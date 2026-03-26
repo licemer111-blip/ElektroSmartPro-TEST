@@ -233,35 +233,81 @@ function renderHeaderKlasyczny(
   const font = hasFont ? "Roboto" : "helvetica";
   const primary: [number,number,number] = showColors ? [TPL.primary[0], TPL.primary[1], TPL.primary[2]] : [30, 41, 59];
 
-  const bannerH = 17;
+  // ─── Power Header (2-column) ────────────────────────────────────────
+  const headerH = 20;
   doc.setFillColor(...primary);
-  doc.rect(0, 0, pageWidth, bannerH, "F");
+  doc.rect(0, 0, pageWidth, headerH, "F");
 
+  // Left: Logo
   let logoEndX = margin;
   if (logoBase64 && profile?.logo_url) {
-    try { const ls = _fitLogo(logoBase64, 12); doc.addImage(logoBase64, _getImageFormat(logoBase64), margin, 2.5, ls.w, ls.h); logoEndX = margin + ls.w + 3; }
+    try { const ls = _fitLogo(logoBase64, 14); doc.addImage(logoBase64, _getImageFormat(logoBase64), margin, 3, ls.w, ls.h); logoEndX = margin + ls.w + 4; }
     catch (e) { logger.error("Logo error", {}, e); }
   }
-  doc.setFontSize(9.5); doc.setFont(font, "bold"); doc.setTextColor(255, 255, 255);
-  doc.text(sanitize(profile?.company_name || "ElektroSmart PRO", hasFont), logoEndX, 11);
-  doc.setFontSize(12.5); doc.setFont(font, "bold"); doc.setTextColor(255, 255, 255);
-  doc.text("KOSZTORYS OFERTOWY", pageWidth - margin, 11, { align: "right" });
 
-  const accentC: [number,number,number] = showColors ? [TPL.accentMat[0], TPL.accentMat[1], TPL.accentMat[2]] : [71, 85, 105];
-  doc.setFillColor(...accentC); doc.rect(0, bannerH, pageWidth, 1.5, "F");
+  // Center: Document Title
+  doc.setFontSize(15); doc.setFont(font, "bold"); doc.setTextColor(255, 255, 255);
+  doc.text(`KOSZTORYS ELEKTRYCZNY NR ${project.id.substring(0, 8).toUpperCase()}`, pageWidth / 2, 13, { align: "center" });
 
-  const colSplit = 107; const rightX = colSplit + 6;
-  let leftY = bannerH + 9; let rightY = bannerH + 9;
-  leftY = _companyBlock(doc, font, hasFont, profile, margin, leftY, colSplit - margin - 4);
-  rightY = _docBlock(doc, font, hasFont, project, rightX, rightY);
-  rightY = _clientBlock(doc, font, hasFont, project, rightX, rightY, pageWidth - rightX - margin);
+  // Right: Company Details (Wykonawca)
+  const rightX = pageWidth - margin;
+  doc.setFontSize(8); doc.setFont(font, "normal"); doc.setTextColor(255, 255, 255);
+  const companyLines = [
+    profile?.company_name || "ElektroSmart PRO",
+    profile?.nip ? `NIP: ${profile.nip}` : "",
+    profile?.address || "",
+    profile?.phone || "",
+    profile?.email || "",
+  ].filter(Boolean);
+  companyLines.forEach((line, i) => {
+    doc.text(sanitize(line, hasFont), rightX, 5 + i * 3.2, { align: "right" });
+  });
 
-  const infoBottom = Math.max(leftY, rightY) + 3;
-  doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.25);
-  doc.line(colSplit, bannerH + 5, colSplit, infoBottom);
-  doc.setLineWidth(0.3); doc.line(margin, infoBottom, pageWidth - margin, infoBottom);
+  // ─── Context Grid (2x2) ───────────────────────────────────────────────
+  const gridY = headerH + 6;
+  const gridCols = [pageWidth / 2 - margin, pageWidth / 2];
+  const gridRows = [gridY, gridY + 14];
+  const gridLabels = [
+    { x: gridCols[0] + 4, y: gridRows[0] - 3, label: "Inwestor:" },
+    { x: gridCols[1] + 4, y: gridRows[0] - 3, label: "Adres inwestycji:" },
+    { x: gridCols[0] + 4, y: gridRows[1] - 3, label: "Typ obiektu:" },
+    { x: gridCols[1] + 4, y: gridRows[1] - 3, label: "Województwo:" },
+  ];
+  const gridValues = [
+    project.client_name || "—",
+    project.client_address || "—",
+    project.object_types?.name || "—",
+    project.regions?.name || "—",
+  ];
 
-  return { headerEndY: _projectStrip(doc, font, hasFont, primary, project, infoBottom + 3, pageWidth, margin) };
+  // Grid background & borders
+  doc.setFillColor(248, 250, 252);
+  doc.rect(margin, gridY - 5, pageWidth - 2 * margin, 24, "F");
+  doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.3);
+  doc.rect(margin, gridY - 5, pageWidth - 2 * margin, 24, "S");
+  // Vertical divider
+  doc.line(pageWidth / 2, gridY - 5, pageWidth / 2, gridY + 19);
+  // Horizontal divider
+  doc.line(margin, gridY + 7, pageWidth - margin, gridY + 7);
+
+  // Grid content
+  doc.setFontSize(7); doc.setFont(font, "normal"); doc.setTextColor(100, 116, 139);
+  gridLabels.forEach(({ x, y, label }) => doc.text(label, x, y));
+  doc.setFontSize(8.5); doc.setFont(font, "bold"); doc.setTextColor(20, 20, 30);
+  gridValues.forEach((value, i) => {
+    const { x, y } = gridLabels[i];
+    doc.text(sanitize(value, hasFont), x, y + 3.5);
+  });
+
+  // Date below grid
+  doc.setFontSize(7); doc.setFont(font, "italic"); doc.setTextColor(120, 120, 120);
+  doc.text(`Data sporządzenia: ${new Date().toLocaleDateString("pl-PL")}`, margin, gridY + 26);
+
+  // Separator line
+  doc.setDrawColor(...primary); doc.setLineWidth(0.8);
+  doc.line(margin, gridY + 30, pageWidth - margin, gridY + 30);
+
+  return { headerEndY: gridY + 34 };
 }
 
 // ─── Template 2: Elegancki ────────────────────────────────────────────────────
@@ -774,7 +820,7 @@ export function renderPdfFooter(
     doc.setTextColor(150, 150, 150);
     doc.setFont(font, "normal");
     doc.text(
-      `Strona ${i} z ${pageCount} | ${sanitize("Wygenerowano w ElektroSmart PRO", hasFont)}`,
+      `Strona ${i} z ${pageCount} | ${sanitize("Wygenerowano w systemie ElektroSmart PRO – Eksperckie systemy kosztorysowe", hasFont)}`,
       105, 290, { align: "center" }
     );
   }

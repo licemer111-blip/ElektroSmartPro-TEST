@@ -774,6 +774,22 @@ export async function POST(req: Request) {
       }
     }
 
+    // ─── Signature Block (last page) ───────────────────────────────────────
+    const pageCount = (doc as unknown as { internal: { getNumberOfPages(): number } }).internal.getNumberOfPages();
+    doc.setPage(pageCount);
+    const sigY = 250;
+    const sigW = (doc.internal.pageSize.getWidth() - 2 * 14) / 2 - 10;
+    doc.setFontSize(8); doc.setFont(hasFont ? "Roboto" : "helvetica", "bold"); doc.setTextColor(40, 40, 40);
+    doc.text("Sporządził (Wykonawca)", 14, sigY);
+    doc.text("Zatwierdził (Zleceniodawca)", 14 + sigW + 20, sigY);
+    doc.setDrawColor(180, 180, 180); doc.setLineWidth(0.3);
+    doc.line(14, sigY + 5, 14 + sigW, sigY + 5);
+    doc.line(14 + sigW + 20, sigY + 5, 14 + sigW * 2 + 20, sigY + 5);
+    // Legal disclaimer
+    doc.setFontSize(6); doc.setFont(hasFont ? "Roboto" : "helvetica", "italic"); doc.setTextColor(120, 120, 120);
+    const disclaimer = "Niniejszy kosztorys ma charakter informacyjny i nie stanowi oferty handlowej w rozumieniu Art. 66 par. 1 Kodeksu Cywilnego.";
+    doc.text(sanitize(disclaimer, hasFont), 14, sigY + 14, { maxWidth: doc.internal.pageSize.getWidth() - 28 });
+
     const footerNote = sanitize("Kalkulacja sporzadzona wg norm ES-KNR 2026", hasFont);
     renderPdfFooter(doc, hasFont, isPro, footerNote, TPL, showColors, template);
 
