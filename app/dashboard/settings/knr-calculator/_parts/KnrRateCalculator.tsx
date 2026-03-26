@@ -360,10 +360,26 @@ export function KnrRateCalculator({
 
         {/* ══ Material margin (marża) ═══════════════════ */}
         <div className="pt-2 border-t border-slate-200 dark:border-slate-700">
-          <div className="flex items-center gap-2 mb-2">
-            <Zap className="w-3.5 h-3.5 text-amber-500" />
-            <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">Marża materiałów</span>
-            <span className="text-[10px] text-slate-400 ml-1">(zysk na materiałach)</span>
+          <div className="flex items-start gap-2 mb-2">
+            <Zap className="w-3.5 h-3.5 text-amber-500 mt-0.5 flex-shrink-0" />
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">Twoja Marża (Zysk)</span>
+                <TooltipProvider delayDuration={200}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Info className="w-3 h-3 text-slate-400 hover:text-amber-500 cursor-help flex-shrink-0" />
+                    </TooltipTrigger>
+                    <TooltipContent side="top" className="max-w-[240px] text-xs">
+                      Procent, który zarabiasz na czyśto. Doliczany PO korekcie rynkowej.
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+              <p className="text-[10px] text-slate-400 mt-0.5">
+                Twój zarobek za logistykę i obsługę materiałów. Dopisuje się do ceny końcowej.
+              </p>
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <div className="relative w-32">

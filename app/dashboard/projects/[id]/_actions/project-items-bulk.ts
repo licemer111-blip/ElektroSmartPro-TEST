@@ -55,19 +55,26 @@ export async function bulkUpdateItemPrices(
 
   const multiplier = 1 + adjustPercent / 100;
 
-  await Promise.all(items.map(async (item) => {
+  // Optimized: Single RPC call instead of N individual updates
+  const itemsData = items.map(item => {
     const matPrice = item.final_material_price ?? item.material_price ?? 0;
     const labPrice = item.final_labor_price ?? item.labor_price ?? 0;
     const newMat = Math.round(matPrice * multiplier * 100) / 100;
     const newLab = Math.round(labPrice * multiplier * 100) / 100;
-    await supabase.from("project_items").update({
+    
+    return {
+      id: item.id,
       material_price: newMat,
       labor_price: newLab,
       final_material_price: newMat,
-      final_labor_price: newLab,
-      confidence_level: null,
-    }).eq("id", item.id);
-  }));
+      final_labor_price: newLab
+    };
+  });
+
+  const { error } = await supabase.rpc('update_item_prices_bulk', {
+    items_data: itemsData,
+    p_project_id: projectId
+  });
 
   revalidateProject(projectId);
   return { success: true, count: items.length };
@@ -109,10 +116,16 @@ export async function updateItemSortOrder(projectId: string, orderedIds: string[
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
   if (!canEdit) return { error: "Brak uprawnień do edycji tego projektu" };
 
-  for (let i = 0; i < orderedIds.length; i++) {
-    await supabase.from("project_items")
-      .update({ sort_order: i }).eq("id", orderedIds[i]).eq("project_id", projectId);
-  }
+  // Optimized: Single RPC call instead of N individual updates
+  const itemsData = orderedIds.map((id, idx) => ({
+    id: id,
+    sort_order: idx
+  }));
+
+  const { error } = await supabase.rpc('update_sort_order_bulk', {
+    items_data: itemsData,
+    p_project_id: projectId
+  });
 
   revalidateProject(projectId);
   return { success: true };
@@ -125,11 +138,16 @@ export async function reorderProjectItems(
   const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
   if (!user || !supabase) return { error: "Brak autoryzacji" };
 
-  await Promise.all(
-    orderedIds.map((id, idx) =>
-      supabase.from("project_items").update({ sort_order: idx }).eq("id", id).eq("project_id", projectId)
-    )
-  );
+  // Optimized: Single RPC call instead of Promise.all individual updates
+  const itemsData = orderedIds.map((id, idx) => ({
+    id: id,
+    sort_order: idx
+  }));
+
+  const { error } = await supabase.rpc('update_sort_order_bulk', {
+    items_data: itemsData,
+    p_project_id: projectId
+  });
   return {};
 }
 
@@ -155,7 +173,6 @@ export async function copyItemsToProject(
   const startOrder = (existingItems?.[0]?.sort_order || 0) + 1;
 
   const projectItems = items.map((item, index) => ({
-    project_id: targetProjectId,
     name: item.name,
     unit: item.unit,
     quantity: item.quantity,
@@ -164,9 +181,17 @@ export async function copyItemsToProject(
     catalog_item_id: item.catalog_item_id,
     section: item.section || null,
     sort_order: startOrder + index,
+    knr_code: null,
+    knr_source: null,
+    labor_norm: null,
+    labor_hours_total: null,
+    is_custom: true
   }));
 
-  const { error } = await supabase.from("project_items").insert(projectItems);
+  const { error } = await supabase.rpc('insert_project_items_bulk', {
+    items_data: projectItems,
+    p_project_id: targetProjectId
+  });
   if (error) {
     logger.error("Error copying items", { targetProjectId }, error);
     return { error: "Błąd podczas kopiowania pozycji" };
@@ -210,22 +235,24 @@ export async function importItemsToProject(
     const qty = item.quantity || 1;
     const laborHoursTotal = laborNorm != null ? parseFloat((laborNorm * qty).toFixed(4)) : null;
     return {
-      project_id: projectId,
       name: item.name,
       unit: item.unit || "szt",
       quantity: qty,
       final_material_price: item.material_price || 0,
       final_labor_price: item.labor_price || 0,
-      is_custom: true,
-      sort_order: startOrder + index,
       knr_code: item.knr_code || null,
       knr_source: item.knr_source || null,
       labor_norm: laborNorm,
       labor_hours_total: laborHoursTotal,
+      sort_order: startOrder + index,
+      is_custom: true
     };
   });
 
-  const { error } = await supabase.from("project_items").insert(projectItems);
+  const { error } = await supabase.rpc('insert_project_items_bulk', {
+    items_data: projectItems,
+    p_project_id: projectId
+  });
   if (error) {
     logger.error("Error importing items", { projectId }, error);
     return { error: "Błąd podczas importu pozycji" };
@@ -258,8 +285,6 @@ export async function importItemsFromExcel(
   let nextSortOrder = (existingItems?.[0]?.sort_order || 0) + 1;
 
   const rows = items.map((item) => ({
-    project_id: projectId,
-    catalog_item_id: null,
     name: item.name.trim().slice(0, 500),
     unit: item.unit.trim().slice(0, 20) || "szt",
     quantity: Math.max(0.001, item.quantity),
@@ -268,9 +293,16 @@ export async function importItemsFromExcel(
     section: item.section || null,
     knr_code: item.knrCode?.trim() || null,
     sort_order: nextSortOrder++,
+    is_custom: true,
+    knr_source: null,
+    labor_norm: null,
+    labor_hours_total: null
   }));
 
-  const { error } = await supabase.from("project_items").insert(rows);
+  const { error } = await supabase.rpc('insert_project_items_bulk', {
+    items_data: rows,
+    p_project_id: projectId
+  });
   if (error) {
     logger.error("Error importing items from Excel", { projectId, count: rows.length }, error);
     return { error: "Błąd podczas importu pozycji" };
