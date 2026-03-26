@@ -16,6 +16,8 @@ import {
   renderPdfSummary,
   renderPdfFooter,
   buildTableConfig,
+  _fitLogo,
+  _getImageFormat,
   type TemplatePalette,
   type PdfRow,
   type PdfNarzutyDisplay,
@@ -469,65 +471,57 @@ export async function POST(req: Request) {
       blindBannerOffset = 13;
     }
 
-    // ─── Executive Summary (page 1: after header) ─────────────────────────────
-    const execRows: (string | number)[][] = [];
-    for (const sec of PDF_SECTIONS) {
-      const st = sectionTotalsMap.get(sec.id)!;
-      if (st.mat + st.lab === 0) continue;
-      execRows.push([
-        `${sec.roman}.`,
-        sanitize(sec.label, hasFont),
-        maskPrices ? "\u2014" : fMoney(st.mat),
-        maskPrices ? "\u2014" : fMoney(st.lab),
-        maskPrices ? "\u2014" : fMoney(st.mat + st.lab),
-      ]);
-    }
-    execRows.push([
-      "",
-      sanitize("RAZEM WSZYSTKIE SEKCJE", hasFont),
-      maskPrices ? "\u2014" : fMoney(totalMatSum),
-      maskPrices ? "\u2014" : fMoney(totalLabSum),
-      maskPrices ? "\u2014" : fMoney(totalMatSum + totalLabSum),
-    ]);
+    // ─── Premium Cover Page (page 1: no tables) ───────────────────────────────
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageCenter = pageWidth / 2;
+    let coverY = headerEndY + blindBannerOffset + 30;
 
-    (doc as unknown as { autoTable(options: Record<string, unknown>): void }).autoTable({
-      startY: headerEndY + blindBannerOffset,
-      head: [[
-        "Lp.",
-        sanitize("Zakres prac", hasFont),
-        sanitize("Material (netto)", hasFont),
-        sanitize("Robocizna (netto)", hasFont),
-        sanitize("Suma (netto)", hasFont),
-      ]],
-      body: execRows,
-      theme: "plain",
-      styles: {
-        fontSize: 9, cellPadding: { top: 3.5, bottom: 3.5, left: 4, right: 4 },
-        font: hasFont ? "Roboto" : "helvetica", textColor: [40, 40, 40],
-        lineColor: [229, 231, 235], lineWidth: 0.15,
-      },
-      headStyles: {
-        fillColor: [TPL.primary[0], TPL.primary[1], TPL.primary[2]],
-        textColor: [255, 255, 255], fontStyle: "bold", fontSize: 9,
-      },
-      columnStyles: {
-        0: { cellWidth: 10, halign: "center" as const },
-        1: { cellWidth: "auto" },
-        2: { cellWidth: 33, halign: "right" as const },
-        3: { cellWidth: 33, halign: "right" as const },
-        4: { cellWidth: 33, halign: "right" as const, fontStyle: "bold" as const },
-      },
-      didParseCell: (data: { row: { index: number }; column: { index: number }; cell: { styles: Record<string, unknown> } }) => {
-        if (data.row.index === execRows.length - 1) {
-          data.cell.styles.fillColor = [TPL.primaryLight[0], TPL.primaryLight[1], TPL.primaryLight[2]];
-          data.cell.styles.fontStyle = "bold";
-          if (data.column.index === 4) {
-            data.cell.styles.textColor = [TPL.totalCol[0], TPL.totalCol[1], TPL.totalCol[2]];
-            data.cell.styles.fontSize = 10;
-          }
-        }
-      },
-    });
+    // Disable hyphenation for key terms (jsPDF handles this automatically)
+
+    // Logo centered (if exists)
+    if (logoBase64 && profile?.logo_url) {
+      try {
+        const ls = _fitLogo(logoBase64, 25);
+        doc.addImage(logoBase64, _getImageFormat(logoBase64), pageCenter - ls.w / 2, coverY, ls.w, ls.h);
+        coverY += ls.h + 20;
+      } catch (e) { logger.error("Cover logo error", {}, e); }
+    }
+
+    // Document Title
+    doc.setFontSize(24); doc.setFont(hasFont ? "Roboto" : "helvetica", "bold"); doc.setTextColor(TPL.primary[0], TPL.primary[1], TPL.primary[2]);
+    doc.text(sanitize("KOSZTORYS ELEKTRYCZNY", hasFont), pageCenter, coverY, { align: "center" });
+    coverY += 15;
+    doc.setFontSize(16); doc.setFont(hasFont ? "Roboto" : "helvetica", "normal"); doc.setTextColor(60, 60, 60);
+    doc.text(sanitize(`NR ${project.id.substring(0, 8).toUpperCase()}`, hasFont), pageCenter, coverY, { align: "center" });
+    coverY += 35;
+
+    // Client Info Block
+    doc.setFontSize(12); doc.setFont(hasFont ? "Roboto" : "helvetica", "bold"); doc.setTextColor(40, 40, 40);
+    doc.text(sanitize("Inwestor", hasFont), pageCenter, coverY, { align: "center" });
+    coverY += 8;
+    doc.setFontSize(11); doc.setFont(hasFont ? "Roboto" : "helvetica", "normal"); doc.setTextColor(60, 60, 60);
+    doc.text(sanitize(project.client_name || "—", hasFont), pageCenter, coverY, { align: "center" });
+    if (project.client_address) {
+      coverY += 6;
+      const addrLines = doc.splitTextToSize(sanitize(project.client_address, hasFont), 140) as string[];
+      addrLines.forEach((line) => { doc.text(line, pageCenter, coverY, { align: "center" }); coverY += 5; });
+    }
+    coverY += 25;
+
+    // Grand Total Brutto Box
+    const boxW = 140;
+    const boxH = 40;
+    const boxX = pageCenter - boxW / 2;
+    doc.setFillColor(TPL.primary[0], TPL.primary[1], TPL.primary[2]);
+    doc.roundedRect(boxX, coverY, boxW, boxH, 4, 4, "F");
+    doc.setFontSize(10); doc.setFont(hasFont ? "Roboto" : "helvetica", "normal"); doc.setTextColor(255, 255, 255);
+    doc.text(sanitize("SUMA BRUTTO", hasFont), pageCenter, coverY + 12, { align: "center" });
+    doc.setFontSize(18); doc.setFont(hasFont ? "Roboto" : "helvetica", "bold"); doc.setTextColor(255, 255, 255);
+    doc.text(maskPrices ? "*** zl" : fMoney(totalGross), pageCenter, coverY + 28, { align: "center" });
+
+    // Auto date at bottom
+    doc.setFontSize(9); doc.setFont(hasFont ? "Roboto" : "helvetica", "italic"); doc.setTextColor(120, 120, 120);
+    doc.text(sanitize(`Data sporządzenia: ${new Date().toLocaleDateString("pl-PL")}`, hasFont), pageCenter, 280, { align: "center" });
 
     // New page for the detailed items table
     doc.addPage();
@@ -553,14 +547,14 @@ export async function POST(req: Request) {
       body: tableBody,
       theme: "plain",
       styles: {
-        fontSize: TC.fs, cellPadding: { top: TC.padV, bottom: TC.padV, left: 3, right: 3 },
+        fontSize: TC.fs, cellPadding: { top: 5, bottom: 5, left: 5, right: 5 },
         lineColor: [229, 231, 235], lineWidth: TC.lw,
         font: hasFont ? "Roboto" : "helvetica", textColor: [40, 40, 40], valign: "middle",
       },
       headStyles: {
         fillColor: [TPL.primary[0], TPL.primary[1], TPL.primary[2]],
         textColor: [255, 255, 255], fontStyle: "bold", fontSize: Math.max(TC.fs - 0.5, 8),
-        cellPadding: { top: TC.hPadV, bottom: TC.hPadV, left: 3, right: 3 },
+        cellPadding: { top: 5, bottom: 5, left: 5, right: 5 },
       },
       columnStyles: colStyles,
       didParseCell: (data: { row: { index: number }; column: { index: number }; section: string; cell: { styles: Record<string, unknown> } }) => {
@@ -773,6 +767,67 @@ export async function POST(req: Request) {
         doc.text(sanitize(notes, hasFont), 15, startY + 13, { maxWidth: bw - 30 });
       }
     }
+
+    // ─── Executive Summary (pre-final page) ───────────────────────────────────
+    doc.addPage();
+    const execRows: (string | number)[][] = [];
+    for (const sec of PDF_SECTIONS) {
+      const st = sectionTotalsMap.get(sec.id)!;
+      if (st.mat + st.lab === 0) continue;
+      execRows.push([
+        `${sec.roman}.`,
+        sanitize(sec.label, hasFont),
+        maskPrices ? "\u2014" : fMoney(st.mat),
+        maskPrices ? "\u2014" : fMoney(st.lab),
+        maskPrices ? "\u2014" : fMoney(st.mat + st.lab),
+      ]);
+    }
+    execRows.push([
+      "",
+      sanitize("RAZEM WSZYSTKIE SEKCJE", hasFont),
+      maskPrices ? "\u2014" : fMoney(totalMatSum),
+      maskPrices ? "\u2014" : fMoney(totalLabSum),
+      maskPrices ? "\u2014" : fMoney(totalMatSum + totalLabSum),
+    ]);
+
+    (doc as unknown as { autoTable(options: Record<string, unknown>): void }).autoTable({
+      startY: 15,
+      head: [[
+        "Lp.",
+        sanitize("Zakres prac", hasFont),
+        sanitize("Material (netto)", hasFont),
+        sanitize("Robocizna (netto)", hasFont),
+        sanitize("Suma (netto)", hasFont),
+      ]],
+      body: execRows,
+      theme: "plain",
+      styles: {
+        fontSize: 9, cellPadding: { top: 3.5, bottom: 3.5, left: 4, right: 4 },
+        font: hasFont ? "Roboto" : "helvetica", textColor: [40, 40, 40],
+        lineColor: [229, 231, 235], lineWidth: 0.15,
+      },
+      headStyles: {
+        fillColor: [TPL.primary[0], TPL.primary[1], TPL.primary[2]],
+        textColor: [255, 255, 255], fontStyle: "bold", fontSize: 9,
+      },
+      columnStyles: {
+        0: { cellWidth: 10, halign: "center" as const },
+        1: { cellWidth: "auto" },
+        2: { cellWidth: 33, halign: "right" as const },
+        3: { cellWidth: 33, halign: "right" as const },
+        4: { cellWidth: 33, halign: "right" as const, fontStyle: "bold" as const },
+      },
+      didParseCell: (data: { row: { index: number }; column: { index: number }; cell: { styles: Record<string, unknown> } }) => {
+        if (data.row.index === execRows.length - 1) {
+          data.cell.styles.fillColor = [TPL.primaryLight[0], TPL.primaryLight[1], TPL.primaryLight[2]];
+          data.cell.styles.fontStyle = "bold";
+          if (data.column.index === 4) {
+            data.cell.styles.textColor = [TPL.totalCol[0], TPL.totalCol[1], TPL.totalCol[2]];
+            data.cell.styles.fontSize = 10;
+          }
+        }
+      },
+    });
 
     // ─── Signature Block (last page) ───────────────────────────────────────
     const pageCount = (doc as unknown as { internal: { getNumberOfPages(): number } }).internal.getNumberOfPages();

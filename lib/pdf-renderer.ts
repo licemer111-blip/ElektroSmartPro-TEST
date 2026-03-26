@@ -102,7 +102,7 @@ function _getImageDimensions(base64: string): { w: number; h: number } | null {
 /**
  * Returns jsPDF-compatible format string ("PNG" | "JPEG") from a data URI or raw base64.
  */
-function _getImageFormat(base64: string): string {
+export function _getImageFormat(base64: string): string {
   if (base64.startsWith("data:image/jpeg") || base64.startsWith("data:image/jpg")) return "JPEG";
   return "PNG";
 }
@@ -111,7 +111,7 @@ function _getImageFormat(base64: string): string {
  * Returns { w, h } in mm for a logo constrained to maxH mm, preserving aspect ratio.
  * maxW caps the width (default 48mm) to prevent very wide logos overflowing.
  */
-function _fitLogo(base64: string, maxH: number, maxW = 48): { w: number; h: number } {
+export function _fitLogo(base64: string, maxH: number, maxW = 48): { w: number; h: number } {
   const dims = _getImageDimensions(base64);
   if (!dims || dims.h === 0) return { w: maxH * 2, h: maxH };
   const ratio = dims.w / dims.h;
@@ -844,7 +844,7 @@ export function buildTableConfig(
     if (matOwnedByClient && showKnr) {
       return {
         tableHead: ["Lp.", sanitize("Nazwa", hasFont), sanitize("Kod KNR", hasFont), sanitize("Jedn.", hasFont), sanitize("Ilość", hasFont), sanitize("Naklady r-g (rbh)", hasFont), sanitize("Robocizna", hasFont), "Suma"],
-        tableBody: rows.map(r => [r.index, r.name, r.knrCode, r.unit, r.qty, r.rg, r.lab, r.total]),
+        tableBody: rows.map((r, i) => [(i + 1).toString(), r.name, r.knrCode, r.unit, r.qty, r.rg, r.lab, r.total]),
         colStyles: {
           0: { cellWidth: 10, halign: "center" },
           1: { cellWidth: "auto" },
@@ -862,7 +862,7 @@ export function buildTableConfig(
       // No Material column — client provides materials
       return {
         tableHead: ["Lp.", sanitize("Nazwa", hasFont), sanitize("Jedn.", hasFont), sanitize("Ilość", hasFont), sanitize("Naklady r-g (rbh)", hasFont), sanitize("Robocizna", hasFont), "Suma"],
-        tableBody: rows.map(r => [r.index, r.name, r.unit, r.qty, r.rg, r.lab, r.total]),
+        tableBody: rows.map((r, i) => [(i + 1).toString(), r.name, r.unit, r.qty, r.rg, r.lab, r.total]),
         colStyles: {
           0: { cellWidth: 10, halign: "center" },
           1: { cellWidth: "auto" },
@@ -878,7 +878,7 @@ export function buildTableConfig(
     if (showKnr) {
       return {
         tableHead: ["Lp.", sanitize("Nazwa", hasFont), sanitize("Kod KNR", hasFont), sanitize("Jedn.", hasFont), sanitize("Ilość", hasFont), sanitize("Naklady r-g (rbh)", hasFont), sanitize("Material", hasFont), sanitize("Robocizna", hasFont), "Suma"],
-        tableBody: rows.map(r => [r.index, r.name, r.knrCode, r.unit, r.qty, r.rg, r.mat, r.lab, r.total]),
+        tableBody: rows.map((r, i) => [(i + 1).toString(), r.name, r.knrCode, r.unit, r.qty, r.rg, r.mat, r.lab, r.total]),
         colStyles: {
           0: { cellWidth: 10, halign: "center" },
           1: { cellWidth: "auto" },
@@ -895,7 +895,7 @@ export function buildTableConfig(
     }
     return {
       tableHead: ["Lp.", sanitize("Nazwa", hasFont), sanitize("Jedn.", hasFont), sanitize("Ilość", hasFont), sanitize("Naklady r-g (rbh)", hasFont), sanitize("Material", hasFont), sanitize("Robocizna", hasFont), "Suma"],
-      tableBody: rows.map(r => [r.index, r.name, r.unit, r.qty, r.rg, r.mat, r.lab, r.total]),
+      tableBody: rows.map((r, i) => [(i + 1).toString(), r.name, r.unit, r.qty, r.rg, r.mat, r.lab, r.total]),
       colStyles: {
         0: { cellWidth: 10, halign: "center" },
         1: { cellWidth: "auto" },
