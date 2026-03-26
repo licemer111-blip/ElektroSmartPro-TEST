@@ -19,6 +19,12 @@ import {
   Sparkles, CircleDollarSign, ChevronDown, Brain,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useGlobalSettings } from "@/hooks/use-global-settings";
@@ -390,21 +396,6 @@ export function ProjectHeaderToolbar({
                 />
                 {/* ShareOfferDialog moved to SummaryExportPanel — hidden here to avoid duplication */}
                 <div className="w-px h-5 bg-slate-200 dark:bg-slate-700 mx-0.5 flex-shrink-0" />
-                {/* Zen Mode — Podpowiedzi ES toggle */}
-                <div className="flex items-center gap-1.5 flex-shrink-0">
-                  <Switch
-                    id="zen-hints-switch"
-                    checked={showHints}
-                    onCheckedChange={setShowHints}
-                    className="h-4 w-7 data-[state=checked]:bg-amber-500"
-                  />
-                  <Label
-                    htmlFor="zen-hints-switch"
-                    className="text-[10px] text-slate-500 dark:text-slate-400 whitespace-nowrap cursor-pointer select-none"
-                  >
-                    Podpowiedzi ES
-                  </Label>
-                </div>
                 <Button
                   onClick={onToggleStatus}
                   disabled={isSaving}
@@ -430,6 +421,30 @@ export function ProjectHeaderToolbar({
                   )}
                   {projectStatus === "final" ? "🔒 Zapisany" : "Zapisz"}
                 </Button>
+                {/* Zen Mode — Podpowiedzi ES toggle */}
+                <TooltipProvider delayDuration={200}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-1.5 flex-shrink-0 cursor-help">
+                        <Switch
+                          id="zen-hints-switch"
+                          checked={showHints}
+                          onCheckedChange={setShowHints}
+                          className="h-4 w-7 data-[state=checked]:bg-amber-500 [&>span]:h-3 [&>span]:w-3 [&>span]:data-[state=checked]:translate-x-3 [&>span]:data-[state=unchecked]:translate-x-0"
+                        />
+                        <Label
+                          htmlFor="zen-hints-switch"
+                          className="text-[10px] text-slate-500 dark:text-slate-400 whitespace-nowrap cursor-pointer select-none"
+                        >
+                          Podpowiedzi ES
+                        </Label>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="max-w-[280px] text-xs">
+                      <p>Włącz/wyłącz inteligentne sugestie ElektroSmart AI pomocne przy tworzeniu kosztorysu.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </div>
           )}
