@@ -1,0 +1,610 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0301",
+    "column_number": "01",
+    "description": "Montaż obudowy rozdzielnicy natynkowej (do 12 modułów DIN) z drzwiczkami",
+    "unit": "szt",
+    "labor_norm": 0.60,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "tablica elektryczna",
+      "rozdzielnica 12 mod",
+      "szafka elektryczna natynkowa",
+      "obudowa tablicy",
+      "box elektryczny 12",
+      "tablica 12 obwodów"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0301",
+    "column_number": "02",
+    "description": "Montaż obudowy rozdzielnicy natynkowej (24 moduły DIN) z drzwiczkami",
+    "unit": "szt",
+    "labor_norm": 0.90,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "tablica elektryczna 24",
+      "rozdzielnica 24 mod",
+      "szafka elektryczna 24",
+      "obudowa tablicy 24",
+      "box elektryczny 24",
+      "tablica 24 obwodów"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0301",
+    "column_number": "03",
+    "description": "Montaż obudowy rozdzielnicy podtynkowej (do 24 modułów DIN) w ścianie",
+    "unit": "szt",
+    "labor_norm": 1.20,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "tablica podtynkowa",
+      "rozdzielnica pt",
+      "szafka podtynkowa",
+      "obudowa p/t",
+      "wnęka tablicy",
+      "rozdzielnica wpuszczana"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0301",
+    "column_number": "04",
+    "description": "Montaż obudowy rozdzielnicy natynkowej (36-48 modułów DIN) z drzwiczkami",
+    "unit": "szt",
+    "labor_norm": 1.50,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "tablica elektryczna 36",
+      "rozdzielnica 48 mod",
+      "szafka elektryczna duza",
+      "obudowa tablicy 48",
+      "tablica 48 obwodów",
+      "rozdzielnica duża"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0301",
+    "column_number": "05",
+    "description": "Montaż szafy sterowniczej wolnostojącej (metal, 1000x800x400mm) z szyną DIN i korytem",
+    "unit": "szt",
+    "labor_norm": 4.0,
+    "is_industrial": true,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "szafa sterownicza",
+      "rozdzielnica wolnostojąca",
+      "szafa elektryczna wolnostojąca",
+      "panel sterowniczy",
+      "szafa nn",
+      "rozdzielnica główna nn"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0302",
+    "column_number": "01",
+    "description": "Montaż szyny DIN (TH35) w obudowie rozdzielnicy wraz z dokręceniem",
+    "unit": "szt",
+    "labor_norm": 0.10,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "szyna din",
+      "th35",
+      "szyna montażowa",
+      "listwa din",
+      "szyna din 35",
+      "szyna modułowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0302",
+    "column_number": "02",
+    "description": "Montaż szyny zbiorczej N (niebieska) i PE (żółtozielona) z zaciskami w rozdzielnicy",
+    "unit": "kpl",
+    "labor_norm": 0.25,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "szyna n pe",
+      "szyna neutralna",
+      "szyna ochronna",
+      "listwa n pe",
+      "zacisk n pe",
+      "szyna zero"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0303",
+    "column_number": "01",
+    "description": "Montaż i podłączenie wyłącznika głównego (MCCB) 3P 40A do 63A w rozdzielnicy",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "wyłącznik główny 40a",
+      "wyłącznik 63a",
+      "mccb 63a",
+      "odłącznik główny",
+      "wyłącznik główny 3p",
+      "главный выключатель"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0303",
+    "column_number": "02",
+    "description": "Montaż i podłączenie wyłącznika głównego (MCCB) 3P 100A do 160A w rozdzielnicy",
+    "unit": "szt",
+    "labor_norm": 0.55,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "wyłącznik główny 100a",
+      "wyłącznik 160a",
+      "mccb 100a",
+      "odłącznik 160a",
+      "wyłącznik główny 3p 100",
+      "mccb 160"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0304",
+    "column_number": "01",
+    "description": "Montaż wyłącznika nadprądowego (bezpiecznika automatycznego) MCB 1P na szynie DIN",
+    "unit": "szt",
+    "labor_norm": 0.10,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "mcb 1p",
+      "bezpiecznik automatyczny 1p",
+      "wyłącznik nadprądowy 1p",
+      "bezpiecznik jednofjazowy",
+      "b16 1p",
+      "c16 1p",
+      "automat 1p"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0304",
+    "column_number": "02",
+    "description": "Montaż wyłącznika nadprądowego (bezpiecznika automatycznego) MCB 2P na szynie DIN",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "mcb 2p",
+      "bezpiecznik 2p",
+      "wyłącznik nadprądowy 2p",
+      "automat 2p",
+      "b16 2p",
+      "c20 2p",
+      "wyłącznik dwubiegunowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0304",
+    "column_number": "03",
+    "description": "Montaż wyłącznika nadprądowego (bezpiecznika automatycznego) MCB 3P na szynie DIN",
+    "unit": "szt",
+    "labor_norm": 0.20,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "mcb 3p",
+      "bezpiecznik 3p",
+      "bezpiecznik trójfazowy",
+      "wyłącznik nadprądowy 3f",
+      "automat 3p",
+      "b16 3p",
+      "c32 3p",
+      "trójfazowy bezpiecznik"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0305",
+    "column_number": "01",
+    "description": "Montaż wyłącznika różnicowoprądowego (RCD) 2P 40A/30mA na szynie DIN",
+    "unit": "szt",
+    "labor_norm": 0.20,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "rcd 2p",
+      "fi 40a 30ma",
+      "wyłącznik różnicowoprądowy 2p",
+      "wyłącznik ochronny 2p",
+      "rcd 40a",
+      "pcdd 2p",
+      "different current 30ma"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0305",
+    "column_number": "02",
+    "description": "Montaż wyłącznika różnicowoprądowego (RCD) 4P 40A/30mA lub 63A/30mA na szynie DIN",
+    "unit": "szt",
+    "labor_norm": 0.30,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "rcd 4p",
+      "fi 4p 40a",
+      "wyłącznik różnicowoprądowy 4p",
+      "rcd czterobiegunowy",
+      "rcd 63a 4p",
+      "pcdd 4p",
+      "fi 63a 30ma"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0306",
+    "column_number": "01",
+    "description": "Montaż wyłącznika kombinowanego RCBO 1P+N (automat + różnicowy) na szynie DIN",
+    "unit": "szt",
+    "labor_norm": 0.22,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "rcbo",
+      "automat z różnicowym",
+      "kombifii",
+      "wyłącznik rcbo",
+      "fi+b16",
+      "rcbo 1p+n",
+      "wyłącznik kombinowany"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0307",
+    "column_number": "01",
+    "description": "Montaż ogranicznika przepięć (SPD) Typ C (klasa II) 1P lub 4P na szynie DIN",
+    "unit": "szt",
+    "labor_norm": 0.30,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "spd",
+      "ogranicznik przepięć",
+      "spd typ 2",
+      "klasa 2 przepięcia",
+      "ochrona przepięciowa",
+      "odgromnik przepięciowy",
+      "surge protector",
+      "spd 4p"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0307",
+    "column_number": "02",
+    "description": "Montaż ogranicznika przepięć (SPD) Typ B+C (klasa I+II) 4P — wejście budynku",
+    "unit": "szt",
+    "labor_norm": 0.50,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "spd typ 1",
+      "ogranicznik typ b",
+      "spd klasa 1",
+      "ochrona przepięciowa wejście",
+      "odgromnik typ1+2",
+      "surge protector typ b"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0308",
+    "column_number": "01",
+    "description": "Montaż i podłączenie licznika energii 1-fazowego lub 3-fazowego w rozdzielnicy",
+    "unit": "szt",
+    "labor_norm": 0.60,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "licznik energii",
+      "podlicznik",
+      "licznik elektryczności",
+      "licznik 3f",
+      "podlicznik 3f",
+      "miernik energii elektrycznej",
+      "sub-meter"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0308",
+    "column_number": "02",
+    "description": "Montaż przekaźnika pomocniczego 24V/230V (relay) na szynie DIN z podstawką",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "is_industrial": true,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "przekaźnik pomocniczy",
+      "relay din",
+      "przekaźnik 24v",
+      "relay 230v",
+      "przekaźnik pośredni",
+      "relay socket",
+      "przekaźnik z podstawką"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0309",
+    "column_number": "01",
+    "description": "Montaż i podłączenie stycznika (kontaktora) 3P 16A do 40A na szynie DIN",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": true,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "stycznik",
+      "kontaktor",
+      "contactor 16a",
+      "contactor 40a",
+      "cewka 230v",
+      "kontaktor trójfazowy",
+      "stycznik 3p"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0309",
+    "column_number": "02",
+    "description": "Montaż i podłączenie wyłącznika silnikowego (PKZ / MS116) 3P w szafie sterowniczej",
+    "unit": "szt",
+    "labor_norm": 0.40,
+    "is_industrial": true,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "wyłącznik silnikowy",
+      "pkz",
+      "ms116",
+      "motor starter",
+      "pkm",
+      "wyłącznik ochrony silnika",
+      "motor circuit breaker"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0310",
+    "column_number": "01",
+    "description": "Ułożenie i podłączenie przewodu w rozdzielnicy (kabla zasilającego obwód 1.5-4mm²)",
+    "unit": "m",
+    "labor_norm": 0.05,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "kabel w tablicy",
+      "przewód w rozdzielnicy",
+      "okablowanie tablicy",
+      "podłączenie obwodu",
+      "kabel 2.5 tablica",
+      "ułożenie w rozdzielnicy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0310",
+    "column_number": "02",
+    "description": "Ułożenie i podłączenie grubego kabla zasilającego w rozdzielnicy (10-35mm²)",
+    "unit": "m",
+    "labor_norm": 0.12,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "kabel 10mm tablica",
+      "kabel 25mm tablica",
+      "przewód 35mm rozdzielnica",
+      "podłączenie zasilania głównego",
+      "kabel główny tablica",
+      "wlz w rozdzielnicy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0311",
+    "column_number": "01",
+    "description": "Montaż grzebienia fazowego (buskbar / grzebyku) do MCB w rzędzie rozdzielnicy",
+    "unit": "szt",
+    "labor_norm": 0.20,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "grzebień fazowy",
+      "busbar rozdzielnica",
+      "szyna łącząca mcb",
+      "grzebień łączący",
+      "listwa fazowa mcb",
+      "busbar mcb"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0311",
+    "column_number": "02",
+    "description": "Montaż zaślepek, etykiet i oznaczeń obwodów w rozdzielnicy (opis tablicy)",
+    "unit": "kpl",
+    "labor_norm": 0.50,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "oznaczenie obwodów",
+      "etykiety tablicy",
+      "opis rozdzielnicy",
+      "zaślepki din",
+      "numeracja obwodów",
+      "schemat tablicy elektrycznej"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0312",
+    "column_number": "01",
+    "description": "Montaż wyłącznika zmierzchowego / zegara sterującego na szynie DIN w rozdzielnicy",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "wyłącznik zmierzchowy",
+      "zegar elektroniczny",
+      "timer obwodu",
+      "programator czasowy",
+      "sterownik czasowy",
+      "twilight switch"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0312",
+    "column_number": "02",
+    "description": "Montaż i podłączenie modułu PLC / sterownika logicznego (np. LOGO, EASY) w szafie",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "is_industrial": true,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "plc logo",
+      "sterownik plc",
+      "easy plc",
+      "sterownik logiczny",
+      "logo siemens",
+      "plc din",
+      "moeller easy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0313",
+    "column_number": "01",
+    "description": "Montaż i podłączenie zasilacza DIN 24V DC (np. 5A, 10A) w rozdzielnicy",
+    "unit": "szt",
+    "labor_norm": 0.30,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "zasilacz 24v dc",
+      "psu din rail",
+      "power supply 24v",
+      "zasilacz dinowy",
+      "transformator din",
+      "power unit 24v"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0314",
+    "column_number": "01",
+    "description": "Uruchomienie i sprawdzenie gotowej rozdzielnicy mieszkaniowej (próba napięciowa, test RCD)",
+    "unit": "kpl",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "uruchomienie tablicy",
+      "sprawdzenie rozdzielnicy",
+      "test tablicy",
+      "próba rozdzielnicy",
+      "odbiór tablicy elektrycznej",
+      "commissioning tablica"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0314",
+    "column_number": "02",
+    "description": "Uruchomienie i sprawdzenie szafy sterowniczej przemysłowej (próba napięciowa, test obwodów)",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "is_industrial": true,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "uruchomienie szafy",
+      "sprawdzenie szafy sterowniczej",
+      "test szafy elektrycznej",
+      "próba szafy nn",
+      "commissioning szafy",
+      "odbiór szafy sterowniczej"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0315",
+    "column_number": "01",
+    "description": "Montaż oświetlenia wewnętrznego tablicy / szafy i kontaktu drzwiowego (LED strip)",
+    "unit": "szt",
+    "labor_norm": 0.30,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "oświetlenie szafy",
+      "lampa szafy elektrycznej",
+      "led szafa",
+      "kontakt drzwiowy",
+      "oświetlenie tablicy",
+      "szafka led"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0316",
+    "column_number": "01",
+    "description": "Montaż korytek kablowych wewnątrz szafy sterowniczej (na przewody sterownicze)",
+    "unit": "m",
+    "labor_norm": 0.20,
+    "is_industrial": true,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "koryto w szafie",
+      "kanał kablowy szafa",
+      "korytko szafy sterowniczej",
+      "prowadnica kablowa",
+      "trunking szafa",
+      "przewód szafa kanał"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0317",
+    "column_number": "01",
+    "description": "Sporządzenie schematu tablicy elektrycznej (schemat jednokreskowy / wielokreskowy)",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice",
+    "synonyms": [
+      "schemat tablicy",
+      "schemat elektryczny",
+      "jednokreskowy schemat",
+      "dokumentacja tablicy",
+      "schemat rozdzielnicy",
+      "rysunek elektryczny"
+    ]
+  }
+]

@@ -1,0 +1,270 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9034",
+    "column_number": "01",
+    "description": "Montaż i podłączenie złącza kablowego ZK / zestawu złączowo-pomiarowego (ZPP)",
+    "unit": "szt",
+    "labor_norm": 4.5,
+    "knr_category": "Przyłącza i WLZ",
+    "is_industrial": false,
+    "synonyms": [
+      "złącze kablowe",
+      "zpp",
+      "zk",
+      "szafka przyłączeniowa",
+      "złącze pomiarowe",
+      "zlacze osd"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9034",
+    "column_number": "02",
+    "description": "Układanie kabla zasilającego WLZ (np. YKXS 4x25mm2 - 4x70mm2) w wykopie lub korycie",
+    "unit": "mb",
+    "labor_norm": 0.35,
+    "knr_category": "Przyłącza i WLZ",
+    "is_industrial": false,
+    "synonyms": [
+      "wlz",
+      "kabel zasilajacy",
+      "ykxs 70",
+      "ykxs 25",
+      "wewnetrzna linia zasilajaca",
+      "kabel 70mm2"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9034",
+    "column_number": "03",
+    "description": "Ręczne kopanie rowu dla kabla (głębokość 0.8m) w gruncie kat. III z zasypaniem",
+    "unit": "mb",
+    "labor_norm": 1.8,
+    "knr_category": "Przyłącza i WLZ",
+    "is_industrial": false,
+    "synonyms": [
+      "kopanie rowu",
+      "row kablowy",
+      "wykop reczny",
+      "row 0.8m",
+      "prace ziemne"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9034",
+    "column_number": "04",
+    "description": "Wykonanie przepustu szczelnego (przejście przez ścianę/fundament) dla kabli WLZ",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "Przyłącza i WLZ",
+    "is_industrial": false,
+    "synonyms": [
+      "przepust szczelny",
+      "przejscie przez sciane",
+      "mufa przepustowa",
+      "uszczelnienie kabla",
+      "przepust kablowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9034",
+    "column_number": "05",
+    "description": "Montaż i podłączenie rozłącznika izolacyjnego głównego (FR) w rozdzielnicy głównej",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "Przyłącza i WLZ",
+    "is_industrial": false,
+    "synonyms": [
+      "rozłącznik główny",
+      "fr",
+      "wygłówny wyłącznik",
+      "izolator główny",
+      "main switch",
+      "rozłącznik izolacyjny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9034",
+    "column_number": "06",
+    "description": "Montaż i podłączenie wyłącznika różnicowoprądowego (RCD 300mA) na WLZ głównym",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "knr_category": "Przyłącza i WLZ",
+    "is_industrial": false,
+    "synonyms": [
+      "rcd 300ma",
+      "fi główny",
+      "rcd wlz",
+      "główny wyłącznik rcd",
+      "rcd na wejściu",
+      "fi instalacji główny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9034",
+    "column_number": "07",
+    "description": "Montaż licznika energii elektrycznej (3-fazowy) w szafce pomiarowej lub rozdzielnicy",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Przyłącza i WLZ",
+    "is_industrial": false,
+    "synonyms": [
+      "licznik 3-fazowy",
+      "energomierz",
+      "energy meter 3phase",
+      "licznik elektryczny montaż",
+      "montaż licznika",
+      "elektromierz"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9034",
+    "column_number": "08",
+    "description": "Montaż szafki pomiarowo-rozdzielczej (SPR) z wyposażeniem — licznik + zabezpieczenie",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "knr_category": "Przyłącza i WLZ",
+    "is_industrial": false,
+    "synonyms": [
+      "szafka pomiarowa",
+      "spr",
+      "szafka osd",
+      "zestaw pomiarowy",
+      "montaż spr",
+      "metering cabinet"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9034",
+    "column_number": "09",
+    "description": "Układanie WLZ w rurze ochronnej (RHDPE) pod podłogą lub w korytku kablowym",
+    "unit": "mb",
+    "labor_norm": 0.25,
+    "knr_category": "Przyłącza i WLZ",
+    "is_industrial": false,
+    "synonyms": [
+      "wlz w rurze",
+      "hdpe wlz",
+      "rura ochronna wlz",
+      "kabel wlz korytko",
+      "rhdpe kabel",
+      "protect wlz"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9034",
+    "column_number": "10",
+    "description": "Wykonanie przebicia poziomego w ścianie dla kabli WLZ (otwornica, uszczelnienie)",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "knr_category": "Przyłącza i WLZ",
+    "is_industrial": false,
+    "synonyms": [
+      "przebicie wlz",
+      "otwornica ściana",
+      "core drill wall",
+      "wlz przez ścianę",
+      "przejście kabla przez ścianę",
+      "przebijanie ściany kabel"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9034",
+    "column_number": "11",
+    "description": "Montaż i podłączenie odgałęźnika kablowego (mufa odgałęźna) dla kabla zasilającego",
+    "unit": "szt",
+    "labor_norm": 4.0,
+    "knr_category": "Przyłącza i WLZ",
+    "is_industrial": false,
+    "synonyms": [
+      "mufa kablowa",
+      "odgałęźnik kablowy",
+      "cable joint",
+      "złączka kablowa",
+      "mufa odgałęźna",
+      "kabel junction"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9034",
+    "column_number": "12",
+    "description": "Układanie kabla WLZ w ziemi ze żwirem i folia ochronną zgodnie z normą",
+    "unit": "mb",
+    "labor_norm": 0.45,
+    "knr_category": "Przyłącza i WLZ",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel w ziemi wlz",
+      "ułożenie wlz ziemia",
+      "folia kablowa",
+      "kabel podziemny wlz",
+      "cable burial wlz",
+      "zasypka kablowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9034",
+    "column_number": "13",
+    "description": "Montaż i okablowanie rozdzielnicy głównej RG (do 48 mod.) ze szyną PE/N i okablowaniem",
+    "unit": "kpl",
+    "labor_norm": 16.0,
+    "knr_category": "Przyłącza i WLZ",
+    "is_industrial": false,
+    "synonyms": [
+      "rozdzielnica główna",
+      "rg montaż",
+      "tablica główna",
+      "main distribution board",
+      "mdb montaż",
+      "szafa główna 48"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9034",
+    "column_number": "14",
+    "description": "Koordinacja przyłączenia z OSD — złożenie wniosku, dokumentacja techniczna, odbiór",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "knr_category": "Przyłącza i WLZ",
+    "is_industrial": false,
+    "synonyms": [
+      "wniosek osd",
+      "przyłączenie tauron",
+      "przyłączenie energa",
+      "zlecenie przyłącza",
+      "grid connection application",
+      "dokumentacja przyłączeniowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9034",
+    "column_number": "15",
+    "description": "Pomiary odbiorcze WLZ (pętla zwarcia, izolacja, ciągłość PE) z protokołem",
+    "unit": "kpl",
+    "labor_norm": 2.5,
+    "knr_category": "Przyłącza i WLZ",
+    "is_industrial": false,
+    "synonyms": [
+      "pomiary wlz",
+      "odbiór wlz",
+      "test wlz",
+      "protokol wlz",
+      "pomiary elektryczne wlz",
+      "petla zwarcia wlz"
+    ]
+  }
+]

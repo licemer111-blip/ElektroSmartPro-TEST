@@ -1,0 +1,271 @@
+[
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9031",
+    "column_number": "01",
+    "description": "Kompleksowe pomiary odbiorcze instalacji (pętla zwarcia, izolacja, RCD) - do 10 obwodów",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "knr_category": "Pomiary i Dokumentacja",
+    "is_industrial": false,
+    "synonyms": [
+      "pomiary odbiorcze",
+      "pomiary elektryczne",
+      "odbiór instalacji",
+      "sonel mpi",
+      "petla zwarcia",
+      "izolacja pomiar",
+      "rcd test"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9031",
+    "column_number": "02",
+    "description": "Badanie termowizyjne rozdzielnicy i połączeń pod obciążeniem (Raport z kamery)",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Pomiary i Dokumentacja",
+    "is_industrial": false,
+    "synonyms": [
+      "termowizja",
+      "kamera termowizyjna",
+      "badanie termiczne",
+      "termogram",
+      "inspekcja termiczna",
+      "flir"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9031",
+    "column_number": "03",
+    "description": "Wykonanie dokumentacji powykonawczej (schemat jednokreskowy, opis obwodów) w CAD/PDF",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "knr_category": "Pomiary i Dokumentacja",
+    "is_industrial": false,
+    "synonyms": [
+      "dokumentacja powykonawcza",
+      "schemat jednokreskowy",
+      "projekt powykonawczy",
+      "cad elektryczny",
+      "as-built"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9031",
+    "column_number": "04",
+    "description": "Analiza jakości zasilania (logowanie parametrów sieci, harmoniczne) - raport 24h",
+    "unit": "godz",
+    "labor_norm": 2.0,
+    "knr_category": "Pomiary i Dokumentacja",
+    "is_industrial": false,
+    "synonyms": [
+      "jakosc zasilania",
+      "harmoniczne",
+      "analizator sieci",
+      "power quality",
+      "pq analiza",
+      "fluktuacje napiecia"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9031",
+    "column_number": "05",
+    "description": "Inwentaryzacja istniejącej instalacji elektrycznej (odtworzenie schematów)",
+    "unit": "godz",
+    "labor_norm": 1.0,
+    "knr_category": "Pomiary i Dokumentacja",
+    "is_industrial": false,
+    "synonyms": [
+      "inwentaryzacja instalacji",
+      "odtworzenie schematu",
+      "audyt elektryczny",
+      "mapowanie instalacji",
+      "ekspertyza instalacji"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9031",
+    "column_number": "06",
+    "description": "Pomiar oporności uziemienia i ciągłości przewodów ochronnych PE (na 1 obwód)",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "knr_category": "Pomiary i Dokumentacja",
+    "is_industrial": false,
+    "synonyms": [
+      "ciągłość pe",
+      "pomiar oporności pe",
+      "earth continuity",
+      "test pe",
+      "ciągłość uziemienia",
+      "pe resistance test"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9031",
+    "column_number": "07",
+    "description": "Pomiar czasu zadziałania wyłącznika różnicowoprądowego RCD (30mA/100mA/300mA)",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "knr_category": "Pomiary i Dokumentacja",
+    "is_industrial": false,
+    "synonyms": [
+      "pomiar rcd",
+      "czas zadziałania fi",
+      "test fi",
+      "rcd trip time",
+      "wyłącznik fi test",
+      "rcd measurement"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9031",
+    "column_number": "08",
+    "description": "Rejestracja parametrów jakości zasilania (Power Quality Logger — 7-dniowy)",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "knr_category": "Pomiary i Dokumentacja",
+    "is_industrial": false,
+    "synonyms": [
+      "power quality logger",
+      "rejestracja jakości",
+      "pq logger",
+      "analizator 7 dni",
+      "harmoniczne rejestracja",
+      "fluktuacje napięcia logger"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9031",
+    "column_number": "09",
+    "description": "Lokalizacja uszkodzenia kabla metodą TDR (reflektometria czasowa) wraz z raportem",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "knr_category": "Pomiary i Dokumentacja",
+    "is_industrial": false,
+    "synonyms": [
+      "tdr pomiar",
+      "reflektometria kablowa",
+      "lokalizacja przerwy kabel",
+      "tdr cable fault",
+      "cable fault location",
+      "uszkodzenie kabla tdr"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9031",
+    "column_number": "10",
+    "description": "Pomiar prądów rozruchowych i eksploatacyjnych silnika elektrycznego z protokołem",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Pomiary i Dokumentacja",
+    "is_industrial": true,
+    "synonyms": [
+      "pomiar silnika",
+      "prąd rozruchowy",
+      "motor current test",
+      "pomiar obciążenia silnika",
+      "diagnostyka silnika",
+      "current clamp motor"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9031",
+    "column_number": "11",
+    "description": "Wykonanie ekspertyzy technicznej instalacji elektrycznej z opinią rzeczoznawcy",
+    "unit": "kpl",
+    "labor_norm": 8.0,
+    "knr_category": "Pomiary i Dokumentacja",
+    "is_industrial": false,
+    "synonyms": [
+      "ekspertyza elektryczna",
+      "opinia rzeczoznawcy",
+      "expert opinion electrical",
+      "rzeczoznawca elektryczny",
+      "raport ekspertowy",
+      "technical assessment"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9031",
+    "column_number": "12",
+    "description": "Pomiar natężenia oświetlenia (lux meter) w miejscu pracy lub instalacji — protokół EN 12464",
+    "unit": "kpl",
+    "labor_norm": 1.5,
+    "knr_category": "Pomiary i Dokumentacja",
+    "is_industrial": false,
+    "synonyms": [
+      "pomiar natężenia oświetlenia",
+      "lux meter",
+      "badanie oświetlenia",
+      "en 12464",
+      "natężenie lux",
+      "protokol oświetlenia"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9031",
+    "column_number": "13",
+    "description": "Pomiar emisji elektromagnetycznych (EMC) — wstępne badanie w obiekcie",
+    "unit": "godz",
+    "labor_norm": 3.0,
+    "knr_category": "Pomiary i Dokumentacja",
+    "is_industrial": true,
+    "synonyms": [
+      "emc pomiar",
+      "emisja elektromagnetyczna",
+      "emf measurement",
+      "pole elektromagnetyczne",
+      "emc compliance test",
+      "badanie emc"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9031",
+    "column_number": "14",
+    "description": "Sporządzenie raportu i protokołu z kompleksowych pomiarów (do 20 obwodów) zgodnie z PN-HD 60364",
+    "unit": "kpl",
+    "labor_norm": 2.5,
+    "knr_category": "Pomiary i Dokumentacja",
+    "is_industrial": false,
+    "synonyms": [
+      "protokol pomiarów",
+      "raport elektryczny",
+      "pn-hd 60364",
+      "dokumentacja pomiarowa",
+      "rapport pomiarów",
+      "electrical test report"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9031",
+    "column_number": "15",
+    "description": "Przegląd i konserwacja aparatury pomiarowej — kalibracja wzorcowa (koszt usługi zewnętrznej)",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "knr_category": "Pomiary i Dokumentacja",
+    "is_industrial": false,
+    "synonyms": [
+      "kalibracja miernika",
+      "wzorcowanie",
+      "calibration meter",
+      "kalibracja sonel",
+      "wzorcowanie fluke",
+      "legalizacja miernika"
+    ]
+  }
+]

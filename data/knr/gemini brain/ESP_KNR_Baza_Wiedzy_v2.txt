@@ -1,0 +1,512 @@
+BAZA WIEDZY ES-KNR 2026 — ElektroSmart PRO
+Wersja: 3.0 | Aktualizacja: marzec 2026
+Autor: System AI ElektroSmart PRO (ES-Engine 2.1)
+
+=======================================================
+SEKCJA 1: KATALOG NORM KNR — PEŁNA LISTA KATEGORII
+=======================================================
+
+PLIK: es_knr_instalacja_podstawowa.json (56 pozycji)
+ZAKRES: Bazowa instalacja elektryczna wewnętrzna
+- Bruzdowanie (cegła/beton/GK/silikat) — normy 0.18–2.0 rbh/m
+- Układanie przewodów YDYp/NYM (3x1.5, 3x2.5, 5x2.5, 5x4, 5x6 mm²) — 0.07–0.15 rbh/m
+- Montaż puszek (podtynkowych okrągłych/kwadratowych, hermetycznych IP55, rozgałęźnych)
+- Gniazda 230V (pojedyncze/podwójne/potrójne/z USB/bryzgoszczelne IP44/natynkowe/siłowe CEE)
+- Łączniki (jednobiegunowy/dwuklawiszowy/schodowy/krzyżowy/ściemniacz/natynkowy)
+- Osprzęt (czujniki PIR, zmierzchowe, termostaty, wentylatory, listwy kanałowe PCV, rurki PCV)
+- Gniazda specjalne (TV/SAT, RJ45 LAN, siłowe 3-fazowe 16A/32A)
+WAŻNE: To jest NAJWAŻNIEJSZA kategoria — obejmuje podstawę każdego kosztorysu mieszkaniowego i remontowego.
+
+PLIK: es_knr_trasy_kablowe_pvc.json (29 pozycji)
+ZAKRES: Trasy kablowe, korytka, rury, kable ziemne
+- Korytka stalowe perforowane 60x35 / 100x60 / 200x60 mm — 0.35–0.60 rbh/m
+- Korytka PVC białe 40x25 mm — 0.20 rbh/m
+- Drabinki kablowe stalowe ocynkowane 300/600 mm — 0.50–0.65 rbh/m
+- Rury DVK (karbowane PVC) Ø50/Ø110 mm, HDPE, sztywne RL
+- Rury metalowe RVS (elastyczne) do silników
+- Wykopy kablowe ręczne, podsypka piaskowa, folia ostrzegawcza
+- Kable ziemne YKY/NYY 3x2.5, 4x10, kable pancerne XSWY
+- Przepusty kablowe, mufy, mocowania elewacyjne, skrzynki IP54
+
+PLIK: es_knr_rozdzielnice_aparatura.json (60+ pozycji)
+ZAKRES: Aparatura rozdzielcza i łącznikowa
+- MCB (wyłączniki nadprądowe): 1P/2P/3P/4P — 0.15–0.30 rbh/szt
+- RCD (wyłączniki różnicowoprądowe): 2P/4P typ A/B/F — 0.25–0.50 rbh/szt
+- RCBO (combo MCB+RCD): 1P/2P/3P+N — 0.30–0.45 rbh/szt
+- SPD (ochronniki przepięciowe) typ I/II/III — 0.30–0.40 rbh/szt
+- Kontaktory / przekaźniki bistabilne — 0.35–0.80 rbh/szt
+- Rozdzielnice modułowe mieszkaniowe/przemysłowe
+- Szyny DIN, zestawy zacisków PE/N, falowniki
+
+PLIK: es_knr_zasilanie_wlz_szr.json
+ZAKRES: WLZ, przyłącza, SZR, agregaty, UPS
+- Układanie kabla WLZ (YKXS, NYY) — przekroje do 240 mm²
+- Systemy SZR (samoczynne załączenie rezerwy)
+- Agregaty prądotwórcze — podłączenie elektryczne
+- UPS wolnostojące / rack
+
+PLIK: es_knr_uziomy_odgromowa.json
+ZAKRES: Uziemienie i ochrona odgromowa
+- Uziomy fundamentowe, pionowe, poziome (taśma FeZn, linka Cu)
+- Instalacja odgromowa (zwody, przewody odprowadzające)
+- Połączenia wyrównawcze, złącza kontrolne
+- Głowice retraktywne (ESE)
+
+PLIK: es_knr_lan_rack_expert.json (14 pozycji)
+PLIK: es_knr_lan_wifi_6e.json (25 pozycji)
+ZAKRES: Sieci teleinformatyczne LAN/Wi-Fi
+- Skrętki Cat 5e / 6 / 6a / 7 / Cat 8 — 0.04–0.07 rbh/m
+- Gniazda keystone Cat 6a, zaszycie patchpaneli 24/48p
+- Punkty dostępowe Wi-Fi 6E (802.11ax), Wi-Fi 7 (802.11be)
+- Przełączniki zarządzalne L2/L3 (Cisco/Ubiquiti/HP)
+- Routery / Firewall (Mikrotik, FortiGate, pfSense)
+- Spawanie włókien OM4/OS2, przełącznice FDF, OTDR
+- Szafy RACK 9U/12U/24U/42U
+- Certyfikacja Fluke DSX2-8000, pomiary OTDR
+- Kabel KNX YCYM 2x2x0.8 do BMS
+
+PLIK: es_knr_ssp_oddymianie.json
+ZAKRES: Systemy sygnalizacji pożaru i oddymiania
+- Czujniki: dymowy, temperaturowy, CO, liniowy
+- Centrale pożarowe (Polon, Satel, Bosch)
+- Klapy oddymiające, siłowniki, sterowniki
+- Okna napowietrzające (NV)
+
+PLIK: es_knr_security_cctv_alarm.json
+ZAKRES: Systemy alarmowe i CCTV
+- Kamery IP PoE (2MP/4MP/8MP 4K), PTZ, fisheye
+- Rejestratory NVR (4/8/16 kanałów)
+- Czujniki alarmowe (PIR, kontaktrony, wibracje)
+- Centrale alarmowe (Satel Integra, DSC, Bosch)
+- Wideodomofony IP, kontrola dostępu
+
+PLIK: es_knr_oswietlenie_smart.json (9 pozycji)
+PLIK: es_knr_oswietlenie_przemyslowe.json (25 pozycji)
+ZAKRES: Oświetlenie (wszystkie typy)
+- Oprawy: plafony, downlight, panele 60x60, taśmy LED, żyrandole
+- High Bay LED (100–400W) dla hal i magazynów — 0.8–1.5 rbh/szt
+- Naświetlacze zewnętrzne, słupy oświetleniowe
+- Oświetlenie ewakuacyjne/awaryjne (EXIT, AT/SA) — 0.50–0.55 rbh/szt
+- Systemy DALI/0-10V, sterowniki DMX, KNX oświetlenie
+- Oprawy ATEX (strefy wybuchowe)
+- Luksometr + protokół zgodny PN-EN 12464
+
+PLIK: es_knr_fotowoltaika_rozszerzona.json (26 pozycji)
+ZAKRES: Fotowoltaika i magazyny energii
+- Panele PV: dach skośny (0.45), płaski (0.55), grunt (0.65 rbh/szt)
+- Inwertery: 1-fazowe do 6kW, 3-fazowe hybrydowe 10-15kW, przemysłowe 20-100kW
+- Kabel solarny H1Z2Z2-K DC 4-6 mm², złącza MC4, zabezpieczenia DC
+- Optymalizatory (SolarEdge, Tigo), mikroinwertery (Enphase, Hoymiles)
+- Magazyny energii LiFePO4: 10kWh (3.0 rbh), 15-20kWh (5.0 rbh)
+- Liczniki dwukierunkowe (net-metering), zero-export relay
+- Ładowarki EV AC: 7.4kW (2.5 rbh), 11/22kW (3.5 rbh), DC fast (8.0 rbh)
+- Dokumentacja PV + zgłoszenie OSD: 4.0 rbh
+
+PLIK: es_knr_ogrzewanie_elektryczne.json (18 pozycji)
+ZAKRES: Ogrzewanie elektryczne
+- Maty grzewcze (Devi, Ensto, Nexans) pod płytki — 0.35–0.50 rbh/m²
+- Folie grzewcze pod panele laminowane — 0.35 rbh/m²
+- Kable grzewcze dwużyłowe (TXLP, Millicabel) — 0.15 rbh/m
+- Termostaty/termostaty WiFi (Danfoss, Warmup, Tuya) — 0.50–0.60 rbh/szt
+- Grzejniki panelowe/konwektorowe (500-2000W)
+- Promienniki IR sufitowe/ścienne
+- Antyzamarzanie rynien i rur (kabel samoregulujący)
+- Kotły elektryczne CO 6/9/12 kW — 3.0 rbh/kpl
+- Piece sauny elektryczne — 2.0 rbh/szt
+
+PLIK: es_knr_remonty_pomiary.json (9 pozycji) + Pomiary i Dokumentacja (2026).json
+ZAKRES: Remonty, pomiary odbiorcze
+- Demontaże instalacji, wybiórka osprzętu
+- Pomiar impedancji pętli zwarcia — 0.12 rbh/szt
+- Pomiar rezystancji izolacji — 0.25 rbh/szt
+- Badanie RCD (test 30mA) — 0.30 rbh/szt
+- Pomiar uziemienia (metoda 3-biegunowa) — 0.80 rbh/szt
+- Termowizja, protokół odbiorczy PN-HD 60364
+
+--- NOWE KATEGORIE (marzec 2026) ---
+
+PLIK: es_knr_instalacje_rurowe.json
+ZAKRES: Rury ochronne i instalacyjne dla kabli
+- Rury karbowane PVC (peszel) ø16–50mm — 0.025–0.06 rbh/m
+- Rury sztywne PVC ø20–32mm — 0.04–0.05 rbh/m
+- Rury stalowe BST ø25–32mm — 0.10–0.12 rbh/m
+- Rury HDPE ø40–63mm (podposadzkowe) — 0.18–0.22 rbh/m
+- Puszki instalacyjne p/t ø60mm — 0.15 rbh/szt
+- Wciąganie kabla w rurę ochronną — 0.02 rbh/m
+
+PLIK: es_knr_demontaz_rozbiorka.json (KNR 4-03)
+ZAKRES: Demontaż instalacji elektrycznych i elektronicznych
+- Demontaż opraw oświetleniowych — 0.30–0.35 rbh/szt
+- Demontaż gniazd/wyłączników — 0.20 rbh/szt
+- Demontaż rozdzielnic ≤24/48/96 mod. — 2.0–6.0 rbh/szt
+- Demontaż kabli p/t (z bruzdą) — 0.05 rbh/m, n/t — 0.02 rbh/m
+- Demontaż koryta/drabinki kablowej — 0.06–0.08 rbh/m
+- Demontaż systemu alarmowego/CCTV — 4.0 rbh/kpl
+- Demontaż klimatyzatora split — 2.0 rbh/szt
+- Demontaż agregatu prądotwórczego — 6.0 rbh/szt
+- Lokalizacja i naprawa uszkodzenia kabla — 2.0 + 1.5 rbh/szt
+
+PLIK: es_knr_przepusty_uszczelnienia.json (KNR 2-02)
+ZAKRES: Przepusty ogniowe, uszczelnienia, dławice
+- Przepust kablowy EI60 — 0.50 rbh/szt
+- Przepust kablowy EI120 — 0.80 rbh/szt
+- Obroża pożarowa na rurę ø75mm — 0.40 rbh/szt
+- Uszczelnienie modułowe Roxtec — 1.20 rbh/szt
+- Masa/pianka ogniochronna — 0.30 rbh/szt
+- Dławica kablowa IP68 — 0.20 rbh/szt, ATEX — 0.50 rbh/szt, EMV — 0.30 rbh/szt
+- Mufa kablowa nN — 2.50 rbh/szt, głowica kablowa nN — 2.00 rbh/szt
+WAŻNE: Przepusty EI60/EI120 obowiązkowe przy przejściach przez przegrody p.poż. (PN-EN 13501)
+
+PLIK: es_knr_silniki_napedy_przemyslowe.json (KNR 5-10)
+ZAKRES: Silniki elektryczne, falowniki VFD, softstarter
+- Silnik 3-faz. ≤7.5kW — 3.0 rbh/szt
+- Silnik 3-faz. 7.5–22kW — 5.0 rbh/szt, >22kW — 8.0 rbh/szt
+- Falownik VFD ≤11kW — 3.0 rbh/szt, 11–45kW — 5.0 rbh/szt
+- Softstart ≤45kW — 4.0 rbh/szt
+- Serwomotor + sterownik — 5.0 + 4.0 rbh/szt
+- Uruchomienie i próba silnika — 2.0 rbh/kpl
+WAŻNE: Dla silników 3-faz. zawsze MCB char. D (prąd rozruchowy 6–10×In). Nigdy char. B!
+
+PLIK: es_knr_wlz_przylacza_pelny.json (KNR 5-04)
+ZAKRES: Wewnętrzne linie zasilające i przyłącza kablowe
+- WLZ kabel YKY ≤35mm² — 0.06 rbh/m, 50–95mm² — 0.10 rbh/m
+- WLZ kabel YAKY 95–150mm² — 0.14 rbh/m, 185–240mm² — 0.20 rbh/m
+- Przyłącze kablowe nN — 6.0 rbh/szt
+- Złącze/mufa kablowa nN — 2.50 rbh/szt
+- Głowica kablowa zewnętrzna nN — 2.00 rbh/szt
+- Licznik energii 3-faz. — 1.20 rbh/szt, skrzynka ZKP — 2.0 rbh/szt
+
+PLIK: es_knr_agregaty_ups_szr_pelny.json (KNR 5-08)
+ZAKRES: Agregaty prądotwórcze, UPS, SZR
+- Agregat prądotwórczy ≤50kVA — 8.0 rbh/szt, 100kVA — 12.0 rbh/szt
+- Generator 200kVA — 16.0 rbh/szt
+- Szafa SZR/ATS — 6.0 rbh/szt
+- UPS rack ≤3kVA — 2.0 rbh/szt, >3kVA — 3.0 rbh/szt
+- UPS 3-fazowy on-line — 6.0 rbh/szt
+- Uruchomienie i próby agregatu — 4.0 rbh/kpl
+
+PLIK: es_knr_stacje_transformatorowe.json (ES-KNR/SN)
+ZAKRES: Transformatory SN/nN i stacje transformatorowe
+- Transformator suchy 100kVA — 10.0 rbh/szt, 400kVA — 14.0 rbh, 630kVA — 16.0 rbh
+- Transformator olejowy — 20.0 rbh/szt
+- Rozdzielnica SN (komora) — 12.0 rbh/szt
+- Głowica kablowa SN — 4.0 rbh/szt, mufa SN — 5.0 rbh/szt
+- Uziemienie stacji trafo — 8.0 rbh/kpl
+- Uruchomienie stacji trafo — 8.0 rbh/kpl
+WAŻNE: Normy SN wg IEC 62271, obsługa tylko przez osoby z uprawnieniami D SN!
+
+PLIK: es_knr_pompy_ciepla_oze.json (KNR 5-11 / KNR AT-26)
+ZAKRES: Pompy ciepła, fotowoltaika zaawansowana, magazyny energii
+- Pompa ciepła split/monoblok ≤12kW — 6.0 rbh/szt
+- Pompa ciepła grunt-woda — 8.0 rbh/szt
+- Pompa ciepła CWU — 4.0 rbh/szt
+- Falownik PV 1-faz. ≤5kW — 3.0 rbh/szt, 3-faz. ≤10kW — 4.0 rbh/szt
+- Magazyn energii 10kWh LiFePO4 — 6.0 rbh/szt
+- Licznik dwukierunkowy prosument — 1.50 rbh/szt
+- Kabel solarny DC 4–6mm² — 0.025–0.03 rbh/m
+
+PLIK: es_knr_instalacje_zewnetrzne_pelny.json
+ZAKRES: Instalacje zewnętrzne i oświetlenie drogowe
+- Słup oświetleniowy stalowy do 8m — 4.0 rbh/szt, betonowy — 5.0 rbh/szt
+- Oprawa uliczna LED na słupie — 1.50 rbh/szt
+- Naświetlacz LED zewnętrzny ≤100W — 0.80 rbh/szt
+- Kabel nN ziemny YKY/YAKY w ziemi — 0.06–0.10 rbh/m
+- Szafka sterowania oświetleniem — 6.0 rbh/szt
+- Napęd bramy elektrycznej — 4.0 rbh/szt
+- Fundament prefabrykowany pod słup — 2.0 rbh/szt
+
+PLIK: es_knr_klimatyzacja_wentylacja.json (KNR AT-26)
+ZAKRES: Instalacje HVAC — podłączenie elektryczne
+- Klimatyzator split ≤5kW — 1.50 rbh/szt, multi-split — 3.0 rbh/szt
+- Klimatyzacja kasetonowa — 3.0 rbh/szt
+- Centrala wentylacyjna HRV/rekuperator — 4.0 rbh/szt
+- Wentylator kanałowy — 1.50 rbh/szt
+- Chiller wodny — 6.0 rbh/szt
+- Termostat/sterownik klimatyzacji — 0.80 rbh/szt
+- Kabel zasilający klimatyzację 5×2.5mm² — 0.04 rbh/m
+WAŻNE: Przy klimatyzatorach/falownikach — RCD typ A obowiązkowo (nie AC!)
+
+PLIK: es_knr_dali_knx_bms_pelny.json (KNR 5-09)
+ZAKRES: Systemy DALI, KNX, BMS i automatyka budynkowa
+- Zasilacz DALI — 0.80 rbh/szt, driver DALI 2-kan. — 1.0 rbh/szt
+- Adresowanie oprawy DALI — 0.20 rbh/szt (per oprawa)
+- Programowanie sceny DALI — 0.50 rbh/szt
+- Zasilacz magistrali KNX 30V — 1.50 rbh/szt
+- Sterownik KNX actor 4-kan. — 2.0 rbh/szt
+- Kabel magistrali KNX J-Y(St)Y — 0.03 rbh/m
+- Programowanie KNX ETS (per urządzenie) — 0.50 rbh/szt
+- Sterownik BMS/DDC — 8.0 rbh/szt, bramka BMS — 4.0 rbh/szt
+- Moduł Modbus RTU/TCP — 1.50 rbh/szt
+- Panel HMI operatorski — 3.0 rbh/szt
+- Uruchomienie systemu BMS/KNX — 8.0 rbh/kpl
+
+PLIK: es_knr_rozdzielnice_montaz_pelny.json (KNR 5-08 / uzupełnienie)
+ZAKRES: Rozdzielnice przemysłowe, skrzynki sterownicze
+- Rozdzielnica modułowa 1-rzędowa 24 mod. — 4.0 rbh/szt
+- Rozdzielnica 2-rzędowa 48 mod. — 6.0 rbh/szt
+- Rozdzielnica 3-rzędowa 72 mod. — 8.0 rbh/szt
+- Szafa sterownicza IP65 600×600 — 10.0 rbh/szt
+- Szafa sterownicza IP65 1000×800 — 14.0 rbh/szt
+- Pomiary kompleksowe rozdzielnicy — 0.50 rbh/kpl
+
+=======================================================
+SEKCJA 2: STAWKI ROBOCIZNY 2026 — REGIONY PL
+=======================================================
+
+WAŻNA ZASADA SYSTEMU: regionModifier stosowany TYLKO na Robociznę, NIE na Materiał.
+
+KLUCZOWA ZASADA: System NIE ma żadnej stałej stawki domyślnej!
+Użytkownik MUSI ustawić własną stawkę w Ustawieniach → Baza Kalkulacji.
+Bez stawki użytkownika → kalkulacja zablokowana + komunikat błędu.
+
+Poniższe stawki to WYŁĄCZNIE orientacja rynkowa 2026 (do rozmów/porad w czacie):
+- Rynek ogółem: 85–110 PLN/rbh netto
+- Mazowieckie (Warszawa): 100–130 PLN/rbh
+- Regiony wschodnie: 75–90 PLN/rbh
+
+Mnożniki regionalne (stosowane do stawki użytkownika × regionModifier):
+Regiony z mnożnikami:
+- mazowieckie (Warszawa):    × 1.20  → ~96–102 PLN/rbh
+- małopolskie (Kraków):      × 1.12  → ~84–95 PLN/rbh
+- dolnośląskie (Wrocław):    × 1.12  → ~84–95 PLN/rbh
+- pomorskie (Gdańsk/Gdynia): × 1.10  → ~83–94 PLN/rbh
+- śląskie (Katowice):        × 1.08  → ~81–92 PLN/rbh
+- wielkopolskie (Poznań):    × 1.08  → ~81–92 PLN/rbh
+- łódzkie (Łódź):            × 1.00  → ~75–85 PLN/rbh (baza)
+- kujawsko-pomorskie:        × 0.98  → ~74–83 PLN/rbh
+- lubelskie:                 × 0.95  → ~71–81 PLN/rbh
+- podkarpackie:              × 0.93  → ~70–79 PLN/rbh
+- warmińsko-mazurskie:       × 0.93  → ~70–79 PLN/rbh
+- podlaskie:                 × 0.92  → ~69–78 PLN/rbh
+- świętokrzyskie:            × 0.92  → ~69–78 PLN/rbh
+
+=======================================================
+SEKCJA 3: LOGIKA VAT (POLSKA 2026)
+=======================================================
+
+VAT 8%: Roboty budowlane (w tym elektryczne) w obiektach:
+- Budynki mieszkalne do 300 m² powierzchni użytkowej
+- Lokale mieszkalne do 150 m²
+- Podstawa prawna: art. 41 ust. 12 ustawy o VAT
+- Dotyczy: klientów prywatnych, inwestycji mieszkaniowych
+
+VAT 23%: Wszystkie inne przypadki:
+- Firmy i spółki (B2B)
+- Biurowce, hale, obiekty usługowe, handlowe
+- Obiekty mieszkalne powyżej limitów (>300 m² dom, >150 m² mieszkanie)
+- Usługi serwisowe, pogotowie elektryczne
+
+UWAGA: Materiały — zawsze VAT 23% (chyba że w ramach usługi kompleksowej z VAT 8%)
+
+=======================================================
+SEKCJA 4: ZESTAWY MONTAŻOWE (SMART ASSEMBLIES)
+=======================================================
+
+Gdy klient pyta o "punkt gniazda" lub "gniazdko" — system automatycznie kalkuluje:
+1. Gniazdo 230V (szt) — KNR 5-08 0401 — 0.20 rbh
+2. Puszka podtynkowa Ø60 (szt) — KNR 5-08 0301 — 0.12 rbh
+3. Przewód YDYp 3x2.5 (5 m) — KNR 5-08 0202 — 0.08 rbh/m × 5 = 0.40 rbh
+4. Bruzda w cegle (5 m) — KNR 5-08 0101 — 0.85 rbh/m × 5 = 4.25 rbh
+5. Zatynkowanie bruzdy (5 m) — KNR 5-08 0107 — 0.12 rbh/m × 5 = 0.60 rbh
+ŁĄCZNIE ROBOCIZNA: ~5.57 rbh × stawka regionalna
+
+Gdy klient pyta o "punkt świetlny" lub "włącznik + lampa":
+1. Łącznik jednobiegunowy (szt) — KNR 5-08 0501 — 0.15 rbh
+2. Puszka podtynkowa Ø60 (szt) — KNR 5-08 0301 — 0.12 rbh
+3. Puszka sufitowa (szt) — KNR 5-08 0305 — 0.15 rbh
+4. Wypust oświetleniowy (szt) — KNR 5-08 0701 — 0.20 rbh
+5. Przewód YDYp 3x1.5 (8 m) — KNR 5-08 0201 — 0.07 rbh/m × 8 = 0.56 rbh
+6. Bruzda (8 m) — KNR 5-08 0101 — 0.85 rbh/m × 8 = 6.80 rbh
+ŁĄCZNIE ROBOCIZNA: ~7.98 rbh × stawka regionalna
+
+=======================================================
+SEKCJA 5: NORMY CZASOWE — SZYBKA REFERENCJA
+=======================================================
+
+BRUZDOWANIE:
+- Cegła/Silikat/Ytong: 0.85 rbh/m (1-przewodowa), 1.10 rbh/m (2-przewodowa)
+- Beton/Żelbet: 2.00 rbh/m
+- G-K/Gips: 0.18 rbh/m
+- Zatynkowanie bruzdy: 0.12 rbh/m
+
+PRZEWODY I KABLE (układanie):
+- YDYp 3x1.5 mm²: 0.07 rbh/m
+- YDYp 3x2.5 mm²: 0.08 rbh/m
+- YDYp 5x2.5 mm²: 0.11 rbh/m
+- YDYp 5x4 mm²: 0.13 rbh/m
+- NYM okrągły 3x2.5: 0.09 rbh/m
+- Kabel LAN Cat 6a: 0.045 rbh/m
+- Kabel solarny DC H1Z2Z2-K 6mm²: 0.10 rbh/m
+- Kabel ziemny YKY 3x2.5: 0.07 rbh/m
+
+OSPRZĘT (montaż):
+- Gniazdo 230V pojedyncze: 0.20 rbh/szt
+- Gniazdo 230V podwójne: 0.25 rbh/szt
+- Gniazdo bryzgoszczelne IP44: 0.30 rbh/szt
+- Gniazdo CEE 16A 3-faz.: 0.50 rbh/szt
+- Gniazdo CEE 32A 3-faz.: 0.65 rbh/szt
+- Łącznik jednobiegunowy: 0.15 rbh/szt
+- Łącznik schodowy/krzyżowy: 0.20–0.22 rbh/szt
+- Ściemniacz (dimmer): 0.30 rbh/szt
+
+APARATURA ROZDZIELCZA:
+- MCB 1P: 0.15 rbh/szt
+- MCB 3P: 0.25 rbh/szt
+- RCD 2P 30mA: 0.25 rbh/szt
+- RCBO 1P+N: 0.30 rbh/szt
+- SPD typ II: 0.35 rbh/szt
+
+FOTOWOLTAIKA:
+- Panel PV dach skośny: 0.45 rbh/szt
+- Panel PV dach płaski: 0.55 rbh/szt
+- Inwerter hybrydowy 10-15kW: 2.50 rbh/szt
+- Magazyn energii 10kWh: 3.00 rbh/szt
+- Ładowarka EV 7.4kW: 2.50 rbh/szt
+
+OŚWIETLENIE:
+- Oprawa prosta LED: 0.35 rbh/szt
+- Downlight GU10: 0.20 rbh/szt
+- High Bay LED 100-200W: 0.80 rbh/szt
+- Naświetlacz zewnętrzny: 0.70 rbh/szt
+- Oprawa awaryjna EXIT: 0.50 rbh/szt
+
+POMIARY:
+- Impedancja pętli zwarcia (1 pkt): 0.12 rbh
+- Rezystancja izolacji (obwód): 0.25 rbh
+- Badanie RCD: 0.30 rbh
+- Protokół zbiorczy: 1.50 rbh/kpl
+
+=======================================================
+SEKCJA 6: KATEGORIE KNR — SYNONIMY I SŁOWA KLUCZOWE
+=======================================================
+
+bruzdowanie = kucie | rowek | bruzda | wykucie | rowek kablowy | cięcie ściany
+kablowanie = przewód | kabel | układanie | prowadzenie kabla | trasa
+osprzet_elektryczny = gniazdo | kontakt | gniazdko | wyłącznik | włącznik | przełącznik | ściemniacz
+puszki = puszka | skrzynka instalacyjna | rozgałęźnik | junction box
+trasy_kablowe = koryto | korytko | drabinka | rura | kanał kablowy | DVK | HDPE | rów
+rozdzielnice = tablica | skrzynka elektryczna | rozdzielnia | panel elektryczny | szafa
+breaker = bezpiecznik | wyłącznik | mcb | nadprądowy | bezpiecznik automatyczny
+rcd = różnicówka | fi | elecro | różnicowoprądowy | RCCB | prąd upływowy
+fotowoltaika = pv | solar | panele słoneczne | energia słoneczna | instalacja solarna | mikroinstalacja
+ev_ladowanie = wallbox | ładowarka do samochodu | ładowanie ev | stacja ładowania | punkt ładowania ev
+ogrzewanie_elektryczne = mata grzewcza | kabel grzewczy | ogrzewanie podłogowe | folia grzewcza | ciepła podłoga
+lan_teleinformatyka = sieć | internet | lan | wifi | rj45 | patchpanel | szafa rack | it
+oswietlenie = lampa | oprawa | oświetlenie | LED | żarówka | punkt świetlny | oświetlenie sufitowe
+oswietlenie_awaryjne = exit | ewakuacja | awaryjna | noc | bateria lampa | oświetlenie zapasowe
+alarmowe = alarm | czujnik | cctv | kamera | monitoring | bms | klapa
+odgromowa = piorun | uziom | odgromnik | uziemienie | piorunochroni | linka Cu
+demontaz = demontaż | rozbiorka | rozbiórka | likwidacja instalacji | usunięcie | wymiana instalacji | remont elektryczny
+przepusty = przepust | EI60 | EI120 | obroża pożarowa | roxtec | uszczelnienie ogniowe | dławica | mufa | głowica
+silniki_napedy = silnik | falownik | vfd | przemiennik częstotliwości | softstart | serwomotor | napęd elektryczny | DOL
+stacje_transformatorowe = transformator | stacja SN | rozdzielnica SN | komora SN | trafo | 15kV | 20kV | WN
+agregaty_ups = agregat | generator prądu | prądnica | ups | szr | ats | zasilanie awaryjne | szafa szr
+wlz_przylacza = wlz | przyłącze | linia zasilająca | kabel główny | zarobienie | głowicowanie kabla
+klima_hvac = klimatyzacja | klimatyzator | split | rekuperator | wentylacja mechaniczna | chiller | hvac | pompa cyrkulacyjna
+bms_dali_knx = dali | knx | bms | automatyka budynku | sterownik oświetlenia | scena | programowanie knx | ets | modbus
+pompy_ciepla = pompa ciepła | monoblok | grunt-woda | cwu | heat pump | geotermia | ciepło ze gruntu
+instalacje_zewnetrzne = słup oświetleniowy | oprawa uliczna | naświetlacz zewnętrzny | oświetlenie parkingu | brama elektryczna
+rury_instalacyjne = rura karbowana | peszel | rura sztywna pvc | rura stalowa | hdpe | rurka osłonowa | wciąganie kabla
+
+=======================================================
+SEKCJA 7: NORMY PRAWNE I TECHNICZNE 2026
+=======================================================
+
+PN-HD 60364 (seria): Instalacje elektryczne niskiego napięcia (zastąpiła PN-IEC 60364)
+- PN-HD 60364-4-41: Ochrona przed porażeniem elektrycznym
+- PN-HD 60364-4-43: Ochrona przed przetężeniem
+- PN-HD 60364-5-51: Dobór i montaż wyposażenia
+- PN-HD 60364-5-52: Instalacje kablowe
+- PN-HD 60364-5-53: Aparatura łączeniowa i sterownicza
+- PN-HD 60364-6: Sprawdzanie instalacji (badania odbiorcze)
+- PN-HD 60364-7-701: Pomieszczenia z wanną lub prysznicem
+- PN-HD 60364-7-712: Instalacje fotowoltaiczne
+
+PN-EN 50174 (seria): Instalacje okablowania informatycznego
+PN-EN 50310: Uziemienie i ekranowanie instalacji IT
+PN-EN 62305: Ochrona odgromowa obiektów budowlanych
+PN-EN 54 (seria): Systemy sygnalizacji pożarowej
+PN-EN 12464: Oświetlenie miejsc pracy (natężenie oświetlenia w lux)
+IEC 61439: Rozdzielnice i tablice elektryczne
+IEC 62933: Systemy magazynowania energii elektrycznej
+
+ROZPORZĄDZENIE MINISTRA INFRASTRUKTURY z 12.04.2002
+(warunki techniczne budynków i ich usytuowania) — wymagania dla instalacji:
+§ 180: Odległości gniazdek od podłogi min. 0.30 m
+§ 183: Bezpieczniki automatyczne, wyłączniki różnicowoprądowe 30mA w łazienkach
+§ 185: Ochrona przepięciowa dla budynków
+
+ROZPORZĄDZENIE O SYSTEMACH PROSUMENCKICH (2024):
+- Prosumenci OSD mogą eksportować 100% energii do sieci
+- Net-billing od 2022 (rozliczenie wartościowe, nie ilościowe)
+- Obowiązek rejestracji instalacji >50 kW w URE
+
+=======================================================
+SEKCJA 8: MATERIAŁY — CENY REFERENCYJE 2026 (orientacyjne)
+=======================================================
+
+UWAGA: Ceny materiałów aktualizowane są przez globalny katalog ES. Poniższe to wartości ORIENTACYJNE dla walidacji wycen przez AI.
+
+Przewody i kable:
+- YDYp 3x1.5 mm²: 1.80–2.20 PLN/m
+- YDYp 3x2.5 mm²: 2.80–3.40 PLN/m
+- YDYp 5x2.5 mm²: 5.20–6.50 PLN/m
+- YDYp 5x4 mm²: 7.50–9.00 PLN/m
+- YKY (NYY) 4x10 mm² ziemny: 12.00–16.00 PLN/m
+- Kabel LAN Cat 6a FTP: 2.80–4.50 PLN/m
+- Kabel solarny 6mm² H1Z2Z2-K: 4.50–6.00 PLN/m
+
+Osprzęt (klasa średnia — ABB, Schneider, Legrand):
+- Gniazdo 230V pojedyncze: 12–25 PLN/szt
+- Łącznik jednobiegunowy: 10–20 PLN/szt
+- Puszka podtynkowa Ø60: 1.50–3.00 PLN/szt
+- Puszka hermetyczna IP55: 8–18 PLN/szt
+
+Aparatura (Eaton, Schneider, ABB):
+- MCB 1P 16A typ B/C: 15–35 PLN/szt
+- RCD 2P 25A/30mA typ A: 80–180 PLN/szt
+- RCBO 1P+N 16A/30mA: 90–200 PLN/szt
+- SPD typ II (T2) 3-fazowy: 200–450 PLN/szt
+
+Fotowoltaika (2026):
+- Panel PV 400-440W mono: 380–550 PLN/szt
+- Panel PV 550-650W bifacial: 600–850 PLN/szt
+- Inwerter string 5kW: 1800–2800 PLN/szt
+- Inwerter hybrydowy 10kW: 5000–9000 PLN/szt
+- Magazyn LiFePO4 10kWh: 8000–15000 PLN/szt
+- Wallbox AC 11kW: 1500–3500 PLN/szt
+
+=======================================================
+SEKCJA 9: STANDARDOWE ZAKRESY PRAC — TYPY PROJEKTÓW
+=======================================================
+
+1. MIESZKANIE (50-100 m², nowy standard 2026):
+Typowe pozycje: 30-50 gniazdek 230V, 15-25 łączników, 10-20 punktów oświetleniowych, 1-2 rozdzielnice, 200-350 m kabla YDYp, 200-350 m bruzd, pomiary odbiorcze.
+Orientacyjny czas robocizny: 60-120 rbh
+
+2. DOM (150-250 m², pełna instalacja):
+Typowe pozycje: 60-100 gniazdek, 30-45 łączników, 25-40 punktów oświetleniowych, 2-3 rozdzielnice, 500-800 m kabla, 500-800 m bruzd, uziemienie, domofon, 1 ładowarka EV.
+Orientacyjny czas robocizny: 150-280 rbh
+
+3. BIURO (200 m² open space):
+Typowe pozycje: Koryto 150m, LAN 40 punktów Cat 6a, 1 szafa RACK 12U, WiFi 6E 4 AP, 30 gniazd floorbox/kolumny, DALI oświetlenie, UPS, oświetlenie awaryjne 20 opraw.
+Orientacyjny czas robocizny: 80-160 rbh
+
+4. HALA PRODUKCYJNA (1000 m²):
+Typowe pozycje: Drabinki 300mm 200m, kable NYY/YKXS 1000m, oświetlenie High Bay 40 szt, rozdzielnica przemysłowa, zasilanie maszyn 400V, uziemienie przemysłowe.
+Orientacyjny czas robocizny: 300-600 rbh
+
+=======================================================
+SEKCJA 10: ZASADY WYCENY AI — NAJWAŻNIEJSZE PRZYPOMNIENIE
+=======================================================
+
+1. ZAWSZE rozdzielaj Robociznę (rbh × stawka) od Materiału (cena katalogowa)
+2. NIGDY nie sumuj ich przed ostatecznym zestawieniem
+3. Mnożnik regionalny stosuj TYLKO do Robocizny
+4. VAT: 8% dla klientów prywatnych budownictwo mieszkaniowe, 23% B2B
+5. Przy braku danych o materiale — pytaj lub użyj wartości orientacyjnej + oznacz jako "do weryfikacji"
+6. Normy podane w rbh = normogodziny (nie to samo co godziny zegarowe — narzut na czas ~15%)
+7. Dla prac niestandardowych (wysokościowe, ATEX, noce) stosuj współczynnik 1.3–1.5×
+8. Każda wycena musi zawierać pozycję "Pomiary i dokumentacja odbiorcza" (1.5–3.0 rbh/kpl)
+
+Data ostatniej aktualizacji bazy: marzec 2026 (v3.0 — dodano 12 nowych kategorii)

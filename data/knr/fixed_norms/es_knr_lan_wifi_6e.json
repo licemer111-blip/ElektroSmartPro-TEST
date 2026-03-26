@@ -1,0 +1,478 @@
+[
+  {
+    "catalog_code": "KNR 5-12 3101",
+    "table_number": "5106",
+    "column_number": "01",
+    "description": "Ułożenie kabla skrętkowego Cat 6a (U/FTP lub F/FTP) 10 Gbit w gotowych trasach",
+    "unit": "m",
+    "labor_norm": 0.045,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "cat6a",
+      "kabel cat6a",
+      "10gbit kabel",
+      "u/ftp 6a",
+      "f/ftp cat6a",
+      "skrętka 6a",
+      "kabel sieciowy 10g",
+      "okablowanie strukturalne cat6a"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3102",
+    "table_number": "5106",
+    "column_number": "02",
+    "description": "Ułożenie kabla skrętkowego Cat 7 / Cat 7A (S/FTP) 10G/25G w trasach lub bruzdach",
+    "unit": "m",
+    "labor_norm": 0.055,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "cat7",
+      "cat7a",
+      "s/ftp",
+      "kabel cat7",
+      "25gbit",
+      "kabel 10g cat7",
+      "skrętka cat7"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3103",
+    "table_number": "5106",
+    "column_number": "03",
+    "description": "Ułożenie kabla Cat 8 (S/FTP, 25/40G) do data center / serwerowni",
+    "unit": "m",
+    "labor_norm": 0.07,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": true,
+    "synonyms": [
+      "cat8",
+      "kabel 25g",
+      "kabel 40g",
+      "data center cabling",
+      "serwerownia kabel",
+      "cat8 s/ftp"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3104",
+    "table_number": "5106",
+    "column_number": "04",
+    "description": "Montaż gniazda keystone Cat 6a RJ45 z montażem w gniazd. lub korycie (zarabianie)",
+    "unit": "szt",
+    "labor_norm": 0.28,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "keystone cat6a",
+      "gniazdo rj45 cat6a",
+      "punkt lan cat6a",
+      "punch down cat6a",
+      "zarabianie cat6a",
+      "moduł rj45 10g"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3105",
+    "table_number": "5106",
+    "column_number": "05",
+    "description": "Zaszycie panelu krosowego 24-portowego Cat 6a (punchdown narzędzie, opisanie)",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "patchpanel cat6a",
+      "panel krosowy 24p cat6a",
+      "zaszycie patchpanelu 6a",
+      "panel 10g",
+      "punchdown 24 port",
+      "zarabianie patchpanelu cat6a"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3106",
+    "table_number": "5106",
+    "column_number": "06",
+    "description": "Zaszycie panelu krosowego 48-portowego Cat 6 (dense panel)",
+    "unit": "szt",
+    "labor_norm": 4.5,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "patchpanel 48 port",
+      "panel 48p",
+      "dense patchpanel",
+      "zaszycie 48 portów",
+      "panel krosowy 48"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3201",
+    "table_number": "5106",
+    "column_number": "07",
+    "description": "Montaż punktu dostępowego Wi-Fi 6E (802.11ax/be) PoE na suficie lub ścianie",
+    "unit": "szt",
+    "labor_norm": 1.3,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "wifi 6e",
+      "access point wifi 6e",
+      "wifi 7",
+      "802.11ax",
+      "802.11be",
+      "ap wifi 6e",
+      "unifi wifi 6e",
+      "cisco wifi 6",
+      "punkt dostępowy 6ghz",
+      "wifi6 poe"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3202",
+    "table_number": "5106",
+    "column_number": "08",
+    "description": "Montaż i konfiguracja kontrolera Wi-Fi (Cloud Controller / on-premise) dla sieci AP",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "kontroler wifi",
+      "cloud controller",
+      "unifi controller",
+      "wifi management",
+      "cloud key",
+      "sdwan wifi",
+      "zarządzanie siecią wifi"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3203",
+    "table_number": "5106",
+    "column_number": "09",
+    "description": "Montaż injektora PoE++ (90W) lub PoE Switch PoE+ (802.3bt) dla zasilania AP / kamer",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "injektor poe",
+      "poe plus",
+      "poe++ 90w",
+      "802.3bt",
+      "switch poe",
+      "zasilanie poe",
+      "poe midspan"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3301",
+    "table_number": "5106",
+    "column_number": "10",
+    "description": "Spawanie włókna światłowodowego OM4/OS2 (single fusion splice)",
+    "unit": "szt",
+    "labor_norm": 0.28,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "spawanie światłowodu",
+      "fusion splice",
+      "spaw fo",
+      "pigtail fo",
+      "spawanie włókna",
+      "om4 splice",
+      "os2 splice"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3302",
+    "table_number": "5106",
+    "column_number": "11",
+    "description": "Montaż przełącznicy światłowodowej 12-SC/LC w szafie rack (FDF) + zarabianie",
+    "unit": "szt",
+    "labor_norm": 1.8,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "przełącznica fo",
+      "fdf",
+      "fiber panel",
+      "patchpanel światłowodowy",
+      "przełącznica lc",
+      "przełącznica sc",
+      "panel fo 12 portów"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3303",
+    "table_number": "5106",
+    "column_number": "12",
+    "description": "Ułożenie kabla światłowodowego wielowłóknowego (OM3/OM4, 4-24 włókna) w budynku",
+    "unit": "m",
+    "labor_norm": 0.055,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel om4",
+      "kabel om3",
+      "światłowód 12 włókien",
+      "światłowód 24 włókna",
+      "kabel fo multicore",
+      "kabel trunk fo",
+      "światłowód wielowłóknowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3304",
+    "table_number": "5106",
+    "column_number": "13",
+    "description": "Ułożenie kabla światłowodowego zewnętrznego (OS2, 8-48 włókien) w ziemi/rynnie",
+    "unit": "m",
+    "labor_norm": 0.08,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel os2 zewnętrzny",
+      "światłowód ziemny",
+      "kabel fo ziemny",
+      "outdoor fiber",
+      "adss kabel",
+      "fo outdoor",
+      "kabel fo 48 włókien"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3401",
+    "table_number": "5106",
+    "column_number": "14",
+    "description": "Montaż szafy RACK 19-calowej stojącej 42U (Data Center / IT room) z uziemieniem",
+    "unit": "szt",
+    "labor_norm": 5.0,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "rack 42u",
+      "szafa serwerowa",
+      "szafa data center",
+      "rack it",
+      "rack 19 cali stojący",
+      "server rack",
+      "szafa 42u it"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3402",
+    "table_number": "5106",
+    "column_number": "15",
+    "description": "Montaż szafy RACK 19-calowej wiszącej 9U / 12U (dla biur i SB)",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "rack 9u",
+      "rack 12u",
+      "szafa wisząca it",
+      "mini rack biurowy",
+      "rack ścienny",
+      "wall mount rack",
+      "szafa it wisząca"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3403",
+    "table_number": "5106",
+    "column_number": "16",
+    "description": "Montaż i konfiguracja switcha zarządzalnego L2/L3 (np. Cisco, Juniper, Ubiquiti) w rack",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "switch zarządzalny",
+      "managed switch",
+      "switch l2",
+      "switch l3",
+      "cisco catalyst",
+      "ubiquiti usw",
+      "hp switch zarządzalny",
+      "vlan switch"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3404",
+    "table_number": "5106",
+    "column_number": "17",
+    "description": "Montaż routera / firewalla (Mikrotik, FortiGate, pfSense) i konfiguracja sieci WAN",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "router",
+      "firewall",
+      "mikrotik",
+      "fortinet",
+      "pfsense",
+      "router brzegowy",
+      "brama sieciowa",
+      "wan router",
+      "konfiguracja sieci"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3405",
+    "table_number": "5106",
+    "column_number": "18",
+    "description": "Montaż UPS (stand-alone, 1-3 kVA) dla szafy RACK / serwera",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "ups rack",
+      "ups serwer",
+      "zasilacz awaryjny rack",
+      "ups 2kva",
+      "ups it",
+      "apc ups",
+      "eaton ups",
+      "ups 1kva"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3501",
+    "table_number": "5106",
+    "column_number": "19",
+    "description": "Montaż Floorboxa biurowego podłogowego (puszka podłogowa — LAN + 230V + HDMI)",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "floorbox",
+      "puszka podłogowa",
+      "gniazdo podłogowe biurowe",
+      "floor outlet",
+      "skrzynka podłogowa lan",
+      "gniazdo w podłodze"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3502",
+    "table_number": "5106",
+    "column_number": "20",
+    "description": "Montaż kolumny zasilająco-komunikacyjnej do biurka/open space (Legrand, Hager)",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "kolumna biurowa",
+      "kolumna zasilająca",
+      "słupek zasilający",
+      "kolumna open space",
+      "kolumna biurkowa",
+      "trunk biurowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3601",
+    "table_number": "5106",
+    "column_number": "21",
+    "description": "Pomiary certyfikacyjne sieci LAN Cat 6a (Fluke DSX2-8000 lub Versiv) — wydruk protokołu",
+    "unit": "szt",
+    "labor_norm": 0.18,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "certyfikacja lan cat6a",
+      "fluke pomiar",
+      "certyfikacja 10g",
+      "test punktu lan",
+      "pomiar toru cat6a",
+      "protokół certyfikacji",
+      "dsx2 pomiar"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3602",
+    "table_number": "5106",
+    "column_number": "22",
+    "description": "Pomiary reflektometryczne OTDR linii światłowodowej (jednomodowej/wielomodowej)",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "otdr",
+      "reflektometr fo",
+      "pomiar fo otdr",
+      "certyfikacja fo",
+      "test włókna",
+      "pomiar światłowodu",
+      "protokół fo"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3603",
+    "table_number": "5106",
+    "column_number": "23",
+    "description": "Konfiguracja VLAN, QoS, Spanning Tree na przełącznikach zarządzalnych (roboczogodzina)",
+    "unit": "godz",
+    "labor_norm": 1.0,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "konfiguracja vlan",
+      "qos sieć",
+      "spanning tree",
+      "konfiguracja switcha",
+      "trunk port",
+      "vlan biurowy",
+      "sieć korporacyjna konfiguracja"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3701",
+    "table_number": "5106",
+    "column_number": "24",
+    "description": "Montaż okablowania telefonicznego / VOIP (skrętka Cat 5e, gniazda RJ11/RJ45)",
+    "unit": "m",
+    "labor_norm": 0.04,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "telefon voip",
+      "okablowanie telefoniczne",
+      "rj11 gniazdo",
+      "cat5e telefon",
+      "kabel telefoniczny",
+      "linia telefoniczna",
+      "voip cabling"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12 3702",
+    "table_number": "5106",
+    "column_number": "25",
+    "description": "Montaż systemu BMS / KNX — kabel instalacyjny YCYM 2x2x0.8 (skrętka KNX)",
+    "unit": "m",
+    "labor_norm": 0.07,
+    "knr_category": "lan_teleinformatyka",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel knx",
+      "ycym kabel",
+      "bms kabel",
+      "autobus knx",
+      "bus kabel",
+      "inteligentny budynek kabel",
+      "knx tp kabel"
+    ]
+  }
+]

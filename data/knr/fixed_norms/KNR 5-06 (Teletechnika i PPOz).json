@@ -1,0 +1,239 @@
+[
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0101",
+    "column_number": "01",
+    "description": "Montaż czujki dymu (optyczna) na suficie",
+    "unit": "szt",
+    "labor_norm": 0.85,
+    "section": "01",
+    "material_category": "ppoz",
+    "is_industrial": false,
+    "synonyms": [
+      "czujka dymu",
+      "detektor dymu",
+      "czujnik pożarowy",
+      "optyczna czujka",
+      "smoke detector",
+      "czujka sap",
+      "sygnałizator dymu",
+      "detektor pożaru"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0105",
+    "column_number": "02",
+    "description": "Montaż ROP (Ręczny Ostrzegacz Pożarowy)",
+    "unit": "szt",
+    "labor_norm": 1.25,
+    "section": "01",
+    "material_category": "ppoz",
+    "is_industrial": false,
+    "synonyms": [
+      "rop",
+      "ręczny ostrzegacz pożarowy",
+      "przycisk pożarowy",
+      "manual call point",
+      "przycisk sap",
+      "mcp",
+      "alarm pożarowy przycisk",
+      "czerwony przycisk pożar"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0201",
+    "column_number": "01",
+    "description": "Montaż Centrali Sygnalizacji Pożaru (CSP)",
+    "unit": "szt",
+    "labor_norm": 8.5,
+    "section": "02",
+    "material_category": "ppoz_centrala",
+    "is_industrial": false,
+    "synonyms": [
+      "centrala sap",
+      "csp",
+      "centrala pożarowa",
+      "panel alarmowy",
+      "fire alarm panel",
+      "centrala p.poż",
+      "system sygnalizacji pożaru",
+      "sap centrala",
+      "facp"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0301",
+    "column_number": "01",
+    "description": "Montaż sygnalizatora akustycznego (syrena)",
+    "unit": "szt",
+    "labor_norm": 0.9,
+    "section": "03",
+    "material_category": "ppoz",
+    "is_industrial": false,
+    "synonyms": [
+      "syrena alarmowa",
+      "sygnalizator dźwiękowy",
+      "goniec pożarowy",
+      "alarm dźwiękowy",
+      "sounder",
+      "syrena zewnętrzna",
+      "sygnałizator akustyczny",
+      "bell alarm"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0301",
+    "column_number": "02",
+    "description": "Montaż sygnalizatora optyczno-akustycznego (syrena z lampą stroboskopową)",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "section": "03",
+    "material_category": "ppoz",
+    "is_industrial": false,
+    "synonyms": [
+      "sygnalizator optyczno-akustyczny",
+      "strobo syrena",
+      "syrena ze strobem",
+      "sounder strobe",
+      "alarm strobe",
+      "sygnalizator pożarowy optyczny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0401",
+    "column_number": "01",
+    "description": "Ułożenie kabla sygnalizacyjnego HTKSH 2x2x0.8 (pożarowego) — na mb",
+    "unit": "m",
+    "labor_norm": 0.18,
+    "section": "04",
+    "material_category": "ppoz_cable",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel htksh",
+      "kabel pożarowy",
+      "przewód sap",
+      "linia sap kabel",
+      "fire cable htksh",
+      "kabel sygnalizacyjny ppoz"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0401",
+    "column_number": "02",
+    "description": "Ułożenie kabla telekomunikacyjnego YTDY 4x0.5 (alarmowego) — na mb",
+    "unit": "m",
+    "labor_norm": 0.12,
+    "section": "04",
+    "material_category": "alarm_cable",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel ytdy",
+      "kabel alarmowy układanie",
+      "ytdy 4x0.5",
+      "linia alarmowa",
+      "kabel alarm",
+      "alarm cable ytdy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0501",
+    "column_number": "01",
+    "description": "Montaż i podłączenie akumulatora podtrzymującego dla CSP (12V/7Ah–17Ah)",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "section": "05",
+    "material_category": "ppoz_centrala",
+    "is_industrial": false,
+    "synonyms": [
+      "akumulator csp",
+      "bateria centrali sap",
+      "backup battery sap",
+      "akumulator pożarowy",
+      "csp akumulator",
+      "sap battery"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0601",
+    "column_number": "01",
+    "description": "Montaż kamery CCTV IP wewnętrznej (Dome, PoE, 4MP) na suficie w systemie teletechniki",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "section": "06",
+    "material_category": "cctv",
+    "is_industrial": false,
+    "synonyms": [
+      "kamera dome",
+      "kamera ip 4mp",
+      "kamera sufit",
+      "ip camera poe",
+      "dome camera indoor",
+      "kamera wewnętrzna ip"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0601",
+    "column_number": "02",
+    "description": "Ułożenie kabla UTP Cat 5e/6 dla CCTV IP (na mb w korytku)",
+    "unit": "m",
+    "labor_norm": 0.10,
+    "section": "06",
+    "material_category": "cctv",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel cctv utp",
+      "utp kamera",
+      "cat6 cctv",
+      "kabel ip kamera",
+      "utp 5e cctv",
+      "ethernet camera cable"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0701",
+    "column_number": "01",
+    "description": "Montaż głośnika (Ceiling Speaker) dla systemu DSO/PA — wbudowany w sufit podwieszany",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "section": "07",
+    "material_category": "dso",
+    "is_industrial": false,
+    "synonyms": [
+      "głośnik sufitowy dso",
+      "ceiling speaker pa",
+      "głośnik pa sufitowy",
+      "dso głośnik",
+      "speaker fire evacuation",
+      "głośnik ewakuacyjny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0701",
+    "column_number": "02",
+    "description": "Montaż wzmacniacza mocy dla systemu DSO (100V linia) — 1 strefa",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "section": "07",
+    "material_category": "dso",
+    "is_industrial": false,
+    "synonyms": [
+      "wzmacniacz dso",
+      "amplifier 100v",
+      "pa amplifier fire",
+      "wzmacniacz ewakuacyjny",
+      "100v line amplifier",
+      "dso amplifier"
+    ]
+  }
+]

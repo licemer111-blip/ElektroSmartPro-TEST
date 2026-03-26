@@ -1,0 +1,268 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9039",
+    "column_number": "01",
+    "description": "Pogrążanie uziomu pionowego (szpilkowego) metodą udarową do 6m",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "knr_category": "Ochrona Odgromowa",
+    "is_industrial": false,
+    "synonyms": [
+      "uziom szpilkowy",
+      "szpilka uziemiająca",
+      "wbijanie uziomu",
+      "pręt uziomowy",
+      "uziom pionowy 6m"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9039",
+    "column_number": "02",
+    "description": "Montaż zwodu poziomego nienapiętego (drut odgromowy) na dachu skośnym",
+    "unit": "mb",
+    "labor_norm": 0.35,
+    "knr_category": "Ochrona Odgromowa",
+    "is_industrial": false,
+    "synonyms": [
+      "zwod poziomy",
+      "drut odgromowy",
+      "piorunochron poziomy",
+      "lps dach",
+      "instalacja odgromowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9039",
+    "column_number": "03",
+    "description": "Instalacja złącza kontrolnego w puszce (pomiarowego) dla instalacji odgromowej",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "knr_category": "Ochrona Odgromowa",
+    "is_industrial": false,
+    "synonyms": [
+      "złącze kontrolne",
+      "punkt pomiarowy uziom",
+      "puszka kontrolna",
+      "control joint lps"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9039",
+    "column_number": "04",
+    "description": "Montaż iglicy kominowej wolnostojącej wraz с osprzętem montażowym",
+    "unit": "szt",
+    "labor_norm": 1.8,
+    "knr_category": "Ochrona Odgromowa",
+    "is_industrial": false,
+    "synonyms": [
+      "iglica kominowa",
+      "maszt odgromowy",
+      "lightning rod",
+      "piorunochron iglica",
+      "zwod pionowy komin"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9039",
+    "column_number": "05",
+    "description": "Pomiar rezystancji uziemienia (metoda 3-biegunowa) wraz z protokołem",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "knr_category": "Ochrona Odgromowa",
+    "is_industrial": false,
+    "synonyms": [
+      "pomiar uziemienia",
+      "rezystancja uziemienia",
+      "pomiar oporności",
+      "3-biegunowy",
+      "protokol uziom"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9039",
+    "column_number": "06",
+    "description": "Ułożenie uziomu fundamentowego (taśma miedziowana 25x3) w ławie betonowej",
+    "unit": "mb",
+    "labor_norm": 0.35,
+    "knr_category": "Ochrona Odgromowa",
+    "is_industrial": false,
+    "synonyms": [
+      "uziom fundamentowy",
+      "taśma miedziana uziom",
+      "foundation earth",
+      "betonowy uziom",
+      "uziom w fundamencie",
+      "ground strap concrete"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9039",
+    "column_number": "07",
+    "description": "Montaż ogranicznika przepięć SPD Typ 1 (klasy I) przy złączu kablowym lub liczniku",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Ochrona Odgromowa",
+    "is_industrial": false,
+    "synonyms": [
+      "spd typ 1",
+      "klasa 1",
+      "ogranicznik typ 1",
+      "spd klasy i",
+      "ochrona przed piorunem",
+      "arrester typ 1",
+      "lightning arrester"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9039",
+    "column_number": "08",
+    "description": "Montaż ogranicznika przepięć SPD Typ 2 (klasy II) w rozdzielnicy głównej",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "knr_category": "Ochrona Odgromowa",
+    "is_industrial": false,
+    "synonyms": [
+      "spd typ 2",
+      "klasa 2",
+      "ogranicznik przepięć",
+      "spd klasy ii",
+      "ochrona przepięciowa",
+      "surge arrester typ 2",
+      "dehn spd"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9039",
+    "column_number": "09",
+    "description": "Wykonanie połączenia wyrównawczego głównego (PEW) — szyna wyrównawcza i przewody",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "knr_category": "Ochrona Odgromowa",
+    "is_industrial": false,
+    "synonyms": [
+      "połączenie wyrównawcze",
+      "szyna wyrównawcza",
+      "pew",
+      "main bonding",
+      "equipotential bonding",
+      "szyna główna pe"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9039",
+    "column_number": "10",
+    "description": "Wykonanie miejscowego połączenia wyrównawczego w łazience (zlewy, rury, wanna) — PEL",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "knr_category": "Ochrona Odgromowa",
+    "is_industrial": false,
+    "synonyms": [
+      "wyrównawcze łazienka",
+      "pel",
+      "local bonding bathroom",
+      "szyna pel",
+      "połączenie łazienka",
+      "bonding rur łazienka"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9039",
+    "column_number": "11",
+    "description": "Montaż systemu wyrównywania potencjałów przy basenie (strefa 0,1,2 — PN-HD 60364-7-702)",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "knr_category": "Ochrona Odgromowa",
+    "is_industrial": false,
+    "synonyms": [
+      "wyrównanie basen",
+      "potencjał basen",
+      "pool bonding",
+      "strefowe wyrównanie",
+      "basen uziemienie",
+      "pool equipotential bonding"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9039",
+    "column_number": "12",
+    "description": "Ułożenie drutu odgromowego na dachu płaskim (drut ocynkowany Fi8) z mocowaniami",
+    "unit": "mb",
+    "labor_norm": 0.3,
+    "knr_category": "Ochrona Odgromowa",
+    "is_industrial": false,
+    "synonyms": [
+      "drut odgromowy dach płaski",
+      "fi8 drut",
+      "wire lps flat roof",
+      "zwód dach płaski",
+      "lightning conductor flat",
+      "drut odgromowy poziomy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9039",
+    "column_number": "13",
+    "description": "Montaż przewodu odprowadzającego (zworka miedziana 16mm2) od iglicy do uziomów",
+    "unit": "mb",
+    "labor_norm": 0.4,
+    "knr_category": "Ochrona Odgromowa",
+    "is_industrial": false,
+    "synonyms": [
+      "przewód odprowadzający",
+      "down conductor",
+      "zworka odgromowa",
+      "copper down lead",
+      "odprowadzenie odgromowe",
+      "kabel odgromowy 16mm2"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9039",
+    "column_number": "14",
+    "description": "Wykonanie przeglądu i dokumentacji powykonawczej instalacji odgromowej wg PN-EN 62305",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "knr_category": "Ochrona Odgromowa",
+    "is_industrial": false,
+    "synonyms": [
+      "odbiór odgromówki",
+      "dokumentacja lps",
+      "en 62305",
+      "protokol odgromowy",
+      "certyfikat odgromowy",
+      "inspekcja odgromowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9039",
+    "column_number": "15",
+    "description": "Montaż puszki rewizyjnej złącza kontrolnego z pokrywą (dostępna do pomiarów)",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "Ochrona Odgromowa",
+    "is_industrial": false,
+    "synonyms": [
+      "puszka rewizyjna uziom",
+      "inspection pit lps",
+      "puszka kontrolna ziemia",
+      "access box earth",
+      "studzienka rewizyjna uziom",
+      "rewizja uziemienia"
+    ]
+  }
+]

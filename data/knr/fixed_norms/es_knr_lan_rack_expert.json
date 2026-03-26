@@ -1,0 +1,271 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9003",
+    "column_number": "01",
+    "description": "Ułożenie kabla skrętkowego (UTP/FTP kat. 5e/6/6a) w gotowych trasach kablowych",
+    "unit": "m",
+    "labor_norm": 3.8,
+    "is_industrial": false,
+    "knr_category": "lan_teleinformatyka",
+    "synonyms": [
+      "skrętka",
+      "utp",
+      "ftp",
+      "cat5e",
+      "cat6",
+      "cat6a",
+      "kabel lan",
+      "kabel sieciowy",
+      "okablowanie strukturalne"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9003",
+    "column_number": "02",
+    "description": "Ułożenie kabla światłowodowego (wewnątrz budynku) w gotowych trasach",
+    "unit": "m",
+    "labor_norm": 4.5,
+    "is_industrial": false,
+    "knr_category": "lan_teleinformatyka",
+    "synonyms": [
+      "światłowód",
+      "fiber",
+      "fo",
+      "kabel optyczny",
+      "om3",
+      "om4",
+      "os2",
+      "multimode",
+      "singlemode",
+      "kabel światłowodowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9003",
+    "column_number": "03",
+    "description": "Montaż modułu RJ45 (Keystone) i osadzenie w gnieździe natynkowym/podtynkowym",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "is_industrial": false,
+    "knr_category": "lan_teleinformatyka",
+    "synonyms": [
+      "keystone rj45",
+      "gniazdo lan",
+      "modul rj45",
+      "punkt logiczny",
+      "gniazdo sieciowe",
+      "outlet cat6",
+      "gniazdo komputerowe"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9003",
+    "column_number": "04",
+    "description": "Montaż Floorboxa (puszki podłogowej) wraz ze zbrojeniem w moduły M45 (Zasilanie + LAN)",
+    "unit": "szt",
+    "labor_norm": 1.1,
+    "is_industrial": false,
+    "knr_category": "lan_teleinformatyka",
+    "synonyms": [
+      "floorbox",
+      "puszka podłogowa",
+      "gniazdo podłogowe",
+      "skrzynka podłogowa",
+      "gniazdo biurowe",
+      "puszka m45",
+      "podpłogowe"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9003",
+    "column_number": "05",
+    "description": "Montaż szafy Rack 19-calowej wiszącej (do 15U) z uziemieniem",
+    "unit": "szt",
+    "labor_norm": 1.8,
+    "is_industrial": false,
+    "knr_category": "lan_teleinformatyka",
+    "synonyms": [
+      "rack wiszący",
+      "szafa 15u",
+      "rack ścienny",
+      "szafa teleinformatyczna wisząca",
+      "mini rack",
+      "szafa it wisząca"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9003",
+    "column_number": "06",
+    "description": "Montaż szafy Rack 19-calowej stojącej (Serwerowej, od 24U do 42U i wyżej)",
+    "unit": "szt",
+    "labor_norm": 4.5,
+    "is_industrial": false,
+    "knr_category": "lan_teleinformatyka",
+    "synonyms": [
+      "rack stojący",
+      "szafa serwerowa 42u",
+      "data center rack",
+      "szafa 24u",
+      "rack sieciowy",
+      "szafa kolokacja"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9003",
+    "column_number": "07",
+    "description": "Zaszycie Patchpanelu 24-portowego (kat. 5e/6) w szafie Rack",
+    "unit": "szt",
+    "labor_norm": 2.2,
+    "is_industrial": false,
+    "knr_category": "lan_teleinformatyka",
+    "synonyms": [
+      "patchpanel",
+      "panel krosowy",
+      "zaszycie panelu",
+      "zarabianie patchpanelu",
+      "punch down panel",
+      "rozszycie kabli",
+      "panel 24 port rack"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9003",
+    "column_number": "08",
+    "description": "Spawanie światłowodów w przełącznicy światłowodowej 19\" (pigtail do kabla liniowego)",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "is_industrial": false,
+    "knr_category": "lan_teleinformatyka",
+    "synonyms": [
+      "spawanie światłowodu",
+      "fusion splice",
+      "spawarka światłowodowa",
+      "pigtail",
+      "światłowód spaw",
+      "spawanie wlókna",
+      "przełącznica fo"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9003",
+    "column_number": "09",
+    "description": "Montaż wyposażenia szafy: Organizator kabli, Półka, Panel zaślepiający",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "is_industrial": false,
+    "knr_category": "lan_teleinformatyka",
+    "synonyms": [
+      "organizator kabli",
+      "półka rack",
+      "panel zaślepiający",
+      "1u blank",
+      "zarządzanie kablem",
+      "uchwyty kablowe rack"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9003",
+    "column_number": "10",
+    "description": "Montaż listwy zasilającej PDU (19\" lub pionowej) z podłączeniem",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "is_industrial": false,
+    "knr_category": "lan_teleinformatyka",
+    "synonyms": [
+      "pdu",
+      "listwa pdu",
+      "listwa zasilająca rack",
+      "power strip rack",
+      "listwa 19",
+      "zasilanie szafy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9003",
+    "column_number": "11",
+    "description": "Montaż i uruchomienie zasilacza awaryjnego UPS (wersja Rack 19\")",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "lan_teleinformatyka",
+    "synonyms": [
+      "ups rack",
+      "zasilacz awaryjny rack",
+      "ups 19",
+      "ups serwerowy",
+      "szyna ups",
+      "snmp ups",
+      "apc ups rack"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9003",
+    "column_number": "12",
+    "description": "Montaż sprzętu aktywnego (Switch, Router) w szafie i krosowanie portów (Patchcordy)",
+    "unit": "szt",
+    "labor_norm": 0.6,
+    "is_industrial": false,
+    "knr_category": "lan_teleinformatyka",
+    "synonyms": [
+      "switch",
+      "router",
+      "sprzęt aktywny",
+      "krosowanie",
+      "patchcord",
+      "switch sieciowy",
+      "cisco",
+      "ubiquiti",
+      "hp switch"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9003",
+    "column_number": "13",
+    "description": "Pomiary certyfikacyjne/dynamiczne sieci LAN (np. Miernikiem Fluke) z protokołem",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "is_industrial": false,
+    "knr_category": "lan_teleinformatyka",
+    "synonyms": [
+      "certyfikacja lan",
+      "fluke",
+      "pomiar sieci",
+      "test cat6",
+      "certyfikacja struktury",
+      "pomiar toru",
+      "protokol lan"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9003",
+    "column_number": "14",
+    "description": "Pomiary reflektometryczne linii światłowodowej (OTDR)",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "is_industrial": false,
+    "knr_category": "lan_teleinformatyka",
+    "synonyms": [
+      "otdr",
+      "reflektometr",
+      "pomiar światłowodu",
+      "test fo",
+      "reflektometria",
+      "pomiar włókna",
+      "certyfikacja fo"
+    ]
+  }
+]

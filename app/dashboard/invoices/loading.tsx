@@ -1,0 +1,5 @@
+import { PageSkeleton } from "@/components/ui/page-skeleton";
+
+export default function InvoicesLoading() {
+  return <PageSkeleton cards={3} table />;
+}

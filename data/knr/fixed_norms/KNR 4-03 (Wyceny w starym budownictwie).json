@@ -1,0 +1,259 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0101",
+    "column_number": "01",
+    "description": "Demontaż starej rozdzielnicy bezpiecznikowej (do 12 mod.)",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "section": "01",
+    "material_category": "demontaz",
+    "is_industrial": false,
+    "synonyms": [
+      "demontaż rozdzielnicy",
+      "wybićrka tablicy",
+      "stara tablica",
+      "skrzynka bezpiecznikowa",
+      "rozdzielnica korkowa",
+      "tablica elektryczna",
+      "demontaż tablicy",
+      "skrzynka z korkami"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0201",
+    "column_number": "02",
+    "description": "Wykuwanie bruzd dla przewodów YDYp 3x1.5-2.5 w betonie",
+    "unit": "m",
+    "labor_norm": 0.55,
+    "section": "02",
+    "material_category": "bruzdy",
+    "is_industrial": false,
+    "synonyms": [
+      "bruzdowanie betonu",
+      "kucie bruzd",
+      "bruzda w betonie",
+      "przebijanie betonu",
+      "szlifierka kątowa beton",
+      "kanał w betonie",
+      "bruzdownica",
+      "bruzdowanie cieniowe"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0201",
+    "column_number": "04",
+    "description": "Wykuwanie bruzd dla przewodów w cegle",
+    "unit": "m",
+    "labor_norm": 0.32,
+    "section": "02",
+    "material_category": "bruzdy",
+    "is_industrial": false,
+    "synonyms": [
+      "bruzdowanie cegły",
+      "kucie bruzd cegła",
+      "bruzda w cegle",
+      "kanał w cegle",
+      "bruzdownica cegła",
+      "bruzdowanie muru",
+      "robić bruzdę",
+      "cios cegły"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0305",
+    "column_number": "01",
+    "description": "Wykucie otworu pod puszkę fi 60 w betonie (otwornica)",
+    "unit": "szt",
+    "labor_norm": 0.45,
+    "section": "03",
+    "material_category": "otwory",
+    "is_industrial": false,
+    "synonyms": [
+      "otwór pod puszkę",
+      "otwornica beton",
+      "wiercenie fi60",
+      "otwór puszka p/t",
+      "wiertnica koronowa",
+      "otwor pod gnazdo",
+      "kucie otworu",
+      "fi60 beton"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0305",
+    "column_number": "02",
+    "description": "Wykucie otworu pod puszkę fi 80 (dla 2-krotki lub floorbox) w betonie",
+    "unit": "szt",
+    "labor_norm": 0.65,
+    "section": "03",
+    "material_category": "otwory",
+    "is_industrial": false,
+    "synonyms": [
+      "otwór fi80",
+      "otwornica fi80",
+      "puszka 2-krotna otwór",
+      "wiercenie fi80",
+      "koronka fi80",
+      "puszka łączeniowa otwór"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0305",
+    "column_number": "03",
+    "description": "Wiercenie otworu przelotowego w ścianie (fi 20-40mm) dla rurki lub kabla",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "section": "03",
+    "material_category": "otwory",
+    "is_industrial": false,
+    "synonyms": [
+      "wiercenie otworu",
+      "przelot przez ścianę",
+      "otworowanie ściany",
+      "durchbruch",
+      "wiertło koronkowe",
+      "przejście przez ścianę rura"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0401",
+    "column_number": "01",
+    "description": "Demontaż starego przewodu podtynkowego (kucie, wyjęcie, utylizacja) — na mb",
+    "unit": "m",
+    "labor_norm": 0.4,
+    "section": "04",
+    "material_category": "demolition_labor",
+    "is_industrial": false,
+    "synonyms": [
+      "demontaż przewodu",
+      "usunięcie starych kabli",
+      "wybiórka kabla",
+      "stary kabel usunięcie",
+      "demolition wiring",
+      "usuwanie instalacji"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0402",
+    "column_number": "01",
+    "description": "Demontaż rury instalacyjnej PVC lub metalowej z korytka/ściany",
+    "unit": "m",
+    "labor_norm": 0.25,
+    "section": "04",
+    "material_category": "demolition_labor",
+    "is_industrial": false,
+    "synonyms": [
+      "demontaż rury",
+      "usunięcie rurki",
+      "rura instalacyjna demontaż",
+      "pvc rura wybiórka",
+      "demontaż rurki inst",
+      "conduit removal"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0510",
+    "column_number": "01",
+    "description": "Poszukiwanie i usuwanie przerw w obwodach podtynkowych",
+    "unit": "godz",
+    "labor_norm": 1.0,
+    "section": "05",
+    "material_category": "serwis",
+    "is_industrial": false,
+    "synonyms": [
+      "szukanie przerwy",
+      "uszkodzenie przewodu",
+      "przerwa w obwodzie",
+      "diagnostyka instalacji",
+      "wykrywacz przerw",
+      "awaria elektryczna",
+      "inspekcja instalacji",
+      "szukanie usterki"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0601",
+    "column_number": "01",
+    "description": "Układanie rury instalacyjnej PVC (Ø20) podtynkowej z osprzętem",
+    "unit": "m",
+    "labor_norm": 0.22,
+    "section": "06",
+    "material_category": "conduit_labor",
+    "is_industrial": false,
+    "synonyms": [
+      "rurka pvc 20",
+      "rura podtynkowa",
+      "rurka instalacyjna",
+      "pvc conduit 20",
+      "rura kl. BI",
+      "peszl pvc"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0601",
+    "column_number": "02",
+    "description": "Układanie rury karbowanej (peszla) w tynku lub betonie — fi 20/25/32",
+    "unit": "m",
+    "labor_norm": 0.18,
+    "section": "06",
+    "material_category": "conduit_labor",
+    "is_industrial": false,
+    "synonyms": [
+      "peszel",
+      "rura karbowana",
+      "corrugated conduit",
+      "rurka falista",
+      "rura giętka pvc",
+      "peszel układanie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1201",
+    "column_number": "02",
+    "description": "Zaprawianie bruzd tynkiem renowacyjnym lub cementowym — po ułożeniu kabli (tynkarz)",
+    "unit": "m",
+    "labor_norm": 0.20,
+    "section": "12",
+    "material_category": "plaster_material",
+    "is_industrial": false,
+    "synonyms": [
+      "tynk renowacyjny",
+      "cement bruzdy",
+      "zaprawianie cementem",
+      "repair plaster",
+      "bruzdy po kablach zaprawa",
+      "odtworzenie bruzdy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1301",
+    "column_number": "01",
+    "description": "Wywóz i utylizacja gruzu elektrycznego (cegła, beton, tynk) — do 1t",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "section": "13",
+    "material_category": "demolition_labor",
+    "is_industrial": false,
+    "synonyms": [
+      "wywóz gruzu",
+      "utylizacja gruzu",
+      "gruz elektryczny",
+      "gruz budowlany elektryka",
+      "odbiór gruzu",
+      "wywiezienie gruzu"
+    ]
+  }
+]

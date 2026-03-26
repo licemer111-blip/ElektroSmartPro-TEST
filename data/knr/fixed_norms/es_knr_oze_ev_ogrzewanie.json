@@ -1,0 +1,161 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9005",
+    "column_number": "01",
+    "description": "Montaż stacji ładowania pojazdów EV (Wallbox 11kW/22kW) natynkowo na elewacji",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "is_industrial": false,
+    "knr_category": "ev_ladowanie",
+    "synonyms": [
+      "wallbox",
+      "stacja ładowania ev",
+      "ładowarka samochodów",
+      "punkt ładowania",
+      "ev charger",
+      "eobd",
+      "charger 11kw",
+      "charger 22kw",
+      "elektromobilność"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9005",
+    "column_number": "02",
+    "description": "Montaż zabezpieczeń dla stacji EV w rozdzielnicy głównej (RCD Typ B + B16/B32)",
+    "unit": "kpl",
+    "labor_norm": 1.0,
+    "is_industrial": false,
+    "knr_category": "ev_ladowanie",
+    "synonyms": [
+      "rcd typ b",
+      "zabezpieczenie ev",
+      "rcd b32",
+      "wyłącznik typ b",
+      "ochrona przed prądem stałym",
+      "ev protection",
+      "dc rcd"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9005",
+    "column_number": "03",
+    "description": "Montaż falownika (inwertera) fotowoltaicznego 3-fazowego na ścianie (do 15kW)",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "is_industrial": false,
+    "knr_category": "fotowoltaika",
+    "synonyms": [
+      "falownik pv",
+      "inwerter solarny",
+      "falownik fotowoltaiczny",
+      "inwerter 3f",
+      "solar inverter",
+      "fronius",
+      "sma",
+      "huawei inverter",
+      "falownik 15kw"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9005",
+    "column_number": "04",
+    "description": "Montaż modułu fotowoltaicznego na dachu skośnym (dachówka) wraz z konstrukcją",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "is_industrial": false,
+    "knr_category": "fotowoltaika",
+    "synonyms": [
+      "panel solarny",
+      "moduł pv",
+      "panel fotowoltaiczny",
+      "ogniwo pv",
+      "panel słoneczny",
+      "fotowoltaika",
+      "pv moduł",
+      "montaż paneli pv"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9005",
+    "column_number": "05",
+    "description": "Montaż i konfiguracja inteligentnego licznika energii (Smart Meter) z przekładnikami",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "fotowoltaika",
+    "synonyms": [
+      "smart meter",
+      "licznik energii",
+      "przekładnik prądowy",
+      "licznik dwukierunkowy",
+      "energy monitor",
+      "powermeter",
+      "ct sensor",
+      "load balancing"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9005",
+    "column_number": "06",
+    "description": "Ułożenie elektrycznej maty grzewczej podłogowej (np. pod płytki w łazience)",
+    "unit": "m2",
+    "labor_norm": 0.5,
+    "is_industrial": false,
+    "knr_category": "ogrzewanie_elektryczne",
+    "synonyms": [
+      "mata grzewcza",
+      "ogrzewanie podłogowe",
+      "elektryczne podłogówki",
+      "grzejnik podłogowy",
+      "kablik grzejny",
+      "heating mat",
+      "podłogówki elektryczne"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9005",
+    "column_number": "07",
+    "description": "Montaż termostatu pokojowego z podwójnym czujnikiem (powietrze + podłoga)",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "is_industrial": false,
+    "knr_category": "ogrzewanie_elektryczne",
+    "synonyms": [
+      "termostat",
+      "regulator temperatury",
+      "sterownik grzewczy",
+      "termostat wifi",
+      "timer grzejnika",
+      "smart termostat",
+      "regulator podłogówek"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9005",
+    "column_number": "08",
+    "description": "Elektryczne podłączenie pompy ciepła (jednostka zewnętrzna i wewnętrzna)",
+    "unit": "kpl",
+    "labor_norm": 4.5,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "pompa ciepła",
+      "heat pump",
+      "klimatyzacja",
+      "hvac",
+      "jednostka zewnętrzna",
+      "podłączenie pc",
+      "zasilanie pompy",
+      "inverter klimatyzacja"
+    ]
+  }
+]

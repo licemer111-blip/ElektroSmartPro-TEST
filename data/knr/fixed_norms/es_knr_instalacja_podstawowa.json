@@ -1,0 +1,1028 @@
+[
+  {
+    "catalog_code": "KNR 5-08 0101",
+    "table_number": "5101",
+    "column_number": "01",
+    "description": "Bruzdowanie ściany z cegły / silikatu / bloczka (bruzda 1-przewodowa, głęb. 3 cm)",
+    "unit": "m",
+    "labor_norm": 0.85,
+    "knr_category": "bruzdowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "bruzda",
+      "bruzdowanie",
+      "cegła",
+      "silikat",
+      "wykucie bruzdy",
+      "rowek w ścianie",
+      "kucie bruzdy",
+      "bruzda kablowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0102",
+    "table_number": "5101",
+    "column_number": "02",
+    "description": "Bruzdowanie ściany z cegły / silikatu — bruzda 2-przewodowa (poszerzenie)",
+    "unit": "m",
+    "labor_norm": 1.1,
+    "knr_category": "bruzdowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "bruzda 2-żyłowa",
+      "bruzda szeroka",
+      "podwójna bruzda",
+      "bruzdowanie cegła",
+      "bruzda dla 2 kabli"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0103",
+    "table_number": "5101",
+    "column_number": "03",
+    "description": "Bruzdowanie ściany betonowej / żelbetowej (bruzda 1-przewodowa)",
+    "unit": "m",
+    "labor_norm": 2.0,
+    "knr_category": "bruzdowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "bruzda beton",
+      "bruzdowanie beton",
+      "beton żelbetowy",
+      "szlifierka diamentowa",
+      "bruzda w betonie",
+      "bruzda żelbet"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0104",
+    "table_number": "5101",
+    "column_number": "04",
+    "description": "Bruzdowanie w ścianie z G-K / tynku gipsowego / styropianu",
+    "unit": "m",
+    "labor_norm": 0.18,
+    "knr_category": "bruzdowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "bruzda gips",
+      "bruzdowanie gk",
+      "płyta gipsowo-kartonowa",
+      "ściana karton-gips",
+      "bruzda gipsowa",
+      "gk instalacja"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0105",
+    "table_number": "5101",
+    "column_number": "05",
+    "description": "Przebicie otworu w ścianie ceglanej (śr. do 50mm) — przepust kablowy",
+    "unit": "szt",
+    "labor_norm": 0.6,
+    "knr_category": "bruzdowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "przebicie ściany",
+      "otwór w ścianie",
+      "przepust kablowy",
+      "wiercenie ściany",
+      "otwór kablowy",
+      "przeprawa przez ścianę"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0106",
+    "table_number": "5101",
+    "column_number": "06",
+    "description": "Przebicie otworu w ścianie betonowej (śr. do 80mm) — wiertnica diamentowa",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "bruzdowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "przebicie betonu",
+      "otwór beton",
+      "wiertnica diamentowa",
+      "core drill",
+      "wiercenie betonu",
+      "otwór w żelbecie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0107",
+    "table_number": "5101",
+    "column_number": "07",
+    "description": "Zasypanie i zatynkowanie bruzdy kablowej gipsem / zaprawą cementowo-wapienną",
+    "unit": "m",
+    "labor_norm": 0.12,
+    "knr_category": "bruzdowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "zamknięcie bruzdy",
+      "zatynkowanie bruzdy",
+      "zalewanie bruzdy",
+      "gipsowanie bruzdy",
+      "zasypanie kabla",
+      "tynkowanie bruzdy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0201",
+    "table_number": "5101",
+    "column_number": "08",
+    "description": "Ułożenie przewodu YDYp 3x1,5 mm² p/t w bruździe lub rurce",
+    "unit": "m",
+    "labor_norm": 0.07,
+    "knr_category": "kablowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "ydyp 3x1.5",
+      "przewód 3x1.5",
+      "kabel oświetleniowy",
+      "ydy 3x1.5",
+      "przewód płaski",
+      "kabel 1.5mm",
+      "obwód oświetleniowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0202",
+    "table_number": "5101",
+    "column_number": "09",
+    "description": "Ułożenie przewodu YDYp 3x2,5 mm² p/t w bruździe lub rurce",
+    "unit": "m",
+    "labor_norm": 0.08,
+    "knr_category": "kablowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "ydyp 3x2.5",
+      "przewód 3x2.5",
+      "kabel gniazdkowy",
+      "ydy 3x2.5",
+      "obwód 16a",
+      "przewód gniazdkowy",
+      "2.5mm przewód"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0203",
+    "table_number": "5101",
+    "column_number": "10",
+    "description": "Ułożenie przewodu YDYp 5x2,5 mm² p/t w bruździe (3-fazowy)",
+    "unit": "m",
+    "labor_norm": 0.11,
+    "knr_category": "kablowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "ydyp 5x2.5",
+      "przewód 5x2.5",
+      "kabel trójfazowy",
+      "3-fazowy przewód",
+      "pięciożyłowy",
+      "kabel kuchenny trójfazowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0204",
+    "table_number": "5101",
+    "column_number": "11",
+    "description": "Ułożenie przewodu YDYp 5x4 mm² p/t lub w rurce (silnik, piekarnik, klimatyzacja)",
+    "unit": "m",
+    "labor_norm": 0.13,
+    "knr_category": "kablowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "ydyp 5x4",
+      "przewód 5x4",
+      "kabel 4mm",
+      "obwód silnikowy",
+      "klimatyzacja zasilanie",
+      "piec elektryczny zasilanie",
+      "przewód do pieca"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0205",
+    "table_number": "5101",
+    "column_number": "12",
+    "description": "Ułożenie przewodu YDYp 5x6 mm² p/t (zasilanie kuchenki elektrycznej / pralki)",
+    "unit": "m",
+    "labor_norm": 0.15,
+    "knr_category": "kablowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "ydyp 5x6",
+      "przewód 5x6",
+      "kabel 6mm",
+      "kuchenka zasilanie",
+      "zasilanie indukcja",
+      "obwód 32a"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0206",
+    "table_number": "5101",
+    "column_number": "13",
+    "description": "Ułożenie kabla NYM-J 3x1,5 (okrągły, natynkowy, w rurce PCV lub korycie)",
+    "unit": "m",
+    "labor_norm": 0.08,
+    "knr_category": "kablowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "nym 3x1.5",
+      "kabel nym",
+      "kabel okrągły",
+      "kabel natynkowy",
+      "kabel do listwy",
+      "nym okrągły"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0207",
+    "table_number": "5101",
+    "column_number": "14",
+    "description": "Ułożenie kabla NYM-J 3x2,5 (natynkowy, instalacja przemysłowa/usługowa)",
+    "unit": "m",
+    "labor_norm": 0.09,
+    "knr_category": "kablowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "nym 3x2.5",
+      "kabel nym 2.5",
+      "kabel serwisowy",
+      "nym-j",
+      "kabel warsztatowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0208",
+    "table_number": "5101",
+    "column_number": "15",
+    "description": "Ułożenie przewodu HDGs (giętki, instalacyjny) w korytku lub korycie otwartym",
+    "unit": "m",
+    "labor_norm": 0.06,
+    "knr_category": "kablowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "hdgs",
+      "przewód giętki",
+      "linka instalacyjna",
+      "h07v-k",
+      "h05v-k",
+      "przewód giętki 2.5"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0301",
+    "table_number": "5101",
+    "column_number": "16",
+    "description": "Montaż puszki podtynkowej okrągłej PVC (Ø 60 lub Ø 68 mm) w ścianie",
+    "unit": "szt",
+    "labor_norm": 0.12,
+    "knr_category": "puszki",
+    "is_industrial": false,
+    "synonyms": [
+      "puszka podtynkowa",
+      "puszka pt",
+      "puszka okrągła",
+      "gniazdo puszka",
+      "puszka 60",
+      "puszka 68",
+      "puszka instalacyjna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0302",
+    "table_number": "5101",
+    "column_number": "17",
+    "description": "Montaż puszki podtynkowej 60x60 (podwójnej / kwadratowej) dla ramek 2-krotnych",
+    "unit": "szt",
+    "labor_norm": 0.18,
+    "knr_category": "puszki",
+    "is_industrial": false,
+    "synonyms": [
+      "puszka podwójna",
+      "puszka kwadratowa",
+      "puszka 60x60",
+      "puszka na 2 elementy",
+      "puszka na podwójny osprzęt"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0303",
+    "table_number": "5101",
+    "column_number": "18",
+    "description": "Montaż puszki hermetycznej IP55 (natynkowej lub do betonu) z dławnicą",
+    "unit": "szt",
+    "labor_norm": 0.2,
+    "knr_category": "puszki",
+    "is_industrial": false,
+    "synonyms": [
+      "puszka hermetyczna",
+      "puszka ip55",
+      "puszka łazienkowa",
+      "puszka wilgocioodporna",
+      "puszka ip44",
+      "puszka ogrodowa",
+      "puszka szczelna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0304",
+    "table_number": "5101",
+    "column_number": "19",
+    "description": "Montaż puszki rozgałęźnej podtynkowej (Ø 80 mm) z połączeniami",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "knr_category": "puszki",
+    "is_industrial": false,
+    "synonyms": [
+      "puszka rozgałęźna",
+      "puszka odgałęźna",
+      "skrzynka rozgałęźna",
+      "puszka 80mm",
+      "puszka przelotowa",
+      "puszka łącznikowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0305",
+    "table_number": "5101",
+    "column_number": "20",
+    "description": "Montaż puszki sufitowej podtynkowej (do oprawy / żyrandola) w suficie GK lub betonie",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "knr_category": "puszki",
+    "is_industrial": false,
+    "synonyms": [
+      "puszka sufitowa",
+      "puszka do żyrandola",
+      "puszka w suficie",
+      "puszka oświetleniowa",
+      "koszyk sufitowy",
+      "puszka do lampy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0401",
+    "table_number": "5101",
+    "column_number": "21",
+    "description": "Montaż gniazda 230V 16A pojedynczego podtynkowego (z bolcem, z uziemieniem)",
+    "unit": "szt",
+    "labor_norm": 0.2,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "gniazdo 230v",
+      "gniazdko",
+      "kontakt elektryczny",
+      "gniazdo pojedyncze",
+      "gniazdo z uziemieniem",
+      "gniazdo schuko",
+      "punkt gniazda",
+      "gniazdo pt"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0402",
+    "table_number": "5101",
+    "column_number": "22",
+    "description": "Montaż gniazda 230V 16A podwójnego podtynkowego (2x230V w jednej puszce)",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "gniazdo podwójne",
+      "gniazdko 2x",
+      "podwójne gniazdo",
+      "kontakt podwójny",
+      "gniazdo 2-krotne",
+      "dwa gniazda"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0403",
+    "table_number": "5101",
+    "column_number": "23",
+    "description": "Montaż gniazda 230V potrójnego (3x230V w ramce lub bloku gniazd)",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "gniazdo potrójne",
+      "gniazdko 3x",
+      "blok gniazd",
+      "3 gniazda",
+      "gniazdo 3-krotne",
+      "blok 3-gniazd"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0404",
+    "table_number": "5101",
+    "column_number": "24",
+    "description": "Montaż gniazda 230V z ładowarką USB-A/C (2x230V + 2xUSB)",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "gniazdo z usb",
+      "gniazdo usb",
+      "gniazdko usb-c",
+      "gniazdo ładowarka",
+      "kontakt z usb",
+      "gniazdo multimedia",
+      "outlet usb"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0405",
+    "table_number": "5101",
+    "column_number": "25",
+    "description": "Montaż gniazda bryzgoszczelnego 230V IP44 (łazienka, kuchnia, zewnętrzne)",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "gniazdo ip44",
+      "gniazdo łazienkowe",
+      "gniazdo bryzgoszczelne",
+      "gniazdo zewnętrzne",
+      "gniazdo ip65",
+      "gniazdo wilgocioodporne",
+      "gniazdo kuchenne"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0406",
+    "table_number": "5101",
+    "column_number": "26",
+    "description": "Montaż gniazda natynkowego 230V (na tynku, w listwie, w mieszkaniach po renowacji)",
+    "unit": "szt",
+    "labor_norm": 0.22,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "gniazdo natynkowe",
+      "gniazdo nt",
+      "gniazdko na ścianie",
+      "gniazdo remontowe",
+      "natynkowe 230v"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0407",
+    "table_number": "5101",
+    "column_number": "27",
+    "description": "Montaż gniazda siłowego 1-fazowego 16A (230V, CEE)",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "gniazdo cee",
+      "gniazdo siłowe",
+      "cee 16a 1-fazowe",
+      "gniazdo przemysłowe 1f",
+      "gniazdo 3-pinowe",
+      "gniazdo niebieskies"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0408",
+    "table_number": "5101",
+    "column_number": "28",
+    "description": "Montaż gniazda siłowego 3-fazowego 16A (400V, CEE 5-pin)",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "gniazdo trójfazowe",
+      "cee 16a 3-fazowe",
+      "gniazdo 400v",
+      "gniazdo 5-pin",
+      "gniazdo czerwone",
+      "gniazdo przemysłowe 3f",
+      "siłowe 400v"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0409",
+    "table_number": "5101",
+    "column_number": "29",
+    "description": "Montaż gniazda siłowego 3-fazowego 32A (400V, CEE 5-pin)",
+    "unit": "szt",
+    "labor_norm": 0.65,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "gniazdo cee 32a",
+      "gniazdo 32a trójfazowe",
+      "cee 32a 5p",
+      "gniazdo spawarki",
+      "gniazdo 32a 400v",
+      "siłowe 32a"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0501",
+    "table_number": "5101",
+    "column_number": "30",
+    "description": "Montaż łącznika jednobiegunowego (wyłącznik światła) podtynkowego",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "łącznik jednobiegunowy",
+      "wyłącznik światła",
+      "włącznik",
+      "przełącznik 1p",
+      "kontakt włącznika",
+      "wyłącznik pt",
+      "łącznik jednoklawiszowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0502",
+    "table_number": "5101",
+    "column_number": "31",
+    "description": "Montaż łącznika dwuklawiszowego (wyłącznik 2-obwodowy) podtynkowego",
+    "unit": "szt",
+    "labor_norm": 0.2,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "łącznik dwuklawiszowy",
+      "wyłącznik podwójny",
+      "włącznik 2-klawiszowy",
+      "podwójny włącznik",
+      "łącznik 2-krotny",
+      "przełącznik podwójny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0503",
+    "table_number": "5101",
+    "column_number": "32",
+    "description": "Montaż łącznika schodowego (dwubiegunowego) — para dla obwodu schodowego",
+    "unit": "szt",
+    "labor_norm": 0.2,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "łącznik schodowy",
+      "wyłącznik schodowy",
+      "przełącznik schodowy",
+      "łącznik dwubiegunowy",
+      "sterowanie schodowe",
+      "wyłącznik z dwóch miejsc"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0504",
+    "table_number": "5101",
+    "column_number": "33",
+    "description": "Montaż łącznika krzyżowego (do obwodów 3 i więcej punktów sterowania)",
+    "unit": "szt",
+    "labor_norm": 0.22,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "łącznik krzyżowy",
+      "wyłącznik krzyżowy",
+      "przełącznik krzyżowy",
+      "sterowanie z 3 miejsc",
+      "łącznik wielopunktowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0505",
+    "table_number": "5101",
+    "column_number": "34",
+    "description": "Montaż ściemniacza (dimmera) podtynkowego 0-300W",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "ściemniacz",
+      "dimmer",
+      "ściemniacz led",
+      "regulator jasności",
+      "dimmer podtynkowy",
+      "ściemniacz 230v",
+      "dimmer 300w"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0506",
+    "table_number": "5101",
+    "column_number": "35",
+    "description": "Montaż łącznika natynkowego (na tynku, remontowy)",
+    "unit": "szt",
+    "labor_norm": 0.17,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "wyłącznik natynkowy",
+      "łącznik nt",
+      "włącznik natynkowy",
+      "wyłącznik remontowy",
+      "łącznik na ścianie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0507",
+    "table_number": "5101",
+    "column_number": "36",
+    "description": "Montaż przycisku dzwonkowego / sygnalizacji podtynkowej",
+    "unit": "szt",
+    "labor_norm": 0.18,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "przycisk dzwonkowy",
+      "dzwonek",
+      "domofon przycisk",
+      "przycisk sygnalizacyjny",
+      "przycisk drzwiowy",
+      "dzwonek przy drzwiach"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0508",
+    "table_number": "5101",
+    "column_number": "37",
+    "description": "Montaż gniazda antenowego / TV / SAT podtynkowego",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "gniazdo tv",
+      "gniazdo antenowe",
+      "gniazdo sat",
+      "antena tv",
+      "IEC gniazdo",
+      "punkt antenowy",
+      "gniazdo kablówka"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0509",
+    "table_number": "5101",
+    "column_number": "38",
+    "description": "Montaż gniazda RJ-45 (LAN/Data) w ramce elektrycznej podtynkowej",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "gniazdo rj45",
+      "punkt lan",
+      "gniazdo komputerowe",
+      "gniazdo sieciowe",
+      "cat6 gniazdo",
+      "punkt logiczny",
+      "gniazdo internet"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0601",
+    "table_number": "5101",
+    "column_number": "39",
+    "description": "Montaż ramki 1-krotnej (pojedynczej) dla osprzętu podtynkowego",
+    "unit": "szt",
+    "labor_norm": 0.05,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "ramka pojedyncza",
+      "ramka 1x",
+      "ramka osprzętu",
+      "obwódka gniazda",
+      "ramka legrand",
+      "ramka schneider",
+      "osłona osprzętu"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0602",
+    "table_number": "5101",
+    "column_number": "40",
+    "description": "Montaż ramki 2-krotnej dla zestawu osprzętu (2 elementy obok siebie)",
+    "unit": "szt",
+    "labor_norm": 0.06,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "ramka podwójna",
+      "ramka 2x",
+      "ramka 2-krotna",
+      "ramka na 2 gniazda",
+      "podwójna ramka"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0603",
+    "table_number": "5101",
+    "column_number": "41",
+    "description": "Montaż ramki 3-krotnej (na 3 elementy) — biuro, salon, kuchnia",
+    "unit": "szt",
+    "labor_norm": 0.08,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "ramka 3x",
+      "ramka potrójnia",
+      "ramka 3-krotna",
+      "ramka na 3 gniazda",
+      "ramka biurowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0701",
+    "table_number": "5101",
+    "column_number": "42",
+    "description": "Montaż wypustu oświetleniowego (wylot kablowy w suficie na puszce sufitowej)",
+    "unit": "szt",
+    "labor_norm": 0.2,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "wypust oświetleniowy",
+      "wylot kablowy",
+      "punkt oświetleniowy",
+      "podłączenie lampy",
+      "punkt świetlny",
+      "wylot lampy",
+      "podłączenie oprawy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0702",
+    "table_number": "5101",
+    "column_number": "43",
+    "description": "Montaż czujnika ruchu PIR podtynkowego / natynkowego 230V (sterowanie oświetleniem)",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "czujnik ruchu",
+      "pir",
+      "sensor ruchu",
+      "detektor ruchu",
+      "czujnik pir 230v",
+      "wyłącznik pir",
+      "automatyczne oświetlenie",
+      "detektor podczerwieni"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0703",
+    "table_number": "5101",
+    "column_number": "44",
+    "description": "Montaż czujnika zmierzchowego (fotoprzełącznika) do sterowania oświetleniem zewnętrznym",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "czujnik zmierzchowy",
+      "fotoprzełącznik",
+      "sensor zmierzchu",
+      "automatyczne światło zewnętrzne",
+      "czujnik dzień-noc",
+      "fotokomórka",
+      "włącznik zmierzchowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0704",
+    "table_number": "5101",
+    "column_number": "45",
+    "description": "Montaż termostatu pokojowego (podtynkowego) do ogrzewania elektrycznego / HVAC",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "termostat pokojowy",
+      "termostat ścienny",
+      "regulator temperatury",
+      "termostat pt",
+      "sterownik ogrzewania",
+      "regulator ciepła",
+      "termostat ogrzewania podłogowego"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0705",
+    "table_number": "5101",
+    "column_number": "46",
+    "description": "Montaż wentylatora łazienkowego / wyciągowego (podłączenie elektryczne + mocowanie)",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "wentylator łazienkowy",
+      "wyciąg powietrza",
+      "wentylator wyciągowy",
+      "montaż wentylatora",
+      "wentylacja łazienki",
+      "wentylator sufitowy",
+      "fan łazienkowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0801",
+    "table_number": "5101",
+    "column_number": "47",
+    "description": "Montaż listwy kanałowej PCV (Legrand DLP, Hager, Schneider) na ścianie — do 40x20",
+    "unit": "m",
+    "labor_norm": 0.15,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "listwa kanałowa",
+      "listwa elektroinstalacyjna",
+      "kanał kablowy",
+      "listwa dlp",
+      "listwa natynkowa",
+      "kanał pvc",
+      "listwa biała"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0802",
+    "table_number": "5101",
+    "column_number": "48",
+    "description": "Ułożenie kabla / przewodu w listwie kanałowej PCV (praca dodatkowa do m listwy)",
+    "unit": "m",
+    "labor_norm": 0.05,
+    "knr_category": "kablowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel w listwie",
+      "przewód w kanale",
+      "instalacja listwy",
+      "kabel w pvc",
+      "prowadzenie kabla listwy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0901",
+    "table_number": "5101",
+    "column_number": "49",
+    "description": "Montaż instalacji w rurce osłonowej PVC Ø16-20 mm na tynku (uchwyt co 50cm)",
+    "unit": "m",
+    "labor_norm": 0.18,
+    "knr_category": "kablowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "rurka pvc",
+      "rura osłonowa",
+      "rurka instalacyjna",
+      "rura elektryczna",
+      "rurka rl",
+      "instalacja w rurce",
+      "rura dvk"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0902",
+    "table_number": "5101",
+    "column_number": "50",
+    "description": "Montaż instalacji w rurce osłonowej PVC w betonie / za tynkiem (pod zalewkę)",
+    "unit": "m",
+    "labor_norm": 0.15,
+    "knr_category": "kablowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "rurka pod tynk",
+      "rura w betonie",
+      "rura pod zalewkę",
+      "rura pt",
+      "rura instalacyjna pt",
+      "rurka elektryczna pt"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 1001",
+    "table_number": "5101",
+    "column_number": "51",
+    "description": "Montaż grzejnika elektrycznego łazienkowego (drabinkowy / grzewczy) z podłączeniem",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "grzejnik łazienkowy",
+      "grzejnik elektryczny",
+      "drabinka łazienkowa",
+      "grzejnik drabinkowy",
+      "grzejnik podwieszany",
+      "grzejnik 230v"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 1002",
+    "table_number": "5101",
+    "column_number": "52",
+    "description": "Montaż bojlera elektrycznego (podgrzewacza wody) — podłączenie elektryczne",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "bojler elektryczny",
+      "podgrzewacz wody",
+      "zasobnik cwu",
+      "boiler",
+      "montaż bojlera",
+      "podłączenie bojlera",
+      "terma elektryczna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 1101",
+    "table_number": "5101",
+    "column_number": "53",
+    "description": "Demontaż gniazda / łącznika / oprawy (do wymiany lub remontu)",
+    "unit": "szt",
+    "labor_norm": 0.08,
+    "knr_category": "demontaz",
+    "is_industrial": false,
+    "synonyms": [
+      "demontaż gniazda",
+      "wybiórka gniazda",
+      "usunięcie łącznika",
+      "demontaż wyłącznika",
+      "wymiana osprzętu",
+      "zdemontować kontakt"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 1102",
+    "table_number": "5101",
+    "column_number": "54",
+    "description": "Wymiana gniazda lub łącznika (demontaż + montaż nowego) — pełna robota",
+    "unit": "szt",
+    "labor_norm": 0.28,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "wymiana gniazda",
+      "wymiana łącznika",
+      "zamiana gniazdka",
+      "modernizacja gniazda",
+      "nowe gniazdo",
+      "wymiana kontaktu"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 1201",
+    "table_number": "5101",
+    "column_number": "55",
+    "description": "Montaż domofonu jednorodzinnego (panel zewnętrzny + słuchawka wewnętrzna + zasilacz)",
+    "unit": "kpl",
+    "labor_norm": 2.5,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "domofon",
+      "wideomofon",
+      "unifon",
+      "domofon jednorodzinny",
+      "panel domofonu",
+      "domofon do domu",
+      "videodomofon"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 1202",
+    "table_number": "5101",
+    "column_number": "56",
+    "description": "Montaż dzwonka elektrycznego / bezprzewodowego przy wejściu",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "knr_category": "osprzet_elektryczny",
+    "is_industrial": false,
+    "synonyms": [
+      "dzwonek elektryczny",
+      "dzwonek drzwiowy",
+      "dzwonek 230v",
+      "dzwonek bezprzewodowy",
+      "bim bom",
+      "sygnalizator drzwi"
+    ]
+  }
+]

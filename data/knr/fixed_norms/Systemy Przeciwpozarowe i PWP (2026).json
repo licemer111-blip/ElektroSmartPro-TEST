@@ -1,0 +1,269 @@
+[
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9038",
+    "column_number": "01",
+    "description": "Montaż i podłączenie Przeciwpożarowego Wyłącznika Prądu (PWP) w obudowie IP65",
+    "unit": "szt",
+    "labor_norm": 4.0,
+    "knr_category": "Ochrona P-POZ",
+    "is_industrial": false,
+    "synonyms": [
+      "pwp",
+      "przeciwpożarowy wyłącznik",
+      "fire safety switch",
+      "wyłącznik pożarowy",
+      "red button pwp"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9038",
+    "column_number": "02",
+    "description": "Instalacja przycisku uruchamiającego PWP (zbijka) wraz z oznakowaniem",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Ochrona P-POZ",
+    "is_industrial": false,
+    "synonyms": [
+      "zbijka",
+      "przycisk pwp",
+      "break glass pwp",
+      "przycisk pożarowy czerwony",
+      "trigger pwp"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9038",
+    "column_number": "03",
+    "description": "Montaż autonomicznej czujki dymu/ciepła w systemie sygnalizacji pożaru",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "Ochrona P-POZ",
+    "is_industrial": false,
+    "synonyms": [
+      "czujka dymu",
+      "autonomiczna czujka",
+      "detektor pożarowy",
+      "smoke detector",
+      "heat detector"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9038",
+    "column_number": "04",
+    "description": "Ułożenie kabla ognioodpornego (np. HDGs 3x1.5) w systemie podtrzymania funkcji (E30/E90)",
+    "unit": "mb",
+    "labor_norm": 0.28,
+    "knr_category": "Ochrona P-POZ",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel ognioodporny",
+      "hdgs",
+      "e30 e90",
+      "kabel pożarowy",
+      "ph90",
+      "htksh",
+      "fire cable"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9038",
+    "column_number": "05",
+    "description": "Próba funkcjonalna systemu PWP, pomiar ciągłości i wystawienie certyfikatu sprawności",
+    "unit": "kpl",
+    "labor_norm": 2.5,
+    "knr_category": "Ochrona P-POZ",
+    "is_industrial": false,
+    "synonyms": [
+      "próba pwp",
+      "test pożarowy",
+      "certyfikat pwp",
+      "sprawdzenie pwp",
+      "odbiór pożarowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9038",
+    "column_number": "06",
+    "description": "Montaż kombinowanej czujki dymu i ciepła (DOR) w systemie SAP",
+    "unit": "szt",
+    "labor_norm": 0.9,
+    "knr_category": "Ochrona P-POZ",
+    "is_industrial": false,
+    "synonyms": [
+      "czujka kombinowana",
+      "dor czujka",
+      "smoke heat detector",
+      "czujka sap",
+      "czujnik dym ciepło",
+      "multi-sensor czujka pożar"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9038",
+    "column_number": "07",
+    "description": "Montaż modułu adresowalnego wejścia/wyjścia (I/O) w systemie SAP do sterowania urządzeniami",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "knr_category": "Ochrona P-POZ",
+    "is_industrial": false,
+    "synonyms": [
+      "moduł sap",
+      "moduł io",
+      "input output module sap",
+      "moduł adresowalny",
+      "io sap module",
+      "interfejs sap"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9038",
+    "column_number": "08",
+    "description": "Montaż i podłączenie elektromagnesu trzymającego drzwi pożarowe (do CSP)",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "Ochrona P-POZ",
+    "is_industrial": false,
+    "synonyms": [
+      "elektromagnes drzwi",
+      "door holder fire",
+      "trzymacz drzwi pożarowych",
+      "fire door holder",
+      "drzwi pożarowe elektromagnes",
+      "door magnet sap"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9038",
+    "column_number": "09",
+    "description": "Instalacja dźwiękowego systemu ostrzegawczego DSO (głośnik, wzmacniacz) — 1 strefa",
+    "unit": "kpl",
+    "labor_norm": 5.0,
+    "knr_category": "Ochrona P-POZ",
+    "is_industrial": false,
+    "synonyms": [
+      "dso",
+      "dźwiękowy system ostrzegawczy",
+      "evs",
+      "evac sound system",
+      "pa fire",
+      "voice evacuation system"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9038",
+    "column_number": "10",
+    "description": "Montaż czujki liniowej (Beam Detector) dym/ciepło dla dużych przestrzeni (hale, aula)",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "knr_category": "Ochrona P-POZ",
+    "is_industrial": true,
+    "synonyms": [
+      "czujka liniowa",
+      "beam detector",
+      "detektor liniowy",
+      "czujnik belkowy pożar",
+      "reflective beam",
+      "hala czujka pożarowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9038",
+    "column_number": "11",
+    "description": "Montaż detektora VESDA (zasysający) dla serwerowni lub archiwów — 1 punkt próbkowania",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "Ochrona P-POZ",
+    "is_industrial": true,
+    "synonyms": [
+      "vesda",
+      "zasysający detektor",
+      "air sampling detector",
+      "vesda laser",
+      "czujka serwerownia",
+      "aspirating detector"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9038",
+    "column_number": "12",
+    "description": "Podłączenie sygnalizacji do systemu gaszenia gazem (CO2/FM200/Novec) — wyzwalanie i reset",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "knr_category": "Ochrona P-POZ",
+    "is_industrial": true,
+    "synonyms": [
+      "gaszenie gazem",
+      "fm200",
+      "novec",
+      "co2 gaszenie",
+      "fire suppression relay",
+      "system gasniczy elektryczne"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9038",
+    "column_number": "13",
+    "description": "Montaż i konfiguracja centrali SAP (do 8 stref) z akumulatorem i raportem",
+    "unit": "szt",
+    "labor_norm": 10.0,
+    "knr_category": "Ochrona P-POZ",
+    "is_industrial": false,
+    "synonyms": [
+      "centrala sap 8 stref",
+      "panel sap",
+      "fire alarm panel 8 zone",
+      "montaż centrali sap",
+      "csp 8 stref",
+      "facp"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9038",
+    "column_number": "14",
+    "description": "Ułożenie kabla systemu SAP (HTKSHekw 2x2x0.8) w rurze ochronnej ognioodpornej",
+    "unit": "mb",
+    "labor_norm": 0.20,
+    "knr_category": "Ochrona P-POZ",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel sap",
+      "htkshekw",
+      "kabel pożarowy sap",
+      "linia sap",
+      "okablowanie systemu sap",
+      "fire alarm cable"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9038",
+    "column_number": "15",
+    "description": "Dokumentacja powykonawcza systemu SAP/PWP, protokoły pomiarów i oddanie do eksploatacji",
+    "unit": "kpl",
+    "labor_norm": 5.0,
+    "knr_category": "Ochrona P-POZ",
+    "is_industrial": false,
+    "synonyms": [
+      "dokumentacja sap",
+      "protokol ppoz",
+      "odbiór sap",
+      "certyfikacja sap",
+      "as-built sap",
+      "fire alarm commissioning"
+    ]
+  }
+]

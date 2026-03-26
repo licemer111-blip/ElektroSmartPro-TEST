@@ -1,0 +1,150 @@
+[
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0108",
+    "column_number": "01",
+    "description": "Montaż modułu RJ45 SL (nieekranowany) na skrętce 4-parowej",
+    "unit": "szt",
+    "labor_norm": 0.07,
+    "section": "01",
+    "material_category": "it_osprzet",
+    "is_industrial": false,
+    "synonyms": [
+      "keystone utp",
+      "rj45 utp",
+      "moduł lan",
+      "cat6 utp keystone",
+      "gniazdo skrętka"
+    ],
+    "materials": [
+      {
+        "material_name": "Moduł RJ45 SL UTP Cat 6",
+        "material_unit": "kpl",
+        "quantity_factor": 1.0,
+        "component_type": "material"
+      }
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0108",
+    "column_number": "02",
+    "description": "Montaż modułu RJ45 SL (ekranowany) на skrętce 4-parowej",
+    "unit": "szt",
+    "labor_norm": 0.1,
+    "section": "01",
+    "material_category": "it_osprzet",
+    "is_industrial": false,
+    "synonyms": [
+      "keystone ftp",
+      "rj45 ekranowany",
+      "cat6a ftp",
+      "keystone sftp",
+      "gniazdo ekranowane"
+    ],
+    "materials": [
+      {
+        "material_name": "Moduł RJ45 SL FTP Cat 6A",
+        "material_unit": "kpl",
+        "quantity_factor": 1.0,
+        "component_type": "material"
+      }
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0110",
+    "column_number": "01",
+    "description": "Montaż szafy dystrybucyjnej stojącej 19'' (kompletna z poziomowaniem)",
+    "unit": "kpl",
+    "labor_norm": 2.4,
+    "section": "01",
+    "material_category": "it_racks",
+    "is_industrial": false,
+    "synonyms": [
+      "szafa 19 cali",
+      "rack stojący it",
+      "szafa dystrybucyjna",
+      "szafa teleinformatyczna"
+    ],
+    "materials": [
+      {
+        "material_name": "Szafa stojąca 19 cali",
+        "material_unit": "kpl",
+        "quantity_factor": 1.0,
+        "component_type": "material"
+      },
+      {
+        "material_name": "Zestaw uziemiający do szafy",
+        "material_unit": "kpl",
+        "quantity_factor": 1.0,
+        "component_type": "material"
+      }
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0120",
+    "column_number": "01",
+    "description": "Pomiary dynamiczne toru transmisyjnego (pierwsza linia)",
+    "unit": "szt",
+    "labor_norm": 0.57,
+    "section": "01",
+    "material_category": "it_labor_only",
+    "is_industrial": false,
+    "synonyms": [
+      "certyfikacja lan",
+      "fluke tester",
+      "pomiar toru",
+      "pierwsza linia certyfikacja"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0120",
+    "column_number": "02",
+    "description": "Pomiary dynamiczne toru transmisyjnego (każda następna linia)",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "section": "01",
+    "material_category": "it_labor_only",
+    "is_industrial": false,
+    "synonyms": [
+      "certyfikacja kolejna",
+      "pomiar następna linia",
+      "fluke seryjna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0104",
+    "column_number": "02",
+    "description": "Spawanie włókna kabla światłowodowego jednomodowego (SM)",
+    "unit": "szt",
+    "labor_norm": 0.345,
+    "section": "01",
+    "material_category": "it_fiber",
+    "is_industrial": false,
+    "synonyms": [
+      "spaw sm",
+      "singlemode spaw",
+      "spawanie jednomod",
+      "os2 spaw",
+      "fusion splice sm"
+    ],
+    "materials": [
+      {
+        "material_name": "Osłonka spawu termokurczliwa",
+        "material_unit": "szt",
+        "quantity_factor": 1.0,
+        "component_type": "material"
+      },
+      {
+        "material_name": "Kaseta światłowodowa",
+        "material_unit": "szt",
+        "quantity_factor": 0.08,
+        "component_type": "material"
+      }
+    ]
+  }
+]

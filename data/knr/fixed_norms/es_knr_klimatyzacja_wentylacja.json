@@ -1,0 +1,488 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0401",
+    "column_number": "01",
+    "description": "Elektryczne podłączenie klimatyzatora split (jednostka zewnętrzna + wewnętrzna) do 5kW",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "podłączenie klimatyzatora",
+      "klimatyzator split",
+      "klima elektryczna",
+      "ac podłączenie elektryczne",
+      "klima 5kw",
+      "split system elektryka"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0401",
+    "column_number": "02",
+    "description": "Elektryczne podłączenie klimatyzatora split (jednostka zewnętrzna + wewnętrzna) 7-12kW",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "klimatyzator 9kw elektryka",
+      "klima 12kw podłączenie",
+      "ac 12kw elektryczna",
+      "klimatyzacja podłączenie 12kw",
+      "split 9000btu elektryka"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0401",
+    "column_number": "03",
+    "description": "Elektryczne podłączenie klimatyzatora multi-split (do 4 jednostek wewnętrznych)",
+    "unit": "kpl",
+    "labor_norm": 5.0,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "multi-split elektryka",
+      "klimatyzacja multisplit",
+      "4 jednostki wewnętrzne",
+      "vrf podłączenie",
+      "multi klima elektryczna",
+      "ac multi podłączenie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0401",
+    "column_number": "04",
+    "description": "Elektryczne podłączenie klimatyzatora kasetonowego 4-drożnego (sufit podwieszany)",
+    "unit": "kpl",
+    "labor_norm": 3.5,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "kaseton klimatyzacyjny",
+      "klimatyzator kasetonowy",
+      "cassette ac",
+      "klima kaseton elektryka",
+      "4-drożny kaseton",
+      "ac ceiling cassette"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0401",
+    "column_number": "05",
+    "description": "Elektryczne podłączenie klimatyzatora kanałowego (ductless / korytkowego) w suficie",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "klimatyzator kanałowy",
+      "ductless ac",
+      "klima korytkowa",
+      "ac duct elektryka",
+      "klimatyzacja kanałowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0402",
+    "column_number": "01",
+    "description": "Montaż i podłączenie zabezpieczenia elektrycznego dla klimatyzatora (RCD + MCB) w rozdzielnicy",
+    "unit": "kpl",
+    "labor_norm": 0.60,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "zabezpieczenie klimatyzatora",
+      "bezpiecznik klima",
+      "ochrona elektryczna ac",
+      "rcd klima",
+      "mcb klimatyzator",
+      "obwód klima"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0402",
+    "column_number": "02",
+    "description": "Układanie kabla zasilającego klimatyzator (3x2.5mm² lub 5x2.5mm²) w trasie kablowej",
+    "unit": "m",
+    "labor_norm": 0.08,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "kabel klima",
+      "przewód klimatyzatora",
+      "kabel zasilający ac",
+      "kabel 2.5 klima",
+      "linia zasilająca klimatyzator",
+      "obwód elektryczny ac"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0403",
+    "column_number": "01",
+    "description": "Montaż i elektryczne podłączenie wentylatora dachowego (wyciągowego) 1-fazowego",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "wentylator dachowy",
+      "wyciągowy dachowy",
+      "wentylator wyciąg",
+      "wentylator dach 1f",
+      "roof fan",
+      "fan elektryczne podłączenie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0403",
+    "column_number": "02",
+    "description": "Montaż i elektryczne podłączenie wentylatora kanałowego (inline) 1-fazowego",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "wentylator kanałowy",
+      "inline fan",
+      "wentylator łazienkowy",
+      "wentylator wyciągowy",
+      "łazienkowy wentylator",
+      "wentylator 100mm"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0403",
+    "column_number": "03",
+    "description": "Montaż i elektryczne podłączenie wentylatora przemysłowego 3-fazowego z silnikiem",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "is_industrial": true,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "wentylator przemysłowy",
+      "wentylator 3f",
+      "silnik wentylatora",
+      "fan 3f industrial",
+      "wentylator ścienny 3f",
+      "przemysłowy wyciąg"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0404",
+    "column_number": "01",
+    "description": "Elektryczne podłączenie centrali wentylacyjnej (nawiewno-wywiewnej) do 2500m³/h",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "centrala wentylacyjna",
+      "nawiewno-wywiewna",
+      "central air unit",
+      "ahu elektryczne",
+      "wentylacja mechaniczna podłączenie",
+      "centrala nawiewna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0404",
+    "column_number": "02",
+    "description": "Elektryczne podłączenie rekuperatora (HRV/ERV) z podłączeniem sterownika i czujników",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "rekuperator",
+      "hrv elektryczne",
+      "rekuperacja podłączenie",
+      "odzysk ciepła elektryka",
+      "erv podłączenie",
+      "centrala rekuperacyjna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0404",
+    "column_number": "03",
+    "description": "Montaż sterownika / panelu dotykowego centrali wentylacyjnej lub klimatyzacyjnej",
+    "unit": "szt",
+    "labor_norm": 0.60,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "sterownik centrali",
+      "panel hvac",
+      "touchscreen hvac",
+      "sterownik rekuperatora",
+      "panel klimatyzacji",
+      "controller ac"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0405",
+    "column_number": "01",
+    "description": "Montaż i podłączenie termostatu pokojowego (regulatora) do systemu ogrzewania / klimatyzacji",
+    "unit": "szt",
+    "labor_norm": 0.40,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "termostat pokojowy",
+      "regulator temperatury",
+      "sterownik hvac",
+      "termostat 230v",
+      "regulator klimatyzacji",
+      "room thermostat"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0405",
+    "column_number": "02",
+    "description": "Montaż i podłączenie czujnika temperatury / wilgotności (do systemu automatyki)",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "czujnik temperatury",
+      "czujnik wilgotności",
+      "sensor temp",
+      "pt100 czujnik",
+      "czujnik ntc",
+      "sensor hvac",
+      "temperature sensor"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0406",
+    "column_number": "01",
+    "description": "Elektryczne podłączenie chillery / agregatu chłodniczego (>20kW) 3-fazowego",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "is_industrial": true,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "chiller elektryczne",
+      "agregat chłodniczy",
+      "chiller 3f",
+      "podłączenie chilera",
+      "agregat lodowy",
+      "cooling unit 3f"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0406",
+    "column_number": "02",
+    "description": "Elektryczne podłączenie systemu VRF/VRV (central system klimatyzacji budynku)",
+    "unit": "kpl",
+    "labor_norm": 12.0,
+    "is_industrial": true,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "vrf system",
+      "vrv system",
+      "centralna klimatyzacja",
+      "system klimatyzacji budynku",
+      "daikin vrf",
+      "mitsubishi vrf elektryczne"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0407",
+    "column_number": "01",
+    "description": "Montaż i podłączenie elektryczne ogrzewacza wody (bojler elektryczny 80-120L)",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "bojler elektryczny",
+      "podgrzewacz wody elektryczny",
+      "ogrzewacz elektryczny 80l",
+      "electric water heater",
+      "bojler 120l",
+      "terma elektryczna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0407",
+    "column_number": "02",
+    "description": "Elektryczne podłączenie przepływowego ogrzewacza wody (grzałka prysznicowa 3.5-8kW)",
+    "unit": "szt",
+    "labor_norm": 0.60,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "ogrzewacz przepływowy",
+      "grzałka przepływowa",
+      "prysznic elektryczny",
+      "przepływowy 5kw",
+      "instant water heater",
+      "podgrzewacz przepływowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0408",
+    "column_number": "01",
+    "description": "Elektryczne podłączenie kotła elektrycznego CO (c.o.) 6-12kW z termostatem",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "kocioł elektryczny",
+      "elektryczny kocioł co",
+      "electric boiler",
+      "grzejnik co elektryczny",
+      "kocioł 6kw",
+      "kocioł 12kw"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0408",
+    "column_number": "02",
+    "description": "Montaż i podłączenie grzejnika elektrycznego (konwektora / panelu) ściennego",
+    "unit": "szt",
+    "labor_norm": 0.40,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "grzejnik elektryczny",
+      "konwektor elektryczny",
+      "panel grzewczy",
+      "grzejnik ścienny elektryczny",
+      "grzejnik halogenowy",
+      "piec elektryczny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0409",
+    "column_number": "01",
+    "description": "Montaż i podłączenie siłownika (aktuatora) zaworu elektrycznego 24V do systemu HVAC",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "siłownik zaworu",
+      "aktuator zaworu",
+      "elektryczny zawór 24v",
+      "valve actuator",
+      "belimo",
+      "siłownik belimo",
+      "zawór elektryczny hvac"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0409",
+    "column_number": "02",
+    "description": "Montaż i podłączenie szafy sterowniczej systemu HVAC / BMS (kontroler+moduły IO)",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "is_industrial": true,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "szafa hvac",
+      "szafa bms hvac",
+      "sterownia hvac",
+      "panel hvac industrial",
+      "szafa sterowania klimatyzacją",
+      "hvac control panel"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0410",
+    "column_number": "01",
+    "description": "Elektryczne podłączenie pompy cyrkulacyjnej CO / CWU (1-fazowej, do 1.5kW)",
+    "unit": "szt",
+    "labor_norm": 0.60,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "pompa cyrkulacyjna",
+      "pompa co elektryczna",
+      "pompa cwu",
+      "circulation pump",
+      "grundfos elektryczne",
+      "wilo pompa podłączenie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0410",
+    "column_number": "02",
+    "description": "Elektryczne podłączenie pompy obiegowej przemysłowej 3-fazowej (>2.2kW) z falownikiem",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "is_industrial": true,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "pompa 3f elektryczna",
+      "pompa przemysłowa podłączenie",
+      "pump vfd",
+      "pompa z falownikiem",
+      "industrial pump electrical",
+      "pompa obiegowa 3f"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0411",
+    "column_number": "01",
+    "description": "Montaż i podłączenie wyłącznika pożarowego (odcięcia wentylacji) w obudowie natynkowej",
+    "unit": "szt",
+    "labor_norm": 0.50,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "wyłącznik pożarowy wentylacji",
+      "odcięcie wentylacji",
+      "fire damper switch",
+      "przycisk odcięcia",
+      "wyłącznik pożarowy hvac",
+      "przycisk pożarowy wentylacja"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0411",
+    "column_number": "02",
+    "description": "Montaż i podłączenie elektryczne kurtyny powietrznej (elektrycznej) nad wejściem",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "is_industrial": false,
+    "knr_category": "klimatyzacja_hvac",
+    "synonyms": [
+      "kurtyna powietrzna",
+      "air curtain",
+      "kurtyna elektryczna",
+      "zasłona powietrzna",
+      "kurtyna nad drzwiami",
+      "electric air curtain"
+    ]
+  }
+]

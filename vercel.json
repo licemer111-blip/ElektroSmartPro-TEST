@@ -1,0 +1,47 @@
+{
+  "crons": [
+    {
+      "path": "/api/reminders/deadlines",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/admin/catalog-cache",
+      "schedule": "0 3 * * *"
+    }
+  ],
+  "functions": {
+    "app/api/ai/**": {
+      "maxDuration": 60
+    },
+    "app/dashboard/ai-lab/**": {
+      "maxDuration": 60
+    },
+    "app/dashboard/projects/*/ai-actions*": {
+      "maxDuration": 60
+    },
+    "app/dashboard/projects/*/ai-import*": {
+      "maxDuration": 60
+    },
+    "app/dashboard/projects/quick-estimate/**": {
+      "maxDuration": 60
+    },
+    "app/dashboard/assemblies/**": {
+      "maxDuration": 60
+    },
+    "app/dashboard/catalog/ai-*": {
+      "maxDuration": 60
+    },
+    "app/dashboard/settings/ai-*": {
+      "maxDuration": 60
+    },
+    "app/dashboard/settings/generate-*": {
+      "maxDuration": 60
+    },
+    "app/api/admin/catalog-cache": {
+      "maxDuration": 120
+    },
+    "app/dashboard/settings/my-knowledge-base/**": {
+      "maxDuration": 120
+    }
+  }
+}

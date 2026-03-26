@@ -1,0 +1,273 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9033",
+    "column_number": "01",
+    "description": "Podłączenie elektryczne pompy ciepła (Jednostka wewn. + zewn.) wraz z zasilaniem",
+    "unit": "kpl",
+    "labor_norm": 8.0,
+    "knr_category": "Automatyka HVAC",
+    "is_industrial": false,
+    "synonyms": [
+      "pompa ciepła",
+      "heat pump",
+      "pc zasilanie",
+      "klimatyzacja zewnętrzna",
+      "podlaczenie hvac",
+      "inverter pc"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9033",
+    "column_number": "02",
+    "description": "Instalacja dedykowanego zabezpieczenia dla pompy ciepła (RCD Typ F + SPD)",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Automatyka HVAC",
+    "is_industrial": false,
+    "synonyms": [
+      "rcd typ f",
+      "zabezpieczenie pc",
+      "spd hvac",
+      "ochrona przepiec",
+      "rcd f32",
+      "protection hvac"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9033",
+    "column_number": "03",
+    "description": "Podłączenie zasilania i sterowania klimatyzacji typu Split/Multi-split",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "knr_category": "Automatyka HVAC",
+    "is_industrial": false,
+    "synonyms": [
+      "klimatyzacja split",
+      "multi-split",
+      "klimatyzator",
+      "ac zasilanie",
+      "inverter klimatyzacja",
+      "daikin",
+      "mitsubishi klima"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9033",
+    "column_number": "04",
+    "description": "Montaż i konfiguracja termostatu pokojowego (BUS/Wi-Fi) w systemie HVAC",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "knr_category": "Automatyka HVAC",
+    "is_industrial": false,
+    "synonyms": [
+      "termostat hvac",
+      "regulator hvac",
+      "termostat wifi",
+      "termostat bus",
+      "modbus termostat",
+      "bacnet"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9033",
+    "column_number": "05",
+    "description": "Ułożenie magistrali komunikacyjnej (ekranowanej) między jednostkami HVAC",
+    "unit": "mb",
+    "labor_norm": 0.22,
+    "knr_category": "Automatyka HVAC",
+    "is_industrial": false,
+    "synonyms": [
+      "magistrala hvac",
+      "kabel komunikacyjny",
+      "ekranowany kabel",
+      "modbus kabel",
+      "bus hvac",
+      "kabel rs485"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9033",
+    "column_number": "06",
+    "description": "Podłączenie elektryczne systemu VRF (zewnętrzna jednostka, do 25kW) — linia trójfazowa",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "knr_category": "Automatyka HVAC",
+    "is_industrial": true,
+    "synonyms": [
+      "vrf zasilanie",
+      "vrf power",
+      "vrv zasilanie",
+      "system vrf elektryczne",
+      "klimatyzacja vrf podłączenie",
+      "podłączenie vrf"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9033",
+    "column_number": "07",
+    "description": "Podłączenie elektryczne centrali wentylacyjnej (AHU) wraz z silnikami i zabezpieczeniami",
+    "unit": "kpl",
+    "labor_norm": 8.0,
+    "knr_category": "Automatyka HVAC",
+    "is_industrial": true,
+    "synonyms": [
+      "centrala wentylacyjna",
+      "ahu zasilanie",
+      "air handling unit wiring",
+      "wentylacja mechaniczna podłączenie",
+      "rekuperator zasilanie",
+      "hrv elektryczne"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9033",
+    "column_number": "08",
+    "description": "Montaż czujnika CO2 z sygnałem analogowym 0-10V do sterownika wentylacji",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Automatyka HVAC",
+    "is_industrial": false,
+    "synonyms": [
+      "czujnik co2 wentylacja",
+      "co2 sensor 0-10v",
+      "sensor co2 hvac",
+      "detektor co2 klimatyzacja",
+      "jakość powietrza hvac",
+      "co2 modbus"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9033",
+    "column_number": "09",
+    "description": "Montaż i podłączenie zaworu regulacyjnego 230V (siłownik elektryczny) na piętnie grzewczym",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "knr_category": "Automatyka HVAC",
+    "is_industrial": false,
+    "synonyms": [
+      "zawór regulacyjny",
+      "siłownik zaworu",
+      "motorized valve",
+      "zawór 230v hvac",
+      "zawór elektryczny grzejnik",
+      "actuator valve hvac"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9033",
+    "column_number": "10",
+    "description": "Montaż i konfiguracja sterownika pompy ciepła (zewnętrzny panel HMI lub internet)",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "Automatyka HVAC",
+    "is_industrial": false,
+    "synonyms": [
+      "sterownik pc",
+      "hmi pompa ciepła",
+      "panel obsługi pc",
+      "internet pc",
+      "smart control pompa",
+      "wifi heat pump controller"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9033",
+    "column_number": "11",
+    "description": "Integracja systemu HVAC z BMS (Building Management System) — protokół BACnet/Modbus",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "knr_category": "Automatyka HVAC",
+    "is_industrial": true,
+    "synonyms": [
+      "bms integracja",
+      "bacnet hvac",
+      "modbus bms",
+      "building management",
+      "automatyka budynku hvac",
+      "bms protokol"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9033",
+    "column_number": "12",
+    "description": "Podłączenie elektryczne wentylatorów wyciągowych / nawiewnych (1 szt.) z przełącznikiem biegów",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Automatyka HVAC",
+    "is_industrial": false,
+    "synonyms": [
+      "wentylator wyciągowy",
+      "nawiewnik podłączenie",
+      "exhaust fan wiring",
+      "fan motor connection",
+      "łącznik biegów wentylatora",
+      "wentylator 3-biegowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9033",
+    "column_number": "13",
+    "description": "Montaż i okablowanie przekształtnika częstotliwości (inverter/VFD) dla pompy lub wentylatora",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "knr_category": "Automatyka HVAC",
+    "is_industrial": true,
+    "synonyms": [
+      "inverter hvac",
+      "vfd wentylator",
+      "przemiennik częstotliwości",
+      "falownik pompa",
+      "vfd pump",
+      "fc200 danfoss"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9033",
+    "column_number": "14",
+    "description": "Montaż przepustnicy pożarowej (EI120) z siłownikiem elektrycznym 230V i sygnałem zwrotnym",
+    "unit": "szt",
+    "labor_norm": 3.5,
+    "knr_category": "Automatyka HVAC",
+    "is_industrial": false,
+    "synonyms": [
+      "przepustnica pożarowa",
+      "ei120 klapka",
+      "fire damper wiring",
+      "klapka wentylacyjna elektryczna",
+      "damper actuator",
+      "klapka ppoż hvac"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9033",
+    "column_number": "15",
+    "description": "Wykonanie dokumentacji technicznej i protokołu odbioru instalacji elektrycznej HVAC",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "knr_category": "Automatyka HVAC",
+    "is_industrial": false,
+    "synonyms": [
+      "dokumentacja hvac",
+      "protokol hvac",
+      "odbiór hvac",
+      "as-built hvac",
+      "dokumentacja klimatyzacja",
+      "certyfikacja hvac"
+    ]
+  }
+]

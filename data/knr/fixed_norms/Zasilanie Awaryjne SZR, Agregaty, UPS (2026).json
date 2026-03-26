@@ -1,0 +1,270 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9040",
+    "column_number": "01",
+    "description": "Montaż i podłączenie agregatu prądotwórczego (stacjonarnego) z przygotowaniem podłoża",
+    "unit": "szt",
+    "labor_norm": 12.0,
+    "knr_category": "Zasilanie Awaryjne",
+    "is_industrial": false,
+    "synonyms": [
+      "agregat prądotwórczy",
+      "generator",
+      "genset",
+      "generator diesla",
+      "przdnica stacjonarna",
+      "zasilanie awaryjne"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9040",
+    "column_number": "02",
+    "description": "Instalacja i oprogramowanie układu SZR (Samoczynne Załączanie Rezerwy)",
+    "unit": "kpl",
+    "labor_norm": 5.0,
+    "knr_category": "Zasilanie Awaryjne",
+    "is_industrial": false,
+    "synonyms": [
+      "szr",
+      "samoczynne załączanie rezerwy",
+      "ats",
+      "przełącznik rezerwy",
+      "auto transfer switch"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9040",
+    "column_number": "03",
+    "description": "Montaż centralnego zasilacza UPS (Online) w obudowie Tower/Rack (do 10kVA)",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "knr_category": "Zasilanie Awaryjne",
+    "is_industrial": false,
+    "synonyms": [
+      "ups",
+      "zasilacz awaryjny",
+      "ups online",
+      "ups tower",
+      "ups 10kva",
+      "apc ups",
+      "eaton ups"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9040",
+    "column_number": "04",
+    "description": "Instalacja dodatkowego modułu bateryjnego (Battery Pack) wraz z konfiguracją",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Zasilanie Awaryjne",
+    "is_industrial": false,
+    "synonyms": [
+      "battery pack",
+      "moduł bateryjny",
+      "akumulator ups",
+      "rozszerzenie ups",
+      "ebm"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9040",
+    "column_number": "05",
+    "description": "Wykonanie testów symulacji zaniku napięcia i pomiar czasu przełączania",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "knr_category": "Zasilanie Awaryjne",
+    "is_industrial": false,
+    "synonyms": [
+      "test ups",
+      "symulacja awarii",
+      "zanik napięcia test",
+      "czas przełączania",
+      "odbiór ups"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9040",
+    "column_number": "06",
+    "description": "Wymiana baterii akumulatorowych w UPS (do 10 szt.) z testem pojemności",
+    "unit": "kpl",
+    "labor_norm": 2.5,
+    "knr_category": "Zasilanie Awaryjne",
+    "is_industrial": false,
+    "synonyms": [
+      "wymiana baterii ups",
+      "akumulator ups wymiana",
+      "battery replacement ups",
+      "serwis baterii",
+      "test pojemności ups",
+      "ups maintenance batteries"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9040",
+    "column_number": "07",
+    "description": "Montaż i okablowanie przełącznika serwisowego bypass (MBS) dla UPS",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "knr_category": "Zasilanie Awaryjne",
+    "is_industrial": false,
+    "synonyms": [
+      "bypass ups",
+      "mbs switch",
+      "maintenance bypass",
+      "serwis bypass ups",
+      "manual bypass switch",
+      "ups bypass szafa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9040",
+    "column_number": "08",
+    "description": "Montaż i konfiguracja statycznego przełącznika zasilania STS (Static Transfer Switch)",
+    "unit": "szt",
+    "labor_norm": 5.0,
+    "knr_category": "Zasilanie Awaryjne",
+    "is_industrial": true,
+    "synonyms": [
+      "sts",
+      "static transfer switch",
+      "przełącznik statyczny",
+      "dual feed sts",
+      "redundancja zasilania",
+      "sts konfiguracja"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9040",
+    "column_number": "09",
+    "description": "Konfiguracja monitoringu UPS przez SNMP (karta sieciowa, PowerChute, SolarWinds)",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "knr_category": "Zasilanie Awaryjne",
+    "is_industrial": false,
+    "synonyms": [
+      "snmp ups",
+      "ups monitoring",
+      "powerchute network",
+      "ups zarządzanie",
+      "apc ups snmp",
+      "eaton snmp ups"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9040",
+    "column_number": "10",
+    "description": "Okablowanie automatyki agregatu (wejście zewnętrzne + SZR) — zdalna kontrola START/STOP",
+    "unit": "kpl",
+    "labor_norm": 3.5,
+    "knr_category": "Zasilanie Awaryjne",
+    "is_industrial": false,
+    "synonyms": [
+      "zdalne startowanie agregatu",
+      "remote start generator",
+      "automatyka generatora",
+      "start/stop agregat",
+      "zdalne sterowanie generatorem",
+      "generator remote control"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9040",
+    "column_number": "11",
+    "description": "Montaż pompy paliwowej i okablowania elektrycznego układu zasilania agregatu",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "knr_category": "Zasilanie Awaryjne",
+    "is_industrial": true,
+    "synonyms": [
+      "pompa paliwa agregat",
+      "fuel pump generator",
+      "zasilanie paliwem agregat",
+      "transfer pump diesel",
+      "pompa zasilania generatora",
+      "diesel fuel pump wiring"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9040",
+    "column_number": "12",
+    "description": "Montaż systemu zasilania 2N (dwa UPS równoległe lub 2 tory zasilania) w serwerowni",
+    "unit": "kpl",
+    "labor_norm": 8.0,
+    "knr_category": "Zasilanie Awaryjne",
+    "is_industrial": true,
+    "synonyms": [
+      "zasilanie 2n",
+      "redundancja 2n",
+      "dual ups",
+      "serwerownia 2n",
+      "podwójne zasilanie",
+      "2n power redundancy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9040",
+    "column_number": "13",
+    "description": "Montaż i podłączenie urządzenia EPO (Emergency Power Off) dla szafy serwerowej",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "Zasilanie Awaryjne",
+    "is_industrial": true,
+    "synonyms": [
+      "epo",
+      "emergency power off",
+      "wyłącznik awaryjny serwer",
+      "epo button",
+      "rapid shutdown ups",
+      "ups emergency stop"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9040",
+    "column_number": "14",
+    "description": "Wykonanie próby obciążeniowej UPS/agregatu (do 80% mocy) z protokołem i raportem",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "knr_category": "Zasilanie Awaryjne",
+    "is_industrial": false,
+    "synonyms": [
+      "próba obciążeniowa",
+      "load test ups",
+      "test generatora pod obciążeniem",
+      "obciążenie agregatu",
+      "generator load test",
+      "ups load bank test"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9040",
+    "column_number": "15",
+    "description": "Dokumentacja powykonawcza systemu zasilania awaryjnego — schematy SZR, protokoły, DTR",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "knr_category": "Zasilanie Awaryjne",
+    "is_industrial": false,
+    "synonyms": [
+      "dokumentacja ups",
+      "protokol szr",
+      "as-built zasilanie awaryjne",
+      "dtr agregat",
+      "dokumentacja zasilania awaryjnego",
+      "szr dokumentacja"
+    ]
+  }
+]

@@ -1,0 +1,268 @@
+[
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9035",
+    "column_number": "01",
+    "description": "Diagnostyka i lokalizacja usterki w instalacji (brak zasilania, zwarcie, upływność RCD)",
+    "unit": "godz",
+    "labor_norm": 1.0,
+    "knr_category": "Serwis i Awarie",
+    "is_industrial": false,
+    "synonyms": [
+      "diagnostyka",
+      "szukanie awarii",
+      "brak prądu",
+      "zwarcie",
+      "upływ rcd",
+      "lokalizacja usterki"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9035",
+    "column_number": "02",
+    "description": "Opłata za wezwanie serwisowe (Dojazd i pierwsza godzina pracy) - tryb standard",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "knr_category": "Serwis i Awarie",
+    "is_industrial": false,
+    "synonyms": [
+      "wezwanie serwisowe",
+      "dojazd elektryka",
+      "usługa serwisowa",
+      "dojazd",
+      "wizyta elektryka"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9035",
+    "column_number": "03",
+    "description": "Pogotowie elektryczne (Interwencja 24/7, niedziele i święta) - dopłata do usługi",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "knr_category": "Serwis i Awarie",
+    "is_industrial": false,
+    "synonyms": [
+      "pogotowie elektryczne",
+      "24/7 awaria",
+      "awaria nocna",
+      "wezwanie nagłe",
+      "pilne wezwanie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9035",
+    "column_number": "04",
+    "description": "Wymiana uszkodzonego gniazda/łącznika/oprawy w ramach wizyty serwisowej",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "knr_category": "Serwis i Awarie",
+    "is_industrial": false,
+    "synonyms": [
+      "wymiana gniazda",
+      "naprawa kontaktu",
+      "wymiana włącznika",
+      "naprawa lampy",
+      "wymiana osprzatu"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9035",
+    "column_number": "05",
+    "description": "Przegląd okresowy instalacji w budynku (sprawdzenie połączeń, dokręcenie zacisków)",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "knr_category": "Serwis i Awarie",
+    "is_industrial": false,
+    "synonyms": [
+      "przegląd instalacji",
+      "kontrola elektryczna",
+      "audyt roczny",
+      "przegląd techniczny",
+      "dokręcenie zacisków"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9035",
+    "column_number": "06",
+    "description": "Modernizacja rozdzielnicy — wymiana starego bezpiecznika korkowego na zabezpieczenie modułowe",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "knr_category": "Modernizacje",
+    "is_industrial": false,
+    "synonyms": [
+      "wymiana korka",
+      "bezpiecznik na nadprądowy",
+      "modernizacja tablicy",
+      "stare korki wymiana",
+      "fuse replacement",
+      "bezpiecznik topikowy wymiana"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9035",
+    "column_number": "07",
+    "description": "Dołożenie brakującego przewodu PE (uziemienie) do obwodu 2-żyłowego w bruzdzie",
+    "unit": "mb",
+    "labor_norm": 0.45,
+    "knr_category": "Modernizacje",
+    "is_industrial": false,
+    "synonyms": [
+      "dołożenie pe",
+      "uziemienie 2-żyłowe",
+      "retrofit earth wire",
+      "dodanie uziemienia",
+      "pe do starej instalacji",
+      "retro pe wiring"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9035",
+    "column_number": "08",
+    "description": "Wymiana odcinka uszkodzonego przewodu (max 5m) w instalacji podtynkowej — wlewanie kleju/gips",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "Serwis i Awarie",
+    "is_industrial": false,
+    "synonyms": [
+      "wymiana odcinka kabla",
+      "naprawa przewodu",
+      "cable repair",
+      "uszkodzony przewód naprawa",
+      "wymiana kabla p/t",
+      "naprawa instalacji podtynkowej"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9035",
+    "column_number": "09",
+    "description": "Naprawa awaryjna po zalaniu — suszenie, czyszczenie połączeń, wymiana osprzętu mokrego",
+    "unit": "godz",
+    "labor_norm": 1.0,
+    "knr_category": "Serwis i Awarie",
+    "is_industrial": false,
+    "synonyms": [
+      "zalanie instalacji",
+      "naprawa po zalaniu",
+      "wet installation repair",
+      "flood damage electrical",
+      "suszenie po zalaniu",
+      "naprawa po powodzi"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9035",
+    "column_number": "10",
+    "description": "Wymiana i przeprogramowanie automatycznego bezpiecznika nadprądowego (MCB) w tablicy",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "knr_category": "Serwis i Awarie",
+    "is_industrial": false,
+    "synonyms": [
+      "wymiana bezpiecznika",
+      "mcb wymiana",
+      "nadprądowy wymiana",
+      "circuit breaker replacement",
+      "wymiana automatu",
+      "S-typowy wymiana"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9035",
+    "column_number": "11",
+    "description": "Rozbudowa rozdzielnicy o nowy obwód (kabel + bezpiecznik) w istniejącej tablicy",
+    "unit": "kpl",
+    "labor_norm": 2.5,
+    "knr_category": "Modernizacje",
+    "is_industrial": false,
+    "synonyms": [
+      "nowy obwód",
+      "rozbudowa tablicy",
+      "dodatkowy bezpiecznik",
+      "new circuit",
+      "dorobienie obwodu",
+      "rozbudowa rozdzielnicy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9035",
+    "column_number": "12",
+    "description": "Wymiana starej rozdzielnicy (do 24 mod.) na nową z wyposażeniem i okablowaniem",
+    "unit": "kpl",
+    "labor_norm": 12.0,
+    "knr_category": "Modernizacje",
+    "is_industrial": false,
+    "synonyms": [
+      "wymiana rozdzielnicy",
+      "nowa tablica",
+      "modernizacja skrzynki",
+      "panel upgrade",
+      "wymiana tablicy elektrycznej",
+      "nowa rozdzielnica 24"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9035",
+    "column_number": "13",
+    "description": "Wytrasowanie i naprawa puszki rozgałęźnej (junction box) z połączeniami pod tynkiem",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Serwis i Awarie",
+    "is_industrial": false,
+    "synonyms": [
+      "puszka rozgałęźna",
+      "junction box naprawa",
+      "szukanie puszki",
+      "naprawa połączeń",
+      "puszka pod tynkiem",
+      "wytrasowanie puszki"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9035",
+    "column_number": "14",
+    "description": "Montaż i podłączenie licznika energii z rejestracją dobową (dla sublokatorów/firm)",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "Modernizacje",
+    "is_industrial": false,
+    "synonyms": [
+      "podlicznik energii",
+      "licznik dla sublokatora",
+      "energy submeter",
+      "dodatkowy licznik",
+      "montaż licznika",
+      "licznik lokatorski"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9035",
+    "column_number": "15",
+    "description": "Uszczelnienie i zabezpieczenie przepustu kablowego (np. EI60) po remoncie lub modernizacji",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "knr_category": "Modernizacje",
+    "is_industrial": false,
+    "synonyms": [
+      "uszczelnienie przepustu",
+      "ei60 przepust",
+      "fire seal cable",
+      "przejście pożarowe",
+      "zabezpieczenie przejścia kabli",
+      "przepust ognioodporny po remoncie"
+    ]
+  }
+]

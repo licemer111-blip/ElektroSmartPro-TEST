@@ -1,0 +1,272 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9017",
+    "column_number": "01",
+    "description": "Montaż i podłączenie aktora sterującego KNX (8-kanałowy) w rozdzielnicy",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "knr_category": "Smart Home",
+    "is_industrial": false,
+    "synonyms": [
+      "aktor knx",
+      "knx",
+      "modul knx",
+      "magistrala knx",
+      "actuator knx",
+      "inteligentny dom knx"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9017",
+    "column_number": "02",
+    "description": "Programowanie i parametryzacja 1 punktu/kanału w systemie KNX/Grenton",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "knr_category": "Smart Home",
+    "is_industrial": false,
+    "synonyms": [
+      "programowanie knx",
+      "grenton",
+      "ets programowanie",
+      "konfiguracja knx",
+      "punkt knx"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9017",
+    "column_number": "03",
+    "description": "Montaż czujnika obecności/ruchu w systemie Smart Home (magistralny)",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "Smart Home",
+    "is_industrial": false,
+    "synonyms": [
+      "czujnik obecności",
+      "detektor ruchu smart",
+      "pir smart",
+      "czujnik knx",
+      "sensor smart home"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9017",
+    "column_number": "04",
+    "description": "Instalacja i konfiguracja serwera wizualizacji (Grenton Gate/KNX IP Interface)",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "knr_category": "Smart Home",
+    "is_industrial": false,
+    "synonyms": [
+      "serwer knx",
+      "grenton gate",
+      "ip interface",
+      "wizualizacja smart",
+      "home automation server"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9017",
+    "column_number": "05",
+    "description": "Montaż panelu dotykowego (Touch Panel) do sterowania automatyką",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Smart Home",
+    "is_industrial": false,
+    "synonyms": [
+      "panel dotykowy",
+      "touch screen",
+      "panel knx",
+      "tablet smart home",
+      "panel sterowania"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9017",
+    "column_number": "06",
+    "description": "Montaż i uruchomienie silnika napędu rolet/żaluzji (przewodowy, magistralny KNX/Grenton)",
+    "unit": "szt",
+    "labor_norm": 1.8,
+    "knr_category": "Smart Home",
+    "is_industrial": false,
+    "synonyms": [
+      "napęd rolet",
+      "silnik żaluzji",
+      "motor blinds",
+      "roletamatic",
+      "sterowanie roletami",
+      "napęd knx roleta"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9017",
+    "column_number": "07",
+    "description": "Instalacja i konfiguracja hubu Zigbee/Z-Wave z bramką (Gateway) do aplikacji mobilnej",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Smart Home",
+    "is_industrial": false,
+    "synonyms": [
+      "zigbee hub",
+      "z-wave gateway",
+      "home assistant",
+      "smartthings",
+      "philips hue bridge",
+      "matter hub",
+      "zigbee2mqtt"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9017",
+    "column_number": "08",
+    "description": "Montaż inteligentnego gniazda z pomiarem energetycznym i zdalnym sterowaniem",
+    "unit": "szt",
+    "labor_norm": 0.6,
+    "knr_category": "Smart Home",
+    "is_industrial": false,
+    "synonyms": [
+      "smart socket",
+      "inteligentne gniazdo",
+      "gniazdo wifi",
+      "shelly plug",
+      "tasmota",
+      "gniazdo z pomiarem mocy",
+      "smart outlet"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9017",
+    "column_number": "09",
+    "description": "Montaż czujnika otwarcia drzwi/okna (magnetyczny) w systemie Smart Home",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "knr_category": "Smart Home",
+    "is_industrial": false,
+    "synonyms": [
+      "czujnik otwarcia",
+      "sensor magnetyczny",
+      "door sensor",
+      "window sensor",
+      "czujka magnetyczna smart",
+      "zigbee door sensor"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9017",
+    "column_number": "10",
+    "description": "Montaż i konfiguracja inteligentnego dzwonka wideo (Smart Doorbell) z kamerą i Wi-Fi",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "knr_category": "Smart Home",
+    "is_industrial": false,
+    "synonyms": [
+      "smart doorbell",
+      "dzwonek wideo",
+      "ring dzwonek",
+      "nest doorbell",
+      "arlo doorbell",
+      "wideo dzwonek wifi",
+      "interkom wifi"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9017",
+    "column_number": "11",
+    "description": "Montaż sterownika ogrzewania podłogowego Smart (Wi-Fi/Zigbee) per pokój",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "Smart Home",
+    "is_industrial": false,
+    "synonyms": [
+      "termostat smart",
+      "regulator ogrzewania smart",
+      "wifi thermostat",
+      "nest thermostat",
+      "honeywell smart",
+      "zigbee termostat"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9017",
+    "column_number": "12",
+    "description": "Montaż i konfiguracja systemu multiroom audio (Sonos/Yamaha) — strefa 1 pomieszczenie",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "Smart Home",
+    "is_industrial": false,
+    "synonyms": [
+      "multiroom sonos",
+      "yamaha musiccast",
+      "audio smart",
+      "głośnik smart",
+      "whole home audio",
+      "spotify connect audio"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9017",
+    "column_number": "13",
+    "description": "Programowanie scen automatyzacji (Scenes, Routines) i harmonogramów w systemie Smart Home",
+    "unit": "godz",
+    "labor_norm": 1.0,
+    "knr_category": "Smart Home",
+    "is_industrial": false,
+    "synonyms": [
+      "sceny smart",
+      "automatyzacja home",
+      "routines smart home",
+      "programowanie automatyki",
+      "harmonogram smart",
+      "home automation scripting"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9017",
+    "column_number": "14",
+    "description": "Montaż czujnika jakości powietrza (CO2, PM2.5, VOC) ze sterowaniem wentylacją",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "knr_category": "Smart Home",
+    "is_industrial": false,
+    "synonyms": [
+      "czujnik co2",
+      "pm2.5 sensor",
+      "jakość powietrza",
+      "air quality sensor",
+      "voc sensor",
+      "czujnik iaq",
+      "awair sensor"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9017",
+    "column_number": "15",
+    "description": "Szkolenie użytkownika z obsługi systemu Smart Home i konfiguracja aplikacji mobilnej",
+    "unit": "godz",
+    "labor_norm": 1.5,
+    "knr_category": "Smart Home",
+    "is_industrial": false,
+    "synonyms": [
+      "szkolenie smart home",
+      "konfiguracja aplikacji",
+      "obsługa automatyki",
+      "user training smart",
+      "instruktaż knx",
+      "onboarding smart home"
+    ]
+  }
+]

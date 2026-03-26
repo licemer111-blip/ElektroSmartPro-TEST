@@ -1,0 +1,363 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0801",
+    "column_number": "01",
+    "description": "Układanie kabla YKY (miedzianego) 3x1.5mm² w rurze lub korytku kablowym",
+    "unit": "m",
+    "labor_norm": 2.5,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "kabel yky 1.5",
+      "przewód 3x1.5",
+      "kabel miedź 1.5mm",
+      "yky 3x1.5",
+      "kabel instalacyjny 1.5",
+      "okablowanie 1.5mm"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0801",
+    "column_number": "02",
+    "description": "Układanie kabla YKY (miedzianego) 3x2.5mm² w rurze lub korytku kablowym",
+    "unit": "m",
+    "labor_norm": 3.0,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "kabel yky 2.5",
+      "przewód 3x2.5",
+      "kabel miedź 2.5mm",
+      "yky 3x2.5",
+      "kabel instalacyjny 2.5",
+      "okablowanie 2.5mm"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0801",
+    "column_number": "03",
+    "description": "Układanie kabla YKY (miedzianego) 5x2.5mm² lub 5x4mm² (3-fazowy) w trasie kablowej",
+    "unit": "m",
+    "labor_norm": 4.0,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "kabel 5x2.5",
+      "kabel 5x4",
+      "yky 5x2.5",
+      "kabel trójfazowy 2.5",
+      "kabel 3f 4mm",
+      "przewód siłowy 5x4"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0801",
+    "column_number": "04",
+    "description": "Układanie kabla YKY 5x6mm² lub 5x10mm² (3-fazowy zasilający) w korytku lub rurze",
+    "unit": "m",
+    "labor_norm": 5.0,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "kabel 5x6",
+      "kabel 5x10",
+      "yky 5x6",
+      "yky 5x10",
+      "kabel zasilający 6mm",
+      "kabel 10mm trójfazowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0801",
+    "column_number": "05",
+    "description": "Układanie kabla YKY 5x16mm² lub 5x25mm² (WLZ do rozdzielnicy piętrowej)",
+    "unit": "m",
+    "labor_norm": 7.0,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "kabel 5x16",
+      "kabel 5x25",
+      "yky 5x16",
+      "wlz 25mm",
+      "wewnętrzna linia zasilająca 25",
+      "kabel 16mm trójfazowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0801",
+    "column_number": "06",
+    "description": "Układanie kabla WLZ miedziany YKY 5x35mm² lub 5x50mm² (ciężki) na drabinkach",
+    "unit": "m",
+    "labor_norm": 10.0,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "kabel 5x35",
+      "kabel 5x50",
+      "yky 5x35",
+      "wlz 50mm",
+      "wewnętrzna linia 50mm",
+      "kabel 35mm wlz"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0801",
+    "column_number": "07",
+    "description": "Układanie kabla aluminiowego YAKY 4x70mm² lub 4x95mm² (WLZ główne, hala, blok)",
+    "unit": "m",
+    "labor_norm": 14.0,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "kabel aluminiowy 70mm",
+      "yaky 4x70",
+      "kabel 4x95",
+      "yaky 4x95",
+      "wlz aluminium 95mm",
+      "yakxs 4x70"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0801",
+    "column_number": "08",
+    "description": "Układanie kabla aluminiowego YAKXS 4x120mm² lub 4x150mm² (zasilanie główne obiektu)",
+    "unit": "m",
+    "labor_norm": 18.0,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "kabel aluminiowy 120mm",
+      "yakxs 4x120",
+      "kabel 4x150",
+      "yakxs 4x150",
+      "wlz aluminium 150mm",
+      "kabel zasilający 150mm"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0802",
+    "column_number": "01",
+    "description": "Zarobienie (podłączenie) przewodów jednożyłowych lub kabla wielożyłowego do 4mm² w tablicy",
+    "unit": "szt",
+    "labor_norm": 0.08,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "zarobienie kabla",
+      "podłączenie przewodu",
+      "podłączenie kabla",
+      "przyłączenie przewodu",
+      "zacisk kablowy",
+      "terminacja kabla 4mm"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0802",
+    "column_number": "02",
+    "description": "Zarobienie (podłączenie) grubego kabla 6-16mm² z końcówką tulejkową",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "zarobienie 10mm",
+      "podłączenie 16mm",
+      "końcówka tulejkowa 10mm",
+      "terminacja 16mm",
+      "zaprasowanie 10mm",
+      "kabel 16mm podłączenie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0802",
+    "column_number": "03",
+    "description": "Zarobienie końcówki kablowej (prasowanie hydrauliczne) na żyle 25-50mm²",
+    "unit": "szt",
+    "labor_norm": 0.20,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "zaprasowanie 25mm",
+      "końcówka rurkowa 50mm",
+      "prasa hydrauliczna kabel",
+      "oczkowanie 50mm",
+      "terminacja gruba 25mm",
+      "hydraulic crimping"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0803",
+    "column_number": "01",
+    "description": "Montaż złącza kablowo-pomiarowego (ZKP/ZPP) na granicy działki — kompletnie",
+    "unit": "kpl",
+    "labor_norm": 5.0,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "złącze kablowo-pomiarowe",
+      "zkp",
+      "zpp",
+      "szafka przyłączeniowa",
+      "przyjście energii",
+      "przyłącze energetyczne",
+      "kabel przyłącze"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0803",
+    "column_number": "02",
+    "description": "Montaż Złącza Kablowego Napowietrznego (ZKN) na elewacji budynku",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "złącze napowietrzne",
+      "zkn",
+      "przyłącze napowietrzne",
+      "głowica napowietrzna",
+      "wejście kablowe napowietrzne",
+      "łącznik napowietrzny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0804",
+    "column_number": "01",
+    "description": "Wykonanie mufy / złącza naprawczego na kablu ziemnym (YKY / YAKXS) do 120mm²",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "mufa kablowa",
+      "złącze naprawcze kabla",
+      "złącze kablowe ziemne",
+      "mufa kabla",
+      "splicing cable",
+      "cable joint repair"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0804",
+    "column_number": "02",
+    "description": "Wykonanie głowicy kablowej (zarobienie końca kabla) dla kabla 16-95mm² — kpl",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "głowica kablowa",
+      "zarobienie końca kabla",
+      "terminacja kablowa",
+      "cable termination",
+      "zakończenie kabla",
+      "cable head"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0805",
+    "column_number": "01",
+    "description": "Montaż i podłączenie głównego wyłącznika pożarowego prądu (PWP) natynkowego lub podtynkowego",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "główny wyłącznik pożarowy",
+      "pwp",
+      "wyłącznik ppoż",
+      "przycisk odcięcia prądu",
+      "wyłącznik główny ppoż",
+      "fire isolator switch"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0805",
+    "column_number": "02",
+    "description": "Montaż i podłączenie odłącznika izolacyjnego (sectioanalizatora) 3P 63A-200A w rozdzielnicy",
+    "unit": "szt",
+    "labor_norm": 0.50,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "odłącznik izolacyjny",
+      "odłącznik bezpiecznikowy",
+      "rozłącznik 63a",
+      "rozłącznik 200a",
+      "disconnector switch",
+      "isolator switch 200a"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0806",
+    "column_number": "01",
+    "description": "Układanie kabla WLZ w pionowym szybie (kanale instalacyjnym) budynku wielopiętrowego",
+    "unit": "m",
+    "labor_norm": 2.0,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "wlz pionowe",
+      "kabel w szybie",
+      "kabel pionowy",
+      "wlz klatka schodowa",
+      "okablowanie pionowe",
+      "vertical wlz"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0807",
+    "column_number": "01",
+    "description": "Montaż i podłączenie głównego licznika energii 3-fazowego z zabezpieczeniem w rozdzielnicy",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "licznik główny",
+      "podłączenie licznika energii",
+      "licznik 3f główny",
+      "main meter",
+      "energy meter installation",
+      "montaż licznika 3f"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0808",
+    "column_number": "01",
+    "description": "Połączenie szynowe (szyna Cu 30x5mm) między rozdzielnicami sąsiednimi w szafie",
+    "unit": "m",
+    "labor_norm": 0.50,
+    "is_industrial": true,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "szyna miedziana 30x5",
+      "szyna Cu łącząca",
+      "busbar miedź 30x5",
+      "szyna zbiorcza Cu",
+      "copper busbar 30x5",
+      "szyna prądowa miedź"
+    ]
+  }
+]

@@ -1,0 +1,188 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9012",
+    "column_number": "01",
+    "description": "Układanie bednarki ocynkowanej (np. 30x4) w gotowym wykopie (Uziom otokowy)",
+    "unit": "m",
+    "labor_norm": 1.2,
+    "is_industrial": false,
+    "knr_category": "odgromowka",
+    "synonyms": [
+      "bednarka",
+      "uziom otokowy",
+      "bednarka 30x4",
+      "fezn",
+      "taśma uziemiająca",
+      "uziom poziomy",
+      "bednarka ocynkowana"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9012",
+    "column_number": "02",
+    "description": "Układanie bednarki (Uziom fundamentowy) w ławie przed wylaniem betonu",
+    "unit": "m",
+    "labor_norm": 1.8,
+    "is_industrial": false,
+    "knr_category": "odgromowka",
+    "synonyms": [
+      "uziom fundamentowy",
+      "bednarka w fundamencie",
+      "uziemienie ławy",
+      "zbrojenie uziom",
+      "bednarka beton",
+      "uziom zbrojeniowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9012",
+    "column_number": "03",
+    "description": "Pogrążanie (wbijanie) uziomu pionowego (szpilek) prętem stalowym miedziowanym",
+    "unit": "m",
+    "labor_norm": 0.45,
+    "is_industrial": false,
+    "knr_category": "odgromowka",
+    "synonyms": [
+      "szpilka uziemiająca",
+      "pret uziomowy",
+      "uziom pionowy",
+      "wbijanie uziomu",
+      "szpilka 1.5m",
+      "przynawa uziom",
+      "uziom szpilkowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9012",
+    "column_number": "04",
+    "description": "Wykonanie połączenia spawanego (bednarka-bednarka) z zabezpieczeniem antykorozyjnym",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "is_industrial": false,
+    "knr_category": "odgromowka",
+    "synonyms": [
+      "spawanie bednarki",
+      "połączenie spawane",
+      "spawanie uziemienia",
+      "anti-cor",
+      "zabezpieczenie spawu",
+      "denso bednarka",
+      "farba cynkowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9012",
+    "column_number": "05",
+    "description": "Montaż złącza kontrolnego uziomu w puszce elewacyjnej / studzience rewizyjnej",
+    "unit": "szt",
+    "labor_norm": 0.85,
+    "is_industrial": false,
+    "knr_category": "odgromowka",
+    "synonyms": [
+      "złącze kontrolne",
+      "studzienka rewizyjna",
+      "puszka elewacyjna",
+      "punkt kontrolny uziom",
+      "zacisk kontrolny",
+      "muf elewacyjna uziom"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9012",
+    "column_number": "06",
+    "description": "Układanie drutu odgromowego (np. fi 8mm stal/AL) na dachu płaskim",
+    "unit": "m",
+    "labor_norm": 4.5,
+    "is_industrial": false,
+    "knr_category": "odgromowka",
+    "synonyms": [
+      "drut odgromowy",
+      "zwody poziome",
+      "dach płaski odgrom",
+      "instalacja odgromowa",
+      "lps",
+      "drut fi8",
+      "piorunochron poziomy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9012",
+    "column_number": "07",
+    "description": "Układanie drutu odgromowego na dachu spadzistym (dachówka/blacha)",
+    "unit": "m",
+    "labor_norm": 6.0,
+    "is_industrial": false,
+    "knr_category": "odgromowka",
+    "synonyms": [
+      "odgrom dach skosny",
+      "zwody gaśiorowe",
+      "wsporniki gąsiorowe",
+      "dachówka odgrom",
+      "blacha odgrom",
+      "dach skosny piorunochron"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9012",
+    "column_number": "08",
+    "description": "Montaż masztu odgromowego (iglicy) na dachu lub kominie",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "odgromowka",
+    "synonyms": [
+      "iglica odgromowa",
+      "maszt odgromowy",
+      "piorunochron aktywny",
+      "lightning rod",
+      "zwod pionowy",
+      "maszt kominowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9012",
+    "column_number": "09",
+    "description": "Montaż Głównej Szyny Uziemiającej (GSU / GSW) natynkowo",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "is_industrial": false,
+    "knr_category": "odgromowka",
+    "synonyms": [
+      "gsu",
+      "główna szyna uziemiająca",
+      "gsw",
+      "szyna wyrownawcza",
+      "pe szyna",
+      "main earthing terminal",
+      "met"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9012",
+    "column_number": "10",
+    "description": "Wykonanie połączeń wyrównawczych (rur gazowych, wodnych, C.O.) przewodem LGY",
+    "unit": "m",
+    "labor_norm": 1.2,
+    "is_industrial": false,
+    "knr_category": "odgromowka",
+    "synonyms": [
+      "połączenia wyrównawcze",
+      "wyrownanie potencjału",
+      "uziemienie rur",
+      "lgy żółto-zielony",
+      "bonding",
+      "obejma uziemiająca",
+      "pe rury"
+    ]
+  }
+]

@@ -1,0 +1,95 @@
+STANDARDY TECHNICZNE INSTALACJI ELEKTRYCZNYCH (POLSKA 2026)
+Aktualizacja: marzec 2026 | ES-Engine v2.1
+
+=== NORMY PODSTAWOWE (INSTALACJE nn) ===
+PN-HD 60364 (seria) — Instalacje elektryczne niskiego napięcia:
+- PN-HD 60364-4-41: Ochrona przed porażeniem elektrycznym (TN-S/TN-C/TT/IT)
+- PN-HD 60364-4-43: Ochrona przed przeładowaniem i zwarciami
+- PN-HD 60364-5-51: Dobór i montaż wyposażenia
+- PN-HD 60364-5-52: Instalacje kablowe i przewodowe
+- PN-HD 60364-5-53: Aparatura łączeniowa i sterownicza
+- PN-HD 60364-5-54: Uziemienia, przewody ochronne, połączenia wyrownawcze
+- PN-HD 60364-6: Sprawdzanie (badania odbiorcze + okresowe)
+- PN-HD 60364-7-701: Pomieszczenia z wanną lub prysznicem (strefy 0/1/2)
+- PN-HD 60364-7-712: Instalacje fotowoltaiczne PV
+- PN-HD 60364-7-722: Zasilanie pojazdów elektrycznych EV
+- PN-HD 60364-7-753: Ogrzewanie podłogowe i sufitowe elektryczne
+
+IEC 61439-1/2: Rozdzielnice i tablice elektryczne nn (budowa, próby)
+PN-EN 60898: Wyłączniki nadprądowe MCB (charakterystyki B/C/D)
+PN-EN 61008/61009: RCD (wyłączniki różnicowoprądowe RCCB/RCBO)
+PN-EN 62305 (seria): Ochrona odgromowa (LPL I–IV, LPS, SPM)
+PN-EN IEC 62561: Elementy instalacji odgromowej
+
+=== NORMY ŚREDNIEGO NAPIĘCIA (SN) ===
+IEC 62271-1: Aparatura rozdzielcza SN/WN (ogólne)
+IEC 62271-100: Wyłączniki próżniowe SN
+IEC 62271-200: Rozdzielnice SN z izolacją powietrzną (AIS)
+IEC 62271-202: Prefabrykowane stacje transformatorowe
+PN-EN 50522: Uziemienie instalacji SN (powyżej 1 kV)
+UWAGA: Prace przy instalacjach SN wyłącznie z uprawnieniami SEP D (dozorowe) i E (eksploatacyjne) na 1–15 kV!
+
+=== NORMY TELETECHNICZNE / IT / BMS ===
+PN-EN 50173 (seria): Okablowanie strukturalne
+  - 50173-1: Ogólne wymagania
+  - 50173-2: Budynki biurowe (Cat 6A minimum 2026)
+  - 50173-4: Domy i małe biura
+PN-EN 50174 (seria): Instalacje okablowania
+PN-EN 50310: Uziemienie i ekranowanie IT
+PN-EN 62386 (DALI): Cyfrowe sterowanie oświetleniem
+EN 50090 (KNX): Systemy automatyki budynkowej
+IEC 61131-3: Języki programowania PLC/sterowników BMS
+PN-EN 50131: Systemy alarmowe włamaniowe
+PN-EN 54 (seria): Systemy sygnalizacji pożarowej (SSP)
+
+=== NORMY POŻAROWE I BUDOWLANE ===
+PN-EN 13501-2: Klasyfikacja ogńiochronna (EI30/EI60/EI90/EI120)
+PN-EN IEC 60332: Kable odporne na rozprzestrzenianie ognia
+PN-EN IEC 60331: Kable z zachowaniem funkcji (E30/E60/E90 — NHXH, HDGs)
+PN-EN 60529: Stopnie ochrony obudow (IP XX — IP20 do IP68)
+PN-EN 60068: Odporność na warunki środowiskowe
+Rozporządzenie MI z 12.04.2002 §180: gniazda min. 0.30m od podłogi
+Rozporządzenie MI §183: RCD 30mA obowiązkowe w łazienkach
+Rozporządzenie MI §185: SPD ochrona przepięciowa w budynkach
+
+=== NORMY OZE / PV / E-MOBILITY ===
+PN-HD 60364-7-712: Instalacje PV (STS, izolacja DC, uziemienie)
+IEC 62933: Systemy magazynowania energii elektrycznej
+IEC 61851: Stacje ładowania EV (tryby 1/2/3/4)
+IEC 62196: Gniazda ładowania EV (Typ 1/Typ 2/CCS/CHAdeMO)
+Prosumenci 2024: net-billing, eksport 100%, rejestracja >50kW w URE
+
+=== NORMY ATEX (STREFY ZAGROŻENIA WYBUCHEM) ===
+PN-EN IEC 60079-0: Sprzęt elektryczny w atmosferach wybuchowych
+PN-EN IEC 60079-14: Projektowanie, dobór, montaż instalacji elektrycznych Ex
+Klasyfikacja stref: 0/1/2 (gazy), 20/21/22 (pyły)
+Zone 0/20: Ex d/e/ia  |  Zone 1/21: Ex e/mb/tb  |  Zone 2/22: Ex n
+UWAGA: Prace ATEX wyłącznie przez instalatora z certyfikatem Ex!
+
+=== ZASADY PROWADZENIA INSTALACJI ===
+STREFY INSTALACYJNE (PN-HD 60364-5-52):
+- Przewody w pionowych/poziomych pasach 30cm od krawędzi ścian i stropu
+- Zakaz prowadzenia "na skróty" przez środek ściany
+- Minimalna odległość od rur c.o./c.w.: 10 cm
+ŁAZIENKI — STREFY (PN-HD 60364-7-701):
+- Strefa 0 (wewnątrz wanny): IP X7, tylko SELV 12V
+- Strefa 1 (0-60cm nad wanną): min. IP X4, RCBO 30mA obowiązkowe
+- Strefa 2 (60-120cm od wanny): min. IP X4, gniazda z IP44 dopuszczone
+- Poza strefami: normalny osprzet, RCD 30mA w obwodzie
+
+WYMAGANIA PRZY BADANIACH ODBIORCZYCH (PN-HD 60364-6):
+1. Pomiar ciągłości przewodów ochronnych PE/PEN
+2. Pomiar rezystancji izolacji: min. 1 MΩ (230V), 0.5 MΩ (SELV)
+3. Impedancja pętli zwarcia (PSCC/Zs)
+4. Test zadziałania RCD (30mA, 100mA, 500mA)
+5. Sprąbka biegunowości
+6. Pomiar rezystancji uziemienia (metoda 3-biegunowa) <10Ω
+7. Protokół odbiorczy zgodny z PN-HD 60364-6
+
+NARZUTY CZASOWE NA ROBOCIZNĘ:
+- Praca na wysokości >2m: ×1.20
+- Praca w czynnym obiekcie (biuro): ×1.30
+- Beton zbrojony (wiercenie/bruzdowanie): ×1.20
+- Strefa ATEX: ×1.50
+- Praca nocna/weekend: ×1.50
+- Warunki zimowe (<5°C): ×1.15

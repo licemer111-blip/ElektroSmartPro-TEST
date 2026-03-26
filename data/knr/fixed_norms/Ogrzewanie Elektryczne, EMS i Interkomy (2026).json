@@ -1,0 +1,270 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9027",
+    "column_number": "01",
+    "description": "Układanie elektrycznych mat grzejnych (ogrzewanie podłogowe) wraz z czujnikiem",
+    "unit": "m2",
+    "labor_norm": 1.2,
+    "knr_category": "Wykończenia Specjalne",
+    "is_industrial": false,
+    "synonyms": [
+      "mata grzewcza",
+      "ogrzewanie podłogowe elektryczne",
+      "podłogówka elektryczna",
+      "heating mat",
+      "kabel grzejny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9027",
+    "column_number": "02",
+    "description": "Montaż i konfiguracja licznika energii Wi-Fi/LAN (Smart Metering - np. Shelly/Zamel)",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Energy Management",
+    "is_industrial": false,
+    "synonyms": [
+      "smart meter",
+      "licznik energii",
+      "shelly",
+      "zamel licznik",
+      "energy monitor",
+      "powermeter wifi"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9027",
+    "column_number": "03",
+    "description": "Montaż wideodomofonu IP (stacja bramowa + monitor) с konfiguracją aplikacji",
+    "unit": "kpl",
+    "labor_norm": 3.5,
+    "knr_category": "Interkomy",
+    "is_industrial": false,
+    "synonyms": [
+      "wideodomofon",
+      "domofon ip",
+      "bramofon",
+      "stacja bramowa",
+      "monitor domofonu",
+      "interkom ip"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9027",
+    "column_number": "04",
+    "description": "Instalacja elektrozaczepu w furtce/drzwiach wraz z okablowaniem и regulacją",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "Interkomy",
+    "is_industrial": false,
+    "synonyms": [
+      "elektrozaczep",
+      "rygiel elektryczny",
+      "zaczep elektromagnetyczny",
+      "otwieracz elektryczny",
+      "electric strike"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9027",
+    "column_number": "05",
+    "description": "Montaż i uruchomienie systemu Multiroom Audio (głośniki sufitowe + wzmacniacz)",
+    "unit": "kpl",
+    "labor_norm": 4.5,
+    "knr_category": "Smart Home",
+    "is_industrial": false,
+    "synonyms": [
+      "multiroom audio",
+      "głośniki sufitowe",
+      "wzmacniacz audio",
+      "system audio",
+      "sonos",
+      "denon heos"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9027",
+    "column_number": "06",
+    "description": "Montaż i podłączenie elektrycznego grzejnika panelowego na podczerwień (IR)",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "knr_category": "Ogrzewanie Elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "grzejnik ir",
+      "panel grzewczy",
+      "grzejnik podczerwień",
+      "promiennik ir",
+      "infrared heater",
+      "grzejnik elektryczny panel"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9027",
+    "column_number": "07",
+    "description": "Montaż elektrycznego grzejnika łazienkowego (drabinkowego) z termostatem",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Ogrzewanie Elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "grzejnik łazienkowy",
+      "drabinka elektryczna",
+      "grzejnik drabinkowy",
+      "towel radiator",
+      "bathroom heater",
+      "elektryczny grzejnik łazienka"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9027",
+    "column_number": "08",
+    "description": "Instalacja systemu EMS (Energy Management System) z priorytetem PV i sterowanim obciążeniami",
+    "unit": "kpl",
+    "labor_norm": 5.0,
+    "knr_category": "Energy Management",
+    "is_industrial": false,
+    "synonyms": [
+      "ems",
+      "energy management",
+      "zarządzanie energią",
+      "priorytet pv ems",
+      "smart home energy",
+      "hems home energy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9027",
+    "column_number": "09",
+    "description": "Montaż wyświetlacza energetycznego (Energy Display) z odczytem na żywo kW i kWh",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Energy Management",
+    "is_industrial": false,
+    "synonyms": [
+      "energy display",
+      "licznik wyświetlacz",
+      "energy monitor display",
+      "home energy monitor",
+      "odczyt energii",
+      "consumption display"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9027",
+    "column_number": "10",
+    "description": "Montaż regulatora ogrzewania podłogowego (1 strefa) z termostatem tygodniowym",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "Ogrzewanie Elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "regulator ogrzewania podłogowego",
+      "termostat tygodniowy",
+      "termostat floor",
+      "regulator 1 strefa",
+      "floor heating thermostat",
+      "sterownik ogrzewania"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9027",
+    "column_number": "11",
+    "description": "Montaż systemu przyzywowego (dzwonek + przycisk) dla osób niepełnosprawnych / szpitali",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "knr_category": "Interkomy",
+    "is_industrial": false,
+    "synonyms": [
+      "system przyzywowy",
+      "dzwonek niepełnosprawny",
+      "nurse call",
+      "przycisk alarmowy",
+      "przywołanie pielęgniarki",
+      "alarm przyzywowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9027",
+    "column_number": "12",
+    "description": "Montaż i konfiguracja systemu kontroli dostępu (czytnik + kontroler + elektrozaczep) 1 przejście",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "knr_category": "Interkomy",
+    "is_industrial": false,
+    "synonyms": [
+      "kontrola dostępu",
+      "access control",
+      "czytnik kart",
+      "rfid dostęp",
+      "karta dostępu",
+      "system dostępowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9027",
+    "column_number": "13",
+    "description": "Układanie kabla ogrzewania podłogowego (jednostronny) i czujnika podłogowego",
+    "unit": "m2",
+    "labor_norm": 0.8,
+    "knr_category": "Ogrzewanie Elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel grzejny układanie",
+      "heating cable floor",
+      "czujnik podłogowy temperatury",
+      "floor sensor",
+      "kabel jednostronny podłoga",
+      "układanie ogrzewania"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9027",
+    "column_number": "14",
+    "description": "Montaż zewnętrznego głośnika IP (do systemu przyzywania / ogłoszeń) na elewacji",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Interkomy",
+    "is_industrial": false,
+    "synonyms": [
+      "głośnik zewnętrzny ip",
+      "syrena ip",
+      "głośnik pa",
+      "ip speaker",
+      "public address outdoor",
+      "głośnik ścienny pa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9027",
+    "column_number": "15",
+    "description": "Montaż i konfiguracja systemu zliczania osób (People Counter) na wejściu",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "knr_category": "Interkomy",
+    "is_industrial": false,
+    "synonyms": [
+      "licznik osób",
+      "people counter",
+      "footfall counter",
+      "zliczanie wejść",
+      "occupancy sensor",
+      "sensor wejścia"
+    ]
+  }
+]

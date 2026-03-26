@@ -1,0 +1,268 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9029",
+    "column_number": "01",
+    "description": "Montaż i podłączenie lampy ogrodowej (stojącej lub najazdowej) z przygotowaniem fundamentu",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "Ogród i Basen",
+    "is_industrial": false,
+    "synonyms": [
+      "lampa ogrodowa",
+      "słupek ogrodowy",
+      "oświetlenie ogrodu",
+      "lampa najazdowa",
+      "oprawa ogrodowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9029",
+    "column_number": "02",
+    "description": "Układanie kabla zasilającego (YKY) w rurze osłonowej DVK pod trawnikiem/rabatą",
+    "unit": "mb",
+    "labor_norm": 0.25,
+    "knr_category": "Ogród i Basen",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel ogrodowy",
+      "yky pod trawnikiem",
+      "kabel w rurze",
+      "dvk ogród",
+      "kabel zewnętrzny ziemny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9029",
+    "column_number": "03",
+    "description": "Kompleksowe podłączenie elektryczne techniki basenowej (pompa, filtracja, dozownik chloru)",
+    "unit": "kpl",
+    "labor_norm": 6.5,
+    "knr_category": "Ogród i Basen",
+    "is_industrial": false,
+    "synonyms": [
+      "instalacja basenowa",
+      "pompa basenu",
+      "filtracja basenu",
+      "dozownik chloru",
+      "technika basenowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9029",
+    "column_number": "04",
+    "description": "Montaż podwodnego oświetlenia basenowego LED (IP68) wraz z transformatorem bezpieczeństwa",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "knr_category": "Ogród i Basen",
+    "is_industrial": false,
+    "synonyms": [
+      "led basen",
+      "oświetlenie podwodne",
+      "ip68 led",
+      "lampa basenowa",
+      "underwater led",
+      "transformer 12v basen"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9029",
+    "column_number": "05",
+    "description": "Konfiguracja sterowania inteligentnego (Astro, Wi-Fi, Sceny) dla oświetlenia zewnętrznego",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "knr_category": "Ogród i Basen",
+    "is_industrial": false,
+    "synonyms": [
+      "sterowanie astro",
+      "timer oświetlenia",
+      "wi-fi oświetlenie",
+      "sceny świetlne",
+      "zegar astronomiczny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9029",
+    "column_number": "06",
+    "description": "Montaż oprawy wtykanej (Spike Light) w podłożu ogrodowym z podłączeniem przewodu",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "knr_category": "Ogród i Basen",
+    "is_industrial": false,
+    "synonyms": [
+      "spike light",
+      "oprawa wbijana",
+      "wtykana ogrodowa",
+      "garden spike",
+      "oświetlenie krzewów",
+      "oprawa naziemna ogród"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9029",
+    "column_number": "07",
+    "description": "Montaż oprawy schodowej LED (step light) w cokole lub murku ogrodzeniowym",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "Ogród i Basen",
+    "is_industrial": false,
+    "synonyms": [
+      "step light",
+      "oświetlenie schodów",
+      "oprawa schodowa",
+      "led schody",
+      "cokół led",
+      "murek oświetlenie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9029",
+    "column_number": "08",
+    "description": "Montaż wyłącznika różnicowoprądowego (RCD 30mA) dla obwodów zewnętrznych i basenu",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "knr_category": "Ogród i Basen",
+    "is_industrial": false,
+    "synonyms": [
+      "rcd ogród",
+      "fi 30ma",
+      "gfci outdoor",
+      "rcd basen",
+      "ochrona różnicowoprądowa zewnętrzna",
+      "fi dla basenu"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9029",
+    "column_number": "09",
+    "description": "Montaż gniazda zewnętrznego IP44 na słupku lub w elewacji z klapką ochronną",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "Ogród i Basen",
+    "is_industrial": false,
+    "synonyms": [
+      "gniazdo zewnętrzne",
+      "gniazdo ogrodowe ip44",
+      "kontakt ogrodowy",
+      "outdoor socket",
+      "gniazdo z klapką",
+      "ip44 gniazdo"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9029",
+    "column_number": "10",
+    "description": "Montaż słupka elektrycznego ogrodowego z gniazdami i oświetleniem (Power Stake/Bollard)",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "knr_category": "Ogród i Basen",
+    "is_industrial": false,
+    "synonyms": [
+      "słupek ogrodowy elektryczny",
+      "bollard ogrodowy",
+      "power post",
+      "słupek z gniazdami",
+      "garden bollard",
+      "ogrodowy słupek instalacyjny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9029",
+    "column_number": "11",
+    "description": "Montaż oprawy najazdowej (Ground Light) odpornej na ruch pojazdów (IP67)",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Ogród i Basen",
+    "is_industrial": false,
+    "synonyms": [
+      "oprawa najazdowa",
+      "inground light",
+      "ground light",
+      "oprawa ip67 droga",
+      "oświetlenie podjazdu",
+      "najazdowa led"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9029",
+    "column_number": "12",
+    "description": "Instalacja elektrycznej furtki/bramy wjazdowej z napędem i zabezpieczeniami (automatyka bramy)",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "knr_category": "Ogród i Basen",
+    "is_industrial": false,
+    "synonyms": [
+      "automatyka bramy",
+      "napęd bramy",
+      "furtka elektryczna",
+      "brama automatyczna",
+      "motor bramy",
+      "gate automation"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9029",
+    "column_number": "13",
+    "description": "Montaż hydromasażu / jacuzzi — podłączenie elektryczne (trójfazowe, RCD Typ A)",
+    "unit": "kpl",
+    "labor_norm": 5.0,
+    "knr_category": "Ogród i Basen",
+    "is_industrial": false,
+    "synonyms": [
+      "jacuzzi elektryczne",
+      "hydromasaż podłączenie",
+      "whirlpool wiring",
+      "hot tub electric",
+      "spa elektryczne",
+      "podłączenie jacuzzi"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9029",
+    "column_number": "14",
+    "description": "Montaż i podłączenie pompy cyrkulacyjnej (solarna, ogrodowa) IP55 ze sterownikiem",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "Ogród i Basen",
+    "is_industrial": false,
+    "synonyms": [
+      "pompa ogrodowa",
+      "pompa cyrkulacyjna",
+      "garden pump",
+      "irigation pump",
+      "sterownik pompy",
+      "pompa solarna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9029",
+    "column_number": "15",
+    "description": "Pomiar rezystancji izolacji i próba RCD dla instalacji zewnętrznej i basenu (protokół)",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "knr_category": "Ogród i Basen",
+    "is_industrial": false,
+    "synonyms": [
+      "pomiar izolacji ogród",
+      "test rcd basen",
+      "pomiary zewnętrzne",
+      "protokol ogrod",
+      "odbiór instalacji zewnętrznej",
+      "badania elektryczne ogród"
+    ]
+  }
+]

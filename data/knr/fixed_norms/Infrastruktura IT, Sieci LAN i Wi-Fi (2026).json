@@ -1,0 +1,274 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9015",
+    "column_number": "01",
+    "description": "Montaż szafy rack 19 cali (wisząca lub stojąca) wraz z poziomowaniem",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "knr_category": "Infrastruktura IT",
+    "is_industrial": false,
+    "synonyms": [
+      "szafa rack",
+      "rack 19",
+      "szafa it",
+      "szafa teleinformatyczna",
+      "rack wiszący",
+      "rack stojący"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9015",
+    "column_number": "02",
+    "description": "Zarabianie i montaż gniazda komputerowego RJ45 (Cat 6a/7) w puszce",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "knr_category": "Infrastruktura IT",
+    "is_industrial": false,
+    "synonyms": [
+      "gniazdo rj45",
+      "keystone cat6a",
+      "gniazdo komputerowe",
+      "cat7",
+      "gniazdo lan",
+      "outlet rj45"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9015",
+    "column_number": "03",
+    "description": "Montaż, opisanie i krosowanie patch-panelu 24-portowego w szafie RACK",
+    "unit": "szt",
+    "labor_norm": 4.0,
+    "knr_category": "Infrastruktura IT",
+    "is_industrial": false,
+    "synonyms": [
+      "patchpanel",
+      "panel krosowy",
+      "krosowanie",
+      "panel 24 port",
+      "zaszycie panelu",
+      "punch down"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9015",
+    "column_number": "04",
+    "description": "Instalacja i konfiguracja punktu dostępowego Wi-Fi (Access Point) PoE",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "knr_category": "Infrastruktura IT",
+    "is_industrial": false,
+    "synonyms": [
+      "access point",
+      "ap wifi",
+      "punkt dostępowy",
+      "poe wifi",
+      "ubiquiti",
+      "cisco wifi",
+      "wifi mesh"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9015",
+    "column_number": "05",
+    "description": "Pomiary certyfikacyjne sieci LAN (kat. 6a/7) z wydrukiem protokołu",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "knr_category": "Infrastruktura IT",
+    "is_industrial": false,
+    "synonyms": [
+      "certyfikacja lan",
+      "fluke",
+      "pomiar cat6a",
+      "test sieci",
+      "protokol lan",
+      "certyfikacja struktury"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9015",
+    "column_number": "06",
+    "description": "Montaż i konfiguracja przełącznika sieciowego (Switch PoE) 24/48 portów w szafie RACK",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "Infrastruktura IT",
+    "is_industrial": false,
+    "synonyms": [
+      "switch poe",
+      "przełącznik poe",
+      "switch 24 port",
+      "cisco switch",
+      "hp switch",
+      "netgear poe",
+      "zarządzalny switch"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9015",
+    "column_number": "07",
+    "description": "Montaż i okablowanie organizatora kabli poziomego (1U) w szafie RACK",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "knr_category": "Infrastruktura IT",
+    "is_industrial": false,
+    "synonyms": [
+      "organizator kabli",
+      "kabelmanager",
+      "cable manager rack",
+      "ułożenie kabli rack",
+      "porządkowanie kabli it"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9015",
+    "column_number": "08",
+    "description": "Układanie kabla UTP/STP Cat 6a w rurce instalacyjnej lub korytku od punktu do szafy",
+    "unit": "mb",
+    "labor_norm": 0.12,
+    "knr_category": "Infrastruktura IT",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel utp",
+      "stp cat6a",
+      "kabel lan",
+      "skrętka cat6a",
+      "kabel komputerowy",
+      "linka strukturalna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9015",
+    "column_number": "09",
+    "description": "Montaż i konfiguracja zapory sieciowej/routera (Firewall) w szafie RACK",
+    "unit": "szt",
+    "labor_norm": 3.5,
+    "knr_category": "Infrastruktura IT",
+    "is_industrial": false,
+    "synonyms": [
+      "firewall",
+      "router rack",
+      "fortinet",
+      "palo alto",
+      "cisco router",
+      "utm firewall",
+      "gateway sieciowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9015",
+    "column_number": "10",
+    "description": "Instalacja zasilacza UPS dla szafy IT (jednofazowy, do 3kVA)",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "Infrastruktura IT",
+    "is_industrial": false,
+    "synonyms": [
+      "ups rack",
+      "zasilacz awaryjny it",
+      "ups 3kva rack",
+      "apc rack ups",
+      "eaton 5sc",
+      "ups dla serwera"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9015",
+    "column_number": "11",
+    "description": "Montaż i konfiguracja VoIP — telefon IP / brama SIP w sieci LAN",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "knr_category": "Infrastruktura IT",
+    "is_industrial": false,
+    "synonyms": [
+      "telefon ip",
+      "voip",
+      "sip telefon",
+      "cisco ip phone",
+      "yealink",
+      "brama sip",
+      "centrala voip"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9015",
+    "column_number": "12",
+    "description": "Konfiguracja VLAN i segmentacji sieci (zarządzalny switch, oprogramowanie) — do 8 VLAN",
+    "unit": "kpl",
+    "labor_norm": 2.5,
+    "knr_category": "Infrastruktura IT",
+    "is_industrial": false,
+    "synonyms": [
+      "vlan",
+      "segmentacja sieci",
+      "trunking",
+      "802.1q vlan",
+      "network segmentation",
+      "konfiguracja vlan"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9015",
+    "column_number": "13",
+    "description": "Badanie zasięgu sieci Wi-Fi (Wi-Fi survey) i opracowanie mapy pokrycia",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "knr_category": "Infrastruktura IT",
+    "is_industrial": false,
+    "synonyms": [
+      "wifi survey",
+      "badanie zasięgu wifi",
+      "site survey",
+      "ekahau",
+      "mapa pokrycia wifi",
+      "analiza rf wifi"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9015",
+    "column_number": "14",
+    "description": "Montaż i zarabianie gniazda podwójnego RJ45 w puszce podtynkowej z ramką",
+    "unit": "szt",
+    "labor_norm": 0.6,
+    "knr_category": "Infrastruktura IT",
+    "is_industrial": false,
+    "synonyms": [
+      "gniazdo podwójne rj45",
+      "outlet rj45 podwójny",
+      "2x gniazdo lan",
+      "podwójny cat6a",
+      "gniazdo komputerowe podwójne"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9015",
+    "column_number": "15",
+    "description": "Inwentaryzacja i oznakowanie całej infrastruktury IT (kable, porty, urządzenia)",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "knr_category": "Infrastruktura IT",
+    "is_industrial": false,
+    "synonyms": [
+      "inwentaryzacja it",
+      "oznakowanie portów",
+      "labeling it",
+      "cable labeling",
+      "dokumentacja sieci",
+      "identyfikacja kabli"
+    ]
+  }
+]

@@ -1,0 +1,31 @@
+---
+description: ElektroSmart PRO — project identity, tech stack, structure
+alwaysApply: true
+---
+
+# ElektroSmart PRO — Project Overview
+
+**Role:** Senior Full-Stack Developer. "Vibe Coding" — fast, AI-driven development.
+
+**Product:** "ElektroSmart PRO" — professional electrical estimation SaaS for the **Polish market** (Polski rynek).
+
+## Tech Stack
+
+- **Frontend:** Next.js 14+ (App Router), TypeScript, Tailwind CSS, Shadcn/UI, Lucide React
+- **Backend:** Supabase (PostgreSQL, Auth, Realtime, RLS)
+- **Data:** Server Actions + Supabase SSR client (`utils/supabase/client.ts`, `utils/supabase/server.ts`)
+- **Payments:** Stripe (subscription PRO)
+- **Deploy:** Vercel
+
+## Key Folders
+
+- `app/` — App Router (dashboard, api, auth)
+- `components/` — React (catalog, project, dashboard, ui)
+- `lib/` — utils, types (`lib/types/database.ts`), stripe, supabase-admin
+- `supabase/migrations/` — SQL migrations (run in order)
+- `hooks/` — React hooks
+- `utils/supabase/` — Supabase client/server
+
+## Types
+
+Use `lib/types/database.ts` for all Supabase tables. Do not invent ad-hoc types for DB entities.

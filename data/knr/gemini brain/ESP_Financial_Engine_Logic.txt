@@ -1,0 +1,67 @@
+LOGIKA FINANSOWA SILNIKA ES-ENGINE v2.1
+
+=== ARCHITEKTURA CENY (IRON RULE #1 — BEZWZGLĘDNA) ===
+ROBOCIZNA i MATERIAŁ są zawsze przechowywane i wyświetlane OSOBNO.
+NIGDY nie sumuj ich w jednej pozycji przed końcowym zestawieniem.
+DB columns: labor_price (BASE), material_price (BASE), final_labor_price, final_material_price
+
+=== STAWKA ROBOCIZNY ===
+WAŻNE: System NIE posiada żadnej stałej/domyślnej stawki robocizny!
+Stawkę ZAWSZE ustawia sam użytkownik w Ustawieniach → Baza Kalkulacji → Stawka robocizny.
+Jeśli użytkownik NIE ustawił stawki → system blokuje kalkulację i wyświetla:
+  "Nie ustawiono stawki robocizny. Przejdź do Ustawień → Baza Kalkulacji i ustaw własną stawkę (PLN/rbh)."
+
+WARTOŚCI ORIENTACYJNE RYNKOWE 2026 (tylko dla rozmowy/porady — NIE używane w obliczeniach):
+- Rynek ogółem: 85–110 PLN/rbh netto
+- Elektryk podstawowy: 85–95 PLN/rbh
+- Elektryk z SEP E+D: 95–120 PLN/rbh
+- Specjalistyczne (SN, ATEX, BMS): 130–200 PLN/rbh
+Gdy użytkownik pyta o stawki — podaj powyższe jako orientację rynkową.
+
+Jeśli suma rbh jest podejrzanie niska vs normy KNR — ZAWSZE zgłoś ostrzeżenie!
+
+=== MNOŻNIK REGIONALNY (IRON RULE #3) ===
+Mnożnik stosowany WYŁĄCZNIE do Robocizny — NIGDY do Materiału.
+Mnożniki województw:
+- mazowieckie: ×1.20  | małopolskie: ×1.12  | dolnośląskie: ×1.12
+- pomorskie: ×1.10    | śląskie: ×1.08     | wielkopolskie: ×1.08
+- łódzkie: ×1.00 (baza) | kujawsko-pomorskie: ×0.98
+- lubelskie: ×0.95    | podkarpackie: ×0.93 | warmińsko-mazurskie: ×0.93
+- podlaskie: ×0.92    | świętokrzyskie: ×0.92
+FORMUŁA: final_labor_price = labor_price × regionModifier
+MATERIAŁ: final_material_price = material_price (BEZ mnożnika — zawsze!)
+
+=== VAT (IRON RULE #2) ===
+VAT 8% — budownictwo mieszkaniowe:
+  - Klienci prywatni, domy ≤300 m², mieszkania ≤150 m²
+  - Art. 41 ust. 12 ustawy o VAT
+  - Materiały + Robocizna w ramach usługi kompleksowej
+VAT 23% — wszystkie pozostałe:
+  - Firmy (B2B), biurowce, hale, obiekty usługowe
+  - Obiekty mieszkalne powyżej limitów
+  - Usługi serwisowe/pogotowie elektryczne
+  - Materiały sprzedawane osobno (bez usługi kompleksowej)
+
+=== MATEMATYKA MATERIAŁOWA ===
+Bufor bezpieczeństwa: +8% do każdej ceny materiału (wbudowany w system).
+Grupy rabatowe: System obsługuje import cenników hurtowych (Legrand, Schneider, ABB).
+Brak ceny materiału → oznacz "do weryfikacji" + podaj wartość orientacyjną z Sekcji 8 KB.
+
+=== NARZUTY I MARŻE ===
+Narzut (overhead): 15–25% na Robociznę (koszty ZUS, BHP, narzędzia, transport)
+Zysk: 10–20% (negocjowalny — zależy od klienta i projektu)
+Prace specjalne:
+- Praca na wysokości >2m: ×1.20 do robocizny
+- Warunki trudne (czynny obiekt, beton zbrojony): ×1.30
+- ATEX (strefy zagrożone wybuchem): ×1.50
+- Praca nocna/weekendowa: ×1.50
+
+=== STRUKTURA KNR (KATALOGI NAKŁADÓW RZECZOWYCH) ===
+Dane z tabel SQL (knr_norms) i es_dictionary (8500+ wpisów).
+Każda norma: kod KNR, opis czynności, jednostka (m/szt/kpl/m²), nakład rbh.
+Kody: KNR 5-08 (aparatura), KNR 5-04 (kable/trasy), KNR 5-09 (teletechnika),
+      KNR 5-10 (silniki), KNR 5-11 (PV), KNR 4-03 (demontaż), KNR 2-02 (budowlane)
+
+=== RENTOWNOŚĆ — SYGNAŁY OSTRZEGAWCZE ===
+Jeśli ŁĄCZNA robocizna projektu < 40 rbh dla mieszkania (50m²) → OSTRZEŻENIE.
+Jeśli brak pozycji "Pomiary i dokumentacja" → ZAWSZE dodaj (1.5–3.0 rbh/kpl).

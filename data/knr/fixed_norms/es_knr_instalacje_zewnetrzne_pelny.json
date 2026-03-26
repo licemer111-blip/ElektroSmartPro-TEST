@@ -1,0 +1,344 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1101",
+    "column_number": "01",
+    "description": "Montaż słupa oświetleniowego aluminiowego (4-6m) na gotowej stopce / fundamencie",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "słup oświetleniowy 4m",
+      "słup aluminiowy 6m",
+      "latarnia montaż",
+      "słupek ogrodowy 4m",
+      "pole light 4m",
+      "montaż latarni"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1101",
+    "column_number": "02",
+    "description": "Montaż słupa oświetleniowego stalowego (8-10m) z podstawą betonową",
+    "unit": "szt",
+    "labor_norm": 4.0,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "słup stalowy 8m",
+      "słup stalowy 10m",
+      "latarnia uliczna 10m",
+      "słup parkingu",
+      "pole light 10m",
+      "montaż słupa stalowego"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1101",
+    "column_number": "03",
+    "description": "Montaż oprawy LED zewnętrznej (drogowej / parkowej) na wysięgniku słupa",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "oprawa uliczna led",
+      "lampa drogowa led",
+      "oprawa parkingowa led",
+      "street light led",
+      "oprawa parkowa zewnętrzna",
+      "montaż lampy ulicznej"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1101",
+    "column_number": "04",
+    "description": "Podłączenie elektryczne oprawy zewnętrznej (słupa) w szafce słupowej lub studzience",
+    "unit": "szt",
+    "labor_norm": 0.60,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "podłączenie słupa",
+      "skrzynka słupowa",
+      "studzienka kablowa słup",
+      "junction box słup",
+      "podłączenie latarni",
+      "elektryka słupa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1102",
+    "column_number": "01",
+    "description": "Montaż szafki sterowniczej oświetlenia zewnętrznego (wyłącznik zmierzchowy, zegar, bezpieczniki)",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "szafka sterownicza oświetlenia",
+      "szaflka uliczna",
+      "szafka zmierzchowa",
+      "tablica oświetlenia zewnętrznego",
+      "panel sterowania oświetlenia",
+      "street light control panel"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1102",
+    "column_number": "02",
+    "description": "Montaż i podłączenie wyłącznika zmierzchowego zewnętrznego (foto-czujnik)",
+    "unit": "szt",
+    "labor_norm": 0.40,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "wyłącznik zmierzchowy",
+      "fotoczujnik",
+      "czujnik zmierzchu",
+      "daylight sensor",
+      "twilight switch",
+      "photocell switch"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1103",
+    "column_number": "01",
+    "description": "Montaż i podłączenie tymczasowej rozdzielnicy budowlanej (RB) z 16A i 32A gniazdami CEE",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "rozdzielnica budowlana rb",
+      "erbetka",
+      "zasilanie placu budowy",
+      "skrzynka budowlana",
+      "rb 32a",
+      "tymczasowe zasilanie cee"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1103",
+    "column_number": "02",
+    "description": "Montaż zewnętrznego gniazdka hermetycznego IP44 / IP65 na elewacji lub słupku",
+    "unit": "szt",
+    "labor_norm": 0.40,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "gniazdo zewnętrzne",
+      "gniazdko hermetyczne",
+      "ip44 gniazdo",
+      "ip65 gniazdko",
+      "gniazdo elewacyjne",
+      "outdoor socket"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1104",
+    "column_number": "01",
+    "description": "Rozciąganie i podwieszanie przewodu AsXSn (asXSn) na słupach napowietrznych 4x16mm²",
+    "unit": "m",
+    "labor_norm": 6.0,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "asxsn 4x16",
+      "linia napowietrzna 4x16",
+      "przewód napowietrzny",
+      "kabel napowietrzny",
+      "linia nn napowietrzna",
+      "aerial bundle cable"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1104",
+    "column_number": "02",
+    "description": "Montaż uchwytu odciągowego (zawiesia) dla linii napowietrznej na elewacji lub słupie",
+    "unit": "szt",
+    "labor_norm": 0.50,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "uchwyt napowietrzny",
+      "zawiesia linia",
+      "clamp napowietrzny",
+      "strain clamp",
+      "uchwyt asxsn",
+      "support cable aerial"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1104",
+    "column_number": "03",
+    "description": "Montaż słupa drewnianego / betonowego linii NN napowietrznej z wyposażeniem",
+    "unit": "szt",
+    "labor_norm": 8.0,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "słup linii napowietrznej",
+      "słup drewniany nn",
+      "słup betonowy nn",
+      "słup energetyczny",
+      "utility pole",
+      "montaż słupa energetycznego"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1105",
+    "column_number": "01",
+    "description": "Montaż zewnętrznej oprawy elewacyjnej / najazdowej (ledowej) na fasadzie budynku",
+    "unit": "szt",
+    "labor_norm": 0.50,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "oprawa elewacyjna",
+      "kinkiet zewnętrzny",
+      "led fasada",
+      "oprawa najazdowa",
+      "oprawa ogrodowa",
+      "outdoor wall light"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1105",
+    "column_number": "02",
+    "description": "Montaż i podłączenie reflektora LED zewnętrznego na statywie / ścianie (do 200W)",
+    "unit": "szt",
+    "labor_norm": 0.60,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "reflektor led",
+      "floodlight",
+      "naświetlacz led",
+      "reflektor zewnętrzny",
+      "led floodlight 100w",
+      "lampa stadionowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1106",
+    "column_number": "01",
+    "description": "Montaż i podłączenie czujki ruchu zewnętrznej (PIR) z oświetleniem awaryjnym",
+    "unit": "szt",
+    "labor_norm": 0.50,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "czujnik ruchu zewnętrzny",
+      "pir zewnętrzny",
+      "czujka ruchu zewnętrzna",
+      "outdoor motion sensor",
+      "czujnik pir ip65",
+      "motion detector outdoor"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1106",
+    "column_number": "02",
+    "description": "Montaż zewnętrznego domofonowego panelu wejściowego / wideodomofonu IP z szlaban / furtką",
+    "unit": "kpl",
+    "labor_norm": 3.5,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "panel domofonu zewnętrzny",
+      "wideodomofon brama",
+      "interkom brama",
+      "czytnik kart brama",
+      "domofon zewnętrzny ip",
+      "furtka elektroniczna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1107",
+    "column_number": "01",
+    "description": "Montaż i podłączenie bramy przesuwnej / uchylnej elektrycznej z siłownikiem",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "brama elektryczna",
+      "siłownik bramy przesuwnej",
+      "napęd bramy przesuwnej",
+      "gate motor",
+      "automatic gate",
+      "brama automatyczna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1107",
+    "column_number": "02",
+    "description": "Montaż i elektryczne podłączenie szlabanu parkingowego / wjazdowego",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "szlaban elektryczny",
+      "szlaban parking",
+      "barrier arm",
+      "boom barrier",
+      "napęd szlabanu",
+      "szlaban automatyczny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1108",
+    "column_number": "01",
+    "description": "Ułożenie kabla YKY ziemnego na terenie zewnętrznym (parking, droga, ogród) w trawie / bruku",
+    "unit": "m",
+    "labor_norm": 4.0,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "kabel ogrodowy",
+      "kabel parking zewnętrzny",
+      "kabel ziemny ogród",
+      "yky zewnętrzny",
+      "kabel oświetlenia zewnętrznego",
+      "linia kablowa zewnętrzna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1109",
+    "column_number": "01",
+    "description": "Montaż zewnętrznego systemu ochrony odgromowej z pomiarem odległości (ESE / Franklin)",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "piorunochron aktywny",
+      "ese piorunochron",
+      "franklin rod",
+      "odgrom aktywny",
+      "system odgromowy ese",
+      "maszt odgromowy aktywny"
+    ]
+  }
+]

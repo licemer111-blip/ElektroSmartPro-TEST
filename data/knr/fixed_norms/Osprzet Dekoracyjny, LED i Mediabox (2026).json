@@ -1,0 +1,273 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9028",
+    "column_number": "01",
+    "description": "Montaż profilu aluminiowego LED (wpuszczany lub natynkowy) z kloszem",
+    "unit": "mb",
+    "labor_norm": 0.8,
+    "knr_category": "Oświetlenie Dekoracyjne",
+    "is_industrial": false,
+    "synonyms": [
+      "profil led",
+      "profil aluminiowy",
+      "listwa led",
+      "strip led profil",
+      "oświetlenie pośrednie",
+      "led channel"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9028",
+    "column_number": "02",
+    "description": "Wklejenie i lutowanie taśmy LED (RGBW / CCT) wraz z podłączeniem sterownika",
+    "unit": "mb",
+    "labor_norm": 1.2,
+    "knr_category": "Oświetlenie Dekoracyjne",
+    "is_industrial": false,
+    "synonyms": [
+      "taśma led",
+      "led strip rgbw",
+      "cct taśma",
+      "taśma kolorowa",
+      "rgb",
+      "tunable white",
+      "lutowanie led"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9028",
+    "column_number": "03",
+    "description": "Montaż Floorboxa (puszka podłogowa) w podłodze technicznej lub betonie (do 12 mod.)",
+    "unit": "szt",
+    "labor_norm": 3.5,
+    "knr_category": "Osprzęt Specjalny",
+    "is_industrial": false,
+    "synonyms": [
+      "floorbox",
+      "puszka podłogowa",
+      "gniazdo podłogowe",
+      "skrzynka podłogowa",
+      "puszka m45 podłoga"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9028",
+    "column_number": "04",
+    "description": "Instalacja Mediabox / Punktu Multimedialnego (HDMI, USB-C, Audio, LAN) w ramce",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Osprzęt Specjalny",
+    "is_industrial": false,
+    "synonyms": [
+      "mediabox",
+      "punkt multimedialny",
+      "hdmi gniazdo",
+      "usb-c gniazdo",
+      "media wall",
+      "multimedia outlet"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9028",
+    "column_number": "05",
+    "description": "Montaż gniazda blatowego wysuwanego (Pop-up) w gotowym otworze",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "knr_category": "Osprzęt Specjalny",
+    "is_industrial": false,
+    "synonyms": [
+      "popup",
+      "gniazdo pop-up",
+      "gniazdo blatowe",
+      "gniazdo wysuwane",
+      "pop up desk",
+      "kontakt blat"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9028",
+    "column_number": "06",
+    "description": "Montaż i podłączenie ściemniacza LED (Dimmer) 0-10V lub TRIAC do obwodu oświetlenia",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "knr_category": "Oświetlenie Dekoracyjne",
+    "is_industrial": false,
+    "synonyms": [
+      "dimmer led",
+      "ściemniacz",
+      "triac dimmer",
+      "0-10v dimmer",
+      "sterownik led",
+      "dimmer oświetlenia"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9028",
+    "column_number": "07",
+    "description": "Montaż zasilacza LED (Driver) do taśm LED (12V/24V DC) o mocy do 200W",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "Oświetlenie Dekoracyjne",
+    "is_industrial": false,
+    "synonyms": [
+      "zasilacz led",
+      "driver led",
+      "power supply led",
+      "zasilacz 12v",
+      "zasilacz 24v",
+      "led power driver"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9028",
+    "column_number": "08",
+    "description": "Montaż i programowanie sterownika DALI/Casambi dla oświetlenia dekoracyjnego",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "Oświetlenie Dekoracyjne",
+    "is_industrial": false,
+    "synonyms": [
+      "sterownik dali",
+      "casambi",
+      "dali driver",
+      "programowanie dali",
+      "magistrala dali",
+      "oświetlenie magistralowe"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9028",
+    "column_number": "09",
+    "description": "Montaż i podłączenie elastycznego neonu LED (Neon Flex) na fasadzie lub wewnątrz",
+    "unit": "mb",
+    "labor_norm": 1.0,
+    "knr_category": "Oświetlenie Dekoracyjne",
+    "is_industrial": false,
+    "synonyms": [
+      "neon flex",
+      "neon led",
+      "elastyczny neon",
+      "led neon",
+      "szyld neonowy",
+      "dekoracja neonowa led"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9028",
+    "column_number": "10",
+    "description": "Instalacja oświetlenia ambientowego LED w łazience (lustro, nisze, prysznic) IP44/IP65",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "knr_category": "Oświetlenie Dekoracyjne",
+    "is_industrial": false,
+    "synonyms": [
+      "oświetlenie łazienki",
+      "led łazienka",
+      "ip44 led",
+      "lustro led",
+      "nisze led",
+      "prysznic oświetlenie led"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9028",
+    "column_number": "11",
+    "description": "Montaż oprawy podtynkowej LED z modułem awaryjnym (1h) do sufitu podwieszanego",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "knr_category": "Osprzęt Specjalny",
+    "is_industrial": false,
+    "synonyms": [
+      "oprawa awaryjna led",
+      "led emergency",
+      "moduł awaryjny led",
+      "oświetlenie ewakuacyjne led",
+      "emergency led recessed",
+      "oprawa podtynkowa awaryjna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9028",
+    "column_number": "12",
+    "description": "Montaż gniazda HDMI 2.1 lub USB-C (Power Delivery 65W) w puszce podtynkowej",
+    "unit": "szt",
+    "labor_norm": 0.7,
+    "knr_category": "Osprzęt Specjalny",
+    "is_industrial": false,
+    "synonyms": [
+      "gniazdo hdmi",
+      "hdmi 2.1",
+      "usb-c pd",
+      "gniazdo usb",
+      "power delivery gniazdo",
+      "multimedia outlet hdmi"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9028",
+    "column_number": "13",
+    "description": "Montaż i podłączenie kontrolera RGB/RGBW (Wi-Fi/Zigbee) do sterowania taśmami LED",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "Oświetlenie Dekoracyjne",
+    "is_industrial": false,
+    "synonyms": [
+      "kontroler rgb",
+      "rgb controller",
+      "rgbw sterownik",
+      "wled",
+      "magic home",
+      "wifi rgb led",
+      "zigbee led controller"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9028",
+    "column_number": "14",
+    "description": "Montaż systemu wyświetlania (Projector/Screen) z elektrycznym napędem ekranu i maskownicą",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "knr_category": "Osprzęt Specjalny",
+    "is_industrial": false,
+    "synonyms": [
+      "ekran elektryczny",
+      "projektor podłączenie",
+      "elektryczny ekran projekcyjny",
+      "home cinema screen",
+      "motorized screen",
+      "napęd ekranu"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9028",
+    "column_number": "15",
+    "description": "Wykonanie okablowania strukturalnego HDMI/Coax/Audio ukrytego w ścianie (za meblami)",
+    "unit": "mb",
+    "labor_norm": 0.5,
+    "knr_category": "Osprzęt Specjalny",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel hdmi ukryty",
+      "kabel av w ścianie",
+      "media wall wiring",
+      "okablowanie av",
+      "hidden av cable",
+      "kabel kino domowe"
+    ]
+  }
+]

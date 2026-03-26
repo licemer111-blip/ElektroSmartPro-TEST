@@ -1,0 +1,272 @@
+[
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9030",
+    "column_number": "01",
+    "description": "Montaż oprawy przemysłowej typu High-Bay LED na wysokości 6-12m (z podnośnika)",
+    "unit": "szt",
+    "labor_norm": 2.2,
+    "knr_category": "Oświetlenie Przemysłowe",
+    "is_industrial": false,
+    "synonyms": [
+      "high-bay",
+      "oprawa przemysłowa",
+      "led hala",
+      "oprawa halowa",
+      "ufo led",
+      "highbay 150w",
+      "oświetlenie magazynu"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9030",
+    "column_number": "02",
+    "description": "Instalacja szynoprzewodu oświetleniowego (Busbar) wraz z podwieszeniem",
+    "unit": "mb",
+    "labor_norm": 0.8,
+    "knr_category": "Oświetlenie Przemysłowe",
+    "is_industrial": false,
+    "synonyms": [
+      "szynoprzewód",
+      "busbar",
+      "magistrala prądowa",
+      "szyna prądowa",
+      "powertrack",
+      "linia zasilająca"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9030",
+    "column_number": "03",
+    "description": "Montaż oprawy awaryjnej/ewakuacyjnej LED z modułem autonomicznym (3h)",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "knr_category": "Oświetlenie Przemysłowe",
+    "is_industrial": false,
+    "synonyms": [
+      "oprawa awaryjna",
+      "oświetlenie ewakuacyjne",
+      "exit sign",
+      "awaryjne 3h",
+      "droga ewakuacyjna led",
+      "emergency led"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9030",
+    "column_number": "04",
+    "description": "Montaż przemysłowego czujnika ruchu/obecności typu High-Bay (IP65, zasięg do 15m)",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Oświetlenie Przemysłowe",
+    "is_industrial": false,
+    "synonyms": [
+      "czujnik high-bay",
+      "ip65 pir",
+      "detektor przemysłowy",
+      "czujnik hali",
+      "motion sensor industrial"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9030",
+    "column_number": "05",
+    "description": "Praca operatora podnośnika koszowego (zwyżki) - obsługa montażu elektrycznego",
+    "unit": "godz",
+    "labor_norm": 1.0,
+    "knr_category": "Oświetlenie Przemysłowe",
+    "is_industrial": false,
+    "synonyms": [
+      "podnośnik koszowy",
+      "zwyżka",
+      "operator podnośnika",
+      "praca wysokościowa",
+      "rusztowanie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9030",
+    "column_number": "06",
+    "description": "Montaż naświetlacza zewnętrznego LED (Floodlight) na maszcie lub elewacji hali (IP65)",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Oświetlenie Przemysłowe",
+    "is_industrial": false,
+    "synonyms": [
+      "naświetlacz led",
+      "floodlight",
+      "naświetlacz ip65",
+      "reflektor halowy",
+      "led flood hala",
+      "oprawa zewnętrzna ip65 przemysł"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9030",
+    "column_number": "07",
+    "description": "Montaż oprawy liniowej LED (Linear High-Bay) powyżej 6m — z zawieszeniem na łańcuchu",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "knr_category": "Oświetlenie Przemysłowe",
+    "is_industrial": true,
+    "synonyms": [
+      "linear high-bay",
+      "oprawa liniowa hala",
+      "led liniowy przemysł",
+      "linear led fixture",
+      "led linear industrial",
+      "oprawa liniowa magazyn"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9030",
+    "column_number": "08",
+    "description": "Montaż oprawy przeciwwybuchowej Ex (ATEX Zone 1/2) w środowisku zagrożonym",
+    "unit": "szt",
+    "labor_norm": 4.0,
+    "knr_category": "Oświetlenie Przemysłowe",
+    "is_industrial": true,
+    "synonyms": [
+      "oprawa ex",
+      "atex",
+      "przeciwwybuchowa",
+      "zona 1 oświetlenie",
+      "ex led",
+      "zone 2 lighting",
+      "oprawa strefa ex"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9030",
+    "column_number": "09",
+    "description": "Instalacja i programowanie systemu zarządzania oświetleniem DALI (do 64 opraw per linia)",
+    "unit": "kpl",
+    "labor_norm": 5.0,
+    "knr_category": "Oświetlenie Przemysłowe",
+    "is_industrial": true,
+    "synonyms": [
+      "dali przemysł",
+      "zarządzanie oświetleniem",
+      "dali 64 opraw",
+      "industrial dali",
+      "system sterowania oświetleniem",
+      "lms dali"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9030",
+    "column_number": "10",
+    "description": "Montaż kanału kablowego (korytka metalowego) w strefach przemysłowych na wysokości",
+    "unit": "mb",
+    "labor_norm": 0.4,
+    "knr_category": "Oświetlenie Przemysłowe",
+    "is_industrial": true,
+    "synonyms": [
+      "korytko metalowe hala",
+      "koryto kablowe przemysł",
+      "cable tray industrial",
+      "metalowe koryto hala",
+      "drabinka kablowa hala",
+      "tray montaż przemysł"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9030",
+    "column_number": "11",
+    "description": "Prace wysokościowe na rusztowaniu samojezdnym (MEWP) — montaż elektryczny",
+    "unit": "godz",
+    "labor_norm": 1.0,
+    "knr_category": "Oświetlenie Przemysłowe",
+    "is_industrial": false,
+    "synonyms": [
+      "rusztowanie samojezdne",
+      "mewp",
+      "prace wysokościowe rusztowanie",
+      "scissor lift elektryczny",
+      "montaż hala rusztowanie",
+      "praca na rusztowaniu"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9030",
+    "column_number": "12",
+    "description": "Pomiar natężenia oświetlenia przemysłowego (lux meter) według EN 12464-1 z protokołem",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "knr_category": "Oświetlenie Przemysłowe",
+    "is_industrial": true,
+    "synonyms": [
+      "pomiar lux hala",
+      "natężenie oświetlenia przemysł",
+      "en 12464-1",
+      "badanie oświetlenia hali",
+      "lux meter industrial",
+      "protokol oświetlenia hala"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9030",
+    "column_number": "13",
+    "description": "Wymiana oprawy sodowej (SON) na LED — demontaż starej i montaż nowej z adaptacją",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "Oświetlenie Przemysłowe",
+    "is_industrial": false,
+    "synonyms": [
+      "wymiana son na led",
+      "retrofit led",
+      "modernizacja oświetlenia hali",
+      "led retrofit",
+      "zamiana sodowej na led",
+      "son do led"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9030",
+    "column_number": "14",
+    "description": "Montaż oprawy ulicznej LED na słupie (do 10m) z podłączeniem do szafy sterowniczej",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "knr_category": "Oświetlenie Przemysłowe",
+    "is_industrial": false,
+    "synonyms": [
+      "oprawa uliczna led",
+      "street light",
+      "latarnia led",
+      "słup oświetleniowy",
+      "led street lamp",
+      "oprawa drogowa led"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9030",
+    "column_number": "15",
+    "description": "Kompleksowa dokumentacja powykonawcza oświetlenia przemysłowego (schematy, lux mapa, DTR)",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "knr_category": "Oświetlenie Przemysłowe",
+    "is_industrial": false,
+    "synonyms": [
+      "dokumentacja oświetlenia",
+      "as-built przemysł",
+      "mapa lux",
+      "dtr oświetlenie",
+      "protokol oświetlenia przemysł",
+      "certyfikacja oświetlenia"
+    ]
+  }
+]

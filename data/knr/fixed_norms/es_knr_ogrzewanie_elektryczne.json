@@ -1,0 +1,332 @@
+[
+  {
+    "catalog_code": "ES-KNR-OGR 0101",
+    "table_number": "5105",
+    "column_number": "01",
+    "description": "Montaż maty grzewczej elektrycznej pod płytki (np. Devi, Ensto, Nexans) — do 5 m²",
+    "unit": "m2",
+    "labor_norm": 0.5,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "mata grzewcza",
+      "ogrzewanie podłogowe elektryczne",
+      "electric floor heating",
+      "mata pod płytki",
+      "devi mat",
+      "mata grzejna",
+      "ogrzewanie podłogowe 230v",
+      "maty grzewcze"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OGR 0102",
+    "table_number": "5105",
+    "column_number": "02",
+    "description": "Montaż maty grzewczej elektrycznej pod płytki — powierzchnia 5-20 m²",
+    "unit": "m2",
+    "labor_norm": 0.35,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "mata grzewcza duża",
+      "ogrzewanie podłogi elektryczne",
+      "floor heating mat",
+      "mata grzewcza sypialnia",
+      "mata kuchnia",
+      "mata łazienka duża"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OGR 0201",
+    "table_number": "5105",
+    "column_number": "03",
+    "description": "Układanie kabla grzewczego dwużyłowego pod jastrychem (np. TXLP, Millicabel)",
+    "unit": "m",
+    "labor_norm": 0.15,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel grzewczy",
+      "przewód grzewczy",
+      "txlp",
+      "millicabel",
+      "kabel pod jastrychem",
+      "heating cable",
+      "kabel grzewczy pod posadzką"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OGR 0202",
+    "table_number": "5105",
+    "column_number": "04",
+    "description": "Montaż systemowej szyny / klipu dystansowego do kabla grzewczego (uchwyt co 25cm)",
+    "unit": "m",
+    "labor_norm": 0.05,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "uchwyt kabla grzewczego",
+      "klips grzewczy",
+      "szyna montażowa kabel grzewczy",
+      "dystans kabel grzewczy"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OGR 0301",
+    "table_number": "5105",
+    "column_number": "05",
+    "description": "Montaż termoregulatora / termostatu podłogowego 16A (z czujnikiem podłogi)",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "termoregulator podłogowy",
+      "termostat podłogi",
+      "regulator temperatury podłogi",
+      "sterownik maty grzewczej",
+      "termoregulator 16a",
+      "termostat z czujnikiem",
+      "regulator ogrzewania podłogowego"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OGR 0302",
+    "table_number": "5105",
+    "column_number": "06",
+    "description": "Montaż termostatu WiFi / Smart do ogrzewania podłogowego (Tuya, Danfoss, Warmup)",
+    "unit": "szt",
+    "labor_norm": 0.6,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "termostat wifi",
+      "smart termostat",
+      "danfoss wifi",
+      "warmup thermostat",
+      "termostat tuya",
+      "inteligentny termostat",
+      "termostat aplikacja"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OGR 0401",
+    "table_number": "5105",
+    "column_number": "07",
+    "description": "Montaż folii grzewczej elektrycznej pod panele laminowane / parkiet — do 10 m²",
+    "unit": "m2",
+    "labor_norm": 0.35,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "folia grzewcza",
+      "folia pod panele",
+      "ogrzewanie foliowe",
+      "grzanie podłogi foliowe",
+      "folia grzewcza 230v",
+      "film grzewczy",
+      "płyta grzewcza"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OGR 0501",
+    "table_number": "5105",
+    "column_number": "08",
+    "description": "Montaż grzejnika elektrycznego panelowego (konwektorowego) 500-2000W z podłączeniem",
+    "unit": "szt",
+    "labor_norm": 0.6,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "grzejnik panelowy",
+      "grzejnik elektryczny",
+      "konwektor elektryczny",
+      "grzejnik 1500w",
+      "grzejnik 2000w",
+      "ogrzewanie elektryczne ścienne",
+      "panel grzewczy"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OGR 0502",
+    "table_number": "5105",
+    "column_number": "09",
+    "description": "Montaż grzejnika olejowego / akumulacyjnego (nocna taryfa) z obwodem dedykowanym",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "grzejnik akumulacyjny",
+      "grzejnik nocny",
+      "grzejnik olejowy",
+      "storage heater",
+      "akumulator ciepła",
+      "taryfa nocna grzejnik"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OGR 0601",
+    "table_number": "5105",
+    "column_number": "10",
+    "description": "Montaż promiennika podczerwieni IR (sufitowy lub naścienny) np. garażowy, hala",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "promiennik ir",
+      "grzejnik na podczerwień",
+      "ogrzewanie podczerwienią",
+      "promiennik garażowy",
+      "grzejnik sufitowy",
+      "infrared heater",
+      "promiennik tarasowy"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OGR 0701",
+    "table_number": "5105",
+    "column_number": "11",
+    "description": "Montaż systemu antyzamarzania rynien (kabel grzewczy samoregulujący) — m.b. rynny",
+    "unit": "m",
+    "labor_norm": 0.2,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "antyzamarzanie rynny",
+      "kabel grzewczy rynna",
+      "ogrzewanie rynien",
+      "drip edge heating",
+      "kabel samoregulujący rynna",
+      "self-regulating cable rynny"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OGR 0702",
+    "table_number": "5105",
+    "column_number": "12",
+    "description": "Montaż systemu antyzamarzania rur (kabel grzewczy samoregulujący) — m.b. rury",
+    "unit": "m",
+    "labor_norm": 0.18,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "antyzamarzanie rur",
+      "kabel grzewczy rury",
+      "ogrzewanie rur elektryczne",
+      "trace heating",
+      "kabel samoregulujący rury",
+      "ochrona rur przed mrozem"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OGR 0703",
+    "table_number": "5105",
+    "column_number": "13",
+    "description": "Montaż termostatu / sterownika do systemu antyzamarzania z czujnikiem temperatury",
+    "unit": "szt",
+    "labor_norm": 0.6,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "sterownik antyzamarzania",
+      "termostat rynny",
+      "kontroler trace heating",
+      "czujnik mrozu",
+      "automatyka antyzamarzania"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OGR 0801",
+    "table_number": "5105",
+    "column_number": "14",
+    "description": "Montaż sauny elektrycznej (piec) — podłączenie elektryczne 3-fazowe lub 1-fazowe",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "piec sauny",
+      "sauna elektryczna",
+      "agregat sauny",
+      "zasilanie sauny",
+      "montaż sauny elektryka",
+      "piec sauna harvia",
+      "piec sauna tylo"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OGR 0901",
+    "table_number": "5105",
+    "column_number": "15",
+    "description": "Pomiar i odbiór instalacji ogrzewania elektrycznego (test mat/kabli + protokół)",
+    "unit": "kpl",
+    "labor_norm": 1.0,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "odbiór ogrzewania elektrycznego",
+      "test maty grzewczej",
+      "protokół ogrzewania",
+      "pomiar izolacji maty",
+      "test kable grzewcze",
+      "protokół ogrzewanie podłogowe"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OGR 1001",
+    "table_number": "5105",
+    "column_number": "16",
+    "description": "Montaż elektrycznego podgrzewacza wody przepływowego (kran, prysznic) 2-5 kW",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "podgrzewacz przepływowy",
+      "elektryczny kran",
+      "instant water heater",
+      "przepływowy 3kw",
+      "mini kocioł elektryczny",
+      "kocioł elektryczny przepływowy"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OGR 1002",
+    "table_number": "5105",
+    "column_number": "17",
+    "description": "Montaż elektrycznego kotła c.o. (np. 6/9/12 kW — do ogrzewania budynku)",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "kocioł elektryczny",
+      "grzałka kotłowa",
+      "kocioł 9kw",
+      "kocioł 12kw",
+      "elektryczny kocioł co",
+      "boiler elektryczny co",
+      "kocioł elektryczny 3-fazowy"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OGR 1101",
+    "table_number": "5105",
+    "column_number": "18",
+    "description": "Montaż strefy grzewczej (dedykowany obwód + bezpiecznik) dla systemu ogrzewania",
+    "unit": "kpl",
+    "labor_norm": 1.0,
+    "knr_category": "ogrzewanie_elektryczne",
+    "is_industrial": false,
+    "synonyms": [
+      "obwód grzewczy",
+      "dedykowany obwód ogrzewania",
+      "zabezpieczenie ogrzewania",
+      "bezpiecznik ogrzewania",
+      "strefa grzewcza elektryczna"
+    ]
+  }
+]

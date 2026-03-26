@@ -1,0 +1,326 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1201",
+    "column_number": "01",
+    "description": "Montaż i adresowanie modułu DALI (sterownika oświetlenia) na szynie DIN",
+    "unit": "szt",
+    "labor_norm": 0.50,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "moduł dali",
+      "sterownik dali",
+      "dali controller",
+      "dali gateway",
+      "dali interface",
+      "dali bus moduł"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1201",
+    "column_number": "02",
+    "description": "Adresowanie (programowanie) sterownika oświetlenia DALI z grupami i scenami (komisjonowanie)",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "programowanie dali",
+      "komisjonowanie dali",
+      "sceny dali",
+      "adresy dali",
+      "dali commissioning",
+      "konfiguracja dali"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1201",
+    "column_number": "03",
+    "description": "Montaż i podłączenie zasilacza magistrali DALI (230V → 16V DC, 250mA)",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "zasilacz dali",
+      "psu dali 16v",
+      "dali power supply",
+      "zasilanie magistrali dali",
+      "dali bus supply",
+      "zasilacz 250ma dali"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1202",
+    "column_number": "01",
+    "description": "Montaż i konfiguracja urządzenia KNX (sprzęgacza / sterownika / aktora) na szynie DIN",
+    "unit": "szt",
+    "labor_norm": 0.60,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "urządzenie knx",
+      "aktor knx",
+      "moduł knx",
+      "knx device",
+      "knx din rail",
+      "eib urządzenie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1202",
+    "column_number": "02",
+    "description": "Montaż i podłączenie zasilacza magistrali KNX (29V DC, 640mA) na szynie DIN",
+    "unit": "szt",
+    "labor_norm": 0.30,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "zasilacz knx",
+      "psu knx 640ma",
+      "knx power supply",
+      "zasilanie knx bus",
+      "knx 29v",
+      "eib zasilacz"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1202",
+    "column_number": "03",
+    "description": "Montaż przycisku KNX (4-kanałowego / 8-kanałowego) w puszce p/t z ramką",
+    "unit": "szt",
+    "labor_norm": 0.40,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "przycisk knx",
+      "klawisz knx",
+          "knx button 4ch",
+      "knx push button",
+      "przycisk 4 kanałowy knx",
+      "eib przycisk ścienny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1202",
+    "column_number": "04",
+    "description": "Programowanie systemu KNX (ETS) — import projektu, komisjonowanie, test urządzeń",
+    "unit": "godz",
+    "labor_norm": 1.0,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "programowanie knx",
+      "ets komisjonowanie",
+      "knx commissioning",
+      "ets projekt",
+      "konfiguracja knx",
+      "ets5 programowanie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1202",
+    "column_number": "05",
+    "description": "Montaż magistrali KNX (TP) / kabel ekranowany 2x2x0.8mm YCYM po trasach",
+    "unit": "m",
+    "labor_norm": 0.10,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "kabel knx",
+      "kabel tp knx",
+      "kabel bus knx",
+      "ycym 2x2",
+      "kabel magistrali knx",
+      "knx bus cable"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "1203",
+    "column_number": "01",
+    "description": "Montaż serwera BMS (Building Management System) / kontrolera HVAC w szafie 19\"",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "is_industrial": true,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "serwer bms",
+      "kontroler bms",
+      "bms server",
+      "building management system",
+      "hvac controller bms",
+      "scada serwer"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "1203",
+    "column_number": "02",
+    "description": "Montaż i konfiguracja bramy protokołów (gateway) BACnet/IP, Modbus, KNX-IP",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "is_industrial": true,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "gateway bacnet",
+      "modbus gateway",
+      "brama protokołów",
+      "knx-ip gateway",
+      "bacnet modbus konwerter",
+      "protokół gateway bms"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1204",
+    "column_number": "01",
+    "description": "Montaż i podłączenie panelu dotykowego HMI (7-12 cali) do sterowania budynkiem",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "panel hmi",
+      "touchscreen hmi",
+      "wyświetlacz sterowania",
+      "hmi knx",
+      "panel dotykowy bms",
+      "touch panel building"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1204",
+    "column_number": "02",
+    "description": "Montaż i podłączenie czujnika jakości powietrza (CO2 / VOC) do systemu BMS",
+    "unit": "szt",
+    "labor_norm": 0.40,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "czujnik co2",
+      "sensor co2 bms",
+      "czujnik voc",
+      "sensor jakości powietrza",
+      "air quality sensor",
+      "czujnik co2 knx"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1205",
+    "column_number": "01",
+    "description": "Montaż i konfiguracja systemu zarządzania energią EMS (liczniki, modem, dashboard)",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "system zarządzania energią",
+      "ems",
+      "energy management system",
+      "dashboard energii",
+      "monitoring zużycia",
+      "smart metering system"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1205",
+    "column_number": "02",
+    "description": "Montaż i integracja systemu Modbus RTU/TCP (podłączenie urządzeń z rejestrami)",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "is_industrial": true,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "modbus integracja",
+          "modbus rtu",
+      "modbus tcp",
+      "rs485 modbus",
+      "integracja modbus",
+      "protokół modbus bms"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1206",
+    "column_number": "01",
+    "description": "Montaż i podłączenie czujnika obecności dla oświetlenia automatycznego (DALI/KNX)",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "czujnik obecności dali",
+      "sensor obecności knx",
+      "presence detector dali",
+      "occupancy sensor knx",
+      "czujnik ruchu bms",
+      "motion sensor dali"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1206",
+    "column_number": "02",
+    "description": "Montaż i podłączenie czujnika natężenia oświetlenia (lux) do systemu DALI",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "czujnik natężenia oświetlenia",
+      "czujnik lux",
+      "sensor lux dali",
+      "luxmeter dali",
+      "photosensor dali",
+      "daylight sensor dali"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1207",
+    "column_number": "01",
+    "description": "Programowanie scenariuszy oświetlenia DALI (sceny, sekwencje, harmonogramy)",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "sceny oświetlenia dali",
+      "scenariusze dali",
+      "harmonogram dali",
+      "lighting scenes dali",
+      "dali scenes programming",
+      "konfiguracja scen dali"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "1207",
+    "column_number": "02",
+    "description": "Uruchomienie i testy systemu BMS / KNX / DALI (protokół odbioru, szkolenie obsługi)",
+    "unit": "kpl",
+    "labor_norm": 8.0,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "uruchomienie bms",
+      "odbiór knx",
+      "commissioning dali bms",
+      "szkolenie obsługi bms",
+      "test systemu bms",
+      "protokół bms"
+    ]
+  }
+]

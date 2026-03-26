@@ -1,0 +1,177 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9013",
+    "column_number": "01",
+    "description": "Posadowienie i montaż stacjonarnego agregatu prądotwórczego (>50kVA)",
+    "unit": "kpl",
+    "labor_norm": 18.0,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "agregat",
+      "generator",
+      "prądnica",
+      "generator diesla",
+      "generator prądu",
+      "zasilanie awaryjne",
+      "genset",
+      "50kva"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9013",
+    "column_number": "02",
+    "description": "Montaż i podłączenie szafy SZR (Samoczynne Załączanie Rezerwy) dla agregatu",
+    "unit": "kpl",
+    "labor_norm": 8.5,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "szr",
+      "samoczynne załączanie rezerwy",
+      "ats",
+      "przełącznik sieciowy",
+      "szafa przejścia",
+      "nza",
+      "szr agregat",
+      "przełącznik sieci"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9013",
+    "column_number": "03",
+    "description": "Montaż UPS-a trójfazowego wolnostojącego (Centralnego, np. 40-100kVA)",
+    "unit": "szt",
+    "labor_norm": 6.0,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "ups",
+      "zasilacz awaryjny",
+      "zasilanie bezprzerwowe",
+      "ups 3f",
+      "centralny ups",
+      "ups 40kva",
+      "ups 100kva",
+      "uninterruptible power supply"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9013",
+    "column_number": "04",
+    "description": "Układanie ciężkiego kabla WLZ (Cu/Al) o przekroju 50mm2 do 120mm2 na drabinkach",
+    "unit": "m",
+    "labor_norm": 14.0,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "wlz",
+      "wewnętrzna linia zasilająca",
+      "kabel główny",
+      "kabel 120mm2",
+      "kabel 50mm2",
+      "yky gruby",
+      "yakxs",
+      "kabel miedziany gruby"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9013",
+    "column_number": "05",
+    "description": "Układanie bardzo ciężkiego kabla WLZ (Cu/Al) o przekroju 150mm2 do 240mm2 (lub 300mm2)",
+    "unit": "m",
+    "labor_norm": 22.0,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "kabel 240mm2",
+      "kabel 150mm2",
+      "kabel 300mm2",
+      "yky 240",
+      "yakxs 240",
+      "kabel prądnicy",
+      "linia zasilająca wn",
+      "kabel rozdzielni głównej"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9013",
+    "column_number": "06",
+    "description": "Zarobienie końcówki kablowej (prasowanie hydrauliczne) na żyle 50mm2 - 120mm2",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "końcówka kablowa",
+      "prasowanie kabla",
+      "prasa hydrauliczna",
+      "końcówka rurkowa",
+      "zaprasowanie",
+      "oczkowanie kabla",
+      "terminacja grubego kabla"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9013",
+    "column_number": "07",
+    "description": "Zarobienie końcówki kablowej na żyle 150mm2 - 240mm2 (sektorowej - kształt trójkąta)",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "is_industrial": false,
+    "knr_category": "wlz_przylacza",
+    "synonyms": [
+      "sektorowa żyła",
+      "końcówka 240mm2",
+      "kabel aluminiowy",
+      "yakxs sektorowy",
+      "prasa 240",
+      "terminacja sektorowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9013",
+    "column_number": "08",
+    "description": "Układanie wielożyłowego kabla sterowniczego (linka - np. LiYCY 12x0.5 / 24x0.75)",
+    "unit": "m",
+    "labor_norm": 4.5,
+    "is_industrial": false,
+    "knr_category": "kablowanie",
+    "synonyms": [
+      "kabel sterowniczy",
+      "liycy",
+      "linka sterownicza",
+      "kabel bms",
+      "kabel automatyki",
+      "yksy",
+      "kabel ekranowany",
+      "kabel wielożyłowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9013",
+    "column_number": "09",
+    "description": "Rozszycie i podłączenie kabla sterowniczego (linka wielożyłowa)",
+    "unit": "szt",
+    "labor_norm": 0.05,
+    "is_industrial": false,
+    "knr_category": "kablowanie",
+    "synonyms": [
+      "rozszycie kabla",
+      "terminacja sterowniczego",
+      "tulejka zaciskowa",
+      "punch down sterowniczy",
+      "oznaczniki żył",
+      "zarabianie sterowniczego"
+    ]
+  }
+]

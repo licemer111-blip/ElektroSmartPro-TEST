@@ -1,0 +1,376 @@
+"use client";
+
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { QuotaBadge, QuotaBlocker } from "@/components/ui/quota-badge";
+import Link from "next/link";
+import {
+  CircleDollarSign, Loader2, Check, AlertTriangle, Banknote, Wrench, Package,
+  CheckCircle2, Info, ArrowRight, Percent, Settings,
+} from "lucide-react";
+import { AiPriceDetailModal } from "@/components/project/ai-price-detail-modal";
+import { ManualPriceDialog } from "@/components/project/manual-price-dialog";
+import { useAiPriceEstimator } from "@/components/project/_parts/useAiPriceEstimator";
+import { EstimateResultsTable } from "@/components/project/_parts/EstimateResultsTable";
+import type { PriceMode } from "@/components/project/_parts/useAiPriceEstimator";
+import type { AiPriceEstimate } from "@/app/dashboard/projects/[id]/ai-actions";
+
+interface AiPriceEstimatorDialogProps {
+  projectId: string;
+  itemCount: number;
+  projectStatus?: string;
+  selectedRowIds?: Set<string>;
+  externalOpen?: boolean;
+  onExternalOpenChange?: (open: boolean) => void;
+  rateIsDefault?: boolean;
+}
+
+const modeButtons: { mode: PriceMode; label: string; desc: string; icon: typeof Banknote }[] = [
+  { mode: "material", label: "Wyceń materiały", desc: "Uzupełnij brakujące ceny materiałów", icon: Package },
+  { mode: "labor", label: "Wyceń robociznę", desc: "Uzupełnij brakujące ceny robocizny", icon: Wrench },
+  { mode: "all", label: "Wyceń wszystko", desc: "Uzupełnij materiały i robociznę naraz", icon: Banknote },
+];
+
+export function AiPriceEstimatorDialog({
+  projectId,
+  itemCount,
+  projectStatus = "draft",
+  selectedRowIds,
+  externalOpen,
+  onExternalOpenChange,
+  rateIsDefault = false,
+}: AiPriceEstimatorDialogProps) {
+  const est = useAiPriceEstimator({
+    projectId, projectStatus, selectedRowIds, externalOpen, onExternalOpenChange,
+  });
+
+  const aiTooltipText = est.isFinal
+    ? "Projekt zablokowany. Odblokuj projekt, aby użyć ES-Engine wyceny."
+    : est.hasSelectedRows
+    ? `ES-Engine wyceń zaznaczone ${selectedRowIds!.size} pozycje.`
+    : "Expert Engine — katalog prywatny + normy KNR ES-KNR 2026 + ES-Engine na żądanie (L3)";
+
+  const [manualPriceItem, setManualPriceItem] = useState<AiPriceEstimate | null>(null);
+  const [phaseIdx, setPhaseIdx] = useState(0);
+  const phaseIdxRef = useRef(0);
+  useEffect(() => { phaseIdxRef.current = phaseIdx; }, [phaseIdx]);
+
+  const PHASES_LABOR = [
+    { label: "Wczytywanie pozycji kosztorysu...", pct: 8 },
+    { label: "L0: Bezpośrednie kody KNR — wyliczenie norm...", pct: 25 },
+    { label: "L1: Sprawdzam katalog prywatny...", pct: 45 },
+    { label: "L2: Wyliczam robociznę z bazy ES-KNR 2026...", pct: 70 },
+    { label: "L3: AI — dopasowywanie brakujących pozycji...", pct: 88 },
+    { label: "Finalizowanie robocizny...", pct: 96 },
+  ];
+  const PHASES_MATERIAL = [
+    { label: "Przekazuję pozycje z brakiem cen materiałów...", pct: 15 },
+    { label: "ES-Słownik: szukam cen w bazie KNR...", pct: 45 },
+    { label: "AI: szacuję ceny rynkowe brakujących materiałów...", pct: 80 },
+    { label: "Finalizowanie i łączenie wyników...", pct: 96 },
+  ];
+  const PHASES_SINGLE = [
+    { label: "Wczytywanie pozycji kosztorysu...", pct: 8 },
+    { label: "L0: Bezpośrednie kody KNR — wyliczenie norm...", pct: 22 },
+    { label: "L1: Sprawdzam katalog prywatny...", pct: 38 },
+    { label: "L2: Wyliczam ceny z bazy ES-KNR 2026...", pct: 58 },
+    { label: "L3: ES-Słownik AI — dopasowywanie pozycji...", pct: 78 },
+    { label: "Finalizowanie wyników...", pct: 92 },
+  ];
+  // Each step shows for exactly PHASE_STEP_MS so every phase always completes fully
+  const PHASE_STEP_MS = 1800;
+
+  const activePhases = est.allPhase === "labor" ? PHASES_LABOR
+    : est.allPhase === "material" ? PHASES_MATERIAL
+    : PHASES_SINGLE;
+
+  // Advance one step every PHASE_STEP_MS — guarantees every step is always shown
+  useEffect(() => {
+    if (!est.isEstimating) {
+      if (!est.pendingData) setPhaseIdx(0);
+      return;
+    }
+    setPhaseIdx(0);
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    activePhases.forEach((_, idx) => {
+      if (idx === 0) return;
+      timers.push(setTimeout(() => setPhaseIdx(idx), PHASE_STEP_MS * idx));
+    });
+    return () => timers.forEach(clearTimeout);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [est.isEstimating, est.allPhase]);
+
+  // When AI data is ready, step through any remaining phases at 700ms each, then reveal
+  useEffect(() => {
+    if (!est.pendingData) return;
+    const currentIdx = phaseIdxRef.current;
+    const lastIdx = activePhases.length - 1;
+    const STEP_MS = 700;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    let delay = 0;
+    for (let i = currentIdx + 1; i <= lastIdx; i++) {
+      delay += STEP_MS;
+      const target = i;
+      timers.push(setTimeout(() => setPhaseIdx(target), delay));
+    }
+    // After last step is visible, reveal results
+    timers.push(setTimeout(est.onAnimationComplete, delay + 1000));
+    return () => timers.forEach(clearTimeout);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [est.pendingData]);
+
+  const currentPhase = activePhases[Math.min(phaseIdx, activePhases.length - 1)];
+
+  return (
+    <>
+      <Dialog open={est.open} onOpenChange={(v) => { if (!v && !est.isEstimating) { est.handleClose(); onExternalOpenChange?.(v); } else if (v) onExternalOpenChange?.(v); }}>
+        <Button
+          size="sm"
+          disabled={itemCount === 0}
+          onClick={est.handleTriggerClick}
+          title={aiTooltipText}
+          className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 flex-shrink-0 rounded-md bg-orange-500 hover:bg-orange-600 text-white ${est.isFinal ? "opacity-50 cursor-not-allowed" : ""}`}
+        >
+          <CircleDollarSign className="h-3.5 w-3.5" />
+          <span>ES Wycena</span>
+          {est.hasSelectedRows && (
+            <span className="ml-0.5 bg-white/30 text-white text-[9px] font-bold px-1 py-0.5 rounded-full leading-none">
+              {selectedRowIds!.size}
+            </span>
+          )}
+        </Button>
+
+        <DialogContent
+          className={`w-[95vw] overflow-hidden flex flex-col ${est.step === "preview" ? "max-w-4xl h-[90vh]" : "max-w-lg"}`}
+          onInteractOutside={(e) => { if (est.isEstimating) e.preventDefault(); }}
+          onEscapeKeyDown={(e) => { if (est.isEstimating) e.preventDefault(); }}
+        >
+          <DialogHeader className="flex-shrink-0">
+            <DialogTitle className="flex items-center gap-2">
+              <CircleDollarSign className="w-5 h-5 text-orange-500" />
+              Expert Engine — automatyczna wycena pozycji
+              <QuotaBadge info={est.quotaInfo} className="ml-auto" />
+            </DialogTitle>
+            <DialogDescription className="text-xs">
+              P1 Katalog · L2 ES-Słownik · normy KNR 2026 · 16 województw
+            </DialogDescription>
+          </DialogHeader>
+
+          {/* Step 1: Choose */}
+          {est.step === "choose" && (
+            <div className="space-y-4 py-2">
+              {est.quotaInfo?.isExhausted && (
+                <QuotaBlocker info={est.quotaInfo} featureName="ES-Engine Wyceny" />
+              )}
+              {rateIsDefault && (
+                <div className="flex items-start gap-2.5 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700">
+                  <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
+                  <div className="text-[11px] text-amber-800 dark:text-amber-300 leading-relaxed">
+                    <strong>Brak stawki robocizny.</strong>{" "}
+                    Wycena robocizny wymaga zapisanej stawki R-G.{" "}
+                    <Link href="/dashboard/settings/knr-calculator" className="underline font-semibold hover:text-amber-900 dark:hover:text-amber-200">
+                      Ustaw stawkę w Ustawieniach →
+                    </Link>
+                  </div>
+                </div>
+              )}
+              {(
+                <div className="flex items-start gap-2.5 p-3 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border border-amber-200 dark:border-amber-800">
+                  <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                  <div className="text-[11px] text-amber-800 dark:text-amber-300 leading-relaxed">
+                    <strong>Expert Engine</strong> stosuje hierarchię źródeł: <strong>P1 Katalog</strong> → <strong>L2 ES-Słownik</strong> → <strong>L3 ES Engine</strong>.
+                    Robocizna liczona wg stawki regionalnej (16 województw). Zweryfikuj kody KNR przed wysłaniem oferty.
+                  </div>
+                </div>
+              )}
+              {est.error && (
+                <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs">
+                  <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                  {est.error}
+                </div>
+              )}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {modeButtons.map((btn) => {
+                  const Icon = btn.icon;
+                  const needsRate = btn.mode === "labor" || btn.mode === "all";
+                  const isDisabled = est.isEstimating || (needsRate && rateIsDefault);
+                  return (
+                    <button
+                      key={btn.mode}
+                      onClick={() => est.handleEstimate(btn.mode)}
+                      disabled={isDisabled}
+                      title={needsRate && rateIsDefault ? "Ustaw stawkę R-G w Ustawieniach, aby wycenić robociznę" : undefined}
+                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all text-center group ${
+                        isDisabled
+                          ? "border-slate-200 dark:border-slate-700 opacity-40 cursor-not-allowed"
+                          : "border-slate-200 dark:border-slate-700 hover:border-orange-400 dark:hover:border-orange-600 hover:bg-orange-50/50 dark:hover:bg-orange-950/20 cursor-pointer"
+                      }`}
+                    >
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-sm transition-shadow ${
+                        isDisabled
+                          ? "bg-slate-300 dark:bg-slate-700"
+                          : "bg-gradient-to-br from-amber-500 to-orange-500 group-hover:shadow-md"
+                      }`}>
+                        <Icon className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-slate-800 dark:text-slate-200">{btn.label}</p>
+                        <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+                          {needsRate && rateIsDefault ? "Wymaga stawki R-G" : btn.desc}
+                        </p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="flex items-center gap-2 text-[11px] text-slate-400">
+                <Info className="w-3.5 h-3.5 flex-shrink-0" />
+                ES-Engine wyceni tylko pozycje z brakującą ceną (≤ 1 zł). Twoje ceny (powyżej 1 zł) nie zostaną nadpisane.
+              </div>
+            </div>
+          )}
+
+          {/* Step 2: Loading */}
+          {est.step === "loading" && (
+            <div className="flex flex-col items-center justify-center py-8 space-y-5">
+              {/* Phase badge for 'all' mode */}
+              {est.mode === "all" && est.allPhase && (
+                <div className={`flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-semibold transition-all ${
+                  est.allPhase === "labor"
+                    ? "bg-orange-50 dark:bg-orange-950/20 border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-300"
+                    : "bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300"
+                }`}>
+                  {est.allPhase === "labor" ? (
+                    <><Wrench className="w-3.5 h-3.5" /> Faza 1/2 — Robocizna KNR</>
+                  ) : (
+                    <><Package className="w-3.5 h-3.5" /> Faza 2/2 — Materiały rynkowe</>
+                  )}
+                </div>
+              )}
+
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 flex items-center justify-center">
+                <Loader2 className="w-8 h-8 text-orange-500 animate-spin" />
+              </div>
+              <div className="text-center space-y-1">
+                <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">ES Expert Engine wycenia kosztorys...</p>
+                <p className="text-xs text-orange-600 dark:text-orange-400 font-medium min-h-[1.25rem] transition-all">
+                  {currentPhase.label}
+                </p>
+              </div>
+              <div className="w-full max-w-xs space-y-1.5">
+                <div className="w-full bg-orange-100 dark:bg-orange-900/30 rounded-full h-2 overflow-hidden">
+                  <div
+                    className="h-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-400 transition-all duration-1000"
+                    style={{ width: `${currentPhase.pct}%` }}
+                  />
+                </div>
+                <p className="text-[10px] text-slate-400 text-center">
+                  {est.mode === "material" ? "Wycena materiałów" : est.mode === "labor" ? "Wycena robocizny"
+                    : est.allPhase === "labor" ? "Faza 1/2: Robocizna KNR"
+                    : est.allPhase === "material" ? "Faza 2/2: Materiały rynkowe"
+                    : "Pełna wycena"} · Nie zamykaj okna
+                </p>
+              </div>
+              <div className="flex flex-col gap-1.5 w-full max-w-xs">
+                {activePhases.map((phase, idx) => (
+                  <div key={idx} className={`flex items-center gap-2 text-[11px] transition-all ${idx <= phaseIdx ? "text-orange-600 dark:text-orange-400" : "text-slate-300 dark:text-slate-600"}`}>
+                    {idx < phaseIdx ? (
+                      <Check className="w-3 h-3 flex-shrink-0 text-green-500" />
+                    ) : idx === phaseIdx ? (
+                      <Loader2 className="w-3 h-3 flex-shrink-0 animate-spin" />
+                    ) : (
+                      <div className="w-3 h-3 flex-shrink-0 rounded-full border border-slate-200 dark:border-slate-700" />
+                    )}
+                    <span>{phase.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Step 3: Preview */}
+          {est.step === "preview" && (
+            <EstimateResultsTable
+              estimates={est.estimates}
+              selectedIds={est.selectedIds}
+              mode={est.mode}
+              pricedCount={est.pricedCount}
+              unmatchedCount={est.unmatchedCount}
+              refreshingIds={est.refreshingIds}
+              manualMatchItemId={est.manualMatchItemId}
+              manualMatchSearch={est.manualMatchSearch}
+              fullCatalog={est.fullCatalog}
+              isLoadingCatalog={est.isLoadingCatalog}
+              onToggleItem={est.toggleItem}
+              onToggleAll={est.toggleAll}
+              onApplyCertainOnly={est.applyCertainOnly}
+              onBack={() => est.setStep("choose")}
+              onApply={est.handleApply}
+              onOpenManualMatch={est.openManualMatch}
+              onManualMatchSearchChange={est.setManualMatchSearch}
+              onApplyManualMatch={est.applyManualMatch}
+              onCloseManualMatch={() => est.setManualMatchItemId(null)}
+              onOpenDetail={est.setDetailModalItem}
+              onOpenManualPrice={setManualPriceItem}
+              onAddToRefreshing={(id) => est.setRefreshingIds((prev) => { const s = new Set(prev); s.add(id); return s; })}
+              selectedSummary={est.selectedSummary}
+              isApplying={est.isApplying}
+            />
+          )}
+
+          {/* Step 4: Done */}
+          {est.step === "done" && (
+            <div className="text-center py-8 space-y-4">
+              <div className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-8 h-8 text-green-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300">Ceny zaktualizowane</h3>
+                <p className="text-sm text-slate-500 mt-1">Uzupełniono ceny dla <strong>{est.appliedCount}</strong> pozycji</p>
+              </div>
+              <div className="flex items-start gap-2 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 text-[11px] text-amber-700 dark:text-amber-300 text-left max-w-md mx-auto">
+                <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                <span>Wycena ES Engine v2.0 oparta na <strong>ES-KNR 2026</strong>. Zweryfikuj dopasowanie kodów KNR przed wysyłką oferty.</span>
+              </div>
+              <Button onClick={est.handleClose} className="bg-blue-600 hover:bg-blue-700 text-white">Zamknij</Button>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {est.detailModalItem && (
+        <AiPriceDetailModal
+          open={!!est.detailModalItem}
+          onOpenChange={(o) => { if (!o) est.setDetailModalItem(null); }}
+          estimate={est.detailModalItem}
+          projectId={projectId}
+          onRepriced={(updated) => {
+            est.setRefreshingIds((prev) => { const s = new Set(prev); s.add(updated.itemId); return s; });
+            est.handleRepriced(updated);
+          }}
+        />
+      )}
+
+      {manualPriceItem && (
+        <ManualPriceDialog
+          open={!!manualPriceItem}
+          onOpenChange={(o) => { if (!o) setManualPriceItem(null); }}
+          estimate={manualPriceItem}
+          projectId={projectId}
+          onSaved={(updated) => {
+            est.setRefreshingIds((prev) => { const s = new Set(prev); s.add(updated.itemId); return s; });
+            est.handleRepriced(updated);
+            setManualPriceItem(null);
+          }}
+        />
+      )}
+    </>
+  );
+}

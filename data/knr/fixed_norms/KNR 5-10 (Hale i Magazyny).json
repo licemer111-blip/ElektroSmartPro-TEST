@@ -1,0 +1,171 @@
+[
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0101",
+    "column_number": "01",
+    "description": "Montaż szaf sterowniczych wolnostojących do 100kg",
+    "unit": "szt",
+    "labor_norm": 14.5,
+    "section": "01",
+    "material_category": "rozdzielnice",
+    "is_industrial": true,
+    "synonyms": [
+      "szafa sterownicza",
+      "rozdzielnica przemysłowa",
+      "szafa elektryczna",
+      "panel sterowniczy",
+      "tablica sterownicza",
+      "szafa srp",
+      "rozdzielnica wolnostojąca",
+      "szafa technologiczna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0101",
+    "column_number": "02",
+    "description": "Montaż szaf sterowniczych wolnostojących 100-200kg",
+    "unit": "szt",
+    "labor_norm": 22.0,
+    "section": "01",
+    "material_category": "rozdzielnice",
+    "is_industrial": true,
+    "synonyms": [
+      "szafa sterownicza ciężka",
+      "rozdzielnica główna przemysłowa",
+      "szafa nn",
+      "mcc",
+      "motor control center",
+      "szafa silnikowa",
+      "rozdzielnica przemysłowa 200kg"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0201",
+    "column_number": "03",
+    "description": "Montaż korytek metalowych perforowanych 200mm (na wspornikach)",
+    "unit": "m",
+    "labor_norm": 0.95,
+    "section": "02",
+    "material_category": "koryta",
+    "is_industrial": true,
+    "synonyms": [
+      "korytko kablowe",
+      "koryto perforowane",
+      "trasa kablowa",
+      "koryto metalowe",
+      "korytko blaszane",
+      "trasa stalowa",
+      "koryto 200mm",
+      "wspornik korytek"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0205",
+    "column_number": "01",
+    "description": "Montaż drabin kablowych o szerokości do 400mm",
+    "unit": "m",
+    "labor_norm": 1.45,
+    "section": "02",
+    "material_category": "koryta",
+    "is_industrial": true,
+    "synonyms": [
+      "drabinka kablowa",
+      "ladder tray",
+      "trasa drabinkowa",
+      "drabina kablowa",
+      "cable ladder",
+      "nośnik kabli ciężkich",
+      "koryto drabinkowe 400mm"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0305",
+    "column_number": "02",
+    "description": "Układanie kabli siłowych YKY do 35mm2 w korytach",
+    "unit": "m",
+    "labor_norm": 0.38,
+    "section": "03",
+    "material_category": "kable_silowe",
+    "is_industrial": true,
+    "synonyms": [
+      "kabel siłowy",
+      "yky",
+      "ykxs",
+      "kabel zasilający",
+      "przewód zasilający",
+      "układanie kabla",
+      "ciągnienie kabla",
+      "kabel miedziany",
+      "przekrój 35mm2"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0305",
+    "column_number": "04",
+    "description": "Układanie kabli siłowych YKY do 120mm2 (ciężkie)",
+    "unit": "m",
+    "labor_norm": 0.85,
+    "section": "03",
+    "material_category": "kable_silowe",
+    "is_industrial": true,
+    "synonyms": [
+      "kabel siłowy gruby",
+      "yky 120",
+      "ykxs 120",
+      "kabel wlz",
+      "linia zasilająca",
+      "kabel rozdzielczy",
+      "kabel 120mm2",
+      "ciągnienie kabla ciężkiego",
+      "wciąganie kabla"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0401",
+    "column_number": "01",
+    "description": "Montaż opraw przemysłowych typu High-Bay (LED) na zwieszakach",
+    "unit": "szt",
+    "labor_norm": 2.1,
+    "section": "04",
+    "material_category": "oprawy",
+    "is_industrial": true,
+    "synonyms": [
+      "oprawa highbay",
+      "high bay",
+      "lampa halowa",
+      "oprawa przemysłowa led",
+      "lampa przemysłowa",
+      "oświetlenie hali",
+      "oprawa zwieszana",
+      "naświetlacz led",
+      "oprawa magazynowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0501",
+    "column_number": "01",
+    "description": "Wykonanie uziomu otokowego w wykopie (bednarka)",
+    "unit": "m",
+    "labor_norm": 0.62,
+    "section": "05",
+    "material_category": "uziom",
+    "is_industrial": true,
+    "synonyms": [
+      "uziom otokowy",
+      "bednarka ocynkowana",
+      "uziemienie fundamentowe",
+      "uziom poziomy",
+      "uziem taśmowy",
+      "fezn 30x4",
+      "bednarka w fundamencie",
+      "uziom otokowy hali"
+    ]
+  }
+]

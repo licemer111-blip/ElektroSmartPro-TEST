@@ -1,0 +1,170 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9006",
+    "column_number": "01",
+    "description": "Kopanie rowu dla kabla (głębokość do 0.8m) - ręcznie, grunt kat. III",
+    "unit": "m2",
+    "labor_norm": 2.5,
+    "is_industrial": false,
+    "knr_category": "roboty_ziemne",
+    "synonyms": [
+      "kopanie rowu",
+      "wykop pod kabel",
+      "rów kablowy",
+      "wykop ręczny",
+      "rów 0.8m",
+      "prace ziemne",
+      "kopanie łopatą"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9006",
+    "column_number": "02",
+    "description": "Kopanie rowu dla kabla za pomocą minikoparki",
+    "unit": "m",
+    "labor_norm": 3.0,
+    "is_industrial": false,
+    "knr_category": "roboty_ziemne",
+    "synonyms": [
+      "koparka",
+      "minikoparka",
+      "wykop mechaniczny",
+      "koparka pod kabel",
+      "rów kablowy koparka",
+      "prace ziemne mechaniczne"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9006",
+    "column_number": "03",
+    "description": "Wykonanie podsypki i nasypki piaskowej w wykopie (grubość 10+10cm)",
+    "unit": "m2",
+    "labor_norm": 1.2,
+    "is_industrial": false,
+    "knr_category": "roboty_ziemne",
+    "synonyms": [
+      "podsypka piaskowa",
+      "nasypka piasek",
+      "piasek pod kabel",
+      "ochrona kabla piasek",
+      "zasypka piaskowa",
+      "piasek płukany"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9006",
+    "column_number": "04",
+    "description": "Ręczne układanie kabla (YKY / YAKXS) w wykopie",
+    "unit": "m",
+    "labor_norm": 3.5,
+    "is_industrial": false,
+    "knr_category": "roboty_ziemne",
+    "synonyms": [
+      "kabel ziemny",
+      "yky w ziemi",
+      "yakxs",
+      "kabel w wykopie",
+      "układanie kabla w ziemi",
+      "kabel podziemny",
+      "linia kablowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9006",
+    "column_number": "05",
+    "description": "Układanie rury osłonowej karbowanej (np. Arot DVK/DVR fi 50/75) w wykopie",
+    "unit": "m",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "roboty_ziemne",
+    "synonyms": [
+      "rura arot",
+      "rura osłonowa",
+      "dvk dvr",
+      "rura karbowana",
+      "osłona kabla",
+      "rura hdpe",
+      "przepust kablowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9006",
+    "column_number": "06",
+    "description": "Ułożenie taśmy ostrzegawczej (niebieskiej lub czerwonej) w wykopie",
+    "unit": "m",
+    "labor_norm": 0.4,
+    "is_industrial": false,
+    "knr_category": "roboty_ziemne",
+    "synonyms": [
+      "taśma ostrzegawcza",
+      "folia niebieska",
+      "folia czerwona",
+      "taśma kablowa",
+      "folia ostrzeżowcza",
+      "oznaczenie kabla"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9006",
+    "column_number": "07",
+    "description": "Ręczne zasypywanie wykopu wraz z zagęszczaniem mechanicznym (ubijarka)",
+    "unit": "m2",
+    "labor_norm": 1.8,
+    "is_industrial": false,
+    "knr_category": "roboty_ziemne",
+    "synonyms": [
+      "zasypywanie wykopu",
+      "zagęszczanie",
+      "ubijarka",
+      "skoczek",
+      "zagęszczarka",
+      "zasypka gruntu",
+      "rekultywacja wykopu"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9006",
+    "column_number": "08",
+    "description": "Wykonanie przewiertu sterowanego / przećisku pod drogą lub chodnikiem",
+    "unit": "m",
+    "labor_norm": 0.8,
+    "is_industrial": false,
+    "knr_category": "roboty_ziemne",
+    "synonyms": [
+      "przewiert",
+      "przecisk",
+      "kret",
+      "przejście pod drogą",
+      "horyzontalne wiercenie",
+      "hdd",
+      "przekrój drogi"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9006",
+    "column_number": "09",
+    "description": "Montaż złącza kablowo-pomiarowego (ZKP) w granicy działki",
+    "unit": "szt",
+    "labor_norm": 4.5,
+    "is_industrial": false,
+    "knr_category": "roboty_ziemne",
+    "synonyms": [
+      "złącze kablowe",
+      "zkp",
+      "szafka licznikowa",
+      "przyjście energii",
+      "przyłącze",
+      "szafka przyłączeniowa",
+      "licznik granicy"
+    ]
+  }
+]

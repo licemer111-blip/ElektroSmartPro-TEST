@@ -1,0 +1,180 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9004",
+    "column_number": "01",
+    "description": "Montaż oprawy oświetleniowej prostej (plafon / kinkiet / tuba LED)",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "oswietlenie",
+    "synonyms": [
+      "oprawa led",
+      "plafon",
+      "kinkiet",
+      "tuba led",
+      "montaż lampy",
+      "lampa sufitowa",
+      "oprawa natynkowa",
+      "punkt świetlny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9004",
+    "column_number": "02",
+    "description": "Montaż żyrandola wieloramiennego / ciężkiej oprawy zwieszanej",
+    "unit": "szt",
+    "labor_norm": 0.85,
+    "is_industrial": false,
+    "knr_category": "oswietlenie",
+    "synonyms": [
+      "żyrandol",
+      "lampa wisząca",
+      "oprawa zwieszana",
+      "pająk",
+      "ciężka oprawa",
+      "lampa centralna",
+      "montaż żyrandola"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9004",
+    "column_number": "03",
+    "description": "Montaż oprawy w suficie podwieszanym G-K (oczko halogenowe / downlight LED)",
+    "unit": "szt",
+    "labor_norm": 0.2,
+    "is_industrial": false,
+    "knr_category": "oswietlenie",
+    "synonyms": [
+      "oczko halogenowe",
+      "downlight",
+      "spot led",
+      "oprawa wpuszczana",
+      "gu10",
+      "sufitowe oczko",
+      "led downlight",
+      "spotlight sufitowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9004",
+    "column_number": "04",
+    "description": "Montaż panelu LED 60x60 w suficie modułowym (typu Armstrong)",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "is_industrial": false,
+    "knr_category": "oswietlenie",
+    "synonyms": [
+      "panel led 60x60",
+      "led panel armstrong",
+      "oprawa biurowa",
+      "panel sufitowy",
+      "płyta led",
+      "panel kaseton",
+      "oprawa modułowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9004",
+    "column_number": "05",
+    "description": "Montaż profilu aluminiowego dla taśmy LED z wklejeniem i lutowaniem taśmy",
+    "unit": "m",
+    "labor_norm": 0.4,
+    "is_industrial": false,
+    "knr_category": "oswietlenie",
+    "synonyms": [
+      "profil aluminiowy led",
+      "taśma led",
+      "strip led",
+      "listwa led",
+      "led strip",
+      "oświetlenie pośrednie",
+      "podświetlenie led",
+      "taśma rgb"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9004",
+    "column_number": "06",
+    "description": "Montaż i podłączenie zasilacza LED (stałonapięciowego 12V/24V) wraz ze sterownikiem",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "is_industrial": false,
+    "knr_category": "oswietlenie",
+    "synonyms": [
+      "zasilacz led",
+      "driver led",
+      "sterownik led",
+      "power supply 12v",
+      "zasilacz 24v",
+      "kontroler rgb",
+      "dimmer led",
+      "sterownik taśmy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9004",
+    "column_number": "07",
+    "description": "Montaż modułu Smart Home w puszce p/t (np. Shelly, Fibaro, BleBox, Zamel Supla)",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "smart_home",
+    "synonyms": [
+      "shelly",
+      "fibaro",
+      "blebox",
+      "supla",
+      "smart home moduł",
+      "inteligentny dom",
+      "dopuszkowy",
+      "przekaźnik wifi",
+      "automatyka domowa",
+      "iot"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9004",
+    "column_number": "08",
+    "description": "Montaż oprawy parkowej / słupka oświetleniowego w ogrodzie (na gotowym fundamencie)",
+    "unit": "szt",
+    "labor_norm": 0.6,
+    "is_industrial": false,
+    "knr_category": "oswietlenie",
+    "synonyms": [
+      "słupek ogrodowy",
+      "lampa parkowa",
+      "oświetlenie ogrodu",
+      "słup oświetleniowy",
+      "oprawa zewnętrzna",
+      "lampa ogrodowa",
+      "latarnia ogrodowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9004",
+    "column_number": "09",
+    "description": "Demontaż oprawy świetlówkowej (np. 2x36W) / rastrowej",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "is_industrial": false,
+    "knr_category": "oswietlenie",
+    "synonyms": [
+      "demontaż świetlówki",
+      "usunięcie oprawy",
+      "świetlówka t8",
+      "oprawa rastrowa",
+      "wybiórka lampy",
+      "demontaż lampy fluorescencyjnej",
+      "stara świetlówka"
+    ]
+  }
+]

@@ -1,0 +1,922 @@
+{
+  "REGIONAL_MODIFIERS": {
+    "mazowieckie": 1.2,
+    "dolnoslaskie": 1.12,
+    "malopolskie": 1.1,
+    "slaskie": 1.08,
+    "wielkopolskie": 1.06,
+    "pomorskie": 1.1,
+    "zachodniopomorskie": 1.02,
+    "lubuskie": 0.96,
+    "lodzkie": 1,
+    "kujawsko-pomorskie": 0.96,
+    "warminsko-mazurskie": 0.85,
+    "podlaskie": 0.88,
+    "lubelskie": 0.92,
+    "swietokrzyskie": 0.9,
+    "opolskie": 0.94,
+    "podkarpackie": 0.88
+  },
+  "MARKET_DATA": [
+    {
+      "id": "1",
+      "name": "Przewód",
+      "category": "material",
+      "basePrice": 3.2,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 4.2
+    },
+    {
+      "id": "2",
+      "name": "Przewód",
+      "category": "material",
+      "basePrice": 4.8,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 5.8
+    },
+    {
+      "id": "3",
+      "name": "Przewód",
+      "category": "material",
+      "basePrice": 14.5,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 6.3
+    },
+    {
+      "id": "4",
+      "name": "Przewód",
+      "category": "material",
+      "basePrice": 22.8,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 7.1
+    },
+    {
+      "id": "5",
+      "name": "Kabel",
+      "category": "material",
+      "basePrice": 5.5,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 3.9
+    },
+    {
+      "id": "6",
+      "name": "Kabel",
+      "category": "material",
+      "basePrice": 12.4,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 4.5
+    },
+    {
+      "id": "7",
+      "name": "Kabel",
+      "category": "material",
+      "basePrice": 19.2,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 5.2
+    },
+    {
+      "id": "8",
+      "name": "Przewód",
+      "category": "material",
+      "basePrice": 1.8,
+      "unit": "mb",
+      "trend": "stable",
+      "trendPercent": 0.8
+    },
+    {
+      "id": "9",
+      "name": "Przewód",
+      "category": "material",
+      "basePrice": 2.9,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 1.2
+    },
+    {
+      "id": "10",
+      "name": "Przewód",
+      "category": "material",
+      "basePrice": 4.5,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 2.1
+    },
+    {
+      "id": "11",
+      "name": "Kabel",
+      "category": "material",
+      "basePrice": 38,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 8.5
+    },
+    {
+      "id": "12",
+      "name": "Kabel",
+      "category": "material",
+      "basePrice": 52,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 9.2
+    },
+    {
+      "id": "13",
+      "name": "Kabel",
+      "category": "material",
+      "basePrice": 28.5,
+      "unit": "mb",
+      "trend": "stable",
+      "trendPercent": -0.5
+    },
+    {
+      "id": "14",
+      "name": "Przewód",
+      "category": "material",
+      "basePrice": 0.95,
+      "unit": "mb",
+      "trend": "stable",
+      "trendPercent": 0.2
+    },
+    {
+      "id": "15",
+      "name": "Przewód",
+      "category": "material",
+      "basePrice": 1.45,
+      "unit": "mb",
+      "trend": "stable",
+      "trendPercent": 0.5
+    },
+    {
+      "id": "16",
+      "name": "Gniazdo",
+      "category": "material",
+      "basePrice": 18.5,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": -0.8
+    },
+    {
+      "id": "17",
+      "name": "Gniazdo",
+      "category": "material",
+      "basePrice": 42,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0.3
+    },
+    {
+      "id": "18",
+      "name": "Gniazdo",
+      "category": "material",
+      "basePrice": 28,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": -1.2
+    },
+    {
+      "id": "19",
+      "name": "Łącznik",
+      "category": "material",
+      "basePrice": 8.5,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0
+    },
+    {
+      "id": "20",
+      "name": "Łącznik",
+      "category": "material",
+      "basePrice": 12.3,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0.2
+    },
+    {
+      "id": "21",
+      "name": "Łącznik",
+      "category": "material",
+      "basePrice": 15.8,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": -0.5
+    },
+    {
+      "id": "22",
+      "name": "Ściemniacz",
+      "category": "material",
+      "basePrice": 68,
+      "unit": "szt",
+      "trend": "down",
+      "trendPercent": -2.5
+    },
+    {
+      "id": "23",
+      "name": "Gniazdo",
+      "category": "material",
+      "basePrice": 52,
+      "unit": "szt",
+      "trend": "down",
+      "trendPercent": -4.2
+    },
+    {
+      "id": "24",
+      "name": "Puszka",
+      "category": "material",
+      "basePrice": 1.8,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0
+    },
+    {
+      "id": "25",
+      "name": "Puszka",
+      "category": "material",
+      "basePrice": 4.2,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0.1
+    },
+    {
+      "id": "26",
+      "name": "Puszka",
+      "category": "material",
+      "basePrice": 8.9,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0.5
+    },
+    {
+      "id": "27",
+      "name": "Puszka",
+      "category": "material",
+      "basePrice": 18.5,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0.8
+    },
+    {
+      "id": "28",
+      "name": "Ramka",
+      "category": "material",
+      "basePrice": 3.5,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0
+    },
+    {
+      "id": "29",
+      "name": "Ramka",
+      "category": "material",
+      "basePrice": 28,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": -1.5
+    },
+    {
+      "id": "30",
+      "name": "Czujnik",
+      "category": "material",
+      "basePrice": 38,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": -0.3
+    },
+    {
+      "id": "31",
+      "name": "Rozdzielnia",
+      "category": "equipment",
+      "basePrice": 45,
+      "unit": "szt",
+      "trend": "up",
+      "trendPercent": 2.8
+    },
+    {
+      "id": "32",
+      "name": "Rozdzielnia",
+      "category": "equipment",
+      "basePrice": 85,
+      "unit": "szt",
+      "trend": "up",
+      "trendPercent": 3.2
+    },
+    {
+      "id": "33",
+      "name": "Rozdzielnia",
+      "category": "equipment",
+      "basePrice": 180,
+      "unit": "szt",
+      "trend": "up",
+      "trendPercent": 4.1
+    },
+    {
+      "id": "34",
+      "name": "Rozdzielnia",
+      "category": "equipment",
+      "basePrice": 420,
+      "unit": "szt",
+      "trend": "up",
+      "trendPercent": 5.5
+    },
+    {
+      "id": "35",
+      "name": "Wyłącznik",
+      "category": "equipment",
+      "basePrice": 95,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 1.2
+    },
+    {
+      "id": "36",
+      "name": "Wyłącznik",
+      "category": "equipment",
+      "basePrice": 185,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 1.8
+    },
+    {
+      "id": "37",
+      "name": "Wyłącznik",
+      "category": "equipment",
+      "basePrice": 10.5,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0.5
+    },
+    {
+      "id": "38",
+      "name": "Wyłącznik",
+      "category": "equipment",
+      "basePrice": 12.5,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0.8
+    },
+    {
+      "id": "39",
+      "name": "Wyłącznik",
+      "category": "equipment",
+      "basePrice": 48,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 1.1
+    },
+    {
+      "id": "40",
+      "name": "Rozłącznik",
+      "category": "equipment",
+      "basePrice": 125,
+      "unit": "szt",
+      "trend": "up",
+      "trendPercent": 2.5
+    },
+    {
+      "id": "41",
+      "name": "Ogranicznik",
+      "category": "equipment",
+      "basePrice": 78,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0.3
+    },
+    {
+      "id": "42",
+      "name": "Przekaźnik",
+      "category": "equipment",
+      "basePrice": 95,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": -0.2
+    },
+    {
+      "id": "43",
+      "name": "Punkt",
+      "category": "labor",
+      "basePrice": 45,
+      "unit": "pkt",
+      "trend": "up",
+      "trendPercent": 1.5
+    },
+    {
+      "id": "44",
+      "name": "Punkt",
+      "category": "labor",
+      "basePrice": 65,
+      "unit": "pkt",
+      "trend": "up",
+      "trendPercent": 2.1
+    },
+    {
+      "id": "45",
+      "name": "Punkt",
+      "category": "labor",
+      "basePrice": 32,
+      "unit": "pkt",
+      "trend": "up",
+      "trendPercent": 1.2
+    },
+    {
+      "id": "46",
+      "name": "Punkt",
+      "category": "labor",
+      "basePrice": 38,
+      "unit": "pkt",
+      "trend": "up",
+      "trendPercent": 1.8
+    },
+    {
+      "id": "47",
+      "name": "Punkt",
+      "category": "labor",
+      "basePrice": 55,
+      "unit": "pkt",
+      "trend": "up",
+      "trendPercent": 2.5
+    },
+    {
+      "id": "48",
+      "name": "Montaż",
+      "category": "labor",
+      "basePrice": 120,
+      "unit": "szt",
+      "trend": "up",
+      "trendPercent": 1.8
+    },
+    {
+      "id": "49",
+      "name": "Montaż",
+      "category": "labor",
+      "basePrice": 180,
+      "unit": "szt",
+      "trend": "up",
+      "trendPercent": 2.2
+    },
+    {
+      "id": "50",
+      "name": "Pomiary",
+      "category": "labor",
+      "basePrice": 15,
+      "unit": "pkt",
+      "trend": "stable",
+      "trendPercent": 0.5
+    },
+    {
+      "id": "51",
+      "name": "Wymiana",
+      "category": "labor",
+      "basePrice": 25,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0.8
+    },
+    {
+      "id": "52",
+      "name": "Wymiana",
+      "category": "labor",
+      "basePrice": 35,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 1
+    },
+    {
+      "id": "53",
+      "name": "Oprawa",
+      "category": "material",
+      "basePrice": 85,
+      "unit": "szt",
+      "trend": "down",
+      "trendPercent": -3.2
+    },
+    {
+      "id": "54",
+      "name": "Oprawa",
+      "category": "material",
+      "basePrice": 32,
+      "unit": "szt",
+      "trend": "down",
+      "trendPercent": -4.5
+    },
+    {
+      "id": "55",
+      "name": "Taśma",
+      "category": "material",
+      "basePrice": 28,
+      "unit": "mb",
+      "trend": "down",
+      "trendPercent": -2.1
+    },
+    {
+      "id": "56",
+      "name": "Oprawa",
+      "category": "material",
+      "basePrice": 68,
+      "unit": "szt",
+      "trend": "down",
+      "trendPercent": -5.8
+    },
+    {
+      "id": "57",
+      "name": "Żarówka",
+      "category": "material",
+      "basePrice": 12.5,
+      "unit": "szt",
+      "trend": "down",
+      "trendPercent": -6.2
+    },
+    {
+      "id": "58",
+      "name": "Rura",
+      "category": "material",
+      "basePrice": 1.2,
+      "unit": "mb",
+      "trend": "stable",
+      "trendPercent": 0.3
+    },
+    {
+      "id": "59",
+      "name": "Rura",
+      "category": "material",
+      "basePrice": 2.1,
+      "unit": "mb",
+      "trend": "stable",
+      "trendPercent": 0.5
+    },
+    {
+      "id": "60",
+      "name": "Korytko",
+      "category": "material",
+      "basePrice": 18.5,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 1.8
+    },
+    {
+      "id": "61",
+      "name": "Kołek",
+      "category": "material",
+      "basePrice": 0.15,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0
+    },
+    {
+      "id": "62",
+      "name": "Opaska",
+      "category": "material",
+      "basePrice": 8.5,
+      "unit": "op",
+      "trend": "stable",
+      "trendPercent": 0.2
+    },
+    {
+      "id": "63",
+      "name": "Przewód",
+      "category": "material",
+      "basePrice": 5.2,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 4.8
+    },
+    {
+      "id": "64",
+      "name": "Kabel",
+      "category": "material",
+      "basePrice": 4.8,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 5.5
+    },
+    {
+      "id": "65",
+      "name": "Kabel",
+      "category": "material",
+      "basePrice": 6.9,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 6.2
+    },
+    {
+      "id": "66",
+      "name": "Kabel",
+      "category": "material",
+      "basePrice": 28.5,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 7.8
+    },
+    {
+      "id": "67",
+      "name": "Kabel",
+      "category": "material",
+      "basePrice": 42,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 8.9
+    },
+    {
+      "id": "68",
+      "name": "Kabel",
+      "category": "material",
+      "basePrice": 1.85,
+      "unit": "mb",
+      "trend": "stable",
+      "trendPercent": -0.5
+    },
+    {
+      "id": "69",
+      "name": "Kabel",
+      "category": "material",
+      "basePrice": 3.2,
+      "unit": "mb",
+      "trend": "stable",
+      "trendPercent": -0.8
+    },
+    {
+      "id": "70",
+      "name": "Kabel",
+      "category": "material",
+      "basePrice": 1.45,
+      "unit": "mb",
+      "trend": "stable",
+      "trendPercent": 0.1
+    },
+    {
+      "id": "71",
+      "name": "Kabel",
+      "category": "material",
+      "basePrice": 2.8,
+      "unit": "mb",
+      "trend": "stable",
+      "trendPercent": 0.3
+    },
+    {
+      "id": "72",
+      "name": "Przewód",
+      "category": "material",
+      "basePrice": 9.8,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 5.2
+    },
+    {
+      "id": "73",
+      "name": "Punkt",
+      "category": "labor",
+      "basePrice": 28,
+      "unit": "pkt",
+      "trend": "up",
+      "trendPercent": 1
+    },
+    {
+      "id": "74",
+      "name": "Punkt",
+      "category": "labor",
+      "basePrice": 35,
+      "unit": "pkt",
+      "trend": "up",
+      "trendPercent": 1.5
+    },
+    {
+      "id": "75",
+      "name": "Punkt",
+      "category": "labor",
+      "basePrice": 52,
+      "unit": "pkt",
+      "trend": "up",
+      "trendPercent": 2
+    },
+    {
+      "id": "76",
+      "name": "Bruzdowanie",
+      "category": "labor",
+      "basePrice": 12,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 1.8
+    },
+    {
+      "id": "77",
+      "name": "Bruzdowanie",
+      "category": "labor",
+      "basePrice": 28,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 2.5
+    },
+    {
+      "id": "78",
+      "name": "Układanie",
+      "category": "labor",
+      "basePrice": 3.5,
+      "unit": "mb",
+      "trend": "stable",
+      "trendPercent": 0.5
+    },
+    {
+      "id": "79",
+      "name": "Układanie",
+      "category": "labor",
+      "basePrice": 4.8,
+      "unit": "mb",
+      "trend": "stable",
+      "trendPercent": 0.8
+    },
+    {
+      "id": "80",
+      "name": "Układanie",
+      "category": "labor",
+      "basePrice": 5.5,
+      "unit": "mb",
+      "trend": "up",
+      "trendPercent": 1.2
+    },
+    {
+      "id": "81",
+      "name": "Montaż",
+      "category": "labor",
+      "basePrice": 18,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0.5
+    },
+    {
+      "id": "82",
+      "name": "Montaż",
+      "category": "labor",
+      "basePrice": 15,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0.5
+    },
+    {
+      "id": "83",
+      "name": "Montaż",
+      "category": "labor",
+      "basePrice": 35,
+      "unit": "szt",
+      "trend": "up",
+      "trendPercent": 1
+    },
+    {
+      "id": "84",
+      "name": "Montaż",
+      "category": "labor",
+      "basePrice": 85,
+      "unit": "szt",
+      "trend": "up",
+      "trendPercent": 1.5
+    },
+    {
+      "id": "85",
+      "name": "Pomiar",
+      "category": "labor",
+      "basePrice": 12,
+      "unit": "pkt",
+      "trend": "stable",
+      "trendPercent": 0.3
+    },
+    {
+      "id": "86",
+      "name": "Pomiar",
+      "category": "labor",
+      "basePrice": 18,
+      "unit": "pkt",
+      "trend": "stable",
+      "trendPercent": 0.5
+    },
+    {
+      "id": "87",
+      "name": "Wykonanie",
+      "category": "labor",
+      "basePrice": 120,
+      "unit": "kpl",
+      "trend": "up",
+      "trendPercent": 2
+    },
+    {
+      "id": "88",
+      "name": "Montaż",
+      "category": "labor",
+      "basePrice": 8.5,
+      "unit": "mb",
+      "trend": "stable",
+      "trendPercent": 0.8
+    },
+    {
+      "id": "89",
+      "name": "Montaż",
+      "category": "labor",
+      "basePrice": 12,
+      "unit": "mb",
+      "trend": "stable",
+      "trendPercent": 1
+    },
+    {
+      "id": "90",
+      "name": "Podłączenie",
+      "category": "labor",
+      "basePrice": 95,
+      "unit": "szt",
+      "trend": "up",
+      "trendPercent": 1.5
+    },
+    {
+      "id": "91",
+      "name": "Podłączenie",
+      "category": "labor",
+      "basePrice": 75,
+      "unit": "szt",
+      "trend": "up",
+      "trendPercent": 1.2
+    },
+    {
+      "id": "92",
+      "name": "Montaż",
+      "category": "labor",
+      "basePrice": 65,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0.8
+    },
+    {
+      "id": "93",
+      "name": "Wyłącznik",
+      "category": "equipment",
+      "basePrice": 14.5,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0.8
+    },
+    {
+      "id": "94",
+      "name": "Wyłącznik",
+      "category": "equipment",
+      "basePrice": 42,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 1
+    },
+    {
+      "id": "95",
+      "name": "Wyłącznik",
+      "category": "equipment",
+      "basePrice": 52,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 1.2
+    },
+    {
+      "id": "96",
+      "name": "Wyłącznik",
+      "category": "equipment",
+      "basePrice": 220,
+      "unit": "szt",
+      "trend": "up",
+      "trendPercent": 2
+    },
+    {
+      "id": "97",
+      "name": "Lampka",
+      "category": "equipment",
+      "basePrice": 18.5,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0.2
+    },
+    {
+      "id": "98",
+      "name": "Zegar",
+      "category": "equipment",
+      "basePrice": 185,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0.5
+    },
+    {
+      "id": "99",
+      "name": "Stycznik",
+      "category": "equipment",
+      "basePrice": 68,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 0.8
+    },
+    {
+      "id": "100",
+      "name": "Przekaźnik",
+      "category": "equipment",
+      "basePrice": 95,
+      "unit": "szt",
+      "trend": "stable",
+      "trendPercent": 1
+    }
+  ]
+}

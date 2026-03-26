@@ -1,0 +1,32 @@
+---
+description: Coding standards — DB first, types, UI, errors
+alwaysApply: true
+---
+
+# Coding Standards
+
+## Database First
+
+- Before writing frontend that touches data, **verify Supabase schema** and `lib/types/database.ts`.
+- New fields or tables → **SQL migration first** in `supabase/migrations/`, then types, then UI.
+
+## Type Safety
+
+- Use strict TypeScript. Prefer interfaces from `lib/types/database.ts` for tables (e.g. `Project`, `ProjectItem`, `CatalogItem`).
+- Avoid `any`; use proper generics for Supabase client when needed.
+
+## UI/UX
+
+- Use **Shadcn/UI** components from `components/ui/`. Keep design clean, professional, mobile-responsive.
+- **Language:** All user-facing text must be in **Polish (Polski)**. Variable names, keys, and code in **English**.
+
+## Error Handling
+
+- Wrap async DB/API calls in **try/catch**.
+- Show user-friendly messages (e.g. **Sonner toasts**) on error; avoid silent failures.
+- Log or rethrow with context for debugging.
+
+## File Conventions
+
+- Server Actions in `**/actions.ts` next to the page or feature.
+- Shared components in `components/` by domain (catalog, project, dashboard, etc.).

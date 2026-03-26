@@ -1,0 +1,15 @@
+---
+description: Workflow — analyze, blueprint check, migrations, then frontend
+alwaysApply: true
+---
+
+# Process for Changes
+
+1. **Analyze** the user request. Identify affected areas (UI, DB, API, types).
+2. **Check Master Blueprint** (`.cursor/rules/elektrosmart-business.mdc`). Ensure the change does not break demo mode, split pricing, assemblies, or VAT rules.
+3. **Database change?**  
+   - **Yes** → Write SQL migration in `supabase/migrations/` (descriptive name, e.g. `YYYYMMDD_feature_name.sql`). Update `lib/types/database.ts` if schema changes. Then implement frontend.
+   - **No** → Proceed with frontend/API only.
+4. **Implement** in order: migrations → types → server/API → components. Test flows that depend on new data or rules.
+
+When suggesting new features, always consider: RLS policies, free vs PRO limits, and Polish locale for strings.

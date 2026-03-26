@@ -1,0 +1,623 @@
+[
+  {
+    "catalog_code": "KNR 5-08 0201",
+    "table_number": "9008",
+    "column_number": "01",
+    "description": "Montaż wyłącznika nadprądowego MCB 1P na szynie TH35",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "knr_category": "breaker",
+    "is_industrial": false,
+    "synonyms": [
+      "mcb",
+      "wyłącznik",
+      "nadprądowy",
+      "1p",
+      "jednobiegunowy",
+      "b6",
+      "b10",
+      "b16",
+      "b20",
+      "b25",
+      "b32",
+      "c6",
+      "c10",
+      "c16",
+      "c20",
+      "c25",
+      "c32"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0202",
+    "table_number": "9008",
+    "column_number": "02",
+    "description": "Montaż wyłącznika nadprądowego MCB 2P na szynie TH35",
+    "unit": "szt",
+    "labor_norm": 0.2,
+    "knr_category": "breaker",
+    "is_industrial": false,
+    "synonyms": [
+      "mcb",
+      "wyłącznik",
+      "nadprądowy",
+      "2p",
+      "dwubiegunowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0203",
+    "table_number": "9008",
+    "column_number": "03",
+    "description": "Montaż wyłącznika nadprądowego MCB 3P na szynie TH35",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "knr_category": "breaker",
+    "is_industrial": false,
+    "synonyms": [
+      "mcb",
+      "wyłącznik",
+      "nadprądowy",
+      "3p",
+      "trójbiegunowy",
+      "trójfazowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0204",
+    "table_number": "9008",
+    "column_number": "04",
+    "description": "Montaż wyłącznika nadprądowego MCB 4P na szynie TH35",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "knr_category": "breaker",
+    "is_industrial": false,
+    "synonyms": [
+      "mcb",
+      "wyłącznik",
+      "nadprądowy",
+      "4p",
+      "czterobiegunowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0205",
+    "table_number": "9008",
+    "column_number": "05",
+    "description": "Montaż wyłącznika głównego / rozłącznika izolacyjnego",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "knr_category": "breaker",
+    "is_industrial": false,
+    "synonyms": [
+      "główny",
+      "rozłącznik",
+      "izolacyjny",
+      "mccb",
+      "wyłącznik główny",
+      "main switch"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0211",
+    "table_number": "9008",
+    "column_number": "06",
+    "description": "Montaż wyłącznika różnicowoprądowego RCD 2P na szynie TH35",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "knr_category": "rcd",
+    "is_industrial": false,
+    "synonyms": [
+      "rcd",
+      "fi",
+      "różnicowoprądowy",
+      "2p",
+      "30ma",
+      "300ma",
+      "typ a",
+      "typ ac",
+      "selektywny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0212",
+    "table_number": "9008",
+    "column_number": "07",
+    "description": "Montaż wyłącznika różnicowoprądowego RCD 4P na szynie TH35",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "knr_category": "rcd",
+    "is_industrial": false,
+    "synonyms": [
+      "rcd",
+      "fi",
+      "różnicowoprądowy",
+      "4p",
+      "trójfazowy",
+      "30ma",
+      "300ma",
+      "selektywny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0221",
+    "table_number": "9008",
+    "column_number": "08",
+    "description": "Montaż RCBO (wyłącznik nadprądowo-różnicowoprądowy) 1P+N na szynie TH35",
+    "unit": "szt",
+    "labor_norm": 0.2,
+    "knr_category": "rcbo",
+    "is_industrial": false,
+    "synonyms": [
+      "rcbo",
+      "kombinowany",
+      "1p",
+      "1p+n",
+      "nadprądowo-różnicowoprądowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0222",
+    "table_number": "9008",
+    "column_number": "09",
+    "description": "Montaż RCBO 3P na szynie TH35",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "knr_category": "rcbo",
+    "is_industrial": false,
+    "synonyms": [
+      "rcbo",
+      "kombinowany",
+      "3p",
+      "trójfazowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0231",
+    "table_number": "9008",
+    "column_number": "10",
+    "description": "Montaż ogranicznika przepięć SPD T1/T2 na szynie TH35",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "knr_category": "spd",
+    "is_industrial": false,
+    "synonyms": [
+      "spd",
+      "ogranicznik",
+      "przepięć",
+      "t1",
+      "t2",
+      "t1+t2",
+      "odgromnik"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0241",
+    "table_number": "9008",
+    "column_number": "11",
+    "description": "Montaż rozłącznika izolacyjnego / przełącznika sieć-agregat",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "knr_category": "switch",
+    "is_industrial": false,
+    "synonyms": [
+      "rozłącznik",
+      "izolacyjny",
+      "przełącznik",
+      "szr",
+      "sieć-agregat",
+      "ats"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0251",
+    "table_number": "9008",
+    "column_number": "12",
+    "description": "Montaż stycznika / przekaźnika na szynie TH35",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "knr_category": "contactor",
+    "is_industrial": false,
+    "synonyms": [
+      "stycznik",
+      "przekaźnik",
+      "bistabilny",
+      "contactor"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0261",
+    "table_number": "9008",
+    "column_number": "13",
+    "description": "Montaż programatora czasowego / sterownika na szynie TH35",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "knr_category": "timer",
+    "is_industrial": false,
+    "synonyms": [
+      "programator",
+      "czasowy",
+      "astronomiczny",
+      "timer",
+      "sterownik"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0271",
+    "table_number": "9008",
+    "column_number": "14",
+    "description": "Montaż licznika energii / miernika parametrów sieci",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "knr_category": "monitoring",
+    "is_industrial": false,
+    "synonyms": [
+      "licznik",
+      "energii",
+      "miernik",
+      "parametrów",
+      "sieci",
+      "analizator",
+      "kwh"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0272",
+    "table_number": "9008",
+    "column_number": "15",
+    "description": "Montaż przekaźnika nadzoru napięcia / faz",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "knr_category": "monitoring",
+    "is_industrial": false,
+    "synonyms": [
+      "nadzór",
+      "napięcia",
+      "faz",
+      "przekaźnik",
+      "monitor",
+      "kolejność faz",
+      "asymetria"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0281",
+    "table_number": "9008",
+    "column_number": "16",
+    "description": "Montaż modułu automatyki KNX / sterownika PLC na szynie TH35",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "knr_category": "automation",
+    "is_industrial": false,
+    "synonyms": [
+      "knx",
+      "plc",
+      "automatyka",
+      "sterownik",
+      "smart",
+      "inteligentny",
+      "loxone",
+      "actuator"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0291",
+    "table_number": "9008",
+    "column_number": "17",
+    "description": "Montaż baterii kondensatorów / kompensatora mocy biernej",
+    "unit": "szt",
+    "labor_norm": 0.6,
+    "knr_category": "compensation",
+    "is_industrial": false,
+    "synonyms": [
+      "kompensacja",
+      "mocy",
+      "biernej",
+      "kondensator",
+      "bateria",
+      "cos phi"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0295",
+    "table_number": "9008",
+    "column_number": "18",
+    "description": "Montaż sterownika silnikowego DOL / gwiazda-trójkąt / softstart / falownik",
+    "unit": "szt",
+    "labor_norm": 0.7,
+    "knr_category": "motor_control",
+    "is_industrial": false,
+    "synonyms": [
+      "silnik",
+      "motor",
+      "dol",
+      "gwiazda-trójkąt",
+      "softstart",
+      "falownik",
+      "vfd",
+      "termik",
+      "rozruch"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0301",
+    "table_number": "9008",
+    "column_number": "19",
+    "description": "Montaż złączki szynowej / bloku zaciskowego ZUG na szynie TH35",
+    "unit": "szt",
+    "labor_norm": 0.1,
+    "knr_category": "terminal",
+    "is_industrial": false,
+    "synonyms": [
+      "złączka",
+      "szynowa",
+      "zug",
+      "terminal",
+      "zacisk",
+      "n",
+      "pe",
+      "niebieski",
+      "wago",
+      "push-in"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0302",
+    "table_number": "9008",
+    "column_number": "20",
+    "description": "Montaż bloku rozdzielczego / szyny zbiorczej",
+    "unit": "szt",
+    "labor_norm": 0.2,
+    "knr_category": "terminal",
+    "is_industrial": false,
+    "synonyms": [
+      "blok",
+      "rozdzielczy",
+      "szyna",
+      "zbiorcza",
+      "dist",
+      "block",
+      "80a",
+      "125a",
+      "250a",
+      "przegroda fazowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0311",
+    "table_number": "9008",
+    "column_number": "21",
+    "description": "Układanie przewodów wewnętrznych LgY/H07V-K do 6mm² w obudowie",
+    "unit": "m",
+    "labor_norm": 0.05,
+    "knr_category": "wiring",
+    "is_industrial": false,
+    "synonyms": [
+      "przewód",
+      "lgy",
+      "h07v",
+      "1.5mm",
+      "2.5mm",
+      "4mm",
+      "6mm",
+      "wiring",
+      "kabel"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0312",
+    "table_number": "9008",
+    "column_number": "22",
+    "description": "Układanie przewodów wewnętrznych LgY/H07V-K 10–35mm² w obudowie",
+    "unit": "m",
+    "labor_norm": 0.08,
+    "knr_category": "wiring",
+    "is_industrial": false,
+    "synonyms": [
+      "przewód",
+      "lgy",
+      "10mm",
+      "16mm",
+      "25mm",
+      "35mm"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0313",
+    "table_number": "9008",
+    "column_number": "23",
+    "description": "Układanie przewodów wewnętrznych LgY/H07V-K 50–240mm² w obudowie",
+    "unit": "m",
+    "labor_norm": 0.12,
+    "knr_category": "wiring",
+    "is_industrial": false,
+    "synonyms": [
+      "przewód",
+      "lgy",
+      "50mm",
+      "70mm",
+      "95mm",
+      "120mm",
+      "150mm",
+      "240mm"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0321",
+    "table_number": "9008",
+    "column_number": "24",
+    "description": "Zaciskanie końcówek tulejkowych (ferrule) na przewodach",
+    "unit": "szt",
+    "labor_norm": 0.03,
+    "knr_category": "consumable",
+    "is_industrial": false,
+    "synonyms": [
+      "końcówka",
+      "tulejkowa",
+      "ferrule",
+      "tulejka",
+      "zacisk",
+      "oczkowa",
+      "kablowa",
+      "cu"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0322",
+    "table_number": "9008",
+    "column_number": "25",
+    "description": "Montaż dławnicy kablowej M16–M50",
+    "unit": "szt",
+    "labor_norm": 0.12,
+    "knr_category": "consumable",
+    "is_industrial": false,
+    "synonyms": [
+      "dławnica",
+      "kablowa",
+      "m16",
+      "m20",
+      "m25",
+      "m32",
+      "m40",
+      "m50",
+      "pg"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0323",
+    "table_number": "9008",
+    "column_number": "26",
+    "description": "Montaż szyny TH35 / ogranicznika końcowego w obudowie",
+    "unit": "szt",
+    "labor_norm": 0.1,
+    "knr_category": "consumable",
+    "is_industrial": false,
+    "synonyms": [
+      "szyna",
+      "th35",
+      "din",
+      "ogranicznik",
+      "końcowy",
+      "szyna miedziana",
+      "busbar",
+      "pe",
+      "n",
+      "uziemiająca"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0324",
+    "table_number": "9008",
+    "column_number": "27",
+    "description": "Montaż korytka kablowego / drabinki / rury ochronnej wewnątrz obudowy",
+    "unit": "m",
+    "labor_norm": 0.08,
+    "knr_category": "consumable",
+    "is_industrial": false,
+    "synonyms": [
+      "korytko",
+      "kablowe",
+      "drabinka",
+      "rura",
+      "ochronna",
+      "opaska",
+      "zaciskowa",
+      "koszulka",
+      "termokurczliwa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0331",
+    "table_number": "9008",
+    "column_number": "28",
+    "description": "Montaż obudowy rozdzielnicy natynkowej do 24 modułów",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "knr_category": "enclosure",
+    "is_industrial": false,
+    "synonyms": [
+      "obudowa",
+      "rozdzielnica",
+      "natynkowa",
+      "12",
+      "24",
+      "modułów"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0332",
+    "table_number": "9008",
+    "column_number": "29",
+    "description": "Montaż obudowy rozdzielnicy natynkowej 25–72 modułów",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "enclosure",
+    "is_industrial": false,
+    "synonyms": [
+      "obudowa",
+      "rozdzielnica",
+      "natynkowa",
+      "36",
+      "48",
+      "72",
+      "modułów"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0333",
+    "table_number": "9008",
+    "column_number": "30",
+    "description": "Montaż obudowy rozdzielnicy natynkowej 73–144 modułów",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "knr_category": "enclosure",
+    "is_industrial": false,
+    "synonyms": [
+      "obudowa",
+      "rozdzielnica",
+      "96",
+      "144",
+      "modułów"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0334",
+    "table_number": "9008",
+    "column_number": "31",
+    "description": "Montaż szafy wolnostojącej / tablicy przemysłowej",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "enclosure",
+    "is_industrial": false,
+    "synonyms": [
+      "szafa",
+      "wolnostojąca",
+      "tablica",
+      "przemysłowa",
+      "192",
+      "288"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0341",
+    "table_number": "9008",
+    "column_number": "32",
+    "description": "Montaż i podłączenie elementów robocizny / usługi montażowe",
+    "unit": "godz",
+    "labor_norm": 1.0,
+    "knr_category": "labor",
+    "is_industrial": false,
+    "synonyms": [
+      "robocizna",
+      "montaż",
+      "usługa",
+      "praca",
+      "labor",
+      "programowanie",
+      "uruchomienie",
+      "transport",
+      "regulacja",
+      "demontaż"
+    ]
+  }
+]

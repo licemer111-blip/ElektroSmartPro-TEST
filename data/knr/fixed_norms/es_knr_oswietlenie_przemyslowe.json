@@ -1,0 +1,471 @@
+[
+  {
+    "catalog_code": "KNR 5-10 4101",
+    "table_number": "5107",
+    "column_number": "01",
+    "description": "Montaż oprawy przemysłowej High Bay LED (100-200W) na hali / magazynie — zawieszenie",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": true,
+    "synonyms": [
+      "high bay led",
+      "oprawa halowa",
+      "lampa przemysłowa",
+      "highbay 150w",
+      "lampa magazynowa",
+      "oprawa hala",
+      "ufo led",
+      "lampa halowa przemysłowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4102",
+    "table_number": "5107",
+    "column_number": "02",
+    "description": "Montaż oprawy przemysłowej High Bay LED (200-400W) — dźwig, platforma, rusztowanie",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": true,
+    "synonyms": [
+      "high bay 300w",
+      "high bay 400w",
+      "lampa produkcyjna",
+      "oprawa wysoko zawieszona",
+      "wysoka hala oświetlenie",
+      "luminaire industrial"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4103",
+    "table_number": "5107",
+    "column_number": "03",
+    "description": "Montaż naświetlacza LED zewnętrznego (50-200W) na maszcie, elewacji lub parkingu",
+    "unit": "szt",
+    "labor_norm": 0.7,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": false,
+    "synonyms": [
+      "naświetlacz led",
+      "reflektor led",
+      "naświetlacz zewnętrzny",
+      "floodlight led",
+      "naświetlacz parking",
+      "reflektor 100w",
+      "oświetlenie zewnętrzne led"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4104",
+    "table_number": "5107",
+    "column_number": "04",
+    "description": "Montaż oprawy LED liniowej (batten / belka 120cm/150cm) w zakładach i biurach",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": false,
+    "synonyms": [
+      "oprawa liniowa led",
+      "batten led",
+      "belka led",
+      "świetlówka led t8 zastępcza",
+      "oprawa 120cm led",
+      "oprawa 150cm led",
+      "vapor tight led"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4105",
+    "table_number": "5107",
+    "column_number": "05",
+    "description": "Montaż oprawy ledowej szczelnej IP65 (tuba / liniowa) — garażowanie, pralnia, zewnętrze",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": false,
+    "synonyms": [
+      "oprawa ip65",
+      "oprawa szczelna",
+      "lampa garaż",
+      "oprawa piwnica",
+      "vapor tight",
+      "tuba ip65",
+      "oprawa wilgocioodporna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4201",
+    "table_number": "5107",
+    "column_number": "06",
+    "description": "Montaż oprawy ewakuacyjnej / kierunkowej LED z baterią (EXIT, strzałka — 3h backup)",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "knr_category": "oswietlenie_awaryjne",
+    "is_industrial": false,
+    "synonyms": [
+      "oprawa ewakuacyjna",
+      "exit led",
+      "lampa awaryjna",
+      "kierunek ewakuacji",
+      "oświetlenie awaryjne",
+      "exit sign",
+      "piktogram led",
+      "droga ewakuacyjna lampa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4202",
+    "table_number": "5107",
+    "column_number": "07",
+    "description": "Montaż oprawy awaryjnej oświetlenia (AT/SA/SE) z baterią — oświetlenie dróg ewakuacyjnych",
+    "unit": "szt",
+    "labor_norm": 0.55,
+    "knr_category": "oswietlenie_awaryjne",
+    "is_industrial": false,
+    "synonyms": [
+      "oświetlenie awaryjne",
+      "oprawa awaryjna z baterią",
+      "at lampa awaryjna",
+      "sa oświetlenie",
+      "emergency lighting",
+      "lampa na wypadek awarii",
+      "oświetlenie zapasowe"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4203",
+    "table_number": "5107",
+    "column_number": "08",
+    "description": "Montaż centralnej baterii (UPS) dla systemu oświetlenia awaryjnego — szafa centralna",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "knr_category": "oswietlenie_awaryjne",
+    "is_industrial": false,
+    "synonyms": [
+      "centralna bateria oświetlenia awaryjnego",
+      "ups oświetlenie",
+      "centralna bateria cbs",
+      "system awaryjnego oświetlenia",
+      "szafa bateryjna",
+      "CBS system"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4204",
+    "table_number": "5107",
+    "column_number": "09",
+    "description": "Testowanie i odbiór systemu oświetlenia awaryjnego (godzinowy test baterii, protokół)",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "knr_category": "oswietlenie_awaryjne",
+    "is_industrial": false,
+    "synonyms": [
+      "test oświetlenia awaryjnego",
+      "próba baterii",
+      "odbiór oświetlenia ewakuacyjnego",
+      "protokół oświetlenie awaryjne",
+      "en 60598-2-22 test",
+      "3h test bateria"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4301",
+    "table_number": "5107",
+    "column_number": "10",
+    "description": "Montaż słupa oświetleniowego stalowego (wys. 4-6 m) — fundament, uziemienie, oprawowanie",
+    "unit": "szt",
+    "labor_norm": 4.0,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": false,
+    "synonyms": [
+      "słup oświetleniowy",
+      "latarnia uliczna",
+      "maszt oświetleniowy",
+      "słup 6m",
+      "słup parkingowy",
+      "słup stalowy latarnia",
+      "fundament słupa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4302",
+    "table_number": "5107",
+    "column_number": "11",
+    "description": "Montaż oprawy ulicznej LED (30-150W) na słupie lub wysięgniku",
+    "unit": "szt",
+    "labor_norm": 0.6,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": false,
+    "synonyms": [
+      "oprawa uliczna led",
+      "lampa uliczna",
+      "oświetlenie drogi",
+      "latarnia led",
+      "oprawa drogowa",
+      "street light led",
+      "lampa parkingowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4303",
+    "table_number": "5107",
+    "column_number": "12",
+    "description": "Montaż szafki sterowania oświetleniem zewnętrznym (zegar, fotokomórka, zabezpieczenia)",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": false,
+    "synonyms": [
+      "szafka oświetlenia zewnętrznego",
+      "sterownia oświetlenia",
+      "szafka zo",
+      "szafka uliczna",
+      "sterownik oświetlenia zewnętrznego",
+      "szafka latarni"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4401",
+    "table_number": "5107",
+    "column_number": "13",
+    "description": "Montaż sterownika DALI / 0-10V do systemu zarządzania oświetleniem",
+    "unit": "szt",
+    "labor_norm": 0.6,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": false,
+    "synonyms": [
+      "sterownik dali",
+      "dali controller",
+      "0-10v ściemnianie",
+      "sterownik oświetlenia dali",
+      "dimmer dali",
+      "zarządzanie oświetleniem dali",
+      "bus dali"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4402",
+    "table_number": "5107",
+    "column_number": "14",
+    "description": "Montaż czujnika DALI lub KNX (obecności, natężenia światła) — zintegrowany z BMS",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": false,
+    "synonyms": [
+      "czujnik dali",
+      "sensor obecności dali",
+      "czujnik natężenia światła",
+      "sensor bms",
+      "pir dali",
+      "sensor presence"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4403",
+    "table_number": "5107",
+    "column_number": "15",
+    "description": "Programowanie i uruchomienie systemu zarządzania oświetleniem DALI / KNX (godz.)",
+    "unit": "godz",
+    "labor_norm": 1.0,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": false,
+    "synonyms": [
+      "programowanie dali",
+      "uruchomienie knx oświetlenie",
+      "konfiguracja zarządzania oświetleniem",
+      "commissioning bms",
+      "dali programming",
+      "sceny świetlne"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4501",
+    "table_number": "5107",
+    "column_number": "16",
+    "description": "Montaż oprawy LED hermetycznej do chłodni / mroźni IP67 (odporna na wodę i mróz)",
+    "unit": "szt",
+    "labor_norm": 0.7,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": true,
+    "synonyms": [
+      "lampa chłodnia",
+      "oprawa ip67",
+      "oświetlenie mroźnia",
+      "lampa zimna komora",
+      "cold room light",
+      "ip67 led",
+      "food safe led"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4502",
+    "table_number": "5107",
+    "column_number": "17",
+    "description": "Montaż oprawy ATEX (przeciwwybuchowej) w strefie zagrożonej wybuchem (Zone 1/2)",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": true,
+    "synonyms": [
+      "oprawa atex",
+      "lampa przeciwwybuchowa",
+      "ex zone 1",
+      "ex zone 2",
+      "oprawa ex",
+      "strefa wybuchowa oświetlenie",
+      "atex led"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4601",
+    "table_number": "5107",
+    "column_number": "18",
+    "description": "Pomiar i dokumentacja oświetlenia (luksomierz) — raport natężenia zgodny PN-EN 12464",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": false,
+    "synonyms": [
+      "pomiar oświetlenia",
+      "luksomierz",
+      "pomiar lux",
+      "protokół oświetlenia",
+      "pn-en 12464",
+      "raport oświetlenia",
+      "natężenie oświetlenia pomiar"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4701",
+    "table_number": "5107",
+    "column_number": "19",
+    "description": "Montaż oprawy LED do dekoracyjnego podświetlenia elewacji (RGBW, IP65)",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": false,
+    "synonyms": [
+      "podświetlenie elewacji",
+      "oświetlenie architektoniczne",
+      "wall washer",
+      "rgb elewacja",
+      "iluminacja budynku",
+      "led elewacja",
+      "oprawa architektoniczna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4702",
+    "table_number": "5107",
+    "column_number": "20",
+    "description": "Montaż sterownika RGB/RGBW (DMX, SPI, Zigbee) do oświetlenia dekoracyjnego",
+    "unit": "szt",
+    "labor_norm": 0.6,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": false,
+    "synonyms": [
+      "sterownik rgb",
+      "dmx controller",
+      "rgbw sterownik",
+      "zigbee led",
+      "dekoracyjne sterowanie",
+      "spi controller",
+      "pixel led sterownik"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4801",
+    "table_number": "5107",
+    "column_number": "21",
+    "description": "Montaż oprawy LED do oświetlenia gablotek / ekspozytorów sklepowych (track / szynoprzewód)",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": false,
+    "synonyms": [
+      "szynoprzewód",
+      "track lighting",
+      "oświetlenie sklepowe",
+      "listwa track",
+      "spot szynoprzewód",
+      "sklep oświetlenie",
+      "track led"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4802",
+    "table_number": "5107",
+    "column_number": "22",
+    "description": "Montaż i uruchomienie szynoprzewodu elektrycznego 25A (magistralnego) — odcinek 3 m",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": false,
+    "synonyms": [
+      "szynoprzewód elektryczny",
+      "busbar track",
+      "szyna 25a",
+      "listwa zasilająca track",
+      "szynoprzewód sklepowy",
+      "busbar lighting"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4901",
+    "table_number": "5107",
+    "column_number": "23",
+    "description": "Demontaż oprawy świetlówkowej / przemysłowej (do wymiany lub likwidacji)",
+    "unit": "szt",
+    "labor_norm": 0.2,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": false,
+    "synonyms": [
+      "demontaż świetlówki",
+      "usunięcie oprawy przemysłowej",
+      "wybiórka lamp",
+      "demontaż lampy t8",
+      "usunięcie starego oświetlenia",
+      "likwidacja oprawy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 4902",
+    "table_number": "5107",
+    "column_number": "24",
+    "description": "Wymiana źródła światła (LED retrofit, T8 LED) w istniejącej oprawie",
+    "unit": "szt",
+    "labor_norm": 0.12,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": false,
+    "synonyms": [
+      "wymiana żarówki",
+      "retrofit led",
+      "wymiana t8",
+      "modernizacja oświetlenia",
+      "led upgrade",
+      "wymiana świetlówki na led",
+      "led replacement"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10 5001",
+    "table_number": "5107",
+    "column_number": "25",
+    "description": "Montaż oprawy induction (indukcyjnej) lub sodowej HPS w istniejącej instalacji (stara hala)",
+    "unit": "szt",
+    "labor_norm": 0.9,
+    "knr_category": "oswietlenie_przemyslowe",
+    "is_industrial": true,
+    "synonyms": [
+      "oprawa sodowa",
+      "hps lampa",
+      "oprawa metalohalogenowa",
+      "hid lamp",
+      "indukcyjna oprawa",
+      "lampa sodowa",
+      "metal halide"
+    ]
+  }
+]

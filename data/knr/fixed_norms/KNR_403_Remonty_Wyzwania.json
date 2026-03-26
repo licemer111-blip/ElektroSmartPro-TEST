@@ -1,0 +1,255 @@
+[
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "1001",
+    "column_number": "02",
+    "description": "Wykuwanie bruzd dla przewodów w tynku/cegle (ręczne/mechaniczne)",
+    "unit": "m",
+    "labor_norm": 0.35,
+    "section": "10",
+    "material_category": "demolition_labor",
+    "is_industrial": false,
+    "synonyms": [
+      "bruzdowanie tynku",
+      "kucie bruzd",
+      "bruzda pod przewód",
+      "bruzdownica",
+      "szlifierka bruzda",
+      "kanał w tynku",
+      "bruzdowanie ręczne",
+      "przebijanie tynku"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "1105",
+    "column_number": "01",
+    "description": "Demontaż starego osprzętu (gniazda, łączniki) wraz z puszkami",
+    "unit": "szt",
+    "labor_norm": 0.12,
+    "section": "11",
+    "material_category": "demolition_labor",
+    "is_industrial": false,
+    "synonyms": [
+      "demontaż gniazda",
+      "wyjęcie gniazda",
+      "demontaż łącznika",
+      "demontaż osprzętu",
+      "wybiórka kontaktu",
+      "usunięcie gniazda",
+      "stary osprzęt",
+      "demontaż instalacji"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "1201",
+    "column_number": "04",
+    "description": "Zaprawianie bruzd po ułożeniu przewodów (gips/cegiełka)",
+    "unit": "m",
+    "labor_norm": 0.28,
+    "section": "12",
+    "material_category": "plaster_material",
+    "is_industrial": false,
+    "synonyms": [
+      "zaprawianie bruzd",
+      "tynkowanie bruzd",
+      "gipsowanie bruzd",
+      "zaślepienie bruzdy",
+      "uszczelnienie bruzdy",
+      "zaprawianie po kablach",
+      "tynk gips",
+      "odtworzenie tynku"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "1001",
+    "column_number": "03",
+    "description": "Wykuwanie bruzd w betonie (diamentowa bruzdownica) — głębokość do 40mm",
+    "unit": "m",
+    "labor_norm": 0.80,
+    "section": "10",
+    "material_category": "demolition_labor",
+    "is_industrial": false,
+    "synonyms": [
+      "bruzdownica diamentowa",
+      "kucie w betonie",
+      "bruzda beton diament",
+      "diamentowe bruzdowanie",
+      "wet groove cutting",
+      "diamentowa bruzda"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "1105",
+    "column_number": "02",
+    "description": "Demontaż korytka kablowego (plastikowego/metalowego) z uchwytu naściennego",
+    "unit": "m",
+    "labor_norm": 0.20,
+    "section": "11",
+    "material_category": "demolition_labor",
+    "is_industrial": false,
+    "synonyms": [
+      "demontaż korytka",
+      "wybiórka korytka kablowego",
+      "usunięcie listwy",
+      "demontaż kanału kablowego",
+      "cable duct removal",
+      "listwa elektryczna demontaż"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "1105",
+    "column_number": "03",
+    "description": "Wybiórka starego bezpiecznika korkowego (tablo) wraz z gniazdem bezpiecznikowym",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "section": "11",
+    "material_category": "demolition_labor",
+    "is_industrial": false,
+    "synonyms": [
+      "wybiórka korka",
+      "bezpiecznik korkowy demontaż",
+      "stare bezpieczniki",
+      "korek bezpiecznik usunięcie",
+      "fuse base removal",
+      "gniazdo bezpiecznikowe usunięcie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "1002",
+    "column_number": "01",
+    "description": "Ułożenie nowej rurki instalacyjnej PVC 16/20 w istniejącej bruzdzie (pod tynkiem)",
+    "unit": "m",
+    "labor_norm": 0.15,
+    "section": "10",
+    "material_category": "demolition_labor",
+    "is_industrial": false,
+    "synonyms": [
+      "rurka w bruzdzie",
+      "pvc 20 bruzda",
+      "conduit in groove",
+      "rurka pod tynk remont",
+      "nowa rurka bruzda",
+      "pvc conduit existing groove"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "1202",
+    "column_number": "01",
+    "description": "Malowanie ściany po naprawie bruzd i puszek (tynk + farba) — 1 warstwa",
+    "unit": "m2",
+    "labor_norm": 0.5,
+    "section": "12",
+    "material_category": "plaster_material",
+    "is_industrial": false,
+    "synonyms": [
+      "malowanie po naprawie",
+      "farba po bruzdach",
+      "odtworzenie malowania",
+      "paint repair wall",
+      "paint after wiring",
+      "ściana po elektryku malowanie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "1003",
+    "column_number": "01",
+    "description": "Demontaż i utylizacja starego okablowania aluminiowego (ALU) w instalacji remontowanej",
+    "unit": "m",
+    "labor_norm": 0.30,
+    "section": "10",
+    "material_category": "demolition_labor",
+    "is_industrial": false,
+    "synonyms": [
+      "stare okablowanie alu",
+      "aluminium kabel wybiórka",
+      "demontaż kabli alu",
+      "stara instalacja alu",
+      "alu wiring removal",
+      "old aluminum wiring"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "1004",
+    "column_number": "01",
+    "description": "Przeciąganie przewodów YDYp przez istniejące rurki/peszle (remont bez kucia bruzd)",
+    "unit": "m",
+    "labor_norm": 0.12,
+    "section": "10",
+    "material_category": "demolition_labor",
+    "is_industrial": false,
+    "synonyms": [
+      "przeciąganie kabla",
+      "cable pulling conduit",
+      "wciąganie przewodów",
+      "kabel przez rurkę",
+      "pulling through conduit",
+      "wciąganie instalacji"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "1005",
+    "column_number": "01",
+    "description": "Wykonanie mufowania i przejść szczelnych przez stropy (uszczelnienie ognioodporne)",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "section": "10",
+    "material_category": "demolition_labor",
+    "is_industrial": false,
+    "synonyms": [
+      "przejście przez strop",
+      "mufa ognioodporna",
+      "fire stop ceiling",
+      "przepust stropowy",
+      "uszczelnienie strop elektryczne",
+      "ceiling penetration fire"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "1301",
+    "column_number": "01",
+    "description": "Wstępna ocena zakresu remontu instalacji elektrycznej (wizja lokalna, obmiar)",
+    "unit": "godz",
+    "labor_norm": 1.0,
+    "section": "13",
+    "material_category": "serwis",
+    "is_industrial": false,
+    "synonyms": [
+      "wizja lokalna",
+      "obmiar elektryczny",
+      "wycena remontu",
+      "ocena instalacji",
+      "remont wycena",
+      "site survey elektryka"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "1302",
+    "column_number": "01",
+    "description": "Ochrona i zabezpieczenie mebli/podłogi przed kurzem i gruzem podczas robót elektrycznych",
+    "unit": "godz",
+    "labor_norm": 0.5,
+    "section": "13",
+    "material_category": "demolition_labor",
+    "is_industrial": false,
+    "synonyms": [
+      "zabezpieczenie mebli",
+      "folia ochronna remont",
+      "osłona podłogi",
+      "dust protection",
+      "foliowaie mebli elektryka",
+      "ochrona mieszkania remont"
+    ]
+  }
+]

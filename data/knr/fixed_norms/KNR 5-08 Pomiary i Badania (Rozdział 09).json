@@ -1,0 +1,415 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0901",
+    "column_number": "01",
+    "description": "Sprawdzenie instalacji elektrycznej przez oględziny (wizualna inspekcja obwodów, oznaczeń, tras kablowych)",
+    "unit": "kpl",
+    "labor_norm": 1.5,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "ogledziny instalacji",
+      "inspekcja wizualna",
+      "sprawdzenie wizualne instalacji",
+      "przeglad instalacji elektrycznej",
+      "kontrola instalacji"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0902",
+    "column_number": "01",
+    "description": "Próba napięciowa izolacji napięciem 500V DC — 1 obwód jednofazowy",
+    "unit": "ob",
+    "labor_norm": 0.2,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "proba napieciowa izolacji",
+      "hipot 500V",
+      "probowanie izolacji",
+      "ispytanie izolacji",
+      "испытание изоляции"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0902",
+    "column_number": "02",
+    "description": "Próba napięciowa izolacji napięciem 1000V DC — 1 obwód trójfazowy",
+    "unit": "ob",
+    "labor_norm": 0.25,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "proba napieciowa 1kV",
+      "hipot 1000V",
+      "probowanie izolacji 3-faz",
+      "ispytanie 1kV"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0903",
+    "column_number": "01",
+    "description": "Pomiar rezystancji izolacji megaomomierzem — obwód jednofazowy 230V",
+    "unit": "ob",
+    "labor_norm": 0.2,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "pomiar rezystancji izolacji",
+      "megaomierz 230V",
+      "izolacja 230V obwod",
+      "rezystancja izolacji 1-faz",
+      "zamery izolacji",
+      "zamiary elektryczne"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0903",
+    "column_number": "02",
+    "description": "Pomiar rezystancji izolacji megaomomierzem — obwód trójfazowy 400V",
+    "unit": "ob",
+    "labor_norm": 0.25,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "megaomierz 400V",
+      "izolacja 400V obwod",
+      "rezystancja izolacji 3-faz",
+      "MΩ pomiar"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0904",
+    "column_number": "01",
+    "description": "Pomiar impedancji pętli zwarcia Zs — punkt pomiarowy (sieć TN)",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "petla zwarcia",
+      "impedancja petli zwarcia",
+      "pomiar Zs",
+      "pętla zwarcia miernik MPI",
+      "petla zwarcia TN",
+      "pomiar zwarciowy",
+      "zamery petli"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0904",
+    "column_number": "02",
+    "description": "Pomiar impedancji pętli zwarcia Zs — punkt pomiarowy (sieć TT/IT)",
+    "unit": "szt",
+    "labor_norm": 0.2,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "petla zwarcia TT",
+      "impedancja TT IT",
+      "pomiar petli siec izolowana",
+      "Zs TT pomiar"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0905",
+    "column_number": "01",
+    "description": "Pomiar rezystancji uziemienia metodą 3-biegunową (Wenner)",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "rezystancja uziemienia",
+      "pomiar uziemienia 3-biegunowy",
+      "uziom pomiar wenner",
+      "pomiar uziomu"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0905",
+    "column_number": "02",
+    "description": "Pomiar rezystancji uziemienia metodą cęgową (bez rozłączania)",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "pomiar cegami uziemienia",
+      "cegi amperometryczne",
+      "uziom bez rozlaczania",
+      "KMZ pomiar uziomu"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0906",
+    "column_number": "01",
+    "description": "Sprawdzenie ciągłości przewodu ochronnego PE/PEN — 1 punkt",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "ciaglosc przewodu PE",
+      "sprawdzenie PE",
+      "ciaglosc ochronna",
+      "pomiar ciaglosci",
+      "PE pomiar ciaglosci"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0906",
+    "column_number": "02",
+    "description": "Sprawdzenie ciągłości głównej i miejscowych szyn wyrównawczych",
+    "unit": "kpl",
+    "labor_norm": 0.3,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "syna wyrownawcza pomiar",
+      "GES LES pomiar",
+      "szyna glowna wyrownawcza"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0907",
+    "column_number": "01",
+    "description": "Badanie wyłącznika różnicowoprądowego RCD/FI 30 mA — pomiar czasu i prądu wyzwolenia",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "badanie RCD 30mA",
+      "test RCD fi 30",
+      "wylacznik roznicowy pomiar",
+      "fi pomiar czasu",
+      "RCCB test"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0907",
+    "column_number": "02",
+    "description": "Badanie wyłącznika RCD/FI 100/300 mA (selektywny, S-type) — pomiar czasu i prądu",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "RCD 300mA selektywny",
+      "fi 100 300 badanie",
+      "S-type RCD test"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0908",
+    "column_number": "01",
+    "description": "Sprawdzenie biegunowości obwodów elektrycznych (L, N, PE)",
+    "unit": "ob",
+    "labor_norm": 0.1,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "biegunowos obwodow",
+      "sprawdzenie L N PE",
+      "biegunowos",
+      "polaryzacja obwodu"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0909",
+    "column_number": "01",
+    "description": "Sprawdzenie kolejności i symetrii faz (wskaźnik kolejności faz)",
+    "unit": "szt",
+    "labor_norm": 0.1,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "kolejnosc faz",
+      "sekwencja faz",
+      "wskaznik faz",
+      "pomiar kolejnosci faz",
+      "kolejnosc L1 L2 L3"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0910",
+    "column_number": "01",
+    "description": "Pomiar natężenia oświetlenia ogólnego luksomierzem — 1 pomieszczenie",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "natezenie oswietlenia",
+      "luksomierz",
+      "pomiar lux",
+      "oswietlenie pomiar pomieszczenie",
+      "EN 12464 pomiar"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0910",
+    "column_number": "02",
+    "description": "Pomiar natężenia oświetlenia awaryjnego i ewakuacyjnego — 1 pomieszczenie",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "oswietlenie awaryjne pomiar",
+      "oswietlenie ewakuacyjne pomiar",
+      "emergency lighting test",
+      "lux ewakuacja"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0911",
+    "column_number": "01",
+    "description": "Pomiar napięcia dotyku w strefach ochronnych (dotyk pośredni)",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "napiecie dotyku",
+      "touch voltage",
+      "napiecie krokowe",
+      "ochrona przed porazeniem pomiar"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0912",
+    "column_number": "01",
+    "description": "Sprawdzenie nastawień i charakterystyk zabezpieczeń nadprądowych (MCB/MCCB)",
+    "unit": "szt",
+    "labor_norm": 0.2,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "sprawdzenie MCB",
+      "nastawa zabezpieczenia",
+      "charakterystyka wylacznika",
+      "MCCB sprawdzenie nastawy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0913",
+    "column_number": "01",
+    "description": "Sporządzenie protokołu z pomiarów elektrycznych — do 10 obwodów",
+    "unit": "kpl",
+    "labor_norm": 1.0,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "protokol pomiarow elektrycznych",
+      "protokoly pomiarowe",
+      "sporządzenie protokołu",
+      "dokumentacja pomiarowa",
+      "protokol odbioru",
+      "protokoly",
+      "protokol z badan"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0913",
+    "column_number": "02",
+    "description": "Sporządzenie protokołu z pomiarów elektrycznych — 11 do 30 obwodów",
+    "unit": "kpl",
+    "labor_norm": 1.5,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "protokol pomiarow do 30 obwodow",
+      "protokol sredni",
+      "protokoly elektryczne"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0913",
+    "column_number": "03",
+    "description": "Sporządzenie protokołu z pomiarów elektrycznych — powyżej 30 obwodów",
+    "unit": "kpl",
+    "labor_norm": 2.5,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "protokol pomiarow duzy obiekt",
+      "protokol budynku",
+      "protokoly wiele obwodow"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0914",
+    "column_number": "01",
+    "description": "Kompleksowe badania odbiorcze instalacji — lokal mieszkalny/kawalerka (do 10 obwodów)",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "badania odbiorcze mieszkanie",
+      "odbior instalacji lokal",
+      "kompleksowe pomiary mieszkanie",
+      "ispytania instalacji mieszkanie",
+      "испытания установки",
+      "odbiór techniczny lokal"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0914",
+    "column_number": "02",
+    "description": "Kompleksowe badania odbiorcze instalacji — biuro/sklep/lokal usługowy (do 20 obwodów)",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "badania odbiorcze biuro",
+      "odbior instalacji biuro",
+      "kompleksowe pomiary lokal uslugowy",
+      "ispytania instalacji biuro"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0914",
+    "column_number": "03",
+    "description": "Kompleksowe badania odbiorcze instalacji — budynek wielorodzinny (powyżej 20 obwodów)",
+    "unit": "kpl",
+    "labor_norm": 16.0,
+    "knr_category": "Pomiary i Badania",
+    "is_industrial": false,
+    "synonyms": [
+      "badania odbiorcze budynek",
+      "odbior instalacji budynek",
+      "kompleksowe pomiary budynek",
+      "PN-IEC 60364 odbiorcze",
+      "zamery komplet budynku"
+    ]
+  }
+]

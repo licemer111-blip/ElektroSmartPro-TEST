@@ -1,0 +1,326 @@
+[
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0601",
+    "column_number": "01",
+    "description": "Wykonanie przepustu ognioodpornego kabla (masy uszczelniające) przez ścianę 1h (EI60)",
+    "unit": "szt",
+    "labor_norm": 0.50,
+    "is_industrial": false,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "przepust ognioodporny",
+      "uszczelnienie kabla pożarowe",
+      "firestopping cable",
+      "ei60 przepust",
+      "masa ogniochronna",
+      "uszczelnienie ogniowe"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0601",
+    "column_number": "02",
+    "description": "Wykonanie przepustu ognioodpornego kabla przez strop beton 2h (EI120)",
+    "unit": "szt",
+    "labor_norm": 0.80,
+    "is_industrial": false,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "przepust strop ogniowy",
+      "ei120 przepust",
+      "uszczelnienie strop kabel",
+      "firestop ceiling",
+      "masa ognioodporna strop",
+      "przepust 2h"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0601",
+    "column_number": "03",
+    "description": "Wykonanie przepustu ognioodpornego dla wiązki kabli (>5 kabli) przez ścianę/strop",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "przepust wiązki kabli",
+      "uszczelnienie wiązki",
+      "multi-cable firestopping",
+      "przepust grupowy",
+      "masa ogniochronna wiązka",
+      "sealing cable bundle"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0602",
+    "column_number": "01",
+    "description": "Montaż modułu uszczelniającego (kołnierza) ognioodpornego dla rury PVC/metalowej",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "kołnierz ogniochronny",
+      "firestop collar",
+      "kołnierz rury",
+      "intumescent collar",
+      "uszczelnienie rury ogniowe",
+      "firestop sleeve"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0602",
+    "column_number": "02",
+    "description": "Montaż systemu modułowego przepustu kablowego (np. Roxtec, Hauff) w ścianie",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "is_industrial": false,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "roxtec",
+      "hauff przepust",
+      "modułowy przepust",
+      "multi-cable entry",
+      "frame przepust kablowy",
+      "przepust systemu"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0602",
+    "column_number": "03",
+    "description": "Montaż systemu modułowego przepustu kablowego (np. Roxtec) rozmiaru dużego (>10 kabli)",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "is_industrial": true,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "roxtec duży",
+      "przepust 10+ kabli",
+      "duży modułowy przepust",
+      "hauff duży",
+      "multi cable big",
+      "przepust wiązki duży"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0603",
+    "column_number": "01",
+    "description": "Montaż dławicy kablowej uszczelniającej IP68 (dla kabla w mokrym środowisku)",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "is_industrial": false,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "dławica ip68",
+      "uszczelka kabla ip68",
+      "cable gland ip68",
+      "dławik wodoszczelny",
+      "dławnica ip68",
+      "waterproof cable gland"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0603",
+    "column_number": "02",
+    "description": "Montaż dławicy kablowej do kabla opancerzonego (SWA/AWA) z uszczelką i nakrętką",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "is_industrial": true,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "dławica swa",
+      "dławica opancerzony",
+      "armoured cable gland",
+      "dławica awa",
+      "cable gland swa",
+      "dławnica kabel zbrojony"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0603",
+    "column_number": "03",
+    "description": "Montaż dławicy kablowej ATEX (EX) w strefie zagrożonej wybuchem",
+    "unit": "szt",
+    "labor_norm": 0.40,
+    "is_industrial": true,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "dławica atex",
+      "dławnica ex",
+      "ex cable gland",
+      "dławica strefa ex",
+      "atex gland",
+      "cable gland zone 1"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0604",
+    "column_number": "01",
+    "description": "Wypełnienie ubytku / otworu w ścianie ogniochronną masą pęczniejącą (kit/pianka EI)",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "is_industrial": false,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "masa pęczniejąca",
+      "pianka ognioodporna",
+      "uszczelnienie masa",
+      "intumescent sealant",
+      "firestop sealant",
+      "kit ogniochronny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0604",
+    "column_number": "02",
+    "description": "Montaż przepustu kablowego przez fundament / ścianę zewnętrzną (uszczelnienie wodoszczelne + ogniowe)",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "przepust fundament",
+      "przepust ściana zewnętrzna",
+      "waterproof firestop",
+      "przepust wodoszczelny",
+      "uszczelnienie fundamentu",
+      "cable penetration foundation"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0605",
+    "column_number": "01",
+    "description": "Montaż przepustu dla kabla ognioodpornego w kasecie stalowej (EI90/EI120)",
+    "unit": "szt",
+    "labor_norm": 0.60,
+    "is_industrial": false,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "kaseta przepustowa",
+      "ei90 kaseta",
+      "steel box firestop",
+      "przepust kaseta stalowa",
+      "kaseta ogniochronna",
+      "fire rated cable box"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0606",
+    "column_number": "01",
+    "description": "Inspekcja i dokumentacja przepustów ogniowych (protokół REI zgodnie z normami)",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "is_industrial": false,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "protokół przepustów",
+      "dokumentacja przepustu",
+      "inspekcja ogniowa",
+      "atest przepustu",
+      "certyfikat firestop",
+      "odbiór przepustów"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0607",
+    "column_number": "01",
+    "description": "Montaż i uszczelnienie przepustu dla rury cięśnieniowej (np. sprinkler / CO2) przez ścianę",
+    "unit": "szt",
+    "labor_norm": 0.80,
+    "is_industrial": false,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "przepust rury sprinkler",
+      "uszczelnienie rury co2",
+      "firestop pipe",
+      "pipe penetration fire",
+      "przepust rury gaśniczej",
+      "pipe firestopping"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0607",
+    "column_number": "02",
+    "description": "Montaż przepustu kablowego przez szyb windowy / kana wentylacyjny (EI60)",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "is_industrial": false,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "przepust szyb windowy",
+      "przepust kanał wentylacyjny",
+      "elevator shaft firestop",
+      "przepust szybu",
+      "firestop shaft",
+      "ei60 szyb"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0608",
+    "column_number": "01",
+    "description": "Montaż opaski ogniochronnej (intumescentnej) na rurze PVC w ścianie / stropie",
+    "unit": "szt",
+    "labor_norm": 0.20,
+    "is_industrial": false,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "opaska ogniochronna",
+      "intumescent wrap",
+      "opaska pęczniejąca",
+      "fire collar wrap",
+      "uszczelnienie rury pcv",
+      "wrap opaska pcv"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0609",
+    "column_number": "01",
+    "description": "Montaż uszczelnienia przeciwwilgociowego kabla (dla kabla poniżej poziomu terenu)",
+    "unit": "szt",
+    "labor_norm": 0.40,
+    "is_industrial": false,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "uszczelnienie wilgoć",
+      "przepust podpoziomowy",
+      "waterproof cable entry",
+      "uszczelnienie kabla zewnętrznego",
+      "cable waterproofing",
+      "underground cable sealing"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0609",
+    "column_number": "02",
+    "description": "Wymiana uszkodzonego / degradowanego uszczelnienia ogniodpornego (remont)",
+    "unit": "szt",
+    "labor_norm": 0.60,
+    "is_industrial": false,
+    "knr_category": "przepusty_uszczelnienia",
+    "synonyms": [
+      "wymiana uszczelnienia",
+      "naprawa przepustu",
+      "remont uszczelnienie",
+      "renowacja firestop",
+      "naprawa ogniodporna",
+      "firestop repair"
+    ]
+  }
+]

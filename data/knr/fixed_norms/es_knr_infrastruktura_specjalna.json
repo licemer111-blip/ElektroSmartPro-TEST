@@ -1,0 +1,138 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9002",
+    "column_number": "01",
+    "description": "Montaż słupa oświetleniowego (aluminiowy/stalowy 6-10m) na gotowym fundamencie",
+    "unit": "szt",
+    "labor_norm": 3.5,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "słup oświetleniowy",
+      "latarnia drogowa",
+      "słup 6m",
+      "słup 10m",
+      "stalowy słup",
+      "oświetlenie uliczne",
+      "lampa uliczna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9002",
+    "column_number": "02",
+    "description": "Montaż oprawy drogowej LED na wysięgniku słupa (praca na podnośniku)",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "oprawa drogowa",
+      "lampa led uliczna",
+      "wysięgnik słupa",
+      "podnośnik koszowy",
+      "oprawa parkingowa",
+      "oprawa strada",
+      "led ulica"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9002",
+    "column_number": "03",
+    "description": "Montaż i podłączenie tymczasowej Rozdzielnicy Budowlanej (RB / eRBetka)",
+    "unit": "kpl",
+    "labor_norm": 2.5,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "rozdzielnica budowlana",
+      "rb",
+      "erbetka",
+      "budowlana",
+      "szafa budowlana",
+      "tymczasowe zasilanie",
+      "zasilanie placu budowy",
+      "bęben kablowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9002",
+    "column_number": "04",
+    "description": "Rozciąganie i podwieszanie linii napowietrznej izolowanej (np. AsXSn 4x16 do 4x35)",
+    "unit": "m",
+    "labor_norm": 8.0,
+    "is_industrial": false,
+    "knr_category": "instalacje_zewnetrzne",
+    "synonyms": [
+      "linia napowietrzna",
+      "asxsn",
+      "kabel napowietrzny",
+      "linia niskiego napięcia",
+      "linia nn",
+      "zasilanie napowietrzne",
+      "przewiód asxsn"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9002",
+    "column_number": "05",
+    "description": "Montaż oprawy oświetleniowej / osprzatu w strefie zagrożonej wybuchem (EX)",
+    "unit": "szt",
+    "labor_norm": 1.8,
+    "is_industrial": false,
+    "knr_category": "instalacje_specjalne",
+    "synonyms": [
+      "strefa ex",
+      "atex",
+      "przeciwwybuchowy",
+      "wykonanie ex",
+      "strefa zagrożona",
+      "oprawa ex",
+      "osprzat ex",
+      "zone 1",
+      "zone 2"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9002",
+    "column_number": "06",
+    "description": "Ułożenie kabla grzejnego (samoregulującego) na rurociągu (ochrona przed zamarzaniem)",
+    "unit": "m",
+    "labor_norm": 1.2,
+    "is_industrial": false,
+    "knr_category": "instalacje_specjalne",
+    "synonyms": [
+      "kabel grzejny",
+      "trace heating",
+      "samoregulujący kabel",
+      "ochrona przed zamarzaniem",
+      "grzanie rur",
+      "heat trace",
+      "kabel ogrzewający"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9002",
+    "column_number": "07",
+    "description": "Ułożenie systemu przeciwoblodzeniowego w rynnach i rurach spustowych",
+    "unit": "m",
+    "labor_norm": 2.5,
+    "is_industrial": false,
+    "knr_category": "instalacje_specjalne",
+    "synonyms": [
+      "przeciwoblodzenie",
+      "kabel w rynnie",
+      "deicing",
+      "ochrona rynnna",
+      "kabel rynna",
+      "system grzejny rynna",
+      "rura spustowa grzana"
+    ]
+  }
+]

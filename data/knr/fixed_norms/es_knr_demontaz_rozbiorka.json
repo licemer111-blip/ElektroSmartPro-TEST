@@ -1,0 +1,541 @@
+[
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0201",
+    "column_number": "01",
+    "description": "Demontaż oprawy oświetleniowej natynkowej (plafon, panel LED, tuba) z sufitu",
+    "unit": "szt",
+    "labor_norm": 0.08,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż oprawy",
+      "wybiórka lampy",
+      "demontaż plafonu",
+      "usunięcie oprawy",
+      "demontaż lampy",
+      "zdemontowanie oprawy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0201",
+    "column_number": "02",
+    "description": "Demontaż oprawy oświetleniowej wpuszczanej w sufit (downlight, oczko halogenowe)",
+    "unit": "szt",
+    "labor_norm": 0.06,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż downlight",
+      "wybiórka oczka",
+      "demontaż halogen",
+      "usunięcie wpuszczanej",
+      "demontaż gu10",
+      "wybiórka spot"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0201",
+    "column_number": "03",
+    "description": "Demontaż oprawy świetlówkowej przemysłowej (np. 2x36W / 2x58W) rastrowej lub hermetycznej",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż świetlówki",
+      "wybiórka oprawy rastrowej",
+      "demontaż t8",
+      "wybiórka świetlówki 36w",
+      "demontaż oprawa fluorescencyjna",
+      "usunięcie świetlówki 58w"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0202",
+    "column_number": "01",
+    "description": "Demontaż gniazda wtykowego (pojedynczego lub podwójnego) podtynkowego",
+    "unit": "szt",
+    "labor_norm": 0.05,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż gniazda",
+      "wybiórka gniazdka",
+      "usunięcie kontaktu",
+      "demontaż kontaktu",
+      "wybiórka gniazda",
+      "demontaż gniazdka elektrycznego"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0202",
+    "column_number": "02",
+    "description": "Demontaż wyłącznika (łącznika) jednopolowego / schodowego podtynkowego",
+    "unit": "szt",
+    "labor_norm": 0.04,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż wyłącznika",
+      "wybiórka włącznika",
+      "usunięcie łącznika",
+      "demontaż przełącznika",
+      "wybiórka kontaktu ściennego",
+      "demontaż wtrysku"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0202",
+    "column_number": "03",
+    "description": "Demontaż gniazda przemysłowego (CEE 16A / 32A) natynkowego lub wpuszczanego",
+    "unit": "szt",
+    "labor_norm": 0.20,
+    "is_industrial": true,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż gniazda cee",
+      "wybiórka gniazda przemysłowego",
+      "demontaż 16a cee",
+      "wybiórka gniazdo 3f",
+      "usunięcie gniazdo siłowe",
+      "demontaż gniazda 32a"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0203",
+    "column_number": "01",
+    "description": "Demontaż rozdzielnicy mieszkaniowej (do 24 modułów DIN) z odłączeniem WLZ",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż rozdzielnicy",
+      "wybiórka tablicy elektrycznej",
+      "demontaż tablicy 24mod",
+      "usunięcie rozdzielnicy",
+      "wybiórka skrzynki elektrycznej",
+      "demontaż tablicy głównej"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0203",
+    "column_number": "02",
+    "description": "Demontaż rozdzielnicy przemysłowej / wielosekcyjnej (>36 modułów) z odłączeniem",
+    "unit": "szt",
+    "labor_norm": 4.0,
+    "is_industrial": true,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż rozdzielnicy przemysłowej",
+      "wybiórka tablicy głównej",
+      "demontaż NN",
+      "demontaż rozdzielni",
+      "wybiórka szafy sterowniczej",
+      "demontaż szafy elektrycznej"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0204",
+    "column_number": "01",
+    "description": "Wybiórka (demontaż) przewodów instalacyjnych z rur lub spod tynku (na m trasy)",
+    "unit": "m",
+    "labor_norm": 0.06,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż przewodów",
+      "wybiórka okablowania",
+      "usunięcie przewodów",
+      "demontaż kabla",
+      "wykucie przewodów",
+      "wybiórka instalacji elektrycznej"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0204",
+    "column_number": "02",
+    "description": "Demontaż przewodów aluminiowych starego typu (Ala / DYp) z tynku",
+    "unit": "m",
+    "labor_norm": 0.12,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż aluminium",
+      "wybiórka ala",
+      "usunięcie dyp",
+      "stara instalacja aluminium",
+      "demontaż aluminiowych",
+      "wybiórka starych przewodów",
+      "aluminium instalacja wybiórka"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0204",
+    "column_number": "03",
+    "description": "Demontaż kabla energetycznego (YKY / YAKY) ze ścian lub koryt kablowych",
+    "unit": "m",
+    "labor_norm": 0.08,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż kabla yky",
+      "wybiórka kabla",
+      "usunięcie kabla energetycznego",
+      "demontaż yaky",
+      "wybiórka kabla z koryta",
+      "demontaż liny kablowej"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0205",
+    "column_number": "01",
+    "description": "Demontaż rury instalacyjnej PVC (peszel / rura sztywna) natynkowej",
+    "unit": "m",
+    "labor_norm": 0.05,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż rury pcv",
+      "wybiórka peszel",
+      "usunięcie rury",
+      "demontaż rury instalacyjnej",
+      "wybiórka karbka",
+      "demontaż kanału pcv"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0205",
+    "column_number": "02",
+    "description": "Demontaż koryta kablowego (siatka, pełne, z pokrywą) natynkowego",
+    "unit": "m",
+    "labor_norm": 0.10,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż koryta",
+      "wybiórka drabinki",
+      "usunięcie koryta kablowego",
+      "demontaż trasy kablowej",
+      "wybiórka korytka",
+      "demontaż koryto"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0206",
+    "column_number": "01",
+    "description": "Wyburzenie / wykucie otworu na puszkę elektryczną p/t (bez uszkodzenia rur)",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "wykucie otworu puszki",
+      "wyciecie puszki",
+      "otworek pod puszkę",
+      "wykucie beton puszka",
+      "otwór na puszke elektryczną",
+      "frezowanie puszki"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0206",
+    "column_number": "02",
+    "description": "Demontaż / wyjęcie starej puszki elektrycznej p/t ze ściany i uszczelnienie otworu",
+    "unit": "szt",
+    "labor_norm": 0.10,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "wyciągnięcie puszki",
+      "demontaż puszki",
+      "wybiórka puszki",
+      "usunięcie puszki",
+      "demontaż box instalacyjny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0207",
+    "column_number": "01",
+    "description": "Odcięcie i zabezpieczenie (izolacja, zaślepki) kabla / obwodu przy selektywnym demontażu",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "odcięcie kabla",
+      "zaślepienie kabla",
+      "bezpieczne odłączenie",
+      "izolacja końca kabla",
+      "zabezpieczenie kabla",
+      "odłączenie obwodu"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0207",
+    "column_number": "02",
+    "description": "Tymczasowe odłączenie i ponowne podłączenie urządzenia (np. przy remoncie)",
+    "unit": "szt",
+    "labor_norm": 0.40,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "tymczasowe odłączenie",
+      "odłączenie i podłączenie",
+      "demontaż i remontaż",
+      "bezpieczne odłączenie urządzenia",
+      "ponowne podłączenie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0208",
+    "column_number": "01",
+    "description": "Demontaż oprawy ewakuacyjnej / awaryjnej (EXIT, awaryjne LED)",
+    "unit": "szt",
+    "labor_norm": 0.12,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż exit",
+      "wybiórka oprawy awaryjnej",
+      "demontaż awaryjna",
+      "usunięcie exit led",
+      "demontaż evakuacyjna",
+      "wybiórka podświetlanego exit"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0208",
+    "column_number": "02",
+    "description": "Demontaż słupa oświetleniowego (ogrodowego, parkowego) z fundamentu",
+    "unit": "szt",
+    "labor_norm": 1.50,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż słupa",
+      "wybiórka latarni",
+      "demontaż słupka ogrodowego",
+      "usunięcie lampy parkowej",
+      "demontaż słupa stalowego",
+      "wybiórka słupa oświetleniowego"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0209",
+    "column_number": "01",
+    "description": "Demontaż wyłącznika silnikowego / soft-startera / falownika z szafy sterowniczej",
+    "unit": "szt",
+    "labor_norm": 0.50,
+    "is_industrial": true,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż falownika",
+      "wybiórka soft-startera",
+      "demontaż wyłącznik silnikowy",
+      "usunięcie falownik",
+      "demontaż vfd",
+      "wybiórka przemiennik"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0209",
+    "column_number": "02",
+    "description": "Demontaż starego agregatu prądotwórczego (do 50kVA) z fundamentu",
+    "unit": "kpl",
+    "labor_norm": 8.0,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż agregatu",
+      "wybiórka generatora",
+      "usunięcie agregatu",
+      "demontaż prądnicy",
+      "wybiórka generator"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0210",
+    "column_number": "01",
+    "description": "Rozbiórka starego osprzętu (ramek, puszek, wyłączników) całego mieszkania - ryczałt",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "rozbiórka instalacji",
+      "wybiórka całości",
+      "demontaż mieszkanie",
+      "generalny demontaż",
+      "pełna wybiórka elektryczna",
+      "wyburzenie instalacji"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0210",
+    "column_number": "02",
+    "description": "Usunięcie starej listwy naściennej / kanału kablowego i uzupełnienie ubytków w ścianie",
+    "unit": "m",
+    "labor_norm": 0.12,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż listwy",
+      "wybiórka karbka",
+      "usunięcie kanału",
+      "demontaż kabelkanalu",
+      "wybiórka listwa naścienna",
+      "demontaż kanał pcv"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0211",
+    "column_number": "01",
+    "description": "Demontaż starego licznika energii (ze złącza pomiarowego) przez uprawnionego elektryka",
+    "unit": "szt",
+    "labor_norm": 0.50,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż licznika",
+      "wymiana licznika",
+      "wybiórka licznika energii",
+      "wymontowanie licznika",
+      "demontaż miernik energii",
+      "licznik stary wybiórka"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0211",
+    "column_number": "02",
+    "description": "Demontaż instalacji odgromowej (zwodów, przewodów odprowadzających) z dachu",
+    "unit": "m",
+    "labor_norm": 0.18,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż odgromówki",
+      "wybiórka odgromowa",
+      "usunięcie piorunochronu",
+      "demontaż lps",
+      "wybiórka zwodów",
+      "demontaż instalacji odgromowej"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0212",
+    "column_number": "01",
+    "description": "Lokalizacja uszkodzenia kabla / zwarcia w instalacji (diagnostyka z reflektometrem lub testerem)",
+    "unit": "godz",
+    "labor_norm": 1.0,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "szukanie awarii",
+      "lokalizacja usterki",
+      "diagnostyka elektryczna",
+      "przerwa w kablu",
+      "szukanie zwarcia",
+      "awaria instalacji",
+      "reflektometr usterka"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0212",
+    "column_number": "02",
+    "description": "Przegląd i serwis rozdzielnicy elektrycznej (czyszczenie, dociągnięcie zacisków, test)",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "serwis rozdzielnicy",
+      "przegląd tablicy",
+      "dociągnięcie zacisków",
+      "czyszczenie rozdzielnicy",
+      "inspekcja tablicy elektrycznej",
+      "przegląd elektryczny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0213",
+    "column_number": "01",
+    "description": "Demontaż klimatyzatora split (jednostka zewnętrzna + wewnętrzna) z odłączeniem elektrycznym",
+    "unit": "kpl",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż klimatyzatora",
+      "wybiórka klimy",
+      "demontaż split",
+      "usunięcie klimatyzatora",
+      "wybiórka ac",
+      "demontaż jednostka zewnętrzna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0213",
+    "column_number": "02",
+    "description": "Demontaż paneli fotowoltaicznych (modułów PV) z konstrukcji dachowej",
+    "unit": "szt",
+    "labor_norm": 0.30,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż paneli pv",
+      "wybiórka fotowoltaiki",
+      "demontaż modułu solarnego",
+      "usunięcie paneli",
+      "wybiórka pv",
+      "demontaż fotowoltaika"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "0214",
+    "column_number": "01",
+    "description": "Transport odpadów po wybiórce i utylizacja starych materiałów elektrycznych",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "utylizacja",
+      "wywóz odpadów",
+      "transport odpadów",
+      "złom elektryczny",
+      "wywóz gruzu",
+      "demontaż i wywóz"
+    ]
+  }
+]

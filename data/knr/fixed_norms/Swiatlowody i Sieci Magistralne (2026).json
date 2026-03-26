@@ -1,0 +1,268 @@
+[
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9036",
+    "column_number": "01",
+    "description": "Układanie mikrorurek i kabli światłowodowych в kanalizacji lub wewnątrz budynków",
+    "unit": "mb",
+    "labor_norm": 0.25,
+    "knr_category": "Teletechnika",
+    "is_industrial": false,
+    "synonyms": [
+      "światłowód",
+      "mikrorurka",
+      "kabel fo",
+      "fiber optic",
+      "kabel optyczny",
+      "kanalizacja kablowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9036",
+    "column_number": "02",
+    "description": "Spawanie mechaniczne lub termiczne włókien światłowodowych (1 spaw)",
+    "unit": "szt",
+    "labor_norm": 0.6,
+    "knr_category": "Teletechnika",
+    "is_industrial": false,
+    "synonyms": [
+      "spaw światłowodu",
+      "fusion splice",
+      "mechaniczny spaw",
+      "spawarka fo",
+      "spaw włókna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9036",
+    "column_number": "03",
+    "description": "Montaż i podłączenie puszki/przełącznicy światłowodowej (mufy) na elewacji lub wewnątrz",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "knr_category": "Teletechnika",
+    "is_industrial": false,
+    "synonyms": [
+      "przełącznica fo",
+      "mufa światłowodowa",
+      "odf",
+      "puszka fo",
+      "box światłowodowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9036",
+    "column_number": "04",
+    "description": "Pomiary reflektometryczne (OTDR) linii światłowodowej wraz z protokołem",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "knr_category": "Teletechnika",
+    "is_industrial": false,
+    "synonyms": [
+      "otdr",
+      "reflektometr fo",
+      "pomiar światłowodu",
+      "certyfikacja fo",
+      "test włókna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9036",
+    "column_number": "05",
+    "description": "Instalacja gniazda abonenckiego FTTH i konfiguracja routera ONT",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Teletechnika",
+    "is_industrial": false,
+    "synonyms": [
+      "ftth",
+      "gniazdo światłowodowe",
+      "ont router",
+      "fiber home",
+      "internet światłowodowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9036",
+    "column_number": "06",
+    "description": "Układanie kanalizacji kablowej (mikrorurki HDPE) pod ziemią dla sieci światłowodowej",
+    "unit": "mb",
+    "labor_norm": 0.4,
+    "knr_category": "Teletechnika",
+    "is_industrial": false,
+    "synonyms": [
+      "kanalizacja kablowa fo",
+      "rura hdpe ziemia",
+      "microduct underground",
+      "kanalizacja światłowodowa",
+      "rura fo podziemna",
+      "hdpe microduct"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9036",
+    "column_number": "07",
+    "description": "Instalacja napowietrznego kabla światłowodowego (ADSS/spadowego) między słupami",
+    "unit": "mb",
+    "labor_norm": 0.3,
+    "knr_category": "Teletechnika",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel napowietrzny fo",
+      "adss kabel",
+      "aerial fiber",
+      "kabel zawieszany fo",
+      "napowietrzny światłowód",
+      "drop cable fo"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9036",
+    "column_number": "08",
+    "description": "Montaż i zarobienie pigtaila (złącze SC/APC lub LC/APC) w przełącznicy lub mufie",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "knr_category": "Teletechnika",
+    "is_industrial": false,
+    "synonyms": [
+      "pigtail fo",
+      "złącze sc/apc",
+      "lc/apc pigtail",
+      "pigtail jednomodowy",
+      "fiber pigtail",
+      "złącze apc sc"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9036",
+    "column_number": "09",
+    "description": "Wdmuchiwanie kabla światłowodowego w mikrorurki (air blowing) — odcinek do 500m",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "knr_category": "Teletechnika",
+    "is_industrial": false,
+    "synonyms": [
+      "wdmuchiwanie kabla",
+      "air blowing fo",
+      "cable blowing",
+      "wciąganie kabla pneumatyczne",
+      "fiber blowing",
+      "instalacja kabla pneumatyczna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9036",
+    "column_number": "10",
+    "description": "Montaż kasety spawów (Splice Cassette) w przełącznicy ODF — do 12 spawów",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "knr_category": "Teletechnika",
+    "is_industrial": false,
+    "synonyms": [
+      "kaseta spawów",
+      "splice cassette",
+      "taca spawów",
+      "odf kaseta",
+      "fiber splice tray",
+      "kaseta 12 spawów"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9036",
+    "column_number": "11",
+    "description": "Montaż i konfiguracja switcha SFP (gigabit/10G) dla sieci szkieletowej światłowodowej",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "knr_category": "Teletechnika",
+    "is_industrial": false,
+    "synonyms": [
+      "switch sfp",
+      "sfp switch",
+      "switch światłowodowy",
+      "switch 10g fo",
+      "backbone switch",
+      "fiber core switch"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9036",
+    "column_number": "12",
+    "description": "Montaż wzmacniacza optycznego (EDFA/EYDFA) w torze transmisyjnym",
+    "unit": "szt",
+    "labor_norm": 3.5,
+    "knr_category": "Teletechnika",
+    "is_industrial": true,
+    "synonyms": [
+      "wzmacniacz optyczny",
+      "edfa",
+      "amplifier fo",
+      "optical amplifier",
+      "wzmacniacz światłowodowy",
+      "eydfa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9036",
+    "column_number": "13",
+    "description": "Montaż i oznakowanie patchcordów optycznych (SC-SC, LC-LC) w szafie ODF",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "knr_category": "Teletechnika",
+    "is_industrial": false,
+    "synonyms": [
+      "patchcord fo",
+      "kabel krosowy fo",
+      "sc-sc patchcord",
+      "lc-lc fiber",
+      "optical patch cord",
+      "jumper fo"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9036",
+    "column_number": "14",
+    "description": "Inwentaryzacja i dokumentacja powykonawcza sieci światłowodowej z mapą tras",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "knr_category": "Teletechnika",
+    "is_industrial": false,
+    "synonyms": [
+      "dokumentacja sieci fo",
+      "mapa tras fo",
+      "inwentaryzacja światłowód",
+      "as-built fo",
+      "dokumentacja powykonawcza fo",
+      "fiber network map"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9036",
+    "column_number": "15",
+    "description": "Szkolenie techniczne z obsługi systemu światłowodowego i narzędzi pomiarowych",
+    "unit": "godz",
+    "labor_norm": 1.0,
+    "knr_category": "Teletechnika",
+    "is_industrial": false,
+    "synonyms": [
+      "szkolenie fo",
+      "training fiber",
+      "obsługa otdr",
+      "szkolenie spawanie",
+      "fiber training",
+      "kurs światłowodowy"
+    ]
+  }
+]

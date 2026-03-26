@@ -1,0 +1,326 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1001",
+    "column_number": "01",
+    "description": "Elektryczne podłączenie pompy ciepła powietrze-woda (monoblok) 6-12kW do rozdzielnicy",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "pompa ciepła powietrze woda",
+      "monoblok pompa ciepła",
+      "heat pump air water",
+      "pompa ciepła 8kw",
+      "pompa ciepła 12kw",
+      "elektryczne pc"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1001",
+    "column_number": "02",
+    "description": "Elektryczne podłączenie pompy ciepła powietrze-woda (split) 14-20kW 3-fazowej",
+    "unit": "kpl",
+    "labor_norm": 5.0,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "pompa ciepła 14kw",
+      "pompa ciepła 20kw split",
+      "heat pump split 20kw",
+      "pc split 3f",
+      "pompa ciepła 3f",
+      "podłączenie pc 20kw"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1001",
+    "column_number": "03",
+    "description": "Elektryczne podłączenie gruntowej pompy ciepła (solanka-woda) z pompą glikolu 3-fazowej",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "gruntowa pompa ciepła",
+      "solanka woda",
+      "ground source heat pump",
+      "gshp elektryczne",
+      "pompa glikolu elektryczna",
+      "geotermalna pc"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1002",
+    "column_number": "01",
+    "description": "Montaż i podłączenie sterownika pompy ciepła z czujnikami temperatury (zasilanie 230V)",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "sterownik pompy ciepła",
+      "kontroler pc",
+      "heat pump controller",
+      "sterownik nibe",
+      "sterownik daikin altherma",
+      "panel pc sterowanie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1002",
+    "column_number": "02",
+    "description": "Montaż i podłączenie zabezpieczenia elektrycznego dla pompy ciepła (RCD Typ A/B + MCB)",
+    "unit": "kpl",
+    "labor_norm": 1.0,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "zabezpieczenie pompy ciepła",
+      "bezpiecznik pc",
+      "rcd pompa ciepła",
+      "mcb pompa ciepła",
+      "ochrona elektryczna pc",
+      "obwód pc"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1003",
+    "column_number": "01",
+    "description": "Montaż falownika (inwertera) fotowoltaicznego 1-fazowego (string, do 5kW) na ścianie",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "falownik 1f 3kw",
+      "inwerter 1f fotowoltaika",
+      "falownik 5kw 1f",
+      "solar inverter 1f",
+      "growatt falownik",
+      "solaredge falownik"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1003",
+    "column_number": "02",
+    "description": "Montaż falownika fotowoltaicznego 3-fazowego (string, 5-15kW) na ścianie z kablowaniem DC",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "falownik 3f 10kw",
+      "inwerter 3f 15kw",
+      "falownik 3f fotowoltaika",
+      "solar inverter 3f 10kw",
+      "fronius symo",
+      "sma tripower"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1003",
+    "column_number": "03",
+    "description": "Montaż hybrydowego falownika fotowoltaicznego (z interfejsem akumulatorów)",
+    "unit": "szt",
+    "labor_norm": 4.0,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "falownik hybrydowy",
+      "hybrid inverter",
+      "falownik z akumulatorem",
+      "all-in-one falownik",
+      "goodwe hybrid",
+      "victron hybrid"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1004",
+    "column_number": "01",
+    "description": "Montaż modułu fotowoltaicznego na dachu płaskim z konstrukcją balastową (bez wiercenia)",
+    "unit": "szt",
+    "labor_norm": 0.80,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "panel pv dach płaski",
+      "moduł fotowoltaiczny dach płaski",
+      "panel solarny flat roof",
+      "pv konstrukcja balastowa",
+      "moduł pv balast",
+      "fotowoltaika dach płaski"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1004",
+    "column_number": "02",
+    "description": "Montaż modułu fotowoltaicznego na elewacji / wiaty / pergoli (konstrukcja naziemna)",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "panel pv elewacja",
+      "fotowoltaika elewacja",
+      "panele pv naziemne",
+      "pv ground mount",
+      "carport pv",
+      "wiata solarna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1004",
+    "column_number": "03",
+    "description": "Układanie kabla DC (H1Z2Z2-K) 4-6mm² w instalacji fotowoltaicznej (strona DC)",
+    "unit": "m",
+    "labor_norm": 0.10,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "kabel dc fotowoltaika",
+      "kabel h1z2z2-k",
+      "kabel solarny dc",
+      "pv cable dc",
+      "kabel 6mm dc",
+      "kabel 4mm pv"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1004",
+    "column_number": "04",
+    "description": "Montaż złączy MC4 (konektorów DC) dla połączenia modułów PV w stringach",
+    "unit": "szt",
+    "labor_norm": 0.05,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "złącze mc4",
+      "konektor mc4",
+      "mc4 connector",
+      "złącze dc pv",
+      "wtyczka mc4",
+      "solar connector"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1005",
+    "column_number": "01",
+    "description": "Montaż magazynu energii (akumulatora LFP/Li-ion) do instalacji PV (na ścianie / rack)",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "akumulator pv",
+      "magazyn energii domowy",
+      "bateria lfp",
+      "li-ion storage",
+      "tesla powerwall",
+      "energy storage home"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1005",
+    "column_number": "02",
+    "description": "Montaż i podłączenie optymalizatora DC (mikroinwertera / power optimizer) na module PV",
+    "unit": "szt",
+    "labor_norm": 0.20,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "optymalizator dc",
+      "power optimizer",
+      "mikroinwerter",
+      "microinverter",
+      "solaredge optimizer",
+      "enphase microinverter"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1006",
+    "column_number": "01",
+    "description": "Montaż pełnej tablicy fotowoltaicznej AC+DC (bezpieczniki DC, rozłącznik DC, wyłącznik AC)",
+    "unit": "kpl",
+    "labor_norm": 2.5,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "tablica pv",
+      "tablica fotowoltaiczna",
+      "szafka pv",
+      "rozdzielnica pv",
+      "ac dc panel pv",
+      "skrzynka pv"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1006",
+    "column_number": "02",
+    "description": "Montaż i podłączenie licznika dwukierunkowego / monitoringu PV (smart meter + logowanie)",
+    "unit": "kpl",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "licznik dwukierunkowy",
+      "smart meter pv",
+      "monitoring pv",
+      "powermeter fotowoltaika",
+      "logger pv",
+      "solar monitoring"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1007",
+    "column_number": "01",
+    "description": "Uruchomienie i konfiguracja instalacji fotowoltaicznej (parametryzacja falownika, test)",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "uruchomienie pv",
+      "commissioning fotowoltaika",
+      "konfiguracja falownika",
+      "test instalacji pv",
+      "odbiór pv",
+      "pv commissioning"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "1007",
+    "column_number": "02",
+    "description": "Uruchomienie i konfiguracja pompy ciepła z systemem grzewczym (pierwsze uruchomienie)",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "is_industrial": false,
+    "knr_category": "pompy_ciepla_oze",
+    "synonyms": [
+      "uruchomienie pompy ciepła",
+      "commissioning pc",
+      "pierwsze uruchomienie pc",
+      "test pompy ciepła",
+      "odbiór instalacji pc",
+      "heat pump commissioning"
+    ]
+  }
+]

@@ -1,0 +1,275 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9014",
+    "column_number": "01",
+    "description": "Montaż konstrukcji i panelów fotowoltaicznych na dachu skośnym (dachówka)",
+    "unit": "szt",
+    "labor_norm": 3.5,
+    "knr_category": "Fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "panel pv",
+      "fotowoltaika",
+      "moduł solarny",
+      "panel słoneczny",
+      "pv dach",
+      "ogniwo fotowoltaiczne"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9014",
+    "column_number": "02",
+    "description": "Instalacja i konfiguracja falownika (Inwertera) hybrydowego (do 10kW)",
+    "unit": "szt",
+    "labor_norm": 5.0,
+    "knr_category": "Fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "falownik",
+      "inwerter",
+      "inverter hybrydowy",
+      "solar inverter",
+      "falownik 10kw",
+      "growatt",
+      "solis",
+      "solax"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9014",
+    "column_number": "03",
+    "description": "Montaż i uruchomienie magazynu energii (Bateria LiFePO4 > 5kWh)",
+    "unit": "szt",
+    "labor_norm": 4.0,
+    "knr_category": "Fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "magazyn energii",
+      "bateria lifepo4",
+      "akumulator dom",
+      "home battery",
+      "energy storage",
+      "bms bateria",
+      "bateria 5kwh"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9014",
+    "column_number": "04",
+    "description": "Wykonanie kompletnego zabezpieczenia DC/AC (rozdzielnica PV, SPD, uziom)",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "knr_category": "Fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "rozdzielnica pv",
+      "zabezpieczenie dc",
+      "spd pv",
+      "ochrona przepiec pv",
+      "dc disconnect",
+      "ac dc protection"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9014",
+    "column_number": "05",
+    "description": "Pomiary końcowe, protokół odbioru i zgłoszenie instalacji do OSD",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "knr_category": "Fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "protokol pv",
+      "odbiór fotowoltaiki",
+      "zgłoszenie osd",
+      "tauron zgłoszenie",
+      "energa zgłoszenie",
+      "dokumentacja pv"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9014",
+    "column_number": "06",
+    "description": "Montaż paneli PV na dachu płaskim (balasty lub wsporniki aluminiowe)",
+    "unit": "szt",
+    "labor_norm": 2.8,
+    "knr_category": "Fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "panel dach płaski",
+      "pv flat roof",
+      "balast pv",
+      "montaż pv płaski",
+      "wspornik aluminiowy pv",
+      "fotowoltaika dach płaski"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9014",
+    "column_number": "07",
+    "description": "Montaż mikroinwertera (micro-inverter) na każdym panelu z okablowaniem AC",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "knr_category": "Fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "mikroinwerter",
+      "micro-inverter",
+      "enphase",
+      "hoymiles",
+      "module level optimizer",
+      "optymalizator pv"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9014",
+    "column_number": "08",
+    "description": "Układanie kabla solarnego DC (H1Z2Z2-K 6mm2) w instalacji PV na dachu",
+    "unit": "mb",
+    "labor_norm": 0.15,
+    "knr_category": "Fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel solarny dc",
+      "h1z2z2-k",
+      "kabel pv 6mm2",
+      "przewód fotowoltaiczny",
+      "dc string kabel",
+      "kabel dc pv"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9014",
+    "column_number": "09",
+    "description": "Montaż licznika dwukierunkowego (eksport/import) do rozliczeń z OSD (net-metering)",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "Fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "licznik dwukierunkowy",
+      "net metering",
+      "eksport energii",
+      "licznik bidirectional",
+      "smart meter pv",
+      "licznik osd pv"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9014",
+    "column_number": "10",
+    "description": "Montaż i konfiguracja monitora produkcji PV (Wi-Fi logger, aplikacja mobilna)",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "Fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "logger pv",
+      "monitoring pv",
+      "aplikacja solarna",
+      "wifi monitoring solar",
+      "datalogger pv",
+      "solaredge monitoring"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9014",
+    "column_number": "11",
+    "description": "Instalacja optymalizatora mocy DC-DC (np. SolarEdge P-series) na module PV",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "Fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "optymalizator solaredge",
+      "power optimizer",
+      "dc optimizer",
+      "module optimizer",
+      "p300 solaredge",
+      "mppt per module"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9014",
+    "column_number": "12",
+    "description": "Instalacja systemu EV+PV — integracja ładowarki wallbox z falownikiem hybrydowym",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "knr_category": "Fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "ev pv integracja",
+      "wallbox pv",
+      "solar ev charging",
+      "ładowanie pv",
+      "inteligentne ładowanie ev",
+      "solar wallbox combo"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9014",
+    "column_number": "13",
+    "description": "Montaż przekaźnika priorytetu (self-consumption relay) i układu zarządzania energią",
+    "unit": "kpl",
+    "labor_norm": 2.5,
+    "knr_category": "Fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "self consumption",
+      "priorytet pv",
+      "relay pv",
+      "autokonsumpcja pv",
+      "zarządzanie energią pv",
+      "pv management relay"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9014",
+    "column_number": "14",
+    "description": "Szkolenie użytkownika z obsługi systemu PV, magazynu energii i odczytu danych",
+    "unit": "godz",
+    "labor_norm": 1.0,
+    "knr_category": "Fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "szkolenie pv",
+      "instruktaż fotowoltaika",
+      "obsługa inwertera",
+      "szkolenie bateria",
+      "user training pv",
+      "instrukcja pv"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9014",
+    "column_number": "15",
+    "description": "Inspekcja serwisowa instalacji PV po roku — termowizja, czyszczenie złączy, aktualizacja oprogramowania",
+    "unit": "kpl",
+    "labor_norm": 3.5,
+    "knr_category": "Fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "serwis pv",
+      "przegląd fotowoltaiki",
+      "czyszczenie paneli",
+      "inspekcja roczna pv",
+      "maintenance pv",
+      "inspekcja termowizyjna pv"
+    ]
+  }
+]

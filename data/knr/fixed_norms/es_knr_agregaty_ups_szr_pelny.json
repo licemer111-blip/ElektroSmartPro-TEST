@@ -1,0 +1,326 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0701",
+    "column_number": "01",
+    "description": "Posadowienie i montaż przenośnego agregatu prądotwórczego (do 15kVA) na podkładkach",
+    "unit": "szt",
+    "labor_norm": 4.0,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "agregat 15kva",
+      "generator przenośny",
+      "generator 10kw",
+      "prądnica 15kva",
+      "agregat mobilny",
+      "generator budowlany"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0701",
+    "column_number": "02",
+    "description": "Posadowienie i montaż stacjonarnego agregatu prądotwórczego 20-50kVA na fundamencie",
+    "unit": "szt",
+    "labor_norm": 12.0,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "agregat 30kva",
+      "agregat 50kva",
+      "generator stacjonarny 50kva",
+      "prądnica stacjonarna",
+      "genset 50kva",
+      "agregat diesel 50kva"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0701",
+    "column_number": "03",
+    "description": "Posadowienie i montaż stacjonarnego agregatu prądotwórczego 60-200kVA na fundamencie",
+    "unit": "szt",
+    "labor_norm": 24.0,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "agregat 100kva",
+      "agregat 200kva",
+      "generator stacjonarny 200kva",
+      "genset 100kva",
+      "diesel genset 200kva",
+      "agregat 160kva"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0702",
+    "column_number": "01",
+    "description": "Montaż szafy SZR (Samoczynne Załączanie Rezerwy) dla małego agregatu (do 50kVA)",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "szr 50kva",
+      "ats 50kva",
+      "samoczynne załączenie rezerwy",
+      "szafa przełącznikowa",
+      "automatic transfer switch",
+      "nza szr"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0702",
+    "column_number": "02",
+    "description": "Montaż szafy SZR (ATS) z wyłącznikiem Mocy 3P 160A-400A dla dużego agregatu",
+    "unit": "kpl",
+    "labor_norm": 12.0,
+    "is_industrial": true,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "szr 400a",
+      "ats 400a",
+      "szr 160a",
+      "szafa ats przemysłowa",
+      "automatic transfer switch 400a",
+      "przełącznik sieci 400a"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0702",
+    "column_number": "03",
+    "description": "Okablowanie szafy SZR (podłączenie strony sieciowej i agregatowej, magistrala sterowania)",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "okablowanie szr",
+      "podłączenie ats",
+      "magistrala sterowania szr",
+      "kabel do agregatu",
+      "szr podłączenie elektryczne",
+      "wiring szr"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0703",
+    "column_number": "01",
+    "description": "Montaż i podłączenie UPS jedno-fazowego (1-fazowy, 1-3kVA) wolnostojący / rack",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "ups 1f 2kva",
+      "ups 3kva jednofazowy",
+      "zasilacz ups",
+      "ups serwer",
+      "ups rack 2u",
+      "ups jednofazowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0703",
+    "column_number": "02",
+    "description": "Montaż i podłączenie UPS 3-fazowego Online (10-40kVA) wolnostojącego",
+    "unit": "szt",
+    "labor_norm": 5.0,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "ups 3f 20kva",
+      "ups online 40kva",
+      "ups trójfazowy 20kva",
+      "centralny ups",
+      "ups 3f wolnostojący",
+      "double conversion ups"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0703",
+    "column_number": "03",
+    "description": "Montaż i podłączenie UPS 3-fazowego Online (60-200kVA) wolnostojącego z kablowaniem",
+    "unit": "szt",
+    "labor_norm": 10.0,
+    "is_industrial": true,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "ups 100kva",
+      "ups 200kva 3f",
+      "ups data center",
+      "ups przemysłowy 100kva",
+      "central ups 200kva",
+      "ups on-line 160kva"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0703",
+    "column_number": "04",
+    "description": "Montaż i podłączenie zewnętrznego modułu akumulatorów (EBC) do UPS",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "moduł akumulatorów ups",
+      "ebc ups",
+      "zewnętrzne akumulatory",
+      "battery cabinet ups",
+      "rozszerzenie akumulatorów",
+      "ups battery extension"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0704",
+    "column_number": "01",
+    "description": "Montaż i podłączenie tablicy rozdzielczej UPS (paska wyjść chronionych + bypass)",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "tablica ups",
+      "rozdzielnica ups",
+      "bypass ups",
+      "szafy ups wyjścia",
+      "ups output panel",
+      "kabel ups rozdzielnica"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0704",
+    "column_number": "02",
+    "description": "Montaż i podłączenie Statycznego Wyłącznika Bypass UPS (Static Transfer Switch STS)",
+    "unit": "szt",
+    "labor_norm": 4.0,
+    "is_industrial": true,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "sts bypass",
+      "static transfer switch",
+      "wyłącznik bypass statyczny",
+      "przełącznik ups bypass",
+      "sts 100kva",
+      "static bypass switch"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0705",
+    "column_number": "01",
+    "description": "Uruchomienie agregatu prądotwórczego i próba obciążeniowa (commissioning + test SZR)",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "uruchomienie agregatu",
+      "próba obciążeniowa",
+      "test szr agregat",
+      "commissioning generator",
+      "test agregatu",
+      "uruchomienie genset"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0705",
+    "column_number": "02",
+    "description": "Uruchomienie i konfiguracja UPS z testem baterii i próbą przełączenia na baterię",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "uruchomienie ups",
+      "test baterii ups",
+      "commissioning ups",
+      "próba ups",
+      "test przełączenia ups",
+      "konfiguracja ups"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0706",
+    "column_number": "01",
+    "description": "Podłączenie agregatu do sieci / gniazda serwisowego i konfiguracja sterownika",
+    "unit": "kpl",
+    "labor_norm": 2.5,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "podłączenie agregatu do sieci",
+      "sterownik agregatu",
+      "konfiguracja gensetu",
+      "genset controller",
+      "amf panel",
+      "dse genset controller"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0707",
+    "column_number": "01",
+    "description": "Montaż i podłączenie akumulatorowego systemu magazynowania energii BESS (ESS) do rozdzielnicy",
+    "unit": "kpl",
+    "labor_norm": 8.0,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "bess magazyn energii",
+      "ess battery system",
+      "system magazynowania energii",
+      "bank baterii",
+      "energy storage",
+      "lithium battery storage"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0708",
+    "column_number": "01",
+    "description": "Montaż i podłączenie zasilacza buforowego 24V DC (backup power) z akumulatorem żelowym",
+    "unit": "szt",
+    "labor_norm": 0.60,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "zasilacz buforowy 24v",
+      "backup 24vdc",
+      "zasilanie buforowe",
+      "akumulator żelowy",
+      "psu bufor",
+      "buffer power supply"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0708",
+    "column_number": "02",
+    "description": "Wymiana akumulatora (baterii) w UPS lub zasilaczu buforowym (standardowy VRLA)",
+    "unit": "szt",
+    "labor_norm": 0.40,
+    "is_industrial": false,
+    "knr_category": "agregaty_ups",
+    "synonyms": [
+      "wymiana akumulatora ups",
+      "bateria vrla",
+      "wymiana baterii",
+      "ups battery replacement",
+      "akumulator sealed lead",
+      "gel battery replacement"
+    ]
+  }
+]

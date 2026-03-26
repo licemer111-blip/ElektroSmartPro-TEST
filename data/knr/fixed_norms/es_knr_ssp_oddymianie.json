@@ -1,0 +1,155 @@
+[
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9010",
+    "column_number": "01",
+    "description": "Układanie kabla ognioodpornego (np. HTKSH PH90 / HDGS E90) natynkowo",
+    "unit": "m",
+    "labor_norm": 5.5,
+    "is_industrial": false,
+    "knr_category": "kablowanie_pozarowe",
+    "synonyms": [
+      "kabel ognioodporny",
+      "htksh",
+      "ph90",
+      "e90",
+      "kabel pożarowy",
+      "kabel hdgs",
+      "kabel czerwony ssp",
+      "kabel 90 minut"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9010",
+    "column_number": "02",
+    "description": "Montaż i podłączenie adresowalnej czujki dymu / ciepła z gniazdem",
+    "unit": "szt",
+    "labor_norm": 0.45,
+    "is_industrial": false,
+    "knr_category": "ssp_ppoz",
+    "synonyms": [
+      "czujka adresowalna",
+      "czujka dymu ssp",
+      "detektor ppoż",
+      "czujka termiczna",
+      "polon czujka",
+      "bosch czujka",
+      "adresowalna sap"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9010",
+    "column_number": "03",
+    "description": "Montaż Ręcznego Ostrzegacza Pożarowego (ROP)",
+    "unit": "szt",
+    "labor_norm": 0.6,
+    "is_industrial": false,
+    "knr_category": "ssp_ppoz",
+    "synonyms": [
+      "rop",
+      "ręczny ostrzegacz",
+      "przycisk pożarowy",
+      "mcp",
+      "manual call point",
+      "break glass",
+      "przycisk sap czerwony"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9010",
+    "column_number": "04",
+    "description": "Montaż sygnalizatora akustycznego / optycznego PPOŻ (czerwony)",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "is_industrial": false,
+    "knr_category": "ssp_ppoz",
+    "synonyms": [
+      "sygnalizator pożarowy",
+      "syrena sap",
+      "sounder ppoż",
+      "flash pożarowy",
+      "sygnalizator czerwony",
+      "dzwonek pożarowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9010",
+    "column_number": "05",
+    "description": "Montaż i oprogramowanie centrali SSP (np. Polon-Alfa, Bosch, Esser) - moduł bazowy",
+    "unit": "kpl",
+    "labor_norm": 8.0,
+    "is_industrial": false,
+    "knr_category": "ssp_ppoz",
+    "synonyms": [
+      "centrala ssp",
+      "csp",
+      "central sap",
+      "polon-alfa",
+      "bosch centrala",
+      "esser",
+      "facp",
+      "centrala pożarowa",
+      "panel ssp"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9010",
+    "column_number": "06",
+    "description": "Montaż centrali oddymiania (np. D+H, Mercor, AFG) z akumulatorami",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "is_industrial": false,
+    "knr_category": "ssp_ppoz",
+    "synonyms": [
+      "centrala oddymiania",
+      "d+h",
+      "mercor",
+      "oddymianie klatki",
+      "wentylacja pożarowa",
+      "nzo",
+      "naturalne oddymianie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9010",
+    "column_number": "07",
+    "description": "Montaż siłownika okiennego (wrzecionowego/łańcuchowego) klapy dymowej",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "ssp_ppoz",
+    "synonyms": [
+      "siłownik okna",
+      "klapa dymowa",
+      "aktuator 24v",
+      "siłownik acuator",
+      "napęd klapy",
+      "siłownik łańcuchowy",
+      "siłownik wrzecionowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9010",
+    "column_number": "08",
+    "description": "Montaż przycisku oddymiania (pomarańczowy) i czujki dymu klatki schodowej",
+    "unit": "kpl",
+    "labor_norm": 1.0,
+    "is_industrial": false,
+    "knr_category": "ssp_ppoz",
+    "synonyms": [
+      "przycisk oddymiania",
+      "rt oddymianie",
+      "przycisk pomarańczowy",
+      "wentylacja klatki",
+      "przywołanie oddymiania",
+      "czujka klatki"
+    ]
+  }
+]

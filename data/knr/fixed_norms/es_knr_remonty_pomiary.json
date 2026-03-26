@@ -1,0 +1,176 @@
+[
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9007",
+    "column_number": "01",
+    "description": "Demontaż oprawy oświetleniowej / gniazda / wyłącznika",
+    "unit": "szt",
+    "labor_norm": 0.08,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż gniazda",
+      "wyjęcie oprawy",
+      "demontaż włącznika",
+      "wybiórka osprzatu",
+      "demontaż kontaktu",
+      "usunięcie lampy",
+      "stary osprzat"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9007",
+    "column_number": "02",
+    "description": "Wykucie i usunięcie starych przewodów z tynku (cegła/beton)",
+    "unit": "m",
+    "labor_norm": 0.12,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "usunięcie przewodu",
+      "wybiórka instalacji",
+      "stare okablowanie",
+      "przewody aluminiowe",
+      "demontaż instalacji",
+      "aluminium przewody",
+      "stare przewody"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9007",
+    "column_number": "03",
+    "description": "Demontaż starej rozdzielnicy mieszkaniowej z odłączeniem WLZ",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "demontaż rozdzielnicy",
+      "wybiórka tablicy",
+      "stara tablica elektryczna",
+      "wymiana rozdzielnicy",
+      "demontaż tablicy głównej",
+      "skrzynka korkowa wybiórka"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9007",
+    "column_number": "04",
+    "description": "Lokalizacja uszkodzenia kabla w ziemi / w ścianie (diagnostyka)",
+    "unit": "godz",
+    "labor_norm": 1.0,
+    "is_industrial": false,
+    "knr_category": "demontaz",
+    "synonyms": [
+      "szukanie awarii",
+      "lokalizacja usterki",
+      "uszkodzony kabel",
+      "reflektometr",
+      "diagnostyka",
+      "przerwa w kablu",
+      "szukanie zwarcia",
+      "awaria instalacji"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9007",
+    "column_number": "05",
+    "description": "Pomiar impedancji pętli zwarcia (ochrona przeciwporażeniowa)",
+    "unit": "szt",
+    "labor_norm": 0.12,
+    "is_industrial": false,
+    "knr_category": "pomiary_odbiory",
+    "synonyms": [
+      "impedancja pętli",
+      "pomiar zwarcia",
+      "ochrona przeciwporażeniowa",
+      "swz pomiar",
+      "sonel mpi",
+      "pomiar elektryczny",
+      "punkt pomiarowy",
+      "pętla zwarciowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9007",
+    "column_number": "06",
+    "description": "Pomiar rezystancji izolacji obwodu 1-fazowego / 3-fazowego",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "is_industrial": false,
+    "knr_category": "pomiary_odbiory",
+    "synonyms": [
+      "pomiar izolacji",
+      "megaohm",
+      "rezystancja izolacji",
+      "megomierz",
+      "500v izolacja",
+      "1000v izolacja",
+      "test izolacji",
+      "megger"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9007",
+    "column_number": "07",
+    "description": "Badanie wyłącznika różnicowoprądowego (RCD) - czas i prąd zadziałania",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "is_industrial": false,
+    "knr_category": "pomiary_odbiory",
+    "synonyms": [
+      "test rcd",
+      "badanie fi",
+      "test różnicowoprądowy",
+      "pomiar rcd",
+      "30ma test",
+      "czas zadziałania rcd",
+      "badanie wyłącznika ochronnego"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9007",
+    "column_number": "08",
+    "description": "Pomiar rezystancji uziemienia metodą techniczną (np. 3-biegunową)",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "is_industrial": false,
+    "knr_category": "pomiary_odbiory",
+    "synonyms": [
+      "pomiar uziemienia",
+      "rezystancja uziemienia",
+      "ohm uziom",
+      "pomiar uziomu",
+      "miernik uziemienia",
+      "pomiar pe",
+      "badanie uziemienia"
+    ]
+  },
+  {
+    "catalog_code": "KNR 4-03",
+    "table_number": "9007",
+    "column_number": "09",
+    "description": "Sporządzenie protokołu z pomiarów elektrycznych (dokumentacja odbiorcza)",
+    "unit": "kpl",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "pomiary_odbiory",
+    "synonyms": [
+      "protokół pomiarów",
+      "dokumentacja odbiorcza",
+      "pn-hd 60364",
+      "uprawnienia sep",
+      "odbiór instalacji",
+      "atest instalacji",
+      "certyfikat elektryczny",
+      "odbiór techniczny"
+    ]
+  }
+]

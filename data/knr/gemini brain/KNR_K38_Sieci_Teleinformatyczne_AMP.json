@@ -1,0 +1,383 @@
+[
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0108",
+    "column_number": "01",
+    "description": "Montaż modułu RJ45 SL (nieekranowany) na skrętce 4-parowej",
+    "unit": "szt",
+    "labor_norm": 0.07,
+    "section": "01",
+    "material_category": "it_osprzet",
+    "is_industrial": false,
+    "synonyms": [
+      "keystone utp",
+      "rj45 utp",
+      "moduł lan",
+      "cat6 utp keystone",
+      "gniazdo skrętka"
+    ],
+    "materials": [
+      {
+        "material_name": "Moduł RJ45 SL UTP Cat 6",
+        "material_unit": "kpl",
+        "quantity_factor": 1.0,
+        "component_type": "material"
+      }
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0108",
+    "column_number": "02",
+    "description": "Montaż modułu RJ45 SL (ekranowany) на skrętce 4-parowej",
+    "unit": "szt",
+    "labor_norm": 0.1,
+    "section": "01",
+    "material_category": "it_osprzet",
+    "is_industrial": false,
+    "synonyms": [
+      "keystone ftp",
+      "rj45 ekranowany",
+      "cat6a ftp",
+      "keystone sftp",
+      "gniazdo ekranowane"
+    ],
+    "materials": [
+      {
+        "material_name": "Moduł RJ45 SL FTP Cat 6A",
+        "material_unit": "kpl",
+        "quantity_factor": 1.0,
+        "component_type": "material"
+      }
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0110",
+    "column_number": "01",
+    "description": "Montaż szafy dystrybucyjnej stojącej 19'' (kompletna z poziomowaniem)",
+    "unit": "kpl",
+    "labor_norm": 2.4,
+    "section": "01",
+    "material_category": "it_racks",
+    "is_industrial": false,
+    "synonyms": [
+      "szafa 19 cali",
+      "rack stojący it",
+      "szafa dystrybucyjna",
+      "szafa teleinformatyczna"
+    ],
+    "materials": [
+      {
+        "material_name": "Szafa stojąca 19 cali",
+        "material_unit": "kpl",
+        "quantity_factor": 1.0,
+        "component_type": "material"
+      },
+      {
+        "material_name": "Zestaw uziemiający do szafy",
+        "material_unit": "kpl",
+        "quantity_factor": 1.0,
+        "component_type": "material"
+      }
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0120",
+    "column_number": "01",
+    "description": "Pomiary dynamiczne toru transmisyjnego (pierwsza linia)",
+    "unit": "szt",
+    "labor_norm": 0.57,
+    "section": "01",
+    "material_category": "it_labor_only",
+    "is_industrial": false,
+    "synonyms": [
+      "certyfikacja lan",
+      "fluke tester",
+      "pomiar toru",
+      "pierwsza linia certyfikacja"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0120",
+    "column_number": "02",
+    "description": "Pomiary dynamiczne toru transmisyjnego (każda następna linia)",
+    "unit": "szt",
+    "labor_norm": 0.3,
+    "section": "01",
+    "material_category": "it_labor_only",
+    "is_industrial": false,
+    "synonyms": [
+      "certyfikacja kolejna",
+      "pomiar następna linia",
+      "fluke seryjna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0104",
+    "column_number": "02",
+    "description": "Spawanie włókna kabla światłowodowego jednomodowego (SM)",
+    "unit": "szt",
+    "labor_norm": 0.345,
+    "section": "01",
+    "material_category": "it_fiber",
+    "is_industrial": false,
+    "synonyms": [
+      "spaw sm",
+      "singlemode spaw",
+      "spawanie jednomod",
+      "os2 spaw",
+      "fusion splice sm"
+    ],
+    "materials": [
+      {
+        "material_name": "Osłonka spawu termokurczliwa",
+        "material_unit": "szt",
+        "quantity_factor": 1.0,
+        "component_type": "material"
+      },
+      {
+        "material_name": "Kaseta światłowodowa",
+        "material_unit": "szt",
+        "quantity_factor": 0.08,
+        "component_type": "material"
+      }
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0104",
+    "column_number": "01",
+    "description": "Spawanie włókna kabla światłowodowego wielomodowego (MM OM3/OM4/OM5)",
+    "unit": "szt",
+    "labor_norm": 0.285,
+    "section": "01",
+    "material_category": "it_fiber",
+    "is_industrial": false,
+    "synonyms": [
+      "spaw mm",
+      "multimode spaw",
+      "spawanie om4",
+      "spawanie om5",
+      "om3 spaw",
+      "fusion splice mm"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0108",
+    "column_number": "03",
+    "description": "Montaż modułu RJ45 Cat 7 (ekranowany STP/SSTP 600MHz)",
+    "unit": "szt",
+    "labor_norm": 0.12,
+    "section": "01",
+    "material_category": "it_osprzet",
+    "is_industrial": false,
+    "synonyms": [
+      "keystone cat7",
+      "rj45 cat 7",
+      "cat7 sstp",
+      "gniazdo cat7",
+      "600mhz keystone"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0108",
+    "column_number": "04",
+    "description": "Montaż gniazda RJ45 Cat 8 (ekranowany SFTP 2000MHz, 40GbE)",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "section": "01",
+    "material_category": "it_osprzet",
+    "is_industrial": false,
+    "synonyms": [
+      "keystone cat8",
+      "rj45 cat 8",
+      "cat8 sftp",
+      "40gbe gniazdo",
+      "2ghz keystone"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0201",
+    "column_number": "01",
+    "description": "Układanie kabla UTP/STP kat. 6A w korytku lub rurze",
+    "unit": "mb",
+    "labor_norm": 0.05,
+    "section": "02",
+    "material_category": "it_kable",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel utp cat6a",
+      "skrętka cat 6a",
+      "przewód lan 6a",
+      "kabel sftp cat6a"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0201",
+    "column_number": "02",
+    "description": "Układanie kabla Cat 7/8 (SSTP/SFTP) w korytku lub rurze",
+    "unit": "mb",
+    "labor_norm": 0.07,
+    "section": "02",
+    "material_category": "it_kable",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel cat7",
+      "kabel cat8",
+      "sstp kabel",
+      "sftp kabel lan"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-09",
+    "table_number": "0502",
+    "column_number": "08",
+    "description": "Układanie kabla magistrali KNX J-Y(St)Y 2x2x0.8",
+    "unit": "mb",
+    "labor_norm": 0.03,
+    "section": "05",
+    "material_category": "bms_kable",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel knx",
+      "magistrala knx",
+      "j-y sty 2x2",
+      "ycym 2x2x0.8",
+      "kabel bms"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-09",
+    "table_number": "0502",
+    "column_number": "06",
+    "description": "Montaż sterownika KNX (actor, sensor, interface) na szynie DIN",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "section": "05",
+    "material_category": "bms_sterowniki",
+    "is_industrial": false,
+    "synonyms": [
+      "sterownik knx",
+      "actor knx",
+      "moduł knx",
+      "interfejs knx",
+      "panel knx"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-09",
+    "table_number": "0502",
+    "column_number": "09",
+    "description": "Montaż zasilacza/sterownika DALI 2-kanałowego",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "section": "05",
+    "material_category": "bms_dali",
+    "is_industrial": false,
+    "synonyms": [
+      "sterownik dali",
+      "driver dali",
+      "zasilacz dali",
+      "dali 2 kanały",
+      "dali controller"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0801",
+    "column_number": "01",
+    "description": "Montaż punktu dostępowego Wi-Fi 6E (802.11ax) na suficie/ścianie",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "section": "08",
+    "material_category": "it_aktywne",
+    "is_industrial": false,
+    "synonyms": [
+      "access point wifi",
+      "ap wifi 6e",
+      "punkt dostępowy wifi",
+      "wifi 6",
+      "802.11ax montaż"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0801",
+    "column_number": "02",
+    "description": "Montaż punktu dostępowego Wi-Fi 7 (802.11be, MLO, 6GHz)",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "section": "08",
+    "material_category": "it_aktywne",
+    "is_industrial": false,
+    "synonyms": [
+      "wifi 7",
+      "802.11be",
+      "ap wifi 7",
+      "mlo access point",
+      "6ghz wifi"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0130",
+    "column_number": "01",
+    "description": "Pomiary i certyfikacja toru światłowodowego OTDR (per włókno)",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "section": "01",
+    "material_category": "it_labor_only",
+    "is_industrial": false,
+    "synonyms": [
+      "otdr pomiar",
+      "certyfikacja światłowód",
+      "pomiar otdr",
+      "test fiber optic",
+      "reflektometr"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0110",
+    "column_number": "02",
+    "description": "Montaż szafy wiszącej RACK 19'' (12U/9U) na ścianie",
+    "unit": "kpl",
+    "labor_norm": 1.8,
+    "section": "01",
+    "material_category": "it_racks",
+    "is_industrial": false,
+    "synonyms": [
+      "szafka wisząca rack",
+      "mini rack 12u",
+      "szafa 9u",
+      "wall mount rack",
+      "szafka teleinformatyczna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "0115",
+    "column_number": "01",
+    "description": "Montaż i konfiguracja switcha zarządzalnego L2/L3 (do 48 portów)",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "section": "01",
+    "material_category": "it_aktywne",
+    "is_industrial": false,
+    "synonyms": [
+      "switch zarządzalny",
+      "przełącznik l2 l3",
+      "switch 48p",
+      "switch cisco",
+      "switch managed"
+    ]
+  }
+]

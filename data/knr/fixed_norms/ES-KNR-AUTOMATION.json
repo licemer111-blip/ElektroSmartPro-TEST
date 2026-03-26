@@ -1,0 +1,252 @@
+[
+  {
+    "catalog_code": "KNR 5-08 0401-01",
+    "table_number": "9001",
+    "column_number": "01",
+    "description": "Złączka szynowa przelotowa (Zug) L/N 2.5mm2",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "złączka szynowa",
+      "zug 2.5",
+      "terminal block",
+      "złączka ln",
+      "listew zaciskowych"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0401-02",
+    "table_number": "9001",
+    "column_number": "02",
+    "description": "Złączka szynowa przelotowa (Zug) L/N 4.0mm2",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "złączka szynowa 4mm",
+      "zug 4",
+      "terminal 4mm2",
+      "zacisk 4mm2"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0401-10",
+    "table_number": "9001",
+    "column_number": "03",
+    "description": "Złączka szynowa ochronna (Zug PE) żółto-zielona",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "złączka pe",
+      "zug pe",
+      "terminal pe",
+      "zielona złączka",
+      "ochronna pe"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0401-15",
+    "table_number": "9001",
+    "column_number": "04",
+    "description": "Złączka szynowa piętrowa (Signal Zug) dla BMS",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "złączka signal",
+      "bms terminal",
+      "złączka dwupiętrowa",
+      "złączka sygnalizacyjna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0401-05",
+    "table_number": "9001",
+    "column_number": "05",
+    "description": "Trzymacz końcowy (Stoper) na szynę DIN",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "stoper",
+      "ogranicznik końcowy",
+      "end stop din",
+      "zaciśnik końcowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0801-01",
+    "table_number": "9001",
+    "column_number": "06",
+    "description": "Zasilacz magistrali KNX/DALI 640mA",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "zasilacz knx",
+      "dali zasilacz",
+      "knx power supply",
+      "640ma knx",
+      "magistrala knx zasilanie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0801-05",
+    "table_number": "9001",
+    "column_number": "07",
+    "description": "Bramka DALI/KNX (Gateway) - 64 adresy",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "gateway dali",
+      "bramka dali knx",
+      "dali gateway",
+      "interfejs dali",
+      "konwerter dali"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0801-10",
+    "table_number": "9001",
+    "column_number": "08",
+    "description": "Aktuator binarny KNX 8-kanałowy",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "aktuator knx",
+      "aktor binarny",
+      "8 channel knx",
+      "moduł wyjść knx",
+      "relay knx"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0801-20",
+    "table_number": "9001",
+    "column_number": "09",
+    "description": "Kontroler BMS / Serwer logiki (DIN)",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "kontroler bms",
+      "plc bms",
+      "serwer automatyki",
+      "logic controller",
+      "sterownik din"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0102-01",
+    "table_number": "9001",
+    "column_number": "10",
+    "description": "Przewód magistralny KNX/DALI (układanie)",
+    "unit": "m",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "kabel knx",
+      "dali kabel",
+      "magistrala knx",
+      "przewod dali",
+      "tp kabel knx"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0902-01",
+    "table_number": "9001",
+    "column_number": "11",
+    "description": "Podłączenie czujnika BMS / PPOŻ (sygnałowe)",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "czujnik bms",
+      "wejście sygnałowe",
+      "czujnik ppoz",
+      "sygnał analogowy",
+      "wejście ai bms"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0201-05",
+    "table_number": "9001",
+    "column_number": "12",
+    "description": "Przekaźnik priorytetowy / monitorujący BMS",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "przekaźnik bms",
+      "relay priorytetowy",
+      "relay monitorujący",
+      "moduł relay bms"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0601-01",
+    "table_number": "9001",
+    "column_number": "13",
+    "description": "Licznik energii z wyjściem Modbus RTU",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "licznik modbus",
+      "smart meter rtu",
+      "energy meter",
+      "licznik 3f modbus",
+      "pomiar energii"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0405-01",
+    "table_number": "9001",
+    "column_number": "14",
+    "description": "Zasilacz awaryjny UPS dla sterowników BMS",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "ups bms",
+      "zasilanie awaryjne bms",
+      "backup power bms",
+      "akumulator bms"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 0901-01",
+    "table_number": "9001",
+    "column_number": "15",
+    "description": "Etykieta identyfikacyjna obwodu BMS (drukowana)",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "dali_knx_bms",
+    "synonyms": [
+      "etykieta bms",
+      "oznakowanie",
+      "label bms",
+      "drukowana etykieta",
+      "oznacznik"
+    ]
+  }
+]

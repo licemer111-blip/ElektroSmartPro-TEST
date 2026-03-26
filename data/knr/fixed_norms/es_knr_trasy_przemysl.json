@@ -1,0 +1,174 @@
+[
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9011",
+    "column_number": "01",
+    "description": "Montaż korytka siatkowego (szer. 100-200mm) bez konstrukcji wsporczej",
+    "unit": "m",
+    "labor_norm": 0.25,
+    "is_industrial": false,
+    "knr_category": "trasy_kablowe",
+    "synonyms": [
+      "korytko siatkowe",
+      "kosz kablowy",
+      "trasa siatkowa",
+      "wire mesh tray",
+      "koryto siatkowe"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9011",
+    "column_number": "02",
+    "description": "Montaż korytka pełnego z blachy (szer. do 300mm) z pokrywą",
+    "unit": "m",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "trasy_kablowe",
+    "synonyms": [
+      "korytko pełne",
+      "koryto blaszane",
+      "trasa kablowa",
+      "koryto z pokrywą",
+      "koryto metalowe"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9011",
+    "column_number": "03",
+    "description": "Montaż drabinki kablowej (pod ciężkie kable WLZ)",
+    "unit": "m",
+    "labor_norm": 0.45,
+    "is_industrial": false,
+    "knr_category": "trasy_kablowe",
+    "synonyms": [
+      "drabinka kablowa",
+      "cable ladder",
+      "drabinka wlz",
+      "trasa drabinkowa",
+      "heavy duty tray"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9011",
+    "column_number": "04",
+    "description": "Montaż konstrukcji podwieszaną (Pręt gwintowany + Profil / Ceownik)",
+    "unit": "kpl",
+    "labor_norm": 0.3,
+    "is_industrial": false,
+    "knr_category": "trasy_kablowe",
+    "synonyms": [
+      "podwieszenie",
+      "pręt gwintowany",
+      "wieszak",
+      "ceownik",
+      "podwieszany uchwyt",
+      "threaded rod"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9011",
+    "column_number": "05",
+    "description": "Montaż wysięgnika ściennego (konsoli) pod korytka",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "is_industrial": false,
+    "knr_category": "trasy_kablowe",
+    "synonyms": [
+      "wysięgnik ścienny",
+      "konsola",
+      "wspornik korytka",
+      "bracket",
+      "uchwyt ścienny korytko"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9011",
+    "column_number": "06",
+    "description": "Układanie rury instalacyjnej sztywnej (RL/RS) natynkowo na uchwytach zamykanych",
+    "unit": "m",
+    "labor_norm": 0.12,
+    "is_industrial": false,
+    "knr_category": "trasy_kablowe",
+    "synonyms": [
+      "rura pcv",
+      "rura sztywna",
+      "rura rl",
+      "rura rs",
+      "rura natynkowa",
+      "karbek"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9011",
+    "column_number": "07",
+    "description": "Układanie rury karbowanej (peszla) w betonie (przed wylaniem stropu)",
+    "unit": "m",
+    "labor_norm": 2.5,
+    "is_industrial": false,
+    "knr_category": "trasy_kablowe",
+    "synonyms": [
+      "peszel",
+      "rura karbowana",
+      "rura w betonie",
+      "strop peszel",
+      "rura pod tynk"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9011",
+    "column_number": "08",
+    "description": "Wciąganie kabli do ułożonych rur osłonowych (np. Arot w ziemi / Peszel w stropie)",
+    "unit": "m",
+    "labor_norm": 1.8,
+    "is_industrial": false,
+    "knr_category": "trasy_kablowe",
+    "synonyms": [
+      "wciąganie kabla",
+      "przepychanie kabla",
+      "pilot kablowy",
+      "żmija",
+      "wciąganie przez rurę"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9011",
+    "column_number": "09",
+    "description": "Montaż szynoprzewodu dystrybucyjnego (np. 160A - 400A) na wspornikach",
+    "unit": "m",
+    "labor_norm": 1.2,
+    "is_industrial": false,
+    "knr_category": "trasy_kablowe",
+    "synonyms": [
+      "szynoprzewód",
+      "busduct",
+      "busbar duct",
+      "magistrala prądowa",
+      "szyna dystrybucyjna 400a"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "9011",
+    "column_number": "10",
+    "description": "Montaż skrzynki odpływowej (Tap-off box) na szynoprzewodzie",
+    "unit": "szt",
+    "labor_norm": 0.5,
+    "is_industrial": false,
+    "knr_category": "trasy_kablowe",
+    "synonyms": [
+      "tap-off box",
+      "skrzynka odpływowa",
+      "kaseta zasilająca",
+      "odpływ szyna",
+      "plug-in unit"
+    ]
+  }
+]

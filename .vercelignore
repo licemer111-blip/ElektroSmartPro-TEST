@@ -1,0 +1,27 @@
+# Vercel Deployment Ignore
+
+# Legacy archive folder (development documentation)
+_legacy_archive/
+
+# Development files
+*.log
+.DS_Store
+Thumbs.db
+
+# Local environment
+.env.local
+.env*.local
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Test coverage
+coverage/
+
+# Temporary files
+*.tmp
+*.temp

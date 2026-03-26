@@ -1,0 +1,524 @@
+[
+  {
+    "catalog_code": "KNR 5-08 2101",
+    "table_number": "5102",
+    "column_number": "01",
+    "description": "Montaż korytka kablowego stalowego perforowanego 60x35 mm (z pokrywą lub bez)",
+    "unit": "m",
+    "labor_norm": 0.35,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "koryto kablowe",
+      "korytko stalowe",
+      "koryto perforowane",
+      "koryto 60x35",
+      "trasa kablowa",
+      "korytko elektryczne",
+      "montaż korytka"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2102",
+    "table_number": "5102",
+    "column_number": "02",
+    "description": "Montaż korytka kablowego stalowego 100x60 mm (ze wspornikami co 1,5 m)",
+    "unit": "m",
+    "labor_norm": 0.45,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "koryto 100x60",
+      "korytko 100mm",
+      "trasa 100x60",
+      "koryto kablowe 100",
+      "korytko szerokie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2103",
+    "table_number": "5102",
+    "column_number": "03",
+    "description": "Montaż korytka kablowego stalowego 200x60 mm (hala, przemysł, data center)",
+    "unit": "m",
+    "labor_norm": 0.6,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": true,
+    "synonyms": [
+      "koryto 200x60",
+      "koryto przemysłowe",
+      "koryto 200mm",
+      "trasa kablowa przemysłowa",
+      "koryto hala"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2104",
+    "table_number": "5102",
+    "column_number": "04",
+    "description": "Montaż korytka kablowego PVC/Plastikowego 40x25 mm (biuro, mieszkanie, remont)",
+    "unit": "m",
+    "labor_norm": 0.2,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "koryto pvc",
+      "korytko plastikowe",
+      "koryto białe",
+      "koryto mieszkaniowe",
+      "koryto 40x25",
+      "kanał pvc biały"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2105",
+    "table_number": "5102",
+    "column_number": "05",
+    "description": "Montaż drabinki kablowej stalowej ocynkowanej 300 mm (zawiesia co 1,5 m)",
+    "unit": "m",
+    "labor_norm": 0.5,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": true,
+    "synonyms": [
+      "drabinka kablowa",
+      "kabel tray",
+      "cable ladder",
+      "drabinka stalowa",
+      "trasa drabinkowa",
+      "drabinka ocynkowana",
+      "drabinka 300mm"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2106",
+    "table_number": "5102",
+    "column_number": "06",
+    "description": "Montaż drabinki kablowej stalowej ocynkowanej 600 mm (dla magistralnych tras)",
+    "unit": "m",
+    "labor_norm": 0.65,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": true,
+    "synonyms": [
+      "drabinka 600mm",
+      "drabinka magistralna",
+      "kabel ladder 600",
+      "drabinka szerokie",
+      "trasa magistralna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2107",
+    "table_number": "5102",
+    "column_number": "07",
+    "description": "Montaż łuków, trójników, redukcji i złączy do korytka kablowego (element osprzętu)",
+    "unit": "szt",
+    "labor_norm": 0.2,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "łuk korytka",
+      "trójnik koryto",
+      "redukcja korytka",
+      "osprzęt koryto",
+      "złączka koryto",
+      "narożnik korytka"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2108",
+    "table_number": "5102",
+    "column_number": "08",
+    "description": "Montaż wspornika / konsoli podtrzymującej korytko (na ścianie lub suficie)",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "wspornik korytka",
+      "konsola kablowa",
+      "wieszak koryto",
+      "uchwyt trasy kablowej",
+      "wspornik stalowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2201",
+    "table_number": "5102",
+    "column_number": "09",
+    "description": "Ułożenie rury ochronnej DVK (karbowanej PVC) w ziemi lub betonie — Ø 50 mm",
+    "unit": "m",
+    "labor_norm": 0.12,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "rura dvk",
+      "rura karbowana",
+      "dvk 50",
+      "rura elastyczna",
+      "rura ziemna",
+      "rura kablowa dvk",
+      "rura czarna karbowana"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2202",
+    "table_number": "5102",
+    "column_number": "10",
+    "description": "Ułożenie rury ochronnej DVK Ø 110 mm (pod jezdnią, w wykopie, dla kabli SN)",
+    "unit": "m",
+    "labor_norm": 0.2,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "dvk 110",
+      "rura 110mm",
+      "przepust drogowy",
+      "rura pod drogą",
+      "rura karbowana 110",
+      "dvk magistrala"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2203",
+    "table_number": "5102",
+    "column_number": "11",
+    "description": "Ułożenie rury sztywnej PVC (RL, Kupraplast) Ø 20-25 mm w ścianie lub nad sufitem",
+    "unit": "m",
+    "labor_norm": 0.14,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "rura sztywna pvc",
+      "rura rl",
+      "rurka instalacyjna pvc",
+      "rurka 20mm",
+      "rurka 25mm",
+      "rura kupraplast",
+      "instalacja w rurze pvc"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2204",
+    "table_number": "5102",
+    "column_number": "12",
+    "description": "Ułożenie rury metalowej RVS (stalowej elastycznej) Ø 20 mm — połączenie do silnika",
+    "unit": "m",
+    "labor_norm": 0.25,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": true,
+    "synonyms": [
+      "rura stalowa elastyczna",
+      "rvs",
+      "rura metalowa",
+      "przewód w rvsie",
+      "metalowa rura instalacyjna",
+      "rura do silnika"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2205",
+    "table_number": "5102",
+    "column_number": "13",
+    "description": "Montaż rury HDPE Ø 40 / 63 mm (do kabli zewnętrznych, ziemnych, rurociągi)",
+    "unit": "m",
+    "labor_norm": 0.18,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "rura hdpe",
+      "rura hdpe 40",
+      "rura hdpe 63",
+      "rura ziemna hdpe",
+      "rura kablowa hdpe",
+      "rura zewnętrzna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2301",
+    "table_number": "5102",
+    "column_number": "14",
+    "description": "Wykop ręczny rowu kablowego (głęb. 70 cm, szer. 30 cm) — w gruncie kat. I-II",
+    "unit": "m",
+    "labor_norm": 0.6,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "wykop kablowy",
+      "rów kablowy",
+      "wykop ziemny",
+      "wykop ręczny",
+      "kopanie rowka",
+      "rów dla kabla"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2302",
+    "table_number": "5102",
+    "column_number": "15",
+    "description": "Zasypanie rowu kablowego z zagęszczeniem gruntu (po ułożeniu kabla)",
+    "unit": "m",
+    "labor_norm": 0.25,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "zasypanie wykopu",
+      "zasypanie rowu",
+      "zagęszczenie gruntu",
+      "zakrycie kabla",
+      "rekultywacja wykopu"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2303",
+    "table_number": "5102",
+    "column_number": "16",
+    "description": "Ułożenie folii ostrzegawczej (niebieskiej) nad kablem w ziemi",
+    "unit": "m",
+    "labor_norm": 0.04,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "folia ostrzegawcza",
+      "folia kablowa",
+      "folia niebieska",
+      "oznaczenie kabla",
+      "taśma kablowa ostrzegawcza"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2304",
+    "table_number": "5102",
+    "column_number": "17",
+    "description": "Ułożenie podsypki piaskowej i obsypki kabla w rowie (warstwa 10 cm)",
+    "unit": "m",
+    "labor_norm": 0.1,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "podsypka piaskowa",
+      "obsypka kabla",
+      "piasek pod kabel",
+      "warstwa piaskowa",
+      "ochrona kabla w ziemi"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2401",
+    "table_number": "5102",
+    "column_number": "18",
+    "description": "Układanie kabla ziemnego YKY (NYY) 3x2,5 mm² w rowie kablowym",
+    "unit": "m",
+    "labor_norm": 0.07,
+    "knr_category": "kablowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "yky 3x2.5",
+      "nyy 3x2.5",
+      "kabel ziemny",
+      "kabel ykxs",
+      "kabel NYY",
+      "kabel ogrodowy",
+      "kabel do ogrodu"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2402",
+    "table_number": "5102",
+    "column_number": "19",
+    "description": "Układanie kabla ziemnego YKY 4x10 mm² (zasilanie budynku, garaż, altana)",
+    "unit": "m",
+    "labor_norm": 0.12,
+    "knr_category": "kablowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "yky 4x10",
+      "nyy 4x10",
+      "kabel zasilający ziemny",
+      "kabel do garażu",
+      "zasilanie zewnętrzne",
+      "kabel 10mm ziemny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2403",
+    "table_number": "5102",
+    "column_number": "20",
+    "description": "Układanie kabla ziemnego XSWY / YXKSwa (do 35 mm²) — kable pancerne",
+    "unit": "m",
+    "labor_norm": 0.15,
+    "knr_category": "kablowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel pancerny",
+      "xswy",
+      "yxkswa",
+      "kabel zbrojony",
+      "kabel stalowy",
+      "kabel armored",
+      "kabel swa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2501",
+    "table_number": "5102",
+    "column_number": "21",
+    "description": "Montaż skrzynki rozdzielczej / złącza kablowego zewnętrznego IP54 na elewacji",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "skrzynka zewnętrzna",
+      "skrzynka ip54",
+      "złącze kablowe",
+      "rozdzielnia zewnętrzna",
+      "skrzynka ogrodowa",
+      "puszka zewnętrzna ip54",
+      "skrzynka elewacyjna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2502",
+    "table_number": "5102",
+    "column_number": "22",
+    "description": "Montaż mufy / głowicy kablowej (zakończenie kabla ziemnego) — mufa skurczowa",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "mufa kablowa",
+      "głowica kablowa",
+      "zakończenie kabla",
+      "mufa skurczowa",
+      "terminacja kabla",
+      "mufa NYY"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2601",
+    "table_number": "5102",
+    "column_number": "23",
+    "description": "Przepust kablowy przez fundamenty / ściany zewnętrzne (rura stalowa uszczelniona)",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "przepust przez fundament",
+      "przepust kablowy",
+      "uszczelnienie przepustu",
+      "przepust w ścianie",
+      "uszczelniony przepust",
+      "przepust p.poż"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2602",
+    "table_number": "5102",
+    "column_number": "24",
+    "description": "Mocowanie uchwytów kablowych / zacisków strunobetonowych do trasy (ściana/sufit)",
+    "unit": "szt",
+    "labor_norm": 0.08,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "uchwyt kablowy",
+      "zacisk kablowy",
+      "klamra kablowa",
+      "opaski kablowe",
+      "uchwyt do ściany",
+      "mocowanie kabla"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2603",
+    "table_number": "5102",
+    "column_number": "25",
+    "description": "Wiązanie i opisywanie kabli w szafie / rozdzielni (opaski, oznaczniki)",
+    "unit": "godz",
+    "labor_norm": 1.0,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "wiązanie kabli",
+      "opaski kablowe",
+      "opisywanie kabli",
+      "oznaczanie kabli",
+      "zarządzanie kablami",
+      "identyfikacja kabli",
+      "labeling kabli"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2701",
+    "table_number": "5102",
+    "column_number": "26",
+    "description": "Montaż mocowania kabli na elewacji budynku (klipsy UV, haki, uchwyty zewnętrzne)",
+    "unit": "m",
+    "labor_norm": 0.2,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "instalacja na elewacji",
+      "kabel na elewacji",
+      "mocowanie zewnętrzne",
+      "elewacja elektryczna",
+      "uchwyt elewacyjny",
+      "klipsy UV"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2702",
+    "table_number": "5102",
+    "column_number": "27",
+    "description": "Montaż instalacji na linkach nośnych (np. między budynkami) — odcinek do 30m",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "linka nośna",
+      "kabel napowietrzny",
+      "instalacja między budynkami",
+      "przewód na linkce",
+      "napowietrzne",
+      "kabel ASXSN",
+      "kabel między budynkami"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2801",
+    "table_number": "5102",
+    "column_number": "28",
+    "description": "Montaż przewodów YDY / NYM w korytkach kablowych (osobna pozycja za metr)",
+    "unit": "m",
+    "labor_norm": 0.04,
+    "knr_category": "kablowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel w korycie",
+      "przewód w korycie",
+      "układanie w korytku",
+      "kabel korytko",
+      "instalacja korytko"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08 2802",
+    "table_number": "5102",
+    "column_number": "29",
+    "description": "Podwieszenie kabla / przewodu (osprzęt, opaski, wieszaki) — dodatkowe mocowanie",
+    "unit": "szt",
+    "labor_norm": 0.06,
+    "knr_category": "trasy_kablowe",
+    "is_industrial": false,
+    "synonyms": [
+      "wieszak kablowy",
+      "opaska kablowa",
+      "podwieszenie kabla",
+      "hak kablowy",
+      "clip kablowy"
+    ]
+  }
+]

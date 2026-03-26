@@ -1,0 +1,158 @@
+[
+  {
+    "catalog_code": "KNR 5-12",
+    "table_number": "0101",
+    "column_number": "01",
+    "description": "Montaż szafy Rack 19'' 42U (stojąca)",
+    "unit": "szt",
+    "labor_norm": 5.5,
+    "section": "01",
+    "material_category": "rack",
+    "is_industrial": false,
+    "synonyms": [
+      "szafa rack",
+      "rack 19 cali",
+      "szafa serwerowa",
+      "szafa teleinformatyczna",
+      "rack 42u",
+      "szafa it",
+      "szafa 19",
+      "rack stojący",
+      "szafa network"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12",
+    "table_number": "0105",
+    "column_number": "02",
+    "description": "Montaż Patch-panelu 24-porty (RJ45) w szafie",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "section": "01",
+    "material_category": "rack_osprzet",
+    "is_industrial": false,
+    "synonyms": [
+      "patch panel",
+      "panel krosowy",
+      "panel rj45",
+      "patchpanel 24",
+      "panel lan",
+      "krosownica",
+      "panel struktury",
+      "panel 24 port"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12",
+    "table_number": "0201",
+    "column_number": "01",
+    "description": "Układanie skrętki U/UTP Cat. 6 w korytach PCV",
+    "unit": "m",
+    "labor_norm": 0.12,
+    "section": "02",
+    "material_category": "skretka",
+    "is_industrial": false,
+    "synonyms": [
+      "skrętka lan",
+      "kabel utp",
+      "cat6",
+      "cat 6",
+      "kabel sieciowy",
+      "kabel ethernet",
+      "utp cat6",
+      "przewód lan",
+      "linia danych",
+      "skrętka komputerowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12",
+    "table_number": "0203",
+    "column_number": "01",
+    "description": "Zaciąganie kabla światłowodowego 12J w rurki RL",
+    "unit": "m",
+    "labor_norm": 0.45,
+    "section": "02",
+    "material_category": "swiatlowod",
+    "is_industrial": false,
+    "synonyms": [
+      "światłowód",
+      "fiber",
+      "kabel fo",
+      "kabel optyczny",
+      "12j",
+      "24j",
+      "om3",
+      "om4",
+      "os2",
+      "fiber optic",
+      "kabel światłowodowy",
+      "światlowód wielomodowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12",
+    "table_number": "0301",
+    "column_number": "02",
+    "description": "Montaż gniazda logicznego 2xRJ45 (Keystone) w parpecie",
+    "unit": "szt",
+    "labor_norm": 0.75,
+    "section": "03",
+    "material_category": "it_osprzet",
+    "is_industrial": false,
+    "synonyms": [
+      "gniazdo rj45",
+      "gniazdo lan",
+      "keystone",
+      "gniazdo sieciowe",
+      "punkt logiczny",
+      "gniazdo cat6",
+      "outlet lan",
+      "gniazdo komputerowe",
+      "punkt it"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12",
+    "table_number": "0405",
+    "column_number": "01",
+    "description": "Pomiary dynamiczne sieci LAN (1 tor)",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "section": "04",
+    "material_category": "pomiary",
+    "is_industrial": false,
+    "synonyms": [
+      "pomiar lan",
+      "test sieci",
+      "certyfikacja cat6",
+      "fluke test",
+      "pomiar toru",
+      "test kabla lan",
+      "certyfikat sieci",
+      "pomiar struktury"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12",
+    "table_number": "0501",
+    "column_number": "01",
+    "description": "Montaż kamery IP (kopułkowa) na suficie podwieszanym",
+    "unit": "szt",
+    "labor_norm": 1.8,
+    "section": "05",
+    "material_category": "cctv",
+    "is_industrial": false,
+    "synonyms": [
+      "kamera ip",
+      "kamera cctv",
+      "kamera kopułkowa",
+      "dome camera",
+      "kamera monitoringu",
+      "kamera sufitowa",
+      "kamera sieciowa",
+      "monitoring",
+      "kamera poe"
+    ]
+  }
+]

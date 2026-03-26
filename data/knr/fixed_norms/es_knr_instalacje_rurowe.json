@@ -1,0 +1,575 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0101",
+    "column_number": "01",
+    "description": "Układanie rury instalacyjnej PVC sztywnej (RL) fi 16mm natynkowo na uchwytach",
+    "unit": "m",
+    "labor_norm": 0.08,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "rura rl 16",
+      "rura pcv 16",
+      "rura sztywna 16mm",
+      "rura instalacyjna 16",
+      "peszel sztywny 16",
+      "rura natynkowa 16"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0101",
+    "column_number": "02",
+    "description": "Układanie rury instalacyjnej PVC sztywnej (RL) fi 20mm natynkowo na uchwytach",
+    "unit": "m",
+    "labor_norm": 0.09,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "rura rl 20",
+      "rura pcv 20",
+      "rura sztywna 20mm",
+      "rura instalacyjna 20",
+      "rura natynkowa 20",
+      "karbek 20"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0101",
+    "column_number": "03",
+    "description": "Układanie rury instalacyjnej PVC sztywnej (RL) fi 25mm natynkowo na uchwytach",
+    "unit": "m",
+    "labor_norm": 0.11,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "rura rl 25",
+      "rura pcv 25",
+      "rura sztywna 25mm",
+      "rura instalacyjna 25",
+      "rura natynkowa 25"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0101",
+    "column_number": "04",
+    "description": "Układanie rury instalacyjnej PVC sztywnej (RL) fi 32mm natynkowo na uchwytach",
+    "unit": "m",
+    "labor_norm": 0.14,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "rura rl 32",
+      "rura pcv 32",
+      "rura sztywna 32mm",
+      "rura instalacyjna 32",
+      "rura natynkowa 32"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0101",
+    "column_number": "05",
+    "description": "Układanie rury instalacyjnej PVC sztywnej (RL) fi 40mm natynkowo na uchwytach",
+    "unit": "m",
+    "labor_norm": 0.17,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "rura rl 40",
+      "rura pcv 40",
+      "rura sztywna 40mm",
+      "rura instalacyjna 40",
+      "rura natynkowa 40"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0101",
+    "column_number": "06",
+    "description": "Układanie rury instalacyjnej PVC sztywnej (RL) fi 50mm natynkowo na uchwytach",
+    "unit": "m",
+    "labor_norm": 0.22,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "rura rl 50",
+      "rura pcv 50",
+      "rura sztywna 50mm",
+      "rura instalacyjna 50",
+      "rura natynkowa 50"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0102",
+    "column_number": "01",
+    "description": "Układanie rury instalacyjnej PVC sztywnej (RS) fi 16-20mm podtynkowo (w gotowej bruździe)",
+    "unit": "m",
+    "labor_norm": 0.12,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "rura rs 16",
+      "rura podtynkowa",
+      "rura w bruzdzie",
+      "rura pcv podtynkowa",
+      "rura instalacyjna podtynk",
+      "peszel w scianie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0102",
+    "column_number": "02",
+    "description": "Układanie rury instalacyjnej PVC sztywnej (RS) fi 25-32mm podtynkowo (w gotowej bruździe)",
+    "unit": "m",
+    "labor_norm": 0.15,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "rura rs 25",
+      "rura rs 32",
+      "rura pcv gruba podtynk",
+      "rura 32 w bruzdzie",
+      "rura instalacyjna 32 podtynk"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0103",
+    "column_number": "01",
+    "description": "Układanie rury karbowanej (peszla) fi 16mm natynkowo / w wylewce podłogowej",
+    "unit": "m",
+    "labor_norm": 0.07,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "peszel 16",
+      "rura karbowana 16",
+      "peszla 16mm",
+      "rura flex 16",
+      "rura elastyczna 16",
+      "corrugated 16"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0103",
+    "column_number": "02",
+    "description": "Układanie rury karbowanej (peszla) fi 20mm natynkowo / w wylewce podłogowej",
+    "unit": "m",
+    "labor_norm": 0.08,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "peszel 20",
+      "rura karbowana 20",
+      "peszla 20mm",
+      "rura flex 20",
+      "rura elastyczna 20",
+      "corrugated 20"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0103",
+    "column_number": "03",
+    "description": "Układanie rury karbowanej (peszla) fi 25-32mm natynkowo / w wylewce podłogowej",
+    "unit": "m",
+    "labor_norm": 0.10,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "peszel 25",
+      "peszel 32",
+      "rura karbowana 32",
+      "peszla 25mm",
+      "rura flex 32",
+      "corrugated 32"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0103",
+    "column_number": "04",
+    "description": "Układanie rury karbowanej (peszla) fi 40-50mm natynkowo / w szlichcie (wylewce)",
+    "unit": "m",
+    "labor_norm": 0.13,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "peszel 40",
+      "peszel 50",
+      "rura karbowana 50",
+      "rura duża karbowana",
+      "corrugated 50",
+      "rura elastyczna gruba"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0104",
+    "column_number": "01",
+    "description": "Układanie rury stalowej cienkościennej (instalacyjnej) fi 20mm na uchwytach natynkowo",
+    "unit": "m",
+    "labor_norm": 0.18,
+    "is_industrial": true,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "rura stalowa 20",
+      "rura metalowa instalacyjna",
+      "stalowa rura kablowa",
+      "rura gs 20",
+      "conduit stalowy 20",
+      "metal conduit 20"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0104",
+    "column_number": "02",
+    "description": "Układanie rury stalowej cienkościennej (instalacyjnej) fi 25mm na uchwytach natynkowo",
+    "unit": "m",
+    "labor_norm": 0.22,
+    "is_industrial": true,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "rura stalowa 25",
+      "rura metalowa 25",
+      "stalowa kablowa 25",
+      "rura gs 25",
+      "conduit stalowy 25"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0104",
+    "column_number": "03",
+    "description": "Układanie rury stalowej cienkościennej (instalacyjnej) fi 32mm na uchwytach natynkowo",
+    "unit": "m",
+    "labor_norm": 0.28,
+    "is_industrial": true,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "rura stalowa 32",
+      "rura metalowa 32",
+      "rura gs 32",
+      "conduit stalowy 32",
+      "metal conduit 32"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0104",
+    "column_number": "04",
+    "description": "Układanie rury stalowej cienkościennej fi 50mm na uchwytach lub w korycie kablowym",
+    "unit": "m",
+    "labor_norm": 0.38,
+    "is_industrial": true,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "rura stalowa 50",
+      "rura metalowa 50",
+      "rura gs 50",
+      "conduit stalowy 50",
+      "metal conduit 50"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0105",
+    "column_number": "01",
+    "description": "Montaż puszki instalacyjnej podtynkowej (Ø60mm) w ścianie z tynkiem",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "puszka podtynkowa",
+      "puszka pt",
+      "puszka60",
+      "puszka instalacyjna",
+      "puszka do gniazda",
+      "puszka montazowa",
+      "box instalacyjny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0105",
+    "column_number": "02",
+    "description": "Montaż puszki instalacyjnej natynkowej (hermetycznej IP55) na ścianie",
+    "unit": "szt",
+    "labor_norm": 0.12,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "puszka natynkowa",
+      "puszka hermetyczna",
+      "puszka ip55",
+      "puszka nt",
+      "puszka szczelna",
+      "hermetyczna box"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0105",
+    "column_number": "03",
+    "description": "Montaż puszki rozgałęźnej (połączeniowej) p/t w ścianie betonowej / ceglane",
+    "unit": "szt",
+    "labor_norm": 0.20,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "puszka rozgałęźna",
+      "puszka połączeniowa",
+      "puszka rozdzielcza",
+      "junction box",
+      "puszka łączeniowa",
+      "puszka elektryczna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0105",
+    "column_number": "04",
+    "description": "Montaż puszki rozgałęźnej (połączeniowej) n/t hermetycznej IP65",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "puszka ip65",
+      "puszka rozgalezna hermetyczna",
+      "puszka zewnętrzna",
+      "junction box ip65",
+      "puszka wodoodporna",
+      "puszka outdoor"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0106",
+    "column_number": "01",
+    "description": "Kucie bruzdy dla rury fi 16-20mm w murze ceglonym (na mokro / szlifierką)",
+    "unit": "m",
+    "labor_norm": 0.45,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "kucie bruzdy",
+      "bruzda",
+      "nacięcie ściany",
+      "rowek pod instalację",
+      "frezowanie ściany",
+      "kucie cegla",
+      "bruzda 20mm"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0106",
+    "column_number": "02",
+    "description": "Kucie bruzdy dla rury fi 25-32mm w murze ceglonym (na mokro / szlifierką)",
+    "unit": "m",
+    "labor_norm": 0.60,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "kucie bruzdy 32",
+      "bruzda szeroka",
+      "nacięcie ściany głębokie",
+      "frezowanie 32",
+      "kucie cegla 32",
+      "bruzda pod rurę 32"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0106",
+    "column_number": "03",
+    "description": "Kucie bruzdy w betonie / żelbecie (fi 16-20mm) szlifierką tarczową",
+    "unit": "m",
+    "labor_norm": 0.90,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "kucie betonu bruzda",
+      "bruzda w betonie",
+      "nacięcie betonu",
+      "frezowanie betonu",
+      "beton bruzda",
+      "ściana betonowa kucie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0106",
+    "column_number": "04",
+    "description": "Zaprawianie i tynkowanie bruzdy (uzupełnianie tynku po ułożeniu rur)",
+    "unit": "m",
+    "labor_norm": 0.30,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "zaprawienie bruzdy",
+      "uzupełnienie tynku",
+      "tynkowanie bruzdy",
+      "zaszpachlowanie",
+      "wypełnienie rowka",
+      "naprawa tynku"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0107",
+    "column_number": "01",
+    "description": "Układanie kanału kablowego (listwy naściennej) PVC 16x16mm na ścianie",
+    "unit": "m",
+    "labor_norm": 0.08,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "listwa naścienna",
+      "karbek 16x16",
+      "kanał kablowy",
+      "listwa pcv",
+      "kabelkanal maly",
+      "kanał instalacyjny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0107",
+    "column_number": "02",
+    "description": "Układanie kanału kablowego (listwy naściennej) PVC 40x25mm na ścianie",
+    "unit": "m",
+    "labor_norm": 0.12,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "listwa 40x25",
+      "karbek 40x25",
+      "kanał kablowy 40",
+      "listwa pcv srednia",
+      "kabelkanal 40",
+      "kanał instalacyjny 40"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0107",
+    "column_number": "03",
+    "description": "Układanie kanału kablowego (listwy naściennej) PVC 60x40mm na ścianie",
+    "unit": "m",
+    "labor_norm": 0.15,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "listwa 60x40",
+      "karbek 60x40",
+      "kanał kablowy 60",
+      "listwa pcv duza",
+      "kabelkanal 60",
+      "kanał instalacyjny 60"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0107",
+    "column_number": "04",
+    "description": "Układanie kanału kablowego (listwy naściennej) PVC 100x60mm na ścianie",
+    "unit": "m",
+    "labor_norm": 0.22,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "listwa 100x60",
+      "karbek 100x60",
+      "kanał kablowy 100",
+      "listwa pcv xl",
+      "kabelkanal 100",
+      "kanał instalacyjny 100"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0108",
+    "column_number": "01",
+    "description": "Montaż dławicy kablowej (gumowej/metalowej) M16/M20 w przepuście obudowy",
+    "unit": "szt",
+    "labor_norm": 0.08,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "dławica kablowa",
+      "dławnik",
+      "przepust gumowy",
+      "m16 dławica",
+      "m20 dławica",
+      "cable gland",
+      "pg16"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0108",
+    "column_number": "02",
+    "description": "Montaż dławicy kablowej metalowej (EMC/ekranowanej) M25/M32 z nakrętką kontrującą",
+    "unit": "szt",
+    "labor_norm": 0.12,
+    "is_industrial": true,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "dławica metalowa",
+      "dławica emc",
+      "przepust metalowy",
+      "m25 dławica",
+      "m32 dławica",
+      "cable gland metal",
+      "dławica ekranowana"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0109",
+    "column_number": "01",
+    "description": "Wiercenie otworu w ścianie betonowej (fi do 30mm) dla przejścia rury lub kabla",
+    "unit": "szt",
+    "labor_norm": 0.12,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "wiercenie otworu",
+      "otworek w betonie",
+      "przejście przez ścianę",
+      "wiertło koronowe",
+      "otwór kablowy",
+      "przekucie ściany"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "0109",
+    "column_number": "02",
+    "description": "Wiercenie otworu w ścianie / stropie betonowym (fi 50-100mm) koronką diamentową",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": false,
+    "knr_category": "instalacje_rurowe",
+    "synonyms": [
+      "wiercenie koronką",
+      "koronka diamentowa",
+      "otworek 100mm",
+      "przejście 100mm",
+      "wiertło koronowe 100",
+      "otwór w stropie",
+      "przebicie stropu"
+    ]
+  }
+]

@@ -1,0 +1,2172 @@
+{
+  "CABLE_SECTIONS": [
+    1.5,
+    2.5,
+    4,
+    6,
+    10,
+    16,
+    25,
+    35,
+    50,
+    70,
+    95,
+    120,
+    150,
+    185,
+    240
+  ],
+  "CABLE_CORES": [
+    2,
+    3,
+    4,
+    5
+  ],
+  "CABLE_TYPES": [
+    {
+      "name": "YKY",
+      "desc": "Kabel energetyczny Cu",
+      "basePricePerMm2": 0.15
+    },
+    {
+      "name": "YAKXS",
+      "desc": "Kabel energetyczny Al",
+      "basePricePerMm2": 0.08
+    },
+    {
+      "name": "YDY",
+      "desc": "Przewód instalacyjny",
+      "basePricePerMm2": 0.12
+    }
+  ],
+  "ICT_CABLES": [
+    {
+      "name": "UTP Cat5e",
+      "price": 1.2,
+      "labor": 2.5
+    },
+    {
+      "name": "UTP Cat6",
+      "price": 1.8,
+      "labor": 2.8
+    },
+    {
+      "name": "UTP Cat6A",
+      "price": 3.2,
+      "labor": 3.2
+    },
+    {
+      "name": "FTP Cat5e (ekranowany)",
+      "price": 2,
+      "labor": 3
+    },
+    {
+      "name": "FTP Cat6",
+      "price": 2.8,
+      "labor": 3.2
+    },
+    {
+      "name": "FTP Cat6A",
+      "price": 4.5,
+      "labor": 3.5
+    },
+    {
+      "name": "FTP Cat7 S/FTP",
+      "price": 6.5,
+      "labor": 4
+    },
+    {
+      "name": "Swiatłowód SM 9/125 (2J)",
+      "price": 2.5,
+      "labor": 8
+    },
+    {
+      "name": "Swiatłowód SM 9/125 (4J)",
+      "price": 3.8,
+      "labor": 10
+    },
+    {
+      "name": "Swiatłowód SM 9/125 (8J)",
+      "price": 6.5,
+      "labor": 12
+    },
+    {
+      "name": "Swiatłowód SM 9/125 (12J)",
+      "price": 9,
+      "labor": 15
+    },
+    {
+      "name": "Swiatłowód MM 50/125 (2J)",
+      "price": 3.2,
+      "labor": 8
+    },
+    {
+      "name": "Swiatłowód MM 50/125 (4J)",
+      "price": 5,
+      "labor": 10
+    },
+    {
+      "name": "Swiatłowód MM 50/125 (8J)",
+      "price": 8.5,
+      "labor": 12
+    }
+  ],
+  "TRAY_WIDTHS": [
+    50,
+    60,
+    100,
+    150,
+    200,
+    300,
+    400,
+    500,
+    600
+  ],
+  "TRAY_TYPES": [
+    {
+      "name": "Korytko siatkowe (BAKS)",
+      "pricePerMm": 0.18,
+      "labor": 35
+    },
+    {
+      "name": "Korytko pelne metalowe",
+      "pricePerMm": 0.25,
+      "labor": 45
+    },
+    {
+      "name": "Drabinka kablowa",
+      "pricePerMm": 0.22,
+      "labor": 55
+    }
+  ],
+  "TRAY_ACCESSORIES": [
+    {
+      "name": "Lacznik korytka",
+      "price": 8,
+      "labor": 5
+    },
+    {
+      "name": "Kolano korytka 90st",
+      "price": 25,
+      "labor": 8
+    },
+    {
+      "name": "Trojnik korytka",
+      "price": 35,
+      "labor": 12
+    },
+    {
+      "name": "Redukcja korytka",
+      "price": 18,
+      "labor": 6
+    },
+    {
+      "name": "Uchwyt sufitowy korytka",
+      "price": 12,
+      "labor": 8
+    },
+    {
+      "name": "Uchwyt scienny korytka",
+      "price": 10,
+      "labor": 7
+    }
+  ],
+  "FLOORBOX_MODULES": [
+    4,
+    6,
+    8,
+    12
+  ],
+  "FLOORBOX_TYPES": [
+    {
+      "name": "Floorbox podlogowy okragly",
+      "basePrice": 180
+    },
+    {
+      "name": "Floorbox podlogowy prostokatny",
+      "basePrice": 220
+    },
+    {
+      "name": "Floorbox GES (wpuszczany)",
+      "basePrice": 280
+    }
+  ],
+  "DADO_SIZES": [
+    {
+      "size": "20x10mm",
+      "price": 8,
+      "labor": 12
+    },
+    {
+      "size": "40x25mm",
+      "price": 15,
+      "labor": 18
+    },
+    {
+      "size": "60x40mm",
+      "price": 22,
+      "labor": 25
+    },
+    {
+      "size": "80x60mm",
+      "price": 35,
+      "labor": 32
+    },
+    {
+      "size": "100x60mm",
+      "price": 45,
+      "labor": 38
+    },
+    {
+      "size": "130x55mm",
+      "price": 55,
+      "labor": 45
+    }
+  ],
+  "MCCB_RATINGS": [
+    160,
+    250,
+    400,
+    630
+  ],
+  "MCCB_POLES": [
+    3,
+    4
+  ],
+  "MCCB_CURVES": [
+    "C",
+    "D"
+  ],
+  "DISCONNECTOR_RATINGS": [
+    63,
+    100,
+    160,
+    250,
+    400,
+    630
+  ],
+  "CONTACTOR_RATINGS": [
+    9,
+    12,
+    18,
+    25,
+    32,
+    40,
+    50,
+    65,
+    80,
+    95
+  ],
+  "THERMAL_RANGES": [
+    {
+      "range": "0.1-0.16A",
+      "price": 45
+    },
+    {
+      "range": "0.16-0.25A",
+      "price": 45
+    },
+    {
+      "range": "0.25-0.4A",
+      "price": 45
+    },
+    {
+      "range": "0.4-0.63A",
+      "price": 48
+    },
+    {
+      "range": "0.63-1A",
+      "price": 48
+    },
+    {
+      "range": "1-1.6A",
+      "price": 50
+    },
+    {
+      "range": "1.6-2.5A",
+      "price": 52
+    },
+    {
+      "range": "2.5-4A",
+      "price": 55
+    },
+    {
+      "range": "4-6A",
+      "price": 58
+    },
+    {
+      "range": "6-10A",
+      "price": 62
+    },
+    {
+      "range": "10-16A",
+      "price": 68
+    },
+    {
+      "range": "16-25A",
+      "price": 75
+    },
+    {
+      "range": "25-40A",
+      "price": 85
+    },
+    {
+      "range": "40-63A",
+      "price": 95
+    },
+    {
+      "range": "63-80A",
+      "price": 110
+    }
+  ],
+  "ENCLOSURE_SIZES": [
+    {
+      "size": "300x200x150",
+      "price": 180,
+      "labor": 80
+    },
+    {
+      "size": "400x300x200",
+      "price": 250,
+      "labor": 100
+    },
+    {
+      "size": "500x400x200",
+      "price": 320,
+      "labor": 120
+    },
+    {
+      "size": "600x400x200",
+      "price": 380,
+      "labor": 140
+    },
+    {
+      "size": "800x600x250",
+      "price": 550,
+      "labor": 180
+    },
+    {
+      "size": "1000x800x300",
+      "price": 750,
+      "labor": 220
+    },
+    {
+      "size": "1200x800x300",
+      "price": 950,
+      "labor": 260
+    },
+    {
+      "size": "1600x1000x400",
+      "price": 1450,
+      "labor": 350
+    }
+  ],
+  "ENCLOSURE_TYPES": [
+    {
+      "name": "Szafa wolnostojaca IP54",
+      "multiplier": 1
+    },
+    {
+      "name": "Szafa wiszaca IP54",
+      "multiplier": 0.85
+    },
+    {
+      "name": "Szafa wolnostojaca IP65",
+      "multiplier": 1.25
+    },
+    {
+      "name": "Szafa ze stali nierdzewnej IP66",
+      "multiplier": 2.2
+    }
+  ],
+  "BUSBAR_RATINGS": [
+    100,
+    160,
+    250,
+    400,
+    630,
+    800,
+    1000,
+    1250,
+    1600
+  ],
+  "DALI_DEVICES": [
+    {
+      "name": "Sterownik DALI Master (USB)",
+      "price": 450,
+      "labor": 120
+    },
+    {
+      "name": "Zasilacz DALI 200W",
+      "price": 280,
+      "labor": 85
+    },
+    {
+      "name": "Zasilacz DALI 320W",
+      "price": 380,
+      "labor": 95
+    },
+    {
+      "name": "Czujnik ruchu DALI",
+      "price": 220,
+      "labor": 65
+    },
+    {
+      "name": "Czujnik zmierzchowy DALI",
+      "price": 180,
+      "labor": 55
+    },
+    {
+      "name": "Panel sterujacy DALI (4 przyciski)",
+      "price": 320,
+      "labor": 75
+    },
+    {
+      "name": "Panel sterujacy DALI (8 przyciskow)",
+      "price": 450,
+      "labor": 85
+    }
+  ],
+  "DMX_DEVICES": [
+    {
+      "name": "Kontroler DMX 512 (4 kanaly)",
+      "price": 380,
+      "labor": 95
+    },
+    {
+      "name": "Kontroler DMX 512 (8 kanalow)",
+      "price": 550,
+      "labor": 120
+    },
+    {
+      "name": "Splitter DMX (4-way)",
+      "price": 280,
+      "labor": 65
+    },
+    {
+      "name": "Konwerter DMX-RDM",
+      "price": 420,
+      "labor": 85
+    }
+  ],
+  "FIRE_DEVICES": [
+    {
+      "name": "Centrala sygnalizacji pozarowej 2-strefowa",
+      "price": 1200,
+      "labor": 450
+    },
+    {
+      "name": "Centrala sygnalizacji pozarowej 4-strefowa",
+      "price": 1850,
+      "labor": 550
+    },
+    {
+      "name": "Centrala sygnalizacji pozarowej 8-strefowa",
+      "price": 2800,
+      "labor": 750
+    },
+    {
+      "name": "Czujka dymu optyczna",
+      "price": 85,
+      "labor": 45
+    },
+    {
+      "name": "Czujka dymu jonizacyjna",
+      "price": 95,
+      "labor": 45
+    },
+    {
+      "name": "Czujka ciepla (stala temp.)",
+      "price": 75,
+      "labor": 40
+    },
+    {
+      "name": "Czujka ciepla (roznicowa)",
+      "price": 95,
+      "labor": 45
+    },
+    {
+      "name": "Czujka wielokriteryczna (dym+cieplo)",
+      "price": 180,
+      "labor": 55
+    },
+    {
+      "name": "ROP (Reczny Ostrzegacz Pozarowy)",
+      "price": 120,
+      "labor": 65
+    },
+    {
+      "name": "Sygnalizator akustyczny SAP",
+      "price": 95,
+      "labor": 45
+    },
+    {
+      "name": "Sygnalizator optyczno-akustyczny SAP",
+      "price": 145,
+      "labor": 55
+    },
+    {
+      "name": "Modul wejsciowy (8 wejsc)",
+      "price": 280,
+      "labor": 85
+    },
+    {
+      "name": "Modul wyjsciowy (8 wyjsc)",
+      "price": 320,
+      "labor": 95
+    },
+    {
+      "name": "Izolator petli",
+      "price": 65,
+      "labor": 35
+    }
+  ],
+  "UPS_RATINGS": [
+    650,
+    850,
+    1000,
+    1500,
+    2000,
+    3000,
+    5000,
+    6000,
+    10000
+  ],
+  "BATTERY_CAPACITIES": [
+    7,
+    9,
+    12,
+    18,
+    24,
+    40,
+    65,
+    100
+  ],
+  "GROUNDING_ITEMS": [
+    {
+      "name": "Bednarka ocynkowana 30x4mm",
+      "price": 18,
+      "labor": 25,
+      "unit": "m"
+    },
+    {
+      "name": "Bednarka ocynkowana 40x4mm",
+      "price": 25,
+      "labor": 28,
+      "unit": "m"
+    },
+    {
+      "name": "Pret uziemiajacy 1.5m (ocynk)",
+      "price": 45,
+      "labor": 80,
+      "unit": "szt"
+    },
+    {
+      "name": "Pret uziemiajacy 2.0m (ocynk)",
+      "price": 65,
+      "labor": 95,
+      "unit": "szt"
+    },
+    {
+      "name": "Pret uziemiajacy 3.0m (miedz)",
+      "price": 180,
+      "labor": 120,
+      "unit": "szt"
+    },
+    {
+      "name": "Zlacze kontrolne uziemienia",
+      "price": 85,
+      "labor": 65,
+      "unit": "szt"
+    },
+    {
+      "name": "Zacisk uziemiajacy (do bednarki)",
+      "price": 12,
+      "labor": 15,
+      "unit": "szt"
+    },
+    {
+      "name": "Maszt odgromowy 3m",
+      "price": 450,
+      "labor": 280,
+      "unit": "szt"
+    },
+    {
+      "name": "Maszt odgromowy 6m",
+      "price": 850,
+      "labor": 450,
+      "unit": "szt"
+    },
+    {
+      "name": "Uchwyt dachowy odgromowy",
+      "price": 35,
+      "labor": 45,
+      "unit": "szt"
+    },
+    {
+      "name": "Zwod poziomy AlMgSi fi8mm",
+      "price": 15,
+      "labor": 30,
+      "unit": "m"
+    },
+    {
+      "name": "Zwod pionowy AlMgSi fi8mm",
+      "price": 15,
+      "labor": 35,
+      "unit": "m"
+    }
+  ],
+  "HVAC_ITEMS": [
+    {
+      "name": "Podlaczenie klimatyzatora split 2.5kW",
+      "price": 0,
+      "labor": 180
+    },
+    {
+      "name": "Podlaczenie klimatyzatora split 3.5kW",
+      "price": 0,
+      "labor": 220
+    },
+    {
+      "name": "Podlaczenie klimatyzatora split 5.0kW",
+      "price": 0,
+      "labor": 280
+    },
+    {
+      "name": "Podlaczenie klimatyzatora multi-split (2 jednostki)",
+      "price": 0,
+      "labor": 450
+    },
+    {
+      "name": "Podlaczenie klimatyzatora multi-split (3 jednostki)",
+      "price": 0,
+      "labor": 650
+    },
+    {
+      "name": "Podlaczenie wentylacji mechanicznej",
+      "price": 0,
+      "labor": 350
+    },
+    {
+      "name": "Podlaczenie rekuperatora",
+      "price": 0,
+      "labor": 420
+    },
+    {
+      "name": "Podlaczenie pompy ciepla do 10kW",
+      "price": 0,
+      "labor": 850
+    },
+    {
+      "name": "Podlaczenie pompy ciepla 10-20kW",
+      "price": 0,
+      "labor": 1200
+    },
+    {
+      "name": "Podlaczenie pompy ciepla >20kW",
+      "price": 0,
+      "labor": 1800
+    }
+  ],
+  "MEASUREMENT_ITEMS": [
+    {
+      "name": "Pomiar rezystancji izolacji (1-faz)",
+      "price": 0,
+      "labor": 18
+    },
+    {
+      "name": "Pomiar rezystancji izolacji (3-faz)",
+      "price": 0,
+      "labor": 28
+    },
+    {
+      "name": "Pomiar impedancji petli zwarcia",
+      "price": 0,
+      "labor": 18
+    },
+    {
+      "name": "Badanie wylacznika RCD",
+      "price": 0,
+      "labor": 28
+    },
+    {
+      "name": "Pomiar natezenia oswietlenia",
+      "price": 0,
+      "labor": 25
+    },
+    {
+      "name": "Pomiar uziemienia (rezystancja)",
+      "price": 0,
+      "labor": 35
+    },
+    {
+      "name": "Termowizja rozdzielnicy",
+      "price": 0,
+      "labor": 180
+    },
+    {
+      "name": "Pomiar harmonicznych (analizator)",
+      "price": 0,
+      "labor": 250
+    },
+    {
+      "name": "Certyfikacja LAN (Fluke DSX)",
+      "price": 0,
+      "labor": 45
+    },
+    {
+      "name": "Pomiar tlumienninosci swiatłowodu",
+      "price": 0,
+      "labor": 85
+    },
+    {
+      "name": "Protokol pomiarowy (komplet)",
+      "price": 0,
+      "labor": 120
+    },
+    {
+      "name": "Dokumentacja powykonawcza (schemat)",
+      "price": 0,
+      "labor": 350
+    },
+    {
+      "name": "Dokumentacja powykonawcza (projekt)",
+      "price": 0,
+      "labor": 850
+    }
+  ],
+  "EMERGENCY_ITEMS": [
+    {
+      "name": "Oprawa Ewakuacyjna LED 1W (1h)",
+      "price": 85,
+      "labor": 45
+    },
+    {
+      "name": "Oprawa Ewakuacyjna LED 3W (3h) z autotestem",
+      "price": 180,
+      "labor": 55
+    },
+    {
+      "name": "Modul Awaryjny do LED (Uniwersalny)",
+      "price": 120,
+      "labor": 35
+    },
+    {
+      "name": "Piktogram Wyjscie Ewakuacyjne (Prawo)",
+      "price": 35,
+      "labor": 25
+    },
+    {
+      "name": "Piktogram Wyjscie Ewakuacyjne (Lewo)",
+      "price": 35,
+      "labor": 25
+    },
+    {
+      "name": "Piktogram Wyjscie Ewakuacyjne (Dol)",
+      "price": 35,
+      "labor": 25
+    }
+  ],
+  "OFFICE_SPECIALIZED_ITEMS": [
+    {
+      "name": "Gniazdo Nablatowe (Wpuszczane) 2x230V + 2xUSB",
+      "price": 180,
+      "labor": 65
+    },
+    {
+      "name": "Gniazdo Pop-up (Wyskakujace) 3M",
+      "price": 220,
+      "labor": 75
+    },
+    {
+      "name": "Kolumna Zasilajaca (Aluminiowa) 45x45",
+      "price": 850,
+      "labor": 180
+    },
+    {
+      "name": "Kregoslup Kablowy (Organizator Pionowy)",
+      "price": 320,
+      "labor": 120
+    },
+    {
+      "name": "Puszka Podlogowa (Floorbox) 12M Kompletna",
+      "price": 650,
+      "labor": 220
+    }
+  ],
+  "ADDITIONAL_MEASUREMENT_ITEMS": [
+    {
+      "name": "Pomiar Rezystancji Izolacji (1 obwod)",
+      "price": 0,
+      "labor": 18
+    },
+    {
+      "name": "Pomiar Impedancji Petli Zwarcia",
+      "price": 0,
+      "labor": 18
+    },
+    {
+      "name": "Pomiar Wylacznika Roznicowoprądowego (RCD)",
+      "price": 0,
+      "labor": 28
+    },
+    {
+      "name": "Pomiar Natezenia Oswietlenia (Punkt)",
+      "price": 0,
+      "labor": 25
+    },
+    {
+      "name": "Pomiary Kamera Termowizyjna (Rozdzielnica)",
+      "price": 0,
+      "labor": 180
+    }
+  ],
+  "SECURITY_ITEMS": [
+    {
+      "name": "Czujka Ruchu PIR (System Alarmowy)",
+      "price": 85,
+      "labor": 45
+    },
+    {
+      "name": "Manipulator LCD (Klawiatura)",
+      "price": 180,
+      "labor": 65
+    },
+    {
+      "name": "Centrala Alarmowa (Plyta Glowna)",
+      "price": 650,
+      "labor": 200
+    },
+    {
+      "name": "Sygnalizator Zewnetrzny (Optyczno-Akustyczny)",
+      "price": 220,
+      "labor": 85
+    },
+    {
+      "name": "Kontroler Dostepu (Czytnik Kart)",
+      "price": 320,
+      "labor": 95
+    },
+    {
+      "name": "Zwora Elektromagnetyczna (Drzwi)",
+      "price": 280,
+      "labor": 120
+    }
+  ],
+  "DEMOLITION_ACCESSORIES": [
+    {
+      "name": "Demontaz gniazda 230V (podtynk)",
+      "labor": 15
+    },
+    {
+      "name": "Demontaz gniazda 230V (natynk)",
+      "labor": 10
+    },
+    {
+      "name": "Demontaz wylacznika pojedynczego",
+      "labor": 12
+    },
+    {
+      "name": "Demontaz wylacznika podwojnego",
+      "labor": 15
+    },
+    {
+      "name": "Demontaz wylacznika schodowego",
+      "labor": 15
+    },
+    {
+      "name": "Demontaz gniazda silowego 16A",
+      "labor": 25
+    },
+    {
+      "name": "Demontaz gniazda silowego 32A",
+      "labor": 35
+    },
+    {
+      "name": "Demontaz gniazda silowego 63A",
+      "labor": 55
+    },
+    {
+      "name": "Demontaz czujki ruchu",
+      "labor": 18
+    },
+    {
+      "name": "Demontaz czujki zmierzchowej",
+      "labor": 18
+    },
+    {
+      "name": "Demontaz puszki podtynkowej",
+      "labor": 20
+    },
+    {
+      "name": "Demontaz puszki natynkowej",
+      "labor": 12
+    }
+  ],
+  "DEMOLITION_LIGHTING": [
+    {
+      "name": "Demontaz lampy sufitowej (Plafon)",
+      "labor": 25
+    },
+    {
+      "name": "Demontaz lampy rastrowej 60x60",
+      "labor": 35
+    },
+    {
+      "name": "Demontaz panelu LED 60x60",
+      "labor": 30
+    },
+    {
+      "name": "Demontaz zyrandola (do 5kg)",
+      "labor": 45
+    },
+    {
+      "name": "Demontaz zyrandola (powyzej 5kg)",
+      "labor": 85
+    },
+    {
+      "name": "Demontaz kinkietu",
+      "labor": 28
+    },
+    {
+      "name": "Demontaz lampy przemyslowej High-Bay",
+      "labor": 120
+    },
+    {
+      "name": "Demontaz oprawy liniowej LED",
+      "labor": 35
+    },
+    {
+      "name": "Demontaz oprawy ewakuacyjnej",
+      "labor": 40
+    },
+    {
+      "name": "Demontaz oprawy halogenowej",
+      "labor": 30
+    },
+    {
+      "name": "Demontaz tasmy LED (za metr)",
+      "labor": 8
+    },
+    {
+      "name": "Demontaz zasilacza LED",
+      "labor": 15
+    }
+  ],
+  "DEMOLITION_CABLES": [
+    {
+      "name": "Demontaz przewodu podtynkowego (YDYp 3x1.5)",
+      "labor": 2.5
+    },
+    {
+      "name": "Demontaz przewodu podtynkowego (YDYp 3x2.5)",
+      "labor": 3
+    },
+    {
+      "name": "Demontaz przewodu natynkowego (w korytku)",
+      "labor": 1.8
+    },
+    {
+      "name": "Demontaz przewodu natynkowego (w rurce)",
+      "labor": 2.2
+    },
+    {
+      "name": "Demontaz kabla YKY 3x1.5",
+      "labor": 3
+    },
+    {
+      "name": "Demontaz kabla YKY 3x2.5",
+      "labor": 3.5
+    },
+    {
+      "name": "Demontaz kabla YKY 5x6",
+      "labor": 5.5
+    },
+    {
+      "name": "Demontaz kabla YKY 5x10",
+      "labor": 7.5
+    },
+    {
+      "name": "Demontaz kabla YKY 5x16",
+      "labor": 9.5
+    },
+    {
+      "name": "Demontaz kabla ziemnego (wykop)",
+      "labor": 12
+    },
+    {
+      "name": "Demontaz skretki UTP/FTP",
+      "labor": 2
+    },
+    {
+      "name": "Demontaz koncentryka TV/SAT",
+      "labor": 2.2
+    }
+  ],
+  "DEMOLITION_TRAYS": [
+    {
+      "name": "Demontaz korytka kablowego (do 100mm)",
+      "labor": 18
+    },
+    {
+      "name": "Demontaz korytka kablowego (100-200mm)",
+      "labor": 28
+    },
+    {
+      "name": "Demontaz korytka kablowego (powyzej 200mm)",
+      "labor": 45
+    },
+    {
+      "name": "Demontaz drabinki kablowej (do 200mm)",
+      "labor": 35
+    },
+    {
+      "name": "Demontaz drabinki kablowej (powyzej 200mm)",
+      "labor": 55
+    },
+    {
+      "name": "Demontaz rurki PCV fi16-25",
+      "labor": 8
+    },
+    {
+      "name": "Demontaz rurki PCV fi32-50",
+      "labor": 12
+    },
+    {
+      "name": "Demontaz peszla karbowanego fi16-25",
+      "labor": 6
+    },
+    {
+      "name": "Demontaz peszla karbowanego fi32-50",
+      "labor": 9
+    },
+    {
+      "name": "Demontaz kanalu instalacyjnego PVC",
+      "labor": 10
+    }
+  ],
+  "DEMOLITION_SWITCHGEAR": [
+    {
+      "name": "Demontaz wylacznika modulowego (1P)",
+      "labor": 8
+    },
+    {
+      "name": "Demontaz wylacznika modulowego (3P)",
+      "labor": 15
+    },
+    {
+      "name": "Demontaz roznicowki (2P)",
+      "labor": 18
+    },
+    {
+      "name": "Demontaz roznicowki (4P)",
+      "labor": 25
+    },
+    {
+      "name": "Demontaz ogranicznika przepiec",
+      "labor": 12
+    },
+    {
+      "name": "Demontaz przekaznika",
+      "labor": 10
+    },
+    {
+      "name": "Demontaz rozdzielnicy (12-24 mod)",
+      "labor": 120
+    },
+    {
+      "name": "Demontaz rozdzielnicy (36-48 mod)",
+      "labor": 180
+    },
+    {
+      "name": "Demontaz szafy wolnostojacej (do 600mm)",
+      "labor": 250
+    },
+    {
+      "name": "Demontaz szafy wolnostojacej (powyzej 600mm)",
+      "labor": 450
+    },
+    {
+      "name": "Demontaz stycznika (do 32A)",
+      "labor": 25
+    },
+    {
+      "name": "Demontaz stycznika (powyzej 32A)",
+      "labor": 45
+    }
+  ],
+  "DEMOLITION_CHASING": [
+    {
+      "name": "Skuwanie plytek ceramicznych",
+      "labor": 25
+    },
+    {
+      "name": "Wykucie bruzdy w cegle (1x1cm za mb)",
+      "labor": 8
+    },
+    {
+      "name": "Wykucie bruzdy w betonie (1x1cm za mb)",
+      "labor": 15
+    },
+    {
+      "name": "Wykucie otworu pod puszke (cegla)",
+      "labor": 18
+    },
+    {
+      "name": "Wykucie otworu pod puszke (beton)",
+      "labor": 35
+    },
+    {
+      "name": "Wyburzenie fragmentu sciany (cegla)",
+      "labor": 45
+    },
+    {
+      "name": "Wyburzenie fragmentu sciany (beton)",
+      "labor": 85
+    },
+    {
+      "name": "Wiercenie otworu fi10mm (cegla)",
+      "labor": 5
+    },
+    {
+      "name": "Wiercenie otworu fi10mm (beton)",
+      "labor": 8
+    },
+    {
+      "name": "Wiercenie otworu fi20mm (cegla)",
+      "labor": 12
+    },
+    {
+      "name": "Wiercenie otworu fi20mm (beton)",
+      "labor": 18
+    }
+  ],
+  "MONITORING_CAMERAS": [
+    {
+      "name": "Kamera IP 2MP Kopulka (Dome) wewnetrzna",
+      "price": 280,
+      "labor": 85
+    },
+    {
+      "name": "Kamera IP 4MP Kopulka (Dome) wewnetrzna",
+      "price": 420,
+      "labor": 95
+    },
+    {
+      "name": "Kamera IP 5MP Kopulka (Dome) wewnetrzna",
+      "price": 550,
+      "labor": 105
+    },
+    {
+      "name": "Kamera IP 8MP Kopulka (Dome) wewnetrzna",
+      "price": 750,
+      "labor": 120
+    },
+    {
+      "name": "Kamera IP 2MP Tuba (Bullet) zewnetrzna",
+      "price": 320,
+      "labor": 95
+    },
+    {
+      "name": "Kamera IP 4MP Tuba (Bullet) zewnetrzna",
+      "price": 480,
+      "labor": 110
+    },
+    {
+      "name": "Kamera IP 5MP Tuba (Bullet) zewnetrzna",
+      "price": 620,
+      "labor": 125
+    },
+    {
+      "name": "Kamera IP 8MP Tuba (Bullet) zewnetrzna",
+      "price": 850,
+      "labor": 140
+    },
+    {
+      "name": "Kamera IP PTZ 2MP (Obrotowa)",
+      "price": 1850,
+      "labor": 350
+    },
+    {
+      "name": "Kamera IP PTZ 4MP (Obrotowa)",
+      "price": 2800,
+      "labor": 450
+    },
+    {
+      "name": "Kamera IP PTZ 5MP (Obrotowa z zoom 20x)",
+      "price": 4500,
+      "labor": 550
+    },
+    {
+      "name": "Kamera IP Fisheye 360st 5MP",
+      "price": 1200,
+      "labor": 180
+    },
+    {
+      "name": "Kamera IP z rozpoznawaniem twarzy",
+      "price": 2200,
+      "labor": 280
+    },
+    {
+      "name": "Kamera termowizyjna (detekcja ciepla)",
+      "price": 3500,
+      "labor": 450
+    },
+    {
+      "name": "Kamera ANPR (rozpoznawanie tablic)",
+      "price": 4200,
+      "labor": 550
+    }
+  ],
+  "MONITORING_RECORDERS": [
+    {
+      "name": "Rejestrator NVR 4-kanalowy (PoE)",
+      "price": 650,
+      "labor": 120
+    },
+    {
+      "name": "Rejestrator NVR 8-kanalowy (PoE)",
+      "price": 950,
+      "labor": 150
+    },
+    {
+      "name": "Rejestrator NVR 16-kanalowy (PoE)",
+      "price": 1450,
+      "labor": 180
+    },
+    {
+      "name": "Rejestrator NVR 32-kanalowy (PoE)",
+      "price": 2800,
+      "labor": 250
+    },
+    {
+      "name": "Rejestrator NVR 64-kanalowy (PoE)",
+      "price": 4500,
+      "labor": 350
+    },
+    {
+      "name": "Rejestrator DVR 4-kanalowy (Analog)",
+      "price": 420,
+      "labor": 100
+    },
+    {
+      "name": "Rejestrator DVR 8-kanalowy (Analog)",
+      "price": 650,
+      "labor": 120
+    },
+    {
+      "name": "Rejestrator DVR 16-kanalowy (Analog)",
+      "price": 950,
+      "labor": 150
+    },
+    {
+      "name": "Serwer NVR (PC dedykowany 16-kan)",
+      "price": 3500,
+      "labor": 450
+    },
+    {
+      "name": "Serwer NVR (PC dedykowany 32-kan)",
+      "price": 5500,
+      "labor": 650
+    }
+  ],
+  "MONITORING_STORAGE": [
+    {
+      "name": "Dysk HDD 1TB (Surveillance)",
+      "price": 280,
+      "labor": 35
+    },
+    {
+      "name": "Dysk HDD 2TB (Surveillance)",
+      "price": 420,
+      "labor": 35
+    },
+    {
+      "name": "Dysk HDD 4TB (Surveillance)",
+      "price": 650,
+      "labor": 40
+    },
+    {
+      "name": "Dysk HDD 6TB (Surveillance)",
+      "price": 850,
+      "labor": 40
+    },
+    {
+      "name": "Dysk HDD 8TB (Surveillance)",
+      "price": 1200,
+      "labor": 45
+    },
+    {
+      "name": "Dysk HDD 10TB (Surveillance)",
+      "price": 1550,
+      "labor": 45
+    },
+    {
+      "name": "Dysk HDD 12TB (Surveillance)",
+      "price": 1850,
+      "labor": 50
+    },
+    {
+      "name": "Macierz RAID NAS 4-dyskowa",
+      "price": 2800,
+      "labor": 350
+    },
+    {
+      "name": "Macierz RAID NAS 8-dyskowa",
+      "price": 4500,
+      "labor": 550
+    }
+  ],
+  "MONITORING_NETWORK": [
+    {
+      "name": "Switch PoE 4-port (60W)",
+      "price": 320,
+      "labor": 65
+    },
+    {
+      "name": "Switch PoE 8-port (120W)",
+      "price": 550,
+      "labor": 85
+    },
+    {
+      "name": "Switch PoE 16-port (250W)",
+      "price": 1200,
+      "labor": 120
+    },
+    {
+      "name": "Switch PoE 24-port (370W)",
+      "price": 2200,
+      "labor": 180
+    },
+    {
+      "name": "Switch PoE Managed 8-port",
+      "price": 850,
+      "labor": 120
+    },
+    {
+      "name": "Switch PoE Managed 16-port",
+      "price": 1650,
+      "labor": 150
+    },
+    {
+      "name": "Switch PoE Managed 24-port",
+      "price": 2800,
+      "labor": 220
+    },
+    {
+      "name": "Patchpanel 24-port Cat6",
+      "price": 180,
+      "labor": 85
+    },
+    {
+      "name": "Patchpanel 48-port Cat6",
+      "price": 320,
+      "labor": 120
+    },
+    {
+      "name": "Router LTE/4G (backup)",
+      "price": 450,
+      "labor": 95
+    },
+    {
+      "name": "Router przemyslowy (DIN)",
+      "price": 850,
+      "labor": 150
+    },
+    {
+      "name": "Media Converter (Fiber to RJ45)",
+      "price": 220,
+      "labor": 45
+    }
+  ],
+  "MONITORING_POWER": [
+    {
+      "name": "Zasilacz buforowy 12V 3A (z akumulatorem)",
+      "price": 280,
+      "labor": 65
+    },
+    {
+      "name": "Zasilacz buforowy 12V 5A (z akumulatorem)",
+      "price": 420,
+      "labor": 75
+    },
+    {
+      "name": "Zasilacz buforowy 12V 10A (z akumulatorem)",
+      "price": 650,
+      "labor": 95
+    },
+    {
+      "name": "Zasilacz buforowy 24V 5A (z akumulatorem)",
+      "price": 550,
+      "labor": 85
+    },
+    {
+      "name": "Akumulator AGM 12V 7Ah",
+      "price": 85,
+      "labor": 25
+    },
+    {
+      "name": "Akumulator AGM 12V 12Ah",
+      "price": 120,
+      "labor": 30
+    },
+    {
+      "name": "Akumulator AGM 12V 18Ah",
+      "price": 180,
+      "labor": 35
+    },
+    {
+      "name": "Akumulator AGM 12V 40Ah",
+      "price": 350,
+      "labor": 45
+    },
+    {
+      "name": "UPS rack 19in 1000VA",
+      "price": 850,
+      "labor": 120
+    },
+    {
+      "name": "UPS rack 19in 3000VA",
+      "price": 2200,
+      "labor": 180
+    }
+  ],
+  "MONITORING_ACCESSORIES": [
+    {
+      "name": "Uchwyt do kamery (scienny)",
+      "price": 45,
+      "labor": 25
+    },
+    {
+      "name": "Uchwyt do kamery (sufitowy)",
+      "price": 55,
+      "labor": 30
+    },
+    {
+      "name": "Uchwyt do kamery (narozny)",
+      "price": 65,
+      "labor": 35
+    },
+    {
+      "name": "Uchwyt do kamery PTZ (maszt)",
+      "price": 280,
+      "labor": 85
+    },
+    {
+      "name": "Obudowa zewnetrzna kamery",
+      "price": 120,
+      "labor": 35
+    },
+    {
+      "name": "Szafa RACK 19in wiszaca 6U",
+      "price": 420,
+      "labor": 120
+    },
+    {
+      "name": "Szafa RACK 19in wiszaca 9U",
+      "price": 650,
+      "labor": 150
+    },
+    {
+      "name": "Szafa RACK 19in wolnostojaca 42U",
+      "price": 2200,
+      "labor": 350
+    },
+    {
+      "name": "Panel wentylacyjny RACK",
+      "price": 180,
+      "labor": 45
+    },
+    {
+      "name": "Listwa zasilajaca RACK 8x230V",
+      "price": 220,
+      "labor": 55
+    }
+  ],
+  "MONITORING_SERVICES": [
+    {
+      "name": "Konfiguracja rejestratora NVR",
+      "price": 0,
+      "labor": 180
+    },
+    {
+      "name": "Konfiguracja podgladu online (P2P)",
+      "price": 0,
+      "labor": 120
+    },
+    {
+      "name": "Konfiguracja podgladu online (VPN)",
+      "price": 0,
+      "labor": 220
+    },
+    {
+      "name": "Ustawienie stref detekcji ruchu",
+      "price": 0,
+      "labor": 45
+    },
+    {
+      "name": "Konfiguracja nagrywania ciaglego",
+      "price": 0,
+      "labor": 65
+    },
+    {
+      "name": "Konfiguracja nagrywania na ruch",
+      "price": 0,
+      "labor": 85
+    },
+    {
+      "name": "Zarobienie wtyku RJ45 (kamera)",
+      "price": 0,
+      "labor": 15
+    },
+    {
+      "name": "Testowanie kabla UTP (certyfikacja)",
+      "price": 0,
+      "labor": 35
+    },
+    {
+      "name": "Konfiguracja powiadomien email/SMS",
+      "price": 0,
+      "labor": 95
+    },
+    {
+      "name": "Integracja z systemem alarmowym",
+      "price": 0,
+      "labor": 280
+    },
+    {
+      "name": "Integracja z systemem BMS",
+      "price": 0,
+      "labor": 450
+    },
+    {
+      "name": "Szkolenie uzytkownika (1h)",
+      "price": 0,
+      "labor": 150
+    }
+  ],
+  "EARTHWORKS_CABLING": [
+    {
+      "name": "Ukladanie kabla w wykopie (do 5x16mm2)",
+      "price": 0,
+      "labor": 8
+    },
+    {
+      "name": "Ukladanie kabla w wykopie (do 4x50mm2)",
+      "price": 0,
+      "labor": 15
+    },
+    {
+      "name": "Ukladanie kabla w wykopie (Ciezki >120mm2)",
+      "price": 0,
+      "labor": 28
+    },
+    {
+      "name": "Ukladanie kabla w wykopie (Ciezki >240mm2)",
+      "price": 0,
+      "labor": 45
+    },
+    {
+      "name": "Wciaganie kabla do rury oslonowej - lekki do 16mm2",
+      "price": 0,
+      "labor": 12
+    },
+    {
+      "name": "Wciaganie kabla do rury oslonowej - sredni do 50mm2",
+      "price": 0,
+      "labor": 22
+    },
+    {
+      "name": "Wciaganie kabla do rury oslonowej - ciezki (wciagarka)",
+      "price": 0,
+      "labor": 55
+    }
+  ],
+  "EARTHWORKS_PROTECTION": [
+    {
+      "name": "Ukladanie rury oslonowej Arot fi 50mm",
+      "price": 18,
+      "labor": 8
+    },
+    {
+      "name": "Ukladanie rury oslonowej Arot fi 75mm",
+      "price": 28,
+      "labor": 10
+    },
+    {
+      "name": "Ukladanie rury oslonowej Arot fi 110mm",
+      "price": 45,
+      "labor": 15
+    },
+    {
+      "name": "Ukladanie rury oslonowej Arot fi 160mm",
+      "price": 75,
+      "labor": 22
+    },
+    {
+      "name": "Ukladanie rury oslonowej Arot fi 200mm",
+      "price": 120,
+      "labor": 30
+    },
+    {
+      "name": "Ukladanie folii ostrzegawczej (niebieska - woda)",
+      "price": 2.5,
+      "labor": 3
+    },
+    {
+      "name": "Ukladanie folii ostrzegawczej (czerwona - energia)",
+      "price": 2.5,
+      "labor": 3
+    },
+    {
+      "name": "Ukladanie folii ostrzegawczej (zolta - gaz)",
+      "price": 2.5,
+      "labor": 3
+    },
+    {
+      "name": "Podsypka piaskowa 10cm (z materialem)",
+      "price": 15,
+      "labor": 8
+    },
+    {
+      "name": "Podsypka piaskowa 15cm (z materialem)",
+      "price": 22,
+      "labor": 12
+    },
+    {
+      "name": "Tasma ostrzegawcza (niebieska/czerwona)",
+      "price": 1.8,
+      "labor": 2
+    }
+  ],
+  "EARTHWORKS_GROUNDING": [
+    {
+      "name": "Ukladanie bednarki w wykopie (25x4mm ocynk)",
+      "price": 18,
+      "labor": 12
+    },
+    {
+      "name": "Ukladanie bednarki w wykopie (30x4mm ocynk)",
+      "price": 25,
+      "labor": 15
+    },
+    {
+      "name": "Ukladanie bednarki w wykopie (40x4mm ocynk)",
+      "price": 35,
+      "labor": 18
+    },
+    {
+      "name": "Montaz zlacza krzyzowego (Bednarka-Bednarka)",
+      "price": 25,
+      "labor": 35
+    },
+    {
+      "name": "Montaz zacisku uziemiajacego (do bednarki)",
+      "price": 12,
+      "labor": 15
+    },
+    {
+      "name": "Zabezpieczenie antykorozyjne spawow (Zumas)",
+      "price": 15,
+      "labor": 25
+    },
+    {
+      "name": "Spawanie bednarki (zlacze)",
+      "price": 0,
+      "labor": 45
+    }
+  ],
+  "EARTHWORKS_JOINTS": [
+    {
+      "name": "Montaz mufy przelotowej kablowej (do 5x6mm2)",
+      "price": 85,
+      "labor": 120
+    },
+    {
+      "name": "Montaz mufy przelotowej kablowej (do 4x16mm2)",
+      "price": 120,
+      "labor": 150
+    },
+    {
+      "name": "Montaz mufy przelotowej kablowej (do 4x35mm2)",
+      "price": 180,
+      "labor": 220
+    },
+    {
+      "name": "Montaz mufy przelotowej kablowej (do 4x70mm2)",
+      "price": 280,
+      "labor": 320
+    },
+    {
+      "name": "Montaz mufy przelotowej kablowej (do 4x120mm2)",
+      "price": 450,
+      "labor": 480
+    },
+    {
+      "name": "Montaz mufy przelotowej kablowej (do 4x240mm2)",
+      "price": 850,
+      "labor": 750
+    },
+    {
+      "name": "Montaz mufy koncowej kablowej (do 4x35mm2)",
+      "price": 95,
+      "labor": 120
+    },
+    {
+      "name": "Montaz mufy koncowej kablowej (do 4x120mm2)",
+      "price": 280,
+      "labor": 250
+    }
+  ],
+  "EARTHWORKS_SOIL": [
+    {
+      "name": "Zasypywanie wykopu (Reczne)",
+      "price": 0,
+      "labor": 15,
+      "unitOverride": "m"
+    },
+    {
+      "name": "Zasypywanie wykopu (Koparka)",
+      "price": 0,
+      "labor": 8,
+      "unitOverride": "m"
+    },
+    {
+      "name": "Zagestczanie gruntu - warstwa 20cm",
+      "price": 0,
+      "labor": 12,
+      "unitOverride": "m"
+    },
+    {
+      "name": "Zagestczanie gruntu - warstwa 30cm",
+      "price": 0,
+      "labor": 18,
+      "unitOverride": "m"
+    },
+    {
+      "name": "Wywoz ziemi (1m3)",
+      "price": 45,
+      "labor": 0,
+      "unitOverride": "m3"
+    },
+    {
+      "name": "Dowoz piasku/kruszywa (1m3)",
+      "price": 85,
+      "labor": 0,
+      "unitOverride": "m3"
+    }
+  ],
+  "FIRE_MANUAL_DEVICES": [
+    {
+      "name": "Reczny Ostrzegacz Pozarowy (ROP) - Natynkowy",
+      "price": 85,
+      "labor": 45
+    },
+    {
+      "name": "Reczny Ostrzegacz Pozarowy (ROP) - Podtynkowy",
+      "price": 95,
+      "labor": 65
+    },
+    {
+      "name": "Puszka instalacyjna PIP-1AN (E90) - Ognioodporna",
+      "price": 35,
+      "labor": 25
+    },
+    {
+      "name": "Puszka instalacyjna PIP-3AN (E90) - Rozgalezna",
+      "price": 55,
+      "labor": 30
+    },
+    {
+      "name": "Puszka instalacyjna PIP-5AN (E90) - Duza",
+      "price": 75,
+      "labor": 35
+    }
+  ],
+  "FIRE_DETECTORS": [
+    {
+      "name": "Czujka Dymu Optyczna (Adresowalna)",
+      "price": 180,
+      "labor": 55
+    },
+    {
+      "name": "Czujka Dymu Optyczna (Konwencjonalna)",
+      "price": 95,
+      "labor": 45
+    },
+    {
+      "name": "Czujka Ciepla (Adresowalna)",
+      "price": 150,
+      "labor": 50
+    },
+    {
+      "name": "Czujka Ciepla (Konwencjonalna)",
+      "price": 75,
+      "labor": 40
+    },
+    {
+      "name": "Czujka Wieloparametrowa (Dym+Cieplo)",
+      "price": 280,
+      "labor": 65
+    },
+    {
+      "name": "Gniazdo czujki (Podstawa) - Standard",
+      "price": 12,
+      "labor": 15
+    },
+    {
+      "name": "Gniazdo czujki (Podstawa) - Izolujace",
+      "price": 45,
+      "labor": 20
+    },
+    {
+      "name": "Oslona przeciwpylowa czujki",
+      "price": 8,
+      "labor": 5
+    }
+  ],
+  "FIRE_SOUNDERS": [
+    {
+      "name": "Sygnalizator Optyczno-Akustyczny (Wewnetrzny)",
+      "price": 120,
+      "labor": 45
+    },
+    {
+      "name": "Sygnalizator Optyczno-Akustyczny (Zewnetrzny IP65)",
+      "price": 180,
+      "labor": 55
+    },
+    {
+      "name": "Sygnalizator Akustyczny (Syrena wewnetrzna)",
+      "price": 65,
+      "labor": 35
+    },
+    {
+      "name": "Sygnalizator Optyczny (Lampa blyskowa)",
+      "price": 85,
+      "labor": 40
+    }
+  ],
+  "FIRE_CENTRALS": [
+    {
+      "name": "Centrala Sygnalizacji Pozaru (SAP) 1-2 strefy - Montaz",
+      "price": 1200,
+      "labor": 350,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Centrala Sygnalizacji Pozaru (SAP) 4 strefy - Montaz",
+      "price": 1800,
+      "labor": 450,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Centrala Sygnalizacji Pozaru (SAP) Adresowalna - Montaz",
+      "price": 3500,
+      "labor": 650,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Modul wejsc/wyjsc (I/O Module)",
+      "price": 280,
+      "labor": 120,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Zasilacz buforowy SAP 24V/3A",
+      "price": 350,
+      "labor": 85,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Akumulator AGM 12V 7Ah (do SAP)",
+      "price": 80,
+      "labor": 20,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Kabel Ognioodporny HDGs 2x1.5 (E90)",
+      "price": 12,
+      "labor": 5,
+      "unitOverride": "m"
+    },
+    {
+      "name": "Kabel Ognioodporny HDGs 2x2.5 (E90)",
+      "price": 18,
+      "labor": 6,
+      "unitOverride": "m"
+    },
+    {
+      "name": "Uchwyt kablowy metalowy (UDF) - Ognioodporny",
+      "price": 3.5,
+      "labor": 2,
+      "unitOverride": "szt"
+    }
+  ],
+  "SMOKE_VENTING": [
+    {
+      "name": "Centrala Oddymiania (RZN/UCS) - Montaz i Podlaczenie",
+      "price": 2800,
+      "labor": 550,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Modul rozszerzen (Dodatkowe wyjscia)",
+      "price": 450,
+      "labor": 120,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Przycisk Oddymiania (Pomaranczowy) - RPO",
+      "price": 95,
+      "labor": 45,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Przycisk Przewietrzania (LT) - Zielony",
+      "price": 85,
+      "labor": 40,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Przycisk Resetu (Zolty)",
+      "price": 75,
+      "labor": 35,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Czujka Pogodowa (Wiatr/Deszcz) - Montaz na dachu",
+      "price": 650,
+      "labor": 180,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Czujka Dymu Kanalowa (ASD)",
+      "price": 380,
+      "labor": 120,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Silownik Okienny/Klapy 230V 24Nm - Montaz i Regulacja",
+      "price": 850,
+      "labor": 220,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Silownik Okienny/Klapy 230V 50Nm - Montaz i Regulacja",
+      "price": 1200,
+      "labor": 280,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Silownik Okienny/Klapy 24V 24Nm - Montaz i Regulacja",
+      "price": 950,
+      "labor": 240,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Modul sterujacy klapami (1-kanalowy)",
+      "price": 280,
+      "labor": 85,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Modul sterujacy klapami (2-kanalowy)",
+      "price": 420,
+      "labor": 110,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Wspornik montazowy silownika",
+      "price": 45,
+      "labor": 25,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Kabel sterujacy YnTKSY 2x2x0.8",
+      "price": 8,
+      "labor": 4,
+      "unitOverride": "m"
+    },
+    {
+      "name": "Kabel zasilajacy silownika YDY 3x1.5",
+      "price": 5,
+      "labor": 3,
+      "unitOverride": "m"
+    }
+  ],
+  "ACCESS_LOCKS": [
+    {
+      "name": "Zwora Elektromagnetyczna 300kg - Montaz",
+      "price": 280,
+      "labor": 120
+    },
+    {
+      "name": "Zwora Elektromagnetyczna 600kg - Montaz",
+      "price": 450,
+      "labor": 150
+    },
+    {
+      "name": "Zwora Elektromagnetyczna 1200kg - Montaz",
+      "price": 850,
+      "labor": 200
+    },
+    {
+      "name": "Elektrozaczep Awersyjny - Montaz i frezowanie",
+      "price": 180,
+      "labor": 150
+    },
+    {
+      "name": "Elektrozaczep Rewersyjny - Montaz i frezowanie",
+      "price": 220,
+      "labor": 160
+    },
+    {
+      "name": "Samozamykacz drzwiowy EN3 - Montaz i Regulacja",
+      "price": 180,
+      "labor": 85
+    },
+    {
+      "name": "Samozamykacz drzwiowy EN5 - Montaz i Regulacja",
+      "price": 280,
+      "labor": 95
+    }
+  ],
+  "ACCESS_POINTS": [
+    {
+      "name": "Czytnik Kart/Brelokow (RFID 125kHz)",
+      "price": 120,
+      "labor": 65
+    },
+    {
+      "name": "Czytnik Kart (Mifare 13.56MHz)",
+      "price": 180,
+      "labor": 75
+    },
+    {
+      "name": "Czytnik Biometryczny (Odcisk palca)",
+      "price": 650,
+      "labor": 120
+    },
+    {
+      "name": "Szyfrator (Klawiatura kodowa)",
+      "price": 150,
+      "labor": 70
+    },
+    {
+      "name": "Przycisk Wyjscia Awaryjnego (Zielona szybka)",
+      "price": 45,
+      "labor": 35
+    },
+    {
+      "name": "Przycisk Wyjscia (Metalowy/Podswietlany)",
+      "price": 65,
+      "labor": 40
+    },
+    {
+      "name": "Przycisk Wyjscia Bezdotykowy (Sensor)",
+      "price": 95,
+      "labor": 50
+    },
+    {
+      "name": "Kontaktron wpuszczany (Drzwi metalowe)",
+      "price": 25,
+      "labor": 45
+    },
+    {
+      "name": "Kontaktron nawierzchniowy (Brama/Garaz)",
+      "price": 35,
+      "labor": 30
+    }
+  ],
+  "ACCESS_CONTROLLERS": [
+    {
+      "name": "Kontroler Dostepu (Plyta w obudowie z zasilaczem)",
+      "price": 450,
+      "labor": 180,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Kontroler Dostepu (2-drzwiowy)",
+      "price": 750,
+      "labor": 250,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Kontroler Dostepu (4-drzwiowy)",
+      "price": 1200,
+      "labor": 350,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Zasilacz buforowy 12V 5A (z obudowa)",
+      "price": 220,
+      "labor": 70,
+      "unitOverride": "szt"
+    },
+    {
+      "name": "Okablowanie strukturalne KD (UTP Cat5e)",
+      "price": 3,
+      "labor": 4,
+      "unitOverride": "m"
+    },
+    {
+      "name": "Okablowanie zasilajace KD (YTDY 4x0.5)",
+      "price": 4,
+      "labor": 3,
+      "unitOverride": "m"
+    }
+  ],
+  "ENGINEERING_SERVICES": [
+    {
+      "name": "Programowanie Centrali KD (Dodawanie uzytkownikow)",
+      "price": 0,
+      "labor": 280
+    },
+    {
+      "name": "Programowanie Centrali KD (Konfiguracja stref)",
+      "price": 0,
+      "labor": 350
+    },
+    {
+      "name": "Programowanie Centrali SAP (Adresowanie czujek)",
+      "price": 0,
+      "labor": 450
+    },
+    {
+      "name": "Uruchomienie Systemu Oddymiania (Testy funkcjonalne)",
+      "price": 0,
+      "labor": 650
+    },
+    {
+      "name": "Scenariusz Pozarowy (Testy wind/grodzi/klap)",
+      "price": 0,
+      "labor": 850
+    },
+    {
+      "name": "Testy Integracji SAP-KD-Oddymianie",
+      "price": 0,
+      "labor": 950
+    },
+    {
+      "name": "Szkolenie obslugi dla Inwestora (2h)",
+      "price": 0,
+      "labor": 450
+    },
+    {
+      "name": "Sporzadzenie Dokumentacji Powykonawczej",
+      "price": 0,
+      "labor": 550
+    },
+    {
+      "name": "Przeglad Okresowy Systemu SAP",
+      "price": 0,
+      "labor": 380
+    },
+    {
+      "name": "Serwis Gwarancyjny (Wizyta)",
+      "price": 0,
+      "labor": 280
+    }
+  ]
+}

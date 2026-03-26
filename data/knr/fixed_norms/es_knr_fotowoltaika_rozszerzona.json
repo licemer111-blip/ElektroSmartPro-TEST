@@ -1,0 +1,498 @@
+[
+  {
+    "catalog_code": "ES-KNR-OZE 0101",
+    "table_number": "5103",
+    "column_number": "01",
+    "description": "Montaż panelu fotowoltaicznego mono/bifacial na dachu skośnym (blachodachówka / dachówka) — hak + szyna + klema",
+    "unit": "szt",
+    "labor_norm": 0.45,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "panel pv",
+      "panel słoneczny",
+      "moduł fotowoltaiczny",
+      "panel solarny",
+      "moduł pv",
+      "panele słoneczne",
+      "montaż paneli",
+      "dach skośny pv",
+      "blachodachówka pv",
+      "dachówka pv"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0102",
+    "table_number": "5103",
+    "column_number": "02",
+    "description": "Montaż panelu fotowoltaicznego na dachu płaskim (system balastowy lub kotwiony)",
+    "unit": "szt",
+    "labor_norm": 0.55,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "dach płaski pv",
+      "panel na płaskim dachu",
+      "system balastowy",
+      "pv dach płaski",
+      "montaż na tarasie",
+      "montaż flat roof",
+      "stropodach pv"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0103",
+    "table_number": "5103",
+    "column_number": "03",
+    "description": "Montaż panelu fotowoltaicznego na gruncie (konstrukcja słupkowa lub ramowa stalowa)",
+    "unit": "szt",
+    "labor_norm": 0.65,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "pv grunt",
+      "panele na ziemi",
+      "farma pv",
+      "instalacja gruntowa",
+      "solar ground",
+      "montaż na gruncie",
+      "konstrukcja gruntowa pv"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0104",
+    "table_number": "5103",
+    "column_number": "04",
+    "description": "Montaż i uziemienie konstrukcji montażowej / systemu szyn (bez paneli)",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "konstrukcja pv",
+      "szyny montażowe",
+      "system mocowania pv",
+      "stelaż pv",
+      "uziemienie konstrukcji",
+      "montaż szyn pv"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0201",
+    "table_number": "5103",
+    "column_number": "05",
+    "description": "Montaż inwertera jednofazowego (micro / string) do 6 kW — ściana lub szyna DIN",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "inwerter pv",
+      "falownik pv",
+      "inwerter jednofazowy",
+      "inwerter solarny",
+      "string inverter",
+      "inwerter 5kw",
+      "inwerter 6kw",
+      "solar inverter"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0202",
+    "table_number": "5103",
+    "column_number": "06",
+    "description": "Montaż inwertera trójfazowego hybrydowego 10-15 kW (z funkcją backup)",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "inwerter hybrydowy",
+      "inwerter trójfazowy",
+      "falownik hybrydowy",
+      "inwerter z backup",
+      "hybrid inverter",
+      "inwerter 10kw",
+      "inwerter 15kw",
+      "off-grid inwerter"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0203",
+    "table_number": "5103",
+    "column_number": "07",
+    "description": "Montaż inwertera trójfazowego przemysłowego 20-100 kW",
+    "unit": "szt",
+    "labor_norm": 4.0,
+    "knr_category": "fotowoltaika",
+    "is_industrial": true,
+    "synonyms": [
+      "inwerter przemysłowy",
+      "inwerter 50kw",
+      "inwerter 100kw",
+      "duży inwerter",
+      "inwerter komercyjny",
+      "central inverter"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0301",
+    "table_number": "5103",
+    "column_number": "08",
+    "description": "Ułożenie kabla solarnego DC 4-6 mm² (H1Z2Z2-K) między panelami a inwerterem",
+    "unit": "m",
+    "labor_norm": 0.1,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "kabel solarny",
+      "kabel dc",
+      "kabel pv",
+      "h1z2z2-k",
+      "kabel fotowoltaiczny",
+      "kabel 6mm solar",
+      "przewód dc pv"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0302",
+    "table_number": "5103",
+    "column_number": "09",
+    "description": "Montaż złącza MC4 (para: wtyk + gniazdo) na kablu solarnym",
+    "unit": "kpl",
+    "labor_norm": 0.12,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "mc4",
+      "złącze mc4",
+      "wtyk solarny",
+      "konektor mc4",
+      "złącze dc pv",
+      "mc4 connector"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0303",
+    "table_number": "5103",
+    "column_number": "10",
+    "description": "Montaż zabezpieczenia DC (bezpiecznik / wyłącznik DC) w łańcuchu PV",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "bezpiecznik dc",
+      "wyłącznik dc",
+      "zabezpieczenie dc",
+      "string fuse",
+      "dc disconnect",
+      "odłącznik dc"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0304",
+    "table_number": "5103",
+    "column_number": "11",
+    "description": "Montaż ochronnika przepięciowego DC (SPD DC typ II) dla instalacji PV",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "spd dc",
+      "ochronnik przepięciowy dc",
+      "odgromnik dc",
+      "surge protector pv",
+      "ochrona dc pv",
+      "ogranicznik napięcia dc"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0305",
+    "table_number": "5103",
+    "column_number": "12",
+    "description": "Montaż optymalizatora mocy (power optimizer) na panelu — SolarEdge, Tigo",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "optymalizator",
+      "power optimizer",
+      "solaredge optymalizator",
+      "tigo optimizer",
+      "mppt modułowy",
+      "optymalizator mocy pv"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0306",
+    "table_number": "5103",
+    "column_number": "13",
+    "description": "Montaż mikroinwertera (Enphase, Hoymiles) bezpośrednio na module PV",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "mikroinwerter",
+      "micro inverter",
+      "enphase",
+      "hoymiles",
+      "deye microinverter",
+      "iq8 enphase",
+      "mikroinwerter pv"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0401",
+    "table_number": "5103",
+    "column_number": "14",
+    "description": "Montaż magazynu energii (bateria LiFePO4) do 10 kWh — szafa lub naścienny",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "magazyn energii",
+      "bateria domowa",
+      "akumulator pv",
+      "lifepo4",
+      "energy storage",
+      "bateria 10kwh",
+      "magazyn lifepo4",
+      "pylontech",
+      "byd battery"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0402",
+    "table_number": "5103",
+    "column_number": "15",
+    "description": "Montaż magazynu energii 15-20 kWh (wielomodułowy, rack lub wolnostojący)",
+    "unit": "szt",
+    "labor_norm": 5.0,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "magazyn 15kwh",
+      "bateria 20kwh",
+      "duży magazyn energii",
+      "bms bateria",
+      "system storage",
+      "ess system",
+      "bateria rack"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0501",
+    "table_number": "5103",
+    "column_number": "16",
+    "description": "Montaż i konfiguracja licznika dwukierunkowego (net-metering) — współpraca z OSD",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "licznik dwukierunkowy",
+      "net metering",
+      "licznik pv",
+      "bidirectional meter",
+      "prosument licznik",
+      "licznik energii pv",
+      "energia zwrotna"
+      ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0502",
+    "table_number": "5103",
+    "column_number": "17",
+    "description": "Montaż przekaźnika bilansu energii / ogranicznika eksportu (zero export)",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "zero export",
+      "ogranicznik eksportu",
+      "bilans energii",
+      "przekaźnik mocy",
+      "energy meter ct",
+      "ct clamp",
+      "anti-islanding"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0503",
+    "table_number": "5103",
+    "column_number": "18",
+    "description": "Montaż i konfiguracja systemu monitoringu instalacji PV (Wi-Fi + aplikacja)",
+    "unit": "kpl",
+    "labor_norm": 1.5,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "monitoring pv",
+      "solaredge monitoring",
+      "aplikacja pv",
+      "wifi inwerter",
+      "logger pv",
+      "cloud pv",
+      "monitoring instalacji solarnej"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0601",
+    "table_number": "5103",
+    "column_number": "19",
+    "description": "Wykonanie pomiarów elektrycznych instalacji PV (izolacja DC, pętla zwarcia AC, biegunowość)",
+    "unit": "kpl",
+    "labor_norm": 2.5,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "pomiary pv",
+      "odbiór pv",
+      "testy instalacji solarnej",
+      "badanie izolacji dc",
+      "pomiar pv odbiór",
+      "protokół pv",
+      "commissioning pv"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0602",
+    "table_number": "5103",
+    "column_number": "20",
+    "description": "Sporządzenie dokumentacji powykonawczej PV i zgłoszenie do OSD (operator sieci)",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "dokumentacja pv",
+      "zgłoszenie osd",
+      "tauron zgłoszenie",
+      "pge prosument",
+      "energa mikroinstalacja",
+      "wniosek przyłączenie pv",
+      "dokumentacja powykonawcza pv"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0701",
+    "table_number": "5103",
+    "column_number": "21",
+    "description": "Montaż ładowarki AC EV jednofazowej (Wallbox) do 7,4 kW z podłączeniem",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "knr_category": "ev_ladowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "wallbox",
+      "ładowarka ev",
+      "stacja ładowania ev",
+      "punkt ładowania samochodu",
+      "ładowarka 7.4kw",
+      "typ2 ładowarka",
+      "mode 3 ładowarka",
+      "evse"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0702",
+    "table_number": "5103",
+    "column_number": "22",
+    "description": "Montaż ładowarki AC EV trójfazowej (Wallbox) 11/22 kW z dedykowanym zabezpieczeniem",
+    "unit": "szt",
+    "labor_norm": 3.5,
+    "knr_category": "ev_ladowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "wallbox trójfazowy",
+      "ładowarka 11kw",
+      "ładowarka 22kw",
+      "ładowarka 3-fazowa ev",
+      "stacja 22kw",
+      "ac charging station",
+      "ładowarka szybka ac"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0703",
+    "table_number": "5103",
+    "column_number": "23",
+    "description": "Montaż dedykowanego obwodu zasilającego do ładowarki EV (5x6 lub 5x10 mm²)",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "knr_category": "ev_ladowanie",
+    "is_industrial": false,
+    "synonyms": [
+      "obwód ev",
+      "zasilanie ładowarki",
+      "kabel do ładowarki",
+      "dedykowany obwód ev",
+      "instalacja pod ev",
+      "przyłącze ładowarki"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0704",
+    "table_number": "5103",
+    "column_number": "24",
+    "description": "Montaż stacji ładowania DC (szybkiego) CHAdeMO / CCS — Combo 2 (parking, stacja)",
+    "unit": "szt",
+    "labor_norm": 8.0,
+    "knr_category": "ev_ladowanie",
+    "is_industrial": true,
+    "synonyms": [
+      "stacja dc",
+      "fast charging",
+      "ładowarka dc",
+      "chademo",
+      "ccs combo 2",
+      "szybka ładowarka ev",
+      "dc charger"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0801",
+    "table_number": "5103",
+    "column_number": "25",
+    "description": "Montaż pompy ciepła (jednostka zewnętrzna + wewnętrzna) — podłączenie elektryczne",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "pompa ciepła",
+      "heat pump",
+      "pc elektryczna",
+      "pompa gruntowa",
+      "pompa powietrze-woda",
+      "awhp",
+      "gshp",
+      "monoblok pompa ciepła"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-OZE 0802",
+    "table_number": "5103",
+    "column_number": "26",
+    "description": "Montaż klimatyzatora / klimatyzacji (split) — tylko podłączenie elektryczne",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "knr_category": "fotowoltaika",
+    "is_industrial": false,
+    "synonyms": [
+      "klimatyzacja",
+      "klimatyzator",
+      "split",
+      "ac jednostka",
+      "klimatyzacja zasilanie",
+      "podłączenie klimy",
+      "montaż klimatyzacji elektryka"
+    ]
+  }
+]

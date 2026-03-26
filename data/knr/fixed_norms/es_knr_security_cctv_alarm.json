@@ -1,0 +1,192 @@
+[
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9009",
+    "column_number": "01",
+    "description": "Montaż kamery IP/AHD wewnętrznej (kopułkowa) na suficie podwieszanym/ścianie",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "is_industrial": false,
+    "knr_category": "teletechnika_cctv",
+    "synonyms": [
+      "kamera ip",
+      "kamera ahd",
+      "kamera cctv",
+      "kamera kopułkowa",
+      "monitoring",
+      "dome camera",
+      "kamera poe",
+      "kamera wewnętrzna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9009",
+    "column_number": "02",
+    "description": "Montaż kamery zewnętrznej na elewacji ocieplonej (styropian/wełna)",
+    "unit": "szt",
+    "labor_norm": 1.8,
+    "is_industrial": false,
+    "knr_category": "teletechnika_cctv",
+    "synonyms": [
+      "kamera zewnętrzna",
+      "kamera elewacyjna",
+      "kamera ip outdoor",
+      "kamera tubowa",
+      "kamera ptc",
+      "kamera wodoodporna",
+      "ip66 kamera"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9009",
+    "column_number": "03",
+    "description": "Montaż i uruchomienie Rejestratora (NVR/DVR) wraz z instalacją dysku HDD",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "is_industrial": false,
+    "knr_category": "teletechnika_cctv",
+    "synonyms": [
+      "rejestrator",
+      "nvr",
+      "dvr",
+      "rejestrator cctv",
+      "network video recorder",
+      "hdd monitoring",
+      "rejestrator ip"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9009",
+    "column_number": "04",
+    "description": "Montaż czujki ruchu (PIR / Dualnej) wewnętrznej",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "is_industrial": false,
+    "knr_category": "teletechnika_alarm",
+    "synonyms": [
+      "czujka ruchu",
+      "pir",
+      "detektor ruchu",
+      "czujnik ruchu",
+      "czujka alarmowa",
+      "motion sensor",
+      "czujka dualna",
+      "satel pir"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9009",
+    "column_number": "05",
+    "description": "Montaż czujki magnetycznej (kontaktronu) wpuszczanego w ramę okna/drzwi",
+    "unit": "szt",
+    "labor_norm": 1.1,
+    "is_industrial": false,
+    "knr_category": "teletechnika_alarm",
+    "synonyms": [
+      "kontaktron",
+      "czujka magnetyczna",
+      "czujnik drzwi",
+      "czujnik okna",
+      "reed sensor",
+      "czujka otwarcia",
+      "magnetic contact"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9009",
+    "column_number": "06",
+    "description": "Montaż manipulatora (klawiatury) LCD lub dotykowego",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "is_industrial": false,
+    "knr_category": "teletechnika_alarm",
+    "synonyms": [
+      "manipulator alarmowy",
+      "klawiatura alarmu",
+      "panel alarmu",
+      "satel kpd",
+      "manipulator lcd",
+      "touchscreen alarm",
+      "klawiatura kodowa"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9009",
+    "column_number": "07",
+    "description": "Montaż sygnalizatora optyczno-akustycznego zewnętrznego",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "is_industrial": false,
+    "knr_category": "teletechnika_alarm",
+    "synonyms": [
+      "sygnalizator zewnętrzny",
+      "syrena zewnętrzna",
+      "flash alarm",
+      "sygnalizator akustyczno-optyczny",
+      "sounder strobe",
+      "sygnałizator elewacyjny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9009",
+    "column_number": "08",
+    "description": "Montaż stacji bramowej wideodomofonu IP (natynkowo lub podtynkowo na słupku)",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "is_industrial": false,
+    "knr_category": "teletechnika_interkom",
+    "synonyms": [
+      "wideodofon",
+      "stacja bramowa",
+      "panel zewnętrzny domofonu",
+      "domofon ip",
+      "wideodomofon",
+      "bramofon",
+      "interkom zewnętrzny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9009",
+    "column_number": "09",
+    "description": "Montaż monitora wideodomofonu wewnętrznego (np. 7 cali)",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "is_industrial": false,
+    "knr_category": "teletechnika_interkom",
+    "synonyms": [
+      "monitor domofonu",
+      "panel wewnętrzny",
+      "wideodomofon monitor",
+      "słuchawka ip",
+      "ekran domofonu",
+      "unifon"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-06",
+    "table_number": "9009",
+    "column_number": "10",
+    "description": "Montaż i podłączenie zasilacza buforowego (np. 12V 5A) w obudowie natynkowej",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "is_industrial": false,
+    "knr_category": "teletechnika_alarm",
+    "synonyms": [
+      "zasilacz buforowy",
+      "zasilacz 12v",
+      "zasilacz z akumulatorem",
+      "psu bufor",
+      "zasilacz cctv",
+      "power supply alarm",
+      "zasilacz 24v"
+    ]
+  }
+]

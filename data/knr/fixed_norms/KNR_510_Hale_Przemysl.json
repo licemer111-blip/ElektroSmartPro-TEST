@@ -1,0 +1,90 @@
+[
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0101",
+    "column_number": "01",
+    "description": "Montaż szaf sterowniczych wolnostojących (do 100kg) - Hale",
+    "unit": "szt",
+    "labor_norm": 14.5,
+    "section": "01",
+    "material_category": "switchgear",
+    "is_industrial": true,
+    "synonyms": [
+      "szafa sterownicza hala",
+      "rozdzielnica przemysłowa",
+      "panel mcc",
+      "szafa silnikowa",
+      "szafa elektryczna przemysł",
+      "tablica zasilania maszyn",
+      "srp hala"
+    ],
+    "materials": [
+      {
+        "material_name": "Kotwa montażowa M12",
+        "material_unit": "szt",
+        "quantity_factor": 4.0,
+        "component_type": "material"
+      },
+      {
+        "material_name": "Podkładka gumowa wibroizolacyjna",
+        "material_unit": "kpl",
+        "quantity_factor": 1.0,
+        "component_type": "material"
+      }
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0203",
+    "column_number": "02",
+    "description": "Układanie korytek kablowych o szerokości do 200mm na konstrukcjach",
+    "unit": "m",
+    "labor_norm": 0.85,
+    "section": "02",
+    "material_category": "cable_trays",
+    "is_industrial": true,
+    "synonyms": [
+      "korytko kablowe 200mm",
+      "trasa kablowa przemysłowa",
+      "koryto perforowane",
+      "korytka na ścianie",
+      "trasa metalowa",
+      "koryto kablowe hala",
+      "montaż korytek"
+    ],
+    "materials": [
+      {
+        "material_name": "Korytko perforowane 200x60",
+        "material_unit": "m",
+        "quantity_factor": 1.05,
+        "component_type": "material"
+      },
+      {
+        "material_name": "Uchwyt ścienny/wieszak",
+        "material_unit": "szt",
+        "quantity_factor": 0.5,
+        "component_type": "material"
+      }
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0301",
+    "column_number": "05",
+    "description": "Wciąganie kabli o masie do 1.0kg/m (YKY 5x10-16mm2) w koryta",
+    "unit": "m",
+    "labor_norm": 0.22,
+    "section": "03",
+    "material_category": "cable_heavy",
+    "is_industrial": true,
+    "synonyms": [
+      "yky 5x10",
+      "yky 5x16",
+      "układanie kabla siłowego",
+      "ciągnienie kabla",
+      "kabel zasilający maszynę",
+      "kabel 5żyłowy",
+      "układanie kabli w korytach"
+    ]
+  }
+]

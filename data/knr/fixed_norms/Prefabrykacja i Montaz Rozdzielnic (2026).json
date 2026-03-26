@@ -1,0 +1,272 @@
+[
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "01",
+    "description": "Prefabrykacja rozdzielnicy w warsztacie (montaż szyn, okablowanie wewnętrzne) - do 48 modułów",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": false,
+    "synonyms": [
+      "prefabrykacja rozdzielnicy",
+      "budowa tablicy",
+      "montaż szyn",
+      "okablowanie wewnetrzne",
+      "montaż aparatury",
+      "budowa rozdzielnicy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "02",
+    "description": "Montaż i podłączenie aparatury modułowej (nadprądowe, RCD, ochronniki) w gotowej rozdzielnicy",
+    "unit": "szt",
+    "labor_norm": 0.4,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": false,
+    "synonyms": [
+      "aparat modułowy",
+      "mcb rozdzielnica",
+      "rcd montaż",
+      "bezpieczniki montaż",
+      "ochronnik przepięć",
+      "spd montaż"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "03",
+    "description": "Osadzenie i montaż obudowy rozdzielnicy podtynkowej/natynkowej na obiekcie",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": false,
+    "synonyms": [
+      "obudowa rozdzielnicy",
+      "tablica p/t",
+      "skrzynka elektryczna",
+      "osadzenie tablicy",
+      "rozdzielnica natynkowa",
+      "montaż skrzynki"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "04",
+    "description": "Zarobienie końcówek kablowych (tulejkowanie) i podłączenie kabli do aparatury w rozdzielnicy",
+    "unit": "szt",
+    "labor_norm": 0.25,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": false,
+    "synonyms": [
+      "tulejkowanie",
+      "zarabianie kabli",
+      "tuleja zaciskowa",
+      "koniec kablowy",
+      "terminacja rozdzielnica",
+      "podlaczenie kabla"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "05",
+    "description": "Znakowanie obwodów, wydruk legendy i testowanie poprawności połączeń rozdzielnicy",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": false,
+    "synonyms": [
+      "znakowanie obwodów",
+      "legenda rozdzielnicy",
+      "opis obwodów",
+      "testowanie tablicy",
+      "sprawdzenie połączeń",
+      "etykiety obwodów"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "06",
+    "description": "Montaż i podłączenie szyny zbiorczej (busbar) PE/N oraz zacisków w rozdzielnicy",
+    "unit": "kpl",
+    "labor_norm": 1.5,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": false,
+    "synonyms": [
+      "szyna pe",
+      "szyna n",
+      "busbar rozdzielnica",
+      "szyna zbiorcza",
+      "PE/N szyna",
+      "neutral bar"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "07",
+    "description": "Montaż i podłączenie stycznika modułowego (230V/400V) w rozdzielnicy",
+    "unit": "szt",
+    "labor_norm": 0.8,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": false,
+    "synonyms": [
+      "stycznik modułowy",
+      "contactor rozdzielnica",
+      "przekaźnik bistabilny",
+      "styh modułowy",
+      "modular contactor",
+      "bistable relay"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "08",
+    "description": "Montaż i konfiguracja przekaźnika napięciowego / kontroli faz (zabezpieczenie ppoż. napięcia)",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": false,
+    "synonyms": [
+      "przekaźnik napięciowy",
+      "kontrola faz",
+      "phase monitor",
+      "voltage relay",
+      "zabezpieczenie napięciowe",
+      "relay voltage protection"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "09",
+    "description": "Montaż zestawu pomiarowego z podlicznikiem energii w rozdzielnicy (MID, LCD)",
+    "unit": "szt",
+    "labor_norm": 1.2,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": false,
+    "synonyms": [
+      "podlicznik rozdzielnica",
+      "energy meter panel",
+      "licznik lcd",
+      "mid rozdzielnica",
+      "submetering panel",
+      "montaż licznika w tablicy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "10",
+    "description": "Montaż i okablowanie rozdzielnicy przemysłowej SZT (sterowniczo-zasilającej) w szafie metalowej",
+    "unit": "kpl",
+    "labor_norm": 20.0,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": true,
+    "synonyms": [
+      "szafa sterownicza",
+      "szt montaż",
+      "szafa siłowa",
+      "industrial panel",
+      "mcc panel",
+      "motor control center"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "11",
+    "description": "Montaż i podłączenie zabezpieczenia silnikowego (PKZ, DOL starter) w rozdzielnicy",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": true,
+    "synonyms": [
+      "starter silnika",
+      "pkz",
+      "dol starter",
+      "zabezpieczenie silnikowe",
+      "motor protection",
+      "direct on line starter"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "12",
+    "description": "Montaż i okablowanie wejścia 3-fazowego z zaciskami i zabezpieczeniem głównym rozdzielnicy",
+    "unit": "kpl",
+    "labor_norm": 2.5,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": false,
+    "synonyms": [
+      "wejście 3-fazowe",
+      "zasilanie tablicy",
+      "podłączenie tablicy wejście",
+      "3-phase input panel",
+      "input wiring panel",
+      "zasilanie rozdzielnicy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "13",
+    "description": "Montaż drzwiczek z plombowaniem i oznakowanie BHP rozdzielnicy",
+    "unit": "kpl",
+    "labor_norm": 1.0,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": false,
+    "synonyms": [
+      "plombowanie tablicy",
+      "oznakowanie bhp",
+      "drzwiczki rozdzielnica",
+      "plomba rozdzielnica",
+      "bhp oznakowanie",
+      "panel sealing label"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "14",
+    "description": "Wykonanie prób funkcjonalnych i sprawdzenie selektywności zabezpieczeń rozdzielnicy",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": false,
+    "synonyms": [
+      "próby funkcjonalne",
+      "selektywność zabezpieczeń",
+      "testy rozdzielnicy",
+      "commissioning panel",
+      "coordination check",
+      "sprawdzenie rozdzielnicy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "15",
+    "description": "Dokumentacja techniczna rozdzielnicy — schemat jednokreskowy + DTR w formie elektronicznej",
+    "unit": "kpl",
+    "labor_norm": 3.0,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": false,
+    "synonyms": [
+      "dokumentacja rozdzielnicy",
+      "dtr rozdzielnica",
+      "schemat jednokreskowy",
+      "as-built rozdzielnica",
+      "panel documentation",
+      "panel schematics"
+    ]
+  }
+]

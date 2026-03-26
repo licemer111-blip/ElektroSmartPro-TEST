@@ -1,0 +1,440 @@
+[
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0501",
+    "column_number": "01",
+    "description": "Montaż i elektryczne podłączenie silnika elektrycznego 3-fazowego do 4kW (klatka wiewiórki)",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "silnik elektryczny 3f",
+      "silnik trójfazowy",
+      "silnik 4kw",
+      "montaż silnika",
+      "podłączenie silnika",
+      "motor 3f",
+      "electric motor 4kw"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0501",
+    "column_number": "02",
+    "description": "Montaż i elektryczne podłączenie silnika elektrycznego 3-fazowego 5.5kW do 15kW",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "silnik 7.5kw",
+      "silnik 11kw",
+      "silnik 15kw",
+      "motor 11kw",
+      "silnik 3f 15kw",
+      "podłączenie silnika 15kw"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0501",
+    "column_number": "03",
+    "description": "Montaż i elektryczne podłączenie silnika elektrycznego 3-fazowego 18.5kW do 45kW",
+    "unit": "szt",
+    "labor_norm": 5.0,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "silnik 22kw",
+      "silnik 37kw",
+      "silnik 45kw",
+      "motor 30kw",
+      "silnik 3f 45kw",
+      "podłączenie silnika 37kw"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0501",
+    "column_number": "04",
+    "description": "Montaż i elektryczne podłączenie silnika elektrycznego 3-fazowego 55kW do 110kW",
+    "unit": "szt",
+    "labor_norm": 8.0,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "silnik 75kw",
+      "silnik 90kw",
+      "silnik 110kw",
+      "motor 75kw",
+      "silnik 3f 110kw",
+      "podłączenie silnika 90kw"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0502",
+    "column_number": "01",
+    "description": "Montaż i podłączenie falownika (przemiennika częstotliwości VFD) do 4kW na ścianie szafy",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "falownik",
+      "przemiennik częstotliwości",
+      "vfd",
+      "vsd",
+      "inverter 4kw",
+      "przemiennik 4kw",
+      "falownik vfd 4kw"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0502",
+    "column_number": "02",
+    "description": "Montaż i podłączenie falownika (przemiennika częstotliwości VFD) 5.5kW do 22kW",
+    "unit": "szt",
+    "labor_norm": 4.0,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "falownik 11kw",
+      "przemiennik 15kw",
+      "vfd 22kw",
+      "vsd 15kw",
+      "inverter 11kw",
+      "abb vfd",
+      "siemens vfd"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0502",
+    "column_number": "03",
+    "description": "Montaż i podłączenie falownika (przemiennika częstotliwości VFD) 30kW do 90kW",
+    "unit": "szt",
+    "labor_norm": 7.0,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "falownik 45kw",
+      "przemiennik 75kw",
+      "vfd 90kw",
+      "inverter 45kw",
+      "abb acs880",
+      "siemens g120",
+      "przemiennik duzy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0503",
+    "column_number": "01",
+    "description": "Montaż i podłączenie softstarter (łagodnego rozrusznika) 3-fazowego do 30kW",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "softstarter",
+      "łagodny rozrusznik",
+      "soft start",
+      "rozrusznik łagodny",
+      "abb psr",
+      "siemens 3rw",
+      "soft starter 30kw"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0504",
+    "column_number": "01",
+    "description": "Montaż i podłączenie rozrusznika gwiazda-trójkąt (Y-Δ) dla silnika 3-fazowego",
+    "unit": "kpl",
+    "labor_norm": 3.5,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "rozrusznik gwiazda trójkąt",
+      "star delta starter",
+      "y-delta",
+      "rozrusznik y-d",
+      "układ gwiazda trojkat",
+      "star triangle motor"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0504",
+    "column_number": "02",
+    "description": "Montaż szafy zasilająco-sterującej silnika (DOL / Y-D) z zabezpieczeniami",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "szafa silnikowa",
+      "rozrusznik dol",
+      "szafa sterowania silnikiem",
+      "direct on line starter",
+      "motor control center",
+      "mcc panel"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0505",
+    "column_number": "01",
+    "description": "Montaż i podłączenie przekładnika prądowego (CT) do pomiaru prądu silnika",
+    "unit": "szt",
+    "labor_norm": 0.40,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "przekładnik prądowy",
+      "ct prąd",
+      "current transformer",
+      "przekładnik ct",
+      "pomiar prądu",
+      "transformator prądowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0505",
+    "column_number": "02",
+    "description": "Montaż i podłączenie zabezpieczenia termicznego silnika (bimetalowego / PTC)",
+    "unit": "szt",
+    "labor_norm": 0.35,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "zabezpieczenie termiczne",
+      "bimetal silnikowy",
+      "ptc termistor",
+      "termik",
+      "termistor silnika",
+      "motor overload relay"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0506",
+    "column_number": "01",
+    "description": "Montaż i elektryczne podłączenie napędu liniowego (siłownika elektrycznego) 24V/230V",
+    "unit": "szt",
+    "labor_norm": 1.0,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "siłownik elektryczny",
+      "napęd liniowy",
+      "linear actuator",
+      "siłownik 24v",
+      "actuator elektryczny",
+      "cylinder elektryczny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0507",
+    "column_number": "01",
+    "description": "Podłączenie serwomotoru z enkoderem (CNC / robot) do sterownika osi",
+    "unit": "szt",
+    "labor_norm": 2.0,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "serwomotor",
+      "servo motor",
+      "enkoder",
+      "servo drive",
+      "silnik cnc",
+      "oś serwomotoru",
+      "servo axis"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0507",
+    "column_number": "02",
+    "description": "Montaż i podłączenie serwowzmacniacza (servo drive) do 7.5kW na płycie montażowej",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "servo drive",
+      "serwowzmacniacz",
+      "servo amplifier",
+      "servo kontroller",
+      "servo 7.5kw",
+      "sinamics servo"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0508",
+    "column_number": "01",
+    "description": "Konfiguracja i uruchomienie falownika VFD (parametryzacja, próba silnika)",
+    "unit": "kpl",
+    "labor_norm": 2.0,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "parametryzacja falownika",
+      "uruchomienie vfd",
+      "konfiguracja vfd",
+      "programowanie falownika",
+      "commissioning vfd",
+      "nastawy falownika"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0508",
+    "column_number": "02",
+    "description": "Pomiar i regulacja silnika elektrycznego (pomiar izolacji, pobór prądu, kierunek obrotów)",
+    "unit": "szt",
+    "labor_norm": 0.80,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "pomiar silnika",
+      "sprawdzenie silnika",
+      "test silnika elektrycznego",
+      "pomiar izolacji silnika",
+      "pobór prądu silnik",
+      "kierunek obrotów"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0509",
+    "column_number": "01",
+    "description": "Montaż i podłączenie napędu elektrycznego bramy przemysłowej / rolety (1-fazowy)",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "is_industrial": false,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "napęd bramy",
+      "silnik bramy",
+      "motor bramy garażowej",
+      "napęd rolety",
+      "garage door motor",
+      "brama automatyczna elektryczna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0509",
+    "column_number": "02",
+    "description": "Montaż i elektryczne podłączenie wciągarki elektrycznej (wci) / hoist (3-fazowej)",
+    "unit": "szt",
+    "labor_norm": 4.0,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "wciągarka elektryczna",
+      "hoist elektryczny",
+      "dźwig elektryczny",
+      "hoist 3f",
+      "crane elektryczne",
+      "winda towarowa elektryczna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0510",
+    "column_number": "01",
+    "description": "Montaż i elektryczne podłączenie sprężarki powietrza (kompresor) 3-fazowej do 7.5kW",
+    "unit": "szt",
+    "labor_norm": 3.0,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "sprężarka elektryczna",
+      "kompresor elektryczny",
+      "kompresor 3f",
+      "air compressor electrical",
+      "sprężarka 7.5kw",
+      "kompresor powietrza 3f"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0510",
+    "column_number": "02",
+    "description": "Montaż i elektryczne podłączenie pompy elektrycznej 3-fazowej (przemysłowej) do 11kW",
+    "unit": "szt",
+    "labor_norm": 2.5,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "pompa elektryczna 3f",
+      "pompa 3f przemysłowa",
+      "electric pump industrial",
+      "pompa 7.5kw",
+      "pompa 11kw 3f",
+      "pompa wodna elektryczna"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0511",
+    "column_number": "01",
+    "description": "Montaż encoder / przetwornik położenia (inkrementalny) na wale silnika",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "enkoder inkrementalny",
+      "przetwornik położenia",
+      "encoder montaż",
+      "rotary encoder",
+      "pulse generator",
+      "enkoder wału"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0512",
+    "column_number": "01",
+    "description": "Montaż i podłączenie hamulca elektromagnetycznego (BRK) silnika 3-fazowego",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "hamulec elektromagnetyczny",
+      "electromagnetic brake",
+      "brk silnik",
+      "hamulec silnikowy",
+      "brake motor",
+      "hamulec 24vdc"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0513",
+    "column_number": "01",
+    "description": "Montaż i konfiguracja systemu soft-start (łagodny rozruch) dla pompy z pętlą PID",
+    "unit": "kpl",
+    "labor_norm": 3.5,
+    "is_industrial": true,
+    "knr_category": "silniki_napedy",
+    "synonyms": [
+      "soft start pompa",
+      "rozruch łagodny pid",
+      "pid regulator pompa",
+      "pid vfd pump",
+      "sterownik pompy vfd",
+      "system pid pompa"
+    ]
+  }
+]

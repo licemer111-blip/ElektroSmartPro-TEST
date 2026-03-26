@@ -1,0 +1,79 @@
+[
+  {
+    "catalog_code": "KNR 5-12",
+    "table_number": "0701",
+    "column_number": "01",
+    "description": "Montaż gniazda logicznego RJ45 (2xKeystone) w parpecie/poddłogowe",
+    "unit": "szt",
+    "labor_norm": 0.65,
+    "section": "07",
+    "material_category": "it_osprzet",
+    "is_industrial": false,
+    "synonyms": [
+      "gniazdo rj45 biuro",
+      "punkt logiczny",
+      "keystone cat6",
+      "gniazdo komputerowe",
+      "outlet sieciowy",
+      "gniazdo lan biuro",
+      "punkt it biuro",
+      "gniazdo podpłogowe"
+    ],
+    "materials": [
+      {
+        "material_name": "Moduł Keystone Cat 6",
+        "material_unit": "szt",
+        "quantity_factor": 2.0,
+        "component_type": "material"
+      },
+      {
+        "material_name": "Ramka/Front gniazda 45x45",
+        "material_unit": "szt",
+        "quantity_factor": 1.0,
+        "component_type": "material"
+      }
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12",
+    "table_number": "0815",
+    "column_number": "03",
+    "description": "Zarabianie kabla U/UTP Cat 6 na patch-panelu (1 port)",
+    "unit": "szt",
+    "labor_norm": 0.15,
+    "section": "08",
+    "material_category": "it_labor",
+    "is_industrial": false,
+    "synonyms": [
+      "zarabianie kabla",
+      "terminacja cat6",
+      "punch down",
+      "zarobienie rj45",
+      "zarabianie skrętki",
+      "terminacja keystone",
+      "krosowanie",
+      "patch panel zarabianie"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-12",
+    "table_number": "0105",
+    "column_number": "01",
+    "description": "Montaż szafy Rack 19 cali (stojąca, do 42U)",
+    "unit": "szt",
+    "labor_norm": 4.8,
+    "section": "01",
+    "material_category": "server_racks",
+    "is_industrial": false,
+    "synonyms": [
+      "szafa serwerowa",
+      "rack it",
+      "szafa 19 cali",
+      "rack 42u",
+      "szafa teleinformatyczna",
+      "rack data center",
+      "szafa sieciowa",
+      "szafa rack biuro"
+    ]
+  }
+]

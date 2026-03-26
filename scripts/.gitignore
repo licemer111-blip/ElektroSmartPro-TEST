@@ -1,0 +1,28 @@
+# Ignore all Excel files (user data)
+*.xlsx
+*.xls
+*.xlsm
+
+# Ignore Markdown reports (user data)
+Przedmiar*.md
+*Raport*.md
+
+# Ignore generated SQL files (can be large)
+*.sql
+
+# But keep utility SQL scripts
+!check_*.sql
+!rollback_*.sql
+!test_*.sql
+!vacuum_catalog.sql
+
+# Ignore batch SQL folder
+schneider_import_sql/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+.venv/

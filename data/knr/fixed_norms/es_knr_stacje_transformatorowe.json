@@ -1,0 +1,326 @@
+[
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0901",
+    "column_number": "01",
+    "description": "Montaż transformatora rozdzielczego suchego (żywicznego) 100-250kVA w stacji wnętrzowej",
+    "unit": "szt",
+    "labor_norm": 16.0,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "transformator suchy 160kva",
+      "transformator żywiczny",
+      "trafo 250kva",
+      "dry type transformer",
+      "transformator 100kva",
+      "transformator wnętrzowy"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0901",
+    "column_number": "02",
+    "description": "Montaż transformatora rozdzielczego olejowego 400-1000kVA w stacji słupowej / wnętrzowej",
+    "unit": "szt",
+    "labor_norm": 32.0,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "transformator olejowy 400kva",
+      "trafo olejowy 630kva",
+      "transformator 1000kva",
+      "oil transformer",
+      "transformator słupowy",
+      "trafo 630kva"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0902",
+    "column_number": "01",
+    "description": "Montaż rozdzielnicy SN (średniego napięcia) 10-20kV — jeden moduł / pole",
+    "unit": "szt",
+    "labor_norm": 8.0,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "rozdzielnica sn",
+      "pole sn",
+      "rozdzielnia 10kv",
+      "20kv switchgear",
+      "medium voltage panel",
+      "szafa sn 10kv"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0902",
+    "column_number": "02",
+    "description": "Montaż wyłącznika SN (próżniowego/SF6) VCB 10-20kV w rozdzielnicy SN",
+    "unit": "szt",
+    "labor_norm": 6.0,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "wyłącznik próżniowy",
+      "vcb 10kv",
+      "wyłącznik sf6",
+      "breaker sn",
+      "circuit breaker mv",
+      "wyłącznik 20kv"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0902",
+    "column_number": "03",
+    "description": "Montaż odłącznika SN z napędem ręcznym lub elektrycznym 10-20kV",
+    "unit": "szt",
+    "labor_norm": 4.0,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "odłącznik sn",
+      "disconnector 10kv",
+      "odłącznik 20kv",
+      "rozłącznik sn",
+      "isolator mv",
+      "odłącznik wyso"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0903",
+    "column_number": "01",
+    "description": "Ułożenie kabla SN (XRUHAKXS / XLPE) 10-20kV w wykobie lub korytku kablowym",
+    "unit": "m",
+    "labor_norm": 6.0,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "kabel sn",
+      "kabel 10kv",
+      "kabel 20kv",
+      "xruhakxs",
+      "xlpe mv cable",
+      "kabel wysokiego napięcia sn"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0903",
+    "column_number": "02",
+    "description": "Wykonanie głowicy kablowej (zakończenie kablowe) SN dla kabla 10-20kV",
+    "unit": "szt",
+    "labor_norm": 4.0,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "głowica kablowa sn",
+      "zakończenie kablowe sn",
+      "cable termination mv",
+      "końcówka kablowa 10kv",
+      "głowica 20kv",
+      "cable head mv"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0903",
+    "column_number": "03",
+    "description": "Wykonanie mufy kablowej (złącza) SN dla kabla 10-20kV",
+    "unit": "szt",
+    "labor_norm": 6.0,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "mufa kablowa sn",
+      "złącze kablowe sn",
+      "cable joint mv",
+      "mufa 10kv",
+      "splicing mv cable",
+      "cable splice mv"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0904",
+    "column_number": "01",
+    "description": "Montaż przekładników napięciowych (PT) i prądowych (CT) SN w polach rozdzielnicy",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "przekładnik napięciowy",
+      "pt sn",
+      "przekładnik prądowy sn",
+      "ct sn",
+      "voltage transformer mv",
+      "current transformer mv"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0905",
+    "column_number": "01",
+    "description": "Montaż i podłączenie ogranicznika przepięć SN (MOV / iskiernikowy) 10-20kV",
+    "unit": "szt",
+    "labor_norm": 1.5,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "ogranicznik przepięć sn",
+      "odgromnik sn",
+      "surge arrester mv",
+      "mov 10kv",
+      "ogranicznik 20kv",
+      "arester sn"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0906",
+    "column_number": "01",
+    "description": "Montaż rozdzielnicy NN 0.4kV (głównej) na stronie wtórnej transformatora",
+    "unit": "szt",
+    "labor_norm": 8.0,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "rozdzielnica główna nn",
+      "rozdzielnia 0.4kv",
+      "trafo secondary panel",
+      "main lv switchgear",
+      "rozdzielnia nn stacja",
+      "panel 400v główny"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0906",
+    "column_number": "02",
+    "description": "Ułożenie i podłączenie szyny zbiorczej Cu (busbar) między transformatorem a rozdzielnicą NN",
+    "unit": "m",
+    "labor_norm": 1.5,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "szyna zbiorcza stacja",
+      "busbar trafo-rozdzielnica",
+      "szyna Cu trafo",
+      "listwa zbiorcza nn",
+      "copper busbar station",
+      "szyna prądowa trafo"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0907",
+    "column_number": "01",
+    "description": "Montaż i konfiguracja zabezpieczenia cyfrowego (przekaźnikowego) transformatora (relay ANSI)",
+    "unit": "szt",
+    "labor_norm": 6.0,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "zabezpieczenie transformatora",
+      "przekaźnik cyfrowy",
+      "relay ochronny",
+      "digital relay trafo",
+      "ansi relay",
+      "micom relay"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0907",
+    "column_number": "02",
+    "description": "Montaż systemu monitoringu i pomiaru transformatora (czujniki temperatury, poziom oleju)",
+    "unit": "kpl",
+    "labor_norm": 4.0,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "monitoring transformatora",
+      "czujnik temperatury trafo",
+      "poziom oleju czujnik",
+      "transformer monitoring",
+      "buchholz relay",
+      "przekaźnik buchholza"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0908",
+    "column_number": "01",
+    "description": "Uruchomienie stacji transformatorowej — próba, pomiary i dokumentacja (commissioning)",
+    "unit": "kpl",
+    "labor_norm": 16.0,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "uruchomienie stacji",
+      "commissioning stacji",
+      "próba transformatora",
+      "odbiór stacji elektrycznej",
+      "test stacji trafo",
+      "dokumentacja stacji"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0908",
+    "column_number": "02",
+    "description": "Pomiary elektryczne stacji transformatorowej (rezystancja izolacji uzwojeń, przekładnia)",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "pomiary stacji",
+      "test uzwojenia",
+      "pomiar izolacji transformatora",
+      "winding resistance test",
+      "pomiar przekładni",
+      "turns ratio test"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0909",
+    "column_number": "01",
+    "description": "Montaż i podłączenie systemu uziemienia stacji transformatorowej (siatka uziemiająca)",
+    "unit": "kpl",
+    "labor_norm": 8.0,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "uziemienie stacji",
+      "siatka uziemiająca",
+      "earthing grid station",
+      "uziom stacji trafo",
+      "substation earthing",
+      "bednarka stacja trafo"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-10",
+    "table_number": "0909",
+    "column_number": "02",
+    "description": "Montaż i podłączenie ochrony odgromowej stacji transformatorowej (iglice, odprowadzenia)",
+    "unit": "kpl",
+    "labor_norm": 6.0,
+    "is_industrial": true,
+    "knr_category": "stacje_transformatorowe",
+    "synonyms": [
+      "odgromowa stacji",
+      "iglica stacja trafo",
+      "piorunochron stacji",
+      "lightning protection substation",
+      "lps stacja",
+      "odgrom trafo"
+    ]
+  }
+]

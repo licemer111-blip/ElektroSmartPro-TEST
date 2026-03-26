@@ -1,0 +1,33 @@
+---
+description: Master Blueprint — demo mode, pricing, assemblies, VAT
+alwaysApply: true
+---
+
+# Master Blueprint (Critical Business Logic)
+
+Every code change must respect these rules.
+
+## 1. Demo Mode ("The Trap")
+
+- **Free users:** Can create estimates but **cannot see total prices**.
+- **Blur Mode:** Show prices as `*** zł` or CSS blur for free users. Use `BlurredPrice` / blur logic where totals are shown.
+- **Block PDF export** for free users.
+- **Limit:** 1 active project per free user. Check subscription/`is_pro` before allowing new projects.
+
+## 2. Split Pricing (DB + UI)
+
+- **Catalog Item** and **Project Item** must have **separate columns:** `labor_price` and `material_price`. Never merge into a single `price` column.
+- **Regional logic:** Final price = Base price × Voivodeship modifier (use `regions` table).
+
+## 3. VAT (Podatek)
+
+- Support **8%** (Residential) and **23%** (Commercial). Default from Object Type; allow manual override in UI.
+
+## 4. Assemblies ("Zestawy")
+
+- Composite items (e.g. "Punkt gniazda" = box + cable + labor). When user adds a Zestaw, backend **expands** it into individual `project_items` (hidden by default in UI, expandable for edit).
+
+## 5. Flexible Data
+
+- **Custom items:** Allow manual rows (custom name, price) not from catalog.
+- **Target budget:** Slider that applies a global percentage discount to match target price (e.g. "Fit to 15,000 PLN").
