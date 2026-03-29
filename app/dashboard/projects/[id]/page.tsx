@@ -100,9 +100,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     ]);
 
     const profile = profileResult.data;
+    // Demo projects bypass free-tier blur + PDF paywall and are permanently read-only.
+    const isDemoProject = project.is_demo_project === true;
     // Only external 'viewer' role (Client Portal) gets read-only lockdown.
     // All team members (editor, elektryk, kierownik, admin, owner) have full access.
-    const isReadOnly = userRole === "viewer";
+    // Demo projects are always read-only — showcase mode.
+    const isReadOnly = userRole === "viewer" || isDemoProject;
+    // showPrices: PRO users OR demo project → no blur, full prices visible
+    const showPrices = (profile?.is_pro || false) || isDemoProject;
 
     // ⚡ OPTIMIZATION: Don't fetch all catalog items initially (lazy load in sidebar)
     // This prevents huge payload size and net::ERR_ABORTED errors
@@ -169,7 +174,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 address: profile.address || undefined,
                 logo_url: profile.logo_url || undefined,
               } : undefined}
-              isPro={profile?.is_pro || false}
+              isPro={showPrices}
+              isDemoProject={isDemoProject}
               assignedTo={project.assigned_to}
               isOwner={project.user_id === profile?.id}
               userId={user.id}
@@ -181,7 +187,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   projectId={id}
                   categories={categories}
                   catalogItemsByCategory={catalogItemsByCategory}
-                  isPro={profile?.is_pro || false}
+                  isPro={showPrices}
                   userTeam={userTeam}
                   projectStatus={project.status}
                 />
@@ -196,7 +202,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     profile={profile}
                     projectId={id}
                     userId={user.id}
-                    isPro={profile?.is_pro || false}
+                    isPro={showPrices}
                     currentAssemblyCount={userAssemblies.length}
                     categories={categories}
                     catalogItemsByCategory={catalogItemsByCategory}

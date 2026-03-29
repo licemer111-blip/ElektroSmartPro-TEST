@@ -216,6 +216,7 @@ export interface Project {
   show_knr: boolean;        // Show KNR code prefix in PDF/Portal (e.g. "[KNR 5-08 0401-03] Montaż gniazda")
   brutto_mode: boolean;     // Show Brutto prices (with VAT) in PDF/Portal instead of Netto
   expert_coloring: boolean; // Use color coding in PDF (green=labor, orange=materials)
+  is_demo_project: boolean; // System-generated showcase — bypasses free-tier blur + PDF paywall; permanently read-only
   created_at: string;
   updated_at: string;
 }

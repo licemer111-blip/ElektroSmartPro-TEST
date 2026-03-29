@@ -69,7 +69,7 @@ export function ProjectSummary({
   const liveRegionData = regions?.find(r => r.id === effectiveRegionId);
   const regionModifier = liveRegionData?.price_modifier ?? project.regions?.price_modifier ?? 1.0;
   const regionName = liveRegionData?.name ?? project.regions?.name ?? "Brak regionu";
-  const isPro = profile?.is_pro || false;
+  const isPro = profile?.is_pro || project.is_demo_project === true;
   const isFinal = projectStatus === "final";
 
   // Effective KNR coefficients: project override wins over global profile default

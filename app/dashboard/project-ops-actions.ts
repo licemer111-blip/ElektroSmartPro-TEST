@@ -565,6 +565,7 @@ export async function createDemoProject(): Promise<{ success?: boolean; error?: 
       client_address: "ul. Przykładowa 12, 00-001 Warszawa",
       status: "draft",
       default_hourly_rate: 0,
+      is_demo_project: true,
     })
     .select("id")
     .single();

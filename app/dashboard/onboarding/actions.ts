@@ -77,6 +77,7 @@ export async function createDemoProject(): Promise<{ projectId?: string; error?:
       rate_source: "engine",
       default_hourly_rate: null,
       description: "Projekt demonstracyjny — przykładowy kosztorys mieszkania 65m²",
+      is_demo_project: true,
     })
     .select("id")
     .single();

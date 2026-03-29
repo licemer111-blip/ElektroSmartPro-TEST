@@ -146,6 +146,7 @@ export async function POST(req: Request) {
       .single();
 
     const isPro = requestingProfile?.is_pro || false;
+    const isDemoProject = Boolean((project as Record<string, unknown>).is_demo_project);
 
     // Rate limiting: 20 PDF exports per minute per user
     const pdfRl = checkRateLimit({ key: `pdf:${requestingUser.id}`, limit: 20, windowMs: 60_000 });
@@ -156,7 +157,8 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!isPro) {
+    // Demo projects bypass the PRO paywall so free users can see the full PDF value.
+    if (!isPro && !isDemoProject) {
       return new NextResponse(
         JSON.stringify({ error: "Eksport PDF wymaga planu PRO. Zupgraduj, aby odblokować eksport." }),
         { status: 403, headers: { "Content-Type": "application/json" } }
@@ -178,7 +180,7 @@ export async function POST(req: Request) {
     const modifier = adjustmentOnly * regionModifier;
     // [A1] showRg and showKnrInPdf read directly from project settings (no pricingMode gate)
     const showRg = Boolean(project.show_labor_hours_in_pdf);
-    const maskPrices = !isPro || Boolean(blindMode); // blind mode also masks prices
+    const maskPrices = (!isPro && !isDemoProject) || Boolean(blindMode); // blind mode also masks prices
     const showKnrInPdf = Boolean((project as Record<string, unknown>).show_knr);
     // If materials are provided by the client — hide Material column entirely from PDF
     const matOwnedByClient = Boolean((project as Record<string, unknown>).materials_owned_by_customer);
