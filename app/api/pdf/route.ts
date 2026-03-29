@@ -1,9 +1,8 @@
 import { logger } from "@/lib/logger";
+import React from "react";
 import { NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 import { checkRateLimit } from "@/lib/rate-limit";
-import { jsPDF } from "jspdf";
-import "jspdf-autotable";
 import {
   fMoney,
   sanitize,
@@ -11,49 +10,13 @@ import {
   calcPdfTotals,
   type PriceDisplay,
 } from "@/lib/pdf-pricing";
-import {
-  renderPdfHeader,
-  renderPdfSummary,
-  renderPdfFooter,
-  buildTableConfig,
-  _fitLogo,
-  _getImageFormat,
-  type TemplatePalette,
-  type PdfRow,
-  type PdfNarzutyDisplay,
-} from "@/lib/pdf-renderer";
+import { type PdfNarzutyDisplay, type PdfRow } from "@/lib/pdf-renderer";
 import { calcNarzuty } from "@/lib/pricing-calculations";
 import { classifyIntent } from "@/lib/services/semantic-classifier";
+import { renderToBuffer, type DocumentProps } from "@react-pdf/renderer";
+import { PremiumPdfDocument, type PdfEngineData, type ThemeName } from "@/lib/pdf-engine";
 
-// ─── Font & Image utilities ───────────────────────────────────────────────────
-
-const ROBOTO_CDN = "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto";
-
-async function loadFonts(doc: jsPDF): Promise<boolean> {
-  try {
-    const variants: Array<[string, string, string]> = [
-      ["Roboto-Regular.ttf",   "Roboto", "normal"],
-      ["Roboto-Bold.ttf",      "Roboto", "bold"],
-      ["Roboto-Italic.ttf",    "Roboto", "italic"],
-      ["Roboto-Medium.ttf",    "Roboto", "bolditalic"],
-    ];
-    await Promise.all(
-      variants.map(async ([file, family, style]) => {
-        const res = await fetch(`${ROBOTO_CDN}/${file}`, { cache: "force-cache" });
-        if (!res.ok) throw new Error(`Font fetch failed: ${file}`);
-        const b64 = Buffer.from(await res.arrayBuffer()).toString("base64");
-        doc.addFileToVFS(file, b64);
-        doc.addFont(file, family, style);
-      })
-    );
-    doc.setFont("Roboto");
-    return true;
-  } catch (e) {
-    logger.error("Font error:", {}, e);
-    doc.setFont("helvetica");
-    return false;
-  }
-}
+// ─── Logo fetch ──────────────────────────────────────────────────────────────
 
 async function fetchImage(url: string): Promise<string | null> {
   try {
@@ -68,35 +31,6 @@ async function fetchImage(url: string): Promise<string | null> {
   }
 }
 
-// ─── Template palettes ────────────────────────────────────────────────────────
-
-const TEMPLATE_PALETTES: Record<string, TemplatePalette> = {
-  klasyczny: {
-    primary: [37, 99, 235], primaryLight: [219, 234, 254], summaryBg: [240, 249, 255],
-    summaryBorder: [186, 230, 253], accentSet: [234, 88, 12], accentSingle: [37, 99, 235],
-    accentMat: [202, 138, 4], accentLab: [5, 150, 105], accentRg: [14, 116, 144], totalCol: [37, 99, 235],
-  },
-  elegancki: {
-    primary: [30, 41, 59], primaryLight: [241, 245, 249], summaryBg: [255, 251, 235],
-    summaryBorder: [196, 170, 105], accentSet: [191, 155, 48], accentSingle: [51, 100, 164],
-    accentMat: [144, 12, 63], accentLab: [22, 120, 70], accentRg: [14, 116, 144], totalCol: [30, 41, 59],
-  },
-  nowoczesny: {
-    primary: [13, 148, 136], primaryLight: [204, 251, 241], summaryBg: [240, 253, 250],
-    summaryBorder: [153, 246, 228], accentSet: [239, 68, 68], accentSingle: [13, 148, 136],
-    accentMat: [79, 70, 229], accentLab: [101, 163, 13], accentRg: [14, 116, 144], totalCol: [13, 148, 136],
-  },
-  korporacyjny: {
-    primary: [55, 65, 81], primaryLight: [243, 244, 246], summaryBg: [254, 242, 242],
-    summaryBorder: [252, 165, 165], accentSet: [220, 38, 38], accentSingle: [100, 116, 139],
-    accentMat: [180, 83, 9], accentLab: [17, 94, 89], accentRg: [14, 116, 144], totalCol: [55, 65, 81],
-  },
-  premium: {
-    primary: [109, 40, 217], primaryLight: [237, 233, 254], summaryBg: [245, 243, 255],
-    summaryBorder: [196, 181, 253], accentSet: [219, 39, 119], accentSingle: [124, 58, 237],
-    accentMat: [5, 150, 105], accentLab: [67, 56, 202], accentRg: [14, 116, 144], totalCol: [109, 40, 217],
-  },
-};
 
 // ─── Semantic Section Sorter (Smart PDF Grouping v2.0) ──────────────────────
 
@@ -169,15 +103,12 @@ export async function POST(req: Request) {
       showKnrCoeffsInPdf = false,
       blindMode = false,      // v3.0: Kosztorys ślepy — hide all prices
     } = await req.json();
-    // PDF always uses template colors — visual style is controlled by template picker, not a toggle
-    const showColors = true;
 
     const pricingParams = {
       vatMode: Number(vatMode),
       priceDisplay: priceDisplay as PriceDisplay,
     };
     const vatMultiplier = getVatMultiplier(priceDisplay as PriceDisplay, Number(vatMode));
-    const TPL = TEMPLATE_PALETTES[template] || TEMPLATE_PALETTES.klasyczny;
 
     // ─── Fetch data ────────────────────────────────────────────────────────────
 
@@ -449,409 +380,54 @@ export async function POST(req: Request) {
 
     // ─── Build PDF ────────────────────────────────────────────────────────────
 
-    const doc = new jsPDF();
-    const hasFont = await loadFonts(doc);
     const logoBase64 = profile?.logo_url ? await fetchImage(profile.logo_url) : null;
 
-    const { headerEndY } = renderPdfHeader(doc, hasFont, showColors, TPL, profile, project, logoBase64, template);
+    // ─── Assemble PdfEngineData & render ──────────────────────────────────────
 
-    // ─── Blind mode banner ────────────────────────────────────────────────────
-    let blindBannerOffset = 0;
-    if (blindMode && isPro) {
-      const bw = doc.internal.pageSize.getWidth();
-      doc.setFillColor(254, 243, 199);
-      doc.roundedRect(14, headerEndY, bw - 28, 9, 2, 2, "F");
-      doc.setDrawColor(251, 191, 36);
-      doc.setLineWidth(0.5);
-      doc.roundedRect(14, headerEndY, bw - 28, 9, 2, 2, "S");
-      doc.setFontSize(9);
-      doc.setFont(hasFont ? "Roboto" : "helvetica", "bold");
-      doc.setTextColor(120, 53, 15);
-      doc.text(sanitize("KOSZTORYS SLEPY — CENY POUFNE (oferta dla inwestora bez cen jednostkowych)", hasFont), bw / 2, headerEndY + 5.8, { align: "center" });
-      blindBannerOffset = 13;
-    }
-
-    // ─── Premium Cover Page (page 1: no tables) ───────────────────────────────
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageCenter = pageWidth / 2;
-    let coverY = headerEndY + blindBannerOffset + 30;
-
-    // Disable hyphenation for key terms (jsPDF handles this automatically)
-
-    // Logo centered (if exists)
-    if (logoBase64 && profile?.logo_url) {
-      try {
-        const ls = _fitLogo(logoBase64, 25);
-        doc.addImage(logoBase64, _getImageFormat(logoBase64), pageCenter - ls.w / 2, coverY, ls.w, ls.h);
-        coverY += ls.h + 20;
-      } catch (e) { logger.error("Cover logo error", {}, e); }
-    }
-
-    // Document Title
-    doc.setFontSize(24); doc.setFont(hasFont ? "Roboto" : "helvetica", "bold"); doc.setTextColor(TPL.primary[0], TPL.primary[1], TPL.primary[2]);
-    doc.text(sanitize("KOSZTORYS ELEKTRYCZNY", hasFont), pageCenter, coverY, { align: "center" });
-    coverY += 15;
-    doc.setFontSize(16); doc.setFont(hasFont ? "Roboto" : "helvetica", "normal"); doc.setTextColor(60, 60, 60);
-    doc.text(sanitize(`NR ${project.id.substring(0, 8).toUpperCase()}`, hasFont), pageCenter, coverY, { align: "center" });
-    coverY += 35;
-
-    // Client Info Block
-    doc.setFontSize(12); doc.setFont(hasFont ? "Roboto" : "helvetica", "bold"); doc.setTextColor(40, 40, 40);
-    doc.text(sanitize("Inwestor", hasFont), pageCenter, coverY, { align: "center" });
-    coverY += 8;
-    doc.setFontSize(11); doc.setFont(hasFont ? "Roboto" : "helvetica", "normal"); doc.setTextColor(60, 60, 60);
-    doc.text(sanitize(project.client_name || "—", hasFont), pageCenter, coverY, { align: "center" });
-    if (project.client_address) {
-      coverY += 6;
-      const addrLines = doc.splitTextToSize(sanitize(project.client_address, hasFont), 140) as string[];
-      addrLines.forEach((line) => { doc.text(line, pageCenter, coverY, { align: "center" }); coverY += 5; });
-    }
-    coverY += 25;
-
-    // Grand Total Brutto Box
-    const boxW = 140;
-    const boxH = 40;
-    const boxX = pageCenter - boxW / 2;
-    doc.setFillColor(TPL.primary[0], TPL.primary[1], TPL.primary[2]);
-    doc.roundedRect(boxX, coverY, boxW, boxH, 4, 4, "F");
-    doc.setFontSize(10); doc.setFont(hasFont ? "Roboto" : "helvetica", "normal"); doc.setTextColor(255, 255, 255);
-    doc.text(sanitize("SUMA BRUTTO", hasFont), pageCenter, coverY + 12, { align: "center" });
-    doc.setFontSize(18); doc.setFont(hasFont ? "Roboto" : "helvetica", "bold"); doc.setTextColor(255, 255, 255);
-    doc.text(maskPrices ? "*** zl" : fMoney(totalGross), pageCenter, coverY + 28, { align: "center" });
-
-    // Auto date at bottom
-    doc.setFontSize(9); doc.setFont(hasFont ? "Roboto" : "helvetica", "italic"); doc.setTextColor(120, 120, 120);
-    doc.text(sanitize(`Data sporządzenia: ${new Date().toLocaleDateString("pl-PL")}`, hasFont), pageCenter, 280, { align: "center" });
-
-    // New page for the detailed items table
-    doc.addPage();
-    const mainTableStartY = 15;
-
-    // ─── Table ────────────────────────────────────────────────────────────────
-
-    const { tableHead, tableBody, colStyles, totalColIdx } = buildTableConfig(rows, hasFont, showRg, matOwnedByClient, showKnrInPdf);
-
-    // Per-template table layout: font size, cell padding, border weight
-    const TPL_CONFIG: Record<string, { fs: number; padV: number; hPadV: number; lw: number }> = {
-      klasyczny:    { fs: 9,   padV: 4,   hPadV: 5,   lw: 0.15 },
-      elegancki:    { fs: 8.5, padV: 4.5, hPadV: 5.5, lw: 0    },
-      nowoczesny:   { fs: 8,   padV: 2.5, hPadV: 4,   lw: 0    },
-      korporacyjny: { fs: 9,   padV: 3.5, hPadV: 4.5, lw: 0.25 },
-      premium:      { fs: 9.5, padV: 5.5, hPadV: 6,   lw: 0    },
+    const engineData: PdfEngineData = {
+      theme: (template as ThemeName) || 'klasyczny',
+      profile: profile ?? null,
+      project: {
+        id: project.id as string,
+        name: project.name as string,
+        client_name: (project as Record<string, unknown>).client_name as string | null,
+        client_address: (project as Record<string, unknown>).client_address as string | null,
+        client_nip: (project as Record<string, unknown>).client_nip as string | null,
+        vat_rate: (project as Record<string, unknown>).vat_rate as number | null,
+        regions: (project.regions as { name?: string; price_modifier?: number } | null),
+        object_types: (project.object_types as { name?: string } | null),
+      },
+      rows,
+      logoBase64,
+      maskPrices,
+      blindMode: Boolean(blindMode),
+      showRg,
+      showKnr: showKnrInPdf,
+      showKnrCoeffsInPdf: Boolean(showKnrCoeffsInPdf),
+      matOwnedByClient,
+      totalMatSum,
+      totalLabSum,
+      totalLaborHours,
+      totalNet,
+      vatRate,
+      vatAmount,
+      totalGross,
+      pdfNarzuty: pdfNarzuty as PdfNarzutyDisplay | undefined,
+      priceDisplay: priceDisplay as string,
+      notes: notes as string,
     };
-    const TC = TPL_CONFIG[template] ?? TPL_CONFIG.klasyczny;
 
-    (doc as unknown as { autoTable(options: Record<string, unknown>): void }).autoTable({
-      startY: mainTableStartY,
-      head: [tableHead],
-      body: tableBody,
-      theme: "plain",
-      styles: {
-        fontSize: TC.fs, cellPadding: { top: 5, bottom: 5, left: 5, right: 5 },
-        lineColor: [229, 231, 235], lineWidth: TC.lw,
-        font: hasFont ? "Roboto" : "helvetica", textColor: [40, 40, 40], valign: "middle",
-      },
-      headStyles: {
-        fillColor: [TPL.primary[0], TPL.primary[1], TPL.primary[2]],
-        textColor: [255, 255, 255], fontStyle: "bold", fontSize: Math.max(TC.fs - 0.5, 8),
-        cellPadding: { top: 5, bottom: 5, left: 5, right: 5 },
-      },
-      columnStyles: colStyles,
-      didParseCell: (data: { row: { index: number }; column: { index: number }; section: string; cell: { styles: Record<string, unknown> } }) => {
-        // Header: inherit halign from column style so each header aligns with its column content
-        if (data.section === "head") {
-          const cs = colStyles[data.column.index] as Record<string, unknown> | undefined;
-          if (cs?.halign) data.cell.styles.halign = cs.halign;
-          return;
-        }
-        const r = rows[data.row.index];
-        if (!r || data.section !== "body") return;
-        if (r.rowType === "section_header") {
-          if (template === "elegancki") {
-            // Cream bg, italic navy text, gold total
-            data.cell.styles.fillColor = [252, 251, 248];
-            data.cell.styles.fontSize = 8.5;
-            if (data.column.index === 1) {
-              data.cell.styles.fontStyle = "italic";
-              data.cell.styles.textColor = [TPL.primary[0], TPL.primary[1], TPL.primary[2]];
-            } else if (data.column.index === totalColIdx) {
-              data.cell.styles.fontStyle = "bold";
-              data.cell.styles.textColor = [TPL.accentSet[0], TPL.accentSet[1], TPL.accentSet[2]];
-            } else {
-              (data.cell as Record<string, unknown>).text = [""];
-              data.cell.styles.textColor = [252, 251, 248];
-            }
-          } else if (template === "nowoczesny") {
-            // Light teal bg, bold teal text, no white-on-dark
-            data.cell.styles.fillColor = [236, 253, 248];
-            data.cell.styles.fontStyle = "bold";
-            data.cell.styles.fontSize = TC.fs;
-            if (data.column.index === 1 || data.column.index === totalColIdx) {
-              data.cell.styles.textColor = [TPL.primary[0], TPL.primary[1], TPL.primary[2]];
-            } else {
-              (data.cell as Record<string, unknown>).text = [""];
-              data.cell.styles.textColor = [236, 253, 248];
-            }
-          } else {
-            // klasyczny, korporacyjny, premium: solid color band
-            const secTotal: [number,number,number] =
-              template === "korporacyjny" ? [252, 180, 180]
-              : template === "premium"    ? [220, 205, 255]
-              : [251, 191, 36];
-            data.cell.styles.fillColor = [TPL.primary[0], TPL.primary[1], TPL.primary[2]];
-            data.cell.styles.fontStyle = "bold";
-            data.cell.styles.fontSize = 8.5;
-            data.cell.styles.textColor = [255, 255, 255];
-            if (data.column.index !== 1 && data.column.index !== totalColIdx) {
-              (data.cell as Record<string, unknown>).text = [""];
-            }
-            if (data.column.index === totalColIdx) {
-              data.cell.styles.textColor = secTotal;
-            }
-          }
-          return;
-        }
-        if (r.rowType === "set_parent") {
-          data.cell.styles.fillColor = [255, 243, 205];
-          data.cell.styles.fontStyle = "bold";
-          data.cell.styles.fontSize = TC.fs;
-          data.cell.styles.textColor = [120, 53, 15];
-        } else if (r.rowType === "child_mat") {
-          data.cell.styles.fillColor = [255, 252, 232];
-          if (data.column.index === 1) {
-            data.cell.styles.textColor = [120, 80, 20]; data.cell.styles.fontStyle = "italic";
-            data.cell.styles.fontSize = Math.max(TC.fs - 0.5, 7.5);
-          } else { data.cell.styles.textColor = [60, 40, 10]; }
-        } else if (r.rowType === "child_lab") {
-          data.cell.styles.fillColor = [240, 253, 244];
-          if (data.column.index === 1) {
-            data.cell.styles.textColor = [20, 100, 60]; data.cell.styles.fontStyle = "italic";
-            data.cell.styles.fontSize = Math.max(TC.fs - 0.5, 7.5);
-          } else { data.cell.styles.textColor = [15, 60, 35]; }
-        } else if (r.rowType === "single") {
-          const oddC: [number,number,number] = template === "elegancki"    ? [255, 253, 244]
-            : template === "nowoczesny"   ? [240, 253, 250]
-            : template === "premium"      ? [250, 247, 255]
-            : template === "korporacyjny" ? [250, 249, 249]
-            : [248, 250, 252];
-          data.cell.styles.fillColor = data.row.index % 2 === 0 ? [255, 255, 255] : oddC;
-          data.cell.styles.textColor = [40, 40, 40];
-        } else if (r.rowType === "warning") {
-          data.cell.styles.fillColor = [254, 242, 242]; data.cell.styles.textColor = [220, 38, 38];
-          data.cell.styles.fontStyle = "bold";
-        } else if (r.rowType === "section_subtotal") {
-          data.cell.styles.fillColor = [244, 244, 245];
-          data.cell.styles.textColor = [70, 70, 80];
-          data.cell.styles.fontStyle = "italic";
-          data.cell.styles.fontSize = Math.max(TC.fs - 0.5, 7.5);
-          if (data.column.index === totalColIdx) {
-            data.cell.styles.fontStyle = "bold";
-            data.cell.styles.textColor = [50, 50, 60];
-          }
-          // Clear qty/unit/rg columns
-          if (data.column.index >= 2 && data.column.index < totalColIdx - 2) {
-            (data.cell as Record<string, unknown>).text = [""];
-          }
-          return;
-        }
-        // Total column: always bold + template accent
-        if (data.column.index === totalColIdx && r.rowType !== "section_header" && r.rowType !== "section_subtotal") {
-          data.cell.styles.fontStyle = "bold";
-          data.cell.styles.textColor = TPL.totalCol;
-        }
-      },
-      didDrawCell: (data: { doc: jsPDF; row: { index: number }; column: { index: number }; section: string; cell: { x: number; y: number; width: number; height: number } }) => {
-        const { x, y, width, height } = data.cell;
-        if (data.section === "head") {
-          doc.setDrawColor(200, 200, 200); doc.setLineWidth(0.3);
-          doc.line(x, y + height, x + width, y + height); return;
-        }
-        const r = rows[data.row.index];
-        if (!r || data.section !== "body") return;
+    const pdfBuffer = await renderToBuffer(
+      React.createElement(PremiumPdfDocument, { data: engineData }) as React.ReactElement<DocumentProps>
+    );
 
-        if (TC.lw === 0) {
-          // No-grid templates: subtle horizontal bottom line per cell
-          const lc: [number,number,number] = template === "elegancki" ? [228, 215, 175] : [229, 231, 235];
-          doc.setDrawColor(lc[0], lc[1], lc[2]); doc.setLineWidth(0.1);
-          doc.line(x, y + height, x + width, y + height);
-        } else {
-          // Grid templates: vertical column separator
-          doc.setDrawColor(229, 231, 235); doc.setLineWidth(TC.lw);
-          doc.line(x + width, y, x + width, y + height);
-        }
+    const safeName = (project.name as string).replace(/[^a-zA-Z0-9\-_]/g, '_');
+    const filename = `${blindMode && isPro ? 'Kosztorys_Slepy' : 'Kosztorys'}_${safeName}.pdf`;
 
-        // set_parent: thick colored left bar (col 0)
-        if (r.rowType === "set_parent" && data.column.index === 0) {
-          const c = TPL.accentSet as [number, number, number];
-          doc.setDrawColor(c[0], c[1], c[2]); doc.setLineWidth(3);
-          doc.line(x, y + 0.5, x, y + height - 0.5);
-        }
-
-        // Left accent bars for children, singles, section (col 0)
-        if (data.column.index === 0) {
-          let barColor: [number,number,number] | null = null;
-          let barW = 1;
-          if (r.rowType === "child_mat") barColor = TPL.accentMat as [number,number,number];
-          else if (r.rowType === "child_lab") barColor = TPL.accentLab as [number,number,number];
-          else if (r.rowType === "single") barColor = TPL.accentSingle as [number,number,number];
-          else if (r.rowType === "warning") barColor = [239, 68, 68];
-          else if (r.rowType === "section_header" && template === "nowoczesny") {
-            barColor = [TPL.primary[0], TPL.primary[1], TPL.primary[2]]; barW = 4;
-          }
-          if (barColor) {
-            doc.setLineWidth(barW); doc.setDrawColor(barColor[0], barColor[1], barColor[2]);
-            doc.line(x, y, x, y + height);
-          }
-        }
-
-        // elegancki section_header: gold bottom accent
-        if (template === "elegancki" && r.rowType === "section_header") {
-          doc.setDrawColor(TPL.accentSet[0], TPL.accentSet[1], TPL.accentSet[2]);
-          doc.setLineWidth(0.6);
-          doc.line(x, y + height, x + width, y + height);
-        }
-
-        // Last child in set: thick separator line
-        if ((r.rowType === "child_mat" || r.rowType === "child_lab") && data.column.index === 0) {
-          const nextRow = rows[data.row.index + 1];
-          if (!nextRow || !nextRow.isChild) {
-            doc.setDrawColor(160, 160, 160); doc.setLineWidth(0.5);
-            doc.line(x, y + height, x + width + 182, y + height);
-          }
-        }
-      },
-    });
-
-    // ─── Summary & Footer ─────────────────────────────────────────────────────
-
-    let startY = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
-    // Dynamic threshold: BRUTTO line is at startY + 28 + summaryOffset + korekOffset + narzutyHeight
-    // Must fit within Y=285 (leaves gap before footer at Y=289)
-    const pricingOverrides = (project as Record<string, unknown>).pricing_overrides as {
-      coeff_height?: boolean | null;
-      coeff_difficulty?: boolean | null;
-      coeff_surface?: boolean | null;
-    } | null | undefined;
-
-    const narzutyLineCount = pdfNarzuty
-      ? (pdfNarzuty.kpAmount > 0 ? 1 : 0) + (pdfNarzuty.zAmount > 0 ? 1 : 0) + (pdfNarzuty.kzAmount > 0 ? 1 : 0)
-      : 0;
-    const knrCoeffsLineCount = showKnrCoeffsInPdf && pricingOverrides
-      ? (pricingOverrides.coeff_height ? 1 : 0) + (pricingOverrides.coeff_difficulty ? 1 : 0) + (pricingOverrides.coeff_surface ? 1 : 0)
-      : 0;
-    const summarySpaceNeeded = 78 + (Number(priceModifier) !== 0 ? 6 : 0) + (narzutyLineCount * 5) + (knrCoeffsLineCount > 0 ? 5 + knrCoeffsLineCount * 4.5 : 0);
-    if (startY + summarySpaceNeeded > 270) { doc.addPage(); startY = 20; }
-
-    if (!blindMode || !isPro) {
-      renderPdfSummary(
-        doc, hasFont, showColors, showRg, maskPrices, TPL,
-        startY, totalMatSum, totalLabSum, totalLaborHours,
-        totalNet, vatAmount, totalGross,
-        priceDisplay as PriceDisplay, Number(vatMode),
-        notes,
-        Number(priceModifier),
-        pdfNarzuty,
-        template,
-        Boolean(showKnrCoeffsInPdf),
-        pricingOverrides ?? undefined,
-      );
-    } else {
-      // Blind mode: show only note footer (no financial totals)
-      const bw = doc.internal.pageSize.getWidth();
-      doc.setFontSize(8);
-      doc.setFont(hasFont ? "Roboto" : "helvetica", "normal");
-      doc.setTextColor(120, 53, 15);
-      doc.text(sanitize("Niniejszy kosztorys nie zawiera cen. Pelna wersja dostepna po podpisaniu NDA.", hasFont), bw / 2, startY + 6, { align: "center" });
-      if (notes) {
-        doc.setTextColor(71, 85, 105);
-        doc.text(sanitize(notes, hasFont), 15, startY + 13, { maxWidth: bw - 30 });
-      }
-    }
-
-    // ─── Executive Summary (pre-final page) ───────────────────────────────────
-    doc.addPage();
-    const execRows: (string | number)[][] = [];
-    for (const sec of PDF_SECTIONS) {
-      const st = sectionTotalsMap.get(sec.id)!;
-      if (st.mat + st.lab === 0) continue;
-      execRows.push([
-        `${sec.roman}.`,
-        sanitize(sec.label, hasFont),
-        maskPrices ? "\u2014" : fMoney(st.mat),
-        maskPrices ? "\u2014" : fMoney(st.lab),
-        maskPrices ? "\u2014" : fMoney(st.mat + st.lab),
-      ]);
-    }
-    execRows.push([
-      "",
-      sanitize("RAZEM WSZYSTKIE SEKCJE", hasFont),
-      maskPrices ? "\u2014" : fMoney(totalMatSum),
-      maskPrices ? "\u2014" : fMoney(totalLabSum),
-      maskPrices ? "\u2014" : fMoney(totalMatSum + totalLabSum),
-    ]);
-
-    (doc as unknown as { autoTable(options: Record<string, unknown>): void }).autoTable({
-      startY: 15,
-      head: [[
-        "Lp.",
-        sanitize("Zakres prac", hasFont),
-        sanitize("Material (netto)", hasFont),
-        sanitize("Robocizna (netto)", hasFont),
-        sanitize("Suma (netto)", hasFont),
-      ]],
-      body: execRows,
-      theme: "plain",
-      styles: {
-        fontSize: 9, cellPadding: { top: 3.5, bottom: 3.5, left: 4, right: 4 },
-        font: hasFont ? "Roboto" : "helvetica", textColor: [40, 40, 40],
-        lineColor: [229, 231, 235], lineWidth: 0.15,
-      },
-      headStyles: {
-        fillColor: [TPL.primary[0], TPL.primary[1], TPL.primary[2]],
-        textColor: [255, 255, 255], fontStyle: "bold", fontSize: 9,
-      },
-      columnStyles: {
-        0: { cellWidth: 10, halign: "center" as const },
-        1: { cellWidth: "auto" },
-        2: { cellWidth: 33, halign: "right" as const },
-        3: { cellWidth: 33, halign: "right" as const },
-        4: { cellWidth: 33, halign: "right" as const, fontStyle: "bold" as const },
-      },
-      didParseCell: (data: { row: { index: number }; column: { index: number }; cell: { styles: Record<string, unknown> } }) => {
-        if (data.row.index === execRows.length - 1) {
-          data.cell.styles.fillColor = [TPL.primaryLight[0], TPL.primaryLight[1], TPL.primaryLight[2]];
-          data.cell.styles.fontStyle = "bold";
-          if (data.column.index === 4) {
-            data.cell.styles.textColor = [TPL.totalCol[0], TPL.totalCol[1], TPL.totalCol[2]];
-            data.cell.styles.fontSize = 10;
-          }
-        }
-      },
-    });
-
-    // ─── Signature Block (last page) ───────────────────────────────────────
-    const pageCount = (doc as unknown as { internal: { getNumberOfPages(): number } }).internal.getNumberOfPages();
-    doc.setPage(pageCount);
-    const sigY = 250;
-    const sigW = (doc.internal.pageSize.getWidth() - 2 * 14) / 2 - 10;
-    doc.setFontSize(8); doc.setFont(hasFont ? "Roboto" : "helvetica", "bold"); doc.setTextColor(40, 40, 40);
-    doc.text("Sporządził (Wykonawca)", 14, sigY);
-    doc.text("Zatwierdził (Zleceniodawca)", 14 + sigW + 20, sigY);
-    doc.setDrawColor(180, 180, 180); doc.setLineWidth(0.3);
-    doc.line(14, sigY + 5, 14 + sigW, sigY + 5);
-    doc.line(14 + sigW + 20, sigY + 5, 14 + sigW * 2 + 20, sigY + 5);
-    // Legal disclaimer
-    doc.setFontSize(6); doc.setFont(hasFont ? "Roboto" : "helvetica", "italic"); doc.setTextColor(120, 120, 120);
-    const disclaimer = "Niniejszy kosztorys ma charakter informacyjny i nie stanowi oferty handlowej w rozumieniu Art. 66 par. 1 Kodeksu Cywilnego.";
-    doc.text(sanitize(disclaimer, hasFont), 14, sigY + 14, { maxWidth: doc.internal.pageSize.getWidth() - 28 });
-
-    const footerNote = sanitize("Kalkulacja sporzadzona wg norm ES-KNR 2026", hasFont);
-    renderPdfFooter(doc, hasFont, isPro, footerNote, TPL, showColors, template);
-
-    return new NextResponse(doc.output("arraybuffer"), {
+    return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="${blindMode && isPro ? "Kosztorys_Slepy" : "Kosztorys"}_${sanitize(project.name, hasFont)}.pdf"`,
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${filename}"`,
       },
     });
   } catch (e) {

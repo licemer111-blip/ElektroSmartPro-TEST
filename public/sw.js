@@ -3,7 +3,7 @@
 
 // ⚡ IMPORTANT: This version string is updated on each deploy via build process.
 // When a new SW is installed, it clears all old caches automatically.
-const CACHE_VERSION = '1774540185086';
+const CACHE_VERSION = '1774778195236';
 const CACHE_NAME = `elektrosmart-${CACHE_VERSION}`;
 const OFFLINE_URL = '/offline';
 
