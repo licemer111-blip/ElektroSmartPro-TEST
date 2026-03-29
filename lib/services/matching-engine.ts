@@ -1,15 +1,19 @@
 /**
  * matching-engine.ts
  *
- * ES-Engine: 4-Phase Semantic Matching Pipeline
+ * ES-Engine: 5-Phase Semantic Matching Pipeline
  * Maps any Polish installer text to a canonical KNR code.
  *
- * Phase 1 — Exact Match     → confidence L1 (100%)  — DB exact lookup
- * Phase 2 — Fuzzy Match     → confidence L2 (60-89%) — pg_trgm similarity
- * Phase 3 — Regex Extractors → confidence L2 (75%)  — cable/pipe specs
- * Phase 4 — LLM Fallback    → confidence L3 (<50%)  — mark for manual review
+ * Phase 0   — Action-Verb Lock     → confidence L2 (50-85%) — bruzda/podlacz/wymiana priority
+ * Phase 1   — Exact Match          → confidence L1 (100%)   — DB exact lookup
+ * Phase 1.5 — Semantic Vector      → confidence L2 (76-89%) — OpenAI text-embedding-3-small + pgvector
+ *             Graceful degradation: any OpenAI/RPC failure silently falls through to Phase 2.
+ * Phase 2   — Fuzzy Match (pg_trgm)→ confidence L2 (60-89%) — trigram similarity + NER weighted
+ * Phase 3   — Regex Extractors     → confidence L2-L1 (75-92%) — cable/pipe specs
+ * Phase 4   — LLM Fallback         → confidence L3 (<50%)   — mark for manual review
  */
 
+import OpenAI from "openai";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   normalizeText,
@@ -30,6 +34,7 @@ export type DictionaryEntryType = "material" | "robocizna" | "zestaw";
 export type ConfidenceLevel = "L1" | "L2" | "L3";
 export type MatchMethod =
   | "exact"
+  | "semantic_vector"
   | "fuzzy_trgm"
   | "fuzzy_token"
   | "ner_weighted"
@@ -303,6 +308,145 @@ function expandWithSynonyms(normalized: string): string | null {
     }
   }
   return additions.length > 0 ? `${normalized} ${additions.join(" ")}` : null;
+}
+
+// ─── Phase 1.5: Semantic Vector Brain ───────────────────────────────────────
+// Constants
+
+/**
+ * Minimum cosine similarity passed to the match_dictionary_semantic RPC.
+ * The RPC only returns rows above this floor — keeps the result set small.
+ */
+const SEMANTIC_RPC_THRESHOLD   = 0.75;
+
+/**
+ * Minimum cosine similarity of the TOP result to actually RETURN a semantic match.
+ * Must be >= SEMANTIC_RPC_THRESHOLD.
+ * Below this → fall through to Phase 2 (pg_trgm) silently.
+ */
+const SEMANTIC_RETURN_THRESHOLD = 0.80;
+
+/**
+ * Hard cap on confidence for semantic matches.
+ * Semantic is highly accurate but NOT infallible — cap below L1 (1.0).
+ * 0.89 = same ceiling as Phase 2 fuzzy, keeping the confidence band consistent.
+ */
+const SEMANTIC_MAX_CONFIDENCE   = 0.89;
+
+/** Timeout (ms) for the OpenAI embeddings API call in the hot path. */
+const SEMANTIC_OPENAI_TIMEOUT_MS = 4000;
+
+/**
+ * Return shape from the match_dictionary_semantic Supabase RPC.
+ * Mirrors the SQL RETURNS TABLE columns defined in the migration.
+ */
+interface SemanticDictRow {
+  id:                 string;
+  keyword:            string;
+  keyword_normalized: string;
+  knr_ref:            string;
+  label:              string | null;
+  type:               DictionaryEntryType;
+  is_composite:       boolean;
+  composite_refs:     CompositeRef[] | null;
+  labor_norm_rbh:     number | null;
+  unit:               string | null;
+  category:           string | null;
+  confidence_weight:  number | null;
+  /** Cosine similarity score [0..1] returned by pgvector <=> operator. */
+  similarity:         number;
+}
+
+// Lazy singleton — avoids re-constructing the client on every request
+// and respects OPENAI_API_KEY being undefined (semantic phase stays disabled).
+let _openaiClient: OpenAI | null = null;
+
+function getOpenAIClient(): OpenAI {
+  if (_openaiClient) return _openaiClient;
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) throw new Error("OPENAI_API_KEY not configured — semantic phase disabled");
+  _openaiClient = new OpenAI({
+    apiKey,
+    timeout:    SEMANTIC_OPENAI_TIMEOUT_MS,
+    maxRetries: 0, // no retries in the hot path — fall through immediately on failure
+  });
+  return _openaiClient;
+}
+
+/**
+ * Phase 1.5 — Semantic Vector Match.
+ *
+ * 1. Embeds `normalizedText` via OpenAI text-embedding-3-small.
+ * 2. Calls Supabase RPC `match_dictionary_semantic` with the embedding.
+ * 3. Returns the top hit if its cosine similarity >= SEMANTIC_RETURN_THRESHOLD.
+ * 4. Returns null on ANY failure (timeout, 429, missing key, low similarity)
+ *    so the caller falls through to Phase 2 (pg_trgm) seamlessly.
+ *
+ * Performance budget: ~200-400 ms when OpenAI responds normally.
+ * Failure budget: 4 s hard timeout, 0 retries.
+ */
+async function phase1bSemantic(
+  normalized: string,
+  input: string,
+  supabase: SupabaseClient,
+): Promise<MatchResult | null> {
+  // ── a. Get query embedding ──────────────────────────────────────────────────
+  const openai = getOpenAIClient();
+
+  const embResponse = await openai.embeddings.create({
+    model:           "text-embedding-3-small",
+    input:           normalized,       // already normalized — minimal token noise
+    encoding_format: "float",
+    dimensions:      1536,
+  });
+
+  const queryEmbedding: number[] = embResponse.data[0].embedding;
+
+  if (!queryEmbedding || queryEmbedding.length !== 1536) {
+    return null; // malformed API response — fall through silently
+  }
+
+  // ── b. Call match_dictionary_semantic RPC ───────────────────────────────────
+  const { data, error } = await supabase.rpc("match_dictionary_semantic", {
+    query_embedding:  queryEmbedding,
+    match_threshold:  SEMANTIC_RPC_THRESHOLD,
+    match_count:      3,
+  });
+
+  if (error || !data || (data as SemanticDictRow[]).length === 0) return null;
+
+  const best = (data as SemanticDictRow[])[0];
+
+  // ── c. Apply high-confidence threshold ─────────────────────────────────────
+  if (best.similarity < SEMANTIC_RETURN_THRESHOLD) return null;
+
+  // ── d. Map similarity → confidence ─────────────────────────────────────────
+  // Apply confidence_weight (e.g. 1.2 for highly reliable entries) then cap.
+  // Examples: sim=0.92, weight=1.0 → conf=0.883 (< 0.89 cap)
+  //           sim=0.85, weight=1.1 → conf=min(0.89, 0.935)=0.89
+  //           sim=0.80, weight=0.9 → conf=0.720
+  const weight = best.confidence_weight ?? 1.0;
+  const rawConf = best.similarity * weight;
+  const confidence = Math.min(SEMANTIC_MAX_CONFIDENCE, rawConf);
+
+  return {
+    knr_ref:              best.knr_ref,
+    label:                best.label ?? best.keyword,
+    type:                 best.type,
+    is_composite:         best.is_composite,
+    composite_refs:       Array.isArray(best.composite_refs) ? best.composite_refs : [],
+    labor_norm_rbh:       best.labor_norm_rbh,
+    unit:                 best.unit ?? "szt",
+    confidence,
+    confidence_level:     confidence >= 0.60 ? "L2" : "L3",
+    match_phase:          2,
+    match_method:         "semantic_vector",
+    matched_keyword:      best.keyword,
+    similarity:           best.similarity,
+    original_input:       input,
+    normalized_input:     normalized,
+    keyword_encodes_surface: false, // semantic never implies surface encoding
+  };
 }
 
 // ─── DB row shape (Supabase response) ─────────────────────────────────────────
@@ -808,6 +952,28 @@ export async function matchItem(
     if (p3cable) return p3cable;
   }
 
+  // ── Phase 1.5: Semantic Vector Match ────────────────────────────────────────
+  // Runs AFTER cable-regex (Phase 3a) because cable spec extraction is
+  // deterministic and more precise than vector similarity for wiring items.
+  // Runs BEFORE pg_trgm (Phase 2a) because semantic vectors capture
+  // domain meaning that trigrams miss (e.g. "kontakt" → "gniazdo").
+  //
+  // Safety net: the entire block is wrapped in try/catch.
+  // Failures that cause graceful fallthrough:
+  //   • OPENAI_API_KEY not set / empty
+  //   • OpenAI timeout  (> 4 s) or network error
+  //   • OpenAI 429 Rate Limit
+  //   • Supabase RPC error (e.g. pgvector extension not enabled yet)
+  //   • Top result similarity < SEMANTIC_RETURN_THRESHOLD (0.80)
+  //   • Any unexpected exception
+  // In all cases the pipeline continues to Phase 2a (pg_trgm) silently.
+  try {
+    const p1b = await phase1bSemantic(normalized, input, supabase);
+    if (p1b) return p1b;
+  } catch {
+    // Semantic phase failed — fall through to pg_trgm pipeline (non-fatal)
+  }
+
   // ── Phase 2a: Fuzzy trigram match (threshold driven by sensitivity) ─────────
   try {
     const p2 = await phase2Fuzzy(normalized, supabase, input, t.queryThreshold);
@@ -908,12 +1074,14 @@ export interface BatchMatchOutput {
 
 /**
  * Batch-matches multiple items concurrently.
- * Limits parallelism to avoid overwhelming Supabase connection pool.
+ * Concurrency is limited to 5 (not 20) because Phase 1.5 may call the
+ * OpenAI Embeddings API for each item — 20 parallel calls causes mass 429s.
+ * At concurrency=5 with a 4 s timeout: 100 items ≈ 10 s matching phase.
  */
 export async function matchBatch(
   inputs: BatchMatchInput[],
   supabase: SupabaseClient,
-  concurrency = 20,
+  concurrency = 5,
   settings?: EngineSettings,
 ): Promise<BatchMatchOutput[]> {
   const effectiveSettings = settings ?? DEFAULT_ENGINE_SETTINGS;
@@ -970,7 +1138,7 @@ export async function resolveImportedRows(
     text: row.name ?? "",
   }));
 
-  const matched = await matchBatch(inputs, supabase, 20, settings);
+  const matched = await matchBatch(inputs, supabase, undefined, settings);
 
   return rows.map((row, idx) => {
     const m = matched[idx]?.result ?? phase4Fallback(row.name ?? "", "");

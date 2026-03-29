@@ -7,11 +7,26 @@ import {
   computeSectionPowerBalance,
   computeRailRows,
 } from "@/components/project/panel-configurator-helpers";
+import { ENCLOSURE_OPTIONS } from "@/lib/data/din-modules-catalog";
 import type {
   PanelSection,
   RailModule,
   IssueSeverity,
 } from "@/components/project/panel-configurator-types";
+
+// ─── R1 fix: enclosure recommendation helper ──────────────────────────────────
+// Returns the smallest enclosure that leaves at least 20% free space (headroom)
+// for future circuit additions. Returns null if no larger option exists.
+export type EnclosureOption = typeof ENCLOSURE_OPTIONS[number];
+
+export function recommendEnclosure(
+  occupiedModules: number
+): EnclosureOption | null {
+  // Required capacity: current modules must fill at most 80% of the enclosure
+  const minCapacity = Math.ceil(occupiedModules / 0.8);
+  // ENCLOSURE_OPTIONS is already sorted ascending by module count
+  return ENCLOSURE_OPTIONS.find((enc) => enc.modules >= minCapacity) ?? null;
+}
 
 interface UsePanelDerivedStateProps {
   sections: PanelSection[];
@@ -129,6 +144,19 @@ export function usePanelDerivedState({
     : 0;
   const overflow = totalModules > selectedEnclosure.modules;
 
+  // R1 fix: compute the recommended enclosure for the active section.
+  // suggestedEnclosure is non-null only when the current enclosure would leave
+  // less than 20% headroom (or is already overflowing), prompting the UI to
+  // show a warning banner with the upgrade suggestion.
+  const suggestedEnclosure = useMemo((): EnclosureOption | null => {
+    if (totalModules === 0) return null;
+    const recommended = recommendEnclosure(totalModules);
+    if (!recommended) return null;
+    // Only surface a suggestion when the current enclosure is undersized
+    if (recommended.modules <= selectedEnclosure.modules) return null;
+    return recommended;
+  }, [totalModules, selectedEnclosure.modules]);
+
   return {
     activeSection,
     railModules,
@@ -151,5 +179,6 @@ export function usePanelDerivedState({
     selectedRowIdx,
     occupancyPercent,
     overflow,
+    suggestedEnclosure,
   };
 }

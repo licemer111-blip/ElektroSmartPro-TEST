@@ -13,6 +13,7 @@ import { revalidatePath } from "next/cache";
 import { unpackCompositeItem, recalcChildrenQty } from "@/lib/services/composer-engine";
 import { findRecipeByKeyword } from "@/lib/config/zestawy-recipes";
 import { updateProjectItem } from "@/app/dashboard/projects/[id]/actions";
+import { estimatePricesWithAI } from "@/app/dashboard/projects/[id]/_ai_actions/pricing";
 import type { EngineCalibration } from "@/app/dashboard/settings/knr-calculator/_parts/KnrEngineCalibration";
 import type { UnitType } from "@/lib/types/database";
 
@@ -24,6 +25,10 @@ interface AddZestawParams {
   quantity: number;
   section?: string | null;
   calibration: EngineCalibration;
+  // Z1 fix: user-supplied average cable run per point (mb/szt).
+  // Overrides the static 3.5 mb qtyFactor for all mb-unit children.
+  // When null/undefined the recipe default is used.
+  averageCableLength?: number | null;
 }
 
 export async function addZestawToProject({
@@ -32,6 +37,7 @@ export async function addZestawToProject({
   quantity,
   section,
   calibration,
+  averageCableLength,
 }: AddZestawParams): Promise<{ success: boolean; error: string | null; parentId?: string; addedCount?: number }> {
   try {
     const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
@@ -50,8 +56,12 @@ export async function addZestawToProject({
     const recipe = findRecipeByKeyword(zestawName);
     if (!recipe) return { success: false, error: `Nie znaleziono receptury dla: "${zestawName}"` };
 
-    // Unpack
-    const result = unpackCompositeItem({ name: zestawName, quantity }, calibration);
+    // Unpack — pass averageCableLength so mb-unit children use user's cable length
+    const result = unpackCompositeItem(
+      { name: zestawName, quantity },
+      calibration,
+      averageCableLength ?? undefined,
+    );
     if (!result) return { success: false, error: "Nie można rozwinąć zestawu" };
 
     // Get current max sort_order
@@ -129,6 +139,16 @@ export async function addZestawToProject({
     }
 
     revalidatePath(`/dashboard/projects/${projectId}`);
+
+    // Z2 fix: auto-price the new zestaw immediately, scoped to this parent only.
+    // Non-fatal: if pricing fails the items remain at 0 PLN and user can run
+    // "Wycena AI" manually — same UX as before this fix.
+    try {
+      await estimatePricesWithAI(projectId, "all", { targetItemIds: [parentId] });
+    } catch (pricingErr) {
+      logger.error("Auto-pricing after zestaw insert failed (non-fatal):", { projectId, parentId }, pricingErr);
+    }
+
     return { success: true, error: null, parentId, addedCount: 1 + children.length };
 
   } catch (err) {

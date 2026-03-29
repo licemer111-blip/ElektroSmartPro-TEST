@@ -209,28 +209,27 @@ export function PanelConfigurator({ projectId, isPro = false, projectStatus = "d
       secs: PanelSection[],
       name: string,
       coeff: number,
-      regMod: number
     ) => {
+      // R2 fix: only sync MATERIAL price from the live catalog track.
+      // Catalog defaultPrice × manufacturerCoeff is an acceptable first-approximation
+      // for the BOM material total while the user is building the board.
+      //
+      // Labor is NOT synced here because defaultLaborPrice (e.g. 15 PLN/szt) is a
+      // flat JSON value that ignores the user's hourly rate, KNR norms, and regional
+      // modifier — writing it to final_labor_price would corrupt the kosztorys.
+      // Instead we set final_labor_price=0 and confidence_level="estimated" so the
+      // amber badge tells the user to run "Wycena AI" for the real KNR labor total.
       let totalMat = 0;
-      let totalLab = 0;
       for (const sec of secs) {
         totalMat += sec.enclosure.price;
-        totalLab += sec.enclosure.laborPrice;
-        for (const m of sec.modules) {
-          const pr = getModulePrice(m, coeff);
-          totalMat += pr.material;
-          totalLab += pr.labor;
-        }
-        for (const acc of sec.accessories) {
-          const pr = getModulePrice(acc, coeff);
-          totalMat += pr.material;
-          totalLab += pr.labor;
-        }
+        for (const m of sec.modules) totalMat += getModulePrice(m, coeff).material;
+        for (const acc of sec.accessories) totalMat += getModulePrice(acc, coeff).material;
       }
       await updateProjectItem(pid, itemId, {
         name: `📦 ${name.trim() || "Rozdzielnica"}`,
         final_material_price: Math.round(totalMat * 100) / 100,
-        final_labor_price: Math.round(totalLab * regMod * 100) / 100,
+        final_labor_price:    0,
+        confidence_level:     "estimated",
       });
     },
     1500
@@ -241,7 +240,7 @@ export function PanelConfigurator({ projectId, isPro = false, projectStatus = "d
     const linkedItemId = snapshot?.linkedItemId ?? null;
     if (!linkedItemId || sections.length === 0) return;
     const coeff = selectedManufacturer.id === "custom" ? customCoefficient : selectedManufacturer.coefficient;
-    debouncedSyncToKoszorys(projectId, linkedItemId, sections, panelName, coeff, regionModifier);
+    debouncedSyncToKoszorys(projectId, linkedItemId, sections, panelName, coeff);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sections, panelName, selectedManufacturer, customCoefficient, regionModifier]);
 
@@ -292,6 +291,7 @@ export function PanelConfigurator({ projectId, isPro = false, projectStatus = "d
     selectedRowIdx,
     occupancyPercent,
     overflow,
+    suggestedEnclosure,
   } = usePanelDerivedState({ sections, activeSectionIdx, manufacturerCoeff, selectedUid });
 
   // Section-aware setters — dispatch directly into reducer so updater always
@@ -500,6 +500,7 @@ export function PanelConfigurator({ projectId, isPro = false, projectStatus = "d
         sectionPowerBalance,
         activeIssues, allCriticalErrors, moduleIssueMap, railRows,
         selectedRowIdx, occupancyPercent, overflow,
+        suggestedEnclosure,
         manufacturerCoeff, selectedSlot, ghostModuleData,
         isFinal, isPro, projectId, regionModifier,
         schematSvgRef, schematReadyRef,

@@ -112,6 +112,7 @@ export interface ConfiguratorTabsDerived {
   selectedRowIdx: number;
   occupancyPercent: number;
   overflow: boolean;
+  suggestedEnclosure: { modules: number; rows: number; name: string; price: number; laborPrice: number } | null;
   manufacturerCoeff: number;
   selectedSlot: SelectedSlot | null;
   ghostModuleData: GhostModuleData | null;

@@ -53,12 +53,16 @@ export interface UnpackResult {
  */
 export function unpackCompositeItem(
   item: { name: string; quantity: number; knr_code?: string | null },
-  calibration: EngineCalibration
+  calibration: EngineCalibration,
+  // Z1 fix: user-supplied average cable run length per point (mb/szt).
+  // Overrides the static qtyFactor for ALL mb-unit components (cable + bruzdowanie).
+  // Defaults to undefined (uses recipe qtyFactor as-is).
+  averageCableLength?: number
 ): UnpackResult | null {
   const recipe = findRecipeByKeyword(item.name);
   if (!recipe) return null;
 
-  return buildUnpackResult(recipe, item.quantity, calibration);
+  return buildUnpackResult(recipe, item.quantity, calibration, averageCableLength);
 }
 
 /**
@@ -67,12 +71,13 @@ export function unpackCompositeItem(
 export function unpackByRecipeKey(
   recipeKey: string,
   parentQty: number,
-  calibration: EngineCalibration
+  calibration: EngineCalibration,
+  averageCableLength?: number
 ): UnpackResult | null {
   const recipe = findRecipeByKey(recipeKey);
   if (!recipe) return null;
 
-  return buildUnpackResult(recipe, parentQty, calibration);
+  return buildUnpackResult(recipe, parentQty, calibration, averageCableLength);
 }
 
 // ─── Internal ─────────────────────────────────────────────────────────────────
@@ -80,21 +85,32 @@ export function unpackByRecipeKey(
 function buildUnpackResult(
   recipe: ZestawRecipe,
   parentQty: number,
-  calibration: EngineCalibration
+  calibration: EngineCalibration,
+  averageCableLength?: number
 ): UnpackResult {
   const children: UnpackedChild[] = recipe.components
     .filter((comp) => isComponentActive(comp, calibration))
-    .map((comp) => ({
-      componentId:  comp.id,
-      type:         comp.type,
-      label:        comp.label,
-      unit:         normalizeUnit(comp.unit),
-      quantity:     roundQty(comp.qtyFactor * parentQty),
-      qtyFactor:    comp.qtyFactor,
-      knrRef:       comp.knrRef ?? null,
-      laborNormRbh: comp.laborNormRbh ?? null,
-      metadata:     { qty_factor: comp.qtyFactor, component_id: comp.id },
-    }));
+    .map((comp) => {
+      // Z1 fix: for cable/trench components (unit=mb), substitute averageCableLength
+      // for the recipe's static qtyFactor when the caller has provided a value.
+      // Store the effective factor in metadata so recalcChildrenQty stays in sync.
+      const isCableComp = comp.unit === "mb";
+      const effectiveQtyFactor =
+        isCableComp && averageCableLength != null && averageCableLength > 0
+          ? averageCableLength
+          : comp.qtyFactor;
+      return {
+        componentId:  comp.id,
+        type:         comp.type,
+        label:        comp.label,
+        unit:         normalizeUnit(comp.unit),
+        quantity:     roundQty(effectiveQtyFactor * parentQty),
+        qtyFactor:    effectiveQtyFactor,
+        knrRef:       comp.knrRef ?? null,
+        laborNormRbh: comp.laborNormRbh ?? null,
+        metadata:     { qty_factor: effectiveQtyFactor, component_id: comp.id },
+      };
+    });
 
   return { recipe, children };
 }
