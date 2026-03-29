@@ -12,7 +12,8 @@ import { UNIT_PRESETS } from "@/lib/validations";
 import type { ProjectItem } from "@/lib/types/database";
 import type { EditingState } from "@/components/project/estimate/EstimateRow";
 import { useGlobalSettings } from "@/hooks/use-global-settings";
-import { Search, Loader2, ShieldCheck, AlertCircle, Info, RotateCcw } from "lucide-react";
+import { Search, Loader2, ShieldCheck, AlertCircle, Info, RotateCcw, Building2, X } from "lucide-react";
+import { updateProjectItem } from "@/app/dashboard/projects/[id]/_actions/project-items";
 import { resetItemNormToKnr } from "@/app/dashboard/projects/[id]/_actions/project-items-labor";
 
 const singleCellBorderClass = "border border-slate-300 dark:border-slate-700 bg-clip-padding";
@@ -28,6 +29,8 @@ export interface RowInputsProps {
   showLaborColumn: boolean;
   showRgCol: boolean;
   materialsOwnedByCustomer: boolean;
+  isReadOnly?: boolean;
+  isFinal?: boolean;
   materialUnit: number;      // effective (after negocjacje)
   laborUnit: number;         // effective (after negocjacje)
   materialUnitBase?: number; // base netto before negocjacje
@@ -155,17 +158,32 @@ export function RowMaterialCell({
   materialsOwnedByCustomer, materialUnit, materialUnitBase, materialTotal, onEditingChange, onKeyDown, dp, adjustmentMultiplier,
   bruttoMode = false, vatRate = 23,
   useCustomRates = false, onGlobalFallback, isFallbackLoading = false,
+  isReadOnly = false, isFinal = false,
 }: Omit<RowInputsProps, "showMaterialsColumn" | "showLaborColumn" | "showRgCol" | "laborUnit" | "laborTotal" | "laborUnitBase" | "materialUnit"> & { materialUnit: number }) {
+  const [isPending, startTransition] = useTransition();
   const showPrices = isPro;
   const bMult = bruttoMode ? (1 + vatRate / 100) : 1;
   const matUnitDisp = dp(materialUnit * bMult);
   const matTotalDisp = dp(materialTotal * bMult);
   if (!true) return null; // consumed by parent conditional
 
+  const isInvestorMat = item.is_investor_material === true;
+  const canToggleInvestor = !isEditing && !materialsOwnedByCustomer && !isReadOnly && !isFinal;
+
+  function handleToggleInvestor(e: React.MouseEvent) {
+    e.stopPropagation();
+    startTransition(async () => {
+      await updateProjectItem(item.project_id, item.id, {
+        is_investor_material: !isInvestorMat,
+      });
+    });
+  }
+
   // "Szukaj w KNR/AI" button condition: Tryb Własny active + zero price + no KNR source
   const showGlobalFallbackBtn = useCustomRates
     && !materialsOwnedByCustomer
     && !isEditing
+    && !isInvestorMat
     && (item.material_price ?? 0) + (item.labor_price ?? 0) === 0
     && !item.knr_source
     && !item.knr_code
@@ -179,6 +197,34 @@ export function RowMaterialCell({
         "opacity-50",
       )}>
         <div className="text-xs text-slate-400 dark:text-slate-600 italic">Klient</div>
+      </TableCell>
+    );
+  }
+
+  if (isInvestorMat && !isEditing) {
+    return (
+      <TableCell className={cn(
+        `text-right min-w-[120px] w-[120px] ${singleCellBorderClass}`,
+        colorMode ? "bg-amber-50/50 dark:bg-amber-950/10" : "bg-slate-50/50 dark:bg-slate-900/10",
+        isPending && "opacity-60",
+      )}>
+        <div className="flex flex-col items-end gap-0.5">
+          <div className="flex items-center gap-1">
+            <Building2 className="w-3 h-3 text-slate-400 dark:text-slate-500 flex-shrink-0" />
+            <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide uppercase">Inwestor</span>
+            {canToggleInvestor && (
+              <button
+                onClick={handleToggleInvestor}
+                disabled={isPending}
+                title="Usuń flagę Materiał Inwestora"
+                className="ml-0.5 rounded-full p-0.5 text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+              >
+                <X className="w-2.5 h-2.5" />
+              </button>
+            )}
+          </div>
+          <span className="text-[9px] text-slate-400 dark:text-slate-500 italic">Tylko robocizna</span>
+        </div>
       </TableCell>
     );
   }
@@ -233,26 +279,39 @@ export function RowMaterialCell({
           <span className="text-[8px] text-slate-400 dark:text-slate-500">brak w P1</span>
         </div>
       ) : compactView ? (
-        <div className={cn("flex items-center justify-end gap-1", colorMode ? "text-amber-700 dark:text-amber-400" : "text-slate-700 dark:text-slate-300")}>
-          {(item.confidence_level || item.knr_code) && item.confidence_level !== "manual" && materialUnit > 0 && (
-            <ConfidenceDot
-              level={item.confidence_level ?? "uncertain"}
-              note={item.confidence_note}
-              knrSource={item.knr_source}
-              knrCode={item.knr_code}
-            />
-          )}
-          {item.confidence_level === "uncertain" && !item.knr_code ? (
-            <UncertainPriceWarning />
-          ) : (
-            <div className="flex flex-col items-end leading-tight">
-              <span className="text-[10px] text-muted-foreground">
-                <BlurredPrice value={matUnitDisp} isPro={showPrices} /> /
-              </span>
-              <span className="text-xs font-semibold">
-                <BlurredPrice value={matTotalDisp} isPro={showPrices} />
-              </span>
-            </div>
+        <div className="flex flex-col items-end gap-0.5">
+          <div className={cn("flex items-center justify-end gap-1", colorMode ? "text-amber-700 dark:text-amber-400" : "text-slate-700 dark:text-slate-300")}>
+            {(item.confidence_level || item.knr_code) && item.confidence_level !== "manual" && materialUnit > 0 && (
+              <ConfidenceDot
+                level={item.confidence_level ?? "uncertain"}
+                note={item.confidence_note}
+                knrSource={item.knr_source}
+                knrCode={item.knr_code}
+              />
+            )}
+            {item.confidence_level === "uncertain" && !item.knr_code ? (
+              <UncertainPriceWarning />
+            ) : (
+              <div className="flex flex-col items-end leading-tight">
+                <span className="text-[10px] text-muted-foreground">
+                  <BlurredPrice value={matUnitDisp} isPro={showPrices} /> /
+                </span>
+                <span className="text-xs font-semibold">
+                  <BlurredPrice value={matTotalDisp} isPro={showPrices} />
+                </span>
+              </div>
+            )}
+          </div>
+          {canToggleInvestor && (
+            <button
+              onClick={handleToggleInvestor}
+              disabled={isPending}
+              title="Oznacz jako Materiał Inwestora (mat. = 0)"
+              className="opacity-0 group-hover:opacity-60 hover:!opacity-100 flex items-center gap-0.5 text-[8px] text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-all"
+            >
+              <Building2 className="w-2.5 h-2.5" />
+              <span>Inwestor</span>
+            </button>
           )}
         </div>
       ) : (
@@ -288,6 +347,18 @@ export function RowMaterialCell({
                 <div className="text-[9px] text-slate-400 dark:text-slate-500 text-right">
                   netto: {dp(materialTotal).toFixed(2)} zł
                 </div>
+              )}
+              {/* Investor toggle — visible on row hover */}
+              {canToggleInvestor && (
+                <button
+                  onClick={handleToggleInvestor}
+                  disabled={isPending}
+                  title="Oznacz jako Materiał Inwestora (mat. = 0)"
+                  className="opacity-0 group-hover:opacity-50 hover:!opacity-100 flex items-center gap-0.5 text-[8px] text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-all mt-0.5"
+                >
+                  <Building2 className="w-2.5 h-2.5" />
+                  <span>Inwestor</span>
+                </button>
               )}
             </>
           )}

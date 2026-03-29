@@ -145,6 +145,8 @@ export interface MatchResult {
    * beton hardness). pricing.ts MUST skip getSurfaceModifier() for these entries.
    */
   keyword_encodes_surface?: boolean;
+  /** Materiał Inwestora default — inherited from es_dictionary.default_investor_material */
+  default_investor_material?: boolean;
 }
 
 // ─── Cable cross-section → KNR table (Phase 3) ────────────────────────────────
@@ -341,20 +343,21 @@ const SEMANTIC_OPENAI_TIMEOUT_MS = 4000;
  * Mirrors the SQL RETURNS TABLE columns defined in the migration.
  */
 interface SemanticDictRow {
-  id:                 string;
-  keyword:            string;
-  keyword_normalized: string;
-  knr_ref:            string;
-  label:              string | null;
-  type:               DictionaryEntryType;
-  is_composite:       boolean;
-  composite_refs:     CompositeRef[] | null;
-  labor_norm_rbh:     number | null;
-  unit:               string | null;
-  category:           string | null;
-  confidence_weight:  number | null;
+  id:                       string;
+  keyword:                  string;
+  keyword_normalized:       string;
+  knr_ref:                  string;
+  label:                    string | null;
+  type:                     DictionaryEntryType;
+  is_composite:             boolean;
+  composite_refs:           CompositeRef[] | null;
+  labor_norm_rbh:           number | null;
+  unit:                     string | null;
+  category:                 string | null;
+  confidence_weight:        number | null;
+  default_investor_material: boolean | null;
   /** Cosine similarity score [0..1] returned by pgvector <=> operator. */
-  similarity:         number;
+  similarity:               number;
 }
 
 // Lazy singleton — avoids re-constructing the client on every request
@@ -445,7 +448,8 @@ async function phase1bSemantic(
     similarity:           best.similarity,
     original_input:       input,
     normalized_input:     normalized,
-    keyword_encodes_surface: false, // semantic never implies surface encoding
+    keyword_encodes_surface:     false, // semantic never implies surface encoding
+    default_investor_material:   best.default_investor_material ?? false,
   };
 }
 
@@ -466,6 +470,7 @@ interface DictRow {
   confidence_weight: number | null;
   user_id: string | null;
   keyword_encodes_surface: boolean;
+  default_investor_material?: boolean | null;
 }
 
 interface FuzzyRow extends DictRow {
@@ -512,7 +517,8 @@ function rowToResult(
     similarity,
     original_input: input,
     normalized_input: normalized,
-    keyword_encodes_surface: row.keyword_encodes_surface ?? false,
+    keyword_encodes_surface:   row.keyword_encodes_surface ?? false,
+    default_investor_material: row.default_investor_material ?? false,
   };
 }
 
@@ -556,7 +562,7 @@ async function phase0ActionLock(
 
   const { data, error } = await supabase
     .from("es_dictionary")
-    .select("id, keyword, keyword_normalized, knr_ref, label, type, is_composite, composite_refs, labor_norm_rbh, unit, category, confidence_weight, user_id, keyword_encodes_surface")
+    .select("id, keyword, keyword_normalized, knr_ref, label, type, is_composite, composite_refs, labor_norm_rbh, unit, category, confidence_weight, user_id, keyword_encodes_surface, default_investor_material")
     .ilike("keyword_normalized", `%${lock.stem}%`)
     .eq("type", "robocizna")
     .not("labor_norm_rbh", "is", null)
@@ -628,7 +634,7 @@ async function phase1Exact(
   // We prefer user entry over global seed — avoid .single() which crashes on multiple rows
   const { data, error } = await supabase
     .from("es_dictionary")
-    .select("id, keyword, keyword_normalized, knr_ref, label, type, is_composite, composite_refs, labor_norm_rbh, unit, category, confidence_weight, user_id, keyword_encodes_surface")
+    .select("id, keyword, keyword_normalized, knr_ref, label, type, is_composite, composite_refs, labor_norm_rbh, unit, category, confidence_weight, user_id, keyword_encodes_surface, default_investor_material")
     .eq("keyword_normalized", normalized)
     .limit(2);
 

@@ -70,8 +70,12 @@ export function calcRowPrices(
   // v3.0: Ryczałt — lump sum positions: total = unit price × 1 (quantity ignored in totals)
   const effectiveQty = item.is_lump_sum ? 1 : item.quantity;
 
+  // Materiał Inwestora: per-row override — material is always 0, labor billed normally.
+  // Takes precedence over stored prices but does NOT affect VAT/markup on labor.
+  const suppressMaterial = materialsOwnedByCustomer || item.is_investor_material === true;
+
   // ── Base Netto (Sacred Cell) — no multipliers ──────────────────────────────
-  const materialUnitBase = materialsOwnedByCustomer ? 0 : rawMat;
+  const materialUnitBase = suppressMaterial ? 0 : rawMat;
   const laborUnitBase = rawLab;
   const materialTotalBase = roundPrice(materialUnitBase * effectiveQty);
   const laborTotalBase = roundPrice(laborUnitBase * effectiveQty);
@@ -79,7 +83,7 @@ export function calcRowPrices(
   // ── Smart Total — with adjustment + region modifier + v3 markups ─────────────
   // roundPrice() applied ONLY to final totals — not to unit prices.
   // v3 order: base × matMarkup × adjMult (negocjacje)
-  const materialUnit = materialsOwnedByCustomer ? 0 : rawMat * matMarkupMult * effectiveAdjMult;
+  const materialUnit = suppressMaterial ? 0 : rawMat * matMarkupMult * effectiveAdjMult;
   const laborUnit = rawLab * labMarkupMult * complexityFactor * effectiveAdjMult * effectiveRegionModifier;
   const materialTotal = roundPrice(materialUnit * effectiveQty);
   const laborTotal = roundPrice(laborUnit * effectiveQty);

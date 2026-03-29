@@ -212,6 +212,7 @@ export async function importItemsToProject(
     knr_code?: string | null;
     knr_source?: string | null;
     labor_norm?: number | null;
+    is_investor_material?: boolean;
   }[]
 ): Promise<{ success?: boolean; error?: string; count?: number }> {
   const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
@@ -245,7 +246,8 @@ export async function importItemsToProject(
       labor_norm: laborNorm,
       labor_hours_total: laborHoursTotal,
       sort_order: startOrder + index,
-      is_custom: true
+      is_custom: true,
+      is_investor_material: item.is_investor_material ?? false,
     };
   });
 

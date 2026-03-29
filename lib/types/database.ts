@@ -364,6 +364,8 @@ export interface ProjectItem {
   equipment_norm?: number | null;    // mh/jm (machine hours per unit)
   // v3.0: Ryczałt — if true, price is fixed regardless of quantity
   is_lump_sum?: boolean | null;
+  // Materiał Inwestora — material supplied by client, labor-only billing
+  is_investor_material?: boolean | null;
   sort_order: number;
   created_at: string;
   updated_at?: string;

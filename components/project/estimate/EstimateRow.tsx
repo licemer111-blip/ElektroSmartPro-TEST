@@ -423,6 +423,8 @@ export const EstimateRow = React.memo(function EstimateRow({
           useCustomRates={useCustomRates}
           onGlobalFallback={onGlobalFallback}
           isFallbackLoading={fallbackLoadingIds?.has(item.id) ?? false}
+          isFinal={isFinal}
+          isReadOnly={isReadOnly}
           />
       )}
 

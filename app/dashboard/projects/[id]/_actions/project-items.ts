@@ -228,6 +228,7 @@ export async function updateProjectItem(
     confidence_level?: "verified" | "analog" | "estimated" | "uncertain" | "manual" | null;
     labor_norm?: number | null;
     knr_code?: string | null;
+    is_investor_material?: boolean;
   }
 ) {
   const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
