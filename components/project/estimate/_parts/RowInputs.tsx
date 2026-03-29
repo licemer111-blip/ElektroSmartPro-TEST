@@ -205,25 +205,25 @@ export function RowMaterialCell({
     return (
       <TableCell className={cn(
         `text-right min-w-[120px] w-[120px] ${singleCellBorderClass}`,
-        "bg-blue-50/70 dark:bg-blue-950/25",
+        "bg-emerald-50/80 dark:bg-emerald-950/30 shadow-[inset_0_0_0_1px_theme(colors.emerald.200)] dark:shadow-[inset_0_0_0_1px_theme(colors.emerald.800/60)]",
         isPending && "opacity-60",
       )}>
         <div className="flex flex-col items-end gap-0.5">
           <div className="flex items-center gap-1">
-            <Building2 className="w-3 h-3 text-blue-500 dark:text-blue-400 flex-shrink-0" />
-            <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 tracking-wide uppercase">Inwestor</span>
+            <Building2 className="w-3 h-3 text-emerald-500 dark:text-emerald-400 flex-shrink-0" />
+            <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 tracking-wide uppercase">Inwestor</span>
             {canToggleInvestor && (
               <button
                 onClick={handleToggleInvestor}
                 disabled={isPending}
                 title="Usuń flagę Materiał Inwestora"
-                className="ml-0.5 rounded-full p-0.5 text-blue-300 hover:text-red-500 dark:text-blue-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+                className="ml-0.5 rounded-full p-0.5 text-emerald-300 hover:text-red-500 dark:text-emerald-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
               >
                 <X className="w-2.5 h-2.5" />
               </button>
             )}
           </div>
-          <span className="text-[9px] text-blue-400 dark:text-blue-500 italic">Tylko robocizna</span>
+          <span className="text-[9px] text-emerald-500 dark:text-emerald-500 italic">Tylko robocizna</span>
         </div>
       </TableCell>
     );
@@ -307,9 +307,9 @@ export function RowMaterialCell({
               onClick={handleToggleInvestor}
               disabled={isPending}
               title="Oznacz jako Materiał Inwestora (mat. = 0)"
-              className="opacity-40 group-hover:opacity-80 hover:!opacity-100 flex items-center gap-0.5 text-[8px] font-medium text-orange-500 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 transition-all"
+              className="opacity-50 group-hover:opacity-100 flex items-center gap-0.5 text-[8px] font-semibold text-orange-500 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 transition-all hover:drop-shadow-[0_0_6px_theme(colors.orange.400)] hover:[text-shadow:0_0_8px_theme(colors.orange.400)]"
             >
-              <Building2 className="w-2.5 h-2.5" />
+              <Building2 className="w-2.5 h-2.5 group-hover:drop-shadow-[0_0_4px_theme(colors.orange.400)]" />
               <span>Inwestor</span>
             </button>
           )}
@@ -354,7 +354,7 @@ export function RowMaterialCell({
                   onClick={handleToggleInvestor}
                   disabled={isPending}
                   title="Oznacz jako Materiał Inwestora (mat. = 0)"
-                  className="opacity-40 group-hover:opacity-80 hover:!opacity-100 flex items-center gap-0.5 text-[8px] font-medium text-orange-500 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 transition-all mt-0.5"
+                  className="opacity-50 group-hover:opacity-100 flex items-center gap-0.5 text-[8px] font-semibold text-orange-500 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 transition-all mt-0.5 hover:drop-shadow-[0_0_6px_theme(colors.orange.400)] hover:[text-shadow:0_0_8px_theme(colors.orange.400)]"
                 >
                   <Building2 className="w-2.5 h-2.5" />
                   <span>Inwestor</span>
