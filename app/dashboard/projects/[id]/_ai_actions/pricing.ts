@@ -442,6 +442,30 @@ function getCableComplexityModifier(name: string): number {
   return sectionFactor * alFactor;
 }
 
+// ─────────────────────────────────────────────────────────────────
+// Multiplier Snowball Guard (Hotfix Phase-1)
+// Physics modifiers (cable × surface × ceiling × height) can stack
+// to unrealistic values (e.g. ×2.75 × ×2.25 × ×2.5 × ×2.0 = ×30.9).
+// Cap their combined product at MAX_COMBINED_MODIFIER = 3.5 before
+// applying the hourly rate. globalLaborMod (project-level policy) is
+// intentionally NOT included in this cap.
+// ─────────────────────────────────────────────────────────────────
+const MAX_COMBINED_MODIFIER = 3.5;
+
+/**
+ * Clamps the product of local physics modifiers to MAX_COMBINED_MODIFIER.
+ * Returns the raw product if below cap, otherwise returns the cap.
+ */
+function clampLocalModifiers(
+  cableMod: number,
+  surfaceMod: number,
+  ceilingMod: number,
+  heightMod: number,
+): number {
+  const raw = cableMod * surfaceMod * ceilingMod * heightMod;
+  return Math.min(raw, MAX_COMBINED_MODIFIER);
+}
+
 /** Bruzdowanie / groove-cutting items — legitimately high norms (up to 2.0 rbh/m in concrete) */
 const GROOVE_RE = /\b(bruzd|kucie|rowek|kanal)\b/i;
 /** Distribution panel / switchboard — assembly can legitimately take >8 rbh/szt */
@@ -1047,19 +1071,21 @@ export async function estimatePricesWithAI(
           const l0CableSection = isCableItem(item.name) ? (() => { const _m = item.name.match(CABLE_SECTION_RE); return _m ? parseFloat(_m[2].replace(",", ".")) : null; })() : null;
           const mFactorL0  = getModernizationFactor(classifyIntent(item.name).intent, l0CableSection);
           const mLabelL0   = getMFactorLabel(mFactorL0);
-          const sugLab = Math.round(laborNormScaled * mFactorL0 * cableMod * surfaceModL0 * ceilingModL0 * heightModL0 * baseRateForCalc * globalLaborMod * 100) / 100;
+          const localModL0 = clampLocalModifiers(cableMod, surfaceModL0, ceilingModL0, heightModL0);
+          const sugLab = Math.round(laborNormScaled * mFactorL0 * localModL0 * baseRateForCalc * globalLaborMod * 100) / 100;
           // Effective hours = norm × M-Factor × modifiers × qty (not bare norm × qty)
           const laborHoursTotalL0 = baseRateForCalc > 0
             ? Math.round(sugLab / baseRateForCalc * (item.quantity ?? 1) * 1000) / 1000
             : null;
           // Region hint — informational suffix showing final price after region modifier
-          // Region is NOT baked into DB price; it’s applied lazily in calcRowPrices at display time
+          // Region is NOT baked into DB price; it's applied lazily in calcRowPrices at display time
           const regionMod = rateResult.regionModifier;
           const regionLabel = projectRegionName ?? "brak";
           const regionHintL0 = regionMod !== 1.0
             ? ` → ×${regionMod.toFixed(2)}(${regionLabel}) → ${(sugLab * regionMod).toFixed(2)}PLN`
             : "";
-          const traceL0 = `${laborNormScaled.toFixed(4)}rbh × ${mFactorL0.toFixed(2)}[M:${mLabelL0}] × ${cableMod.toFixed(2)}(kabel) × 1.0(KNR-enc)${ceilingTagL0}${heightTagL0} × ${baseRateForCalc.toFixed(1)}PLN/h${globalModTagL0} = ${sugLab.toFixed(2)}PLN${regionHintL0}`;
+          const capTagL0 = localModL0 >= MAX_COMBINED_MODIFIER ? ` [⚠️ cap×${MAX_COMBINED_MODIFIER}]` : "";
+          const traceL0 = `${laborNormScaled.toFixed(4)}rbh × ${mFactorL0.toFixed(2)}[M:${mLabelL0}] × ${localModL0.toFixed(2)}(local${capTagL0}) × ${baseRateForCalc.toFixed(1)}PLN/h${globalModTagL0} = ${sugLab.toFixed(2)}PLN${regionHintL0}`;
           l0ResolvedIds.add(item.id);
           l0Estimates.push({
             itemId: item.id,
@@ -1448,8 +1474,9 @@ export async function estimatePricesWithAI(
         const l2CableSection = isCableItem(item.name) ? (() => { const _m = item.name.match(CABLE_SECTION_RE); return _m ? parseFloat(_m[2].replace(",", ".")) : null; })() : null;
         const mFactorL2  = getModernizationFactor(classifyIntent(item.name).intent, l2CableSection);
         const mLabelL2   = getMFactorLabel(mFactorL2);
+        const localModL2 = clampLocalModifiers(cableMod, surfaceMod, ceilingMod, heightMod);
         const sugLabBase = normWithFloor != null
-          ? Math.round(normWithFloor * mFactorL2 * cableMod * surfaceMod * ceilingMod * heightMod * baseRateForCalc * globalLaborMod * 100) / 100
+          ? Math.round(normWithFloor * mFactorL2 * localModL2 * baseRateForCalc * globalLaborMod * 100) / 100
           : 0;
         // ── Absolute PLN floor for connection/commissioning items ─────────────────
         // This bypasses the norm-based calculation entirely: if any multiplier chain
@@ -1492,8 +1519,9 @@ export async function estimatePricesWithAI(
         const globalModTag = globalLaborMod !== 1.0 ? ` ×${globalLaborMod.toFixed(3)}(wys/szt)` : "";
         const normFloorTag = normFloorApplied ? `[⬆floor ${GROOVE_ZELBET_MIN_NORM}] ` : "";
         const wymianaTag = wymianaActive ? ` ×${WYMIANA_FACTOR.toFixed(1)}(wymiana)` : "";
+        const capTagL2 = localModL2 >= MAX_COMBINED_MODIFIER ? ` ⚠️cap×${MAX_COMBINED_MODIFIER}` : "";
         const traceFormula = normWithFloor != null
-          ? `${normFloorTag}${normWithFloor.toFixed(4)}rbh × ${mFactorL2.toFixed(2)}[M:${mLabelL2}] × ${cableMod.toFixed(2)}(kabel) × ${surfaceTag}${ceilingTag}${heightTag} × ${baseRateForCalc.toFixed(1)}PLN/h${globalModTag}${wymianaTag} = ${sugLab.toFixed(2)}PLN`
+          ? `${normFloorTag}${normWithFloor.toFixed(4)}rbh × ${mFactorL2.toFixed(2)}[M:${mLabelL2}] × ${localModL2.toFixed(2)}(local:${surfaceTag}${ceilingTag}${heightTag}${capTagL2}) × ${baseRateForCalc.toFixed(1)}PLN/h${globalModTag}${wymianaTag} = ${sugLab.toFixed(2)}PLN`
           : "brak normy";
         const regionModL2 = rateResult.regionModifier;
         const regionLabelL2 = projectRegionName ?? "brak";
@@ -1501,7 +1529,7 @@ export async function estimatePricesWithAI(
           ? ` → ×${regionModL2.toFixed(2)}(${regionLabelL2}) → ${(sugLab * regionModL2).toFixed(2)}PLN`
           : "";
         const noteFormula = normWithFloor != null
-          ? ` | norma: ${normFloorTag}${normWithFloor.toFixed(4)} rbh/${itemUnitForScale} × ${mFactorL2.toFixed(2)}[M:${mLabelL2}] × ${cableMod.toFixed(2)}(kabel) × ${surfaceTag}${ceilingTag}${heightTag} × ${baseRateForCalc.toFixed(1)}PLN/h${globalModTag} = ${sugLab.toFixed(2)} PLN${regionHintL2}`
+          ? ` | norma: ${normFloorTag}${normWithFloor.toFixed(4)} rbh/${itemUnitForScale} × ${mFactorL2.toFixed(2)}[M:${mLabelL2}] × ${localModL2.toFixed(2)}(local${capTagL2}) × ${baseRateForCalc.toFixed(1)}PLN/h${globalModTag} = ${sugLab.toFixed(2)} PLN${regionHintL2}`
           : "";
         return {
           itemId: item.id,
@@ -1718,7 +1746,9 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
         //        If item.name is neutral   → apply getSurfaceModifier() from name/context.
         // surfaceExtraMod (project coeff_surface flag) is also skipped when name encodes
         // surface, because the difficulty is already specific and known.
-        const SURFACE_IN_NAME_RE = /\b(?:gazobet|siporex|ytong|bloczk|zelbet|żelbet|gipsokart|\bgk\b|beton|cegle?|cegł|tynk)/i;
+        // B4 fix: added zbrojon|monolit to match isZelbet() coverage (zbrojony beton, monolityczny);
+        // żelbe prefix covers all Polish inflections (żelbecie, żelbetowy, etc.) without trailing \b.
+        const SURFACE_IN_NAME_RE = /\b(?:gazobet|siporex|ytong|bloczk|żelbe|zelbe|zbrojon|monolit|gipsokart|\bgk\b|beton|cegle?|cegł|tynk)/i;
         const nameEncodesSurface = SURFACE_IN_NAME_RE.test(est.name);
         const cML3 = getCableComplexityModifier(est.name);
         const autoSurfaceML3 = nameEncodesSurface
@@ -1731,13 +1761,15 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
         const l3ItemCtx = l3CtxMap.get(est.itemId) ?? "";
         const ceilingML3 = getCeilingModifier(est.name, l3ItemCtx);
         const heightML3  = getHeightModifier(est.name, l3ItemCtx);
-        const adjLab = Math.round(Math.round(l3.labor_price * 100) / 100 * cML3 * sML3 * ceilingML3 * heightML3 * globalLaborMod * 100) / 100;
+        const localModL3 = clampLocalModifiers(cML3, sML3, ceilingML3, heightML3);
+        const adjLab = Math.round(Math.round(l3.labor_price * 100) / 100 * localModL3 * globalLaborMod * 100) / 100;
         // L3 trace: show surface source explicitly
         const surfaceTagL3 = nameEncodesSurface
           ? `×1.0(name-enc)`
           : autoSurfaceML3 !== 1.0
             ? `×${autoSurfaceML3.toFixed(2)}(auto)${projSurfaceML3 > 1.0 ? `×${projSurfaceML3.toFixed(2)}(proj)` : ""}`
             : `×1.0(neutral)`;
+        const capTagL3 = localModL3 >= MAX_COMBINED_MODIFIER ? ` ⚠️cap×${MAX_COMBINED_MODIFIER}` : "";
         const globalModTagL3 = globalLaborMod !== 1.0 ? ` ×${globalLaborMod.toFixed(3)}(wys/szt)` : "";
         l2Estimates[i] = {
           ...est,
@@ -1758,7 +1790,7 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
             return raw;
           })(),
           knrSource: (l3.knr_code && !isSyntheticKnr(l3.knr_code) && isOfficialKnr(l3.knr_code)) ? "official" : (l3.knr_code && !isSyntheticKnr(l3.knr_code)) ? "es-synthetic" : null,
-          trace: `L3 AI Batch (${l3.confidence}) | ×${cML3.toFixed(2)}(kabel) ${surfaceTagL3} ×${baseRateForCalc.toFixed(1)}PLN/h${globalModTagL3} → adjLab=${adjLab.toFixed(2)}PLN`,
+          trace: `L3 AI Batch (${l3.confidence}) | ×${localModL3.toFixed(2)}(local:kabel${surfaceTagL3}${capTagL3})${globalModTagL3} → adjLab=${adjLab.toFixed(2)}PLN`,
         };
       }
     }

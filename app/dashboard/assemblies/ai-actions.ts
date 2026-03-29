@@ -33,6 +33,7 @@ async function fetchAssembliesKbContext(): Promise<string | null> {
   }
 }
 
+/** Fallback rate used only when the user has no rate configured in their profile. */
 const DEFAULT_HOURLY_RATE = 62;
 
 interface GeneratedAssembly {
@@ -92,6 +93,22 @@ export async function generateAssembliesWithAI(
       return { success: false, error: "Klucz API Google AI nie jest skonfigurowany. Skontaktuj się z administratorem." };
     }
 
+    // Resolve effective hourly rate from user profile (B1 Hotfix: replace hardcoded 62)
+    const { data: profileRate } = await supabase
+      .from("profiles")
+      .select("hourly_rate, use_custom_rates, custom_labor_rate")
+      .eq("id", user.id)
+      .single();
+    const effectiveRate: number = (() => {
+      if (profileRate?.use_custom_rates && profileRate.custom_labor_rate && profileRate.custom_labor_rate > 0) {
+        return profileRate.custom_labor_rate;
+      }
+      if (profileRate?.hourly_rate && profileRate.hourly_rate > 0) {
+        return profileRate.hourly_rate;
+      }
+      return DEFAULT_HOURLY_RATE;
+    })();
+
     // Get existing assembly categories for context
     const { data: existingCategories } = await supabase
       .from("assembly_categories")
@@ -104,7 +121,7 @@ export async function generateAssembliesWithAI(
       .join(", ") || "Oświetlenie, Gniazda, Rozdzielnice, Instalacje";
 
     // KNR norms from local JSON (no DB call, always available) — limit 40 to prevent context overload
-    const knrContext = buildLocalKnrContext(DEFAULT_HOURLY_RATE, 40);
+    const knrContext = buildLocalKnrContext(effectiveRate, 40);
 
     // KB context in parallel
     const kbContext = await fetchAssembliesKbContext();
@@ -120,8 +137,8 @@ ${categoriesContext}
 
 <knr_norms_table>
 ${knrContext}
-FORMAT: [KOD KNR] | [OPIS] → [NORMA rbh/jednostkę] = [CENA PLN robocizna przy ${DEFAULT_HOURLY_RATE} zł/rbh]
-Używaj DOKŁADNIE tych kodów w polu knr_code. Obliczaj estimatedPrice = labor_norm_rbh × ${DEFAULT_HOURLY_RATE}.
+FORMAT: [KOD KNR] | [OPIS] → [NORMA rbh/jednostkę] = [CENA PLN robocizna przy ${effectiveRate} zł/rbh]
+Używaj DOKŁADNIE tych kodów w polu knr_code. Obliczaj estimatedPrice = labor_norm_rbh × ${effectiveRate}.
 </knr_norms_table>
 
 <reality_check>
@@ -137,7 +154,7 @@ ILOŚCI W ZESTAWIE (na 1 punkt instalacyjny):
 • Bruzdowanie dla 1 gniazda: MAX 7 mb (typowo 5 mb).
 • Kabel dla 1 łącznika: MAX 5 mb.
 ROBOCIZNA — OBLICZAJ Z NORMY KNR:
-• estimatedPrice MUSI być = labor_norm_rbh × ${DEFAULT_HOURLY_RATE} zł
+• estimatedPrice MUSI być = labor_norm_rbh × ${effectiveRate} zł
 • ZAKAZ podawania 0 dla pozycji type=labor
 • Kucie bruzd: max 30 zł/mb | Układanie: max 15 zł/mb | Montaż gniazda: max 60 zł/szt
 </reality_check>
@@ -147,7 +164,7 @@ ROBOCIZNA — OBLICZAJ Z NORMY KNR:
 2. Każdy zestaw: kompletna lista pozycji (materiały + robocizna).
 3. Każdy zestaw MUSI zawierać ZARÓWNO type="material" JAK I type="labor".
 4. Dla KAŻDEJ pozycji robocizny: OBOWIĄZKOWE pola knr_code + labor_norm_rbh z <knr_norms_table>.
-5. estimatedPrice dla robocizny = labor_norm_rbh × ${DEFAULT_HOURLY_RATE}. NIGDY 0!
+5. estimatedPrice dla robocizny = labor_norm_rbh × ${effectiveRate}. NIGDY 0!
 6. estimatedPrice dla materiałów = cena katalogowa za jednostkę (bez robocizny).
 7. Zwracaj minimalny JSON — bez zbędnych komentarzy.
 8. MINIMUM 3 zestawy w odpowiedzi — nigdy mniej!
@@ -266,7 +283,7 @@ ROBOCIZNA — OBLICZAJ Z NORMY KNR:
           }
           // Calculate price from norm × rate (authoritative)
           if (laborNorm && laborNorm > 0) {
-            price = Math.round(laborNorm * DEFAULT_HOURLY_RATE * 100) / 100;
+            price = Math.round(laborNorm * effectiveRate * 100) / 100;
           }
           // Fallback if still 0
           if (price <= 0) {
@@ -276,7 +293,7 @@ ROBOCIZNA — OBLICZAJ Z NORMY KNR:
           const clampedPrice = clampPrice(item.name, unit, price, "labor");
           // Back-calculate norm from clamped price so stored norm always matches stored price
           if (clampedPrice < price && laborNorm && laborNorm > 0) {
-            laborNorm = Math.round((clampedPrice / DEFAULT_HOURLY_RATE) * 10000) / 10000;
+            laborNorm = Math.round((clampedPrice / effectiveRate) * 10000) / 10000;
           }
           price = clampedPrice;
         } else {

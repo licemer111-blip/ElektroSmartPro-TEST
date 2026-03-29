@@ -232,11 +232,11 @@ const SEMANTIC_SYNONYM_GROUPS: ReadonlyArray<SynonymGroup> = [
 
   // ── Gniazda — socket outlet slang ────────────────────────────────────────
   { canonical: "gniazdo",
-    triggers: ["kontakt ", "gniazdko", "punkt gniazd", "gniazdo silow"] },
+    triggers: ["kontakt", "kontaktu", "gniazdko", "punkt gniazd", "gniazdo silow"] },
 
   // ── Rozdzielnica — panel board slang ─────────────────────────────────────
   { canonical: "rozdzielnica",
-    triggers: ["tablica rozdziel", "skrzynka elektr", "rozdzielnia "] },
+    triggers: ["tablica rozdziel", "skrzynka elektr", "rozdzielnia"] },
 
   // ── Demontaż — removal / demolition ──────────────────────────────────────
   { canonical: "demontaz",
@@ -252,7 +252,7 @@ const SEMANTIC_SYNONYM_GROUPS: ReadonlyArray<SynonymGroup> = [
 
   // ── Falownik — VFD / frequency inverter ──────────────────────────────────
   { canonical: "falownik",
-    triggers: ["inverter", "czestotliw", "vfd ", "softstart", "soft-start"] },
+    triggers: ["inverter", "czestotliw", "vfd", "softstart", "soft-start"] },
 
   // ── Klimatyzacja — AC / heat pump slang ──────────────────────────────────
   { canonical: "klimatyzacja",
@@ -284,7 +284,7 @@ const SEMANTIC_SYNONYM_GROUPS: ReadonlyArray<SynonymGroup> = [
 
   // ── Zasilacz UPS / SZR — emergency power ─────────────────────────────────
   { canonical: "zasilacz ups",
-    triggers: ["zasilanie awaryjn", "szr ", "automatyczny przela", "agregat pradotw"] },
+    triggers: ["zasilanie awaryjn", "szr", "automatyczny przela", "agregat pradotw"] },
 ] as const;
 
 /**
@@ -297,7 +297,8 @@ function expandWithSynonyms(normalized: string): string | null {
   for (const { canonical, triggers } of SEMANTIC_SYNONYM_GROUPS) {
     const canonicalNorm = normalizeText(canonical);
     if (normalized.includes(canonicalNorm.split(" ")[0])) continue; // already present
-    if (triggers.some((t) => normalized.includes(t))) {
+    // B3 fix: .trim() guards against any accidental trailing/leading whitespace in triggers
+    if (triggers.some((t) => normalized.includes(t.trim()))) {
       additions.push(canonicalNorm);
     }
   }

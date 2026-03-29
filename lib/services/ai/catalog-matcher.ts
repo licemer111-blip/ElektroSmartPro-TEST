@@ -122,11 +122,13 @@ export function findBestCatalogMatchWithHint(
   }
 
   // ── Stage 3: Contains (substring) ──
+  // B9 fix: reduced min length from 8 → 4 so short catalog names like "Kabel",
+  // "Rura", "Puszka" (5–6 chars after sanitize) are eligible for substring matching.
   let containsMatch: CatalogItemRef | null = null;
   let containsMatchLen = 0;
   for (const item of catalogItems) {
     const catName = sanitize(item.name);
-    if (catName.length < 8) continue;
+    if (catName.length < 4) continue;
     const coverage = catName.length / Math.max(strippedName.length, 1);
     if (coverage < 0.5) continue;
     if (strippedName.includes(catName) || catName.includes(strippedName)) {
