@@ -206,6 +206,7 @@ export interface PdfRow {
   rowType: string;
   isParent: boolean;
   isChild: boolean;
+  isInvestorMat?: boolean;
 }
 
 export interface PdfProfile {
@@ -702,7 +703,13 @@ const TableDataRow = ({
       {/* Materiał */}
       {!matOwned ? (
         <View style={[cellStyle, { width: cols.mat, textAlign: 'right' }]}>
-          <Text>{isSectionHeader ? '' : row.mat}</Text>
+          {isSectionHeader ? (
+            <Text></Text>
+          ) : row.isInvestorMat ? (
+            <Text style={{ color: '#2563eb', fontSize: 7, fontWeight: 'bold' }}>Inwestor</Text>
+          ) : (
+            <Text>{row.mat}</Text>
+          )}
         </View>
       ) : null}
       {/* Robocizna */}

@@ -205,25 +205,25 @@ export function RowMaterialCell({
     return (
       <TableCell className={cn(
         `text-right min-w-[120px] w-[120px] ${singleCellBorderClass}`,
-        colorMode ? "bg-amber-50/50 dark:bg-amber-950/10" : "bg-slate-50/50 dark:bg-slate-900/10",
+        "bg-blue-50/70 dark:bg-blue-950/25",
         isPending && "opacity-60",
       )}>
         <div className="flex flex-col items-end gap-0.5">
           <div className="flex items-center gap-1">
-            <Building2 className="w-3 h-3 text-slate-400 dark:text-slate-500 flex-shrink-0" />
-            <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide uppercase">Inwestor</span>
+            <Building2 className="w-3 h-3 text-blue-500 dark:text-blue-400 flex-shrink-0" />
+            <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 tracking-wide uppercase">Inwestor</span>
             {canToggleInvestor && (
               <button
                 onClick={handleToggleInvestor}
                 disabled={isPending}
                 title="Usuń flagę Materiał Inwestora"
-                className="ml-0.5 rounded-full p-0.5 text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+                className="ml-0.5 rounded-full p-0.5 text-blue-300 hover:text-red-500 dark:text-blue-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
               >
                 <X className="w-2.5 h-2.5" />
               </button>
             )}
           </div>
-          <span className="text-[9px] text-slate-400 dark:text-slate-500 italic">Tylko robocizna</span>
+          <span className="text-[9px] text-blue-400 dark:text-blue-500 italic">Tylko robocizna</span>
         </div>
       </TableCell>
     );

@@ -185,16 +185,18 @@ export async function POST(req: Request) {
 
     const calcItems = items.map(item => {
       const isManualItem = (item as Record<string, unknown>).confidence_level === "manual";
+      const isInvestorMat = Boolean((item as Record<string, unknown>).is_investor_material);
       // Iron Rule: regionModifier ONLY on labor — material is sovereign
       // Material: always adjustmentOnly (no regionModifier regardless of manual/AI)
       // Labor: manual → adjustmentOnly; AI → adjustmentOnly × regionModifier
       const labModifier = isManualItem ? adjustmentOnly : modifier;
       return {
         ...item,
-        // matOwnedByClient: zero out material prices so they don't appear in totals
-        finalMat: matOwnedByClient ? 0 : getPrice(item, "mat") * adjustmentOnly * vatMultiplier,
+        // matOwnedByClient or isInvestorMat: zero out material prices
+        finalMat: (matOwnedByClient || isInvestorMat) ? 0 : getPrice(item, "mat") * adjustmentOnly * vatMultiplier,
         finalLab: getPrice(item, "lab") * labModifier * vatMultiplier,
         laborNorm: Number((item as Record<string, unknown>).labor_norm ?? 0),
+        isInvestorMat,
       };
     });
 
@@ -260,8 +262,8 @@ export async function POST(req: Request) {
       return {
         index: indexDisplay, name, knrCode, unit: item.unit as string, qty: item.quantity as number,
         rg: laborNormDisplay, mat: matDisplay, lab: labDisplay, combined: combinedDisplay,
-        total: maskPrices ? (isPro && blindMode ? "---" : "*** zl") : fMoney(totalVal),
-        rawTotal: blindMode ? 0 : totalVal, rowType, isParent, isChild,
+        total: maskPrices ? (isPro && blindMode ? "---" : "*** zl") : fMoney(totalVal), rawTotal: blindMode ? 0 : totalVal, rowType, isParent, isChild,
+        isInvestorMat: item.isInvestorMat,
       };
     });
 
