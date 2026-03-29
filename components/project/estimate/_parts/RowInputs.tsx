@@ -307,7 +307,7 @@ export function RowMaterialCell({
               onClick={handleToggleInvestor}
               disabled={isPending}
               title="Oznacz jako Materiał Inwestora (mat. = 0)"
-              className="opacity-0 group-hover:opacity-60 hover:!opacity-100 flex items-center gap-0.5 text-[8px] text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-all"
+              className="opacity-40 group-hover:opacity-80 hover:!opacity-100 flex items-center gap-0.5 text-[8px] font-medium text-orange-500 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 transition-all"
             >
               <Building2 className="w-2.5 h-2.5" />
               <span>Inwestor</span>
@@ -354,7 +354,7 @@ export function RowMaterialCell({
                   onClick={handleToggleInvestor}
                   disabled={isPending}
                   title="Oznacz jako Materiał Inwestora (mat. = 0)"
-                  className="opacity-0 group-hover:opacity-50 hover:!opacity-100 flex items-center gap-0.5 text-[8px] text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-all mt-0.5"
+                  className="opacity-40 group-hover:opacity-80 hover:!opacity-100 flex items-center gap-0.5 text-[8px] font-medium text-orange-500 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 transition-all mt-0.5"
                 >
                   <Building2 className="w-2.5 h-2.5" />
                   <span>Inwestor</span>
