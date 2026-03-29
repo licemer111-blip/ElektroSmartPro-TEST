@@ -365,8 +365,17 @@ export async function createQuickEstimateProject(params: {
       );
     }
   } catch (pricingErr) {
-    logger.error("Quick estimate KNR pricing failed (project created, items unprice)", { projectId: project.id }, pricingErr);
-    // Non-fatal: project created successfully, user can run ES Wycena manually
+    // Q2 fix: surface pricing failures instead of creating a silent 0 PLN project.
+    // The project and items are already in the DB — return the projectId so the UI
+    // can navigate there with a warning rather than leaving the user with no context.
+    logger.error("Quick estimate KNR pricing failed", { projectId: project.id }, pricingErr);
+    revalidatePath("/dashboard");
+    revalidatePath(`/dashboard/projects/${project.id}`);
+    return {
+      success: false,
+      projectId: project.id,
+      error: "Silnik wyceny nie odpowiedział. Projekt został utworzony — uruchom 'Wycena AI' ręcznie lub spróbuj ponownie.",
+    };
   }
 
   revalidatePath("/dashboard");

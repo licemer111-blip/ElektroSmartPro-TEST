@@ -152,21 +152,22 @@ export function smartParseExcel(headers: string[], data: string[][]): ExcelRow[]
     const rawQty = String(row[qtyIdx] ?? "1").replace(",", ".").replace(/[^\d.]/g, "");
     const qty = parseFloat(rawQty) || 1;
 
+    // I4 fix: removed toUnitPriceS(qty*50) heuristic — it incorrectly divided unit prices
+    // for large cables (e.g. 200mb × 5 PLN/mb became 1000 PLN/mb). Header-column mapping
+    // (matIdx/labIdx vs priceIdx) is the correct source of truth for unit vs total price.
     const parsePriceS = (raw: string): number =>
       parseFloat(raw.replace(",", ".").replace(/[^\d.]/g, "")) || 0;
-    const toUnitPriceS = (p: number): number =>
-      qty > 1 && p > qty * 50 ? Math.round((p / qty) * 100) / 100 : p;
 
     let mat = 0, lab = 0;
     if (matIdx >= 0 && labIdx >= 0) {
-      mat = toUnitPriceS(parsePriceS(String(row[matIdx] ?? "0")));
-      lab = toUnitPriceS(parsePriceS(String(row[labIdx] ?? "0")));
+      mat = parsePriceS(String(row[matIdx] ?? "0"));
+      lab = parsePriceS(String(row[labIdx] ?? "0"));
     } else if (matIdx >= 0) {
-      mat = toUnitPriceS(parsePriceS(String(row[matIdx] ?? "0")));
+      mat = parsePriceS(String(row[matIdx] ?? "0"));
     } else if (labIdx >= 0) {
-      lab = toUnitPriceS(parsePriceS(String(row[labIdx] ?? "0")));
+      lab = parsePriceS(String(row[labIdx] ?? "0"));
     } else if (priceIdx >= 0) {
-      const p = toUnitPriceS(parsePriceS(String(row[priceIdx] ?? "0")));
+      const p = parsePriceS(String(row[priceIdx] ?? "0"));
       const cls = classifyRow(name);
       if (cls === "labor") lab = p;
       else if (cls === "material") mat = p;
@@ -208,21 +209,20 @@ export function applyColumnMap(map: ExcelColumnMap, data: string[][]): ExcelRow[
     const rawQty = map.qtyIdx >= 0 ? String(row[map.qtyIdx] ?? "1") : "1";
     const qty = parseFloat(rawQty.replace(",", ".").replace(/[^\d.]/g, "")) || 1;
 
+    // I4 fix: removed toUnitPrice(qty*50) heuristic — same fix as smartParseExcel()
     const parsePrice = (raw: string): number =>
       parseFloat(raw.replace(",", ".").replace(/[^\d.]/g, "")) || 0;
-    const toUnitPrice = (p: number): number =>
-      qty > 1 && p > qty * 50 ? Math.round((p / qty) * 100) / 100 : p;
 
     let mat = 0, lab = 0;
     if (map.matIdx >= 0 && map.labIdx >= 0) {
-      mat = toUnitPrice(parsePrice(String(row[map.matIdx] ?? "0")));
-      lab = toUnitPrice(parsePrice(String(row[map.labIdx] ?? "0")));
+      mat = parsePrice(String(row[map.matIdx] ?? "0"));
+      lab = parsePrice(String(row[map.labIdx] ?? "0"));
     } else if (map.matIdx >= 0) {
-      mat = toUnitPrice(parsePrice(String(row[map.matIdx] ?? "0")));
+      mat = parsePrice(String(row[map.matIdx] ?? "0"));
     } else if (map.labIdx >= 0) {
-      lab = toUnitPrice(parsePrice(String(row[map.labIdx] ?? "0")));
+      lab = parsePrice(String(row[map.labIdx] ?? "0"));
     } else if (map.priceIdx >= 0) {
-      const p = toUnitPrice(parsePrice(String(row[map.priceIdx] ?? "0")));
+      const p = parsePrice(String(row[map.priceIdx] ?? "0"));
       const cls = classifyRow(name);
       if (cls === "labor") lab = p;
       else if (cls === "material") mat = p;
@@ -290,8 +290,19 @@ export function parsePrzedmiarText(text: string): AIProjectItem[] {
 
   // ── Phase 1: pre-process lines into tokens ────────────────────────────────
   // Each token has type: "name" | "qty" | "unit" | "inline"
-  type Token = { raw: string; type: "name" | "qty" | "unit" | "inline" };
+  // I5 fix: knrCode carries any KNR code extracted from the line prefix or a
+  // preceding standalone KNR-header line, so the assembled item can store it.
+  type Token = { raw: string; type: "name" | "qty" | "unit" | "inline"; knrCode?: string };
   const tokens: Token[] = [];
+
+  // ── I5: KNR code extraction regexes ─────────────────────────────────────
+  // Matches: "KNR 5-08 0401-01", "KNRW 2-23 0601-05", "KNR AT-26 0303-02"
+  // KNR_PREFIX_RE — code followed by description text on the same line
+  // KNR_STANDALONE_RE — line consists of ONLY the KNR code (position header line)
+  const KNR_PREFIX_RE = /^(KNR[W]?\s+[\w-]{2,8}\s+[\d]{4}-[\d]{2,3})\s+/i;
+  const KNR_STANDALONE_RE = /^(KNR[W]?\s+[\w-]{2,8}\s+[\d]{4}-[\d]{2,3})\s*$/i;
+  // Carries a KNR code extracted from a standalone header line to the next name token
+  let pendingKnrCode: string | undefined;
 
   // ── Noise-header detector ────────────────────────────────────────────────
   // Returns true for lines that are classification codes, TOC entries, section
@@ -322,43 +333,70 @@ export function parsePrzedmiarText(text: string): AIProjectItem[] {
     const strippedLine = trimmed.startsWith('- ') ? trimmed.slice(2).trim() : trimmed;
     if (!strippedLine) continue;
 
+    // ── I5: KNR code extraction ─────────────────────────────────────────────
+    // If the line is ONLY a KNR code ("KNR 5-08 0401-01"), hold it for the
+    // next name token. If the KNR code is a prefix of a longer line
+    // ("KNR 5-08 0401-01 Montaż gniazda 230V"), strip it and keep the
+    // description part as the effective line for further tokenization.
+    let lineKnr: string | undefined;
+    let processedLine = strippedLine;
+
+    const knrStandaloneM = strippedLine.match(KNR_STANDALONE_RE);
+    if (knrStandaloneM) {
+      pendingKnrCode = knrStandaloneM[1].replace(/\s+/g, " ").toUpperCase();
+      continue; // no description text on this line — nothing to tokenize
+    }
+    const knrPrefixM = strippedLine.match(KNR_PREFIX_RE);
+    if (knrPrefixM) {
+      lineKnr = knrPrefixM[1].replace(/\s+/g, " ").toUpperCase();
+      processedLine = strippedLine.slice(knrPrefixM[0].length).trim();
+      if (!processedLine) {
+        pendingKnrCode = lineKnr;
+        continue;
+      }
+    }
+
     // Tab/semicolon separated → treat as inline
-    if (strippedLine.includes("\t") || strippedLine.includes(";")) {
-      tokens.push({ raw: strippedLine, type: "inline" });
+    if (processedLine.includes("\t") || processedLine.includes(";")) {
+      tokens.push({ raw: processedLine, type: "inline" });
+      pendingKnrCode = undefined;
       continue;
     }
 
     // Try to detect inline: "Szafa 42U APC  3  kpl" or "3 kpl Szafa..."
     // Pattern: text qty unit  OR  qty unit text  OR  text unit qty
-    const inlineFullMatch = strippedLine.match(
+    const inlineFullMatch = processedLine.match(
       /^(.{3,}?)\s+(\d+[.,]?\d*)\s+(szt\.?|mb|m\.b\.?|m2|m²|kpl\.?|kg|l|godz\.?|rbh|h|op\.?|zest\.?|pcs?)$/i
     );
     if (inlineFullMatch) {
-      tokens.push({ raw: strippedLine, type: "inline" });
+      tokens.push({ raw: processedLine, type: "inline", knrCode: lineKnr ?? pendingKnrCode });
+      pendingKnrCode = undefined;
       continue;
     }
-    const inlineQtyFirst = strippedLine.match(
+    const inlineQtyFirst = processedLine.match(
       /^(\d+[.,]?\d*)\s+(szt\.?|mb|m\.b\.?|m2|m²|kpl\.?|kg|l|godz\.?|rbh|h|op\.?|pcs?)\s+(.{3,})$/i
     );
     if (inlineQtyFirst) {
-      tokens.push({ raw: strippedLine, type: "inline" });
+      tokens.push({ raw: processedLine, type: "inline", knrCode: lineKnr ?? pendingKnrCode });
+      pendingKnrCode = undefined;
       continue;
     }
 
     // Pure number line
-    if (isNumber(strippedLine) && !isUnit(strippedLine)) {
-      tokens.push({ raw: strippedLine, type: "qty" });
+    if (isNumber(processedLine) && !isUnit(processedLine)) {
+      tokens.push({ raw: processedLine, type: "qty" });
       continue;
     }
 
     // Pure unit line
-    if (isUnit(strippedLine)) {
-      tokens.push({ raw: strippedLine, type: "unit" });
+    if (isUnit(processedLine)) {
+      tokens.push({ raw: processedLine, type: "unit" });
       continue;
     }
 
-    // Everything else is a name fragment
-    tokens.push({ raw: strippedLine, type: "name" });
+    // Everything else is a name fragment — attach the extracted KNR code
+    tokens.push({ raw: processedLine, type: "name", knrCode: lineKnr ?? pendingKnrCode });
+    pendingKnrCode = undefined;
   }
 
   // ── Phase 2: group tokens into items ─────────────────────────────────────
@@ -472,7 +510,15 @@ export function parsePrzedmiarText(text: string): AIProjectItem[] {
       if (cleaned.extractedQty && qty === 1) { qty = cleaned.extractedQty; qtyFound = true; }
       // Only import items with explicit quantity or unit — skip description-text paragraphs
       if (finalName.length >= 3 && (qtyFound || unitFound)) {
-        items.push({ name: finalName, unit, quantity: qty, material_price: 0, labor_price: 0 });
+        items.push({
+          name: finalName,
+          unit,
+          quantity: qty,
+          material_price: 0,
+          labor_price: 0,
+          // I5 fix: KNR code extracted from line prefix or standalone header line
+          knr_code: tok.knrCode ?? null,
+        });
       }
       i = j;
       continue;
@@ -555,6 +601,31 @@ export async function parseRawGrid(file: File): Promise<string[][]> {
   const XLSX = await import("xlsx-js-style");
   const buffer = await file.arrayBuffer();
   const workbook = XLSX.read(buffer, { type: "array" });
-  const sheet = workbook.Sheets[workbook.SheetNames[0]];
-  return XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+
+  // I2 fix: merge ALL sheets — multi-sheet workbooks (e.g., Kosztorys + Zestawienie)
+  // were silently dropping every sheet after the first one.
+  const merged: string[][] = [];
+  let firstSheetHeader: string[] | null = null;
+
+  for (const sheetName of workbook.SheetNames) {
+    const sheet = workbook.Sheets[sheetName];
+    const rows: string[][] = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+    if (rows.length === 0) continue;
+
+    if (firstSheetHeader === null) {
+      // First non-empty sheet — take header + all data rows as-is
+      firstSheetHeader = rows[0].map(String);
+      merged.push(...rows);
+    } else {
+      // Subsequent sheets: skip the first row if it is an identical header
+      const sheetFirstRow = rows[0].map(String);
+      const isHeaderRow =
+        sheetFirstRow.length === firstSheetHeader.length &&
+        sheetFirstRow.every((cell, ci) => cell.toLowerCase() === firstSheetHeader![ci].toLowerCase());
+      const dataRows = isHeaderRow ? rows.slice(1) : rows;
+      merged.push(...dataRows.filter(row => row.some(cell => String(cell).trim() !== "")));
+    }
+  }
+
+  return merged;
 }

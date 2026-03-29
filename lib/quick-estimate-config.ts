@@ -111,7 +111,8 @@ export function generateEstimateItems(params: {
 }): EstimateItem[] {
   const { objectType, areaM2, roomCount, standard, zakres, conditionalFields } = params;
   const mult = STANDARD_MULTIPLIERS[standard];
-  const circuitCount = Math.max(3, Math.ceil(areaM2 / 25));
+  // Q1 fix: modern electrical standard — 1 dedicated circuit per 12m², minimum 6 circuits
+  const circuitCount = Math.max(6, Math.ceil(areaM2 / 12));
   const activeZakres = zakres && zakres.length > 0 ? zakres : (["electrical"] as ZakresPrac[]);
 
   const allRules: ItemRule[] = [...ITEM_RULES[objectType]];
