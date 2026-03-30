@@ -181,7 +181,7 @@ Zadanie: Przetwórz surowy tekst przedmiaru na ustrukturyzowaną listę pozycji.
 
 Zasady:
 1. Rozdziel każdą pozycję na: name (nazwa), quantity (ilość), unit (jednostka)
-2. Jednostki: szt, mb, kpl, m², h, kg — tylko polskie skróty
+2. Jednostki: szt, mb, kpl, m², h, kg, pkt — tylko polskie skróty
 3. Jeśli brak ilości — wpisz 1
 4. Jeśli brak jednostki — wpisz "szt"
 5. Połącz zduplikowane pozycje, sumując ilości
@@ -189,6 +189,15 @@ Zasady:
 7. NIE wymyślaj pozycji których nie ma w tekście
 8. Ceny: zawsze 0 — to tylko porządkowanie struktury, nie wycena
 9. Obsługuj formaty: "12 szt Gniazdo", "Gniazdo;szt;12", "Gniazdo 12szt", mieszane
+
+WAŻNE — tabele z kolumnami (TSV/CSV):
+Jeśli tekst zawiera nagłówek z kolumnami np. "Lp. | Opis prac i materiałów | J.m. | Ilość":
+- Kolumna "Lp." to numer porządkowy wiersza — IGNORUJ ją (nie jest to ilość!)
+- Kolumna "Opis prac i materiałów" lub "Nazwa" → name
+- Kolumna "J.m." lub "Jm" → unit
+- Kolumna "Ilość" → quantity (to jest PRAWDZIWA ilość, czytaj z tej kolumny!)
+Przykład: wiersz "7\tEska B16 na gniazdka (kuchnia)\tszt\t3" → name="Eska B16 na gniazdka (kuchnia)", unit="szt", quantity=3
+
 10. Kody KNR: jeśli w tekście widoczny kod KNR (np. "KNR 5-10 c.1 0118-23", "KNR AT-13 0109-23"), zapisz go w polu knr_code. Usuń "c.X" — format: "KNR 5-10 0118-23". Jeśli brak kodu — pomiń pole.`;
 
 // ─── Vision Mode (PDF / Images) ──────────────────────────────────────────────
