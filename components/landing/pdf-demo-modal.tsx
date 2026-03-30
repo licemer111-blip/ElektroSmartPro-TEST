@@ -5,9 +5,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FileText, Loader2, Sparkles } from "lucide-react";
+import { FileText, Loader2, Zap } from "lucide-react";
 import { toast } from "sonner";
-import { generateDemoPDF } from "@/lib/utils/pdf-demo-generator";
 
 interface PDFDemoModalProps {
   open: boolean;
@@ -38,17 +37,31 @@ export function PDFDemoModal({ open, onOpenChange }: PDFDemoModalProps) {
     setIsGenerating(true);
 
     try {
-      // Generate demo PDF
-      await generateDemoPDF({
-        companyName: formData.companyName,
-        clientName: formData.clientName,
+      const res = await fetch("/api/pdf/demo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          companyName: formData.companyName,
+          clientName: formData.clientName,
+        }),
       });
 
-      toast.success("PDF wygenerowany!", {
+      if (!res.ok) throw new Error("Błąd serwera");
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "ElektroSmart_Demo_Kosztorys.pdf";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      toast.success("PDF pobrany!", {
         description: "Sprawdź zakładkę z pobranymi plikami",
       });
 
-      // Reset form and close modal
       setFormData({ companyName: "", clientName: "" });
       onOpenChange(false);
     } catch (error) {
@@ -79,16 +92,16 @@ export function PDFDemoModal({ open, onOpenChange }: PDFDemoModalProps) {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6 mt-4">
-          {/* Demo Mode Badge */}
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+          {/* Full prices badge */}
+          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
             <div className="flex items-start gap-3">
-              <Sparkles className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+              <Zap className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
               <div className="flex-1">
-                <p className="text-sm font-medium text-amber-900 mb-1">
-                  Tryb Demo
+                <p className="text-sm font-medium text-emerald-900 mb-1">
+                  Pełny kosztorys z cenami
                 </p>
-                <p className="text-xs text-amber-700">
-                  Wszystkie ceny będą ukryte (****). Aby wygenerować pełny PDF z cenami, załóż darmowe konto.
+                <p className="text-xs text-emerald-700">
+                  Generujemy prawdziwy PDF w profesjonalnym szablonie ElektroSmart PRO — z rzeczywistymi cenami, sekcjami i podsumowaniem finansowym.
                 </p>
               </div>
             </div>
@@ -130,9 +143,7 @@ export function PDFDemoModal({ open, onOpenChange }: PDFDemoModalProps) {
           {/* Info Box */}
           <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
             <p className="text-xs text-slate-600">
-              <strong className="text-slate-900">Co otrzymasz?</strong> Profesjonalny kosztorys PDF z Twoim logo (jeśli podasz), 
-              przykładowymi pozycjami (kable, gniazda, rozdzielnice) oraz ukrytymi cenami. 
-              Plik będzie zawierał watermark "WERSJA DEMO".
+              <strong className="text-slate-900">Co otrzymasz?</strong> Profesjonalny kosztorys instalacji elektrycznej domu 150m² — ten sam szablon PDF co na płatnym koncie PRO, z pełnymi cenami, sekcjami branżowymi i tabelą podsumowania.
             </p>
           </div>
 
