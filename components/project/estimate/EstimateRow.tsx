@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { CheckSquare, Square, GripVertical, Shield, Flag, ChevronDown, ChevronRight, AlertTriangle, LayoutGrid, X } from "lucide-react";
+import { CheckSquare, Square, GripVertical, Shield, Flag, ChevronDown, ChevronRight, AlertTriangle, LayoutGrid, X, Check } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { UNIT_PRESETS } from "@/lib/validations";
@@ -315,50 +315,49 @@ export const EstimateRow = React.memo(function EstimateRow({
                     </button>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-56 p-3 shadow-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900"
+                    className="w-44 p-1.5 shadow-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900"
                     side="bottom"
                     align="start"
                     onOpenAutoFocus={(e) => e.preventDefault()}
                   >
-                    <div className="space-y-2.5">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Pomieszczenie</span>
-                        {editingState!.section && (
-                          <button
-                            type="button"
-                            onClick={() => onEditingChange({ ...editingState!, section: "" })}
-                            className="flex items-center gap-0.5 text-[9px] text-slate-400 hover:text-red-500 transition-colors"
-                          >
-                            <X className="w-2.5 h-2.5" />Wyczyść
-                          </button>
-                        )}
-                      </div>
-                      <div className="grid grid-cols-3 gap-1">
-                        {[...SECTION_PRESETS, ...uniqueSections.filter(s => !SECTION_PRESETS.includes(s))].map((s) => (
-                          <button
-                            key={s}
-                            type="button"
-                            onClick={() => onEditingChange({ ...editingState!, section: editingState!.section === s ? "" : s })}
-                            className={cn(
-                              "px-1.5 py-1.5 rounded-md text-[9px] font-medium transition-all border text-center leading-tight",
-                              editingState!.section === s
-                                ? "bg-purple-600 text-white border-purple-600 shadow-sm"
-                                : "bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-purple-300 hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
-                            )}
-                          >
-                            {s}
-                          </button>
-                        ))}
-                      </div>
-                      <div className="border-t border-slate-100 dark:border-slate-800 pt-2">
-                        <Input
-                          type="text"
-                          value={editingState!.section}
-                          onChange={(e) => onEditingChange({ ...editingState!, section: e.target.value })}
-                          className="h-7 text-[10px] px-2 dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-                          placeholder="Własna nazwa sekcji..."
-                        />
-                      </div>
+                    <div className="px-2 pt-1 pb-1.5 text-[9px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide">
+                      Pomieszczenie
+                    </div>
+                    <div className="space-y-0.5">
+                      {[...SECTION_PRESETS, ...uniqueSections.filter(s => !SECTION_PRESETS.includes(s))].map((s) => (
+                        <button
+                          key={s}
+                          type="button"
+                          onClick={() => onEditingChange({ ...editingState!, section: editingState!.section === s ? "" : s })}
+                          className={cn(
+                            "flex items-center justify-between w-full px-2 py-1.5 rounded text-[10px] font-medium transition-all",
+                            editingState!.section === s
+                              ? "bg-purple-600 text-white"
+                              : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                          )}
+                        >
+                          <span>{s}</span>
+                          {editingState!.section === s && <Check className="w-3 h-3 flex-shrink-0 ml-1" />}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="border-t border-slate-100 dark:border-slate-800 mt-1.5 pt-1.5 px-0.5 space-y-1">
+                      <Input
+                        type="text"
+                        value={editingState!.section}
+                        onChange={(e) => onEditingChange({ ...editingState!, section: e.target.value })}
+                        className="h-7 text-[10px] px-2 dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                        placeholder="Własna nazwa..."
+                      />
+                      {editingState!.section && (
+                        <button
+                          type="button"
+                          onClick={() => onEditingChange({ ...editingState!, section: "" })}
+                          className="flex items-center gap-0.5 w-full justify-center text-[9px] text-slate-400 hover:text-red-500 transition-colors py-0.5"
+                        >
+                          <X className="w-2.5 h-2.5" />Wyczyść sekcję
+                        </button>
+                      )}
                     </div>
                   </PopoverContent>
                 </Popover>
