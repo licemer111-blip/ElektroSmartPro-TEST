@@ -432,7 +432,7 @@ export const EstimateRow = React.memo(function EstimateRow({
       {/* Actions — _parts/RowActions */}
       <RowActions
         item={item}
-        isEditing={isEditing}
+        isEditing={false}
         isFinal={isFinal}
         isReadOnly={isReadOnly}
         compactView={compactView}
@@ -448,9 +448,12 @@ export const EstimateRow = React.memo(function EstimateRow({
 
     {/* ── Edit Panel Row ── */}
     {isEditing && (
-      <TableRow className="hover:bg-transparent dark:hover:bg-transparent border-0">
-        <TableCell colSpan={20} className="p-0 px-3 pb-3 border-b border-slate-200 dark:border-slate-700">
-          <div className="rounded-b-xl border border-blue-300 dark:border-blue-600 shadow-lg overflow-hidden -mt-px">
+      <TableRow
+        className="hover:bg-transparent dark:hover:bg-transparent border-0"
+        style={{ transform: `translateY(${compactView ? -1 : -2}px)` }}
+      >
+        <TableCell colSpan={20} className="p-0 px-2 pb-2.5 border-b border-slate-200 dark:border-slate-700">
+          <div className="rounded-b-lg border border-t-0 border-blue-300 dark:border-blue-600 shadow-md overflow-hidden">
             {/* Blue header bar */}
             <div className="flex items-center gap-2 px-3 py-2 bg-blue-600 dark:bg-blue-700">
               <PenLine className="w-3.5 h-3.5 text-white flex-shrink-0" />
