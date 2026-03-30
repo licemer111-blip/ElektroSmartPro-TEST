@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { CheckSquare, Square, GripVertical, Shield, Flag, ChevronDown, ChevronRight, AlertTriangle, LayoutGrid, X, Check } from "lucide-react";
+import { CheckSquare, Square, GripVertical, Shield, Flag, ChevronDown, ChevronRight, AlertTriangle, LayoutGrid, X, Check, PenLine } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { UNIT_PRESETS } from "@/lib/validations";
@@ -150,6 +150,7 @@ export const EstimateRow = React.memo(function EstimateRow({
   const displayItem: ProjectItem = isEditing
     ? {
         ...item,
+        unit: (editingState!.unit || item.unit) as ProjectItem["unit"],
         quantity: parseFloat(editingState!.quantity) || 0,
         final_material_price: editMat,
         final_labor_price: editLab,
@@ -222,9 +223,15 @@ export const EstimateRow = React.memo(function EstimateRow({
   };
 
   return (
+    <>
     <TableRow
       ref={searchRef}
-      className={cn(`group ${rowBgClass}`, isCurrentMatch && "ring-2 ring-blue-500 ring-inset", !isDndEnabled && "select-none")}
+      className={cn(
+        `group ${rowBgClass}`,
+        isEditing && "ring-2 ring-inset ring-blue-400 dark:ring-blue-600",
+        !isEditing && isCurrentMatch && "ring-2 ring-blue-500 ring-inset",
+        !isDndEnabled && "select-none"
+      )}
     >
       {/* Checkbox */}
       {!isFinal && !isReadOnly && (
@@ -277,183 +284,94 @@ export const EstimateRow = React.memo(function EstimateRow({
         )}
       </TableCell>
 
-      {/* Name */}
+      {/* Name — always display mode; editing values reflected via displayItem */}
       <TableCell
         className={`min-w-[180px] xs:min-w-[200px] md:w-[40%] ${singleCellBorderClass} ${!isEditing && !isFinal ? "cursor-pointer" : ""}`}
         onDoubleClick={() => { if (!isEditing && !isFinal) onStartEdit(item); }}
       >
-        {isEditing ? (
-          <div className={isAssemblyChild ? "pl-8" : ""}>
-            <Input
-              type="text"
-              id={`name-${item.id}`}
-              name={`name-${item.id}`}
-              value={editingState!.name}
-              onChange={(e) => onEditingChange({ ...editingState!, name: e.target.value })}
-              className="font-medium dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-              placeholder="Nazwa pozycji"
-              autoFocus
-              onKeyDown={handleKeyDown}
-            />
-            {!isAssemblyChild && (
-              <div className="flex items-center gap-1.5 mt-1.5">
-                <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-wide flex-shrink-0">Sekcja:</span>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button
-                      type="button"
-                      className={cn(
-                        "flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-medium border transition-all",
-                        editingState!.section
-                          ? "bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 border-purple-300 dark:border-purple-700 hover:bg-purple-200 dark:hover:bg-purple-800/50"
-                          : "bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-700 hover:border-purple-300 hover:text-purple-500"
-                      )}
-                    >
-                      <LayoutGrid className="w-2.5 h-2.5 flex-shrink-0" />
-                      <span className="max-w-[120px] truncate">{editingState!.section || "Wybierz sekcję"}</span>
-                      <ChevronDown className="w-2.5 h-2.5 flex-shrink-0 opacity-60" />
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="w-44 p-1.5 shadow-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900"
-                    side="bottom"
-                    align="start"
-                    onOpenAutoFocus={(e) => e.preventDefault()}
-                  >
-                    <div className="px-2 pt-1 pb-1.5 text-[9px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide">
-                      Pomieszczenie
-                    </div>
-                    <div className="space-y-0.5">
-                      {[...SECTION_PRESETS, ...uniqueSections.filter(s => !SECTION_PRESETS.includes(s))].map((s) => (
-                        <button
-                          key={s}
-                          type="button"
-                          onClick={() => onEditingChange({ ...editingState!, section: editingState!.section === s ? "" : s })}
-                          className={cn(
-                            "flex items-center justify-between w-full px-2 py-1.5 rounded text-[10px] font-medium transition-all",
-                            editingState!.section === s
-                              ? "bg-purple-600 text-white"
-                              : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-                          )}
-                        >
-                          <span>{s}</span>
-                          {editingState!.section === s && <Check className="w-3 h-3 flex-shrink-0 ml-1" />}
-                        </button>
-                      ))}
-                    </div>
-                    <div className="border-t border-slate-100 dark:border-slate-800 mt-1.5 pt-1.5 px-0.5 space-y-1">
-                      <Input
-                        type="text"
-                        value={editingState!.section}
-                        onChange={(e) => onEditingChange({ ...editingState!, section: e.target.value })}
-                        className="h-7 text-[10px] px-2 dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-                        placeholder="Własna nazwa..."
-                      />
-                      {editingState!.section && (
-                        <button
-                          type="button"
-                          onClick={() => onEditingChange({ ...editingState!, section: "" })}
-                          className="flex items-center gap-0.5 w-full justify-center text-[9px] text-slate-400 hover:text-red-500 transition-colors py-0.5"
-                        >
-                          <X className="w-2.5 h-2.5" />Wyczyść sekcję
-                        </button>
-                      )}
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className="flex items-start gap-1 sm:gap-2">
-            {isAssemblyChild && <span className="text-slate-400 dark:text-slate-600 mr-1 mt-0.5">↳</span>}
-            <div className="flex-1 min-w-0">
-              <div className={cn(
-                "font-medium dark:text-slate-200 break-words",
-                compactView ? "text-xs" : "text-sm sm:text-base",
-                isAssemblyChild && (compactView ? "text-[11px]" : "text-xs sm:text-sm") + " text-slate-600 dark:text-slate-400",
-              )}>
-                {isZeroPrice && (
-                  <span
-                    title="Brak danych cenowych — wymagana ręczna weryfikacja. Ustaw cenę przed wygenerowaniem PDF."
-                    className="inline-flex items-center gap-0.5 mr-1 sm:mr-2 px-1.5 py-0.5 rounded-full text-[9px] font-semibold bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-300 dark:border-red-700 cursor-help"
-                  >
-                    <AlertTriangle className="w-2.5 h-2.5 flex-shrink-0" />
-                    <span>Uzupełnij</span>
-                  </span>
-                )}
-                {isAmbiguous && (
-                  <span
-                    title="ES-Engine: Zbyt ogólny opis. Podaj konkretne materiały, aby uzyskać rzetelną wycenę"
-                    className="inline-flex items-center gap-0.5 mr-1 px-1 py-0.5 rounded text-[8px] font-bold bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 cursor-help"
-                  >
-                    <Flag className="w-2.5 h-2.5" />
-                    Wymaga doprecyzowania
-                  </span>
-                )}
-                {item.origin_id && (() => {
-                  const ot = (item as { origin_type?: string | null }).origin_type;
-                  const isAggregate = ot === "panel_consumable" || ot === "panel_busbar" || ot === "panel_assembly";
-                  const tip = isAggregate
-                    ? "Akcesoria rozdzielnicy (Zestaw — agregat)"
-                    : "Pozycja z konfiguratora rozdzielnicy";
-                  const color = isAggregate
-                    ? "text-violet-400 dark:text-violet-500"
-                    : "text-indigo-400 dark:text-indigo-500";
-                  return (
-                    <span title={tip} className="inline-flex items-center mr-1">
-                      <Shield className={`w-3 h-3 flex-shrink-0 ${color}`} />
-                    </span>
-                  );
-                })()}
-                {highlightText(item.name)}
-              </div>
-              {item.section && !isAssemblyChild && (
-                <span className="inline-block mt-0.5 px-1.5 py-0 rounded text-[9px] font-medium bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">
-                  {item.section}
+        <div className="flex items-start gap-1 sm:gap-2">
+          {isAssemblyChild && <span className="text-slate-400 dark:text-slate-600 mr-1 mt-0.5">↳</span>}
+          <div className="flex-1 min-w-0">
+            <div className={cn(
+              "font-medium dark:text-slate-200 break-words",
+              compactView ? "text-xs" : "text-sm sm:text-base",
+              isAssemblyChild && (compactView ? "text-[11px]" : "text-xs sm:text-sm") + " text-slate-600 dark:text-slate-400",
+            )}>
+              {isZeroPrice && !isEditing && (
+                <span
+                  title="Brak danych cenowych — wymagana ręczna weryfikacja. Ustaw cenę przed wygenerowaniem PDF."
+                  className="inline-flex items-center gap-0.5 mr-1 sm:mr-2 px-1.5 py-0.5 rounded-full text-[9px] font-semibold bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-300 dark:border-red-700 cursor-help"
+                >
+                  <AlertTriangle className="w-2.5 h-2.5 flex-shrink-0" />
+                  <span>Uzupełnij</span>
                 </span>
               )}
-              {/* Material Brain badge — visible only in Klient+Materiały mode + Podpowiedzi ES ON */}
-              {brainBill && brainCtx && !isAssemblyChild && showHints && (
-                <button
-                  type="button"
-                  onClick={(e) => { e.stopPropagation(); brainCtx.openForItem(item.id); }}
-                  title="Material Brain: kliknij, aby zobaczyć sugestie materiałów"
-                  className="inline-flex items-center gap-0.5 mt-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 border border-amber-300 dark:border-amber-700 hover:bg-amber-200 dark:hover:bg-amber-800/50 transition-colors cursor-pointer"
+              {isAmbiguous && !isEditing && (
+                <span
+                  title="ES-Engine: Zbyt ogólny opis. Podaj konkretne materiały, aby uzyskać rzetelną wycenę"
+                  className="inline-flex items-center gap-0.5 mr-1 px-1 py-0.5 rounded text-[8px] font-bold bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 cursor-help"
                 >
-                  ✨ {brainBill.bill.items.length} mat.
-                </button>
+                  <Flag className="w-2.5 h-2.5" />
+                  Wymaga doprecyzowania
+                </span>
               )}
-              {isKplWarning && !compactView && (
-                <div className="mt-0.5 text-[9px] text-amber-600 dark:text-amber-400 font-medium flex items-center gap-0.5">
-                  <span>⚠️</span>
-                  <span>Jednostka &apos;kpl&apos; przy ilości {item.quantity} — sprawdź czy to nie metry/sztuki</span>
-                </div>
-              )}
-              {!compactView && (
-                <div className="xs:hidden text-xs text-muted-foreground mt-1">Jedn: {item.unit}</div>
-              )}
+              {item.origin_id && (() => {
+                const ot = (item as { origin_type?: string | null }).origin_type;
+                const isAggregate = ot === "panel_consumable" || ot === "panel_busbar" || ot === "panel_assembly";
+                const tip = isAggregate ? "Akcesoria rozdzielnicy (Zestaw — agregat)" : "Pozycja z konfiguratora rozdzielnicy";
+                const color = isAggregate ? "text-violet-400 dark:text-violet-500" : "text-indigo-400 dark:text-indigo-500";
+                return (
+                  <span title={tip} className="inline-flex items-center mr-1">
+                    <Shield className={`w-3 h-3 flex-shrink-0 ${color}`} />
+                  </span>
+                );
+              })()}
+              {highlightText(isEditing ? editingState!.name : item.name)}
             </div>
+            {(isEditing ? editingState!.section : item.section) && !isAssemblyChild && (
+              <span className="inline-block mt-0.5 px-1.5 py-0 rounded text-[9px] font-medium bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">
+                {isEditing ? editingState!.section : item.section}
+              </span>
+            )}
+            {!isEditing && brainBill && brainCtx && !isAssemblyChild && showHints && (
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); brainCtx.openForItem(item.id); }}
+                title="Material Brain: kliknij, aby zobaczyć sugestie materiałów"
+                className="inline-flex items-center gap-0.5 mt-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 border border-amber-300 dark:border-amber-700 hover:bg-amber-200 dark:hover:bg-amber-800/50 transition-colors cursor-pointer"
+              >
+                ✨ {brainBill.bill.items.length} mat.
+              </button>
+            )}
+            {!isEditing && isKplWarning && !compactView && (
+              <div className="mt-0.5 text-[9px] text-amber-600 dark:text-amber-400 font-medium flex items-center gap-0.5">
+                <span>⚠️</span>
+                <span>Jednostka &apos;kpl&apos; przy ilości {item.quantity} — sprawdź czy to nie metry/sztuki</span>
+              </div>
+            )}
+            {!compactView && (
+              <div className="xs:hidden text-xs text-muted-foreground mt-1">Jedn: {item.unit}</div>
+            )}
           </div>
-        )}
+        </div>
       </TableCell>
 
-      {/* Unit — _parts/RowInputs */}
+      {/* Unit — display with displayItem (live preview) */}
       <RowUnitCell
-        item={item} editingState={editingState} isEditing={isEditing}
+        item={displayItem} editingState={editingState} isEditing={false}
         onEditingChange={onEditingChange} onKeyDown={handleKeyDown}
       />
 
-      {/* Quantity — _parts/RowInputs */}
+      {/* Quantity — display with displayItem */}
       <RowQuantityCell
-        item={item} editingState={editingState} isEditing={isEditing}
+        item={displayItem} editingState={editingState} isEditing={false}
         onEditingChange={onEditingChange} onKeyDown={handleKeyDown}
       />
 
-      {/* Material price — shows EffectiveUnitPrice (with negocjacje) as main figure */}
+      {/* Material price — display with displayItem */}
       {showMaterialsColumn && (
         <RowMaterialCell
-          item={item} editingState={editingState} isEditing={isEditing}
+          item={displayItem} editingState={editingState} isEditing={false}
           isPro={showPrices} compactView={compactView} colorMode={colorMode}
           materialsOwnedByCustomer={materialsOwnedByCustomer}
           materialUnit={materialUnit} materialTotal={materialTotal}
@@ -469,10 +387,10 @@ export const EstimateRow = React.memo(function EstimateRow({
           />
       )}
 
-      {/* Labor price — shows EffectiveUnitPrice (with negocjacje) as main figure */}
+      {/* Labor price — display with displayItem */}
       {showLaborColumn && (
         <RowLaborCell
-          item={item} editingState={editingState} isEditing={isEditing}
+          item={displayItem} editingState={editingState} isEditing={false}
           isPro={showPrices} compactView={compactView} colorMode={colorMode}
           laborUnit={laborUnit} laborTotal={laborTotal}
           laborUnitBase={laborUnitBase}
@@ -527,5 +445,148 @@ export const EstimateRow = React.memo(function EstimateRow({
         onStartAddChild={onStartAddChild}
       />
     </TableRow>
+
+    {/* ── Edit Panel Row ── */}
+    {isEditing && (
+      <TableRow className="hover:bg-transparent dark:hover:bg-transparent border-0">
+        <TableCell colSpan={20} className="p-0 px-3 pb-3 border-b border-slate-200 dark:border-slate-700">
+          <div className="rounded-b-xl border border-blue-300 dark:border-blue-600 shadow-lg overflow-hidden -mt-px">
+            {/* Blue header bar */}
+            <div className="flex items-center gap-2 px-3 py-2 bg-blue-600 dark:bg-blue-700">
+              <PenLine className="w-3.5 h-3.5 text-white flex-shrink-0" />
+              <span className="text-xs font-semibold text-white truncate flex-1">{editingState!.name || item.name}</span>
+              <button type="button" onClick={onSaveEdit}
+                className="flex items-center gap-1 px-2.5 py-1 rounded bg-white/20 hover:bg-white/30 text-white text-xs font-semibold transition-colors">
+                <Check className="w-3 h-3" />Zapisz
+              </button>
+              <button type="button" onClick={onCancelEdit}
+                className="p-1 rounded bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-colors ml-1">
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            {/* White body with all inputs */}
+            <div className="bg-white dark:bg-slate-900 px-3 py-2.5 flex flex-wrap items-start gap-3">
+              {/* Nazwa */}
+              <div className="flex-1 min-w-[200px] max-w-[400px] space-y-1.5">
+                <label className="text-[9px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide block">Nazwa pozycji</label>
+                <Input
+                  type="text"
+                  value={editingState!.name}
+                  onChange={(e) => onEditingChange({ ...editingState!, name: e.target.value })}
+                  className="font-medium dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                  placeholder="Nazwa pozycji"
+                  autoFocus
+                  onKeyDown={handleKeyDown}
+                />
+                {!isAssemblyChild && (
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-wide flex-shrink-0">Sekcja:</span>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button type="button" className={cn(
+                          "flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-medium border transition-all",
+                          editingState!.section
+                            ? "bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 border-purple-300 dark:border-purple-700 hover:bg-purple-200 dark:hover:bg-purple-800/50"
+                            : "bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-700 hover:border-purple-300 hover:text-purple-500"
+                        )}>
+                          <LayoutGrid className="w-2.5 h-2.5 flex-shrink-0" />
+                          <span className="max-w-[120px] truncate">{editingState!.section || "Wybierz sekcj\u0119"}</span>
+                          <ChevronDown className="w-2.5 h-2.5 flex-shrink-0 opacity-60" />
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-44 p-1.5 shadow-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900" side="bottom" align="start" onOpenAutoFocus={(e) => e.preventDefault()}>
+                        <div className="px-2 pt-1 pb-1.5 text-[9px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide">Pomieszczenie</div>
+                        <div className="space-y-0.5">
+                          {[...SECTION_PRESETS, ...uniqueSections.filter(s => !SECTION_PRESETS.includes(s))].map((s) => (
+                            <button key={s} type="button"
+                              onClick={() => onEditingChange({ ...editingState!, section: editingState!.section === s ? "" : s })}
+                              className={cn(
+                                "flex items-center justify-between w-full px-2 py-1.5 rounded text-[10px] font-medium transition-all",
+                                editingState!.section === s ? "bg-purple-600 text-white" : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                              )}>
+                              <span>{s}</span>
+                              {editingState!.section === s && <Check className="w-3 h-3 flex-shrink-0 ml-1" />}
+                            </button>
+                          ))}
+                        </div>
+                        <div className="border-t border-slate-100 dark:border-slate-800 mt-1.5 pt-1.5 px-0.5 space-y-1">
+                          <Input type="text" value={editingState!.section}
+                            onChange={(e) => onEditingChange({ ...editingState!, section: e.target.value })}
+                            className="h-7 text-[10px] px-2 dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                            placeholder="W\u0142asna nazwa..."
+                          />
+                          {editingState!.section && (
+                            <button type="button" onClick={() => onEditingChange({ ...editingState!, section: "" })}
+                              className="flex items-center gap-0.5 w-full justify-center text-[9px] text-slate-400 hover:text-red-500 transition-colors py-0.5">
+                              <X className="w-2.5 h-2.5" />Wyczy\u015b\u0107 sekcj\u0119
+                            </button>
+                          )}
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                )}
+              </div>
+              {/* Jm */}
+              <div className="w-20 space-y-1.5">
+                <label className="text-[9px] font-semibold text-slate-400 uppercase tracking-wide block">Jm</label>
+                <Input type="text" list={`unit-presets-panel-${item.id}`}
+                  value={editingState!.unit}
+                  onChange={(e) => onEditingChange({ ...editingState!, unit: e.target.value })}
+                  className="text-center dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                  placeholder="szt" onKeyDown={handleKeyDown}
+                />
+                <datalist id={`unit-presets-panel-${item.id}`}>
+                  {UNIT_PRESETS.map((u) => <option key={u} value={u} />)}
+                </datalist>
+              </div>
+              {/* Ilo\u015b\u0107 */}
+              <div className="w-24 space-y-1.5">
+                <label className="text-[9px] font-semibold text-slate-400 uppercase tracking-wide block">Ilo\u015b\u0107</label>
+                <Input type="number" step="0.01" min="0.01"
+                  value={editingState!.quantity}
+                  onChange={(e) => onEditingChange({ ...editingState!, quantity: e.target.value })}
+                  className="text-center dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                  onKeyDown={handleKeyDown}
+                />
+              </div>
+              {/* Materia\u0142 */}
+              {showMaterialsColumn && !editingState!.isAssemblyParent && !materialsOwnedByCustomer && (
+                <div className="w-28 space-y-1.5">
+                  <label className="text-[9px] font-semibold text-amber-500 uppercase tracking-wide block">Materia\u0142 (z\u0142/jm)</label>
+                  {showPrices ? (
+                    <Input type="number" step="0.01" min="0"
+                      value={editingState!.materialPrice}
+                      onChange={(e) => onEditingChange({ ...editingState!, materialPrice: e.target.value })}
+                      className="text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                      placeholder="0.00" onKeyDown={handleKeyDown}
+                    />
+                  ) : (
+                    <div className="h-9 flex items-center justify-end border rounded px-3 bg-muted text-sm font-medium opacity-40 select-none tracking-widest">***</div>
+                  )}
+                </div>
+              )}
+              {/* Robocizna */}
+              {showLaborColumn && !editingState!.isAssemblyParent && (
+                <div className="w-28 space-y-1.5">
+                  <label className="text-[9px] font-semibold text-emerald-500 uppercase tracking-wide block">Robocizna (z\u0142/jm)</label>
+                  {showPrices ? (
+                    <Input type="number" step="0.01" min="0"
+                      value={editingState!.laborPrice}
+                      onChange={(e) => onEditingChange({ ...editingState!, laborPrice: e.target.value })}
+                      className="text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                      placeholder="0.00" onKeyDown={handleKeyDown}
+                    />
+                  ) : (
+                    <div className="h-9 flex items-center justify-end border rounded px-3 bg-muted text-sm font-medium opacity-40 select-none tracking-widest">***</div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </TableCell>
+      </TableRow>
+    )}
+    </>
   );
 });
