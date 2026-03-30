@@ -290,7 +290,7 @@ export function useProjectImport({ projectId, onImport }: UseProjectImportOption
           dispatch({ type: "SET_SELECTED_ITEMS", payload: new Set(aiItems.map((_, idx) => idx)) });
           dispatch({ type: "SET_STEP", payload: "preview" });
         } else {
-          const cleaned = result.items.map(i => `${i.quantity} ${i.unit} ${i.name}`).join("\n");
+          const cleaned = result.items.map(i => `${i.name} ${i.quantity} ${i.unit}`).join("\n");
           dispatch({ type: "SET_PRZEDMIAR_TEXT", payload: cleaned });
           dispatch({ type: "SET_PRZEDMIAR_CLEANUP_DONE", payload: true });
         }
