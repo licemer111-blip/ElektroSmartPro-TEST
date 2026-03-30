@@ -46,6 +46,7 @@ export interface DialogState {
   // Przedmiar
   przedmiarText: string;
   przedmiarCleaning: boolean;
+  przedmiarCleanupDone: boolean;
 
   // PDF / Vision
   pdfFile: File | null;
@@ -75,6 +76,7 @@ export const INITIAL_STATE: DialogState = {
   editingIndex: null,
   przedmiarText: "",
   przedmiarCleaning: false,
+  przedmiarCleanupDone: false,
   pdfFile: null,
   pdfFileName: "",
   pdfPageNumber: 1,
@@ -104,6 +106,7 @@ export type DialogAction =
   | { type: "SET_EDITING_INDEX"; payload: number | null }
   | { type: "SET_PRZEDMIAR_TEXT"; payload: string }
   | { type: "SET_PRZEDMIAR_CLEANING"; payload: boolean }
+  | { type: "SET_PRZEDMIAR_CLEANUP_DONE"; payload: boolean }
   | { type: "SET_PDF_FILE"; payload: File | null }
   | { type: "SET_PDF_FILE_NAME"; payload: string }
   | { type: "SET_PDF_PAGE_NUMBER"; payload: number }
@@ -175,9 +178,11 @@ export function dialogReducer(state: DialogState, action: DialogAction): DialogS
     case "SET_EDITING_INDEX":
       return { ...state, editingIndex: action.payload };
     case "SET_PRZEDMIAR_TEXT":
-      return { ...state, przedmiarText: action.payload };
+      return { ...state, przedmiarText: action.payload, przedmiarCleanupDone: false };
     case "SET_PRZEDMIAR_CLEANING":
       return { ...state, przedmiarCleaning: action.payload };
+    case "SET_PRZEDMIAR_CLEANUP_DONE":
+      return { ...state, przedmiarCleanupDone: action.payload };
     case "SET_PDF_FILE":
       return { ...state, pdfFile: action.payload };
     case "SET_PDF_FILE_NAME":

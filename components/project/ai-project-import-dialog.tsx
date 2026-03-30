@@ -68,7 +68,7 @@ export function AIProjectImportDialog({
   const {
     step, importMode, error, importCount,
     fileName, rawRows,
-    przedmiarText, przedmiarCleaning,
+    przedmiarText, przedmiarCleaning, przedmiarCleanupDone,
     pdfFile, pdfFileName, pdfPageNumber, pdfInstructions, pdfAnalyzing, pdfProgress,
     excelHeaders, excelParsedRows, excelImporting, excelAnalyzing,
     aiItems, selectedItems, editingIndex,
@@ -300,16 +300,16 @@ export function AIProjectImportDialog({
                     onClick={handleCleanPrzedmiar}
                     disabled={przedmiarCleaning || !przedmiarText.trim() || cleanQuotaInfo?.isExhausted}
                     title={cleanQuotaInfo?.isExhausted ? `Limit ES Cleanup wyczerpany (${cleanQuotaInfo.used}/${cleanQuotaInfo.limit})` : "Uporządkuj strukturę przez ES-Engine"}
-                    className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium transition-all border ${
+                    className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold transition-all border ${
                       cleanQuotaInfo?.isExhausted
                         ? "border-red-200 text-red-400 bg-red-50 dark:bg-red-950/20 cursor-not-allowed opacity-60"
                         : przedmiarCleaning
-                        ? "border-violet-300 text-violet-500 bg-violet-50 dark:bg-violet-950/20 cursor-wait"
-                        : "border-violet-200 text-violet-600 bg-violet-50 hover:bg-violet-100 dark:bg-violet-950/20 dark:hover:bg-violet-900/30 dark:border-violet-800 dark:text-violet-400"
+                        ? "border-orange-300 text-orange-500 bg-orange-50 dark:bg-orange-950/20 cursor-wait"
+                        : "border-orange-300 text-orange-600 bg-orange-50 hover:bg-orange-100 hover:border-orange-400 dark:bg-orange-950/20 dark:hover:bg-orange-900/30 dark:border-orange-700 dark:text-orange-400 shadow-sm shadow-orange-200 dark:shadow-orange-900/30"
                     }`}
                   >
                     {przedmiarCleaning ? <Loader2 className="w-3 h-3 animate-spin" /> : <Wand2 className="w-3 h-3" />}
-                    <span>{przedmiarCleaning ? "Porządkuję..." : "ES Cleanup"}</span>
+                    <span>{przedmiarCleaning ? "Porządkuję..." : "Uporządkuj"}</span>
                   </button>
                   {cleanQuotaInfo && !cleanQuotaInfo.isPro && (
                     <span className={`text-[9px] font-bold leading-none px-1 py-0.5 rounded-full ${cleanQuotaInfo.isExhausted ? "bg-red-500 text-white" : cleanQuotaInfo.isLow ? "bg-orange-500 text-white" : "bg-violet-200 text-violet-700 dark:bg-violet-800 dark:text-violet-200"}`}>
@@ -324,7 +324,7 @@ export function AIProjectImportDialog({
                   value={przedmiarText}
                   onChange={(e) => dispatch({ type: "SET_PRZEDMIAR_TEXT", payload: e.target.value })}
                   placeholder={`Wklej listę materiałów, np.:\n\n12 szt Gniazdo podwójne z uziemieniem\n8 szt Łącznik schodowy\n50 mb Przewód YDYp 3x2,5\n3 szt Wyłącznik nadprądowy B16\n\nMożna też CSV: nazwa;jednostka;ilość`}
-                  className="min-h-[140px] font-mono text-xs pr-10"
+                  className="min-h-[180px] max-h-[260px] overflow-y-auto font-mono text-xs pr-10 resize-none"
                 />
                 <div className="absolute bottom-2 right-2">
                   <VoiceInputButton
@@ -335,7 +335,15 @@ export function AIProjectImportDialog({
               </div>
 
               <div className="flex items-center gap-2">
-                <Button onClick={handleParsePrzedmiar} disabled={!przedmiarText.trim()} className="gap-2 bg-blue-600 hover:bg-blue-700 text-white">
+                <Button
+                  onClick={handleParsePrzedmiar}
+                  disabled={!przedmiarText.trim() || !przedmiarCleanupDone}
+                  title={!przedmiarCleanupDone ? "Najpierw kliknij 'Uporządkuj' aby ES-Engine przetworzył tekst" : undefined}
+                  className={`gap-2 text-white transition-all ${
+                    !przedmiarCleanupDone
+                      ? "bg-blue-300 dark:bg-blue-900/40 opacity-50 cursor-not-allowed"
+                      : "bg-blue-600 hover:bg-blue-700"
+                  }`}>
                   <Check className="w-4 h-4" />
                   Rozpoznaj pozycje
                 </Button>

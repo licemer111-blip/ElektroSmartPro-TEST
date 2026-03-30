@@ -291,6 +291,7 @@ export function useProjectImport({ projectId, onImport }: UseProjectImportOption
         } else {
           const cleaned = result.items.map(i => `${i.quantity} ${i.unit} ${i.name}`).join("\n");
           dispatch({ type: "SET_PRZEDMIAR_TEXT", payload: cleaned });
+          dispatch({ type: "SET_PRZEDMIAR_CLEANUP_DONE", payload: true });
         }
         void refreshCleanQuota();
         toast.success(`ES-Engine 2 uporządkował ${result.items.length} pozycji`);
