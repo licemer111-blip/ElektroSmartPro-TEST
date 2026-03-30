@@ -245,7 +245,7 @@ export function cleanItemName(raw: string): { name: string; extractedUnit?: stri
   let s = raw.trim();
 
   // 1) Try: "Szafa 42U APC 3 kpl" → extract trailing qty+unit
-  const trailingQtyUnit = s.match(/^(.+?)\s+(\d+[.,]?\d*)\s+(szt\.?|mb|m\.b\.?|m2|m²|kpl\.?|kg|l|h|op\.?|zest\.?|pcs?)\s*$/i);
+  const trailingQtyUnit = s.match(/^(.+?)\s+(\d+[.,]?\d*)\s+(szt\.?|mb|m\.b\.?|m2|m²|kpl\.?|kg|l|h|op\.?|zest\.?|pcs?|pkt\.?)\s*$/i);
   if (trailingQtyUnit) {
     return {
       name: trailingQtyUnit[1].trim(),
@@ -255,7 +255,7 @@ export function cleanItemName(raw: string): { name: string; extractedUnit?: stri
   }
 
   // 2) Try: "3 kpl Szafa 42U APC" → extract leading qty+unit
-  const leadingQtyUnit = s.match(/^(\d+[.,]?\d*)\s+(szt\.?|mb|m\.b\.?|m2|m²|kpl\.?|kg|l|h|op\.?|pcs?)\s+(.+)$/i);
+  const leadingQtyUnit = s.match(/^(\d+[.,]?\d*)\s+(szt\.?|mb|m\.b\.?|m2|m²|kpl\.?|kg|l|h|op\.?|pcs?|pkt\.?)\s+(.+)$/i);
   if (leadingQtyUnit) {
     return {
       name: leadingQtyUnit[3].trim(),
@@ -265,7 +265,7 @@ export function cleanItemName(raw: string): { name: string; extractedUnit?: stri
   }
 
   // 3) Strip orphan unit tokens from name ("Kabel UTP kpl" → "Kabel UTP")
-  const UNIT_STRIP_PAT = /^(.+?)\s+(szt\.?|mb|m\.b\.?|m2|m²|m3|m³|kpl\.?|kg|l|godz\.?|rbh|rbg|h|op\.?|zest\.?|pcs?|sztuk[ai]?|komplet|lm|para)\s*$/i;
+  const UNIT_STRIP_PAT = /^(.+?)\s+(szt\.?|mb|m\.b\.?|m2|m²|m3|m³|kpl\.?|kg|l|godz\.?|rbh|rbg|h|op\.?|zest\.?|pcs?|pkt\.?|sztuk[ai]?|komplet|lm|para)\s*$/i;
   const strippedUnit = s.match(UNIT_STRIP_PAT);
   if (strippedUnit && strippedUnit[1].trim().length >= 3) {
     return { name: strippedUnit[1].trim(), extractedUnit: strippedUnit[2].toLowerCase() };
@@ -367,7 +367,7 @@ export function parsePrzedmiarText(text: string): AIProjectItem[] {
     // Try to detect inline: "Szafa 42U APC  3  kpl" or "3 kpl Szafa..."
     // Pattern: text qty unit  OR  qty unit text  OR  text unit qty
     const inlineFullMatch = processedLine.match(
-      /^(.{3,}?)\s+(\d+[.,]?\d*)\s+(szt\.?|mb|m\.b\.?|m2|m²|kpl\.?|kg|l|godz\.?|rbh|h|op\.?|zest\.?|pcs?)$/i
+      /^(.{3,}?)\s+(\d+[.,]?\d*)\s+(szt\.?|mb|m\.b\.?|m2|m²|kpl\.?|kg|l|godz\.?|rbh|h|op\.?|zest\.?|pcs?|pkt\.?)$/i
     );
     if (inlineFullMatch) {
       tokens.push({ raw: processedLine, type: "inline", knrCode: lineKnr ?? pendingKnrCode });
@@ -375,7 +375,7 @@ export function parsePrzedmiarText(text: string): AIProjectItem[] {
       continue;
     }
     const inlineQtyFirst = processedLine.match(
-      /^(\d+[.,]?\d*)\s+(szt\.?|mb|m\.b\.?|m2|m²|kpl\.?|kg|l|godz\.?|rbh|h|op\.?|pcs?)\s+(.{3,})$/i
+      /^(\d+[.,]?\d*)\s+(szt\.?|mb|m\.b\.?|m2|m²|kpl\.?|kg|l|godz\.?|rbh|h|op\.?|pcs?|pkt\.?)\s+(.{3,})$/i
     );
     if (inlineQtyFirst) {
       tokens.push({ raw: processedLine, type: "inline", knrCode: lineKnr ?? pendingKnrCode });
@@ -461,13 +461,13 @@ export function parsePrzedmiarText(text: string): AIProjectItem[] {
       }
 
       // "Nazwa  qty  unit"
-      const m1 = t.match(/^(.{3,}?)\s+(\d+[.,]?\d*)\s+(szt\.?|mb|m\.b\.?|m2|m²|kpl\.?|kg|l|godz\.?|rbh|h|op\.?|zest\.?|pcs?)$/i);
+      const m1 = t.match(/^(.{3,}?)\s+(\d+[.,]?\d*)\s+(szt\.?|mb|m\.b\.?|m2|m²|kpl\.?|kg|l|godz\.?|rbh|h|op\.?|zest\.?|pcs?|pkt\.?)$/i);
       if (m1) {
         items.push({ name: m1[1].trim(), unit: normalizeUnit(m1[3]), quantity: toNumber(m1[2]), material_price: 0, labor_price: 0 });
         i++; continue;
       }
       // "qty unit  Nazwa"
-      const m2 = t.match(/^(\d+[.,]?\d*)\s+(szt\.?|mb|m\.b\.?|m2|m²|kpl\.?|kg|l|godz\.?|rbh|h|op\.?|pcs?)\s+(.{3,})$/i);
+      const m2 = t.match(/^(\d+[.,]?\d*)\s+(szt\.?|mb|m\.b\.?|m2|m²|kpl\.?|kg|l|godz\.?|rbh|h|op\.?|pcs?|pkt\.?)\s+(.{3,})$/i);
       if (m2) {
         items.push({ name: m2[3].trim(), unit: normalizeUnit(m2[2]), quantity: toNumber(m2[1]), material_price: 0, labor_price: 0 });
         i++; continue;
