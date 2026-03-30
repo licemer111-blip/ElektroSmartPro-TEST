@@ -16,7 +16,7 @@ import { Search, Loader2, ShieldCheck, AlertCircle, Info, RotateCcw, Building2, 
 import { updateProjectItem } from "@/app/dashboard/projects/[id]/_actions/project-items";
 import { resetItemNormToKnr } from "@/app/dashboard/projects/[id]/_actions/project-items-labor";
 
-const singleCellBorderClass = "border border-slate-300 dark:border-slate-700 bg-clip-padding";
+const singleCellBorderClass = "border border-slate-300 dark:border-slate-700 bg-clip-padding align-top";
 
 export interface RowInputsProps {
   item: ProjectItem;

@@ -5,7 +5,7 @@ import { ShieldCheck, PenLine } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ProjectItem } from "@/lib/types/database";
 
-const singleCellBorderClass = "border border-slate-300 dark:border-slate-700 bg-clip-padding";
+const singleCellBorderClass = "border border-slate-300 dark:border-slate-700 bg-clip-padding align-top";
 
 interface RowKnrCellProps {
   item: ProjectItem;

@@ -91,7 +91,7 @@ const SECTION_PRESETS = [
   "Garaż", "Piwnica", "Taras", "Zewnętrzne", "Ogólne",
 ];
 
-const singleCellBorderClass = "border border-slate-300 dark:border-slate-700 bg-clip-padding";
+const singleCellBorderClass = "border border-slate-300 dark:border-slate-700 bg-clip-padding align-top";
 
 // ─── Component ────────────────────────────────────────────────────────────────
 

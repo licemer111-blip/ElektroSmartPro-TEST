@@ -29,7 +29,7 @@ function parseCalcModifiers(note: string | null | undefined): CalcModifiers {
   };
 }
 
-const singleCellBorderClass = "border border-slate-300 dark:border-slate-700 bg-clip-padding";
+const singleCellBorderClass = "border border-slate-300 dark:border-slate-700 bg-clip-padding align-top";
 
 interface RowTotalCellProps {
   materialUnit: number;
