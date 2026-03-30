@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 import { BlurredPrice } from "@/components/ui/blurred-price";
-import { Lock, LayoutGrid, ChevronDown, ChevronUp, HardHat, Wrench, Home, Zap, ArrowRight, Truck } from "lucide-react";
+import { LayoutGrid, ChevronDown, ChevronUp, HardHat, Wrench, Home, Zap, Truck } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
@@ -96,29 +94,6 @@ export function SummaryFinancialTotals({
 
   return (
     <div className="space-y-2">
-      {/* Demo notice */}
-      {!isPro && (
-        <div className="bg-gradient-to-br from-amber-50 via-orange-50 to-amber-50 dark:from-amber-900/25 dark:via-orange-900/20 dark:to-amber-900/25 border-2 border-amber-300 dark:border-amber-700 rounded-xl p-3 mb-3 shadow-sm">
-          <div className="flex items-start gap-2 mb-2.5">
-            <div className="p-1 rounded-md bg-amber-100 dark:bg-amber-900/40 flex-shrink-0">
-              <Lock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-bold text-amber-900 dark:text-amber-100">Tryb Demo — Ceny ukryte</p>
-              <p className="text-xs text-amber-700 dark:text-amber-300">
-                Zupgraduj do PRO aby zobaczyć ceny, eksportować PDF i zdjąć limit projektów.
-              </p>
-            </div>
-          </div>
-          <Link href="/dashboard/settings/billing" className="block">
-            <Button size="sm" className="w-full h-8 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-semibold gap-1.5 shadow-md shadow-amber-500/20">
-              Zupgraduj do PRO
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Button>
-          </Link>
-        </div>
-      )}
-
       {/* ── Droga pieniędzy (Clean Table Architecture) ── */}
 
       {/* 1. Suma Bazowa Netto */}
