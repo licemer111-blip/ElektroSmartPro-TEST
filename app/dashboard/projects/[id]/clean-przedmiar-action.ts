@@ -10,6 +10,7 @@ import { AI_MODEL_TIER1 } from "@/lib/ai-models";
 import { z } from "zod";
 import { requireAuth } from "@/lib/auth";
 import { CLEAN_PRZEDMIAR_SYSTEM_PROMPT } from "@/lib/ai/prompts";
+import { parseStructuredTable } from "@/lib/project-import-utils";
 
 interface CleanedItem {
   name: string;
@@ -24,49 +25,6 @@ interface CleanPrzedmiarResult {
   success: boolean;
   items?: CleanedItem[];
   error?: string;
-}
-
-// ─── Deterministic pre-parser for structured tables ──────────────────────────
-// Handles TSV / semicolon-separated tables with a header row.
-// Column detection: Lp. (row number — ignored), Opis/Nazwa, J.m./Jm, Ilość.
-// Returns null if the text doesn't look like a structured table.
-
-function tryParseStructuredTable(text: string): CleanedItem[] | null {
-  const lines = text.trim().split(/\r?\n/).filter(l => l.trim());
-  if (lines.length < 2) return null;
-
-  // Detect separator: tab preferred, then semicolon
-  const sep = lines[0].includes("\t") ? "\t" : lines[0].includes(";") ? ";" : null;
-  if (!sep) return null;
-
-  const headers = lines[0].split(sep).map(h => h.trim().toLowerCase().replace(/[.\s]/g, ""));
-
-  // Map known header names to column indices
-  const col = (aliases: string[]) => headers.findIndex(h => aliases.some(a => h.includes(a)));
-
-  const nameIdx = col(["opis", "nazwa", "pozycj", "material", "robocizna"]);
-  const unitIdx = col(["jm", "jedn", "jednostk"]);
-  const qtyIdx  = col(["ilo", "ilosc", "kol", "qty", "ilo\u015b\u0107"]);
-
-  if (nameIdx === -1 || qtyIdx === -1) return null;
-
-  const items: CleanedItem[] = [];
-
-  for (let i = 1; i < lines.length; i++) {
-    const cols = lines[i].split(sep).map(c => c.trim());
-    if (cols.length < 2) continue;
-
-    const name = cols[nameIdx]?.trim();
-    const rawQty = cols[qtyIdx]?.replace(",", ".") ?? "0";
-    const qty = parseFloat(rawQty);
-    const unit = unitIdx !== -1 ? (cols[unitIdx]?.trim() || "szt") : "szt";
-
-    if (!name || name.length < 2 || isNaN(qty) || qty <= 0) continue;
-
-    items.push({ name, quantity: qty, unit, material_price: 0, labor_price: 0, knr_code: null });
-  }
-
-  return items.length > 0 ? items : null;
 }
 
 /**
@@ -94,9 +52,9 @@ export async function cleanPrzedmiarWithAi(
     }
 
     // ─── Fast path: structured TSV / CSV table — no AI needed ────────────────
-    const tableItems = tryParseStructuredTable(rawText);
+    const tableItems = parseStructuredTable(rawText);
     if (tableItems && tableItems.length > 0) {
-      return { success: true, items: tableItems };
+      return { success: true, items: tableItems.map(i => ({ ...i, knr_code: null })) };
     }
 
     const { object } = await generateObject({

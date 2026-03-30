@@ -11,6 +11,7 @@ export function normalizeUnit(raw: string): string {
   if (["kpl", "kpl.", "komplet", "zestaw"].includes(u)) return "kpl";
   if (["szt", "szt.", "sztuk", "sztuka", "pcs", "pc"].includes(u)) return "szt";
   if (["h", "godz", "godz.", "rbh", "rbg"].includes(u)) return "h";
+  if (["pkt", "pkt.", "punkt", "punkty", "punk"].includes(u)) return "pkt";
   return u || "szt";
 }
 
@@ -38,7 +39,7 @@ export function classifyRow(name: string): "material" | "labor" | "mixed" {
 
 // ─── Column detection helpers ─────────────────────────────────────────────────
 
-const UNIT_WORDS = ["kpl", "szt", "mb", "m", "m2", "m3", "h", "godz", "kg", "l", "komplet", "sztuk", "metr", "para", "op", "zest"];
+const UNIT_WORDS = ["kpl", "szt", "mb", "m", "m2", "m3", "h", "godz", "kg", "l", "komplet", "sztuk", "metr", "para", "op", "zest", "pkt"];
 
 export function isUnitValue(v: string): boolean {
   const s = v.trim().toLowerCase();
@@ -279,7 +280,7 @@ export function parsePrzedmiarText(text: string): AIProjectItem[] {
   const lines = text.trim().split("\n");
   const items: AIProjectItem[] = [];
 
-  const UNIT_RE = /^(szt\.?|mb|m\.b\.?|m2|m²|m3|m³|kpl\.?|kg|l|godz\.?|rbh|rbg|komplet|sztuk[ai]?|metr[y]?|para|op\.?|zest\.?|h|t|cm|mm|mb\.|lm|pcs?)$/i;
+  const UNIT_RE = /^(szt\.?|mb|m\.b\.?|m2|m²|m3|m³|kpl\.?|kg|l|godz\.?|rbh|rbg|komplet|sztuk[ai]?|metr[y]?|para|op\.?|zest\.?|h|t|cm|mm|mb\.|lm|pcs?|pkt\.?)$/i;
   const isUnit = (s: string) => UNIT_RE.test(s.trim());
   const isNumber = (s: string) => {
     const cleaned = s.trim().replace(",", ".").replace(/\s/g, "");
@@ -408,24 +409,42 @@ export function parsePrzedmiarText(text: string): AIProjectItem[] {
     if (tok.type === "inline") {
       const t = tok.raw;
 
-      if (t.includes("\t")) {
-        const parts = t.split("\t").map(s => s.trim());
-        const numParts = parts.filter(p => isNumber(p));
-        const unitParts = parts.filter(p => isUnit(p));
-        const textParts = parts.filter(p => !isNumber(p) && !isUnit(p) && p.length > 0);
-        const nameVal = textParts.sort((a, b) => b.length - a.length)[0] ?? parts[0];
-        if (nameVal && nameVal.length >= 1) {
-          items.push({
-            name: nameVal,
-            unit: normalizeUnit(unitParts[0] ?? "kpl"),
-            quantity: numParts.length > 0 ? toNumber(numParts[0]) : 1,
-            material_price: 0, labor_price: 0,
-          });
+      if (t.includes("\t") || t.includes(";")) {
+        const sep = t.includes("\t") ? "\t" : ";";
+        const parts = t.split(sep).map(s => s.trim()).filter(s => s.length > 0);
+
+        // Smart [Lp, Name, Unit, Qty] detection:
+        // 4-col table where first col is a small integer (row number), second is long text,
+        // third is a unit word, fourth is the actual quantity.
+        const looksLikeLpRow =
+          parts.length >= 3 &&
+          isNumber(parts[0]) && parseInt(parts[0]) >= 1 && parseInt(parts[0]) <= 9999 &&
+          !isUnit(parts[0]) &&
+          !isNumber(parts[1]) && parts[1].length >= 2 && // name = second col
+          (parts.length < 3 || isUnit(parts[parts.length - 2]) || isNumber(parts[parts.length - 1]));
+
+        if (looksLikeLpRow && parts.length >= 3) {
+          // Determine name, unit, qty from positional mapping
+          const nameVal = parts[1];
+          // Last col = qty, second-to-last = unit (for 4-col), or last non-numeric = unit
+          const unitVal = parts.length >= 4 && isUnit(parts[parts.length - 2])
+            ? parts[parts.length - 2]
+            : parts.find((p, idx) => idx >= 2 && isUnit(p)) ?? "kpl";
+          const qtyVal = isNumber(parts[parts.length - 1])
+            ? toNumber(parts[parts.length - 1])
+            : 1;
+          if (nameVal.length >= 1) {
+            items.push({
+              name: nameVal,
+              unit: normalizeUnit(unitVal),
+              quantity: qtyVal,
+              material_price: 0, labor_price: 0,
+            });
+          }
+          i++; continue;
         }
-        i++; continue;
-      }
-      if (t.includes(";")) {
-        const parts = t.split(";").map(s => s.trim());
+
+        // Standard logic for non-Lp separated rows
         const numParts = parts.filter(p => isNumber(p));
         const unitParts = parts.filter(p => isUnit(p));
         const textParts = parts.filter(p => !isNumber(p) && !isUnit(p) && p.length > 0);
@@ -529,6 +548,63 @@ export function parsePrzedmiarText(text: string): AIProjectItem[] {
   }
 
   return items;
+}
+
+// ─── Structured table parser (TSV / semicolon with header row) ───────────────
+// Detects tables like: Lp. | Opis prac i materiałów | J.m. | Ilość
+// Returns null if the text doesn't look like a structured table with headers.
+
+export function parseStructuredTable(text: string): AIProjectItem[] | null {
+  const lines = text.trim().split(/\r?\n/).filter(l => l.trim());
+  if (lines.length < 2) return null;
+
+  const sep = lines[0].includes("\t") ? "\t" : lines[0].includes(";") ? ";" : null;
+  if (!sep) return null;
+
+  const rawHeaders = lines[0].split(sep).map(h => h.trim());
+  // Must have at least 2 non-empty header columns that look like labels (not data)
+  const isHeaderRow = rawHeaders.filter(h => h.length > 0 && isNaN(parseFloat(h))).length >= 2;
+  if (!isHeaderRow) return null;
+
+  const headers = rawHeaders.map(h => h.toLowerCase().replace(/[.\s]/g, ""));
+
+  const colIdx = (aliases: string[]) =>
+    headers.findIndex(h => aliases.some(a => h.includes(a)));
+
+  const nameIdx = colIdx(["opis", "nazwa", "pozycj", "material", "robocizna", "opis prac"]);
+  const unitIdx = colIdx(["jm", "jedn", "jednostk"]);
+  const qtyIdx  = colIdx(["ilo", "qty", "liczba", "kol"]);
+
+  if (nameIdx === -1 || qtyIdx === -1) return null;
+
+  const items: AIProjectItem[] = [];
+
+  for (let i = 1; i < lines.length; i++) {
+    const cols = lines[i].split(sep).map(c => c.trim());
+    if (cols.length < 2) continue;
+
+    const name = cols[nameIdx]?.trim();
+    if (!name || name.length < 2) continue;
+
+    const rawQty = cols[qtyIdx]?.replace(",", ".") ?? "0";
+    const qty = parseFloat(rawQty);
+    if (isNaN(qty) || qty <= 0) continue;
+
+    const rawUnit = unitIdx !== -1 ? (cols[unitIdx]?.trim() || "szt") : "szt";
+    const unit = normalizeUnit(rawUnit);
+
+    items.push({ name, quantity: qty, unit, material_price: 0, labor_price: 0 });
+  }
+
+  return items.length > 0 ? items : null;
+}
+
+// ─── Smart entry point: try structured table first, then free-text ────────────
+
+export function parseTableOrText(text: string): AIProjectItem[] {
+  const tableItems = parseStructuredTable(text);
+  if (tableItems && tableItems.length > 0) return tableItems;
+  return parsePrzedmiarText(text);
 }
 
 // ─── File parsing helpers ─────────────────────────────────────────────────────

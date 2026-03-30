@@ -21,6 +21,7 @@ import {
   smartParseExcel,
   applyColumnMap,
   parsePrzedmiarText,
+  parseTableOrText,
 } from "@/lib/project-import-utils";
 
 interface UseProjectImportOptions {
@@ -313,7 +314,7 @@ export function useProjectImport({ projectId, onImport }: UseProjectImportOption
       toast.error("Wklej listę pozycji");
       return;
     }
-    const items = parsePrzedmiarText(przedmiarText);
+    const items = parseTableOrText(przedmiarText);
     if (items.length === 0) {
       toast.error("Nie rozpoznano żadnych pozycji");
       return;
@@ -370,7 +371,7 @@ export function useProjectImport({ projectId, onImport }: UseProjectImportOption
       } else {
         const text = await file.text();
         dispatch({ type: "SET_PRZEDMIAR_TEXT", payload: text });
-        const items = parsePrzedmiarText(text);
+        const items = parseTableOrText(text);
         if (items.length > 0) {
           dispatch({ type: "SET_AI_ITEMS", payload: items });
           dispatch({ type: "SET_SELECTED_ITEMS", payload: new Set(items.map((_, i) => i)) });
