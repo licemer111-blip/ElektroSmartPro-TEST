@@ -295,31 +295,34 @@ export const EstimateRow = React.memo(function EstimateRow({
               onKeyDown={handleKeyDown}
             />
             {!isAssemblyChild && (
-              <div className="flex items-center gap-1 mt-1">
-                <Select
-                  value={editingState!.section || "__none__"}
-                  onValueChange={(v) => onEditingChange({ ...editingState!, section: v === "__none__" ? "" : v })}
-                >
-                  <SelectTrigger className="h-6 text-[10px] w-auto min-w-[90px] px-1.5 border-slate-200 dark:border-slate-700">
-                    <SelectValue placeholder="Sekcja..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__none__">Bez sekcji</SelectItem>
-                    {SECTION_PRESETS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                    {uniqueSections.filter(s => !SECTION_PRESETS.includes(s)).map((s) => (
-                      <SelectItem key={s} value={s}>{s}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Input
-                  type="text"
-                  id={`section-${item.id}`}
-                  name={`section-${item.id}`}
-                  value={editingState!.section}
-                  onChange={(e) => onEditingChange({ ...editingState!, section: e.target.value })}
-                  className="h-6 text-[10px] w-24 px-1.5 dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-                  placeholder="lub wpisz..."
-                />
+              <div className="flex items-center gap-1.5 mt-1.5">
+                <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-wide flex-shrink-0">Sekcja:</span>
+                <div className="flex items-center gap-1 flex-wrap min-w-0">
+                  {[...SECTION_PRESETS, ...uniqueSections.filter(s => !SECTION_PRESETS.includes(s))].map((s) => (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => onEditingChange({ ...editingState!, section: editingState!.section === s ? "" : s })}
+                      className={cn(
+                        "px-2 py-0.5 rounded-full text-[9px] font-medium transition-all border",
+                        editingState!.section === s
+                          ? "bg-purple-600 text-white border-purple-600"
+                          : "bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-purple-300 hover:text-purple-600"
+                      )}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                  <Input
+                    type="text"
+                    id={`section-${item.id}`}
+                    name={`section-${item.id}`}
+                    value={editingState!.section}
+                    onChange={(e) => onEditingChange({ ...editingState!, section: e.target.value })}
+                    className="h-5 text-[9px] w-20 px-1.5 dark:bg-slate-950 dark:border-slate-700 dark:text-white rounded-full"
+                    placeholder="własna..."
+                  />
+                </div>
               </div>
             )}
           </div>

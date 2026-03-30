@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Copy, X, Check, ArrowRight, Zap, Info } from "lucide-react";
+import { Copy, X, Check, ArrowRight } from "lucide-react";
 import { DinRailRow } from "../panel-din-rail-row";
 import { getModulePrice } from "../panel-configurator-helpers";
 import type { RailModule, VisualModule, IssueSeverity, PanelSection, SelectedSlot, GhostModuleData } from "../panel-configurator-types";
@@ -110,139 +110,94 @@ export const GridBoard = React.memo(function GridBoard({
           />
 
           {/* Inline edit panel — appears right after the row with selected module */}
-          {selectedModule && selectedRowIdx === rowIdx && (
-            <div className="rounded-lg border border-yellow-300 dark:border-yellow-700 bg-yellow-50/80 dark:bg-yellow-950/20 px-3 py-2 shadow-sm">
-              <div className="flex items-center gap-2 mb-1.5">
-                {(() => {
-                  const SIcon = selectedModule.module.icon;
-                  return <SIcon className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" />;
-                })()}
-                <span className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
-                  {selectedModule.module.namePl}
-                </span>
-                <span className="text-[11px] text-slate-400 truncate">
-                  {selectedModule.module.description}
-                </span>
-                <div className="ml-auto flex items-center gap-0.5 flex-shrink-0">
-                  <Button
-                    variant="ghost" size="sm"
-                    className="h-6 px-2 text-[11px] text-blue-500 hover:text-blue-700 hover:bg-blue-50"
-                    onClick={() => { duplicateModule(selectedModule.uid); toast({ title: "Zduplikowano" }); }}
-                  >
-                    <Copy className="w-3 h-3" />
-                  </Button>
-                  {sections.length > 1 && (
-                    <Select name={`mod-move-${selectedModule.uid}`} value="" onValueChange={(v) => moveModuleToSection(selectedModule.uid, parseInt(v))}>
-                      <SelectTrigger id={`mod-move-${selectedModule.uid}`} aria-label="Przenieś do sekcji" className="h-6 w-auto px-2 text-[11px] text-indigo-500 border-indigo-200 gap-0.5">
-                        <ArrowRight className="w-3 h-3" />
-                        <span>Przenieś</span>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {sections.map((s, i) =>
-                          i !== activeSectionIdx && (
-                            <SelectItem key={s.id} value={String(i)} className="text-xs">
-                              {s.name}
-                            </SelectItem>
-                          )
-                        )}
-                      </SelectContent>
-                    </Select>
-                  )}
-                  <Button variant="ghost" size="sm" className="h-5 w-5 p-0" onClick={() => setSelectedUid(null)}>
-                    <X className="w-3 h-3" />
-                  </Button>
-                </div>
-              </div>
-
-              <div className="flex items-end gap-2 flex-wrap">
-                {/* Name override */}
-                <div className="flex-1 min-w-[120px]">
-                  <label htmlFor={`mod-name-${selectedModule.uid}`} className="text-[11px] font-semibold text-slate-500 block">Nazwa</label>
-                  <Input
-                    id={`mod-name-${selectedModule.uid}`}
-                    name={`mod-name-${selectedModule.uid}`}
-                    value={selectedModule.customName || selectedModule.module.namePl}
-                    onChange={(e) => updateModule(selectedModule.uid, { customName: e.target.value })}
-                    className="h-6 text-[11px]"
-                    placeholder={selectedModule.module.namePl}
-                  />
-                </div>
-
-                {/* ZUG Block fields */}
-                {selectedModule.isZugBlock ? (
-                  <>
-                    <div className="w-[90px]">
-                      <label htmlFor={`mod-terminals-${selectedModule.uid}`} className="text-[11px] font-semibold text-slate-500 block">Ilość złączek</label>
-                      <Input
-                        id={`mod-terminals-${selectedModule.uid}`}
-                        name={`mod-terminals-${selectedModule.uid}`}
-                        type="number" min={3} max={300} step={3}
-                        value={selectedModule.terminalCount || 15}
-                        onChange={(e) => updateModule(selectedModule.uid, { terminalCount: parseInt(e.target.value) || 15 })}
-                        className="h-6 text-[11px]"
-                      />
-                    </div>
-                    <div className="w-[80px]">
-                      <label htmlFor={`mod-mat-${selectedModule.uid}`} className="text-[11px] font-semibold text-slate-500 block">Materiał (zł)</label>
-                      {isPro ? (
-                        <Input
-                          id={`mod-mat-${selectedModule.uid}`}
-                          name={`mod-mat-${selectedModule.uid}`}
-                          aria-label="Cena materiału"
-                          type="number" min={0} step={0.01}
-                          placeholder={String(Math.round(selectedModule.module.defaultPrice * manufacturerCoeff * 100) / 100)}
-                          value={selectedModule.customMaterialPrice ?? ""}
-                          onChange={(e) => updateModule(selectedModule.uid, { customMaterialPrice: e.target.value === "" ? undefined : parseFloat(e.target.value) || 0 })}
-                          className="h-6 text-[11px]"
-                        />
-                      ) : (
-                        <div className="h-6 flex items-center text-[11px] text-slate-400 font-medium">***</div>
-                      )}
-                    </div>
-                    <div className="w-[80px]">
-                      <label htmlFor={`mod-lab-${selectedModule.uid}`} className="text-[11px] font-semibold text-slate-500 block">Robocizna (zł)</label>
-                      {isPro ? (
-                        <Input
-                          id={`mod-lab-${selectedModule.uid}`}
-                          name={`mod-lab-${selectedModule.uid}`}
-                          aria-label="Cena robocizny"
-                          type="number" min={0} step={0.01}
-                          placeholder={String(selectedModule.module.defaultLaborPrice)}
-                          value={selectedModule.customLaborPrice ?? ""}
-                          onChange={(e) => updateModule(selectedModule.uid, { customLaborPrice: e.target.value === "" ? undefined : parseFloat(e.target.value) || 0 })}
-                          className="h-6 text-[11px]"
-                        />
-                      ) : (
-                        <div className="h-6 flex items-center text-[11px] text-slate-400 font-medium">***</div>
-                      )}
-                    </div>
-                    {isPro && (
-                      <div className="flex items-center gap-2 text-[11px] text-slate-500 flex-shrink-0 pb-0.5">
-                        <span>Mat: <strong className="text-slate-700 dark:text-slate-300">{getModulePrice(selectedModule, manufacturerCoeff).material.toFixed(0)}</strong></span>
-                        <span>Rob: <strong className="text-slate-700 dark:text-slate-300">{getModulePrice(selectedModule, manufacturerCoeff).labor.toFixed(0)}</strong></span>
-                        <span>= <strong className="text-blue-600">{(getModulePrice(selectedModule, manufacturerCoeff).material + getModulePrice(selectedModule, manufacturerCoeff).labor).toFixed(0)} zł</strong></span>
-                      </div>
+          {selectedModule && selectedRowIdx === rowIdx && (() => {
+            const prices = getModulePrice(selectedModule, manufacturerCoeff);
+            const SIcon = selectedModule.module.icon;
+            return (
+              <div className="rounded-xl border border-blue-200 dark:border-blue-800 bg-white dark:bg-slate-900 shadow-md overflow-hidden">
+                {/* Header */}
+                <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-indigo-950/30 border-b border-blue-100 dark:border-blue-800/60">
+                  <SIcon className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <span className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate block leading-tight">
+                      {selectedModule.module.namePl}
+                    </span>
+                    {selectedModule.module.description && (
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 truncate block leading-tight">
+                        {selectedModule.module.description}
+                      </span>
                     )}
+                  </div>
+                  <div className="flex items-center gap-1 flex-shrink-0">
                     <Button
-                      size="sm"
-                      className="h-7 px-3 text-xs bg-blue-600 hover:bg-blue-700 text-white gap-1"
-                      onClick={() => { setSelectedUid(null); toast({ title: "Zapisano", description: selectedModule.module.namePl }); }}
+                      variant="ghost" size="sm"
+                      className="h-6 w-6 p-0 text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/50 rounded-md"
+                      title="Duplikuj"
+                      onClick={() => { duplicateModule(selectedModule.uid); toast({ title: "Zduplikowano" }); }}
                     >
-                      <Check className="w-3 h-3" /> OK
+                      <Copy className="w-3.5 h-3.5" />
                     </Button>
-                  </>
-                ) : (
-                  <>
-                    <div className="flex items-center gap-2 flex-wrap bg-slate-50/80 dark:bg-slate-800/50 rounded-lg p-1.5 shadow-sm">
+                    {sections.length > 1 && (
+                      <Select name={`mod-move-${selectedModule.uid}`} value="" onValueChange={(v) => moveModuleToSection(selectedModule.uid, parseInt(v))}>
+                        <SelectTrigger id={`mod-move-${selectedModule.uid}`} aria-label="Przenieś do sekcji" className="h-6 w-auto px-2 text-[10px] text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-700 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 gap-0.5 rounded-md">
+                          <ArrowRight className="w-3 h-3" />
+                          <span>Przenieś</span>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {sections.map((s, i) =>
+                            i !== activeSectionIdx && (
+                              <SelectItem key={s.id} value={String(i)} className="text-xs">{s.name}</SelectItem>
+                            )
+                          )}
+                        </SelectContent>
+                      </Select>
+                    )}
+                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-md" onClick={() => setSelectedUid(null)}>
+                      <X className="w-3.5 h-3.5" />
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Body */}
+                <div className="px-3 py-2.5 flex items-end gap-2.5 flex-wrap">
+                  {/* Name */}
+                  <div className="flex-1 min-w-[140px]">
+                    <label htmlFor={`mod-name-${selectedModule.uid}`} className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide block mb-0.5">Nazwa</label>
+                    <Input
+                      id={`mod-name-${selectedModule.uid}`}
+                      name={`mod-name-${selectedModule.uid}`}
+                      value={selectedModule.customName || selectedModule.module.namePl}
+                      onChange={(e) => updateModule(selectedModule.uid, { customName: e.target.value })}
+                      className="h-7 text-xs border-slate-200 dark:border-slate-700 focus-visible:ring-blue-500"
+                      placeholder={selectedModule.module.namePl}
+                    />
+                  </div>
+
+                  {selectedModule.isZugBlock ? (
+                    <>
+                      <div className="w-[90px]">
+                        <label htmlFor={`mod-terminals-${selectedModule.uid}`} className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide block mb-0.5">Ilość złączek</label>
+                        <Input
+                          id={`mod-terminals-${selectedModule.uid}`}
+                          name={`mod-terminals-${selectedModule.uid}`}
+                          type="number" min={3} max={300} step={3}
+                          value={selectedModule.terminalCount || 15}
+                          onChange={(e) => updateModule(selectedModule.uid, { terminalCount: parseInt(e.target.value) || 15 })}
+                          className="h-7 text-xs border-slate-200 dark:border-slate-700 focus-visible:ring-blue-500"
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <>
                       {selectedModule.module.ratingOptions && selectedModule.module.ratingOptions.length > 0 && (
-                        <div className="w-[70px]">
-                          <label className="text-[11px] font-semibold text-slate-500 block">Prąd</label>
+                        <div className="w-[72px]">
+                          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide block mb-0.5">Prąd</label>
                           <Select
                             name={`mod-rating-${selectedModule.uid}`}
                             value={String(selectedModule.rating ?? selectedModule.module.defaultRating)}
                             onValueChange={(v) => updateModule(selectedModule.uid, { rating: parseInt(v) })}
                           >
-                            <SelectTrigger id={`mod-rating-${selectedModule.uid}`} aria-label="Prąd" className="h-6 text-[11px]"><SelectValue /></SelectTrigger>
+                            <SelectTrigger id={`mod-rating-${selectedModule.uid}`} aria-label="Prąd" className="h-7 text-xs border-slate-200 dark:border-slate-700"><SelectValue /></SelectTrigger>
                             <SelectContent>
                               {selectedModule.module.ratingOptions.map((r) => (
                                 <SelectItem key={r} value={String(r)} className="text-xs">{r}A</SelectItem>
@@ -251,55 +206,55 @@ export const GridBoard = React.memo(function GridBoard({
                           </Select>
                         </div>
                       )}
-                      <div className="w-[50px]">
-                        <label htmlFor={`mod-circuit-${selectedModule.uid}`} className="text-[11px] font-semibold text-slate-500 block">Nr obw.</label>
+                      <div className="w-[52px]">
+                        <label htmlFor={`mod-circuit-${selectedModule.uid}`} className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide block mb-0.5">Nr obw.</label>
                         <Input
                           id={`mod-circuit-${selectedModule.uid}`}
                           name={`mod-circuit-${selectedModule.uid}`}
                           value={selectedModule.circuitNumber || ""}
                           onChange={(e) => updateModule(selectedModule.uid, { circuitNumber: e.target.value })}
-                          className="h-6 text-[11px]"
+                          className="h-7 text-xs border-slate-200 dark:border-slate-700 focus-visible:ring-blue-500 text-center"
                           placeholder="1"
                         />
                       </div>
-                      <div className="flex-1 min-w-[80px]">
-                        <label htmlFor={`mod-label-${selectedModule.uid}`} className="text-[11px] font-semibold text-slate-500 block">Opis obwodu</label>
+                      <div className="flex-1 min-w-[100px]">
+                        <label htmlFor={`mod-label-${selectedModule.uid}`} className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide block mb-0.5">Opis obwodu</label>
                         <Input
                           id={`mod-label-${selectedModule.uid}`}
                           name={`mod-label-${selectedModule.uid}`}
                           value={selectedModule.label || ""}
                           onChange={(e) => updateModule(selectedModule.uid, { label: e.target.value })}
-                          className="h-6 text-[11px]"
+                          className="h-7 text-xs border-slate-200 dark:border-slate-700 focus-visible:ring-blue-500"
                           placeholder="np. oświetlenie salon"
                         />
                       </div>
                       {selectedModule.module.modules === 1 && (
-                        <div className="w-[70px]">
-                          <label className="text-[11px] font-semibold text-slate-500 block">Faza</label>
+                        <div className="w-[68px]">
+                          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide block mb-0.5">Faza</label>
                           <Select
                             name={`mod-phase-${selectedModule.uid}`}
                             value={selectedModule.phase || "__none__"}
                             onValueChange={(v) => updateModule(selectedModule.uid, { phase: v === "__none__" ? undefined : v as "L1" | "L2" | "L3" })}
                           >
-                            <SelectTrigger id={`mod-phase-${selectedModule.uid}`} aria-label="Faza" className="h-6 text-[10px]"><SelectValue placeholder="Brak" /></SelectTrigger>
+                            <SelectTrigger id={`mod-phase-${selectedModule.uid}`} aria-label="Faza" className="h-7 text-xs border-slate-200 dark:border-slate-700"><SelectValue placeholder="—" /></SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="__none__" className="text-xs">Brak</SelectItem>
-                              <SelectItem value="L1" className="text-xs">L1 <span className="text-[#78350f]">●</span></SelectItem>
-                              <SelectItem value="L2" className="text-xs">L2 <span className="text-black">●</span></SelectItem>
-                              <SelectItem value="L3" className="text-xs">L3 <span className="text-gray-500">●</span></SelectItem>
+                              <SelectItem value="__none__" className="text-xs">—</SelectItem>
+                              <SelectItem value="L1" className="text-xs">L1</SelectItem>
+                              <SelectItem value="L2" className="text-xs">L2</SelectItem>
+                              <SelectItem value="L3" className="text-xs">L3</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
                       )}
                       {(selectedModule.module.category === "breaker" || selectedModule.module.category === "rcbo") && (
                         <div className="w-[110px]">
-                          <label className="text-[11px] font-semibold text-slate-500 block">Przewód</label>
+                          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide block mb-0.5">Przewód</label>
                           <Select
                             name={`mod-cable-${selectedModule.uid}`}
                             value={selectedModule.cableType || ""}
                             onValueChange={(v) => updateModule(selectedModule.uid, { cableType: v })}
                           >
-                            <SelectTrigger id={`mod-cable-${selectedModule.uid}`} aria-label="Typ przewodu" className="h-6 text-[10px]"><SelectValue placeholder="—" /></SelectTrigger>
+                            <SelectTrigger id={`mod-cable-${selectedModule.uid}`} aria-label="Typ przewodu" className="h-7 text-xs border-slate-200 dark:border-slate-700"><SelectValue placeholder="—" /></SelectTrigger>
                             <SelectContent>
                               {CABLE_TYPES.map((c) => (
                                 <SelectItem key={c} value={c} className="text-xs">{c}</SelectItem>
@@ -308,58 +263,81 @@ export const GridBoard = React.memo(function GridBoard({
                           </Select>
                         </div>
                       )}
-                    </div>
-                    <div className="w-[80px]">
-                      <label htmlFor={`mod-mat2-${selectedModule.uid}`} className="text-[11px] font-semibold text-slate-500 block">Materiał (zł)</label>
-                      {isPro ? (
-                        <Input
-                          id={`mod-mat2-${selectedModule.uid}`}
-                          name={`mod-mat2-${selectedModule.uid}`}
-                          aria-label="Cena materiału"
-                          type="number" min={0} step={0.01}
-                          value={selectedModule.customMaterialPrice ?? Math.round(selectedModule.module.defaultPrice * manufacturerCoeff * 100) / 100}
-                          onChange={(e) => updateModule(selectedModule.uid, { customMaterialPrice: parseFloat(e.target.value) || 0 })}
-                          className="h-6 text-[11px]"
-                        />
-                      ) : (
-                        <div className="h-6 flex items-center text-[11px] text-slate-400 font-medium">***</div>
-                      )}
-                    </div>
-                    <div className="w-[80px]">
-                      <label htmlFor={`mod-lab2-${selectedModule.uid}`} className="text-[11px] font-semibold text-slate-500 block">Robocizna (zł)</label>
-                      {isPro ? (
-                        <Input
-                          id={`mod-lab2-${selectedModule.uid}`}
-                          name={`mod-lab2-${selectedModule.uid}`}
-                          aria-label="Cena robocizny"
-                          type="number" min={0} step={0.01}
-                          value={selectedModule.customLaborPrice ?? selectedModule.module.defaultLaborPrice}
-                          onChange={(e) => updateModule(selectedModule.uid, { customLaborPrice: parseFloat(e.target.value) || 0 })}
-                          className="h-6 text-[11px]"
-                        />
-                      ) : (
-                        <div className="h-6 flex items-center text-[11px] text-slate-400 font-medium">***</div>
-                      )}
-                    </div>
-                    {isPro && (
-                      <div className="flex items-center gap-2 text-[11px] text-slate-500 flex-shrink-0 pb-0.5">
-                        <span>Mat: <strong className="text-slate-700 dark:text-slate-300">{getModulePrice(selectedModule, manufacturerCoeff).material.toFixed(0)}</strong></span>
-                        <span>Rob: <strong className="text-slate-700 dark:text-slate-300">{getModulePrice(selectedModule, manufacturerCoeff).labor.toFixed(0)}</strong></span>
-                        <span>= <strong className="text-blue-600">{(getModulePrice(selectedModule, manufacturerCoeff).material + getModulePrice(selectedModule, manufacturerCoeff).labor).toFixed(0)} zł</strong></span>
-                      </div>
+                    </>
+                  )}
+
+                  {/* Price separator */}
+                  <div className="w-px h-8 bg-slate-200 dark:bg-slate-700 self-end mb-0.5 flex-shrink-0" />
+
+                  {/* Materiał */}
+                  <div className="w-[80px]">
+                    <label htmlFor={`mod-mat-${selectedModule.uid}`} className="text-[10px] font-semibold text-amber-500 uppercase tracking-wide block mb-0.5">Mat. (zł)</label>
+                    {isPro ? (
+                      <Input
+                        id={`mod-mat-${selectedModule.uid}`}
+                        name={`mod-mat-${selectedModule.uid}`}
+                        aria-label="Cena materiału"
+                        type="number" min={0} step={0.01}
+                        placeholder={String(Math.round(selectedModule.module.defaultPrice * manufacturerCoeff * 100) / 100)}
+                        value={selectedModule.isZugBlock ? (selectedModule.customMaterialPrice ?? "") : (selectedModule.customMaterialPrice ?? Math.round(selectedModule.module.defaultPrice * manufacturerCoeff * 100) / 100)}
+                        onChange={(e) => updateModule(selectedModule.uid, { customMaterialPrice: e.target.value === "" ? undefined : parseFloat(e.target.value) || 0 })}
+                        className="h-7 text-xs border-amber-200 dark:border-amber-800/50 focus-visible:ring-amber-400 bg-amber-50/50 dark:bg-amber-950/20"
+                      />
+                    ) : (
+                      <div className="h-7 flex items-center justify-center text-xs text-slate-400 font-medium bg-slate-50 dark:bg-slate-800 rounded-md border border-slate-200 dark:border-slate-700 tracking-widest">***</div>
                     )}
+                  </div>
+
+                  {/* Robocizna */}
+                  <div className="w-[80px]">
+                    <label htmlFor={`mod-lab-${selectedModule.uid}`} className="text-[10px] font-semibold text-blue-500 uppercase tracking-wide block mb-0.5">Rob. (zł)</label>
+                    {isPro ? (
+                      <Input
+                        id={`mod-lab-${selectedModule.uid}`}
+                        name={`mod-lab-${selectedModule.uid}`}
+                        aria-label="Cena robocizny"
+                        type="number" min={0} step={0.01}
+                        placeholder={String(selectedModule.module.defaultLaborPrice)}
+                        value={selectedModule.isZugBlock ? (selectedModule.customLaborPrice ?? "") : (selectedModule.customLaborPrice ?? selectedModule.module.defaultLaborPrice)}
+                        onChange={(e) => updateModule(selectedModule.uid, { customLaborPrice: e.target.value === "" ? undefined : parseFloat(e.target.value) || 0 })}
+                        className="h-7 text-xs border-blue-200 dark:border-blue-800/50 focus-visible:ring-blue-400 bg-blue-50/50 dark:bg-blue-950/20"
+                      />
+                    ) : (
+                      <div className="h-7 flex items-center justify-center text-xs text-slate-400 font-medium bg-slate-50 dark:bg-slate-800 rounded-md border border-slate-200 dark:border-slate-700 tracking-widest">***</div>
+                    )}
+                  </div>
+
+                  {/* Total + OK */}
+                  {isPro && (
+                    <div className="flex flex-col items-end gap-1 flex-shrink-0 self-end">
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 leading-none">
+                        <span className="text-amber-600 dark:text-amber-400">{prices.material.toFixed(0)}</span>
+                        <span className="text-slate-300 dark:text-slate-600 mx-0.5">+</span>
+                        <span className="text-blue-600 dark:text-blue-400">{prices.labor.toFixed(0)}</span>
+                      </div>
+                      <Button
+                        size="sm"
+                        className="h-7 px-3 text-xs bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold gap-1 shadow-sm shadow-blue-500/30"
+                        onClick={() => { setSelectedUid(null); toast({ title: "Zapisano", description: selectedModule.module.namePl }); }}
+                      >
+                        <Check className="w-3 h-3" />
+                        {(prices.material + prices.labor).toFixed(0)} zł
+                      </Button>
+                    </div>
+                  )}
+                  {!isPro && (
                     <Button
                       size="sm"
-                      className="h-7 px-3 text-xs bg-blue-600 hover:bg-blue-700 text-white gap-1"
+                      className="h-7 px-4 text-xs bg-blue-600 hover:bg-blue-700 text-white font-semibold gap-1 self-end"
                       onClick={() => { setSelectedUid(null); toast({ title: "Zapisano", description: selectedModule.module.namePl }); }}
                     >
-                      <Zap className="w-3 h-3" /> OK
+                      <Check className="w-3 h-3" /> OK
                     </Button>
-                  </>
-                )}
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
         </React.Fragment>
       ))}
     </div>
