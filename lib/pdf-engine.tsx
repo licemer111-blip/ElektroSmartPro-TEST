@@ -78,10 +78,10 @@ const THEMES: Record<ThemeName, ThemePalette> = {
     rowEven: '#ffffff',
     sectionHeaderBg: '#1f2937',
     sectionHeaderText: '#ffffff',
-    setParentBg: '#fef3c7',
+    setParentBg: '#fde68a',
     setParentBorder: '#d97706',
-    childMatBg: '#fefce8',
-    childLabBg: '#f0fdf4',
+    childMatBg: '#fef3c7',
+    childLabBg: '#dcfce7',
     subtotalBg: '#f3f4f6',
     warningBg: '#fef2f2',
     warningText: '#dc2626',
@@ -102,10 +102,10 @@ const THEMES: Record<ThemeName, ThemePalette> = {
     rowEven: '#ffffff',
     sectionHeaderBg: '#1f2937',
     sectionHeaderText: '#fde68a',
-    setParentBg: '#fef3c7',
+    setParentBg: '#fde68a',
     setParentBorder: '#b45309',
-    childMatBg: '#fffbeb',
-    childLabBg: '#f0fdf4',
+    childMatBg: '#fef3c7',
+    childLabBg: '#dcfce7',
     subtotalBg: '#f9f7f2',
     warningBg: '#fef2f2',
     warningText: '#dc2626',
@@ -126,10 +126,10 @@ const THEMES: Record<ThemeName, ThemePalette> = {
     rowEven: '#ffffff',
     sectionHeaderBg: '#1e40af',
     sectionHeaderText: '#ffffff',
-    setParentBg: '#fef3c7',
-    setParentBorder: '#2563eb',
-    childMatBg: '#eff6ff',
-    childLabBg: '#f0fdf4',
+    setParentBg: '#fde68a',
+    setParentBorder: '#d97706',
+    childMatBg: '#fef9c3',
+    childLabBg: '#dcfce7',
     subtotalBg: '#f1f5f9',
     warningBg: '#fef2f2',
     warningText: '#dc2626',
@@ -150,10 +150,10 @@ const THEMES: Record<ThemeName, ThemePalette> = {
     rowEven: '#ffffff',
     sectionHeaderBg: '#1e3a8a',
     sectionHeaderText: '#bfdbfe',
-    setParentBg: '#fef3c7',
-    setParentBorder: '#1e3a8a',
-    childMatBg: '#eff6ff',
-    childLabBg: '#f0fdf4',
+    setParentBg: '#fde68a',
+    setParentBorder: '#d97706',
+    childMatBg: '#fef9c3',
+    childLabBg: '#dcfce7',
     subtotalBg: '#e8edf8',
     warningBg: '#fef2f2',
     warningText: '#dc2626',
@@ -174,10 +174,10 @@ const THEMES: Record<ThemeName, ThemePalette> = {
     rowEven: '#ffffff',
     sectionHeaderBg: '#3b0764',
     sectionHeaderText: '#e9d5ff',
-    setParentBg: '#f5f0ff',
-    setParentBorder: '#6d28d9',
-    childMatBg: '#faf5ff',
-    childLabBg: '#f5fff8',
+    setParentBg: '#fde68a',
+    setParentBorder: '#d97706',
+    childMatBg: '#fef9c3',
+    childLabBg: '#dcfce7',
     subtotalBg: '#f2eeff',
     warningBg: '#fef2f2',
     warningText: '#dc2626',
@@ -616,24 +616,24 @@ const TableDataRow = ({
       break;
     case 'set_parent':
       rowBg = palette.setParentBg;
-      textColor = palette.textPrimary;
+      textColor = '#78350f';
       fontWeight = 'bold';
-      borderLeftWidth = 3;
+      borderLeftWidth = 4;
       borderLeftColor = palette.setParentBorder;
       break;
     case 'child_mat':
       rowBg = palette.childMatBg;
-      textColor = palette.textSecondary;
+      textColor = '#92400e';
       fontStyle = 'italic';
-      borderLeftWidth = 2;
-      borderLeftColor = palette.accentPrimary + '60';
+      borderLeftWidth = 3;
+      borderLeftColor = '#f59e0b';
       break;
     case 'child_lab':
       rowBg = palette.childLabBg;
-      textColor = palette.textSecondary;
+      textColor = '#166534';
       fontStyle = 'italic';
-      borderLeftWidth = 2;
-      borderLeftColor = '#059669' + '80';
+      borderLeftWidth = 3;
+      borderLeftColor = '#22c55e';
       break;
     case 'section_subtotal':
       rowBg = palette.subtotalBg;

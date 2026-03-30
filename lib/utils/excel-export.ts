@@ -39,9 +39,10 @@ const C_HEADER_BG   = '1E2937'; // slate-800
 const C_HEADER_TEXT = 'FFFFFF';
 const C_ORANGE_BG   = 'FFF3E0'; // orange tint — Material columns
 const C_GREEN_BG    = 'E8F5E9'; // green tint  — Labor columns
-const C_ZESTAW_BG   = 'FFF7ED'; // warm orange — Zestaw parent row
-const C_ZESTAW_TEXT = '9A3412'; // orange-800
-const C_CHILD_TEXT  = '475569'; // slate-500
+const C_ZESTAW_BG   = 'FEF3C7'; // amber-100 — Zestaw parent row (more visible)
+const C_ZESTAW_TEXT = '92400E'; // amber-900
+const C_CHILD_BG    = 'FFFBEB'; // amber-50  — child row subtle tint
+const C_CHILD_TEXT  = '78350F'; // amber-800 — child text
 const C_SECTION_BG  = 'EEE8FF'; // violet tint — Section header
 const C_SECTION_TXT = '5B21B6'; // violet-800
 const C_SUM_BG      = 'F1F5F9'; // slate-100   — Summary rows
@@ -315,16 +316,28 @@ function buildKosztorysSheet(
 
     const matPrice = item.final_material_price ?? item.material_price ?? 0;
     const labPrice = item.final_labor_price ?? item.labor_price ?? 0;
-    const totalPrice = (matPrice + labPrice) * item.quantity;
     const isChild   = item.is_assembly_child === true;
     const isZestaw  = assemblyParentIds.has(item.id);
 
+    // For Zestaw parents compute total from children (own price is usually 0)
+    const ownTotal = (matPrice + labPrice) * item.quantity;
+    const totalPrice = isZestaw
+      ? flatItems.filter(c => c.parent_assembly_id === item.id).reduce(
+          (acc, c) => acc + ((c.final_material_price ?? c.material_price ?? 0) + (c.final_labor_price ?? c.labor_price ?? 0)) * c.quantity, 0
+        )
+      : ownTotal;
+
     // Row style selection
-    const rowBg     = isZestaw ? C_ZESTAW_BG : 'FFFFFF';
+    const rowBg     = isZestaw ? C_ZESTAW_BG : (isChild ? C_CHILD_BG : 'FFFFFF');
     const textRgb   = isZestaw ? C_ZESTAW_TEXT : (isChild ? C_CHILD_TEXT : '1E293B');
     const baseFont  = font({ bold: isZestaw, color: { rgb: textRgb }, sz: 9 });
     const baseFill  = fill(rowBg);
-    const baseBorder = thinBorder('E2E8F0');
+    // Left border: orange thick for Zestaw parent, orange thin for child, gray for regular
+    const baseBorder: XlsxCellStyle['border'] = isZestaw
+      ? { ...thinBorder('E2E8F0'), left: { style: 'medium', color: { rgb: 'F97316' } } }
+      : isChild
+      ? { ...thinBorder('E2E8F0'), left: { style: 'thin', color: { rgb: 'FB923C' } } }
+      : thinBorder('E2E8F0');
 
     const dataRow: XlsxCell[] = Array(colCount).fill(null).map(() =>
       sc('', { fill: baseFill, font: baseFont, border: baseBorder })
@@ -388,24 +401,28 @@ function buildKosztorysSheet(
 
     // Cena materiału — orange accent fill (hidden if matOwnedByClient)
     if (C_MAT >= 0) {
-      if (isPro) {
+      if (isZestaw) {
+        dataRow[C_MAT] = sc('\u2014', { fill: fill(C_ORANGE_BG), font: font({ bold: true, color: { rgb: 'F97316' }, sz: 9 }), border: baseBorder, alignment: { horizontal: 'center' } });
+      } else if (isPro) {
         dataRow[C_MAT] = sc(matPrice, {
           fill: fill(C_ORANGE_BG), font: baseFont, border: baseBorder,
           alignment: { horizontal: 'right' }, numFmt: FMT_ACCOUNTING,
         });
       } else {
-        dataRow[C_MAT] = sc('*** zł', { fill: fill(C_ORANGE_BG), font: font({ color: { rgb: 'DC2626' }, sz: 9 }), border: baseBorder, alignment: { horizontal: 'right' } });
+        dataRow[C_MAT] = sc('*** z\u0142', { fill: fill(C_ORANGE_BG), font: font({ color: { rgb: 'DC2626' }, sz: 9 }), border: baseBorder, alignment: { horizontal: 'right' } });
       }
     }
 
     // Cena robocizny — green accent fill
-    if (isPro) {
+    if (isZestaw) {
+      dataRow[C_ROB] = sc('\u2014', { fill: fill(C_GREEN_BG), font: font({ bold: true, color: { rgb: '059669' }, sz: 9 }), border: baseBorder, alignment: { horizontal: 'center' } });
+    } else if (isPro) {
       dataRow[C_ROB] = sc(labPrice, {
         fill: fill(C_GREEN_BG), font: baseFont, border: baseBorder,
         alignment: { horizontal: 'right' }, numFmt: FMT_ACCOUNTING,
       });
     } else {
-      dataRow[C_ROB] = sc('*** zł', { fill: fill(C_GREEN_BG), font: font({ color: { rgb: 'DC2626' }, sz: 9 }), border: baseBorder, alignment: { horizontal: 'right' } });
+      dataRow[C_ROB] = sc('*** z\u0142', { fill: fill(C_GREEN_BG), font: font({ color: { rgb: 'DC2626' }, sz: 9 }), border: baseBorder, alignment: { horizontal: 'right' } });
     }
 
     // Wartość netto

@@ -207,15 +207,21 @@ export async function POST(req: Request) {
       };
     });
 
-    const parentIds = new Set(calcItems.filter(i => i.parent_assembly_id).map(i => i.parent_assembly_id));
+    // Detect all children by EITHER field (belt-and-suspenders for legacy data)
+    const parentIds = new Set(
+      calcItems
+        .filter(i => i.parent_assembly_id || (i as Record<string,unknown>).is_assembly_child === true)
+        .map(i => i.parent_assembly_id as string)
+        .filter(Boolean)
+    );
 
-    let globalIndex = 1;
     let totalMatSum = 0;
     let totalLabSum = 0;
 
     const rowsRaw: PdfRow[] = calcItems.map((item) => {
-      const isParent = parentIds.has(item.id);
-      const isChild = !!item.parent_assembly_id;
+      const isParent = parentIds.has(item.id as string);
+      const rawItem = item as Record<string, unknown>;
+      const isChild = !!(item.parent_assembly_id) || rawItem.is_assembly_child === true;
       const unitCombined = item.finalMat + item.finalLab;
       let totalVal = unitCombined * item.quantity;
       let matDisplay = maskPrices ? "*** zl" : fMoney(item.finalMat);
@@ -229,7 +235,7 @@ export async function POST(req: Request) {
         totalVal = children.reduce((acc, c) => acc + (c.finalMat + c.finalLab) * c.quantity, 0);
         matDisplay = "---";
         labDisplay = "---";
-        indexDisplay = String(globalIndex++);
+        indexDisplay = ""; // will be assigned after semantic grouping
         rowType = "set_parent";
       } else if (isChild) {
         indexDisplay = "";
@@ -245,7 +251,7 @@ export async function POST(req: Request) {
         else if (isMixed) { rowType = item.finalMat > item.finalLab ? "child_mat" : "child_lab"; }
         else { rowType = "child_mat"; }
       } else {
-        indexDisplay = String(globalIndex++);
+        indexDisplay = ""; // will be assigned after semantic grouping
         totalMatSum += item.finalMat * item.quantity;
         totalLabSum += item.finalLab * item.quantity;
         if (totalVal === 0) rowType = "warning";
@@ -345,6 +351,14 @@ export async function POST(req: Request) {
         rawTotal: secTot,
         rowType: "section_subtotal", isParent: false, isChild: false,
       });
+    }
+
+    // ── Re-number all LP sequentially in final PDF display order ──────────────
+    let lpCounter = 1;
+    for (const row of rows) {
+      if (row.rowType === 'section_header' || row.rowType === 'section_subtotal') continue;
+      if (row.isChild) continue;
+      row.index = String(lpCounter++);
     }
 
     // ─── Narzuty (Kp, Z, Kz) ─────────────────────────────────────────────────
