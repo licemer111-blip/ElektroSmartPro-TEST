@@ -8,6 +8,8 @@ import { revalidatePath } from "next/cache";
 import { fillTemplate } from "@/lib/email-templates";
 import { rateLimitEmail } from "@/lib/rate-limit";
 import * as XLSX from "xlsx-js-style";
+import { flattenProjectItems } from "@/lib/utils/flatten-project-items";
+import type { ProjectItem } from "@/lib/types/database";
 
 function getResend(): Resend {
   const key = process.env.RESEND_API_KEY;
@@ -256,7 +258,13 @@ export async function sendProjectEmail(input: SendProjectEmailInput) {
         // Generate Excel file (professional format with xlsx library)
         if (items && items.length > 0) {
           try {
-            
+            const flatItems = flattenProjectItems(items as unknown as ProjectItem[]) as typeof items;
+            const parentAssemblyIds = new Set(
+              flatItems
+                .filter(i => (i as unknown as Record<string, unknown>).parent_assembly_id)
+                .map(i => (i as unknown as Record<string, unknown>).parent_assembly_id as string)
+            );
+
             // Create workbook
             const workbook = XLSX.utils.book_new();
 
@@ -264,10 +272,11 @@ export async function sendProjectEmail(input: SendProjectEmailInput) {
             const getMaterialPrice = (item: { final_material_price?: number | null; material_price?: number | null }) => Number(item.final_material_price || item.material_price || 0);
             const getLaborPrice = (item: { final_labor_price?: number | null; labor_price?: number | null }) => Number(item.final_labor_price || item.labor_price || 0);
             const adjMult = 1 + (project.adjustment_percentage || 0) / 100;
-            
+
             // Iron Rule: regionModifier applies to labor only, material is sovereign
-            const materialTotal = items.reduce((sum, item) => sum + (getMaterialPrice(item) * item.quantity * adjMult), 0);
-            const laborTotal = items.reduce((sum, item) => sum + (getLaborPrice(item) * item.quantity * adjMult * regionModifier), 0);
+            // For totals, skip assembly parents (their value comes from children)
+            const materialTotal = flatItems.reduce((sum, item) => parentAssemblyIds.has(item.id) ? sum : sum + (getMaterialPrice(item) * item.quantity * adjMult), 0);
+            const laborTotal = flatItems.reduce((sum, item) => parentAssemblyIds.has(item.id) ? sum : sum + (getLaborPrice(item) * item.quantity * adjMult * regionModifier), 0);
             const subtotal = materialTotal + laborTotal;
             const vatRate = project.vat_rate || 23;
             const vatAmount = (subtotal * vatRate) / 100;
@@ -304,21 +313,44 @@ export async function sendProjectEmail(input: SendProjectEmailInput) {
             allData.push(['Lp.', 'Pozycja', 'Jednostka', 'Ilość', 'Cena materiału (zł)', 'Cena robocizny (zł)', 'Wartość netto (zł)']);
 
             // 6. ITEMS DATA
-            items.forEach((item: { name: string; unit?: string; quantity: number; final_material_price?: number | null; material_price?: number | null; final_labor_price?: number | null; labor_price?: number | null }, index: number) => {
+            let itemCounter = 1;
+            flatItems.forEach((item) => {
+              const raw = item as unknown as Record<string, unknown>;
+              const isChild = !!raw.parent_assembly_id;
+              const isParent = parentAssemblyIds.has(item.id);
               const materialPrice = getMaterialPrice(item) * adjMult;
               // Iron Rule: regionModifier on labor only
               const laborPrice = getLaborPrice(item) * adjMult * regionModifier;
               const totalPrice = (materialPrice + laborPrice) * item.quantity;
 
-              allData.push([
-                index + 1,
-                item.name,
-                item.unit || 'szt',
-                item.quantity,
-                isPro ? materialPrice.toFixed(2) : '*** zl',
-                isPro ? laborPrice.toFixed(2) : '*** zl',
-                isPro ? totalPrice.toFixed(2) : '*** zl',
-              ]);
+              if (isParent) {
+                // Assembly parent: show as header row with children's combined total
+                const children = flatItems.filter(c => (c as unknown as Record<string, unknown>).parent_assembly_id === item.id);
+                const childTotal = children.reduce((acc, c) => {
+                  const cm = getMaterialPrice(c) * adjMult;
+                  const cl = getLaborPrice(c) * adjMult * regionModifier;
+                  return acc + (cm + cl) * c.quantity;
+                }, 0);
+                allData.push([
+                  itemCounter++,
+                  `>> ${item.name}`,
+                  item.unit || 'szt',
+                  item.quantity,
+                  '---',
+                  '---',
+                  isPro ? childTotal.toFixed(2) : '*** zl',
+                ]);
+              } else {
+                allData.push([
+                  isChild ? '' : itemCounter++,
+                  isChild ? `  \u21b3 ${item.name}` : item.name,
+                  item.unit || 'szt',
+                  item.quantity,
+                  isPro ? materialPrice.toFixed(2) : '*** zl',
+                  isPro ? laborPrice.toFixed(2) : '*** zl',
+                  isPro ? totalPrice.toFixed(2) : '*** zl',
+                ]);
+              }
             });
 
             // 7. SUMMARY

@@ -3,6 +3,8 @@ import React from "react";
 import { NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { flattenProjectItems } from "@/lib/utils/flatten-project-items";
+import type { ProjectItem } from "@/lib/types/database";
 import {
   fMoney,
   sanitize,
@@ -129,6 +131,9 @@ export async function POST(req: Request) {
       return new NextResponse("Error", { status: 404 });
     }
 
+    // Flatten so every child item appears immediately after its parent
+    const flatItems = flattenProjectItems(items as unknown as ProjectItem[]) as typeof items;
+
     // [A5] PRO check: verify the REQUESTING user, not the project owner.
     // This prevents team members without PRO from exporting via direct API calls.
     const { data: { user: requestingUser } } = await supabase.auth.getUser();
@@ -185,7 +190,7 @@ export async function POST(req: Request) {
     // If materials are provided by the client — hide Material column entirely from PDF
     const matOwnedByClient = Boolean((project as Record<string, unknown>).materials_owned_by_customer);
 
-    const calcItems = items.map(item => {
+    const calcItems = flatItems.map(item => {
       const isManualItem = (item as Record<string, unknown>).confidence_level === "manual";
       const isInvestorMat = Boolean((item as Record<string, unknown>).is_investor_material);
       // Iron Rule: regionModifier ONLY on labor — material is sovereign
@@ -251,10 +256,10 @@ export async function POST(req: Request) {
       let name = sanitize(item.name as string, true);
       if (rowType === "set_parent") name = `>> ${name}`;
       else if (isChild) {
-        if (rowType === "warning") name = `    ${name} (BRAK CENY!)`;
-        else if (rowType === "child_mat") name = `    ${name}`;
-        else if (rowType === "child_lab") name = `    ${name}`;
-        else name = `    ${name}`;
+        if (rowType === "warning") name = `  \u21b3 ${name} (BRAK CENY!)`;
+        else if (rowType === "child_mat") name = `  \u21b3 ${name}`;
+        else if (rowType === "child_lab") name = `  \u21b3 ${name}`;
+        else name = `  \u21b3 ${name}`;
       } else if (rowType === "warning") name = `${name} (BRAK CENY!)`;
 
       const laborNormDisplay = showRg

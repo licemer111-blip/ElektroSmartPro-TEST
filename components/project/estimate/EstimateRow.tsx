@@ -7,7 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { CheckSquare, Square, GripVertical, Shield, Flag, ChevronDown, ChevronRight, AlertTriangle } from "lucide-react";
+import { CheckSquare, Square, GripVertical, Shield, Flag, ChevronDown, ChevronRight, AlertTriangle, LayoutGrid, X } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { UNIT_PRESETS } from "@/lib/validations";
 import { calcRowPrices } from "@/lib/pricing-calculations";
@@ -297,32 +298,70 @@ export const EstimateRow = React.memo(function EstimateRow({
             {!isAssemblyChild && (
               <div className="flex items-center gap-1.5 mt-1.5">
                 <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-wide flex-shrink-0">Sekcja:</span>
-                <div className="flex items-center gap-1 flex-wrap min-w-0">
-                  {[...SECTION_PRESETS, ...uniqueSections.filter(s => !SECTION_PRESETS.includes(s))].map((s) => (
+                <Popover>
+                  <PopoverTrigger asChild>
                     <button
-                      key={s}
                       type="button"
-                      onClick={() => onEditingChange({ ...editingState!, section: editingState!.section === s ? "" : s })}
                       className={cn(
-                        "px-2 py-0.5 rounded-full text-[9px] font-medium transition-all border",
-                        editingState!.section === s
-                          ? "bg-purple-600 text-white border-purple-600"
-                          : "bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-purple-300 hover:text-purple-600"
+                        "flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-medium border transition-all",
+                        editingState!.section
+                          ? "bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 border-purple-300 dark:border-purple-700 hover:bg-purple-200 dark:hover:bg-purple-800/50"
+                          : "bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-700 hover:border-purple-300 hover:text-purple-500"
                       )}
                     >
-                      {s}
+                      <LayoutGrid className="w-2.5 h-2.5 flex-shrink-0" />
+                      <span className="max-w-[120px] truncate">{editingState!.section || "Wybierz sekcję"}</span>
+                      <ChevronDown className="w-2.5 h-2.5 flex-shrink-0 opacity-60" />
                     </button>
-                  ))}
-                  <Input
-                    type="text"
-                    id={`section-${item.id}`}
-                    name={`section-${item.id}`}
-                    value={editingState!.section}
-                    onChange={(e) => onEditingChange({ ...editingState!, section: e.target.value })}
-                    className="h-5 text-[9px] w-20 px-1.5 dark:bg-slate-950 dark:border-slate-700 dark:text-white rounded-full"
-                    placeholder="własna..."
-                  />
-                </div>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-56 p-3 shadow-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900"
+                    side="bottom"
+                    align="start"
+                    onOpenAutoFocus={(e) => e.preventDefault()}
+                  >
+                    <div className="space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Pomieszczenie</span>
+                        {editingState!.section && (
+                          <button
+                            type="button"
+                            onClick={() => onEditingChange({ ...editingState!, section: "" })}
+                            className="flex items-center gap-0.5 text-[9px] text-slate-400 hover:text-red-500 transition-colors"
+                          >
+                            <X className="w-2.5 h-2.5" />Wyczyść
+                          </button>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-3 gap-1">
+                        {[...SECTION_PRESETS, ...uniqueSections.filter(s => !SECTION_PRESETS.includes(s))].map((s) => (
+                          <button
+                            key={s}
+                            type="button"
+                            onClick={() => onEditingChange({ ...editingState!, section: editingState!.section === s ? "" : s })}
+                            className={cn(
+                              "px-1.5 py-1.5 rounded-md text-[9px] font-medium transition-all border text-center leading-tight",
+                              editingState!.section === s
+                                ? "bg-purple-600 text-white border-purple-600 shadow-sm"
+                                : "bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-purple-300 hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+                            )}
+                          >
+                            {s}
+                          </button>
+                        ))}
+                      </div>
+                      <div className="border-t border-slate-100 dark:border-slate-800 pt-2">
+                        <Input
+                          type="text"
+                          value={editingState!.section}
+                          onChange={(e) => onEditingChange({ ...editingState!, section: e.target.value })}
+                          className="h-7 text-[10px] px-2 dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                          placeholder="Własna nazwa sekcji..."
+                        />
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
             )}
           </div>

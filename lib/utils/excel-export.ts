@@ -1,5 +1,6 @@
 import XLSXStyle from 'xlsx-js-style';
 import type { ProjectItem, ProjectWithRelations } from '@/lib/types/database';
+import { flattenProjectItems } from '@/lib/utils/flatten-project-items';
 
 // ─── Style helpers ─────────────────────────────────────────────────────────────
 
@@ -103,11 +104,14 @@ function buildKosztorysSheet(
   matOwnedByClient: boolean = false,
   showKnr: boolean = false,
 ): BuildResult {
+  // Flatten so every child item appears immediately after its parent
+  const flatItems = flattenProjectItems(items);
+
   // ── Totals ──
-  const materialTotal = items.reduce((sum, item) => {
+  const materialTotal = flatItems.reduce((sum, item) => {
     return sum + ((item.final_material_price ?? item.material_price ?? 0) * item.quantity);
   }, 0);
-  const laborTotal = items.reduce((sum, item) => {
+  const laborTotal = flatItems.reduce((sum, item) => {
     return sum + ((item.final_labor_price ?? item.labor_price ?? 0) * item.quantity);
   }, 0);
   const subtotal = materialTotal + laborTotal;
@@ -127,7 +131,7 @@ function buildKosztorysSheet(
   const grandTotal = subtotalWithNarzuty + vatAmount;
 
   // ── Detect if Opis column has any data ──
-  const hasOpisData = items.some(i => !!(i.description || i.notes));
+  const hasOpisData = flatItems.some(i => !!(i.description || i.notes));
 
   // Column layout depends on whether Opis/r-g/knr/material are shown
   // Cols: Lp(0) | Pozycja(1) | [Opis] | [Kod KNR] | Jm | Ilość | [r-g] | [Cena mat.] | Cena rob. | Wartość
@@ -249,20 +253,20 @@ function buildKosztorysSheet(
   rows.push(headerRow);
 
   // ── Rows 13+: Items data ──
-  const hasSections = items.some(i => i.section && !i.is_assembly_child);
+  const hasSections = flatItems.some(i => i.section && !i.is_assembly_child);
   let lastSection = '__INIT__';
   let itemNumber = 1;
 
   // Pre-compute section subtotals
   const sectionTotals = new Map<string, number>();
   if (hasSections) {
-    const parentIds = new Set(items.filter(i => i.is_assembly_child).map(i => i.parent_assembly_id).filter(Boolean));
-    items.forEach(item => {
+    const parentIds = new Set(flatItems.filter(i => i.is_assembly_child).map(i => i.parent_assembly_id).filter(Boolean));
+    flatItems.forEach(item => {
       if (item.is_assembly_child) return;
       const sec = item.section || '';
       const prev = sectionTotals.get(sec) || 0;
       if (parentIds.has(item.id)) {
-        const children = items.filter(c => c.parent_assembly_id === item.id);
+        const children = flatItems.filter(c => c.parent_assembly_id === item.id);
         const childSum = children.reduce((acc, c) => {
           return acc + ((c.final_material_price ?? c.material_price ?? 0) + (c.final_labor_price ?? c.labor_price ?? 0)) * c.quantity;
         }, 0);
@@ -277,17 +281,15 @@ function buildKosztorysSheet(
 
   // Identify assembly parents
   const assemblyParentIds = new Set(
-    items.filter(i => i.is_assembly_child).map(i => i.parent_assembly_id).filter(Boolean)
+    flatItems.filter(i => i.is_assembly_child).map(i => i.parent_assembly_id).filter(Boolean)
   );
 
-  items.forEach((item) => {
+  flatItems.forEach((item) => {
     // Section header row
     if (hasSections && !item.is_assembly_child) {
       const currentSection = item.section || '';
       if (currentSection !== lastSection) {
-        // Empty separator
         rows.push(Array(colCount).fill(null).map(() => ec()));
-        // Section header row
         const secTotal = sectionTotals.get(currentSection) || 0;
         const sRow: XlsxCell[] = Array(colCount).fill(null).map(() =>
           sc('', { fill: fill(C_SECTION_BG), font: font({ bold: true, color: { rgb: C_SECTION_TXT } }) })
@@ -335,7 +337,7 @@ function buildKosztorysSheet(
     });
 
     // Pozycja — child gets ↳ prefix + indent
-    const posName = isChild ? `↳ ${item.name}` : item.name;
+    const posName = isChild ? `  ↳ ${item.name}` : item.name;
     dataRow[C_POS] = sc(posName, {
       fill: baseFill,
       font: font({ bold: isZestaw, color: { rgb: textRgb }, sz: 9 }),
