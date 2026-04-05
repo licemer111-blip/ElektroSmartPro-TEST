@@ -110,7 +110,7 @@ export async function getOfferByToken(token: string): Promise<{ offer?: OfferDat
   // Fetch offer link
   const { data: link, error: linkError } = await supabaseAdmin
     .from("offer_links")
-    .select("*, projects(id, name, vat_rate, materials_owned_by_customer, adjustment_percentage)")
+    .select("*, projects(id, name, vat_rate, materials_owned_by_customer, adjustment_percentage, mat_markup_pct, lab_markup_pct, complexity_factor, contingency_pct, region_id, regions(price_modifier))")
     .eq("token", token)
     .single();
 
@@ -202,13 +202,24 @@ export async function getOfferByToken(token: string): Promise<{ offer?: OfferDat
   // Get project items (only show name, unit, quantity, and total price — no internal pricing)
   const { data: items } = await supabaseAdmin
     .from("project_items")
-    .select("id, name, unit, quantity, final_material_price, final_labor_price, material_price, labor_price, is_assembly_child, parent_assembly_id, section")
+    .select("id, name, unit, quantity, final_material_price, final_labor_price, material_price, labor_price, is_assembly_child, parent_assembly_id, section, confidence_level")
     .eq("project_id", link.project_id)
     .order("sort_order");
 
-  const project = link.projects as { id: string; name: string; vat_rate?: number; materials_owned_by_customer?: boolean; adjustment_percentage?: number } | null;
+  const project = link.projects as {
+    id: string; name: string; vat_rate?: number;
+    materials_owned_by_customer?: boolean; adjustment_percentage?: number;
+    mat_markup_pct?: number; lab_markup_pct?: number;
+    complexity_factor?: number; contingency_pct?: number;
+    regions?: { price_modifier?: number } | null;
+  } | null;
   const materialsOwnedByCustomer = project?.materials_owned_by_customer || false;
   const adjMult = 1 + (project?.adjustment_percentage || 0) / 100;
+  // v10.5 FIX: Apply v3.0 multipliers — must match project-summary.tsx and PDF route
+  const matMarkupMult   = 1 + (project?.mat_markup_pct || 0) / 100;
+  const labMarkupMult   = 1 + (project?.lab_markup_pct || 0) / 100;
+  const complexityFactor = (project?.complexity_factor as number | undefined) || 1.0;
+  const regionModifier  = project?.regions?.price_modifier ?? 1.0;
 
   const allItems = items || [];
 
@@ -219,9 +230,11 @@ export async function getOfferByToken(token: string): Promise<{ offer?: OfferDat
       const mat = i.final_material_price ?? i.material_price ?? 0;
       const lab = i.final_labor_price ?? i.labor_price ?? 0;
       const effectiveMat = materialsOwnedByCustomer ? 0 : mat;
+      const isManual = (i as Record<string, unknown>).confidence_level === "manual";
+      const effRegion = isManual ? 1.0 : regionModifier;
       const existing = childSums.get(i.parent_assembly_id) || { mat: 0, lab: 0 };
-      existing.mat += effectiveMat * i.quantity * adjMult;
-      existing.lab += lab * i.quantity * adjMult;
+      existing.mat += effectiveMat * i.quantity * matMarkupMult * adjMult;
+      existing.lab += lab * i.quantity * labMarkupMult * complexityFactor * adjMult * effRegion;
       childSums.set(i.parent_assembly_id, existing);
     }
   }
@@ -231,10 +244,13 @@ export async function getOfferByToken(token: string): Promise<{ offer?: OfferDat
     const lab = i.final_labor_price ?? i.labor_price ?? 0;
     const effectiveMat = materialsOwnedByCustomer ? 0 : mat;
     const isParent = !i.is_assembly_child && childSums.has(i.id);
+    const isManual = (i as Record<string, unknown>).confidence_level === "manual";
+    const effRegion = isManual ? 1.0 : regionModifier;
 
     // For assembly parents: show sum of children as their displayed price
-    const displayMat = isParent ? (childSums.get(i.id)?.mat ?? 0) : effectiveMat * i.quantity * adjMult;
-    const displayLab = isParent ? (childSums.get(i.id)?.lab ?? 0) : lab * i.quantity * adjMult;
+    // v10.5: Material × matMarkupMult × adjMult | Labor × labMarkupMult × complexity × adjMult × region
+    const displayMat = isParent ? (childSums.get(i.id)?.mat ?? 0) : effectiveMat * i.quantity * matMarkupMult * adjMult;
+    const displayLab = isParent ? (childSums.get(i.id)?.lab ?? 0) : lab * i.quantity * labMarkupMult * complexityFactor * adjMult * effRegion;
     const displayTotal = displayMat + displayLab;
 
     return {
