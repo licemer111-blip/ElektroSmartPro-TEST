@@ -181,8 +181,6 @@ export async function POST(req: Request) {
 
     const regionModifier = (project.regions as { price_modifier?: number } | null)?.price_modifier ?? 1.0;
     const adjustmentOnly = 1 + Number(priceModifier) / 100;
-    // EffectiveUnitPrice: adjustmentMult × regionModifier for AI-priced items, adjustmentMult only for manual
-    const modifier = adjustmentOnly * regionModifier;
     // [A1] showRg and showKnrInPdf read directly from project settings (no pricingMode gate)
     const showRg = Boolean(project.show_labor_hours_in_pdf);
     const maskPrices = (!isPro && !isDemoProject) || Boolean(blindMode); // blind mode also masks prices
@@ -190,18 +188,24 @@ export async function POST(req: Request) {
     // If materials are provided by the client — hide Material column entirely from PDF
     const matOwnedByClient = Boolean((project as Record<string, unknown>).materials_owned_by_customer);
 
+    // v10.5 FIX: Apply v3.0 pricing multipliers — must match project-summary.tsx
+    const matMarkupMult   = 1 + (Number((project as Record<string, unknown>).mat_markup_pct) || 0) / 100;
+    const labMarkupMult   = 1 + (Number((project as Record<string, unknown>).lab_markup_pct) || 0) / 100;
+    const complexityFactor = Number((project as Record<string, unknown>).complexity_factor) || 1.0;
+    const contingencyPct  = Number((project as Record<string, unknown>).contingency_pct) || 0;
+
     const calcItems = flatItems.map(item => {
       const isManualItem = (item as Record<string, unknown>).confidence_level === "manual";
       const isInvestorMat = Boolean((item as Record<string, unknown>).is_investor_material);
       // Iron Rule: regionModifier ONLY on labor — material is sovereign
-      // Material: always adjustmentOnly (no regionModifier regardless of manual/AI)
-      // Labor: manual → adjustmentOnly; AI → adjustmentOnly × regionModifier
-      const labModifier = isManualItem ? adjustmentOnly : modifier;
+      // Material: base × matMarkupMult × adjustmentOnly (no regionModifier)
+      // Labor: base × labMarkupMult × complexityFactor × adjustmentOnly × regionModifier (manual skips region)
+      const effectiveRegion = isManualItem ? 1.0 : regionModifier;
       return {
         ...item,
         // matOwnedByClient or isInvestorMat: zero out material prices
-        finalMat: (matOwnedByClient || isInvestorMat) ? 0 : getPrice(item, "mat") * adjustmentOnly * vatMultiplier,
-        finalLab: getPrice(item, "lab") * labModifier * vatMultiplier,
+        finalMat: (matOwnedByClient || isInvestorMat) ? 0 : getPrice(item, "mat") * matMarkupMult * adjustmentOnly * vatMultiplier,
+        finalLab: getPrice(item, "lab") * labMarkupMult * complexityFactor * adjustmentOnly * effectiveRegion * vatMultiplier,
         laborNorm: Number((item as Record<string, unknown>).labor_norm ?? 0),
         isInvestorMat,
       };
@@ -395,7 +399,12 @@ export async function POST(req: Request) {
 
     // ─── Totals ───────────────────────────────────────────────────────────────
 
-    const { totalNet, vatRate, vatAmount, totalGross } = calcPdfTotals(totalMatSum, totalLabSum, pricingParams, narzutyForTotals);
+    // v10.5 FIX: Add contingency (rezerwa budżetowa) BEFORE VAT — matches project-summary.tsx
+    const subtotalWithNarzuty = totalMatSum + totalLabSum + narzutyForTotals;
+    const contingencyAmount = contingencyPct > 0 ? Math.round(subtotalWithNarzuty * contingencyPct / 100 * 100) / 100 : 0;
+    const narzutyPlusContingency = narzutyForTotals + contingencyAmount;
+
+    const { totalNet, vatRate, vatAmount, totalGross } = calcPdfTotals(totalMatSum, totalLabSum, pricingParams, narzutyPlusContingency);
     const totalLaborHours = calcItems.reduce((sum, item) => {
       if (item.parent_assembly_id) return sum;
       return sum + (item.laborNorm * item.quantity);

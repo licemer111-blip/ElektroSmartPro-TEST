@@ -17,7 +17,6 @@ import {
   buildModeFieldRestriction,
   buildTopCatalogCandidates,
   findBestCatalogMatchWithHint,
-  batchSemanticCatalogMatch,
   type RateSource,
   PRICING_STATIC_SYSTEM_PROMPT,
 } from "@/lib/services/ai";

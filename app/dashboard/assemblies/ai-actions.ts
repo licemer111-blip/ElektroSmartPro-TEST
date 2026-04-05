@@ -14,6 +14,7 @@ import { buildDynamicSystemPrompt, injectKbContext, GEMINI_RAG_MODEL } from "@/l
 import { fetchKbContext, listKbFileNames } from "@/lib/kb-storage";
 import { buildLocalKnrContext, lookupKnrByName } from "@/lib/knr-local-context";
 import { clampPrice, clampQuantity, clampLaborNorm, lookupKnrForLabor, LABOR_UNIT_FALLBACK } from "@/lib/utils/price-validator";
+import { clampToBenchmark, buildBenchmarkPromptContext } from "@/lib/data/material-benchmarks";
 
 // ─── RAG KB loader (with timeout) ────────────────────────────────────────────
 async function fetchAssembliesKbContext(): Promise<string | null> {
@@ -143,12 +144,6 @@ Używaj DOKŁADNIE tych kodów w polu knr_code. Obliczaj estimatedPrice = labor_
 
 <reality_check>
 ══ KONTROLA CEN — HARD LIMITS (Polska 2026, NETTO) ══
-MATERIAŁY — LIMITY MAKSYMALNE (cena za JEDNOSTKĘ):
-• YDYp 3x1,5mm²: MAX 12 zł/mb (typowo 5,5 zł/mb)
-• YDYp 3x2,5mm²: MAX 14 zł/mb (typowo 7,2 zł/mb)
-• YDYp 5x2,5mm²/5x4mm²: MAX 28 zł/mb (typowo 14,5 zł/mb)
-• Puszka podtynkowa Ø60: MAX 12 zł/szt (typowo 3,5 zł/szt)
-• Gniazdo pojedyncze: MAX 35 zł/szt | Gniazdo podwójne: MAX 55 zł/szt
 ILOŚCI W ZESTAWIE (na 1 punkt instalacyjny):
 • Kabel/przewód dla 1 gniazda: MAX 7 mb (typowo 5 mb). NIGDY 15 mb!
 • Bruzdowanie dla 1 gniazda: MAX 7 mb (typowo 5 mb).
@@ -158,6 +153,8 @@ ROBOCIZNA — OBLICZAJ Z NORMY KNR:
 • ZAKAZ podawania 0 dla pozycji type=labor
 • Kucie bruzd: max 30 zł/mb | Układanie: max 15 zł/mb | Montaż gniazda: max 60 zł/szt
 </reality_check>
+
+${buildBenchmarkPromptContext()}
 
 <output_rules>
 1. Generuj ZAWSZE DOKŁADNIE 3 zestawy — nawet jeśli opis jest krótki. Przykład: dla "gniazdo pojedyncze" generuj: (a) standard p/t, (b) IP44 łazienka, (c) z USB/DATA.
@@ -297,8 +294,9 @@ ROBOCIZNA — OBLICZAJ Z NORMY KNR:
           }
           price = clampedPrice;
         } else {
-          // Clamp material price to market ceiling
-          price = clampPrice(item.name, unit, price, "material");
+          // v10.5: Benchmark validation → clamp to real wholesale range → then ceiling
+          const { price: benchValidated } = clampToBenchmark(item.name, unit, price);
+          price = clampPrice(item.name, unit, benchValidated, "material");
         }
 
         return { ...item, quantity: qty, price, knrCode, laborNorm };

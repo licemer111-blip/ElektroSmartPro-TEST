@@ -13,6 +13,7 @@ import { fetchKbContext, listKbFileNames } from "@/lib/kb-storage";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { lookupKnrByName, buildLocalKnrContext } from "@/lib/knr-local-context";
 import { applyPriceGuard } from "@/lib/utils/price-validator";
+import { clampToBenchmark } from "@/lib/data/material-benchmarks";
 
 // ─── RAG KB loader (with timeout) ────────────────────────────────────────────
 async function fetchCatalogKbContext(): Promise<string | null> {
@@ -448,8 +449,16 @@ Jeśli NIE — podziel przez 5.
         }
       }
 
+      // v10.5: Benchmark validation for material prices before price guard
+      let matPrice = item.base_material_price;
+      if (matPrice > 0) {
+        const { price: benchValidated } = clampToBenchmark(item.name, unit, matPrice);
+        matPrice = benchValidated;
+      }
+
       const guarded = applyPriceGuard({
         ...item,
+        base_material_price: matPrice,
         base_labor_price: laborPrice,
         knr_code: knrCode,
         unit,
