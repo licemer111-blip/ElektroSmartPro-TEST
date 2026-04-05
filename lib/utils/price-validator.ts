@@ -40,6 +40,52 @@ export const MATERIAL_PRICE_CEILING: Array<{
   { keywords: ["korytko", "pcv", "40x25"], unit: "mb", max: 15, marketPrice: 8.0 },
   { keywords: ["korytko", "pcv", "60x40"], unit: "mb", max: 22, marketPrice: 14.0 },
   { keywords: ["rura", "instalacyjna", "pcv"], unit: "mb", max: 8, marketPrice: 3.0 },
+  // ── v10.5: Heavy cables (YKY ≥5x10) ──
+  { keywords: ["yky", "5x10"], unit: "mb", max: 60, marketPrice: 42.0 },
+  { keywords: ["yky", "5x16"], unit: "mb", max: 85, marketPrice: 65.0 },
+  { keywords: ["yky", "5x25"], unit: "mb", max: 130, marketPrice: 98.0 },
+  { keywords: ["yky", "5x35"], unit: "mb", max: 180, marketPrice: 135.0 },
+  { keywords: ["yky", "5x50"], unit: "mb", max: 250, marketPrice: 190.0 },
+  { keywords: ["yky", "5x70"], unit: "mb", max: 350, marketPrice: 265.0 },
+  { keywords: ["yky", "5x95"], unit: "mb", max: 470, marketPrice: 370.0 },
+  { keywords: ["yky", "5x120"], unit: "mb", max: 580, marketPrice: 460.0 },
+  // ── v10.5: Aluminum cables (YAKY) ──
+  { keywords: ["yaky", "4x35"], unit: "mb", max: 40, marketPrice: 28.0 },
+  { keywords: ["yaky", "4x70"], unit: "mb", max: 65, marketPrice: 48.0 },
+  { keywords: ["yaky", "4x120"], unit: "mb", max: 95, marketPrice: 70.0 },
+  { keywords: ["yaky", "4x240"], unit: "mb", max: 165, marketPrice: 120.0 },
+  // ── v10.5: Signal cables ──
+  { keywords: ["utp", "kat", "5e"], unit: "mb", max: 6, marketPrice: 3.0 },
+  // ── v10.5: Apparatus (RCD, RCBO) ──
+  { keywords: ["rcd", "40a", "30ma", "4p"], unit: "szt", max: 300, marketPrice: 180.0 },
+  { keywords: ["rcbo", "b16", "30ma"], unit: "szt", max: 220, marketPrice: 130.0 },
+  { keywords: ["rcbo", "b10", "30ma"], unit: "szt", max: 210, marketPrice: 125.0 },
+  // ── v10.5: MCB extended ──
+  { keywords: ["wyłącznik", "c16"], unit: "szt", max: 45, marketPrice: 25.0 },
+  { keywords: ["wyłącznik", "c32"], unit: "szt", max: 60, marketPrice: 35.0 },
+  { keywords: ["wyłącznik", "c63"], unit: "szt", max: 100, marketPrice: 65.0 },
+  // ── v10.5: Rozdzielnice ──
+  { keywords: ["rozdzielnica", "podtynkow", "12"], unit: "szt", max: 120, marketPrice: 65.0 },
+  { keywords: ["rozdzielnica", "podtynkow", "24"], unit: "szt", max: 190, marketPrice: 110.0 },
+  { keywords: ["rozdzielnica", "natynkow", "12"], unit: "szt", max: 90, marketPrice: 50.0 },
+  { keywords: ["rozdzielnica", "natynkow", "24"], unit: "szt", max: 150, marketPrice: 85.0 },
+  // ── v10.5: Oprawy oświetleniowe ──
+  { keywords: ["oprawa", "led", "panel", "60x60"], unit: "szt", max: 150, marketPrice: 85.0 },
+  { keywords: ["downlight", "led"], unit: "szt", max: 90, marketPrice: 45.0 },
+  { keywords: ["oprawa", "hermetyczn", "led"], unit: "szt", max: 130, marketPrice: 65.0 },
+  { keywords: ["oprawa", "awaryjna"], unit: "szt", max: 220, marketPrice: 110.0 },
+  // ── v10.5: Trasy kablowe ──
+  { keywords: ["korytko", "pcv", "100x40"], unit: "mb", max: 30, marketPrice: 18.0 },
+  { keywords: ["drabinka", "kablowa", "300"], unit: "mb", max: 120, marketPrice: 70.0 },
+  { keywords: ["drabinka", "kablowa", "500"], unit: "mb", max: 150, marketPrice: 90.0 },
+  // ── v10.5: Fotowoltaika ──
+  { keywords: ["panel", "pv"], unit: "szt", max: 750, marketPrice: 500.0 },
+  { keywords: ["panel", "fotowoltaiczn"], unit: "szt", max: 750, marketPrice: 500.0 },
+  { keywords: ["falownik"], unit: "szt", max: 9000, marketPrice: 5500.0 },
+  { keywords: ["optymalizator"], unit: "szt", max: 300, marketPrice: 180.0 },
+  // ── v10.5: Smart home ──
+  { keywords: ["aktor", "knx"], unit: "szt", max: 600, marketPrice: 350.0 },
+  { keywords: ["zasilacz", "knx"], unit: "szt", max: 450, marketPrice: 280.0 },
 ];
 
 export const LABOR_PRICE_CEILING: Array<{
@@ -66,6 +112,17 @@ export const LABOR_PRICE_CEILING: Array<{
   { keywords: ["układanie", "kabel"],   unit: "mb", max: 15, marketPrice: 10.0 },
   { keywords: ["montaż", "oprawy"], unit: "szt", max: 75, marketPrice: 40.0 },
   { keywords: ["montaż", "puszki"], unit: "szt", max: 25, marketPrice: 15.0 },
+  // ── v10.5: Industrial & specialized labor ──
+  { keywords: ["montaż", "rozdzielnic"], unit: "szt", max: 2500, marketPrice: 800.0 },
+  { keywords: ["montaż", "drabink"], unit: "mb", max: 45, marketPrice: 25.0 },
+  { keywords: ["montaż", "korytk"], unit: "mb", max: 35, marketPrice: 18.0 },
+  { keywords: ["montaż", "paneli", "pv"], unit: "szt", max: 120, marketPrice: 65.0 },
+  { keywords: ["montaż", "falownik"], unit: "szt", max: 500, marketPrice: 250.0 },
+  { keywords: ["podłączenie", "pompy"], unit: "szt", max: 800, marketPrice: 350.0 },
+  { keywords: ["podłączenie", "indukcj"], unit: "szt", max: 350, marketPrice: 180.0 },
+  { keywords: ["pomiar", "odbiorcz"], unit: "szt", max: 60, marketPrice: 35.0 },
+  { keywords: ["demontaż"], unit: "szt", max: 200, marketPrice: 80.0 },
+  { keywords: ["programowanie", "knx"], unit: "h", max: 250, marketPrice: 150.0 },
 ];
 
 // ─── Quantity limits per unit in assembly context ───────────────────────────────

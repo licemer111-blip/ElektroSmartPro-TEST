@@ -38,6 +38,7 @@ import {
 } from "@/lib/services/pricing-config";
 import { clampPrice } from "@/lib/utils/price-validator";
 import { applyRealityCheck } from "@/lib/services/reality-check";
+import { findMaterialBenchmark, clampToBenchmark, buildBenchmarkPromptContext } from "@/lib/data/material-benchmarks";
 import {
   getModernizationFactor, getMFactorLabel,
   CONNECTION_MIN_NORM, HEAVY_CONNECTION_MIN_NORM,
@@ -824,6 +825,50 @@ function securityAuditLayer(est: AiPriceEstimate): AiPriceEstimate {
 }
 
 // ─────────────────────────────────────────────────────────────────
+// applyPostProcessPipeline — Unified post-processing for ALL entry points
+// Ensures triggerL3Estimation and repriceSingleItem go through
+// the same guardrails as estimatePricesWithAI.
+// ─────────────────────────────────────────────────────────────────
+
+function applyPostProcessPipeline(
+  est: AiPriceEstimate,
+  baseRateForCalc: number,
+  globalLaborMod: number,
+): AiPriceEstimate {
+  // Step 1: Keyword rules (pure-labor → material=0, demontaż ×0.65)
+  let result = { ...est };
+  if (isPureLaborByKeyword(result.name) && result.suggestedMaterial > 0) {
+    result = { ...result, suggestedMaterial: 0, matSource: null };
+  }
+  const demontazLabor = applyDemontazRule(result.suggestedLabor, result.name);
+  if (demontazLabor !== result.suggestedLabor) {
+    const suffix = (result.note ?? "").includes("KNR 4-03") ? "" : " | KNR 4-03 ×0.65";
+    result = { ...result, suggestedLabor: demontazLabor, note: (result.note ?? "") + suffix };
+  }
+
+  // Step 2: Sanity check (norm thresholds, unit-mismatch detection)
+  result = applySanityCheck(result, baseRateForCalc);
+
+  // Step 3: Expert guards (connection PLN floor, hard surface floor)
+  result = enforceExpertGuards(result, baseRateForCalc, globalLaborMod);
+
+  // Step 4: Reality check (hardness guard, gravity guard, safety integrity)
+  const rc = applyRealityCheck(result);
+  result = {
+    ...result,
+    suggestedLabor: rc.suggestedLabor,
+    calculationLog: rc.calculationLog || result.calculationLog,
+    note: rc.note || result.note,
+    safetyNote: rc.safetyNote,
+  };
+
+  // Step 5: Security Audit Layer — NUCLEAR VETO (hardcoded PLN floors)
+  result = securityAuditLayer(result);
+
+  return result;
+}
+
+// ─────────────────────────────────────────────────────────────────
 // estimatePricesWithAI
 // ─────────────────────────────────────────────────────────────────
 
@@ -1120,10 +1165,8 @@ export async function estimatePricesWithAI(
     // Any L1 hit wins over ALL other tiers regardless of es_dictionary L1/L2 confidence scores.
     //
     // L1 hits are always final (added to l1Estimates, excluded via l1ResolvedIds downstream).
-    // Misses always proceed to L2/L3 — exclusiveMode removed (was tied to use_custom_rates
-    // which was eliminated in One Rate Refactor; keeping it true blocked L2/L3 for all unmatched).
+    // Misses always proceed to L2/L3.
     // bypassL1Exclusive: user clicked "Szukaj w KNR/AI" — skip L1 catalog entirely.
-    const exclusiveMode = false;
 
     // Collect all L1 results here — declared before the if-block so it's available for merge later
     const l1Estimates: AiPriceEstimate[] = [];
@@ -1141,7 +1184,7 @@ export async function estimatePricesWithAI(
         knr_code: c.knr_code ?? null,
       }));
 
-      logger.info(`[L1-STEP1] exclusiveMode=${exclusiveMode} catalog=${catalogForMatch.length} items=${itemsToPriceGuarded.length}`);
+      logger.info(`[L1-STEP1] catalog=${catalogForMatch.length} items=${itemsToPriceGuarded.length}`);
 
       type NotInCatalogEntry = typeof itemsToPriceGuarded[number] & {
         __catalogHint?: { name: string; score: number } | null;
@@ -1209,87 +1252,13 @@ export async function estimatePricesWithAI(
         }
       }
 
-      // ── Phase B: Semantic L1 — parallel LLM calls for keyword misses ──
-      // Only in exclusiveMode. All LLM calls fire simultaneously.
-      let notInCatalog: NotInCatalogEntry[] = keywordMisses;
-
-      if (exclusiveMode && keywordMisses.length > 0) {
-        // FIX a5: single batch LLM call instead of N parallel calls
-        logger.info(`[L1-SEMANTIC] batch call for ${keywordMisses.length} items`);
-
-        const semanticMap = await batchSemanticCatalogMatch(
-          keywordMisses.map((item) => ({ id: item.id, name: item.name })),
-          catalogForMatch,
-          10,
-          true
-        );
-
-        const semanticMisses: NotInCatalogEntry[] = [];
-
-        for (const item of keywordMisses) {
-          const semantic = semanticMap.get(item.id);
-
-          if (semantic?.match) {
-            // Iron Rule: material sovereign. Labor stored as BASE — calcRowPrices applies regionModifier at display
-            const rawMat = Math.round((semantic.match.base_material_price ?? 0) * 100) / 100;
-            const rawLab = Math.round((semantic.match.base_labor_price ?? 0) * 100) / 100;
-            // If catalog item has no prices — fall through to L2/L3
-            if (rawMat === 0 && rawLab === 0) {
-              semanticMisses.push(item);
-              continue;
-            }
-            l1ResolvedIds.add(item.id);
-            l1Estimates.push({
-              itemId: item.id,
-              name: item.name,
-              unit: item.unit,
-              quantity: item.quantity,
-              currentMaterial: item.material_price || 0,
-              currentLabor: item.labor_price || 0,
-              suggestedMaterial: mode === "labor" ? (item.material_price || 0) : rawMat,
-              suggestedLabor: mode === "material" ? (item.labor_price || 0) : rawLab,
-              confidence: "high" as const,
-              note: `P1-Semantic: Twój katalog → ${semantic.match.name} (AI ${Math.round(semantic.confidence * 100)}%)${priceModifier !== 1.0 ? ` (×${priceModifier} ${regionName})` : ""}`,
-              knrCode: semantic.match.knr_code ?? null,
-              knrSource: "catalog-l1" as const,
-              laborNorm: null,
-              trace: `L1 Semantic Hit: "${item.name}" → "${semantic.match.name}" (${Math.round(semantic.confidence * 100)}%)`,
-            });
-          } else {
-            semanticMisses.push(item);
-          }
-        }
-
-        notInCatalog = semanticMisses;
-      }
+      // Phase B (Semantic L1) removed in v10.5 — exclusiveMode was hardcoded false
+      // since One Rate Refactor (use_custom_rates eliminated). Dead code cleaned up.
+      const notInCatalog: NotInCatalogEntry[] = keywordMisses;
 
       // All items resolved via personal catalog — return immediately, skip AI entirely
       if (notInCatalog.length === 0) {
         return { success: true, estimates: l1Estimates };
-      }
-
-      // In exclusive mode (Tryb Własny): items NOT in L1 must NOT reach L2/L3.
-      if (exclusiveMode) {
-        const exclusiveMisses: AiPriceEstimate[] = notInCatalog.map((item) => ({
-          itemId: item.id,
-          name: item.name,
-          unit: item.unit,
-          quantity: item.quantity,
-          currentMaterial: item.material_price || 0,
-          currentLabor: item.labor_price || 0,
-          suggestedMaterial: 0,
-          suggestedLabor: 0,
-          confidence: "low" as const,
-          note: `⚠️ Tryb Własny: brak "${item.name}" w katalogu osobistym. Dodaj pozycję do katalogu.`,
-          knrCode: null,
-          knrSource: null,
-          laborNorm: null,
-          isAmbiguous: false,
-          trace: `L1 Miss → EXCLUSIVE STOP: ${item.__catalogHint ? `best: "${item.__catalogHint.name}" (${item.__catalogHint.score})` : "no candidates"}`,
-          catalogHint: item.__catalogHint ?? null,
-          catalogCandidates: item.__catalogCandidates ?? undefined,
-        }));
-        return { success: true, estimates: [...l1Estimates, ...exclusiveMisses] };
       }
     }
     // ─────────────────────────────────────────────────────────────────────────
@@ -1830,6 +1799,35 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
           const inflationMult =
             Number(adminSettingsRow?.material_inflation_multiplier) || 1.0;
 
+          // ── v10.5: Benchmark-first strategy ─────────────────────────────────
+          // Check material_benchmarks.ts BEFORE calling AI.
+          // Items with a benchmark match get real wholesale prices instantly.
+          // Only items WITHOUT a benchmark go to Gemini (saves API calls + more accurate).
+          const benchmarkResolved: AiPriceEstimate[] = [];
+          const needsAiFallback: AiPriceEstimate[] = [];
+
+          for (const est of zeroMatAll) {
+            const unit = est.guardedUnit ?? est.unit;
+            const bench = findMaterialBenchmark(est.name, unit);
+            if (bench) {
+              const benchPrice = Math.round(bench.avg * inflationMult * 100) / 100;
+              benchmarkResolved.push(est);
+              // Apply directly to the correct tier's estimate array
+              const updatedFields = { suggestedMaterial: benchPrice, matSource: "knr" as const };
+              const suffix = ` | 📊 Benchmark: ${bench.avg.toFixed(2)} PLN/${bench.unit} (${bench.category})`;
+              const l0Idx = l0Estimates.findIndex((e) => e.itemId === est.itemId);
+              if (l0Idx >= 0) { l0Estimates[l0Idx] = { ...l0Estimates[l0Idx], ...updatedFields, note: l0Estimates[l0Idx].note + suffix }; continue; }
+              const l1Idx = l1Estimates.findIndex((e) => e.itemId === est.itemId);
+              if (l1Idx >= 0) { l1Estimates[l1Idx] = { ...l1Estimates[l1Idx], ...updatedFields, note: l1Estimates[l1Idx].note + suffix }; continue; }
+              const l2Idx = l2Estimates.findIndex((e) => e.itemId === est.itemId);
+              if (l2Idx >= 0) { l2Estimates[l2Idx] = { ...l2Estimates[l2Idx], ...updatedFields, note: l2Estimates[l2Idx].note + suffix }; }
+            } else {
+              needsAiFallback.push(est);
+            }
+          }
+
+          logger.info(`[Task3-MatFallback] benchmark=${benchmarkResolved.length} ai-needed=${needsAiFallback.length}`);
+
           // Schema: keep note short (≤20 chars) to avoid hitting maxOutputTokens
           const matFallbackSchema = z.object({
             items: z.array(
@@ -1845,7 +1843,9 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
           const TASK3_CHUNK = 15;
           const applyMatItem = (target: AiPriceEstimate, price: number, noteStr: string) => {
             const rawMat = Math.round(price * 100) / 100;
-            const clampedMat = clampPrice(target.name, target.guardedUnit ?? target.unit, rawMat, "material");
+            // v10.5: Benchmark clamp — if we have a benchmark, use it to validate AI price
+            const { price: benchClamped } = clampToBenchmark(target.name, target.guardedUnit ?? target.unit, rawMat);
+            const clampedMat = clampPrice(target.name, target.guardedUnit ?? target.unit, benchClamped, "material");
             if (clampedMat <= 0) return;
             const updatedFields = { suggestedMaterial: clampedMat, matSource: "ai-market" as const };
             const suffix = ` | ~rynk.: ${noteStr} (×${inflationMult.toFixed(2)})`;
@@ -1857,18 +1857,21 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
             if (l2Idx >= 0) { l2Estimates[l2Idx] = { ...l2Estimates[l2Idx], ...updatedFields, note: l2Estimates[l2Idx].note + suffix }; }
           };
 
-          for (let ci = 0; ci < zeroMatAll.length; ci += TASK3_CHUNK) {
-            const chunk = zeroMatAll.slice(ci, ci + TASK3_CHUNK);
+          // v10.5: Build price reference context for AI prompt (top categories)
+          const priceRefContext = buildBenchmarkPromptContext();
+
+          for (let ci = 0; ci < needsAiFallback.length; ci += TASK3_CHUNK) {
+            const chunk = needsAiFallback.slice(ci, ci + TASK3_CHUNK);
             const chunkList = chunk
               .map((e, idx) => `${idx + 1}. "${e.name}" | jm: ${e.guardedUnit ?? e.unit}`)
               .join("\n");
 
-            logger.info(`[Task3-MatFallback] chunk ${Math.floor(ci / TASK3_CHUNK) + 1}/${Math.ceil(zeroMatAll.length / TASK3_CHUNK)} (${chunk.length} items)`);
+            logger.info(`[Task3-MatFallback] chunk ${Math.floor(ci / TASK3_CHUNK) + 1}/${Math.ceil(needsAiFallback.length / TASK3_CHUNK)} (${chunk.length} items)`);
 
             try {
               const { object: chunkResult } = await generateObject({
                 model: google("gemini-2.0-flash"),
-                system: `Podaj ceny MATERIAŁÓW netto hurtowe 2026 PLN/jm dla elektroinstalacji. ×${inflationMult.toFixed(2)}. note: max 3 słowa. Zero FORBIDDEN.`,
+                system: `Podaj ceny MATERIAŁÓW netto hurtowe 2026 PLN/jm dla elektroinstalacji. ×${inflationMult.toFixed(2)}. note: max 3 słowa. Zero FORBIDDEN.\n\n${priceRefContext}`,
                 prompt: chunkList,
                 schema: matFallbackSchema,
                 temperature: 0.1,
@@ -2173,45 +2176,53 @@ export async function repriceSingleItem(
     if (!e) return { success: false, error: "AI nie zwróciło wyceny" };
 
     // Apply height/difficulty modifiers (globalLaborMod) — AI returns base price without these
-    let adjLabor = Math.round(Math.round((e.labor_price || 0) * 100) / 100 * repriceCfg.globalLaborMod * 100) / 100;
-    // KNR 4-03: demontaż = 65% of montaż labor norm
-    adjLabor = applyDemontazRule(adjLabor, item.name);
+    const adjLabor = Math.round(Math.round((e.labor_price || 0) * 100) / 100 * repriceCfg.globalLaborMod * 100) / 100;
     // Keyword safety: pure-labour items must have material=0; all AI prices pass through clampPrice
     const rawMatRepr = Math.round((e.material_price || 0) * 100) / 100;
     const clampedMatRepr = isPureLaborByKeyword(item.name)
       ? 0
       : clampPrice(item.name, effectiveUnit, rawMatRepr, "material");
 
+    const rawKnrRepr = (() => {
+      const raw = e.knr_code ?? null;
+      if (raw && isSyntheticKnr(raw)) {
+        logger.error(`[Hard-Link v2.2] BLOCKED synthetic KNR "${raw}" for repriceSingleItem "${item.name}"`, {});
+        return null;
+      }
+      return raw;
+    })();
+    const knrSourceRepr = (() => {
+      const raw = e.knr_code ?? null;
+      if (!raw || isSyntheticKnr(raw)) return null;
+      return (e.knr_source ?? "es-synthetic") as "official" | "es-synthetic";
+    })();
+
+    // ── P4 FIX: Apply full post-processing pipeline (was missing before v10.5) ──
+    // repriceSingleItem previously only applied demontaż + clampPrice, bypassing:
+    // applySanityCheck, enforceExpertGuards, realityCheck, securityAuditLayer.
+    const rawEstRepr: AiPriceEstimate = {
+      itemId: item.id,
+      name: item.name,
+      unit: item.unit,
+      guardedUnit: opts.overrideUnit && opts.overrideUnit !== item.unit ? opts.overrideUnit : undefined,
+      quantity: item.quantity,
+      currentMaterial: item.final_material_price ?? item.material_price ?? 0,
+      currentLabor: item.final_labor_price ?? item.labor_price ?? 0,
+      suggestedMaterial: clampedMatRepr,
+      suggestedLabor: adjLabor,
+      confidence: e.confidence,
+      note: `Uścisłone${opts.extraContext ? ` (${opts.extraContext})` : ""}${opts.overrideUnit && opts.overrideUnit !== item.unit ? ` | jm. zmieniono: ${item.unit}→${opts.overrideUnit}` : ""}${repriceCfg.globalLaborMod > 1 ? ` | KNR ×${repriceCfg.globalLaborMod.toFixed(3)} rob.` : ""}: ${e.note}`,
+      knrCode: rawKnrRepr,
+      knrSource: knrSourceRepr,
+      laborNorm: e.labor_norm ?? null,
+      isAmbiguous: false,
+      trace: `repriceSingleItem AI (${e.confidence})`,
+    };
+    const processedRepr = applyPostProcessPipeline(rawEstRepr, baseRateForCalc, repriceCfg.globalLaborMod);
+
     return {
       success: true,
-      estimate: {
-        itemId: item.id,
-        name: item.name,
-        unit: item.unit,
-        guardedUnit: opts.overrideUnit && opts.overrideUnit !== item.unit ? opts.overrideUnit : undefined,
-        quantity: item.quantity,
-        currentMaterial: item.final_material_price ?? item.material_price ?? 0,
-        currentLabor: item.final_labor_price ?? item.labor_price ?? 0,
-        suggestedMaterial: clampedMatRepr,
-        suggestedLabor: adjLabor,
-        confidence: e.confidence,
-        note: `Uścisłone${opts.extraContext ? ` (${opts.extraContext})` : ""}${opts.overrideUnit && opts.overrideUnit !== item.unit ? ` | jm. zmieniono: ${item.unit}→${opts.overrideUnit}` : ""}${repriceCfg.globalLaborMod > 1 ? ` | KNR ×${repriceCfg.globalLaborMod.toFixed(3)} rob.` : ""}: ${e.note}`,
-        knrCode: (() => {
-          const raw = e.knr_code ?? null;
-          if (raw && isSyntheticKnr(raw)) {
-            logger.error(`[Hard-Link v2.2] BLOCKED synthetic KNR "${raw}" for repriceSingleItem "${item.name}"`, {});
-            return null;
-          }
-          return raw;
-        })(),
-        knrSource: (() => {
-          const raw = e.knr_code ?? null;
-          if (!raw || isSyntheticKnr(raw)) return null;
-          return (e.knr_source ?? "es-synthetic") as "official" | "es-synthetic";
-        })(),
-        laborNorm: e.labor_norm ?? null,
-        isAmbiguous: false,
-      },
+      estimate: processedRepr,
     };
   } catch (error) {
     logger.error("repriceSingleItem error:", {}, error);
@@ -2430,6 +2441,9 @@ export async function triggerL3Estimation(
     const rateSource: RateSource = "manual";
     const knrInstruction = buildRateSourceInstruction(rateSource, baseRateForCalc);
 
+    // v10.5: Inject real material price references into L3 prompt
+    const l3PriceRef = buildBenchmarkPromptContext();
+
     const expertSystemPrompt = `${PRICING_STATIC_SYSTEM_PROMPT}
 
 <context>
@@ -2441,10 +2455,13 @@ export async function triggerL3Estimation(
 - ${knrInstruction}
 </context>
 
+${l3PriceRef}
+
 <task>
 Wycen JEDNĄ pozycję której NIE ZNALEZIONO w katalogu osobistym ani bazie ES-Dictionary.
 MUSISZ podać zarówno cenę materiału jak i robocizny (żadna nie może być 0 jeśli pozycja ma sens techniczny).
-Użyj norm KNR ES-KNR 2026. Uzasadnij skąd pochodzi cena (KNR, norma, doświadczenie rynkowe 2026).
+Użyj norm KNR ES-KNR 2026. Ceny materiałów MUSZĄ odpowiadać cennikowi hurtowemu 2026 (patrz price_reference_2026).
+Uzasadnij skąd pochodzi cena (KNR, norma, doświadczenie rynkowe 2026).
 </task>`;
 
     const { object: result } = await generateObject({
@@ -2464,15 +2481,46 @@ Użyj norm KNR ES-KNR 2026. Uzasadnij skąd pochodzi cena (KNR, norma, doświadc
     });
 
     // Iron Rule: material never gets regionModifier. Labor: AI was given userHourlyRate (already regional) — no double-apply
-    const mat = Math.round((result.material_price || 0) * 100) / 100;
-    const lab = Math.round((result.labor_price || 0) * 100) / 100;
+    // v10.5: Benchmark clamp on L3 material price — validate AI guess against real wholesale data
+    const rawMatUnclamped = Math.round((result.material_price || 0) * 100) / 100;
+    const { price: rawMat } = clampToBenchmark(positionName, unit, rawMatUnclamped);
+    const rawLab = Math.round((result.labor_price || 0) * 100) / 100;
     const rawKnrCode = result.knr_code ?? null;
     if (rawKnrCode && isSyntheticKnr(rawKnrCode)) {
       logger.error(`[Hard-Link v2.2] BLOCKED synthetic KNR "${rawKnrCode}" for triggerL3 "${positionName}"`, {});
     }
     const knrCode = rawKnrCode && !isSyntheticKnr(rawKnrCode) ? rawKnrCode : null;
     const laborNorm = result.labor_norm ?? null;
-    const match_trace = `L3: ES-Engine (${result.confidence})`;
+
+    // ── P3 FIX: Apply full post-processing pipeline (was missing before v10.5) ──
+    // triggerL3 previously saved AI result directly to DB, bypassing:
+    // enforceKeywordRules, applySanityCheck, enforceExpertGuards, realityCheck, SAL.
+    // This caused "Demontaż rozdzielnicy" to get full price instead of ×0.65,
+    // and "Pomiar izolacji" to get non-zero material.
+    const rawEstimate: AiPriceEstimate = {
+      itemId,
+      name: positionName,
+      unit,
+      quantity: 1, // triggerL3 is per-unit pricing
+      currentMaterial: 0,
+      currentLabor: 0,
+      suggestedMaterial: isPureLaborByKeyword(positionName)
+        ? 0
+        : clampPrice(positionName, unit, rawMat, "material"),
+      suggestedLabor: rawLab,
+      confidence: result.confidence,
+      note: `L3 ES-Engine: ${result.justification}`,
+      knrCode,
+      knrSource: knrCode ? (isOfficialKnr(knrCode) ? "official" : "es-synthetic") : null,
+      laborNorm,
+      isAmbiguous: false,
+      trace: `L3 triggerL3 (${result.confidence})`,
+    };
+    const processed = applyPostProcessPipeline(rawEstimate, baseRateForCalc, 1.0);
+    const mat = processed.suggestedMaterial;
+    const lab = processed.suggestedLabor;
+    const finalLaborNorm = processed.laborNorm ?? laborNorm;
+    const match_trace = `L3: ES-Engine (${result.confidence})${processed.expert_override ? " [Expert Override]" : ""}`;
 
     const confidenceLevel: "verified" | "analog" | "estimated" = result.confidence === "high"
       ? "verified"
@@ -2489,8 +2537,8 @@ Użyj norm KNR ES-KNR 2026. Uzasadnij skąd pochodzi cena (KNR, norma, doświadc
       .eq("id", itemId)
       .single();
     const itemQty: number = (itemRow?.quantity as number | null) ?? 1;
-    const laborHoursTotal = laborNorm != null && laborNorm > 0
-      ? Math.round(laborNorm * itemQty * 100) / 100
+    const laborHoursTotal = finalLaborNorm != null && finalLaborNorm > 0
+      ? Math.round(finalLaborNorm * itemQty * 100) / 100
       : null;
 
     await adminClient
@@ -2502,11 +2550,14 @@ Użyj norm KNR ES-KNR 2026. Uzasadnij skąd pochodzi cena (KNR, norma, doświadc
         final_labor_price: lab,
         knr_code: knrCode,
         knr_source: knrCode ? (isOfficialKnr(knrCode) ? "system_knr" : "es_synthetic") : "ai_estimation",
-        labor_norm: laborNorm,
+        labor_norm: finalLaborNorm,
         labor_hours_total: laborHoursTotal,
-        suggested_norm: laborNorm,
+        suggested_norm: finalLaborNorm,
         confidence_level: confidenceLevel,
-        confidence_note: `L3 ES-Engine: ${result.justification}`.slice(0, 300),
+        confidence_note: (processed.note ?? `L3 ES-Engine: ${result.justification}`).slice(0, 400),
+        expert_override: processed.expert_override ?? false,
+        is_low_confidence: processed.isLowConfidence ?? false,
+        calculation_log: (processed.calculationLog ?? "").slice(0, 500),
         updated_at: new Date().toISOString(),
       })
       .eq("id", itemId)
@@ -2523,7 +2574,7 @@ Użyj norm KNR ES-KNR 2026. Uzasadnij skąd pochodzi cena (KNR, norma, doświadc
         knr_code: knrCode,
         was_synthetic: rawKnrCode != null && isSyntheticKnr(rawKnrCode),
         confidence: result.confidence,
-        note: `triggerL3: ${result.justification}`.slice(0, 200),
+        note: `triggerL3: ${result.justification}${processed.expert_override ? " [Expert Override]" : ""}`.slice(0, 200),
       })
     ).catch(() => {});
 
@@ -2536,7 +2587,7 @@ Użyj norm KNR ES-KNR 2026. Uzasadnij skąd pochodzi cena (KNR, norma, doświadc
       justification: result.justification,
       match_trace,
       knr_code: knrCode,
-      labor_norm: laborNorm,
+      labor_norm: finalLaborNorm,
     };
   } catch (error) {
     logger.error("triggerL3Estimation error:", {}, error);
