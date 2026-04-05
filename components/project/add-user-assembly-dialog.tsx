@@ -20,7 +20,7 @@ import { Package, Loader2, Plus, Sparkles, Cable } from "lucide-react";
 import { addUserAssemblyToProject } from "@/app/dashboard/projects/[id]/actions";
 import { AssemblyList } from "@/components/assemblies/assembly-list";
 import { AssemblyModal } from "@/components/assemblies/assembly-modal";
-import { AIAssemblyGeneratorDialog } from "@/components/assemblies/ai-assembly-generator-dialog";
+
 import type { UserAssemblyWithItems } from "@/lib/types/database";
 import { useModalStore } from "@/hooks/use-modal-store";
 import { cn } from "@/lib/utils";
@@ -247,7 +247,6 @@ export function AddUserAssemblyDialog({ projectId, isPro = false, currentAssembl
                   Twoje własne zestawy instalacyjne
                 </p>
                 <div className="flex items-center gap-2">
-                  <AIAssemblyGeneratorDialog isPro={isPro} />
                   <Button
                     size="sm"
                     onClick={() => {

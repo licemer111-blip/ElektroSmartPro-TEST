@@ -43,7 +43,7 @@ export function DemoProjectButton() {
         <p className="mt-2 text-xs text-red-600 dark:text-red-400">{error}</p>
       )}
       <p className="mt-1.5 text-[11px] text-slate-400 dark:text-slate-500">
-        Gotowy kosztorys dom 150m² z 18 pozycjami — zobaczysz jak działa ES-Engine
+        Gotowy kosztorys mieszkania 65m² z 24 pozycjami — zobaczysz jak działa system
       </p>
     </div>
   );

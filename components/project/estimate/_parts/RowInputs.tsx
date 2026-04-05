@@ -46,7 +46,7 @@ export interface RowInputsProps {
   /** Tryb Własny is active — show 'Szukaj w KNR/AI' button for zero-price items */
   useCustomRates?: boolean;
   /** Callback for single-row global fallback pricing */
-  onGlobalFallback?: (itemId: string) => void;
+  onGlobalFallbackAction?: (itemId: string) => void;
   /** Whether this item is currently being priced via global fallback */
   isFallbackLoading?: boolean;
 }
@@ -157,7 +157,7 @@ export function RowMaterialCell({
   item, editingState, isEditing, isPro, compactView, colorMode,
   materialsOwnedByCustomer, materialUnit, materialUnitBase, materialTotal, onEditingChange, onKeyDown, dp, adjustmentMultiplier,
   bruttoMode = false, vatRate = 23,
-  useCustomRates = false, onGlobalFallback, isFallbackLoading = false,
+  useCustomRates = false, onGlobalFallbackAction, isFallbackLoading = false,
   isReadOnly = false, isFinal = false,
 }: Omit<RowInputsProps, "showMaterialsColumn" | "showLaborColumn" | "showRgCol" | "laborUnit" | "laborTotal" | "laborUnitBase" | "materialUnit"> & { materialUnit: number }) {
   const [isPending, startTransition] = useTransition();
@@ -187,7 +187,7 @@ export function RowMaterialCell({
     && (item.material_price ?? 0) + (item.labor_price ?? 0) === 0
     && !item.knr_source
     && !item.knr_code
-    && !!onGlobalFallback;
+    && !!onGlobalFallbackAction;
 
   if (materialsOwnedByCustomer) {
     return (
@@ -268,7 +268,7 @@ export function RowMaterialCell({
             </div>
           ) : (
             <button
-              onClick={(e) => { e.stopPropagation(); onGlobalFallback!(item.id); }}
+              onClick={(e) => { e.stopPropagation(); onGlobalFallbackAction!(item.id); }}
               className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline cursor-pointer transition-colors"
               title="Pomiń katalog osobisty i wycen z KNR/AI"
             >
@@ -302,6 +302,9 @@ export function RowMaterialCell({
               </div>
             )}
           </div>
+          {materialUnit > 0 && item.confidence_level !== "manual" && (
+            <span className="text-[7px] font-bold text-orange-500 dark:text-orange-400 bg-orange-100 dark:bg-orange-900/30 border border-orange-300 dark:border-orange-700 px-1 py-px rounded">BETA</span>
+          )}
           {canToggleInvestor && (
             <button
               onClick={handleToggleInvestor}
@@ -343,6 +346,9 @@ export function RowMaterialCell({
               <div className={cn("text-sm font-semibold", colorMode ? "text-amber-700 dark:text-amber-400" : "text-slate-800 dark:text-slate-100")}>
                 <BlurredPrice value={matTotalDisp} isPro={showPrices} />
               </div>
+              {materialUnit > 0 && item.confidence_level !== "manual" && (
+                <span className="inline-flex items-center text-[7px] font-bold text-orange-500 dark:text-orange-400 bg-orange-100 dark:bg-orange-900/30 border border-orange-300 dark:border-orange-700 px-1 py-px rounded">⚠️ Wycena mat. BETA</span>
+              )}
               {bruttoMode && showPrices && (
                 <div className="text-[9px] text-slate-400 dark:text-slate-500 text-right">
                   netto: {dp(materialTotal).toFixed(2)} zł
@@ -461,8 +467,8 @@ export function RowLaborCell({
 }
 
 export function RowRgCell({
-  item, colorMode, onGlobalFallback, isLoading,
-}: { item: ProjectItem; colorMode: boolean; onGlobalFallback?: (id: string) => void; isLoading?: boolean }) {
+  item, colorMode, onGlobalFallbackAction, isLoading,
+}: { item: ProjectItem; colorMode: boolean; onGlobalFallbackAction?: (id: string) => void; isLoading?: boolean }) {
   const [isPending, startTransition] = useTransition();
   const [confirmReset, setConfirmReset] = useState(false);
 
@@ -558,9 +564,9 @@ export function RowRgCell({
           })()}
         </div>
       ) : item.confidence_level !== "manual" && (item.labor_norm == null || item.labor_norm === 0) && Number(item.labor_price) > 0 ? (
-        item.knr_code && onGlobalFallback ? (
+        item.knr_code && onGlobalFallbackAction ? (
           <button
-            onClick={() => onGlobalFallback(item.id)}
+            onClick={() => onGlobalFallbackAction(item.id)}
             disabled={isLoading}
             title="Uzupełnij normę RBH z KNR/AI"
             className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-semibold text-white bg-cyan-500 hover:bg-cyan-600 dark:bg-cyan-600 dark:hover:bg-cyan-500 transition-colors disabled:opacity-60 disabled:cursor-not-allowed animate-pulse shadow-[0_0_6px_rgba(6,182,212,0.6)] hover:shadow-[0_0_8px_rgba(6,182,212,0.9)] hover:animate-none"

@@ -2,8 +2,8 @@
 
 import React from "react";
 import {
-  Search, X, ArrowUp, ArrowDown, LayoutGrid,
-  ChevronUp, ChevronDown, Palette, List, Maximize2, SlidersHorizontal, Loader2,
+  Search, X, LayoutGrid,
+  ChevronUp, ChevronDown, Palette, List, Maximize2, Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -93,16 +93,6 @@ export function EstimateFilterBar({
 
         <div className="w-px h-5 bg-slate-200 dark:bg-slate-700 hidden sm:block flex-shrink-0" />
 
-        <div className={cn("flex items-center gap-0.5 p-0.5 bg-white dark:bg-slate-800 rounded-md border border-slate-200 dark:border-slate-700 flex-shrink-0", isFinal && "opacity-40 pointer-events-none")}>
-          {(["all", "materials", "labor"] as const).map((type) => (
-            <button key={type} onClick={() => onFilterType(type)}
-              className={cn("px-2 py-1 rounded text-[11px] sm:text-xs font-medium transition-all",
-                filterType === type ? "bg-blue-600 text-white shadow-sm" : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200")}>
-              {type === "all" ? "Wszystkie" : type === "materials" ? "Materiały" : "Robocizna"}
-            </button>
-          ))}
-        </div>
-
         {uniqueCategories.length > 0 && (
           <Select value={categoryFilter} onValueChange={isFinal ? undefined : onCategoryFilter}>
             <SelectTrigger className={cn("h-7 sm:h-8 w-auto min-w-[100px] sm:min-w-[130px] text-[11px] sm:text-xs px-2 border-slate-200 dark:border-slate-700", isFinal && "opacity-40 cursor-not-allowed pointer-events-none")}>
@@ -174,25 +164,6 @@ export function EstimateFilterBar({
           <span className="hidden sm:inline">{compactView ? "Normalny" : "Kompakt"}</span>
         </button>
 
-        {/* Sort select + order */}
-        <div className={cn("flex items-center gap-0.5 flex-shrink-0", isFinal && "opacity-50 pointer-events-none")}>
-          <Select key={`sort-by-${sortBy}`} value={sortBy} onValueChange={isFinal ? undefined : (v) => onSortBy(v as "name" | "price" | "date")}>
-            <SelectTrigger className="h-7 sm:h-8 w-[72px] sm:w-[90px] text-[11px] sm:text-xs px-2 border-slate-200 dark:border-slate-700">
-              <SlidersHorizontal className="w-3 h-3 mr-1 hidden sm:inline flex-shrink-0" />
-              <SelectValue placeholder="Sortuj" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="date">Data</SelectItem>
-              <SelectItem value="name">Nazwa</SelectItem>
-              <SelectItem value="price">Cena</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button variant="ghost" size="sm" onClick={() => onSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-            className="h-7 w-7 sm:h-8 sm:w-8 p-0 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
-            title={sortOrder === "asc" ? "Rosnąco" : "Malejąco"}>
-            {sortOrder === "asc" ? <ArrowUp className="w-3.5 h-3.5" /> : <ArrowDown className="w-3.5 h-3.5" />}
-          </Button>
-        </div>
 
         {/* Color toggle */}
         {showColorToggle && (

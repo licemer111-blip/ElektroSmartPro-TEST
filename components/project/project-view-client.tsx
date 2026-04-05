@@ -269,7 +269,8 @@ export function ProjectViewClient({
     return () => window.removeEventListener("project-finalized", handler);
   }, [projectId, project, items, isPro, colorMode, pdfNotes]);
 
-  const brain = useMaterialBrain(projectId, !project.materials_owned_by_customer, liveVatRate);
+  // Material Brain disabled — simplification Phase 1 (AI material suggestions removed)
+  const brain = useMaterialBrain(projectId, false, liveVatRate);
 
   return (
     <MaterialBrainProvider

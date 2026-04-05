@@ -296,7 +296,7 @@ export function renderProjectMetaBlock(
 
   // VAT
   const vatStr = meta.vatRate != null
-    ? `VAT: ${meta.vatRate}% (${meta.vatRate === 8 ? "stawka obnizona" : "stawka standardowa"})`
+    ? `VAT: ${meta.vatRate}% (${meta.vatRate === 8 ? "stawka obnizona (8%)" : "stawka standardowa (23%)"})`
     : "";
   if (vatStr) doc.text(vatStr, leftCol, y);
 

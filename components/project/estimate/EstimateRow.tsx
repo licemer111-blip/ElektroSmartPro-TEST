@@ -82,7 +82,7 @@ export interface EstimateRowProps {
   uniqueSections: string[];
   // Tryb Własny
   useCustomRates?: boolean;
-  onGlobalFallback?: (itemId: string) => void;
+  onGlobalFallbackAction?: (itemId: string) => void;
   fallbackLoadingIds?: Set<string>;
 }
 
@@ -132,7 +132,7 @@ export const EstimateRow = React.memo(function EstimateRow({
   highlightText,
   uniqueSections,
   useCustomRates = false,
-  onGlobalFallback,
+  onGlobalFallbackAction,
   fallbackLoadingIds,
 }: EstimateRowProps) {
   // Blur strictly controlled by is_pro from Supabase — no client-side override
@@ -380,7 +380,7 @@ export const EstimateRow = React.memo(function EstimateRow({
           bruttoMode={bruttoMode} vatRate={vatRate}
           onEditingChange={onEditingChange} onKeyDown={handleKeyDown} dp={roundPrice}
           useCustomRates={useCustomRates}
-          onGlobalFallback={onGlobalFallback}
+          onGlobalFallbackAction={onGlobalFallbackAction}
           isFallbackLoading={fallbackLoadingIds?.has(item.id) ?? false}
           isFinal={isFinal}
           isReadOnly={isReadOnly}
@@ -408,7 +408,7 @@ export const EstimateRow = React.memo(function EstimateRow({
         <RowRgCell
           item={item}
           colorMode={colorMode}
-          onGlobalFallback={(!isFinal && !isReadOnly) ? onGlobalFallback : undefined}
+          onGlobalFallbackAction={(!isFinal && !isReadOnly) ? onGlobalFallbackAction : undefined}
           isLoading={fallbackLoadingIds?.has(item.id)}
         />
       )}

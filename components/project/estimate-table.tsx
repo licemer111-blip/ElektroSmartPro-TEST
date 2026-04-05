@@ -203,25 +203,7 @@ export function EstimateTable({
 
   const singleCellBorder = "border border-slate-300 dark:border-slate-700 bg-clip-padding";
 
-  // ─── Empty state ─────────────────────────────────────────────────────────────
-  if (items.length === 0) {
-    return (
-      <div className="text-center py-16 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-900/30">
-        <div className="mx-auto w-16 h-16 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-4">
-          <FileBox className="w-8 h-8 text-blue-500 dark:text-blue-400" />
-        </div>
-        <h3 className="text-base font-semibold text-slate-700 dark:text-slate-200 mb-1">Kosztorys jest pusty</h3>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 max-w-xs mx-auto">
-          Dodaj pozycje z katalogu po lewej, użyj ES-Engine lub zaimportuj z Excela
-        </p>
-        <div className="flex flex-wrap gap-2 justify-center text-[10px] text-slate-400 dark:text-slate-500">
-          {["📋 Katalog", "⚡ ES-Engine", "📊 Import Excel", "📦 Zestawy"].map(label => (
-            <span key={label} className="px-2 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">{label}</span>
-          ))}
-        </div>
-      </div>
-    );
-  }
+  const isEmpty = items.length === 0;
 
   // ─── Render helpers ───────────────────────────────────────────────────────────
 
@@ -259,7 +241,7 @@ export function EstimateTable({
         searchRef={(el) => { if (el && matchIdx >= 0) matchRefs.current.set(matchIdx, el); }}
         highlightText={highlightText} uniqueSections={uniqueSections}
         useCustomRates={useCustomRates}
-        onGlobalFallback={(isFinal || !rateIsSet) ? undefined : handleGlobalFallback}
+        onGlobalFallbackAction={(isFinal || !rateIsSet) ? undefined : handleGlobalFallback}
         fallbackLoadingIds={fallbackLoadingIds}
       />
     );
@@ -314,8 +296,26 @@ export function EstimateTable({
         onToast={toast}
       />
 
+      {/* Empty state — shown below tabs+toolbar+filters when no items */}
+      {isEmpty && (
+        <div className="text-center py-16 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-900/30">
+          <div className="mx-auto w-16 h-16 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-4">
+            <FileBox className="w-8 h-8 text-blue-500 dark:text-blue-400" />
+          </div>
+          <h3 className="text-base font-semibold text-slate-700 dark:text-slate-200 mb-1">Kosztorys jest pusty</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 max-w-xs mx-auto">
+            Dodaj pozycje z katalogu po lewej, użyj ES-Engine lub zaimportuj z Excela
+          </p>
+          <div className="flex flex-wrap gap-2 justify-center text-[10px] text-slate-400 dark:text-slate-500">
+            {["Katalog", "ES-Engine", "Import Excel", "Zestawy"].map(label => (
+              <span key={label} className="px-2 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">{label}</span>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Mobile Card View — only shown when compactView=true (compact/card mode) on small screens */}
-      <div className={cn("lg:hidden", compactView ? "block" : "hidden")}>
+      {!isEmpty && <div className={cn("lg:hidden", compactView ? "block" : "hidden")}>
         <EstimateMobileCards
           items={filteredItems} isPro={isPro} isFinal={isFinal} isReadOnly={isReadOnly}
           adjustmentPercentage={adjustmentPercentage} selectedIds={selectedIds}
@@ -326,10 +326,10 @@ export function EstimateTable({
           onMoveDown={handleMobileMoveDown}
           onSaveEdit={(id, updates) => handleMobileSaveEdit(id, updates)}
         />
-      </div>
+      </div>}
 
       {/* Desktop Table — always shown on lg+; on mobile shown only when compactView=false (Widok normalny) */}
-      <div className={cn(!compactView ? "block" : "hidden lg:block")}>
+      {!isEmpty && <div className={cn(!compactView ? "block" : "hidden lg:block")}>
         <DndContext id={dndId} sensors={sensors} collisionDetection={closestCenter}
           onDragStart={handleDragStart} onDragEnd={handleDragEnd} onDragCancel={handleDragCancel}>
           <div className="no-btn-scale border rounded-lg dark:border-slate-800 bg-slate-100 dark:bg-slate-900 relative overflow-x-auto scroll-smooth">
@@ -440,7 +440,7 @@ export function EstimateTable({
             ) : null}
           </DragOverlay>
         </DndContext>
-      </div>
+      </div>}
 
       <EstimateBulkActions
         projectId={projectId} selectedIds={selectedIds}

@@ -13,7 +13,6 @@ import { AssembliesWithTabs } from "./assemblies-with-tabs";
 import { AssemblyModal } from "./assembly-modal";
 import { AssemblyModalManager } from "./assembly-modal-manager";
 import { AssemblyFilters, detectBuildingType, detectCategory } from "./assembly-filters";
-import { AIAssemblyGeneratorDialog } from "./ai-assembly-generator-dialog";
 import { shareAssemblyCategoryWithTeam } from "@/app/dashboard/assemblies/actions";
 import type { UserAssemblyWithItems, Team } from "@/lib/types/database";
 import { normalizePolish, searchComparator } from "@/lib/utils";
@@ -162,13 +161,6 @@ export function AssembliesManagerView({
         {/* Toolbar Header */}
         <div className="p-3 md:p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 shrink-0">
           <div className="flex flex-col gap-2">
-            {/* Row 1: AI Generator — pill identical to catalog */}
-            <div className="flex items-center gap-1 rounded-xl bg-slate-100 dark:bg-slate-800 p-0.5 border-2 border-slate-200 dark:border-slate-700 shadow-sm w-[200px]">
-              <AIAssemblyGeneratorDialog
-                isPro={isPro}
-                triggerClassName="flex-1 text-[10px] font-semibold py-1.5 rounded-md transition-all bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white border-0"
-              />
-            </div>
 
           </div>
         </div>

@@ -70,13 +70,15 @@ export async function createDemoProject(): Promise<{ projectId?: string; error?:
     .from("projects")
     .insert({
       user_id: user.id,
-      name: "Mieszkanie 3-pokojowe (Demo)",
+      name: "Mieszkanie 3-pokojowe 65m² (Demo)",
       client_name: "Jan Kowalski",
-      client_address: "ul. Przykładowa 1, Warszawa",
+      client_address: "ul. Przykładowa 1, 00-001 Warszawa",
+      client_nip: "123-456-78-90",
       status: "draft",
       rate_source: "engine",
       default_hourly_rate: null,
-      description: "Projekt demonstracyjny — przykładowy kosztorys mieszkania 65m²",
+      vat_rate: 8,
+      description: "Projekt demonstracyjny — pełny kosztorys instalacji elektrycznej mieszkania 65m². Zawiera osprzęt, okablowanie, rozdzielnicę i pomiary. Ceny oparte na normach KNR i stawkach regionalnych.",
       is_demo_project: true,
     })
     .select("id")

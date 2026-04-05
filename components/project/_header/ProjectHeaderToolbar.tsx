@@ -19,15 +19,6 @@ import {
   Sparkles, CircleDollarSign, ChevronDown, Brain,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { useGlobalSettings } from "@/hooks/use-global-settings";
 import type { ProjectItem } from "@/lib/types/database";
 import { AIAssistantDialog } from "@/components/project/ai-assistant-dialog";
 import { AiPriceEstimatorDialog } from "@/components/project/ai-price-estimator-dialog";
@@ -124,7 +115,6 @@ export function ProjectHeaderToolbar({
   onAIImportClick,
 }: ProjectHeaderToolbarProps) {
   const { toast } = useToast();
-  const { showHints, setShowHints } = useGlobalSettings();
   const isFinal = projectStatus === "final";
 
   const [esAssistOpen, setEsAssistOpen] = useState(false);
@@ -421,30 +411,6 @@ export function ProjectHeaderToolbar({
                   )}
                   {projectStatus === "final" ? "🔒 Zapisany" : "Zapisz"}
                 </Button>
-                {/* Zen Mode — Podpowiedzi ES toggle */}
-                <TooltipProvider delayDuration={200}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="flex items-center gap-1.5 flex-shrink-0 cursor-help">
-                        <Switch
-                          id="zen-hints-switch"
-                          checked={showHints}
-                          onCheckedChange={setShowHints}
-                          className="h-4 w-7 data-[state=checked]:bg-amber-500 [&>span]:h-3 [&>span]:w-3 [&>span]:data-[state=checked]:translate-x-3 [&>span]:data-[state=unchecked]:translate-x-0"
-                        />
-                        <Label
-                          htmlFor="zen-hints-switch"
-                          className="text-[10px] text-slate-500 dark:text-slate-400 whitespace-nowrap cursor-pointer select-none"
-                        >
-                          Podpowiedzi ES
-                        </Label>
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom" className="max-w-[280px] text-xs">
-                      <p>Włącz/wyłącz inteligentne sugestie ElektroSmart AI pomocne przy tworzeniu kosztorysu.</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
               </div>
             </div>
           )}

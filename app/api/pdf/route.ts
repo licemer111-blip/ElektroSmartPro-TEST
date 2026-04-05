@@ -68,11 +68,11 @@ interface PdfSectionDef {
 }
 
 const PDF_SECTIONS: PdfSectionDef[] = [
-  { id: "I_PRZYGOT",   roman: "I",   label: "PRACE PRZYGOTOWAWCZE I DEMONTAZ"         },
+  { id: "I_PRZYGOT",   roman: "I",   label: "PRACE PRZYGOTOWAWCZE I DEMONTAŻ"        },
   { id: "II_TRASY",    roman: "II",  label: "TRASY KABLOWE I OKABLOWANIE"              },
-  { id: "III_OSPRZET", roman: "III", label: "OSPRZET ELEKTRYCZNY I OPRAWY"             },
+  { id: "III_OSPRZET", roman: "III", label: "OSPRZĘT ELEKTRYCZNY I OPRAWY"             },
   { id: "IV_ROZDZ",    roman: "IV",  label: "ROZDZIELNICE I ZASILANIE"                 },
-  { id: "V_SPEC",      roman: "V",   label: "SYSTEMY SPECJALNE (PV/PPOZ/PRZEMYSL)"     },
+  { id: "V_SPEC",      roman: "V",   label: "SYSTEMY SPECJALNE (PV/PPOŻ/PRZEMYSŁ)"    },
   { id: "VI_POMIARY",  roman: "VI",  label: "POMIARY, ODBIORY I URUCHOMIENIE"          },
 ];
 
