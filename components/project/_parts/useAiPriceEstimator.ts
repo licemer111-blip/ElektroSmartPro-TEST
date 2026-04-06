@@ -253,7 +253,11 @@ export function useAiPriceEstimator({
       const result = await applyAiPrices(projectId, toApply as Parameters<typeof applyAiPrices>[1]);
       if (result.success) {
         setAppliedCount(result.updatedCount);
-        setStep("done");
+        toast({ title: `✅ Zastosowano ceny dla ${result.updatedCount} pozycji`, duration: 3000 });
+        // Stay on preview — remove applied items, keep unmatched/ambiguous for further work
+        const appliedIds = new Set(toApply.map((e) => e.itemId));
+        setEstimates((prev) => prev.filter((e) => !appliedIds.has(e.itemId)));
+        setSelectedIds(new Set());
         setTimeout(() => {
           window.dispatchEvent(new CustomEvent("ai-prices-applied", {
             detail: { projectId, prices: toApply },

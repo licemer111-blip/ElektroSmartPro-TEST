@@ -13,14 +13,11 @@ import { QuotaBadge, QuotaBlocker } from "@/components/ui/quota-badge";
 import Link from "next/link";
 import {
   CircleDollarSign, Loader2, Check, AlertTriangle, Banknote, Wrench, Package,
-  CheckCircle2, Info, ArrowRight, Percent, Settings,
+  CheckCircle2, Info,
 } from "lucide-react";
-import { AiPriceDetailModal } from "@/components/project/ai-price-detail-modal";
-import { ManualPriceDialog } from "@/components/project/manual-price-dialog";
 import { useAiPriceEstimator } from "@/components/project/_parts/useAiPriceEstimator";
 import { EstimateResultsTable } from "@/components/project/_parts/EstimateResultsTable";
 import type { PriceMode } from "@/components/project/_parts/useAiPriceEstimator";
-import type { AiPriceEstimate } from "@/app/dashboard/projects/[id]/ai-actions";
 
 interface AiPriceEstimatorDialogProps {
   projectId: string;
@@ -57,7 +54,6 @@ export function AiPriceEstimatorDialog({
     ? `ES-Engine wyceń zaznaczone ${selectedRowIds!.size} pozycje.`
     : "Expert Engine — katalog prywatny + normy KNR ES-KNR 2026 + ES-Engine na żądanie (L3)";
 
-  const [manualPriceItem, setManualPriceItem] = useState<AiPriceEstimate | null>(null);
   const [phaseIdx, setPhaseIdx] = useState(0);
   const phaseIdxRef = useRef(0);
   useEffect(() => { phaseIdxRef.current = phaseIdx; }, [phaseIdx]);
@@ -297,80 +293,52 @@ export function AiPriceEstimatorDialog({
 
           {/* Step 3: Preview */}
           {est.step === "preview" && (
-            <EstimateResultsTable
-              estimates={est.estimates}
-              selectedIds={est.selectedIds}
-              mode={est.mode}
-              pricedCount={est.pricedCount}
-              unmatchedCount={est.unmatchedCount}
-              refreshingIds={est.refreshingIds}
-              manualMatchItemId={est.manualMatchItemId}
-              manualMatchSearch={est.manualMatchSearch}
-              fullCatalog={est.fullCatalog}
-              isLoadingCatalog={est.isLoadingCatalog}
-              onToggleItem={est.toggleItem}
-              onToggleAll={est.toggleAll}
-              onApplyCertainOnly={est.applyCertainOnly}
-              onBack={() => est.setStep("choose")}
-              onApply={est.handleApply}
-              onOpenManualMatch={est.openManualMatch}
-              onManualMatchSearchChange={est.setManualMatchSearch}
-              onApplyManualMatch={est.applyManualMatch}
-              onCloseManualMatch={() => est.setManualMatchItemId(null)}
-              onOpenDetail={est.setDetailModalItem}
-              onOpenManualPrice={setManualPriceItem}
-              onAddToRefreshing={(id) => est.setRefreshingIds((prev) => { const s = new Set(prev); s.add(id); return s; })}
-              selectedSummary={est.selectedSummary}
-              isApplying={est.isApplying}
-            />
+            est.estimates.length === 0 ? (
+              <div className="text-center py-8 space-y-4">
+                <div className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto">
+                  <CheckCircle2 className="w-8 h-8 text-green-600" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300">Wszystkie ceny zastosowane</h3>
+                  <p className="text-sm text-slate-500 mt-1">Możesz zamknąć okno lub uruchomić wycenę ponownie.</p>
+                </div>
+                <Button onClick={est.handleClose} className="bg-blue-600 hover:bg-blue-700 text-white">Zamknij</Button>
+              </div>
+            ) : (
+              <EstimateResultsTable
+                estimates={est.estimates}
+                selectedIds={est.selectedIds}
+                mode={est.mode}
+                pricedCount={est.pricedCount}
+                unmatchedCount={est.unmatchedCount}
+                refreshingIds={est.refreshingIds}
+                manualMatchItemId={est.manualMatchItemId}
+                manualMatchSearch={est.manualMatchSearch}
+                fullCatalog={est.fullCatalog}
+                isLoadingCatalog={est.isLoadingCatalog}
+                projectId={projectId}
+                onToggleItem={est.toggleItem}
+                onToggleAll={est.toggleAll}
+                onApplyCertainOnly={est.applyCertainOnly}
+                onBack={() => est.setStep("choose")}
+                onApply={est.handleApply}
+                onOpenManualMatch={est.openManualMatch}
+                onManualMatchSearchChange={est.setManualMatchSearch}
+                onApplyManualMatch={est.applyManualMatch}
+                onCloseManualMatch={() => est.setManualMatchItemId(null)}
+                onRepriced={(updated) => {
+                  est.setRefreshingIds((prev) => { const s = new Set(prev); s.delete(updated.itemId); return s; });
+                  est.handleRepriced(updated);
+                }}
+                onAddToRefreshing={(id) => est.setRefreshingIds((prev) => { const s = new Set(prev); s.add(id); return s; })}
+                selectedSummary={est.selectedSummary}
+                isApplying={est.isApplying}
+              />
+            )
           )}
 
-          {/* Step 4: Done */}
-          {est.step === "done" && (
-            <div className="text-center py-8 space-y-4">
-              <div className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-8 h-8 text-green-600" />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300">Ceny zaktualizowane</h3>
-                <p className="text-sm text-slate-500 mt-1">Uzupełniono ceny dla <strong>{est.appliedCount}</strong> pozycji</p>
-              </div>
-              <div className="flex items-start gap-2 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 text-[11px] text-amber-700 dark:text-amber-300 text-left max-w-md mx-auto">
-                <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <span>Wycena ES Engine v2.0 oparta na <strong>ES-KNR 2026</strong>. Zweryfikuj dopasowanie kodów KNR przed wysyłką oferty.</span>
-              </div>
-              <Button onClick={est.handleClose} className="bg-blue-600 hover:bg-blue-700 text-white">Zamknij</Button>
-            </div>
-          )}
         </DialogContent>
       </Dialog>
-
-      {est.detailModalItem && (
-        <AiPriceDetailModal
-          open={!!est.detailModalItem}
-          onOpenChange={(o) => { if (!o) est.setDetailModalItem(null); }}
-          estimate={est.detailModalItem}
-          projectId={projectId}
-          onRepriced={(updated) => {
-            est.setRefreshingIds((prev) => { const s = new Set(prev); s.add(updated.itemId); return s; });
-            est.handleRepriced(updated);
-          }}
-        />
-      )}
-
-      {manualPriceItem && (
-        <ManualPriceDialog
-          open={!!manualPriceItem}
-          onOpenChange={(o) => { if (!o) setManualPriceItem(null); }}
-          estimate={manualPriceItem}
-          projectId={projectId}
-          onSaved={(updated) => {
-            est.setRefreshingIds((prev) => { const s = new Set(prev); s.add(updated.itemId); return s; });
-            est.handleRepriced(updated);
-            setManualPriceItem(null);
-          }}
-        />
-      )}
     </>
   );
 }

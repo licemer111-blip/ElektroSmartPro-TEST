@@ -1,19 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter,
-} from "@/components/ui/dialog";
-import {
-  Loader2, AlertTriangle, ShieldCheck, Sparkles, Zap, RefreshCw, Pencil,
+  Loader2, AlertTriangle, ShieldCheck, Sparkles, Zap, RefreshCw, PenLine, X, Check,
 } from "lucide-react";
+import { updateProjectItem } from "@/app/dashboard/projects/[id]/_actions/project-items";
+import { repriceSingleItem } from "@/app/dashboard/projects/[id]/_ai_actions/pricing";
 import type { AiPriceEstimate } from "@/app/dashboard/projects/[id]/ai-actions";
 import type { PriceMode } from "./useAiPriceEstimator";
 
@@ -28,6 +28,7 @@ interface EstimateResultsTableProps {
   manualMatchSearch: string;
   fullCatalog: Array<{ name: string; mat: number; lab: number; score: number }> | null;
   isLoadingCatalog: boolean;
+  projectId: string;
   onToggleItem: (id: string) => void;
   onToggleAll: () => void;
   onApplyCertainOnly: () => void;
@@ -37,8 +38,7 @@ interface EstimateResultsTableProps {
   onManualMatchSearchChange: (v: string) => void;
   onApplyManualMatch: (itemId: string, cand: { name: string; mat: number; lab: number }) => void;
   onCloseManualMatch: () => void;
-  onOpenDetail: (est: AiPriceEstimate) => void;
-  onOpenManualPrice: (est: AiPriceEstimate) => void;
+  onRepriced: (updated: AiPriceEstimate) => void;
   onAddToRefreshing: (id: string) => void;
   selectedSummary: { totalMat: number; totalLab: number; total: number };
   isApplying: boolean;
@@ -52,23 +52,90 @@ export function EstimateResultsTable({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   estimates, selectedIds, mode, pricedCount, unmatchedCount,
   refreshingIds, manualMatchItemId, manualMatchSearch, fullCatalog, isLoadingCatalog,
+  projectId,
   onToggleItem, onToggleAll, onApplyCertainOnly, onBack, onApply,
   onOpenManualMatch, onManualMatchSearchChange, onApplyManualMatch, onCloseManualMatch,
-  onOpenDetail, onOpenManualPrice, onAddToRefreshing, selectedSummary, isApplying,
+  onRepriced, onAddToRefreshing, selectedSummary, isApplying,
 }: EstimateResultsTableProps) {
   const showMatCol = mode !== "labor";
   const showLabCol = mode !== "material";
   const ambiguousCount = estimates.filter(e => e.isAmbiguous).length;
   const interventionCount = ambiguousCount + unmatchedCount;
-  // Poza KNR = no knrSource (same criterion as row badge display)
   const lowConfCount = estimates.filter(e =>
     !e.isAmbiguous &&
     e.trace !== "unmatched" &&
     e.confidence === "low"
   ).length;
 
-  const [showConfirm, setShowConfirm] = useState(false);
-  const selectedEstimates = estimates.filter(e => selectedIds.has(e.itemId));
+  // Inline editing state
+  const [editingRowId, setEditingRowId] = useState<string | null>(null);
+  const [editMat, setEditMat] = useState("");
+  const [editLab, setEditLab] = useState("");
+  const [editSaving, startEditSave] = useTransition();
+  const [editRepricing, startEditReprice] = useTransition();
+  const [editError, setEditError] = useState<string | null>(null);
+
+  const openInlineEdit = (est: AiPriceEstimate) => {
+    setEditingRowId(est.itemId);
+    setEditMat(est.suggestedMaterial > 0 ? String(est.suggestedMaterial) : "");
+    setEditLab(est.suggestedLabor > 0 ? String(est.suggestedLabor) : "");
+    setEditError(null);
+  };
+
+  const closeInlineEdit = () => {
+    setEditingRowId(null);
+    setEditError(null);
+  };
+
+  const handleInlineSave = (est: AiPriceEstimate) => {
+    const mat = parseFloat(editMat.replace(",", ".")) || 0;
+    const lab = parseFloat(editLab.replace(",", ".")) || 0;
+    if (mat <= 0 && lab <= 0) { setEditError("Podaj przynajmniej jedną cenę"); return; }
+    setEditError(null);
+    onAddToRefreshing(est.itemId);
+    startEditSave(async () => {
+      const dbResult = await updateProjectItem(projectId, est.itemId, {
+        final_material_price: mat,
+        final_labor_price: lab,
+        confidence_level: "manual",
+      });
+      if (dbResult?.error) {
+        setEditError(dbResult.error);
+        return;
+      }
+      onRepriced({
+        ...est,
+        suggestedMaterial: mat,
+        suggestedLabor: lab,
+        confidence: "high" as const,
+        note: "Uściślone (cena ręczna)",
+        isAmbiguous: false,
+        knrCode: null,
+        knrSource: null,
+        laborNorm: null,
+      });
+      // Stay on the same row — don't close
+    });
+  };
+
+  const handleInlineReprice = (est: AiPriceEstimate) => {
+    setEditError(null);
+    onAddToRefreshing(est.itemId);
+    startEditReprice(async () => {
+      const result = await repriceSingleItem({
+        itemId: est.itemId,
+        projectId,
+        extraContext: undefined,
+      });
+      if (result.success && result.estimate) {
+        onRepriced(result.estimate);
+        setEditMat(String(result.estimate.suggestedMaterial));
+        setEditLab(String(result.estimate.suggestedLabor));
+      } else {
+        setEditError(result.error ?? "Błąd przeliczenia");
+      }
+    });
+  };
 
   return (
     <div className="flex flex-col flex-1 min-h-0 space-y-3">
@@ -159,8 +226,8 @@ export function EstimateResultsTable({
                 const needsIntervention = rowType === "intervention";
 
                 return (
+                  <React.Fragment key={est.itemId}>
                   <TableRow
-                    key={est.itemId}
                     className={`cursor-pointer transition-colors ${
                       rowType === "refreshing" ? "bg-orange-50/40 dark:bg-orange-950/10 animate-pulse"
                       : needsIntervention ? "bg-violet-50/40 dark:bg-violet-950/10 border-l-2 border-l-violet-400"
@@ -170,7 +237,7 @@ export function EstimateResultsTable({
                     }`}
                     onClick={() => {
                       if (isRefreshing) return;
-                      if (needsIntervention) { onOpenDetail(est); return; }
+                      if (needsIntervention) { openInlineEdit(est); return; }
                       onToggleItem(est.itemId);
                     }}
                   >
@@ -204,18 +271,11 @@ export function EstimateResultsTable({
                           ) : (needsIntervention || rowType === "poza-knr") ? (
                             <div className="flex items-center gap-1 mt-0.5 flex-wrap">
                               <button
-                                onClick={(e) => { e.stopPropagation(); onOpenManualPrice(est); }}
+                                onClick={(e) => { e.stopPropagation(); openInlineEdit(est); }}
                                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[8px] font-bold bg-violet-100 text-violet-700 hover:bg-violet-200 dark:bg-violet-900/30 dark:text-violet-400 border border-violet-300 dark:border-violet-700 transition-colors"
                               >
-                                <Sparkles className="w-2.5 h-2.5" />
-                                Wyceń ręcznie
-                              </button>
-                              <button
-                                onClick={(e) => { e.stopPropagation(); onOpenDetail(est); }}
-                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[8px] font-bold bg-orange-100 text-orange-700 hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-400 border border-orange-300 dark:border-orange-700 transition-colors"
-                              >
-                                <Zap className="w-2.5 h-2.5" />
-                                Szacuj z ES-Engine 2
+                                <PenLine className="w-2.5 h-2.5" />
+                                Wyceń
                               </button>
                             </div>
                           ) : (
@@ -293,10 +353,10 @@ export function EstimateResultsTable({
                         <div className="flex flex-col items-end gap-0.5">
                           <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">{totalAll.toFixed(2)} zł</span>
                           <button
-                            onClick={(e) => { e.stopPropagation(); onOpenDetail(est); }}
+                            onClick={(e) => { e.stopPropagation(); openInlineEdit(est); }}
                             className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-medium bg-slate-100 text-slate-500 hover:bg-emerald-50 hover:text-emerald-700 dark:bg-slate-800 dark:text-slate-400 transition-colors"
                           >
-                            <RefreshCw className="w-2.5 h-2.5" />Edytuj
+                            <PenLine className="w-2.5 h-2.5" />Edytuj
                           </button>
                         </div>
                       ) : (
@@ -341,6 +401,93 @@ export function EstimateResultsTable({
                     </TableCell>
 
                   </TableRow>
+
+                  {/* ── Inline Edit Panel ── */}
+                  {editingRowId === est.itemId && (
+                    <TableRow className="hover:bg-transparent border-0">
+                      <TableCell colSpan={20} className="p-0 border-b border-blue-200 dark:border-blue-700">
+                        <div className="bg-slate-50 dark:bg-slate-900/80 px-4 py-3 space-y-2">
+                          <div className="flex items-center justify-between">
+                            <p className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate max-w-[300px]">
+                              {est.name}
+                              <span className="ml-1.5 text-slate-400 font-normal">× {est.quantity} {est.guardedUnit ?? est.unit}</span>
+                            </p>
+                            <button onClick={closeInlineEdit} className="p-0.5 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+
+                          <div className="flex items-end gap-2">
+                            {showMatCol && (
+                              <div className="space-y-0.5 flex-1 max-w-[140px]">
+                                <label className="text-[9px] font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wide">Materiał (zł/jm.)</label>
+                                <Input
+                                  type="number" step="0.01" min="0"
+                                  value={editMat}
+                                  onChange={(e) => setEditMat(e.target.value)}
+                                  className="h-8 text-xs text-right"
+                                  placeholder="0.00"
+                                  autoFocus
+                                  onKeyDown={(e) => { if (e.key === "Enter") handleInlineSave(est); if (e.key === "Escape") closeInlineEdit(); }}
+                                />
+                              </div>
+                            )}
+                            {showLabCol && (
+                              <div className="space-y-0.5 flex-1 max-w-[140px]">
+                                <label className="text-[9px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">Robocizna (zł/jm.)</label>
+                                <Input
+                                  type="number" step="0.01" min="0"
+                                  value={editLab}
+                                  onChange={(e) => setEditLab(e.target.value)}
+                                  className="h-8 text-xs text-right"
+                                  placeholder="0.00"
+                                  onKeyDown={(e) => { if (e.key === "Enter") handleInlineSave(est); if (e.key === "Escape") closeInlineEdit(); }}
+                                />
+                              </div>
+                            )}
+                            <Button
+                              size="sm"
+                              onClick={() => handleInlineSave(est)}
+                              disabled={editSaving}
+                              className="h-8 px-3 text-[11px] gap-1 bg-violet-600 hover:bg-violet-700 text-white"
+                            >
+                              {editSaving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Check className="w-3 h-3" />}
+                              Zapisz
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleInlineReprice(est)}
+                              disabled={editRepricing}
+                              className="h-8 px-3 text-[11px] gap-1 border-orange-300 text-orange-700 hover:bg-orange-50 dark:border-orange-700 dark:text-orange-400"
+                            >
+                              {editRepricing ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
+                              ES-Engine
+                            </Button>
+                          </div>
+
+                          {(() => {
+                            const m = parseFloat(editMat.replace(",", ".")) || 0;
+                            const l = parseFloat(editLab.replace(",", ".")) || 0;
+                            return (m > 0 || l > 0) ? (
+                              <p className="text-[10px] text-slate-500">
+                                {m > 0 && <span className="text-amber-600">{m.toFixed(2)} mat.</span>}
+                                {m > 0 && l > 0 && " + "}
+                                {l > 0 && <span className="text-emerald-600">{l.toFixed(2)} rob.</span>}
+                                {" = "}
+                                <span className="font-bold text-slate-700 dark:text-slate-200">{((m + l) * est.quantity).toFixed(2)} zł</span>
+                              </p>
+                            ) : null;
+                          })()}
+
+                          {editError && (
+                            <p className="text-[10px] text-red-600 dark:text-red-400">{editError}</p>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </React.Fragment>
                 );
               })}
             </TableBody>
@@ -382,109 +529,14 @@ export function EstimateResultsTable({
           )}
         </div>
         <Button
-          onClick={() => setShowConfirm(true)}
+          onClick={onApply}
           disabled={isApplying || selectedIds.size === 0}
           className="gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white"
         >
+          {isApplying ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
           Zastosuj ceny ({selectedIds.size})
         </Button>
       </div>
-
-      {/* Confirmation Dialog */}
-      <Dialog open={showConfirm} onOpenChange={setShowConfirm}>
-        <DialogContent className="max-w-3xl flex flex-col max-h-[85vh] overflow-hidden">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-base">
-              Potwierdź zastosowanie cen
-              <span className="ml-1 text-[11px] font-normal text-slate-500">{selectedEstimates.length} pozycji</span>
-            </DialogTitle>
-            <DialogDescription className="sr-only">
-              Przegląd i potwierdzenie cen AI przed ich zastosowaniem w kosztorysie.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="flex-1 min-h-0 overflow-y-auto border rounded-lg">
-            <div className="overflow-x-auto">
-            <Table className="min-w-[560px]">
-              <TableHeader>
-                <TableRow className="bg-slate-50 dark:bg-slate-900">
-                  <TableHead className="text-[10px] font-semibold">Pozycja</TableHead>
-                  <TableHead className="text-[10px] text-center w-10">Jm.</TableHead>
-                  <TableHead className="text-[10px] text-center w-10">Ilość</TableHead>
-                  {showMatCol && <TableHead className="text-[10px] text-right w-20">Mat./jm.</TableHead>}
-                  {showLabCol && <TableHead className="text-[10px] text-right w-20">Rob./jm.</TableHead>}
-                  <TableHead className="text-[10px] text-right w-24">Razem</TableHead>
-                  <TableHead className="text-[10px] w-14"></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {selectedEstimates.map((est) => {
-                  const total = Math.round((est.suggestedMaterial + est.suggestedLabor) * est.quantity * 100) / 100;
-                  return (
-                    <TableRow key={est.itemId} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
-                      <TableCell>
-                        <p className="text-xs font-medium truncate max-w-[220px]">{est.name}</p>
-                        {est.note && <p className="text-[9px] text-slate-400 italic truncate max-w-[220px]">{est.note}</p>}
-                      </TableCell>
-                      <TableCell className="text-[10px] text-center text-slate-500">{est.guardedUnit ?? est.unit}</TableCell>
-                      <TableCell className="text-[10px] text-center font-medium">{est.quantity}</TableCell>
-                      {showMatCol && (
-                        <TableCell className="text-right">
-                          <span className="text-xs font-semibold text-emerald-600">{formatPrice(est.suggestedMaterial)}</span>
-                          {est.matSource === "ai-market" && (
-                            <span className="block text-[8px] text-amber-600 dark:text-amber-400 font-medium">~rynk.</span>
-                          )}
-                        </TableCell>
-                      )}
-                      {showLabCol && (
-                        <TableCell className="text-right text-xs font-semibold text-blue-600">
-                          {formatPrice(est.suggestedLabor)}
-                        </TableCell>
-                      )}
-                      <TableCell className="text-right text-xs font-bold text-slate-800 dark:text-slate-200">
-                        {formatPrice(total)}
-                      </TableCell>
-                      <TableCell>
-                        <button
-                          onClick={() => { setShowConfirm(false); onOpenManualPrice(est); }}
-                          className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-medium text-slate-500 hover:text-violet-700 hover:bg-violet-50 dark:hover:bg-violet-950/30 transition-colors"
-                          title="Edytuj cenę ręcznie"
-                        >
-                          <Pencil className="w-3 h-3" />Edytuj
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-            </div>
-          </div>
-
-          <div className="pt-2 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-500">
-            <span className="font-medium text-slate-700 dark:text-slate-300">
-              Łącznie:{" "}
-              {showMatCol && <span className="text-emerald-600">{selectedSummary.totalMat.toFixed(2)} zł mat.</span>}
-              {showMatCol && showLabCol && " + "}
-              {showLabCol && <span className="text-blue-600">{selectedSummary.totalLab.toFixed(2)} zł rob.</span>}
-              {" = "}
-              <span className="font-bold text-slate-900 dark:text-slate-100">{selectedSummary.total.toFixed(2)} zł</span>
-            </span>
-          </div>
-
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setShowConfirm(false)}>Wróć i edytuj</Button>
-            <Button
-              onClick={() => { setShowConfirm(false); onApply(); }}
-              disabled={isApplying}
-              className="gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white"
-            >
-              {isApplying ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-              Zatwierdź i zastosuj ({selectedEstimates.length})
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
