@@ -2,7 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import { isTeamAdmin } from "@/lib/team-auth";
 
@@ -18,10 +18,7 @@ export async function updateMemberRole(
   newRole: string,
   teamId?: string
 ) {
-  const { user, supabase } = await requireAuth().catch(() => ({
-    user: null,
-    supabase: null,
-  }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Nie jesteś zalogowany" };
 
   if (teamId) {

@@ -1,7 +1,7 @@
 "use server";
 
 import { logger } from "@/lib/logger";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { checkAndIncrementAiUsage } from "@/lib/ai-usage";
 import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
@@ -120,7 +120,7 @@ export async function aiAnalyzeProjectImport(
 ): Promise<{ success: boolean; items?: AIProjectItem[]; error?: string }> {
   const settings: EngineSettings = engineSettings ?? DEFAULT_ENGINE_SETTINGS;
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Musisz być zalogowany" };
 
     // AI usage limit (DEMO=5, PRO=200 via centralized quota system)
@@ -355,7 +355,7 @@ export async function aiPriceVisionItems(
 ): Promise<{ success: boolean; items?: AIProjectItem[]; error?: string }> {
   const settings: EngineSettings = engineSettings ?? DEFAULT_ENGINE_SETTINGS;
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Musisz być zalogowany" };
 
     if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {

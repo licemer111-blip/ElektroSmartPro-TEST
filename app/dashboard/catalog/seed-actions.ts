@@ -1,7 +1,7 @@
 "use server";
 
 import { logger } from "@/lib/logger";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import masterCatalogItems from "@/lib/data/master-catalog-items.json";
 import seedLegacyData from "@/lib/data/json/seed-legacy.json";
@@ -39,7 +39,7 @@ const SEED_DATA: SeedItem[] = masterCatalogItems.length > 1
 // ============================================================================
 
 export async function seedDatabaseSmart() {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
 
   if (!user || !supabase) {
     return { error: "Unauthorized" };
@@ -159,7 +159,7 @@ export async function seedDatabaseSmart() {
 // ============================================================================
 
 export async function seedAssembliesSmart() {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
 
   if (!user || !supabase) {
     return { error: "Unauthorized" };

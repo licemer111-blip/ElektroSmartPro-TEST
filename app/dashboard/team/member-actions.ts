@@ -3,14 +3,14 @@
 import { createClient } from "@/utils/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import { isTeamAdmin } from "@/lib/team-auth";
 
 // ─── Remove a member (admin-only guard) ──────────────────────────────────────
 
 export async function removeTeamMember(teamId: string, memberId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Nie jesteś zalogowany" };
 
   const adminCheck = await isTeamAdmin(supabase, teamId, user.id);
@@ -31,7 +31,7 @@ export async function removeTeamMember(teamId: string, memberId: string) {
 // ─── Leave team (self-removal) ────────────────────────────────────────────────
 
 export async function leaveTeam(teamId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Nie jesteś zalogowany" };
 
   const { data: team } = await supabase
@@ -164,7 +164,7 @@ export async function ensureAttachmentColumns(): Promise<{ success: boolean; err
 
 export async function uploadTeamAttachment(teamId: string, file: File) {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { error: "Nie jesteś zalogowany" };
 
     if (file.size > 10 * 1024 * 1024) return { error: "Plik jest zbyt duży (max 10MB)" };

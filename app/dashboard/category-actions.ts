@@ -1,13 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 
 // ── Assembly Categories ───────────────────────────────────────────────────────
 
 export async function createAssemblyCategory(name: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   const trimmedName = name.trim();
   if (!trimmedName) return { error: "Nazwa kategorii nie może być pusta" };
@@ -22,7 +22,7 @@ export async function createAssemblyCategory(name: string) {
 }
 
 export async function updateAssemblyCategory(categoryId: string, name: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   const trimmedName = name.trim();
   if (!trimmedName) return { error: "Nazwa kategorii nie może być pusta" };
@@ -37,7 +37,7 @@ export async function updateAssemblyCategory(categoryId: string, name: string) {
 }
 
 export async function deleteAssemblyCategory(categoryId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   const { data: assemblies, error: checkError } = await supabase
     .from("user_assemblies").select("id").eq("category_id", categoryId).limit(1);
@@ -51,7 +51,7 @@ export async function deleteAssemblyCategory(categoryId: string) {
 }
 
 export async function moveAssemblyToCategory(assemblyId: string, categoryId: string | null) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   if (categoryId) {
     const { data: category, error: catError } = await supabase
@@ -68,7 +68,7 @@ export async function moveAssemblyToCategory(assemblyId: string, categoryId: str
 // ── Project Categories ────────────────────────────────────────────────────────
 
 export async function createProjectCategory(name: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   const trimmedName = name.trim();
   if (!trimmedName) return { error: "Nazwa kategorii nie może być pusta" };
@@ -83,7 +83,7 @@ export async function createProjectCategory(name: string) {
 }
 
 export async function updateProjectCategory(categoryId: string, name: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   const trimmedName = name.trim();
   if (!trimmedName) return { error: "Nazwa kategorii nie może być pusta" };
@@ -98,7 +98,7 @@ export async function updateProjectCategory(categoryId: string, name: string) {
 }
 
 export async function deleteProjectCategory(categoryId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   const { data: projects, error: checkError } = await supabase
     .from("projects").select("id").eq("category_id", categoryId).limit(1);
@@ -112,7 +112,7 @@ export async function deleteProjectCategory(categoryId: string) {
 }
 
 export async function moveProjectToCategory(projectId: string, categoryId: string | null) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   if (categoryId) {
     const { data: category, error: catError } = await supabase

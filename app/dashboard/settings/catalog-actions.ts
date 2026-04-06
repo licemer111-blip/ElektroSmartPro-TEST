@@ -2,7 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 // ============================================================================
 // REGION MANAGEMENT
@@ -14,7 +14,7 @@ import { logger } from "@/lib/logger";
  */
 export async function updateUserRegion(regionId: string): Promise<{ success: boolean; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Nie jesteś zalogowany" };
     }
@@ -63,7 +63,7 @@ export async function getCatalogStats(): Promise<{
   error?: string;
 }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { 
         globalCount: 0, 
@@ -134,7 +134,7 @@ export async function getCatalogStats(): Promise<{
  */
 export async function toggleGlobalCatalog(showGlobalCatalog: boolean): Promise<{ success: boolean; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Nie jesteś zalogowany" };
     }
@@ -166,7 +166,7 @@ export async function toggleGlobalCatalog(showGlobalCatalog: boolean): Promise<{
  */
 export async function unhideGlobalCatalogItem(itemId: string): Promise<{ success: boolean; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Nie jesteś zalogowany" };
     }
@@ -201,7 +201,7 @@ export async function unhideGlobalCatalogItem(itemId: string): Promise<{ success
  */
 export async function restoreAllHiddenItems(): Promise<{ success: boolean; count?: number; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Nie jesteś zalogowany" };
     }
@@ -245,7 +245,7 @@ export async function restoreAllHiddenItems(): Promise<{ success: boolean; count
  */
 export async function deleteAllCatalogItems(): Promise<{ success: boolean; count?: number; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Nie jesteś zalogowany" };
     }
@@ -287,7 +287,7 @@ export async function deleteAllCatalogItems(): Promise<{ success: boolean; count
  */
 export async function deleteAllCatalogItemsIncludingGlobal(): Promise<{ success: boolean; count?: number; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Nie jesteś zalogowany" };
     }
@@ -320,7 +320,7 @@ export async function deleteAllCatalogItemsIncludingGlobal(): Promise<{ success:
  */
 export async function deleteAllAssemblies(): Promise<{ success: boolean; count?: number; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Nie jesteś zalogowany" };
     }
@@ -367,7 +367,7 @@ export async function exportCurrentCatalog(): Promise<{
   error: string | null 
 }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Nie jesteś zalogowany" };
     }

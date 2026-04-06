@@ -1,11 +1,11 @@
 "use server";
 
 import { logger } from "@/lib/logger";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { createClient } from "@/utils/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
-const ADMIN_EMAIL = "elektrosmartpro@gmail.com";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "";
 
 /**
  * Check if the current user is an admin
@@ -13,7 +13,7 @@ const ADMIN_EMAIL = "elektrosmartpro@gmail.com";
  */
 export async function isAdmin(): Promise<boolean> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
 
     if (!user || !supabase) {
       return false;

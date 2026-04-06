@@ -1,7 +1,7 @@
 "use server";
 
 import { logger } from "@/lib/logger";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
 export interface ChatMessage {
@@ -18,7 +18,7 @@ export async function getProjectMessages(
   projectId: string,
   limit: number = 50
 ): Promise<ChatMessage[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return [];
 
   const { data: messages, error } = await supabase
@@ -55,7 +55,7 @@ export async function sendProjectMessage(
   projectId: string,
   content: string
 ): Promise<{ success: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { success: false, error: "Musisz być zalogowany" };
 
   const trimmed = content.trim();
@@ -79,7 +79,7 @@ export async function sendProjectMessage(
 export async function getUnreadMessageCount(
   projectId: string
 ): Promise<number> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return 0;
 
   // Count messages from last 24h that are not from the current user

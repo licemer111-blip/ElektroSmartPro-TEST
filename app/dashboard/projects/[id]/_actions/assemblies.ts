@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import { getUserAssemblyById } from "@/app/dashboard/assemblies/actions";
 import { canUserEditProject, revalidateProject } from "./utils";
@@ -18,7 +18,7 @@ export async function addChildToAssembly(
     laborPrice: number;
   }
 ) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -101,7 +101,7 @@ export async function addUserAssemblyToProject(
   cableLength?: number
 ): Promise<{ success: boolean; error: string | null; addedCount?: number }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Musisz być zalogowany" };
 
     const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -207,7 +207,7 @@ export async function addUserAssemblyToProject(
 export async function getUserProjectsForCopy(excludeProjectId: string): Promise<
   { id: string; name: string; status: string; item_count: number; created_at: string }[]
 > {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return [];
 
   const { data: projects } = await supabase
@@ -238,7 +238,7 @@ export async function getUserProjectsForCopy(excludeProjectId: string): Promise<
 export async function getProjectItemsForCopy(sourceProjectId: string): Promise<
   { id: string; name: string; unit: string; quantity: number; final_material_price: number; final_labor_price: number; catalog_item_id: string | null; section: string | null }[]
 > {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return [];
 
   const { data: project } = await supabase

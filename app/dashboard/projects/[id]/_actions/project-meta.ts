@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { clientDataSchema, validate } from "@/lib/validations";
 import { logger } from "@/lib/logger";
 import type { ProjectWithRelations } from "@/lib/types/database";
@@ -14,7 +14,7 @@ export async function getProjectDetails(
   projectId: string
 ): Promise<ProjectWithRelations | null> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) redirect("/login");
 
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -64,7 +64,7 @@ export async function getProjectDetails(
 
 // Update project name
 export async function updateProjectName(projectId: string, newName: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Unauthorized" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -89,7 +89,7 @@ export async function updateProjectName(projectId: string, newName: string) {
 
 // Toggle project status between draft and final
 export async function toggleProjectStatus(projectId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Unauthorized" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -161,7 +161,7 @@ export async function updateClientData(
     client_nip?: string | null;
   }
 ) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Unauthorized" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -191,7 +191,7 @@ export async function updateClientData(
 
 // Update project adjustment percentage
 export async function updateAdjustmentPercentage(projectId: string, adjustmentPercentage: number) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Unauthorized" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -220,7 +220,7 @@ export async function updateProjectNarzuty(
   projectId: string,
   narzuty: { kp_percent: number; z_percent: number; kz_percent: number }
 ) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Unauthorized" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -250,7 +250,7 @@ export async function updateProjectSafetyFactors(
   projectId: string,
   factors: { aux_material_pct: number; cable_waste_pct: number }
 ) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Unauthorized" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -285,7 +285,7 @@ export async function updateProjectV3Settings(
     complexity_factor?: number;
   }
 ) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Unauthorized" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -324,7 +324,7 @@ export async function updateProjectV3Settings(
 
 // Update project region (voivodeship)
 export async function updateProjectRegion(projectId: string, regionId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -346,7 +346,7 @@ export async function updateProjectRegion(projectId: string, regionId: string) {
 
 // Update project VAT rate — VAT Guard: only 8% or 23% allowed
 export async function updateProjectVatRate(projectId: string, vatRate: number) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -372,7 +372,7 @@ export async function updateProjectVatRate(projectId: string, vatRate: number) {
 
 // Update project notes
 export async function updateProjectNotes(projectId: string, notes: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -394,7 +394,7 @@ export async function updateProjectNotes(projectId: string, notes: string) {
 
 // Append text to project notes (e.g. from AI analysis)
 export async function appendProjectNotes(projectId: string, textToAppend: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -427,7 +427,7 @@ export async function appendProjectNotes(projectId: string, textToAppend: string
 
 // Toggle "Customer owns materials" mode
 export async function toggleMaterialsOwnedByCustomer(projectId: string, enabled: boolean) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -452,7 +452,7 @@ export async function updateProjectDeadline(
   projectId: string,
   deadline: string | null
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -477,7 +477,7 @@ export async function duplicateProject(
   projectId: string,
   newName?: string
 ): Promise<{ project?: ProjectWithRelations; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   try {
@@ -591,7 +591,7 @@ export async function updateHourlyRate(
   projectId: string,
   hourlyRate: number
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -623,7 +623,7 @@ export async function toggleLaborHoursInPdf(
   projectId: string,
   enabled: boolean
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -654,7 +654,7 @@ export async function updateProjectDocSettings(
     show_labor_hours_in_pdf?: boolean;
   }
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -684,7 +684,7 @@ export async function updateProjectPricingOverrides(
     coeff_surface?:    boolean | null;
   }
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -713,7 +713,7 @@ export async function updateProjectPricingOverrides(
 
 // Update project PDF notes (Uwagi do kosztorysu)
 export async function updateProjectPdfNotes(projectId: string, notes: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);

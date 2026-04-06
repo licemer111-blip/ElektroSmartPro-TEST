@@ -3,7 +3,7 @@
 import { logger } from "@/lib/logger";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/utils/supabase/server";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 
 // Define type inline to avoid re-export issues in Server Actions
 export type ProjectTag = {
@@ -22,7 +22,7 @@ export type ProjectTag = {
  * Archive a project (set status to 'archived')
  */
 export async function archiveProject(projectId: string): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -46,7 +46,7 @@ export async function archiveProject(projectId: string): Promise<{ success?: boo
  * Restore a project from archive (set status to 'draft')
  */
 export async function restoreProject(projectId: string): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -74,7 +74,7 @@ export async function restoreProject(projectId: string): Promise<{ success?: boo
  * Get all tags for current user
  */
 export async function getTags(): Promise<ProjectTag[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return [];
   }
@@ -100,7 +100,7 @@ export async function createTag(
   name: string,
   color: string = "#6366f1"
 ): Promise<{ success?: boolean; error?: string; tag?: ProjectTag }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -138,7 +138,7 @@ export async function updateTag(
   tagId: string,
   updates: { name?: string; color?: string }
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -162,7 +162,7 @@ export async function updateTag(
  * Delete a tag
  */
 export async function deleteTag(tagId: string): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -189,7 +189,7 @@ export async function addTagToProject(
   projectId: string,
   tagId: string
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -221,7 +221,7 @@ export async function removeTagFromProject(
   projectId: string,
   tagId: string
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -284,7 +284,7 @@ export async function updateProjectColor(
   projectId: string,
   color: string | null
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }

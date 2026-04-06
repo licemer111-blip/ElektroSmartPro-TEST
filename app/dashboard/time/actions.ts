@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/utils/supabase/server";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { validate } from "@/lib/validations";
 import { logger } from "@/lib/logger";
 import type { TimeEntry } from "./utils";
@@ -21,7 +21,7 @@ export async function startTimer(
   projectId: string,
   description?: string
 ): Promise<{ success?: boolean; error?: string; entry?: TimeEntry }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -66,7 +66,7 @@ export async function startTimer(
 export async function stopTimer(
   entryId: string
 ): Promise<{ success?: boolean; error?: string; entry?: TimeEntry }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -101,7 +101,7 @@ export async function addManualTimeEntry(
   endedAt: string,
   description?: string
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -139,7 +139,7 @@ export async function addManualTimeEntry(
  * Delete a time entry
  */
 export async function deleteTimeEntry(entryId: string): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -163,7 +163,7 @@ export async function deleteTimeEntry(entryId: string): Promise<{ success?: bool
  * Get running timer for current user
  */
 export async function getRunningTimer(): Promise<TimeEntry | null> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return null;
 
   const { data, error } = await supabase
@@ -191,7 +191,7 @@ export async function getMyTimeEntries(
   startDate?: string,
   endDate?: string
 ): Promise<TimeEntry[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return [];
 
   let query = supabase
@@ -262,7 +262,7 @@ export async function getTimeSummary(): Promise<{
   month: number;
   runningTimer: TimeEntry | null;
 }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { today: 0, week: 0, month: 0, runningTimer: null };
   }

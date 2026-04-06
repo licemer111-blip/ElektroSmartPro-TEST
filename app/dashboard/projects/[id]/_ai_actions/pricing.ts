@@ -910,7 +910,8 @@ export async function estimatePricesWithAI(
       return { success: false, error: "Blad pobierania pozycji z bazy danych" };
     }
 
-    let topLevelItems = (items || []).filter((item) => !item.parent_assembly_id);
+    type PricingItem = { id: string; name: string; unit: string; quantity: number; material_price: number | null; labor_price: number | null; final_material_price: number | null; final_labor_price: number | null; section: string | null; description: string | null; parent_assembly_id: string | null; knr_code: string | null; is_assembly_child: boolean | null };
+    let topLevelItems = ((items || []) as PricingItem[]).filter((item) => !item.parent_assembly_id);
     if (topLevelItems.length === 0) return { success: false, error: "Brak pozycji w kosztorysie" };
 
     if (targetItemIds && targetItemIds.length > 0) {
@@ -2017,8 +2018,8 @@ export async function repriceSingleItem(
         .select("final_material_price, material_price, quantity")
         .eq("project_id", opts.projectId);
 
-      const matSum = (allItems ?? []).reduce((acc, i) => {
-        return acc + ((i.final_material_price ?? i.material_price ?? 0) as number) * (i.quantity as number);
+      const matSum = ((allItems ?? []) as { final_material_price: number | null; material_price: number | null; quantity: number }[]).reduce((acc: number, i) => {
+        return acc + ((i.final_material_price ?? i.material_price ?? 0)) * i.quantity;
       }, 0);
       const presetVal = Math.round((matSum * opts.presetPercent) / 100 * 100) / 100;
 
@@ -2051,10 +2052,11 @@ export async function repriceSingleItem(
       .eq("user_id", user.id)
       .eq("is_active", true)
       .limit(500);
-    const userCatalogForReprice = userCatalogForRepriceRaw ?? [];
+    type CatalogRow = { name: string; unit: string; base_material_price: number; base_labor_price: number; knr_code: string | null };
+    const userCatalogForReprice = (userCatalogForRepriceRaw ?? []) as CatalogRow[];
 
     if (userCatalogForReprice.length > 0 && !opts.extraContext && !opts.overrideUnit) {
-      const catalogForMatch = userCatalogForReprice.map((c) => ({
+      const catalogForMatch = userCatalogForReprice.map((c: CatalogRow) => ({
         id: c.name,
         name: c.name,
         unit: c.unit,
@@ -2129,10 +2131,11 @@ export async function repriceSingleItem(
       .select("material_price, final_material_price, labor_price, final_labor_price, quantity")
       .eq("project_id", opts.projectId)
       .limit(200);
-    const ctxItems = projectItemsForCtx ?? [];
-    const ctxTotalNet = ctxItems.reduce((s, i) => {
-      return s + ((i.final_material_price ?? i.material_price ?? 0) as number) * (i.quantity as number)
-                + ((i.final_labor_price  ?? i.labor_price  ?? 0) as number) * (i.quantity as number);
+    type CtxItem = { material_price: number | null; final_material_price: number | null; labor_price: number | null; final_labor_price: number | null; quantity: number };
+    const ctxItems = (projectItemsForCtx ?? []) as CtxItem[];
+    const ctxTotalNet = ctxItems.reduce((s: number, i: CtxItem) => {
+      return s + (i.final_material_price ?? i.material_price ?? 0) * i.quantity
+                + (i.final_labor_price  ?? i.labor_price  ?? 0) * i.quantity;
     }, 0);
     const ctxComplexity = (project.complexity_factor as number | null) ?? 1.0;
     const ctxComplexLabel = ctxComplexity >= 1.25 ? "Smart/KNX/BMS" : ctxComplexity >= 1.15 ? "Przemys\u0142owy" : "Standard";

@@ -3,14 +3,14 @@
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import type { Team, TeamMember } from "@/lib/types/database";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 
 // ─── Read: get user's primary team ───────────────────────────────────────────
 
 export async function getUserTeam(): Promise<Team | null> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return null;
 
     const { data: ownedTeam } = await supabase
@@ -43,7 +43,7 @@ export async function getUserTeam(): Promise<Team | null> {
 
 export async function getAllUserTeams(): Promise<Team[]> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return [];
 
     const ownedTeams: Team[] = [];
@@ -125,7 +125,7 @@ export async function getTeamMembers(teamId: string): Promise<TeamMember[]> {
 // ─── Mutate: create team ──────────────────────────────────────────────────────
 
 export async function createTeam(name: string, description?: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Nie jesteś zalogowany" };
 
   const { data: existingTeam } = await supabase
@@ -154,7 +154,7 @@ export async function createTeam(name: string, description?: string) {
 // ─── Mutate: update team settings (owner only) ───────────────────────────────
 
 export async function updateTeam(teamId: string, data: { name?: string; description?: string }) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Nie jesteś zalogowany" };
 
   const { error } = await supabase
@@ -175,7 +175,7 @@ export async function updateTeam(teamId: string, data: { name?: string; descript
 // ─── Mutate: delete team (owner only) ────────────────────────────────────────
 
 export async function deleteTeam(teamId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Nie jesteś zalogowany" };
 
   const { data: team } = await supabase
@@ -199,7 +199,7 @@ export async function deleteTeam(teamId: string) {
 
 export async function getTeamCatalogItems(teamId: string) {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { items: [] };
 
     const { data, error } = await supabase
@@ -238,7 +238,7 @@ export async function getTeamCatalogItems(teamId: string) {
 
 export async function getTeamAssemblies(teamId: string) {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { assemblies: [] };
 
     const { data, error } = await supabase
@@ -287,7 +287,7 @@ export async function getTeamAssemblies(teamId: string) {
 // ─── Mutate: remove item from team ───────────────────────────────────────────
 
 export async function removeItemFromTeam(itemId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Nie jesteś zalogowany" };
 
   const { error } = await supabase
@@ -308,7 +308,7 @@ export async function removeItemFromTeam(itemId: string) {
 // ─── Mutate: remove assembly from team ───────────────────────────────────────
 
 export async function removeAssemblyFromTeam(assemblyId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Nie jesteś zalogowany" };
 
   const { error } = await supabase

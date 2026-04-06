@@ -3,14 +3,14 @@
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { teamInviteSchema, validate } from "@/lib/validations";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 
 // ─── Read: pending invitations for current user ───────────────────────────────
 
 export async function getPendingTeamInvitations() {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase || !user.email) return [];
 
     const { error: tableError } = await supabase
@@ -61,7 +61,7 @@ export async function getPendingTeamInvitations() {
 
 export async function getTeamOutgoingInvitations(teamId: string) {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return [];
 
     const { data, error } = await supabase
@@ -93,7 +93,7 @@ export async function inviteTeamMember(
   const { error: validationError } = validate(teamInviteSchema, { email, role });
   if (validationError) return { error: validationError };
 
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Nie jesteś zalogowany" };
 
   const { data: existingInvite } = await supabase
@@ -130,7 +130,7 @@ export async function inviteTeamMember(
 
 export async function acceptTeamInvitation(invitationId: string) {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       logger.error("Auth error in acceptTeamInvitation: No user", { invitationId });
       return { error: "Sesja wygasła. Zaloguj się ponownie." };

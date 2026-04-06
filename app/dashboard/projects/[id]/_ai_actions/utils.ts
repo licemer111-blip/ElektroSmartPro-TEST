@@ -5,7 +5,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
-import { requireAuth } from "@/lib/auth";
+import { requireAuth, tryAuth } from "@/lib/auth";
 import { checkAndIncrementAiUsage } from "@/lib/ai-usage";
 import { rateLimitAI } from "@/lib/rate-limit";
 
@@ -57,7 +57,7 @@ export interface GuardFail {
 }
 
 export async function checkGuard(featureName: string): Promise<GuardOk | GuardFail> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const aiCheck = await checkAndIncrementAiUsage(user.id, featureName);
@@ -79,7 +79,7 @@ export async function checkGuard(featureName: string): Promise<GuardOk | GuardFa
 // ── Simple auth-only guard (no quota, no rate-limit) ─────────────
 
 export async function checkAuthOnly(): Promise<GuardOk | GuardFail> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   return { user, supabase };
 }

@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import { createAssemblySchema, updateAssemblySchema, validate } from "@/lib/validations";
 import type {
@@ -46,7 +46,7 @@ export async function getUserAssemblies(
   visibilityFilter?: "all" | "personal" | "team"
 ): Promise<UserAssemblyWithItems[]> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       logger.error("No authenticated user in getUserAssemblies");
       redirect("/login");
@@ -107,7 +107,7 @@ export async function getUserAssemblyById(
   assemblyId: string
 ): Promise<UserAssemblyWithItems | null> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return null;
 
     const { data, error } = await supabase
@@ -131,7 +131,7 @@ export async function getUserAssemblyById(
 
 export async function createUserAssembly(input: CreateAssemblyInput) {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
     const { error: validationError } = validate(createAssemblySchema, input);
@@ -197,7 +197,7 @@ export async function createUserAssembly(input: CreateAssemblyInput) {
 
 export async function updateUserAssembly(assemblyId: string, input: UpdateAssemblyInput) {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
     const { error: validationError } = validate(updateAssemblySchema, input);
@@ -254,7 +254,7 @@ export async function updateUserAssembly(assemblyId: string, input: UpdateAssemb
 
 export async function deleteUserAssembly(assemblyId: string) {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
     const { error, count } = await supabase
@@ -344,7 +344,7 @@ const SEED_ASSEMBLIES: CreateAssemblyInput[] = [
 
 export async function seedAssembliesSmart() {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { error: "Musisz być zalogowany", summary: { added: 0, skipped: 0 } };
 
     const { data: existing } = await supabase.from("user_assemblies").select("name").eq("user_id", user.id);
@@ -378,7 +378,7 @@ export async function seedAssembliesSmart() {
 
 export async function updateAssemblyVisibility(assemblyId: string, visibility: DataVisibility, teamId?: string) {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
     const { data: assembly, error: fetchError } = await supabase.from("user_assemblies").select("user_id, team_id, visibility").eq("id", assemblyId).single();
@@ -413,7 +413,7 @@ export async function updateAssemblyVisibility(assemblyId: string, visibility: D
 
 export async function shareAssemblyCategoryWithTeam(categoryId: string, teamId: string): Promise<{ success?: boolean; sharedCount?: number; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
     const { data: assemblies, error: fetchError } = await supabase

@@ -1,6 +1,6 @@
 "use server";
 
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { logger } from "@/lib/logger";
 
@@ -9,7 +9,7 @@ import { logger } from "@/lib/logger";
  */
 export async function deleteEmailLog(emailLogId: string) {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
 
     if (!user || !supabase) {
       return { success: false, error: "Musisz być zalogowany" };

@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient as createSupabaseClient } from "@/utils/supabase/server";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import type { Client, ClientType, ClientSource } from "@/lib/types/database";
 import { logger } from "@/lib/logger";
@@ -11,7 +11,7 @@ import { logger } from "@/lib/logger";
 // =====================================================
 
 export async function getClients(): Promise<Client[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return [];
 
   const { data, error } = await supabase
@@ -28,7 +28,7 @@ export async function getClients(): Promise<Client[]> {
 }
 
 export async function getClientById(clientId: string): Promise<Client | null> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return null;
 
   const { data, error } = await supabase
@@ -46,7 +46,7 @@ export async function getClientById(clientId: string): Promise<Client | null> {
 }
 
 export async function getClientWithProjects(clientId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return null;
 
   // Get client
@@ -93,7 +93,7 @@ interface CreateClientInput {
 }
 
 export async function createClient(input: CreateClientInput): Promise<{ client?: Client; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -137,7 +137,7 @@ export async function updateClient(
   clientId: string,
   input: Partial<CreateClientInput>
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -166,7 +166,7 @@ export async function updateClient(
 // =====================================================
 
 export async function deleteClient(clientId: string): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -191,7 +191,7 @@ export async function deleteClient(clientId: string): Promise<{ success?: boolea
 // =====================================================
 
 export async function searchClients(query: string): Promise<Client[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return [];
 
   const { data, error } = await supabase
@@ -214,7 +214,7 @@ export async function searchClients(query: string): Promise<Client[]> {
 // =====================================================
 
 export async function getClientsForSelect(): Promise<{ id: string; name: string; company_name: string | null }[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return [];
 
   const { data, error } = await supabase
@@ -238,7 +238,7 @@ export async function assignClientToProject(
   projectId: string,
   clientId: string | null
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -266,7 +266,7 @@ export async function updateClientTags(
   clientId: string,
   tags: string[]
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -291,7 +291,7 @@ export async function updateClientTags(
 // =====================================================
 
 export async function getClientStats() {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return null;
 
   const { data: clients } = await supabase

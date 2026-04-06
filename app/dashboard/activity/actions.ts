@@ -1,6 +1,6 @@
 "use server";
 
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 
 // Define types inline to avoid re-export issues in Server Actions
@@ -35,7 +35,7 @@ export type ActivityActionType =
  * Includes own actions and actions on shared projects
  */
 export async function getRecentActivity(limit: number = 20): Promise<ActivityLog[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
 
   if (!user || !supabase) {
     return [];
@@ -91,7 +91,7 @@ export async function getProjectActivity(
   projectId: string,
   limit: number = 50
 ): Promise<ActivityLog[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
 
   if (!user || !supabase) {
     return [];
@@ -140,7 +140,7 @@ export async function logActivity(
   projectId?: string,
   metadata?: Record<string, unknown>
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
 
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
@@ -173,7 +173,7 @@ export async function getActivityStats(): Promise<{
   month: number;
   topActions: { action_type: string; count: number }[];
 }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
 
   if (!user || !supabase) {
     return { today: 0, week: 0, month: 0, topActions: [] };

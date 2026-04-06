@@ -1,7 +1,7 @@
 "use server";
 
 import { logger } from "@/lib/logger";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { createClient } from "@/utils/supabase/server";
 
@@ -18,7 +18,7 @@ interface SubmitSurveyInput {
 
 export async function submitSurvey(input: SubmitSurveyInput) {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Musisz być zalogowany" };
     }

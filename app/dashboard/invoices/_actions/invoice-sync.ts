@@ -1,13 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { getInFaktAPI } from "@/lib/infakt-api";
 import { logger } from "@/lib/logger";
 
 export async function markInvoiceAsPaid(invoiceId: string, isSubscription: boolean = false) {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Musisz być zalogowany" };
 
     const table = isSubscription ? "subscription_invoices" : "project_invoices";
@@ -47,7 +47,7 @@ export async function markInvoiceAsPaid(invoiceId: string, isSubscription: boole
 
 export async function syncInvoiceStatuses() {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Musisz być zalogowany" };
 
     const { data: profile } = await supabase

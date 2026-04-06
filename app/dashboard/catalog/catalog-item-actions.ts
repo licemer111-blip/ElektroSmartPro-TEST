@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { catalogItemSchema, validate } from "@/lib/validations";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import type { CatalogItem } from "./catalog-search-actions";
 
@@ -18,7 +18,7 @@ export async function createCatalogItem(formData: {
   const { error: validationError } = validate(catalogItemSchema, formData);
   if (validationError) throw new Error(validationError);
 
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) throw new Error("Unauthorized");
 
   const insertData: Record<string, string | number | null> = {
@@ -55,7 +55,7 @@ export async function updateCatalogItem(
     category_id?: string;
   }
 ) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) throw new Error("Unauthorized");
 
   const { data: existingItem, error: fetchError } = await supabase
@@ -110,7 +110,7 @@ export async function updateCatalogItem(
 }
 
 export async function deleteCatalogItem(id: string): Promise<{ success: boolean; error?: string; usedInProjects?: string[] }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { success: false, error: "Unauthorized" };
 
   const { data: existingItem, error: fetchError } = await supabase
@@ -167,7 +167,7 @@ export async function deleteCatalogItem(id: string): Promise<{ success: boolean;
 }
 
 export async function moveItemToCategory(itemId: string, categoryId: string | null) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) throw new Error("Unauthorized");
 
   const { error } = await supabase
@@ -186,7 +186,7 @@ export async function moveItemToCategory(itemId: string, categoryId: string | nu
 }
 
 export async function hideGlobalCatalogItem(itemId: string): Promise<{ success: boolean }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) throw new Error("Unauthorized");
 
   const { data: item, error: fetchError } = await supabase
@@ -218,7 +218,7 @@ export async function hideGlobalCatalogItem(itemId: string): Promise<{ success: 
 }
 
 export async function unhideGlobalCatalogItem(itemId: string): Promise<{ success: boolean }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) throw new Error("Unauthorized");
 
   const { error } = await supabase
@@ -238,7 +238,7 @@ export async function unhideGlobalCatalogItem(itemId: string): Promise<{ success
 }
 
 export async function getHiddenCatalogItems(): Promise<CatalogItem[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return [];
 
   const { data, error } = await supabase
@@ -283,7 +283,7 @@ export async function getHiddenCatalogItems(): Promise<CatalogItem[]> {
 export async function toggleFavoriteCatalogItem(
   itemId: string
 ): Promise<{ success: boolean; isFavorite: boolean }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) throw new Error("Unauthorized");
 
   const { data: existing } = await supabase
@@ -320,7 +320,7 @@ export async function toggleFavoriteCatalogItem(
 }
 
 export async function getFavoriteCatalogItemIds(): Promise<string[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return [];
 
   const { data, error } = await supabase
@@ -337,7 +337,7 @@ export async function getFavoriteCatalogItemIds(): Promise<string[]> {
 }
 
 export async function getFavoriteCatalogItems(): Promise<CatalogItem[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return [];
 
   const { data: favRows, error: favError } = await supabase
@@ -367,7 +367,7 @@ export async function getFavoriteCatalogItems(): Promise<CatalogItem[]> {
 export async function bulkDeleteCatalogItems(ids: string[]): Promise<{ count: number; error?: string }> {
   if (!ids.length) return { count: 0 };
 
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { count: 0, error: "Unauthorized" };
 
   // Pre-delete: remove all FK refs to avoid 23503
@@ -402,7 +402,7 @@ export async function fixZeroLaborItems(): Promise<{
   fixed: number;
   error?: string;
 }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { fixed: 0, error: "Brak autoryzacji" };
 
   const { applyPriceGuard } = await import("@/lib/utils/price-validator");

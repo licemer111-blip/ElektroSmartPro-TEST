@@ -2,7 +2,7 @@
 
 import { logger } from "@/lib/logger";
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import type { ProjectMember, ProjectMemberWithProfile } from "@/lib/types/database";
 
 // ⚡ Helper for aggressive revalidation (for collaborative features)
@@ -23,7 +23,7 @@ export async function getProjectMembers(
   projectId: string
 ): Promise<ProjectMemberWithProfile[]> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return [];
     }
@@ -78,7 +78,7 @@ export async function inviteProjectMember(
 ): Promise<{ success?: boolean; error?: string }> {
   try {
 
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { error: "Musisz być zalogowany" };
     }
@@ -159,7 +159,7 @@ export async function acceptProjectInvitation(
 ): Promise<{ success?: boolean; error?: string }> {
   try {
 
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { error: "Musisz być zalogowany" };
     }
@@ -202,7 +202,7 @@ export async function declineProjectInvitation(
 ): Promise<{ success?: boolean; error?: string }> {
   try {
 
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { error: "Musisz być zalogowany" };
     }
@@ -241,7 +241,7 @@ export async function removeProjectMember(
 ): Promise<{ success?: boolean; error?: string }> {
   
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       logger.error("No user logged in", {});
       return { error: "Musisz być zalogowany" };
@@ -294,7 +294,7 @@ export async function updateProjectMemberRole(
   newRole: ProjectMemberRole
 ): Promise<{ success?: boolean; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { error: "Musisz być zalogowany" };
     }
@@ -337,7 +337,7 @@ export async function updateProjectMemberRole(
 // Get pending invitations for current user
 export async function getPendingInvitations(): Promise<ProjectMemberWithProfile[]> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return [];
     }

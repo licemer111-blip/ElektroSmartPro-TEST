@@ -8,7 +8,7 @@ import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
 import { AI_MODEL_TIER1 } from "@/lib/ai-models";
 import { z } from "zod";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { CLEAN_PRZEDMIAR_SYSTEM_PROMPT } from "@/lib/ai/prompts";
 import { parseStructuredTable } from "@/lib/project-import-utils";
 
@@ -37,7 +37,7 @@ export async function cleanPrzedmiarWithAi(
   rawText: string
 ): Promise<CleanPrzedmiarResult> {
   try {
-    const { user } = await requireAuth().catch(() => ({ user: null }));
+    const { user } = await tryAuth();
     if (!user) return { success: false, error: "Musisz być zalogowany" };
 
     const aiCheck = await checkAndIncrementAiUsage(user.id, AI_FUNCTION_NAMES.cleanPrzedmiar);

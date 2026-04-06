@@ -10,7 +10,7 @@ import { logger } from "@/lib/logger";
 import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
 import { z } from "zod";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { checkAndIncrementAiUsage } from "@/lib/ai-usage";
 import { AI_FUNCTION_NAMES } from "@/lib/ai-quota-config";
 import { rateLimitAI } from "@/lib/rate-limit";
@@ -38,7 +38,7 @@ export async function categorizeCatalogItemWithAI(
   itemName: string
 ): Promise<{ category?: string; subcategory?: string; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
     const aiCheck = await checkAndIncrementAiUsage(user.id, "categorizeCatalog");
@@ -83,7 +83,7 @@ export async function detectPriceAnomalyWithAI(
   price: number
 ): Promise<{ isAnomaly: boolean; suggestion?: string; marketPrice?: string; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { isAnomaly: false, error: "Musisz być zalogowany" };
 
     const aiCheck = await checkAndIncrementAiUsage(user.id, "detectPriceAnomaly");
@@ -156,7 +156,8 @@ export async function fillMissingKnrCodes(projectId: string): Promise<KnrCodeRes
       .eq("project_id", projectId)
       .order("sort_order");
 
-    const itemsNeedingCode = (items || []).filter(
+    type KnrItem = { id: string; name: string; unit: string; quantity: number; knr_code: string | null; labor_price: number | null; parent_assembly_id: string | null };
+    const itemsNeedingCode = ((items || []) as KnrItem[]).filter(
       (i) => !i.parent_assembly_id
         && (!i.knr_code || i.knr_code.trim() === "")
     );
@@ -166,7 +167,7 @@ export async function fillMissingKnrCodes(projectId: string): Promise<KnrCodeRes
     }
 
     const itemsList = itemsNeedingCode
-      .map((item, i) => `${i}. "${item.name}" | jm: ${item.unit} | ilosc: ${item.quantity}`)
+      .map((item: KnrItem, i: number) => `${i}. "${item.name}" | jm: ${item.unit} | ilosc: ${item.quantity}`)
       .join("\n");
 
     const { object: result } = await generateObject({
@@ -264,7 +265,8 @@ export async function fillMissingRbhNorms(projectId: string): Promise<RbhNormRes
       .eq("project_id", projectId)
       .order("sort_order");
 
-    const itemsNeedingNorm = (items || []).filter(
+    type NormItem = { id: string; name: string; unit: string; quantity: number; labor_norm: number | null; labor_price: number | null; parent_assembly_id: string | null };
+    const itemsNeedingNorm = ((items || []) as NormItem[]).filter(
       (i) => !i.parent_assembly_id
         && (i.labor_norm == null || i.labor_norm === 0)
     );
@@ -274,7 +276,7 @@ export async function fillMissingRbhNorms(projectId: string): Promise<RbhNormRes
     }
 
     const itemsList = itemsNeedingNorm
-      .map((item, i) => `${i}. "${item.name}" | jm: ${item.unit} | ilosc: ${item.quantity}`)
+      .map((item: NormItem, i: number) => `${i}. "${item.name}" | jm: ${item.unit} | ilosc: ${item.quantity}`)
       .join("\n");
 
     const { object: result } = await generateObject({

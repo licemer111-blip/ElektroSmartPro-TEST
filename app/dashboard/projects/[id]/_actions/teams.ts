@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import type { Team } from "@/lib/types/database";
 
@@ -10,7 +10,7 @@ export async function getUserProjectRole(
   projectId: string
 ): Promise<"owner" | "editor" | "viewer" | "elektryk" | "kierownik" | "admin" | null> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return null;
 
     // Check if owner
@@ -42,7 +42,7 @@ export async function assignProject(
   projectId: string,
   assignToUserId: string | null
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Unauthorized" };
 
   // Verify permissions (owner only can assign)
@@ -88,7 +88,7 @@ export async function assignProject(
 
 // Fetch user team for project page (minimal data)
 export async function getUserTeamForProjectPage(): Promise<Team | null> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return null;
 
   const { data: member } = await supabase

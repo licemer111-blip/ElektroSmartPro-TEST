@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/utils/supabase/server";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import {
   computeZestawAggregates,
@@ -47,7 +47,7 @@ export async function syncPanelToEstimate(
   input: PanelSyncInput
 ): Promise<PanelSyncResult> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Nie jesteś zalogowany", inserted: 0, updated: 0, orphaned: 0, zestawInserted: 0 };
     }

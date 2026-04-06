@@ -1,6 +1,6 @@
 "use server";
 
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 
 export interface AnalyticsData {
@@ -28,7 +28,7 @@ export interface AnalyticsData {
 }
 
 export async function getAnalyticsData(): Promise<AnalyticsData> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
 
   if (!user || !supabase) {
     return getEmptyAnalytics();

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/utils/supabase/server";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 // requirePro removed — demo users can access all features
 import { templateUpdateSchema, validate } from "@/lib/validations";
 import { logger } from "@/lib/logger";
@@ -37,7 +37,7 @@ export type TemplateItem = {
  * Get all templates for current user
  */
 export async function getTemplates(): Promise<ProjectTemplate[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return [];
   }
@@ -60,7 +60,7 @@ export async function getTemplates(): Promise<ProjectTemplate[]> {
  * Get a single template by ID
  */
 export async function getTemplateById(templateId: string): Promise<ProjectTemplate | null> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return null;
   }
@@ -88,7 +88,7 @@ export async function saveProjectAsTemplate(
   templateDescription?: string
 ): Promise<{ success?: boolean; error?: string; templateId?: string }> {
  
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -155,7 +155,7 @@ export async function createProjectFromTemplate(
   projectName: string
 ): Promise<{ success?: boolean; error?: string; projectId?: string }> {
  
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -260,7 +260,7 @@ export async function updateTemplate(
   templateId: string,
   updates: { name?: string; description?: string }
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -292,7 +292,7 @@ export async function updateTemplate(
 export async function duplicateTemplate(
   templateId: string
 ): Promise<{ success?: boolean; error?: string; templateId?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -340,7 +340,7 @@ export async function duplicateTemplate(
 export async function deleteTemplate(
   templateId: string
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }

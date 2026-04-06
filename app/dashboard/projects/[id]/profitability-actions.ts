@@ -1,6 +1,6 @@
 "use server";
 
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 
 export interface ProfitabilityData {
@@ -42,7 +42,7 @@ export interface ProfitabilityData {
 }
 
 export async function getProjectProfitability(projectId: string): Promise<ProfitabilityData | null> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return null;
 
   // Get project with region + VAT

@@ -2,7 +2,7 @@
 
 import { unstable_noStore as noStore } from "next/cache";
 import { normalizePolish, searchComparator } from "@/lib/utils";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import { searchKnrNorms } from "./ai-search-fallback";
 
@@ -63,7 +63,7 @@ export async function getCatalogItems(params: {
     viewMode = "all",
   } = params;
 
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { items: [], total: 0, page, pageSize, totalPages: 0 };
   }
@@ -268,7 +268,7 @@ export async function getCatalogItems(params: {
  * Get total catalog count — respects viewMode
  */
 export async function getTotalCatalogCount(viewMode?: "all" | "core" | "own"): Promise<number> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return 0;
 
   const { data: profile } = await supabase
@@ -307,7 +307,7 @@ export async function getCategoryItemCounts(
   viewMode?: "all" | "core" | "own"
 ): Promise<Record<string, number>> {
   noStore();
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return {};
 
   let allData: { id: string; category_id: string | null }[] = [];
@@ -362,7 +362,7 @@ export async function getCategoryItemCounts(
  * Get count of user-created categories only (excludes global/system categories)
  */
 export async function getUserCategoriesCount(): Promise<number> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return 0;
 
   const { count, error } = await supabase
@@ -378,7 +378,7 @@ export async function getUserCategoriesCount(): Promise<number> {
  * Get all categories for dropdown
  */
 export async function getCatalogCategories() {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return [];
 
   const { data, error } = await supabase

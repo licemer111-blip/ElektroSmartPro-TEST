@@ -2,7 +2,7 @@
 
 import { logger } from "@/lib/logger";
 import { createClient } from "@/utils/supabase/server";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
 // Pobierz komentarze do pozycji
@@ -35,7 +35,7 @@ export async function addItemComment(
   content: string,
   mentionedUserIds: string[] = []
 ) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     throw new Error("Musisz być zalogowany");
   }
@@ -70,7 +70,7 @@ export async function addItemComment(
 
 // Oznacz komentarz jako rozwiązany
 export async function resolveComment(commentId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     throw new Error("Musisz być zalogowany");
   }
@@ -105,7 +105,7 @@ export async function resolveComment(commentId: string) {
 
 // Usuń komentarz
 export async function deleteComment(commentId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     throw new Error("Musisz być zalogowany");
   }

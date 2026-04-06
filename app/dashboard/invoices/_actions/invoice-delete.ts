@@ -1,6 +1,6 @@
 "use server";
 
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { logger } from "@/lib/logger";
 
@@ -8,7 +8,7 @@ export async function deleteSubscriptionInvoice(
   invoiceId: string
 ): Promise<{ success?: boolean; error?: string }> {
   try {
-    const { user } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user } = await tryAuth();
     if (!user) return { error: "Musisz być zalogowany" };
 
     const { data: invoice } = await supabaseAdmin
@@ -41,7 +41,7 @@ export async function resendInvoiceEmail(
   invoiceId: string
 ): Promise<{ success?: boolean; error?: string }> {
   try {
-    const { user } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user } = await tryAuth();
     if (!user) return { error: "Musisz być zalogowany" };
 
     const { data: invoice } = await supabaseAdmin

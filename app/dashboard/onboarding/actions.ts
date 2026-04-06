@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
 export interface OnboardingData {
@@ -9,7 +9,7 @@ export interface OnboardingData {
 }
 
 export async function saveOnboardingProfile(data: OnboardingData): Promise<{ error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Brak autoryzacji" };
 
   const { error } = await supabase
@@ -51,7 +51,7 @@ const DEMO_ITEMS = [
 ];
 
 export async function createDemoProject(): Promise<{ projectId?: string; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Brak autoryzacji" };
 
   const existingDemo = await supabase
@@ -104,7 +104,7 @@ export async function createDemoProject(): Promise<{ projectId?: string; error?:
 }
 
 export async function resetOnboarding(): Promise<{ error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Brak autoryzacji" };
 
   const { error } = await supabase

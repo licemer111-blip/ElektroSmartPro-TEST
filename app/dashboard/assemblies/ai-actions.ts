@@ -1,7 +1,7 @@
 "use server";
 
 import { logger } from "@/lib/logger";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { checkAndIncrementAiUsage } from "@/lib/ai-usage";
 import { AI_FUNCTION_NAMES } from "@/lib/ai-quota-config";
 import { createClient } from "@/utils/supabase/server";
@@ -78,7 +78,7 @@ export async function generateAssembliesWithAI(
   
   const { description, visibility = 'personal', team_id } = options;
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
 
     if (!user || !supabase) {
       return { success: false, error: "Musisz być zalogowany" };

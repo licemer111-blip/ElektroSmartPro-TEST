@@ -64,3 +64,27 @@ export async function withAuth<T>(
     throw err;
   }
 }
+
+/**
+ * Non-throwing alternative to requireAuth().catch().
+ * Returns { user, supabase } on success, or { user: null, supabase: null } if not authenticated.
+ * UNLIKE the bare .catch() pattern, this logs unexpected (non-auth) errors to prevent silent failures.
+ * 
+ * Migration path: replace `requireAuth().catch(() => ({ user: null, supabase: null }))`
+ * with `tryAuth()` for the same behavior + error visibility.
+ */
+export async function tryAuth(): Promise<{
+  user: User | null;
+  supabase: Awaited<ReturnType<typeof createClient>> | null;
+}> {
+  try {
+    return await requireAuth();
+  } catch (err) {
+    if (err instanceof AuthError) {
+      return { user: null, supabase: null };
+    }
+    // Non-auth error (DB timeout, network failure) — log it, don't silently swallow
+    console.error("[tryAuth] Unexpected error during authentication:", err instanceof Error ? err.message : String(err));
+    return { user: null, supabase: null };
+  }
+}

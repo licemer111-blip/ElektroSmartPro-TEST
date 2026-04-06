@@ -1,6 +1,6 @@
 "use server";
 
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { logger } from "@/lib/logger";
 
@@ -16,7 +16,7 @@ export async function createOfferLink(
   recipientEmail?: string,
   portalSettings?: PortalSettings
 ): Promise<{ success?: boolean; error?: string; token?: string; url?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -58,7 +58,7 @@ export async function createOfferLink(
 }
 
 export async function getOfferLinks(projectId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return [];
 
   const { data } = await supabase
@@ -72,7 +72,7 @@ export async function getOfferLinks(projectId: string) {
 }
 
 export async function getOfferLinkById(linkId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return null;
 
   const { data } = await supabase
@@ -86,7 +86,7 @@ export async function getOfferLinkById(linkId: string) {
 }
 
 export async function deleteOfferLink(linkId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Unauthorized" };
 
   const { error } = await supabase

@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { checkAndIncrementAiUsage, getAiFunctionUsage } from "@/lib/ai-usage";
 import { generateEstimateItems, type EstimateItem, type ObjectTypeKey, type QualityStandard, type ZakresPrac, type ConditionalFields } from "@/lib/quick-estimate-config";
 import { google } from "@ai-sdk/google";
@@ -43,7 +43,7 @@ export async function generateQuickEstimateWithAI(params: {
   conditionalFields?: ConditionalFields;
 }): Promise<{ success: boolean; items?: EstimateItem[]; remaining?: number; error?: string; fallback?: boolean }> {
   try {
-    const { user } = await requireAuth().catch(() => ({ user: null }));
+    const { user } = await tryAuth();
     if (!user) return { success: false, error: "Musisz byc zalogowany" };
 
     const aiCheck = await checkAndIncrementAiUsage(user.id, "quickEstimate");
@@ -236,7 +236,7 @@ export async function createQuickEstimateProject(params: {
   vatRate: number;
   items: EstimateItem[];
 }): Promise<{ success?: boolean; error?: string; projectId?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
 
   if (!user || !supabase) {
     return { error: "Musisz byc zalogowany" };
@@ -389,7 +389,7 @@ export async function createQuickEstimateProject(params: {
  */
 export async function getQuickEstimateUsage(): Promise<{ used: number; limit: number; remaining: number } | null> {
   try {
-    const { user } = await requireAuth().catch(() => ({ user: null }));
+    const { user } = await tryAuth();
     if (!user) return null;
     return await getAiFunctionUsage(user.id, "quickEstimate");
   } catch {

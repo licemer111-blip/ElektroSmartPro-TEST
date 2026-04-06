@@ -1,6 +1,6 @@
 "use server";
 
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { logger } from "@/lib/logger";
 import type { ProjectPhoto, PhotoType } from "@/lib/types/database";
@@ -13,7 +13,7 @@ export async function uploadProjectPhoto(
   imageDataUrl: string
 ): Promise<{ success: boolean; error?: string; imageUrl?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Unauthorized" };
     }
@@ -99,7 +99,7 @@ export async function listProjectPhotos(
   projectId: string
 ): Promise<{ urls: string[]; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { urls: [], error: "Unauthorized" };
 
     const folder = `${user.id}`;
@@ -131,7 +131,7 @@ export async function uploadProjectPhotoFile(
   formData: FormData
 ): Promise<{ success: boolean; error?: string; imageUrl?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Unauthorized" };
 
     const file = formData.get("file") as File | null;
@@ -169,7 +169,7 @@ export async function uploadProjectPhotoFile(
 // =============================================
 
 export async function getProjectPhotos(projectId: string): Promise<ProjectPhoto[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return [];
 
   const { data, error } = await supabase
@@ -191,7 +191,7 @@ export async function uploadAndSavePhoto(
   formData: FormData
 ): Promise<{ success: boolean; error?: string; photo?: ProjectPhoto }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Unauthorized" };
 
     const file = formData.get("file") as File | null;
@@ -255,7 +255,7 @@ export async function uploadAndSavePhoto(
 }
 
 export async function deleteProjectPhotoRecord(photoId: string, projectId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Unauthorized" };
 
   // Get photo record to find storage path
@@ -290,7 +290,7 @@ export async function updatePhotoMetadata(
   projectId: string,
   updates: Partial<{ caption: string; location: string; photo_type: PhotoType; item_id: string | null }>
 ) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Unauthorized" };
 
   const { error } = await supabase

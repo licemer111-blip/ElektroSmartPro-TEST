@@ -11,7 +11,7 @@
  * Called from: "Napraw normy" button in project detail page / admin tools.
  */
 
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { matchItem, DEFAULT_ENGINE_SETTINGS } from "@/lib/services/matching-engine";
 import { scaleLaborNorm } from "@/lib/labor-time";
 
@@ -32,7 +32,7 @@ export async function batchRematchNullLaborItems(
   projectId: string,
 ): Promise<BatchRematchResult> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, totalScanned: 0, fixed: 0, stillMissing: 0, error: "Musisz być zalogowany" };
     }

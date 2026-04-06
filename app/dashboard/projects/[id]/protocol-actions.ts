@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { logger } from "@/lib/logger";
 import type {
@@ -17,7 +17,7 @@ import type {
 
 // Get all protocols for a project
 export async function getProjectProtocols(projectId: string): Promise<MeasurementProtocolWithEntries[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return [];
 
   const { data, error } = await supabase
@@ -47,7 +47,7 @@ export async function createProtocol(projectId: string, data: {
   instrument_serial?: string;
   calibration_date?: string;
 }) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Unauthorized" };
 
   const { data: protocol, error } = await supabase
@@ -95,7 +95,7 @@ export async function updateProtocol(protocolId: string, projectId: string, upda
   overall_result: ProtocolResult;
   notes: string;
 }>) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Unauthorized" };
 
   const { error } = await supabase
@@ -115,7 +115,7 @@ export async function updateProtocol(protocolId: string, projectId: string, upda
 
 // Delete a protocol
 export async function deleteProtocol(protocolId: string, projectId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Unauthorized" };
 
   const { error } = await supabase
@@ -149,7 +149,7 @@ export async function addMeasurementEntry(protocolId: string, projectId: string,
   result?: MeasurementResult;
   notes?: string;
 }) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Unauthorized" };
 
   // Auto-determine result based on measurement type and values
@@ -241,7 +241,7 @@ export async function updateMeasurementEntry(
     notes: string;
   }>
 ) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Unauthorized" };
 
   const { error } = await supabase
@@ -260,7 +260,7 @@ export async function updateMeasurementEntry(
 
 // Delete measurement entry
 export async function deleteMeasurementEntry(entryId: string, projectId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Unauthorized" };
 
   const { error } = await supabase

@@ -3,7 +3,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { generateMasterCatalog } from "./generate-catalog-action";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import {
   CABLE_SECTIONS, CABLE_CORES, CABLE_TYPES,
@@ -31,7 +31,7 @@ import {
 
 export async function generateBigCatalogMatrix() {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, count: 0, error: "Unauthorized" };
     }
@@ -172,7 +172,7 @@ export async function createCategory(name: string): Promise<{
   error: string | null 
 }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Unauthorized" };
     }
@@ -246,7 +246,7 @@ export async function getCategories(): Promise<{
   error: string | null 
 }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Unauthorized" };
     }
@@ -290,7 +290,7 @@ export async function generateProCatalog(): Promise<{
   error: string | null;
 }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, count: 0, error: "Musisz by─З zalogowany" };
     }

@@ -1,7 +1,7 @@
 "use server";
 
 import { logger } from "@/lib/logger";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { getProjectDocumentUrl } from "./document-actions";
 import { checkAndIncrementAiUsage } from "@/lib/ai-usage";
 import { google } from "@ai-sdk/google";
@@ -19,7 +19,7 @@ export async function getPdfPageCount(
   if (!documentPath?.trim()) return { error: "Nie wybrano dokumentu" };
   if (!documentPath.toLowerCase().endsWith(".pdf")) return { error: "Tylko PDF." };
 
-  const { user } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user } = await tryAuth();
   if (!user) return { error: "Musisz być zalogowany" };
 
   const { url, error: urlError } = await getProjectDocumentUrl(projectId, documentPath, 60);
@@ -199,7 +199,7 @@ export async function askDocumentAssistantCountTile(
   documentType?: "lighting" | "power" | "general"
 ): Promise<{ counts?: { lamps?: number; sockets?: number; switches?: number; [key: string]: number | undefined }; error?: string }> {
   if (!imageBase64?.trim()) return { error: "Brak obrazu." };
-  const { user } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user } = await tryAuth();
   if (!user) return { error: "Musisz być zalogowany" };
   const aiCheck = await checkAndIncrementAiUsage(user.id, "docAssistant");
   if (!aiCheck.allowed) return { error: aiCheck.error || "Limit AI wyczerpany" };
@@ -265,7 +265,7 @@ export async function askDocumentAssistantWithPageImage(
   if (!imageBase64?.trim()) return { error: "Brak obrazu strony." };
   if (pageNumber < 1) return { error: "Nieprawidłowy numer strony." };
 
-  const { user: user2 } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user: user2 } = await tryAuth();
   if (!user2) return { error: "Musisz być zalogowany" };
   const aiCheck2 = await checkAndIncrementAiUsage(user2.id, "docAssistantPage");
   if (!aiCheck2.allowed) return { error: aiCheck2.error || "Limit AI wyczerpany" };
@@ -313,7 +313,7 @@ export async function askDocumentAssistant(
   if (!question?.trim()) return { error: "Wpisz pytanie" };
   if (!documentPath?.trim()) return { error: "Nie wybrano dokumentu" };
 
-  const { user: user3 } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user: user3 } = await tryAuth();
   if (!user3) return { error: "Musisz być zalogowany" };
   const aiCheck3 = await checkAndIncrementAiUsage(user3.id, "docAssistantCount");
   if (!aiCheck3.allowed) return { error: aiCheck3.error || "Limit AI wyczerpany" };

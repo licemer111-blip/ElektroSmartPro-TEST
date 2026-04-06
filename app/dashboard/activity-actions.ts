@@ -2,13 +2,13 @@
 
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireAuth } from "@/lib/auth";
+import { requireAuth, tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import type { Profile } from "@/lib/types/database";
 
 export async function getUserProfile(): Promise<Profile | null> {
   noStore();
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) redirect("/login");
 
   let { data, error } = await supabase
@@ -49,7 +49,7 @@ export async function getRecentClientActivity(): Promise<{
   action_url?: string;
   data?: Record<string, unknown>;
 }[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return [];
 
   const { data } = await supabase

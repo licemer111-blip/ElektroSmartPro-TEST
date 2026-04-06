@@ -1,12 +1,12 @@
 "use server";
 
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { getInFaktAPI } from "@/lib/infakt-api";
 import { logger } from "@/lib/logger";
 
 export async function getProjectInvoices() {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Musisz być zalogowany", invoices: [] };
 
     const { data: invoices, error } = await supabase
@@ -29,7 +29,7 @@ export async function getProjectInvoices() {
 
 export async function getSubscriptionInvoices() {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Musisz być zalogowany", invoices: [] };
 
     const { data: invoices, error } = await supabase
@@ -52,7 +52,7 @@ export async function getSubscriptionInvoices() {
 
 export async function getOverdueInvoices() {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Musisz być zalogowany", invoices: [] };
 
     const today = new Date().toISOString().split("T")[0];
@@ -87,7 +87,7 @@ export async function getOverdueInvoices() {
 
 export async function getNextInvoiceNumber() {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Musisz być zalogowany", number: null };
 
     const { data: profile } = await supabase
@@ -140,7 +140,7 @@ export async function getNextInvoiceNumber() {
 
 export async function getInFaktInvoices(params?: { page?: number; limit?: number; status?: string }) {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Musisz być zalogowany", invoices: [] };
 
     const { data: profile } = await supabase

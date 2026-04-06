@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 
 export interface Checkpoint {
   id: string;
@@ -16,10 +16,7 @@ export interface Checkpoint {
 export async function getProjectCheckpoints(
   projectId: string
 ): Promise<Checkpoint[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({
-    user: null,
-    supabase: null,
-  }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return [];
 
   const { data, error } = await supabase
@@ -37,10 +34,7 @@ export async function createCheckpoint(
   projectId: string,
   title: string
 ): Promise<{ success: boolean; checkpoint?: Checkpoint; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({
-    user: null,
-    supabase: null,
-  }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { success: false, error: "Musisz być zalogowany" };
 
   if (!title.trim() || title.trim().length > 500) {
@@ -82,10 +76,7 @@ export async function updateCheckpoint(
   checkpointId: string,
   updates: { title?: string; status?: string }
 ): Promise<{ success: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({
-    user: null,
-    supabase: null,
-  }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { success: false, error: "Musisz być zalogowany" };
 
   const updateData: Record<string, string> = {};
@@ -117,10 +108,7 @@ export async function deleteCheckpoint(
   projectId: string,
   checkpointId: string
 ): Promise<{ success: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({
-    user: null,
-    supabase: null,
-  }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { success: false, error: "Musisz być zalogowany" };
 
   const { error } = await supabase

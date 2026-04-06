@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/utils/supabase/server";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { projectItemUpdateSchema, validate } from "@/lib/validations";
 import { logger } from "@/lib/logger";
 import type { ProjectItem } from "@/lib/types/database";
@@ -42,7 +42,7 @@ export async function addCatalogItemToProject(
   catalogItemId: string,
   quantity: number = 1.0
 ): Promise<{ error: string } | { success: boolean; isAssembly?: boolean }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -231,7 +231,7 @@ export async function updateProjectItem(
     is_investor_material?: boolean;
   }
 ) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -274,7 +274,7 @@ export async function updateProjectItem(
 
 // Delete project item
 export async function deleteProjectItem(projectId: string, itemId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -304,7 +304,7 @@ export async function duplicateProjectItem(
   projectId: string,
   itemId: string
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -356,7 +356,7 @@ export async function duplicateProjectItem(
 
 // Add custom item (not from catalog)
 export async function addCustomItem(projectId: string, formData: FormData) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -408,7 +408,7 @@ export async function addProjectItemDirect(
     parent_assembly_id?: string;
   }
 ) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);

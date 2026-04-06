@@ -1,14 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import { isTeamAdmin } from "@/lib/team-auth";
 
 // ─── Send message ─────────────────────────────────────────────────────────────
 
 export async function sendTeamMessage(teamId: string, content: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Nie jesteś zalogowany" };
 
   const { data, error } = await supabase
@@ -28,7 +28,7 @@ export async function sendTeamMessage(teamId: string, content: string) {
 // ─── Get messages ─────────────────────────────────────────────────────────────
 
 export async function getTeamMessages(teamId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Nie jesteś zalogowany", messages: [] };
 
   const { data, error } = await supabase
@@ -64,7 +64,7 @@ export async function getTeamMessages(teamId: string) {
 // ─── Edit message (own only) ──────────────────────────────────────────────────
 
 export async function editTeamMessage(messageId: string, newContent: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Nie jesteś zalogowany" };
 
   const { error } = await supabase
@@ -84,7 +84,7 @@ export async function editTeamMessage(messageId: string, newContent: string) {
 // ─── Delete message (own or admin) ───────────────────────────────────────────
 
 export async function deleteTeamMessage(messageId: string, teamId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Nie jesteś zalogowany" };
 
   const adminCheck = await isTeamAdmin(supabase, teamId, user.id);
@@ -110,7 +110,7 @@ export async function sendTeamMessageWithAttachment(
   attachment?: { url: string; filename: string; type: string; size: number }
 ) {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { error: "Nie jesteś zalogowany" };
 
     if (attachment) {

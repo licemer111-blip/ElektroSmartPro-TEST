@@ -7,7 +7,7 @@
  * (!materials_owned_by_customer).
  */
 
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { classifyIntent } from "@/lib/services/semantic-classifier";
 import { getMaterialBill } from "@/lib/config/material-bill-bridge";
 import { getForbiddenCategories } from "@/lib/services/material-constraints";
@@ -47,7 +47,7 @@ export interface MaterialBrainResult {
 export async function getMaterialBillForProject(
   projectId: string
 ): Promise<MaterialBrainResult> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { bills: [], totalNet: 0, totalGross: 0, error: "Musisz być zalogowany" };
 
   const [{ data: project }, { data: profile }, { data: items }] = await Promise.all([
@@ -177,7 +177,7 @@ export async function saveProjectMaterials(
   laborItemId: string,
   items: SaveMaterialItem[]
 ): Promise<SaveMaterialsResult> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { success: false, saved: 0, error: "Musisz być zalogowany" };
   if (items.length === 0) return { success: false, saved: 0, error: "Brak wybranych materiałów" };
 

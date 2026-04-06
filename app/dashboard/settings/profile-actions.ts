@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import type { Profile } from "@/lib/types/database";
 import { profileSchema, validate } from "@/lib/validations";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 
 // ============================================================================
@@ -15,7 +15,7 @@ import { logger } from "@/lib/logger";
  */
 export async function getProfile(): Promise<{ data: Profile | null; error: string | null }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { data: null, error: "Nie jesteś zalogowany" };
     }
@@ -86,7 +86,7 @@ export async function updateProfile(profileData: {
       return { success: false, error: validationError };
     }
 
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Nie jesteś zalogowany" };
     }
@@ -129,7 +129,7 @@ export async function updateProfile(profileData: {
  */
 export async function uploadLogo(file: File): Promise<{ success: boolean; url?: string; error: string | null }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Nie jesteś zalogowany" };
     }
@@ -165,7 +165,7 @@ export async function uploadLogo(file: File): Promise<{ success: boolean; url?: 
  */
 export async function ensureProfile(): Promise<{ success: boolean; error: string | null }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Nie jesteś zalogowany" };
     }
@@ -201,7 +201,7 @@ export async function ensureProfile(): Promise<{ success: boolean; error: string
  */
 export async function updateInFaktAPIKey(apiKey: string): Promise<{ success: boolean; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Nie jesteś zalogowany" };
     }

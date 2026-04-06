@@ -1,6 +1,6 @@
 "use server";
 
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import type { CatalogItem, CatalogCategory } from "@/lib/types/database";
 
@@ -15,7 +15,7 @@ export async function getCatalogCategories(
   _pricingMode?: string, // @deprecated — ignored, use sourceFilter directly
   sourceFilter?: "personal" | "team" | "all"
 ): Promise<CatalogCategoryWithCount[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return [];
   }
@@ -126,7 +126,7 @@ export async function getCatalogDataBatch(
 }> {
   const empty = { categories: [], itemsByCategory: {} };
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return empty;
 
     const effectiveSource: "personal" | "team" | "all" = sourceFilter ?? "personal";
@@ -203,7 +203,7 @@ export async function getCatalogItemsByCategory(
   sourceFilter?: "personal" | "team" | "all"
 ): Promise<CatalogItem[]> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       logger.error("Auth failed in getCatalogItemsByCategory", { categoryId });
       return [];
@@ -271,7 +271,7 @@ export async function getCatalogItemsBatch(
   sourceFilter?: "personal" | "team" | "all"
 ): Promise<Record<string, CatalogItem[]>> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return {};
 
     const effectiveSource: "personal" | "team" | "all" = sourceFilter ?? "personal";
@@ -328,7 +328,7 @@ export async function searchCatalogItems(
   searchTerm: string,
   searchMode: "own" | "engine" | "hybrid" = "hybrid",
 ): Promise<CatalogItem[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return [];
   }

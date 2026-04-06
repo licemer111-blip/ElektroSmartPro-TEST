@@ -1,6 +1,6 @@
 "use server";
 
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { normalizeText } from "@/lib/services/normalization";
 import type { DictionaryEntryType } from "@/lib/services/matching-engine";
 
@@ -26,7 +26,7 @@ export async function learnKnrMapping(
   payload: LearnPayload,
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Nie jesteś zalogowany" };
 
     const { originalName, resolvedKnr, type = "robocizna", laborNormRbh, unit } = payload;

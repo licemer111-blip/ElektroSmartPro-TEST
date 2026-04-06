@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { normalizeKnrCode, looksLikeKnrCode } from "@/lib/services/pricing-config";
 import { matchItem, type EngineSettings } from "@/lib/services/matching-engine";
 import { google } from "@ai-sdk/google";
@@ -12,7 +12,7 @@ export async function saveInvestmentContext(
   context: string
 ): Promise<{ success?: boolean; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
     const { error } = await supabase
@@ -30,7 +30,7 @@ export async function saveInvestmentContext(
 
 export async function getGlobalHourlyRate(): Promise<{ rate: number; materialMultiplier: number; materialMargin: number; isDefault?: boolean; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { rate: 0, materialMultiplier: 1.08, materialMargin: 15, isDefault: true };
     const { data } = await supabase
       .from("profiles")
@@ -52,7 +52,7 @@ export async function updateGlobalHourlyRate(
   rate: number
 ): Promise<{ success: boolean; error?: string; recalculated?: { catalog: number; assemblies: number } }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Nie jesteś zalogowany" };
     if (rate < 1 || rate > 9999) return { success: false, error: "Stawka musi być między 1 a 9999 PLN" };
 
@@ -98,7 +98,7 @@ export async function updateMaterialMultiplier(
   multiplier: number
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Nie jesteś zalogowany" };
     if (multiplier < 0.5 || multiplier > 3.0) return { success: false, error: "Mnożnik musi być między 0.5 a 3.0" };
 
@@ -119,7 +119,7 @@ export async function updateMaterialMargin(
   marginPct: number
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Nie jesteś zalogowany" };
     if (marginPct < 0 || marginPct > 100) return { success: false, error: "Marża musi być między 0% a 100%" };
 
@@ -141,7 +141,7 @@ export async function updateExpertMode(
   customLaborRate: number | null
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Nie jesteś zalogowany" };
 
     const { error } = await supabase
@@ -169,7 +169,7 @@ export async function updateCoefficients(
   surface: boolean,
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Nie jesteś zalogowany" };
 
     const { error } = await supabase
@@ -210,7 +210,7 @@ export async function searchKnrNorm(
   error?: string;
 }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, results: [], error: "Brak autoryzacji" };
 
     if (!query.trim() || query.trim().length < 2) {
@@ -368,7 +368,7 @@ export async function getSystemDictionaryStats(): Promise<{
   error?: string;
 }> {
   try {
-    const { supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { supabase } = await tryAuth();
     if (!supabase) return { success: false, error: "Brak autoryzacji" };
 
     // RPC does DISTINCT + COUNT server-side — bypasses PostgREST max_rows cap
@@ -398,7 +398,7 @@ export async function searchSystemDictionaryByCategory(
   category: string
 ): Promise<{ success: boolean; entries: DictionaryEntry[]; error?: string }> {
   try {
-    const { supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { supabase } = await tryAuth();
     if (!supabase) return { success: false, entries: [], error: "Brak autoryzacji" };
 
     const { data, error } = await supabase
@@ -419,7 +419,7 @@ export async function searchSystemDictionary(
   query: string
 ): Promise<{ success: boolean; entries: DictionaryEntry[]; error?: string }> {
   try {
-    const { supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { supabase } = await tryAuth();
     if (!supabase) return { success: false, entries: [], error: "Brak autoryzacji" };
 
     if (!query.trim() || query.trim().length < 2) {
@@ -451,7 +451,7 @@ export async function searchDictionaryWithAI(
   query: string
 ): Promise<{ success: boolean; entries: DictionaryEntry[]; explanation?: string; error?: string }> {
   try {
-    const { supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { supabase } = await tryAuth();
     if (!supabase) return { success: false, entries: [], error: "Brak autoryzacji" };
 
     if (!query.trim() || query.trim().length < 2) {

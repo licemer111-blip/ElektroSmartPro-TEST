@@ -1,7 +1,7 @@
 "use server";
 
 import { logger } from "@/lib/logger";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { createClient } from '@/utils/supabase/server';
 import type { CatalogItem } from "./catalog-data/catalog-item";
 import { getCableItems } from "./catalog-data/cables";
@@ -49,7 +49,7 @@ export async function generateMasterCatalog(): Promise<{
   message: string;
 }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
 
     if (!user || !supabase) {
       return { success: false, count: 0, message: "Unauthorized" };

@@ -1,6 +1,6 @@
 "use server";
 
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { logger } from "@/lib/logger";
 import { supabaseAdmin } from "@/lib/supabase-admin";
@@ -27,7 +27,7 @@ export async function bulkRecalculateLaborPrices(
   newRate: number,
   oldRate?: number
 ): Promise<RecalculateResult> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
 
   if (!user || !supabase) {
     return { success: false, catalogUpdated: 0, assembliesUpdated: 0, error: "Brak autoryzacji" };

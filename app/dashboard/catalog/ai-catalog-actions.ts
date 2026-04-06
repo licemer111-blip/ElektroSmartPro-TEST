@@ -1,7 +1,7 @@
 "use server";
 
 import { logger } from "@/lib/logger";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { checkAndIncrementAiUsage } from "@/lib/ai-usage";
 import type { DataVisibility } from "@/lib/types/database";
@@ -200,7 +200,7 @@ export async function generateCatalogItemsWithAI(
   const { description, visibility = 'personal', team_id } = options;
 
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
 
     if (!user || !supabase) {
       return { success: false, error: "Brak autoryzacji" };

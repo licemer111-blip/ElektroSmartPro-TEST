@@ -3,13 +3,13 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { projectSettingsSchema, validate } from "@/lib/validations";
 import type { Region, ObjectType, ProjectWithRelations } from "@/lib/types/database";
 import { logger } from "@/lib/logger";
 
 export async function getProjects(): Promise<ProjectWithRelations[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) redirect("/login");
 
   const { data: allProjects, error } = await supabase
@@ -125,7 +125,7 @@ export async function getObjectTypes(): Promise<ObjectType[]> {
 }
 
 export async function createProject(formData: FormData) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   let { data: profile, error: profileError } = await supabase
@@ -223,7 +223,7 @@ export async function createProject(formData: FormData) {
 }
 
 export async function duplicateProject(projectId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   // Free-tier limit check — same as createProject
@@ -358,7 +358,7 @@ export async function duplicateProject(projectId: string) {
 }
 
 export async function deleteProject(projectId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const { data: project } = await supabase
@@ -385,7 +385,7 @@ export async function updateProjectSettings(
   projectId: string,
   settings: { name: string; vat_rate: number; region_id: string | null; object_type_id: string | null }
 ) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const { error: validationError } = validate(projectSettingsSchema, settings);
@@ -421,7 +421,7 @@ export async function updateProjectSettings(
 export async function bulkDeleteProjects(
   projectIds: string[]
 ): Promise<{ success?: boolean; error?: string; deletedCount?: number }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   if (!projectIds || projectIds.length === 0) return { error: "Nie wybrano projektów" };
 
@@ -451,7 +451,7 @@ export async function bulkDeleteProjects(
 export async function bulkArchiveProjects(
   projectIds: string[]
 ): Promise<{ success?: boolean; error?: string; archivedCount?: number }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   if (!projectIds || projectIds.length === 0) return { error: "Nie wybrano projektów" };
 
@@ -475,7 +475,7 @@ export async function bulkArchiveProjects(
 export async function bulkRestoreProjects(
   projectIds: string[]
 ): Promise<{ success?: boolean; error?: string; restoredCount?: number }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   if (!projectIds || projectIds.length === 0) return { error: "Nie wybrano projektów" };
 
@@ -500,7 +500,7 @@ export async function bulkMoveToCategory(
   projectIds: string[],
   categoryId: string | null
 ): Promise<{ success?: boolean; error?: string; movedCount?: number }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   if (!projectIds || projectIds.length === 0) return { error: "Nie wybrano projektów" };
 
@@ -522,7 +522,7 @@ export async function bulkMoveToCategory(
 }
 
 export async function createDemoProject(): Promise<{ success?: boolean; error?: string; projectId?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   // Free-tier limit check

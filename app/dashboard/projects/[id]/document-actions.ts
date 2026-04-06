@@ -2,7 +2,7 @@
 
 import { logger } from "@/lib/logger";
 import { createClient } from "@/utils/supabase/server";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 // requirePro removed — demo users can access all features
 import { revalidatePath } from "next/cache";
 
@@ -88,7 +88,7 @@ export async function uploadProjectDocument(
   projectId: string,
   formData: FormData
 ): Promise<{ success: boolean; error?: string; path?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { success: false, error: "Musisz być zalogowany" };
 
   const ok = await canAccessProject(supabase, projectId);
@@ -145,7 +145,7 @@ export async function uploadCalculatorPdfToProject(
   fileName: string
 ): Promise<{ success: boolean; error?: string; path?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Musisz być zalogowany" };
 
     const ok = await canAccessProject(supabase, projectId);
@@ -180,7 +180,7 @@ export async function uploadCalculatorPdfToProject(
  */
 export async function getUserProjectsForAttach(): Promise<{ id: string; name: string }[]> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return [];
 
     const { data: projects } = await supabase
@@ -207,7 +207,7 @@ export async function uploadSvgToProject(
   fileName: string
 ): Promise<{ success: boolean; error?: string; path?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Musisz być zalogowany" };
 
     const ok = await canAccessProject(supabase, projectId);
@@ -251,7 +251,7 @@ export async function getProfileForPdfHeader(): Promise<{
   email: string;
 } | null> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return null;
 
     const { data: profile } = await supabase
@@ -288,7 +288,7 @@ export async function saveGeneratedDocumentToProject(
   contentType: string
 ): Promise<{ success: boolean; error?: string; path?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Musisz być zalogowany" };
 
     const ok = await canAccessProject(supabase, projectId);
@@ -341,7 +341,7 @@ export async function cleanupPanelDocuments(
   projectId: string
 ): Promise<{ success: boolean; removed: number }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, removed: 0 };
 
     const ok = await canAccessProject(supabase, projectId);
@@ -378,7 +378,7 @@ export async function uploadSinglePanelFile(
   contentType: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Musisz być zalogowany" };
 
     const ok = await canAccessProject(supabase, projectId);

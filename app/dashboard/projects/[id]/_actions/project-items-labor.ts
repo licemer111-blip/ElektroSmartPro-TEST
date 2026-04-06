@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import { canUserEditProject, revalidateProject } from "./utils";
 
@@ -11,7 +11,7 @@ export async function updateWorkStatus(
   itemId: string,
   workStatus: "pending" | "in_progress" | "done" | "accepted" | "purchased" | "delivered" | "installed" | "checked"
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -39,7 +39,7 @@ export async function updateItemLaborNorm(
   laborNorm: number | null,
   hourlyRate: number
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -93,7 +93,7 @@ export async function resetItemNormToKnr(
   projectId: string,
   itemId: string
 ): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -124,7 +124,7 @@ export async function recalcAllLaborNorms(
   projectId: string,
   newHourlyRate: number
 ): Promise<{ success?: boolean; updatedCount?: number; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -169,7 +169,7 @@ export async function recalcAllLaborNorms(
 
 // Get project work progress summary
 export async function getProjectWorkProgress(projectId: string) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return null;
 
   const { data: items } = await supabase

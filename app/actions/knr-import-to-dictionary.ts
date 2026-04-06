@@ -7,7 +7,7 @@
 // Każdy wpis jest dostępny jako L1 w matching engine.
 // ═══════════════════════════════════════════════════════════════════
 
-import { requireAuth } from "@/lib/auth";
+import { requireAuth, tryAuth } from "@/lib/auth";
 import { normalizeText } from "@/lib/services/normalization";
 import type { DictionaryEntryType } from "@/lib/services/matching-engine";
 
@@ -170,7 +170,7 @@ export async function commitKnrImport(
   columnMapping: { nameCol: number; knrCol: number | null; normCol: number | null; unitCol: number | null },
 ): Promise<KnrImportResult> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, inserted: 0, updated: 0, skipped: 0, error: "Brak autoryzacji" };
 
     const file = formData.get("file") as File | null;
@@ -259,7 +259,7 @@ export async function getUserKnrDictionaryStats(): Promise<{
   error?: string;
 }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, total: 0, learned: 0, imported: 0, error: "Brak autoryzacji" };
 
     const { data, error } = await supabase
@@ -270,8 +270,8 @@ export async function getUserKnrDictionaryStats(): Promise<{
     if (error) return { success: false, total: 0, learned: 0, imported: 0, error: error.message };
 
     const total    = data.length;
-    const learned  = data.filter((d) => d.category === "user_learned").length;
-    const imported = data.filter((d) => d.category === "user_knr_import").length;
+    const learned  = data.filter((d: { category: string }) => d.category === "user_learned").length;
+    const imported = data.filter((d: { category: string }) => d.category === "user_knr_import").length;
 
     return { success: true, total, learned, imported };
   } catch {
@@ -283,7 +283,7 @@ export async function getUserKnrDictionaryStats(): Promise<{
 
 export async function clearUserKnrImport(): Promise<{ success: boolean; deleted: number; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, deleted: 0, error: "Brak autoryzacji" };
 
     const { error, count } = await supabase

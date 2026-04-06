@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { getProfile } from "@/app/dashboard/settings/actions";
 import { getProjects } from "@/app/dashboard/actions";
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function PanelConfiguratorPage() {
-  const { user } = await requireAuth().catch(() => ({ user: null }));
+  const { user } = await tryAuth();
   if (!user) redirect("/login");
 
   const [profileResult, projects] = await Promise.all([

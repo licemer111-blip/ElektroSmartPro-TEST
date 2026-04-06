@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { getInFaktAPI, calculateVAT, calculateGross } from "@/lib/infakt-api";
 import { createInvoiceSchema, validate } from "@/lib/validations";
 import { logger } from "@/lib/logger";
@@ -35,7 +35,7 @@ export async function createProjectInvoice(input: CreateProjectInvoiceInput) {
     const { error: validationError } = validate(createInvoiceSchema, input);
     if (validationError) return { success: false, error: validationError };
 
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Musisz być zalogowany" };
 
     const { data: project, error: projectError } = await supabase
@@ -173,7 +173,7 @@ export async function createProjectInvoice(input: CreateProjectInvoiceInput) {
 
 export async function createInvoiceDraft(input: CreateProjectInvoiceInput & { status?: "draft" }) {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) return { success: false, error: "Musisz być zalogowany" };
     return { success: true, message: "Draft functionality to be implemented" };
   } catch (error) {

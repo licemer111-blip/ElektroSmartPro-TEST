@@ -1,7 +1,7 @@
 "use server";
 
 import { logger } from "@/lib/logger";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { checkAndIncrementAiUsage } from "@/lib/ai-usage";
 import { AI_FUNCTION_NAMES } from "@/lib/ai-quota-config";
 import { buildDynamicSystemPrompt } from "@/lib/ai-master-brain";
@@ -72,7 +72,7 @@ export async function findDuplicates(
   projectId: string
 ): Promise<{ success: boolean; groups?: DuplicateGroup[]; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Musisz być zalogowany" };
     }
@@ -259,7 +259,7 @@ export async function findDuplicatesWithAI(
   projectId: string
 ): Promise<{ success: boolean; groups?: DuplicateGroup[]; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Musisz być zalogowany" };
     }
@@ -409,7 +409,7 @@ export async function mergeDuplicates(
   duplicateIds: string[]
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { success: false, error: "Musisz być zalogowany" };
     }

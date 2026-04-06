@@ -547,8 +547,8 @@ export async function reviewProposal(
   comment?: string
 ): Promise<{ success?: boolean; error?: string }> {
   // This action is called from the contractor dashboard (authenticated)
-  const { requireAuth } = await import("@/lib/auth");
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { tryAuth } = await import("@/lib/auth");
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const { data: link } = await supabaseAdmin

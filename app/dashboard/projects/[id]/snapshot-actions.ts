@@ -1,6 +1,6 @@
 "use server";
 
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { logger } from "@/lib/logger";
 
@@ -12,7 +12,7 @@ export interface SnapshotMeta {
 }
 
 export async function getProjectSnapshots(projectId: string): Promise<SnapshotMeta[]> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return [];
 
   const { data: files, error } = await supabase.storage
@@ -47,7 +47,7 @@ export async function getSnapshotData(
   projectId: string,
   fileName: string
 ): Promise<{ items: unknown[]; error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { items: [], error: "Unauthorized" };
 
   const { data, error } = await supabase.storage
@@ -71,7 +71,7 @@ export async function restoreSnapshot(
   projectId: string,
   fileName: string
 ): Promise<{ success?: boolean; error?: string; restoredCount?: number }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) {
     return { error: "Musisz być zalogowany" };
   }
@@ -170,7 +170,7 @@ export async function createManualSnapshot(
   description?: string
 ): Promise<{ success?: boolean; error?: string; fileName?: string }> {
   try {
-    const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+    const { user, supabase } = await tryAuth();
     if (!user || !supabase) {
       return { error: "Musisz być zalogowany" };
     }

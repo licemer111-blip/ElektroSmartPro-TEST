@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/utils/supabase/server";
-import { requireAuth } from "@/lib/auth";
+import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import { canUserEditProject, revalidateProject } from "./utils";
 
@@ -11,7 +11,7 @@ import { canUserEditProject, revalidateProject } from "./utils";
 // =====================================================
 
 export async function bulkDeleteProjectItems(projectId: string, itemIds: string[]) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   if (!itemIds.length) return { error: "Brak pozycji do usunięcia" };
 
@@ -39,7 +39,7 @@ export async function bulkUpdateItemPrices(
   itemIds: string[],
   adjustPercent: number
 ) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   if (!itemIds.length) return { error: "Brak pozycji do aktualizacji" };
 
@@ -85,7 +85,7 @@ export async function bulkUpdateItemSection(
   itemIds: string[],
   section: string | null
 ) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   if (!itemIds.length) return { error: "Brak pozycji do aktualizacji" };
 
@@ -110,7 +110,7 @@ export async function bulkUpdateItemSection(
 // =====================================================
 
 export async function updateItemSortOrder(projectId: string, orderedIds: string[]) {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
@@ -135,7 +135,7 @@ export async function reorderProjectItems(
   projectId: string,
   orderedIds: string[]
 ): Promise<{ error?: string }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Brak autoryzacji" };
 
   // Optimized: Single RPC call instead of Promise.all individual updates
@@ -159,7 +159,7 @@ export async function copyItemsToProject(
   targetProjectId: string,
   items: { name: string; unit: string; quantity: number; final_material_price: number; final_labor_price: number; catalog_item_id: string | null; section?: string | null }[]
 ): Promise<{ success?: boolean; error?: string; count?: number }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   if (items.length === 0) return { error: "Brak pozycji do skopiowania" };
 
@@ -215,7 +215,7 @@ export async function importItemsToProject(
     is_investor_material?: boolean;
   }[]
 ): Promise<{ success?: boolean; error?: string; count?: number }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
   if (items.length === 0) return { error: "Brak pozycji do importu" };
 
@@ -268,7 +268,7 @@ export async function importItemsFromExcel(
   projectId: string,
   items: { name: string; unit: string; quantity: number; materialPrice: number; laborPrice: number; section?: string; knrCode?: string | null }[]
 ): Promise<{ success?: boolean; error?: string; addedCount?: number }> {
-  const { user, supabase } = await requireAuth().catch(() => ({ user: null, supabase: null }));
+  const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
