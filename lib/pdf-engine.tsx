@@ -543,7 +543,6 @@ const TableHeaderRow = ({
       base.tableHeaderRow,
       { backgroundColor: palette.tableHeaderBg },
     ]}
-    fixed
   >
     <View style={[base.tableHeaderCell, { width: cols.lp, color: palette.tableHeaderText }]}>
       <Text>LP</Text>
