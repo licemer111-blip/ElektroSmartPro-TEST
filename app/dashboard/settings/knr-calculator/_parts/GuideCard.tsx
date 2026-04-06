@@ -28,7 +28,7 @@ export function GuideCard() {
               {([
                 [1, <>Wgrywasz plik (PDF, XLSX, CSV lub TXT) — cennik hurtowni, normy własne, stawki</>],
                 [2, <>System automatycznie rozpoznaje typ: arkusze → indeksuje jako Twoje Normy, PDF → dodaje do kontekstu AI</>],
-                [3, <>Przy każdej wycenie ES-Engine najpierw szuka w Twoich danych (priorytet P1), potem w globalnej bazie 8500+ norm</>],
+                [3, <>Przy każdej wycenie system szuka w kolejności: <strong>L1</strong> Twoje dane → <strong>L2</strong> baza ES-KNR (8500+ norm) → <strong>L3</strong> ES-Engine AI</>],
                 [4, <>Twoje ceny materiałów i robocizny nadpisują globalne — masz pełną kontrolę nad kosztorysem</>],
               ] as [number, React.ReactNode][]).map(([num, text]) => (
                 <li key={num} className="flex items-start gap-2.5">

@@ -195,15 +195,15 @@ export function KBFilesSection({ onStatsChange }: KBFilesSectionProps) {
 
   return (
     <div className="space-y-5">
-      {/* P1 Priority banner */}
+      {/* L1 Priority banner */}
       <div className="rounded-xl border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/20 p-3.5 flex items-start gap-3">
         <div className="w-7 h-7 rounded-lg bg-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5">
           <Zap className="w-3.5 h-3.5 text-white" />
         </div>
         <div>
-          <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300">Twoje dane mają najwyższy priorytet (P1)</p>
+          <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300">Twoje dane — najwyższy priorytet wyceny (L1)</p>
           <p className="text-[10px] text-emerald-700 dark:text-emerald-400 mt-0.5 leading-relaxed">
-            System automatycznie używa Twoich danych przy każdej wycenie — przed globalnymi normami. Wgraj cenniki, normy własne lub katalogi materiałów.
+            Hierarchia wycen: <strong>L1</strong> Twój katalog → <strong>L2</strong> Globalna baza ES-KNR (8500+ norm) → <strong>L3</strong> ES-Engine AI. Wgraj cenniki, normy lub katalogi — system użyje ich przed bazą globalną.
           </p>
         </div>
       </div>

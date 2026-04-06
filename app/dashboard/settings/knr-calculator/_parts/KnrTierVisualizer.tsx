@@ -2,7 +2,7 @@
 
 // ═══════════════════════════════════════════════════════════════════
 // knr-calculator/_parts/KnrTierVisualizer.tsx
-// KnrPageHeader — compact status panel (mode indicator + P1→P2→AI)
+// KnrPageHeader — compact status panel (mode indicator + L1→L2→L3)
 // KnrTierVisualizer — full 4-tier hierarchy (kept for reference, not rendered)
 // ═══════════════════════════════════════════════════════════════════
 
@@ -19,49 +19,40 @@ interface KnrPageHeaderProps {
 export function KnrPageHeader({ isPro }: KnrPageHeaderProps) {
   const { mode: searchMode } = useSearchMode();
 
-  const P_NODES = [
+  const TIER_NODES = [
     {
-      id: "P1",
-      label: "Własna Baza",
-      desc: "Twój prywatny katalog · stawka własna RBH · najwyższy priorytet",
-      active: searchMode === "own",
+      id: "L1",
+      label: "Twój Katalog",
+      desc: "Twoje cenniki, normy własne, pliki — najwyższy priorytet przy wycenie",
+      active: searchMode === "own" || searchMode === "hybrid",
       activeColor: "border-violet-400 bg-violet-50 dark:border-violet-600 dark:bg-violet-950/30",
       idColor: "bg-violet-600",
       inactiveColor: "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 opacity-40",
     },
     {
-      id: "HYB",
-      label: "Hybrydowy",
-      desc: "Twój katalog ma priorytet · KNR fallback dla braków · oba źródła w wyszukiwaniu",
-      active: searchMode === "hybrid",
-      activeColor: "border-blue-400 bg-blue-50 dark:border-blue-600 dark:bg-blue-950/30",
-      idColor: "bg-blue-500",
-      inactiveColor: "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 opacity-40",
-    },
-    {
-      id: "P2",
-      label: "ES-Engine",
-      desc: "Normy KNR 5-08 · stawki regionu · automatyczne dopasowanie",
-      active: searchMode === "engine",
+      id: "L2",
+      label: "ES-KNR 2026",
+      desc: "Globalna baza 8500+ norm KNR · stawki regionalne · automatyczne dopasowanie",
+      active: searchMode === "engine" || searchMode === "hybrid",
       activeColor: "border-orange-400 bg-orange-50 dark:border-orange-600 dark:bg-orange-950/30",
       idColor: "bg-orange-500",
       inactiveColor: "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 opacity-40",
     },
     {
-      id: "AI",
-      label: "ES Engine (on-demand)",
-      desc: "Wycena ES Engine — tylko na żądanie użytkownika (przycisk Wyceń w tabeli)",
+      id: "L3",
+      label: "ES-Engine AI",
+      desc: "Wycena AI na żądanie — przycisk ‘Wyceń’ w tabeli kosztorysu",
       active: false,
       activeColor: "",
-      idColor: "bg-violet-500",
+      idColor: "bg-cyan-500",
       inactiveColor: "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 opacity-30",
     },
   ];
 
   const modeDesc =
-    searchMode === "own" ? "Tryb Własny — Twoje stawki mają najwyższy priorytet (P1)" :
-    searchMode === "hybrid" ? "Tryb Hybrydowy — Twój katalog priorytetowy + KNR fallback (HYB)" :
-    "ES-Engine 2026 — L1 Katalog + L2 Normy KNR + ES Engine on-demand (P2)";
+    searchMode === "own" ? "Tryb Własny — tylko Twoje dane (L1). Baza globalna pominięta." :
+    searchMode === "hybrid" ? "Tryb Hybrydowy — Twój katalog (L1) + baza ES-KNR (L2) dla braków" :
+    "ES-Engine 2026 — baza ES-KNR (L2) + Twoja stawka R-G. AI (L3) na żądanie.";
 
   return (
     <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-5 py-4 shadow-sm">
@@ -100,10 +91,10 @@ export function KnrPageHeader({ isPro }: KnrPageHeaderProps) {
           </div>
         </div>
 
-        {/* P1 → P2 → AI status bar */}
+        {/* L1 → L2 → L3 status bar */}
         <div className="flex items-center gap-1.5 flex-shrink-0">
           <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider hidden sm:block mr-1">Hierarchia:</span>
-          {P_NODES.map((p, i) => (
+          {TIER_NODES.map((p, i) => (
             <div key={p.id} className="flex items-center gap-1">
               {i > 0 && <span className="text-slate-300 dark:text-slate-600 text-xs font-bold">→</span>}
               <TooltipProvider delayDuration={200}>

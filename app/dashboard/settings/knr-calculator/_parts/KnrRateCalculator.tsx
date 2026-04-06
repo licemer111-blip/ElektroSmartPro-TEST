@@ -2,7 +2,7 @@
 
 // ═══════════════════════════════════════════════════════════════════
 // knr-calculator/_parts/KnrRateCalculator.tsx
-// Expert Engine pipeline: P1 (custom rate) → P2 (ES-KNR) → AI Expert (on-demand)
+// Expert Engine pipeline: L1 (Twój katalog) → L2 (ES-KNR 2026) → L3 (ES-Engine AI on-demand)
 // ═══════════════════════════════════════════════════════════════════
 
 import { useTransition, useEffect } from "react";

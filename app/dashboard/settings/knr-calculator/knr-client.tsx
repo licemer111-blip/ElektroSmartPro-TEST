@@ -2,8 +2,8 @@
 
 // ═══════════════════════════════════════════════════════════════════
 // knr-client.tsx — Centrum Kalkulacji shell
-// Główne: Lokalizacja + Hierarchia wycen (P1/P2/AI)
-// Zaawansowane (accordion): Współczynniki · Sandbox · Kalibracja · Kontekst
+// Główne: Lokalizacja + Hierarchia wycen (L1/L2/L3)
+// Zaawansowane (accordion): Sandbox · Kalibracja · Kontekst
 // ═══════════════════════════════════════════════════════════════════
 
 import { useState } from "react";
@@ -71,7 +71,7 @@ export function KnrClient({ initialRate, initialMaterialMultiplier = 1.08, initi
   const [materialMargin, setMaterialMargin] = useState(initialMaterialMargin);
 
   // Effective base rate for regional preview:
-  // P1: custom/profile rate | P2: profiles.hourly_rate
+  // L1: custom/profile rate | L2: profiles.hourly_rate
   const effectiveBaseRate = useCustomRates
     ? (customLaborRate ?? hourlyRate)
     : hourlyRate;
@@ -128,7 +128,7 @@ export function KnrClient({ initialRate, initialMaterialMultiplier = 1.08, initi
           <SectionDivider
             icon={MapPin}
             title="Lokalizacja"
-            subtitle="Wybiór województwa wpływa na stawki robocizny — ceny różnią się między regionami"
+            subtitle="Województwo wpływa na stawkę R-G — system mnoży ją przez współczynnik regionalny"
           />
           <KnrRegionSelector
             initialRegionUuid={initialRegionUuid}
@@ -141,7 +141,7 @@ export function KnrClient({ initialRate, initialMaterialMultiplier = 1.08, initi
           <SectionDivider
             icon={Banknote}
             title="Finanse"
-            subtitle="Stawka roboczogodziny (R-G) — mnożona przez normy czasowe KNR przy każdej wycenie"
+            subtitle="Stawka R-G, tryb wycen (L1/L2/L3), marża materiałowa — podstawa każdego kosztorysu"
           />
           <KnrRateCalculator
             initialRate={effectiveInitialRate}
