@@ -302,9 +302,6 @@ export function RowMaterialCell({
               </div>
             )}
           </div>
-          {materialUnit > 0 && item.confidence_level !== "manual" && (
-            <span className="text-[7px] font-bold text-orange-500 dark:text-orange-400 bg-orange-100 dark:bg-orange-900/30 border border-orange-300 dark:border-orange-700 px-1 py-px rounded">BETA</span>
-          )}
           {canToggleInvestor && (
             <button
               onClick={handleToggleInvestor}
@@ -346,9 +343,6 @@ export function RowMaterialCell({
               <div className={cn("text-sm font-semibold", colorMode ? "text-amber-700 dark:text-amber-400" : "text-slate-800 dark:text-slate-100")}>
                 <BlurredPrice value={matTotalDisp} isPro={showPrices} />
               </div>
-              {materialUnit > 0 && item.confidence_level !== "manual" && (
-                <span className="inline-flex items-center text-[7px] font-bold text-orange-500 dark:text-orange-400 bg-orange-100 dark:bg-orange-900/30 border border-orange-300 dark:border-orange-700 px-1 py-px rounded">⚠️ Wycena mat. BETA</span>
-              )}
               {bruttoMode && showPrices && (
                 <div className="text-[9px] text-slate-400 dark:text-slate-500 text-right">
                   netto: {dp(materialTotal).toFixed(2)} zł
