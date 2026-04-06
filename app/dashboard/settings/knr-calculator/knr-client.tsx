@@ -128,7 +128,7 @@ export function KnrClient({ initialRate, initialMaterialMultiplier = 1.08, initi
           <SectionDivider
             icon={MapPin}
             title="Lokalizacja"
-            subtitle="Wójewództwo — współczynnik korygujący stawki r-g"
+            subtitle="Wybiór województwa wpływa na stawki robocizny — ceny różnią się między regionami"
           />
           <KnrRegionSelector
             initialRegionUuid={initialRegionUuid}
@@ -141,7 +141,7 @@ export function KnrClient({ initialRate, initialMaterialMultiplier = 1.08, initi
           <SectionDivider
             icon={Banknote}
             title="Finanse"
-            subtitle="Twoja stawka roboczogodziny (R-G) — podstawa wszystkich wycen kosztorysowych"
+            subtitle="Stawka roboczogodziny (R-G) — mnożona przez normy czasowe KNR przy każdej wycenie"
           />
           <KnrRateCalculator
             initialRate={effectiveInitialRate}
@@ -170,7 +170,7 @@ export function KnrClient({ initialRate, initialMaterialMultiplier = 1.08, initi
               <Settings2 className="w-3.5 h-3.5 text-slate-500" />
             </div>
             <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Zaawansowane ustawienia silnika</span>
-            <span className="text-[10px] text-slate-400 dark:text-slate-500 hidden sm:inline">Współczynniki · Kalibracja · Kontekst · Sandbox</span>
+            <span className="text-[10px] text-slate-400 dark:text-slate-500 hidden sm:inline">Sandbox testów · Kalibracja AI · Kontekst obiektu</span>
             <ChevronDown className={`w-4 h-4 text-slate-400 ml-auto flex-shrink-0 transition-transform duration-200 ${showAdvanced ? "rotate-180" : ""}`} />
           </button>
 
@@ -191,7 +191,7 @@ export function KnrClient({ initialRate, initialMaterialMultiplier = 1.08, initi
               <SectionDivider
                 icon={BrainCog}
                 title="Inteligencja ES-Engine"
-                subtitle="Kalibracja silnika: czułość dopasowań KNR + kontekst inwestycji"
+                subtitle="Dopasowanie silnika AI: montaż, pamięć, czułość wyszukiwania + opis obiektu"
               />
               <KnrEngineCalibration
                 calibration={calibration}

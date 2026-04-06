@@ -101,7 +101,7 @@ export function KnrEngineCalibration({ calibration, onChange }: KnrEngineCalibra
           <div>
             <CardTitle className="text-base leading-tight">Kalibracja Silnika ES-Engine</CardTitle>
             <CardDescription className="text-xs mt-0.5">
-              Dostosuj zachowanie algorytmu dopasowań KNR do swoich preferencji
+              Jak dokładnie AI dopasowuje normy KNR do Twoich pozycji — sposób montażu, pamięć i czułość
             </CardDescription>
           </div>
         </div>
@@ -138,7 +138,7 @@ export function KnrEngineCalibration({ calibration, onChange }: KnrEngineCalibra
               </SelectContent>
             </Select>
             <p className="text-[10px] text-slate-400 dark:text-slate-500 leading-snug">
-              Pomaga systemowi dobrać KNR, gdy przedmiar nie precyzuje sposobu układania
+              Gdy przedmiar nie podaje sposobu montażu, system użyje tego domyślnego
             </p>
           </div>
 
@@ -170,7 +170,7 @@ export function KnrEngineCalibration({ calibration, onChange }: KnrEngineCalibra
               />
             </div>
             <p className="text-[10px] text-slate-400 dark:text-slate-500 leading-snug">
-              Zapamiętuj moje ręczne wybory KNR dla pozycji L3 i stosuj je w przyszłości
+              System zapamięta Twoje ręczne korekty KNR i zastosuje je automatycznie w przyszłych projektach
             </p>
             <div className="mt-auto">
               {calibration.autoLearning ? (

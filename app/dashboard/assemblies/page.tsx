@@ -60,7 +60,7 @@ export default async function AssembliesPage({
                 Katalog Zestawów
               </h1>
               <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400">
-                Własne szablony • Udostępnianie zespołowi • ES Generator zestawów
+                Gotowe komplety pozycji (materiał + robocizna) — dodajesz jednym klikiem do kosztorysu
               </p>
             </div>
           </div>
@@ -76,9 +76,8 @@ export default async function AssembliesPage({
           <AlertDescription className="text-blue-800 dark:text-blue-300 mt-2">
             <div className="space-y-3">
               <p className="text-xs leading-relaxed">
-                <strong>Zestawy</strong> to Twoje własne szablony grupujące często używane pozycje (materiały + robocizna) 
-                w jeden element. Dzięki nim możesz <strong>przyspieszyć tworzenie kosztorysów nawet 10x</strong> i zapewnić 
-                spójność cen w różnych projektach.
+                <strong>Zestaw</strong> = gotowy komplet pozycji (materiał + robocizna), który dodajesz do kosztorysu jednym klikiem.
+                Zamiast ręcznie wpisywać gniazdo + puszkę + kabel + montaż — wybierasz zestaw i <strong>wszystko dodaje się automatycznie</strong> z poprawnymi cenami.
               </p>
               
               <div className="grid md:grid-cols-3 gap-3 mt-3">
@@ -121,10 +120,10 @@ export default async function AssembliesPage({
                   💡 Jak to działa?
                 </p>
                 <ol className="text-[11px] space-y-0.5 text-blue-800 dark:text-blue-300 list-decimal list-inside leading-relaxed">
-                  <li>Tworzysz zestaw raz (np. "Punkt gniazda") z wszystkimi potrzebnymi pozycjami</li>
-                  <li>W projekcie klikasz "Dodaj Zestaw" i wybierasz swój szablon</li>
-                  <li>System automatycznie dodaje wszystkie pozycje z zestawu do kosztorysu</li>
-                  <li>Oszczędzasz czas i unikasz błędów - ceny zawsze takie same!</li>
+                  <li>Stwórz zestaw raz — np. "Punkt gniazda" z gniazdem, puszką, kablem i montażem</li>
+                  <li>W projekcie kliknij "Dodaj Zestaw" — wszystkie pozycje trafią do kosztorysu</li>
+                  <li>Ceny materiałów i robocizny są zawsze spójne między projektami</li>
+                  <li>Możesz duplikować i modyfikować zestawy pod konkretne zlecenia</li>
                 </ol>
               </div>
             </div>

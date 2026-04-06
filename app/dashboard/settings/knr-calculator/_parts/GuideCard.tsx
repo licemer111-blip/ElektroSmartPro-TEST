@@ -26,10 +26,10 @@ export function GuideCard() {
             <p className="font-semibold text-slate-900 dark:text-slate-100 mb-2">Jak to działa krok po kroku:</p>
             <ol className="space-y-1.5 list-none">
               {([
-                [1, <>Wgrywasz swój plik (PDF lub TXT) — cennik, normy, własne stawki</>],
-                [2, <>Klikasz <strong>&quot;Zbuduj cache ES-Engine&quot;</strong> — system przetwarza dokument</>],
-                [3, <>ES Engine korzysta z Twoich danych przy wycenie na żądanie (przycisk <strong>Wyceń</strong>)</>],
-                [4, <>Twoje stawki i normy mają priorytet P1 — nadpisują globalne normy ES-KNR</>],
+                [1, <>Wgrywasz plik (PDF, XLSX, CSV lub TXT) — cennik hurtowni, normy własne, stawki</>],
+                [2, <>System automatycznie rozpoznaje typ: arkusze → indeksuje jako Twoje Normy, PDF → dodaje do kontekstu AI</>],
+                [3, <>Przy każdej wycenie ES-Engine najpierw szuka w Twoich danych (priorytet P1), potem w globalnej bazie 8500+ norm</>],
+                [4, <>Twoje ceny materiałów i robocizny nadpisują globalne — masz pełną kontrolę nad kosztorysem</>],
               ] as [number, React.ReactNode][]).map(([num, text]) => (
                 <li key={num} className="flex items-start gap-2.5">
                   <span className="flex-shrink-0 w-5 h-5 rounded-full bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center mt-0.5">{num}</span>
@@ -43,10 +43,10 @@ export function GuideCard() {
             <p className="font-semibold text-slate-900 dark:text-slate-100 mb-2">Obsługiwane formaty:</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {([
-                { fmt: "PDF", color: "text-red-500", desc: "Musi zawierać tekst (nie skan). Normy KNR, oferty hurtowni." },
-                { fmt: "TXT", color: "text-blue-500", desc: "Najlepszy format. Prosta tabela tekstowa — ES-Engine czyta ją najdokładniej." },
-                { fmt: "XLSX / XLS", color: "text-emerald-500", desc: "Arkusz Excel. System bierze pierwszy arkusz i konwertuje na tekst." },
-                { fmt: "CSV", color: "text-emerald-500", desc: "Eksport z hurtowni lub programu kosztorysowego." },
+                { fmt: "PDF", color: "text-red-500", desc: "Cenniki, oferty hurtowni, katalogi. Musi zawierać tekst (nie skan). Trafia do kontekstu AI." },
+                { fmt: "TXT", color: "text-blue-500", desc: "Prosta tabela tekstowa z pozycjami i cenami — najszybsze indeksowanie." },
+                { fmt: "XLSX / XLS", color: "text-emerald-500", desc: "Arkusz Excel z cenami. Automatycznie indeksowany jako Twoje Normy + kontekst AI." },
+                { fmt: "CSV", color: "text-emerald-500", desc: "Eksport z hurtowni lub programu kosztorysowego. Indeksowany jak XLSX." },
               ] as { fmt: string; color: string; desc: string }[]).map((item) => (
                 <div key={item.fmt} className="rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-2.5 flex gap-2">
                   <span className={`text-xs font-bold font-mono mt-0.5 flex-shrink-0 ${item.color}`}>{item.fmt}</span>
@@ -61,8 +61,8 @@ export function GuideCard() {
             <ul className="space-y-1 text-xs text-amber-700 dark:text-amber-400 list-disc list-inside">
               <li>Używaj polskich nazw pozycji — ES-Engine lepiej dopasuje do pytań</li>
               <li>Podawaj jednostki miary: <strong>szt, mb, kpl, m², godz</strong></li>
-              <li>Po każdej zmianie pliku kliknij <strong>&bdquo;Zbuduj cache ES-Engine&rdquo;</strong></li>
-              <li>Cache wygasa po 24h — system sam go odświeża przy następnym zapytaniu</li>
+              <li>System przetwarza pliki automatycznie — nie musisz ręcznie budować cache</li>
+              <li>Po dodaniu nowych plików wyceny natychmiast korzystają z Twoich danych</li>
             </ul>
           </div>
         </CardContent>

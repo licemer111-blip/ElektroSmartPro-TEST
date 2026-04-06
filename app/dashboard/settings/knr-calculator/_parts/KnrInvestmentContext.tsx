@@ -179,7 +179,7 @@ export function KnrInvestmentContext({ value, onChange }: KnrInvestmentContextPr
             <div>
               <CardTitle className="text-base leading-tight">Kontekst Inwestycji</CardTitle>
               <CardDescription className="text-xs mt-0.5">
-                Kontekst ES-Engine — opisz obiekt, system weźmie to pod uwagę przy dopasowywaniu norm KNR
+                Opisz typ obiektu (np. biurowiec, dom, hala) — AI lepiej dobierze normy KNR i materiały
               </CardDescription>
             </div>
           </div>
@@ -218,7 +218,7 @@ export function KnrInvestmentContext({ value, onChange }: KnrInvestmentContextPr
             aria-label="Kontekst inwestycji"
             value={localValue}
             onChange={(e) => handleChange(e.target.value.slice(0, charLimit))}
-            placeholder="Opisz krótko obiekt (np. instalacja SAP, inteligentny dom KNX, biurowiec). System weźmie to pod uwagę przy dopasowywaniu norm KNR..."
+            placeholder="Np. remont mieszkania 60m², dom jednorodzinny z fotowoltaiką 10kWp, biurowiec klasy A z SAP — im więcej szczegółów, tym trafniejsze wyceny..."
             className={`min-h-[100px] pr-24 resize-none text-sm leading-relaxed transition-all ${
               isRecording
                 ? "border-red-400 dark:border-red-600 ring-2 ring-red-200 dark:ring-red-900"
@@ -313,7 +313,7 @@ export function KnrInvestmentContext({ value, onChange }: KnrInvestmentContextPr
         <div className="flex items-start gap-2 px-3 py-2.5 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/40">
           <Lightbulb className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400 flex-shrink-0 mt-0.5" />
           <p className="text-[11px] text-blue-700 dark:text-blue-300 leading-relaxed">
-            <span className="font-semibold">Wskazówka:</span> Podanie kontekstu drastycznie zwiększa skuteczność rozpoznawania specyficznych materiałów (np. teletechnika vs elektryka, instalacje p.poż., systemy KNX/DALI).
+            <span className="font-semibold">Wskazówka:</span> Kontekst pomaga AI rozróżniać np. teletechnikę od elektryki, instalacje p.poż. od standardowych, czy KNX/DALI od zwykłej automatyki. Efekt: trafniejsze normy i ceny.
           </p>
         </div>
       </CardContent>

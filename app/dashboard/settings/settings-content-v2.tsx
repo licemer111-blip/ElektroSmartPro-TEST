@@ -252,7 +252,7 @@ export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems
                     💡 Wskazówka
                   </p>
                   {activeTab === "guide" && (
-                    <p>Workflow, ES Import, ES-Engine z normami KNR, Konfigurator Rozdzielnic, Portal Klienta, Zestawy, 12 Kalkulatorów. Scroll w dół aby zainstalować aplikację (PWA)!</p>
+                    <p>Przegląd funkcji systemu: wyceny AI, katalog 8500+ norm KNR, konfigurator rozdzielnic, zestawy, kalkulatory. Możesz też zainstalować aplikację na telefon (PWA).</p>
                   )}
                   {activeTab === "profile" && (
                     <p>Dane firmy pojawią się na wszystkich dokumentach PDF.</p>
@@ -262,8 +262,8 @@ export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems
                   )}
                   {activeTab === "database" && (
                     <p>
-                      Widok katalogu ("ElektroSmart Core" lub "Własne") zarządzasz bezpośrednio w Katalogu Pozycji.
-                      {catalogStats.hiddenCount > 0 && ` • ${catalogStats.hiddenCount} ukrytych poz.`} Usuń treści ES-Engine jednym kliknięciem.
+                      Zarządzaj danymi katalogu: przełączaj między bazą globalną (8500+ norm) a własnymi pozycjami.
+                      {catalogStats.hiddenCount > 0 && ` • ${catalogStats.hiddenCount} ukrytych poz.`} Ukryte pozycje nie pojawiają się w wynikach.
                     </p>
                   )}
                   {activeTab === "subscription" && (

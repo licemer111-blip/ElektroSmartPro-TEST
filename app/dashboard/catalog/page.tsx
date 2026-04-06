@@ -71,7 +71,7 @@ export default async function CatalogPage({
         {/* Header */}
         <PageHeader
           title="Katalog Pozycji"
-          description={`${SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR • Ceny materiał + robocizna • ES Creator • Własne pozycje`}
+          description={`Baza ${SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR z cenami • Własne pozycje • Przełączaj: Własne / ES-Engine / Hybrydowy`}
           icon={PackageSearch}
           breadcrumbs={[
             { label: "Dashboard", href: "/dashboard" },
@@ -225,10 +225,10 @@ export default async function CatalogPage({
                 </div>
                 <div>
                   <h4 className="text-sm font-semibold text-green-900 dark:text-green-100 mb-1">
-                    Globalny Katalog
+                    Baza ES-Engine
                   </h4>
                   <p className="text-xs text-green-800 dark:text-green-300">
-                    {SYSTEM_STATS_FALLBACK.normsLabelPlus} gotowych norm KNR z cenami materiału i robocizny. Przełącz na "Katalog" w sidebarze aby przeglądać bazę.
+                    {SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR z cenami materiału i robocizny. Przełącz tryb w panelu kategorii po lewej.
                   </p>
                 </div>
               </div>
@@ -243,10 +243,10 @@ export default async function CatalogPage({
                 </div>
                 <div>
                   <h4 className="text-sm font-semibold text-orange-900 dark:text-orange-100 mb-1">
-                    ES Creator &amp; Własne pozycje
+                    Własne pozycje i ES Creator
                   </h4>
                   <p className="text-xs text-orange-800 dark:text-orange-300">
-                    Generuj pozycje przez ES-Engine lub dodaj ręcznie. Każda pozycja ma osobną cenę materiału i robocizny.
+                    Dodawaj pozycje ręcznie lub generuj przez AI. Każda ma osobną cenę materiału i robocizny — używasz ich w kosztorysach.
                   </p>
                 </div>
               </div>
@@ -264,7 +264,7 @@ export default async function CatalogPage({
                     Ceny regionalne
                   </h4>
                   <p className="text-xs text-blue-800 dark:text-blue-300">
-                    Ceny bazowe z katalogu × modyfikator wojewódzki = cena końcowa. Wybierz region w Ustawieniach.
+                    Stawki robocizny są korygowane wg województwa (np. Mazowieckie +15%). Region ustawiasz w Ustawienia → Finanse.
                   </p>
                 </div>
               </div>

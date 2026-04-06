@@ -296,7 +296,7 @@ export function ProjectHeaderToolbar({
                       <Brain className="mr-2 h-4 w-4 text-amber-500" />
                       <div className="flex flex-col">
                         <span className="text-xs font-medium">Kontekst Inwestycji</span>
-                        <span className="text-[10px] text-slate-400">Opisz obiekt dla lepszych norm KNR</span>
+                        <span className="text-[10px] text-slate-400">Typ obiektu → trafniejsze normy i ceny</span>
                       </div>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
@@ -310,7 +310,7 @@ export function ProjectHeaderToolbar({
                       <Sparkles className="mr-2 h-4 w-4 text-amber-500" />
                       <div className="flex flex-col">
                         <span className="text-xs font-medium">ES Asystent</span>
-                        <span className="text-[10px] text-slate-400">Porad, pomoc, analiza</span>
+                        <span className="text-[10px] text-slate-400">Pytaj AI o normy, materiały, rozwiązania</span>
                       </div>
                     </DropdownMenuItem>
                     <DropdownMenuItem
@@ -322,7 +322,7 @@ export function ProjectHeaderToolbar({
                       <FileSpreadsheet className="mr-2 h-4 w-4 text-amber-500" />
                       <div className="flex flex-col">
                         <span className="text-xs font-medium">ES Import</span>
-                        <span className="text-[10px] text-slate-400">Z pliku, PDF, tekstu</span>
+                        <span className="text-[10px] text-slate-400">Wczytaj pozycje z PDF, Excel lub tekstu</span>
                       </div>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
@@ -337,7 +337,7 @@ export function ProjectHeaderToolbar({
                       <CircleDollarSign className="mr-2 h-4 w-4 text-orange-500" />
                       <div className="flex flex-col">
                         <span className="text-xs font-medium">ES Wycena (L1+L2+L3)</span>
-                        <span className="text-[10px] text-slate-400">{projectItems.length} pozycji · normy KNR</span>
+                        <span className="text-[10px] text-slate-400">Wyceń {projectItems.length} poz. — KNR + AI + benchmarki</span>
                       </div>
                     </DropdownMenuItem>
                   </DropdownMenuContent>

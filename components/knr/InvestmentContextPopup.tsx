@@ -185,7 +185,7 @@ export function InvestmentContextPopup({ externalOpen, onExternalOpenChange }: I
               Kontekst Inwestycji
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              AI Prompt — opisz obiekt. ES-Engine weźmie to pod uwagę przy dopasowywaniu norm KNR.
+              Opisz typ obiektu (np. biurowiec, dom, hala) — AI lepiej dobierze normy KNR i materiały do wyceny.
             </DialogDescription>
           </DialogHeader>
 
@@ -213,7 +213,7 @@ export function InvestmentContextPopup({ externalOpen, onExternalOpenChange }: I
                 aria-label="Kontekst inwestycji"
                 value={value}
                 onChange={(e) => { setValue(e.target.value.slice(0, CHAR_LIMIT)); setSaved(false); }}
-                placeholder="Opisz krótko obiekt (np. instalacja SAP, inteligentny dom KNX, biurowiec). System weźmie to pod uwagę przy dopasowywaniu norm KNR..."
+                placeholder="Np. remont mieszkania 60m², dom jednorodzinny z fotowoltaiką 10kWp, biurowiec klasy A z SAP — im więcej szczegółów, tym trafniejsze wyceny..."
                 className={`min-h-[110px] pr-24 resize-none text-sm leading-relaxed transition-all ${
                   isRecording
                     ? "border-red-400 dark:border-red-600 ring-2 ring-red-200 dark:ring-red-900"
@@ -279,7 +279,7 @@ export function InvestmentContextPopup({ externalOpen, onExternalOpenChange }: I
             <div className="flex items-start gap-2 px-3 py-2.5 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/40">
               <Lightbulb className="w-3.5 h-3.5 text-blue-500 flex-shrink-0 mt-0.5" />
               <p className="text-[11px] text-blue-700 dark:text-blue-300 leading-relaxed">
-                <span className="font-semibold">Wskazówka:</span> Kontekst drastycznie zwiększa skuteczność rozpoznawania specyficznych materiałów (teletechnika, KNX/DALI, p.poż.).
+                <span className="font-semibold">Wskazówka:</span> Kontekst pomaga AI rozróżniać np. teletechnikę od elektryki, instalacje p.poż. od standardowych. Efekt: trafniejsze normy i ceny.
               </p>
             </div>
 

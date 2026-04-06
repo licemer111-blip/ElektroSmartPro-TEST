@@ -127,14 +127,14 @@ export function PanelConfiguratorPageClient({
             Zaprojektuj swoją rozdzielnicę
           </h2>
           <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-8">
-            Utwórz projekt, a następnie rozmieszczaj moduły DIN metodą drag&amp;drop, sprawdzaj bilans faz i generuj schemat jednokreskowy PDF.
+            Wizualny konfigurator tablic rozdzielczych: przeciągnij moduły DIN na szyny, sprawdź bilans faz L1/L2/L3 i wyeksportuj schemat jednokreskowy do PDF.
           </p>
 
           {/* Feature pills */}
           <div className="flex flex-wrap justify-center gap-3 mb-8">
             <div className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-600 dark:text-slate-300 shadow-sm">
               <Shield className="w-3.5 h-3.5 text-green-500" />
-              120+ modułów DIN
+              200+ modułów DIN w 15 kategoriach
             </div>
             <div className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-600 dark:text-slate-300 shadow-sm">
               <BarChart3 className="w-3.5 h-3.5 text-blue-500" />
