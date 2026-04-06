@@ -49,7 +49,12 @@ export type MaterialCategory =
   | "pomiary_ochrona"       // uziemienie, odgromniki
   | "fotowoltaika"          // panele PV, falowniki, optymalizatory
   | "materialy_montazowe"   // dławnice, złączki, WAGO, taśmy
-  | "smart_home";           // KNX, DALI, czujniki
+  | "smart_home"            // KNX, DALI, czujniki
+  | "zasilanie_awaryjne"   // UPS, baterie, agregaty
+  | "ladowarki_ev"          // wallbox, kable ładowania
+  | "pomiary_liczniki"      // liczniki, przekładniki, analizatory
+  | "ogrzewanie_elektryczne" // maty grzewcze, kable grzejne, termostaty
+  | "przepusty_ppoz";       // przepusty ogniowe, masy ogniochronne
 
 // ─── Benchmark Database ─────────────────────────────────────────────────────────
 
@@ -285,6 +290,129 @@ export const MATERIAL_BENCHMARKS: MaterialBenchmark[] = [
   { category: "smart_home", keywords: ["przycisk", "knx"], unit: "szt", min: 150.00, avg: 250.00, max: 400.00 },
   { category: "smart_home", keywords: ["czujnik", "knx"], unit: "szt", min: 120.00, avg: 200.00, max: 350.00 },
   { category: "smart_home", keywords: ["moduł", "dali"], unit: "szt", min: 150.00, avg: 250.00, max: 400.00 },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // ZASILANIE AWARYJNE (UPS, baterie, agregaty)
+  // ═══════════════════════════════════════════════════════════════════
+  { category: "zasilanie_awaryjne", keywords: ["ups", "1kva"], unit: "szt", min: 800.00, avg: 1200.00, max: 1800.00 },
+  { category: "zasilanie_awaryjne", keywords: ["ups", "2kva"], unit: "szt", min: 1500.00, avg: 2200.00, max: 3200.00 },
+  { category: "zasilanie_awaryjne", keywords: ["ups", "3kva"], unit: "szt", min: 2200.00, avg: 3500.00, max: 5000.00 },
+  { category: "zasilanie_awaryjne", keywords: ["ups", "5kva"], unit: "szt", min: 3500.00, avg: 5500.00, max: 8000.00 },
+  { category: "zasilanie_awaryjne", keywords: ["ups", "10kva"], unit: "szt", min: 6000.00, avg: 9500.00, max: 14000.00 },
+  { category: "zasilanie_awaryjne", keywords: ["bateria", "ups"], unit: "szt", min: 150.00, avg: 280.00, max: 500.00 },
+  { category: "zasilanie_awaryjne", keywords: ["szafa", "bateryjn"], unit: "szt", min: 800.00, avg: 1500.00, max: 2500.00 },
+  { category: "zasilanie_awaryjne", keywords: ["agregat", "prądotwórcz"], unit: "szt", min: 8000.00, avg: 15000.00, max: 35000.00 },
+  { category: "zasilanie_awaryjne", keywords: ["przełącznik", "sieć", "agregat"], unit: "szt", min: 1200.00, avg: 2500.00, max: 5000.00 },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // ŁADOWARKI EV (wallbox, stacje ładowania)
+  // ═══════════════════════════════════════════════════════════════════
+  { category: "ladowarki_ev", keywords: ["wallbox", "7kw"], unit: "szt", min: 1800.00, avg: 2800.00, max: 4500.00 },
+  { category: "ladowarki_ev", keywords: ["wallbox", "11kw"], unit: "szt", min: 2500.00, avg: 3800.00, max: 6000.00 },
+  { category: "ladowarki_ev", keywords: ["wallbox", "22kw"], unit: "szt", min: 3500.00, avg: 5500.00, max: 8500.00 },
+  { category: "ladowarki_ev", keywords: ["ładowarka", "ev"], unit: "szt", min: 2000.00, avg: 3500.00, max: 6000.00 },
+  { category: "ladowarki_ev", keywords: ["stacja", "ładowani"], unit: "szt", min: 2500.00, avg: 4500.00, max: 8000.00 },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // POMIARY I LICZNIKI (mierniki, przekładniki, analizatory)
+  // ═══════════════════════════════════════════════════════════════════
+  { category: "pomiary_liczniki", keywords: ["licznik", "energii", "1-faz"], unit: "szt", min: 80.00, avg: 140.00, max: 220.00 },
+  { category: "pomiary_liczniki", keywords: ["licznik", "energii", "3-faz"], unit: "szt", min: 200.00, avg: 350.00, max: 550.00 },
+  { category: "pomiary_liczniki", keywords: ["licznik", "modbus"], unit: "szt", min: 250.00, avg: 400.00, max: 600.00 },
+  { category: "pomiary_liczniki", keywords: ["przekładnik", "prądow"], unit: "szt", min: 25.00, avg: 50.00, max: 90.00 },
+  { category: "pomiary_liczniki", keywords: ["analizator", "sieci"], unit: "szt", min: 800.00, avg: 1500.00, max: 2800.00 },
+  { category: "pomiary_liczniki", keywords: ["amperomierz", "moduł"], unit: "szt", min: 40.00, avg: 70.00, max: 120.00 },
+  { category: "pomiary_liczniki", keywords: ["woltomierz", "moduł"], unit: "szt", min: 40.00, avg: 70.00, max: 120.00 },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // OGRZEWANIE ELEKTRYCZNE (maty grzewcze, kable, termostaty)
+  // ═══════════════════════════════════════════════════════════════════
+  { category: "ogrzewanie_elektryczne", keywords: ["mata", "grzewcz", "150w"], unit: "m2", min: 90.00, avg: 140.00, max: 220.00 },
+  { category: "ogrzewanie_elektryczne", keywords: ["mata", "grzewcz", "200w"], unit: "m2", min: 120.00, avg: 180.00, max: 280.00 },
+  { category: "ogrzewanie_elektryczne", keywords: ["mata", "grzewcz"], unit: "m2", min: 90.00, avg: 150.00, max: 250.00 },
+  { category: "ogrzewanie_elektryczne", keywords: ["kabel", "grzejn"], unit: "mb", min: 8.00, avg: 15.00, max: 25.00 },
+  { category: "ogrzewanie_elektryczne", keywords: ["termostat", "podłogow"], unit: "szt", min: 80.00, avg: 150.00, max: 280.00 },
+  { category: "ogrzewanie_elektryczne", keywords: ["termostat", "programowaln"], unit: "szt", min: 120.00, avg: 200.00, max: 350.00 },
+  { category: "ogrzewanie_elektryczne", keywords: ["grzejnik", "elektryczn"], unit: "szt", min: 300.00, avg: 600.00, max: 1200.00 },
+  { category: "ogrzewanie_elektryczne", keywords: ["grzałka", "elektryczn"], unit: "szt", min: 60.00, avg: 120.00, max: 250.00 },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // PRZEPUSTY PPOŻ (przepusty ogniowe, masy ogniochronne)
+  // ═══════════════════════════════════════════════════════════════════
+  { category: "przepusty_ppoz", keywords: ["przepust", "ogniochronn"], unit: "szt", min: 25.00, avg: 55.00, max: 100.00 },
+  { category: "przepusty_ppoz", keywords: ["przepust", "ei60"], unit: "szt", min: 30.00, avg: 60.00, max: 110.00 },
+  { category: "przepusty_ppoz", keywords: ["przepust", "ei90"], unit: "szt", min: 40.00, avg: 75.00, max: 130.00 },
+  { category: "przepusty_ppoz", keywords: ["przepust", "ei120"], unit: "szt", min: 50.00, avg: 90.00, max: 150.00 },
+  { category: "przepusty_ppoz", keywords: ["masa", "ogniochronn"], unit: "szt", min: 40.00, avg: 80.00, max: 150.00 },
+  { category: "przepusty_ppoz", keywords: ["kołnierz", "ogniochronn"], unit: "szt", min: 60.00, avg: 110.00, max: 200.00 },
+  { category: "przepusty_ppoz", keywords: ["opaska", "ogniochronn"], unit: "szt", min: 40.00, avg: 75.00, max: 140.00 },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // DODATKOWY OSPRZĘT (uzupełnienie istniejących kategorii)
+  // ═══════════════════════════════════════════════════════════════════
+  // Tulejki kablowe
+  { category: "materialy_montazowe", keywords: ["tulejka", "kablow", "1,5"], unit: "szt", min: 0.05, avg: 0.10, max: 0.20 },
+  { category: "materialy_montazowe", keywords: ["tulejka", "kablow", "2,5"], unit: "szt", min: 0.06, avg: 0.12, max: 0.25 },
+  { category: "materialy_montazowe", keywords: ["tulejka", "kablow", "6"], unit: "szt", min: 0.10, avg: 0.20, max: 0.40 },
+  { category: "materialy_montazowe", keywords: ["tulejka", "kablow", "10"], unit: "szt", min: 0.15, avg: 0.30, max: 0.60 },
+  { category: "materialy_montazowe", keywords: ["tulejka", "kablow", "16"], unit: "szt", min: 0.25, avg: 0.50, max: 1.00 },
+  // Listwy zaciskowe
+  { category: "materialy_montazowe", keywords: ["listwa", "zaciskow", "12"], unit: "szt", min: 2.00, avg: 4.00, max: 7.00 },
+  { category: "materialy_montazowe", keywords: ["listwa", "zaciskow", "n"], unit: "szt", min: 5.00, avg: 10.00, max: 18.00 },
+  { category: "materialy_montazowe", keywords: ["listwa", "zaciskow", "pe"], unit: "szt", min: 5.00, avg: 10.00, max: 18.00 },
+  // Kołki
+  { category: "materialy_montazowe", keywords: ["kołek", "rozporow"], unit: "szt", min: 0.15, avg: 0.30, max: 0.60 },
+  { category: "materialy_montazowe", keywords: ["kołek", "motylek"], unit: "szt", min: 0.30, avg: 0.60, max: 1.20 },
+  // Mufy kablowe
+  { category: "materialy_montazowe", keywords: ["mufa", "kablow"], unit: "szt", min: 25.00, avg: 55.00, max: 100.00 },
+  { category: "materialy_montazowe", keywords: ["głowica", "kablow"], unit: "szt", min: 30.00, avg: 65.00, max: 120.00 },
+  // Szyny zbiorcze
+  { category: "materialy_montazowe", keywords: ["szyna", "zbiorcz", "miedzian"], unit: "mb", min: 20.00, avg: 40.00, max: 70.00 },
+  { category: "materialy_montazowe", keywords: ["grzebień", "łączeniow"], unit: "szt", min: 15.00, avg: 28.00, max: 45.00 },
+  // Dławice dodatkowe rozmiary
+  { category: "materialy_montazowe", keywords: ["dławnica", "m40"], unit: "szt", min: 3.00, avg: 5.50, max: 9.00 },
+  { category: "materialy_montazowe", keywords: ["dławnica", "m50"], unit: "szt", min: 5.00, avg: 9.00, max: 15.00 },
+  { category: "materialy_montazowe", keywords: ["dławnica", "m63"], unit: "szt", min: 8.00, avg: 14.00, max: 22.00 },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // DODATKOWA APARATURA MODUŁOWA
+  // ═══════════════════════════════════════════════════════════════════
+  { category: "aparatura_modulowa", keywords: ["wyłącznik", "b40"], unit: "szt", min: 22.00, avg: 35.00, max: 55.00 },
+  { category: "aparatura_modulowa", keywords: ["wyłącznik", "b50"], unit: "szt", min: 28.00, avg: 42.00, max: 65.00 },
+  { category: "aparatura_modulowa", keywords: ["wyłącznik", "b63"], unit: "szt", min: 35.00, avg: 52.00, max: 80.00 },
+  { category: "aparatura_modulowa", keywords: ["wyłącznik", "c10"], unit: "szt", min: 15.00, avg: 23.00, max: 40.00 },
+  { category: "aparatura_modulowa", keywords: ["wyłącznik", "c20"], unit: "szt", min: 17.00, avg: 26.00, max: 45.00 },
+  { category: "aparatura_modulowa", keywords: ["rcd", "25a", "30ma", "4p"], unit: "szt", min: 100.00, avg: 160.00, max: 250.00 },
+  { category: "aparatura_modulowa", keywords: ["rcd", "63a", "300ma", "4p"], unit: "szt", min: 130.00, avg: 200.00, max: 310.00 },
+  { category: "aparatura_modulowa", keywords: ["rozłącznik", "izolacyjn", "160a"], unit: "szt", min: 90.00, avg: 140.00, max: 220.00 },
+  { category: "aparatura_modulowa", keywords: ["rozłącznik", "izolacyjn", "250a"], unit: "szt", min: 150.00, avg: 230.00, max: 360.00 },
+  // Bezpieczniki
+  { category: "aparatura_modulowa", keywords: ["wkładka", "bezpiecznikow", "nh00"], unit: "szt", min: 8.00, avg: 15.00, max: 28.00 },
+  { category: "aparatura_modulowa", keywords: ["wkładka", "bezpiecznikow", "nh1"], unit: "szt", min: 12.00, avg: 22.00, max: 40.00 },
+  { category: "aparatura_modulowa", keywords: ["wkładka", "bezpiecznikow", "nh2"], unit: "szt", min: 18.00, avg: 35.00, max: 60.00 },
+  { category: "aparatura_modulowa", keywords: ["podstawa", "bezpiecznikow", "nh00"], unit: "szt", min: 20.00, avg: 38.00, max: 65.00 },
+  { category: "aparatura_modulowa", keywords: ["podstawa", "bezpiecznikow", "nh1"], unit: "szt", min: 30.00, avg: 55.00, max: 90.00 },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // DODATKOWE OPRAWY OŚWIETLENIOWE
+  // ═══════════════════════════════════════════════════════════════════
+  { category: "oprawy_oswietleniowe", keywords: ["oprawa", "led", "liniow"], unit: "szt", min: 40.00, avg: 75.00, max: 130.00 },
+  { category: "oprawy_oswietleniowe", keywords: ["oprawa", "przemysłow", "led"], unit: "szt", min: 80.00, avg: 150.00, max: 280.00 },
+  { category: "oprawy_oswietleniowe", keywords: ["naświetlacz", "led"], unit: "szt", min: 30.00, avg: 70.00, max: 150.00 },
+  { category: "oprawy_oswietleniowe", keywords: ["taśma", "led"], unit: "mb", min: 8.00, avg: 18.00, max: 40.00 },
+  { category: "oprawy_oswietleniowe", keywords: ["zasilacz", "led"], unit: "szt", min: 20.00, avg: 45.00, max: 90.00 },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // DODATKOWE TRASY KABLOWE
+  // ═══════════════════════════════════════════════════════════════════
+  { category: "trasy_kablowe", keywords: ["rura", "stalowa", "rl"], unit: "mb", min: 5.00, avg: 9.00, max: 15.00 },
+  { category: "trasy_kablowe", keywords: ["uchwyt", "kablowy"], unit: "szt", min: 0.50, avg: 1.20, max: 2.50 },
+  { category: "trasy_kablowe", keywords: ["uchwyt", "dystansow"], unit: "szt", min: 1.00, avg: 2.00, max: 4.00 },
+  { category: "trasy_kablowe", keywords: ["korytko", "siatkow", "100"], unit: "mb", min: 15.00, avg: 25.00, max: 40.00 },
+  { category: "trasy_kablowe", keywords: ["korytko", "siatkow", "200"], unit: "mb", min: 20.00, avg: 35.00, max: 55.00 },
+  { category: "trasy_kablowe", keywords: ["korytko", "siatkow", "300"], unit: "mb", min: 28.00, avg: 45.00, max: 70.00 },
+  { category: "trasy_kablowe", keywords: ["rura", "ochronna", "dvr"], unit: "mb", min: 2.50, avg: 5.00, max: 8.50 },
+  { category: "trasy_kablowe", keywords: ["rura", "osłonowa", "arot"], unit: "mb", min: 4.00, avg: 7.50, max: 12.00 },
 ];
 
 // ─── Lookup Functions ───────────────────────────────────────────────────────────
@@ -374,6 +502,11 @@ export function buildBenchmarkPromptContext(categories?: MaterialCategory[]): st
     "aparatura_modulowa",
     "oprawy_oswietleniowe",
     "trasy_kablowe",
+    "zasilanie_awaryjne",
+    "ladowarki_ev",
+    "pomiary_liczniki",
+    "ogrzewanie_elektryczne",
+    "przepusty_ppoz",
   ];
 
   const lines: string[] = ["<price_reference_2026>"];
