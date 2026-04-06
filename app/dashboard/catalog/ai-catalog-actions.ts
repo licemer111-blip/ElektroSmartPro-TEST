@@ -13,7 +13,7 @@ import { fetchKbContext, listKbFileNames } from "@/lib/kb-storage";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { lookupKnrByName, buildLocalKnrContext } from "@/lib/knr-local-context";
 import { applyPriceGuard } from "@/lib/utils/price-validator";
-import { clampToBenchmark } from "@/lib/data/material-benchmarks";
+import { clampToBenchmark, buildBenchmarkPromptContext } from "@/lib/data/material-benchmarks";
 
 // ─── RAG KB loader (with timeout) ────────────────────────────────────────────
 async function fetchCatalogKbContext(): Promise<string | null> {
@@ -33,129 +33,11 @@ async function fetchCatalogKbContext(): Promise<string | null> {
   }
 }
 
-// Catalog items reference for AI
+// v10.5: Catalog items reference now sourced from material-benchmarks.ts (single source of truth)
 const CATALOG_ITEMS_REFERENCE = `
 WZORCE POZYCJI KATALOGOWYCH ElektroSmart PRO (Polska 2026, ceny NETTO):
 
-══ PRZEWODY I KABLE ══
-- Przewód YDYp 3x1,5mm² | mb | mat: 5 | rob: 0        ← obwody oświetleniowe
-- Przewód YDYp 3x2,5mm² | mb | mat: 7 | rob: 0        ← obwody gniazdowe
-- Przewód YDYp 5x2,5mm² | mb | mat: 14 | rob: 0       ← kuchenka, piekarnik
-- Przewód YDYp 5x4mm² | mb | mat: 22 | rob: 0         ← klimatyzacja, bojler
-- Przewód YDYżo 3x1,5mm² (ognioodporny) | mb | mat: 18 | rob: 0
-- Kabel YKY 5x4mm² | mb | mat: 18 | rob: 0            ← zasilanie silników
-- Kabel YKY 5x10mm² | mb | mat: 42 | rob: 0           ← zasilanie główne
-- Kabel YKY 5x16mm² | mb | mat: 65 | rob: 0
-- Kabel N2XH 3x1,5mm² (bezhalogenowy) | mb | mat: 22 | rob: 0
-- Przewód LgY 6mm² żółto-zielony (PE) | mb | mat: 8 | rob: 0
-- Przewód UTP kat.6 | mb | mat: 4 | rob: 0
-- Kabel HDMI 2.0 | mb | mat: 15 | rob: 0
-- Przewód głośnikowy 2x1,5mm² | mb | mat: 3 | rob: 0
-
-══ OSPRZĘT INSTALACYJNY — GNIAZDA ══
-- Gniazdo pojedyncze z uziemieniem | szt | mat: 18 | rob: 0
-- Gniazdo podwójne z uziemieniem | szt | mat: 28 | rob: 0
-- Gniazdo potrójne z uziemieniem | szt | mat: 42 | rob: 0
-- Gniazdo hermetyczne IP44 pojedyncze | szt | mat: 28 | rob: 0
-- Gniazdo hermetyczne IP44 podwójne | szt | mat: 38 | rob: 0
-- Gniazdo DATA RJ45 kat.6 | szt | mat: 35 | rob: 0
-- Gniazdo TV/SAT | szt | mat: 25 | rob: 0
-- Gniazdo USB A+C ładujące | szt | mat: 55 | rob: 0
-- Gniazdo podłogowe (floorbox) 2x230V+2xRJ45 | szt | mat: 280 | rob: 0
-- Gniazdo przemysłowe CEE 16A 3P+N+PE IP44 | szt | mat: 65 | rob: 0
-- Gniazdo przemysłowe CEE 32A 3P+N+PE IP44 | szt | mat: 95 | rob: 0
-- Gniazdo przemysłowe CEE 63A 3P+N+PE IP44 | szt | mat: 180 | rob: 0
-- Gniazdo 3-fazowe 16A 5P natynkowe | szt | mat: 55 | rob: 0
-
-══ OSPRZĘT INSTALACYJNY — ŁĄCZNIKI ══
-- Łącznik pojedynczy | szt | mat: 15 | rob: 0
-- Łącznik podwójny świecznikowy | szt | mat: 22 | rob: 0
-- Łącznik schodowy | szt | mat: 22 | rob: 0
-- Łącznik krzyżowy | szt | mat: 28 | rob: 0
-- Łącznik świecznikowy | szt | mat: 18 | rob: 0
-- Przycisk dzwonkowy | szt | mat: 18 | rob: 0
-- Ściemniacz LED 200W | szt | mat: 85 | rob: 0
-- Łącznik z czujnikiem ruchu | szt | mat: 95 | rob: 0
-- Łącznik WiFi smart (Tuya/Zigbee) | szt | mat: 65 | rob: 0
-- Czujnik ruchu PIR sufitowy 360° | szt | mat: 75 | rob: 0
-- Czujnik obecności HF 360° | szt | mat: 120 | rob: 0
-- Czujnik zmierzchu | szt | mat: 55 | rob: 0
-
-══ PUSZKI I KANAŁY ══
-- Puszka podtynkowa Ø60 | szt | mat: 3 | rob: 0
-- Puszka podtynkowa głęboka Ø60 | szt | mat: 5 | rob: 0
-- Puszka podtynkowa Ø60 podwójna | szt | mat: 6 | rob: 0
-- Puszka połączeniowa IP44 | szt | mat: 12 | rob: 0
-- Puszka połączeniowa IP65 | szt | mat: 18 | rob: 0
-- Puszka natynkowa hermetyczna IP65 | szt | mat: 22 | rob: 0
-- Korytko kablowe PCV 40x25mm | mb | mat: 8 | rob: 0
-- Korytko kablowe PCV 60x40mm | mb | mat: 14 | rob: 0
-- Korytko metalowe 100x60mm | mb | mat: 28 | rob: 0
-- Rura instalacyjna PCV Ø20mm | mb | mat: 3 | rob: 0
-- Rura karbowana Ø25mm | mb | mat: 2 | rob: 0
-
-══ APARATURA MODUŁOWA — WYŁĄCZNIKI ══
-- Wyłącznik nadprądowy B6 1P | szt | mat: 20 | rob: 0
-- Wyłącznik nadprądowy B10 1P | szt | mat: 22 | rob: 0
-- Wyłącznik nadprądowy B16 1P | szt | mat: 25 | rob: 0
-- Wyłącznik nadprądowy B20 1P | szt | mat: 25 | rob: 0
-- Wyłącznik nadprądowy B25 1P | szt | mat: 28 | rob: 0
-- Wyłącznik nadprądowy B32 1P | szt | mat: 30 | rob: 0
-- Wyłącznik nadprądowy B16 3P | szt | mat: 75 | rob: 0
-- Wyłącznik nadprądowy C16 3P | szt | mat: 75 | rob: 0
-- Wyłącznik nadprądowy C32 3P | szt | mat: 90 | rob: 0
-- Wyłącznik nadprądowy D32 3P | szt | mat: 95 | rob: 0
-- Wyłącznik różnicowoprądowy 25A/30mA 2P | szt | mat: 95 | rob: 0
-- Wyłącznik różnicowoprądowy 40A/30mA 4P | szt | mat: 220 | rob: 0
-- Wyłącznik różnicowoprądowy 63A/30mA 4P | szt | mat: 280 | rob: 0
-- Wyłącznik różnicowoprądowy 25A/10mA 2P (łazienka) | szt | mat: 130 | rob: 0
-- Wyłącznik nadróżnicowoprądowy RCBO B16/30mA 1P+N | szt | mat: 95 | rob: 0
-- Ogranicznik przepięć SPD T1+T2 4P | szt | mat: 280 | rob: 0
-- Ogranicznik przepięć SPD T2 4P | szt | mat: 180 | rob: 0
-- Rozłącznik izolacyjny 40A 4P | szt | mat: 85 | rob: 0
-- Rozłącznik izolacyjny 100A 4P | szt | mat: 180 | rob: 0
-- Licznik energii 3-fazowy MID | szt | mat: 320 | rob: 0
-- Przekaźnik czasowy tygodniowy | szt | mat: 95 | rob: 0
-- Przekaźnik napięciowy (ochrona przepięciowa) | szt | mat: 120 | rob: 0
-- Stycznik 3P 25A | szt | mat: 95 | rob: 0
-- Przekaźnik termiczny 6-10A | szt | mat: 75 | rob: 0
-
-══ ROZDZIELNICE ══
-- Rozdzielnica podtynkowa 1x12 modułów | szt | mat: 85 | rob: 0
-- Rozdzielnica podtynkowa 2x12 modułów | szt | mat: 140 | rob: 0
-- Rozdzielnica podtynkowa 3x12 modułów | szt | mat: 200 | rob: 0
-- Rozdzielnica natynkowa IP65 24 moduły | szt | mat: 220 | rob: 0
-- Rozdzielnica natynkowa IP65 48 modułów | szt | mat: 380 | rob: 0
-- Szafa sterownicza wolnostojąca 600x800x250 | szt | mat: 1200 | rob: 0
-- Szyna TH35 (1mb) | szt | mat: 8 | rob: 0
-- Szyna N/PE 10-torowa | szt | mat: 25 | rob: 0
-
-══ OŚWIETLENIE ══
-- Oprawa LED downlight Ø150 12W | szt | mat: 55 | rob: 0
-- Oprawa LED downlight Ø200 18W | szt | mat: 75 | rob: 0
-- Oprawa LED panel 60x60 40W | szt | mat: 110 | rob: 0
-- Oprawa LED natynkowa liniowa 40W | szt | mat: 85 | rob: 0
-- Oprawa LED natynkowa okrągła | szt | mat: 65 | rob: 0
-- Oprawa LED zewnętrzna IP65 | szt | mat: 150 | rob: 0
-- Oprawa LED highbay 100W IP65 | szt | mat: 280 | rob: 0
-- Oprawa LED highbay 150W IP65 | szt | mat: 380 | rob: 0
-- Oprawa awaryjna LED 3h | szt | mat: 180 | rob: 0
-- Oprawa ewakuacyjna LED (EXIT) | szt | mat: 220 | rob: 0
-- Kinkiet LED zewnętrzny IP44 | szt | mat: 120 | rob: 0
-- Taśma LED 24V IP20 (5mb) | szt | mat: 95 | rob: 0
-- Zasilacz LED 24V 60W | szt | mat: 75 | rob: 0
-
-══ TELETECHNIKA I AUTOMATYKA ══
-- Centrala alarmowa 8-strefowa | szt | mat: 450 | rob: 0
-- Czujka PIR alarmowa | szt | mat: 85 | rob: 0
-- Sygnalizator alarmowy zewnętrzny | szt | mat: 180 | rob: 0
-- Domofon wideo 7" WiFi | szt | mat: 650 | rob: 0
-- Kamera IP PoE 4MP | szt | mat: 280 | rob: 0
-- Switch PoE 8-portowy | szt | mat: 320 | rob: 0
-- Punkt dostępowy WiFi 6 sufitowy | szt | mat: 380 | rob: 0
-- Sterownik KNX 4-kanałowy | szt | mat: 580 | rob: 0
-- Termostat programowalny WiFi | szt | mat: 120 | rob: 0
-- Sterownik rolet 230V | szt | mat: 95 | rob: 0
+${buildBenchmarkPromptContext()}
 
 ══ ROBOCIZNA ══
 - Montaż gniazda / łącznika | szt | mat: 0 | rob: 25
