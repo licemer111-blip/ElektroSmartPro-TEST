@@ -453,36 +453,37 @@ export const EstimateRow = React.memo(function EstimateRow({
         style={{ transform: `translateY(${compactView ? -1 : -2}px)` }}
       >
         <TableCell colSpan={20} className="p-0 px-2 pb-2.5 border-b border-slate-200 dark:border-slate-700">
-          <div className="rounded-b-lg border border-t-0 border-blue-300 dark:border-blue-600 shadow-md overflow-hidden">
-            {/* Blue header bar */}
-            <div className="flex items-center gap-2 px-3 py-2 bg-blue-600 dark:bg-blue-700">
-              <PenLine className="w-3.5 h-3.5 text-white flex-shrink-0" />
-              <span className="text-xs font-semibold text-white truncate flex-1">{editingState!.name || item.name}</span>
+          <div className="rounded-b-lg border border-t-0 border-blue-400/60 dark:border-blue-600 shadow-lg overflow-hidden">
+            {/* Header bar */}
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-700 dark:to-blue-800">
+              <PenLine className="w-3.5 h-3.5 text-white/80 flex-shrink-0" />
+              <span className="text-[11px] font-medium text-white/90 truncate flex-1">Edycja pozycji</span>
               <button type="button" onClick={onSaveEdit}
-                className="flex items-center gap-1 px-2.5 py-1 rounded bg-white/20 hover:bg-white/30 text-white text-xs font-semibold transition-colors">
+                className="flex items-center gap-1 px-3 py-1 rounded-md bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold transition-colors">
                 <Check className="w-3 h-3" />Zapisz
               </button>
               <button type="button" onClick={onCancelEdit}
-                className="p-1 rounded bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-colors ml-1">
+                className="p-1 rounded-md bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-colors">
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
-            {/* White body with all inputs */}
-            <div className="bg-white dark:bg-slate-900 px-3 py-2.5 flex flex-wrap items-start gap-3">
-              {/* Nazwa */}
-              <div className="flex-1 min-w-[200px] max-w-[400px] space-y-1.5">
-                <label className="text-[9px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide block">Nazwa pozycji</label>
+
+            {/* Form body */}
+            <div className="bg-white dark:bg-slate-900 px-4 py-3 space-y-3">
+              {/* Row 1: Nazwa + Sekcja */}
+              <div className="space-y-1">
+                <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block">Nazwa pozycji</label>
                 <Input
                   type="text"
                   value={editingState!.name}
                   onChange={(e) => onEditingChange({ ...editingState!, name: e.target.value })}
-                  className="font-medium dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                  className="h-9 text-sm font-medium dark:bg-slate-950 dark:border-slate-700 dark:text-white"
                   placeholder="Nazwa pozycji"
                   autoFocus
                   onKeyDown={handleKeyDown}
                 />
                 {!isAssemblyChild && (
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 pt-0.5">
                     <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-wide flex-shrink-0">Sekcja:</span>
                     <Popover>
                       <PopoverTrigger asChild>
@@ -530,61 +531,61 @@ export const EstimateRow = React.memo(function EstimateRow({
                   </div>
                 )}
               </div>
-              {/* Jm */}
-              <div className="w-20 space-y-1.5">
-                <label className="text-[9px] font-semibold text-slate-400 uppercase tracking-wide block">Jm</label>
-                <Input type="text" list={`unit-presets-panel-${item.id}`}
-                  value={editingState!.unit}
-                  onChange={(e) => onEditingChange({ ...editingState!, unit: e.target.value })}
-                  className="text-center dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-                  placeholder="szt" onKeyDown={handleKeyDown}
-                />
-                <datalist id={`unit-presets-panel-${item.id}`}>
-                  {UNIT_PRESETS.map((u) => <option key={u} value={u} />)}
-                </datalist>
-              </div>
-              {/* Ilo\u015b\u0107 */}
-              <div className="w-24 space-y-1.5">
-                <label className="text-[9px] font-semibold text-slate-400 uppercase tracking-wide block">Ilo\u015b\u0107</label>
-                <Input type="number" step="0.01" min="0.01"
-                  value={editingState!.quantity}
-                  onChange={(e) => onEditingChange({ ...editingState!, quantity: e.target.value })}
-                  className="text-center dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-                  onKeyDown={handleKeyDown}
-                />
-              </div>
-              {/* Materia\u0142 */}
-              {showMaterialsColumn && !editingState!.isAssemblyParent && !materialsOwnedByCustomer && (
-                <div className="w-28 space-y-1.5">
-                  <label className="text-[9px] font-semibold text-amber-500 uppercase tracking-wide block">Materia\u0142 (z\u0142/jm)</label>
-                  {showPrices ? (
-                    <Input type="number" step="0.01" min="0"
-                      value={editingState!.materialPrice}
-                      onChange={(e) => onEditingChange({ ...editingState!, materialPrice: e.target.value })}
-                      className="text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-                      placeholder="0.00" onKeyDown={handleKeyDown}
-                    />
-                  ) : (
-                    <div className="h-9 flex items-center justify-end border rounded px-3 bg-muted text-sm font-medium opacity-40 select-none tracking-widest">***</div>
-                  )}
+
+              {/* Row 2: Jm + Ilość + Materiał + Robocizna — aligned grid */}
+              <div className="grid grid-cols-[80px_90px_1fr_1fr] gap-2 items-end">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block">Jedn.</label>
+                  <Input type="text" list={`unit-presets-panel-${item.id}`}
+                    value={editingState!.unit}
+                    onChange={(e) => onEditingChange({ ...editingState!, unit: e.target.value })}
+                    className="h-9 text-sm text-center dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                    placeholder="szt" onKeyDown={handleKeyDown}
+                  />
+                  <datalist id={`unit-presets-panel-${item.id}`}>
+                    {UNIT_PRESETS.map((u) => <option key={u} value={u} />)}
+                  </datalist>
                 </div>
-              )}
-              {/* Robocizna */}
-              {showLaborColumn && !editingState!.isAssemblyParent && (
-                <div className="w-28 space-y-1.5">
-                  <label className="text-[9px] font-semibold text-emerald-500 uppercase tracking-wide block">Robocizna (z\u0142/jm)</label>
-                  {showPrices ? (
-                    <Input type="number" step="0.01" min="0"
-                      value={editingState!.laborPrice}
-                      onChange={(e) => onEditingChange({ ...editingState!, laborPrice: e.target.value })}
-                      className="text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-                      placeholder="0.00" onKeyDown={handleKeyDown}
-                    />
-                  ) : (
-                    <div className="h-9 flex items-center justify-end border rounded px-3 bg-muted text-sm font-medium opacity-40 select-none tracking-widest">***</div>
-                  )}
+                <div className="space-y-1">
+                  <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block">Ilo\u015b\u0107</label>
+                  <Input type="number" step="0.01" min="0.01"
+                    value={editingState!.quantity}
+                    onChange={(e) => onEditingChange({ ...editingState!, quantity: e.target.value })}
+                    className="h-9 text-sm text-center dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                    onKeyDown={handleKeyDown}
+                  />
                 </div>
-              )}
+                {showMaterialsColumn && !editingState!.isAssemblyParent && !materialsOwnedByCustomer ? (
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 block">Materia\u0142 (z\u0142/jm.)</label>
+                    {showPrices ? (
+                      <Input type="number" step="0.01" min="0"
+                        value={editingState!.materialPrice}
+                        onChange={(e) => onEditingChange({ ...editingState!, materialPrice: e.target.value })}
+                        className="h-9 text-sm text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                        placeholder="0.00" onKeyDown={handleKeyDown}
+                      />
+                    ) : (
+                      <div className="h-9 flex items-center justify-end border rounded-md px-3 bg-muted text-sm font-medium opacity-40 select-none tracking-widest">***</div>
+                    )}
+                  </div>
+                ) : <div />}
+                {showLaborColumn && !editingState!.isAssemblyParent ? (
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 block">Robocizna (z\u0142/jm.)</label>
+                    {showPrices ? (
+                      <Input type="number" step="0.01" min="0"
+                        value={editingState!.laborPrice}
+                        onChange={(e) => onEditingChange({ ...editingState!, laborPrice: e.target.value })}
+                        className="h-9 text-sm text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                        placeholder="0.00" onKeyDown={handleKeyDown}
+                      />
+                    ) : (
+                      <div className="h-9 flex items-center justify-end border rounded-md px-3 bg-muted text-sm font-medium opacity-40 select-none tracking-widest">***</div>
+                    )}
+                  </div>
+                ) : <div />}
+              </div>
             </div>
           </div>
         </TableCell>

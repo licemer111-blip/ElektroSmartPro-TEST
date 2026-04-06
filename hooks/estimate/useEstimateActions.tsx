@@ -65,19 +65,17 @@ export function useEstimateActions({
       return;
     }
     const li = localItemsRef.current;
-    const isManual = item.confidence_level === "manual";
     const rawMat = item.final_material_price ?? item.material_price ?? 0;
     const rawLab = item.final_labor_price ?? item.labor_price ?? 0;
-    // For non-manual (catalog/AI) items: show combined price in materialPrice field,
-    // so user edits one "full price per unit" value. Labor is zeroed out.
-    // For manual items: keep split as-is (user already entered them separately).
+    // Always show material and labor separately — round to 2dp to avoid float artifacts (e.g. 12.469999)
+    const round2 = (v: number) => Math.round(v * 100) / 100;
     setEditingState({
       itemId: item.id,
       name: item.name,
-      quantity: item.quantity.toString(),
+      quantity: String(round2(item.quantity)),
       unit: item.unit,
-      materialPrice: isManual ? rawMat.toString() : (rawMat + rawLab).toString(),
-      laborPrice: isManual ? rawLab.toString() : "0",
+      materialPrice: String(round2(rawMat)),
+      laborPrice: String(round2(rawLab)),
       section: item.section || "",
       isAssemblyParent: li.some((i) => i.parent_assembly_id === item.id),
     });
