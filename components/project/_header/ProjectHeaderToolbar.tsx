@@ -16,7 +16,7 @@ import {
   ArrowLeft, Save, MoreVertical, Edit, Loader2, CheckCircle,
   User, Copy, FileBox, Archive, ArchiveRestore, UserCog,
   GitCompareArrows, PiggyBank, FileSpreadsheet, Info,
-  Sparkles, CircleDollarSign, ChevronDown, Brain,
+  Sparkles, CircleDollarSign, ChevronDown,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import type { ProjectItem } from "@/lib/types/database";
@@ -28,7 +28,6 @@ import { DocumentationDialog } from "@/components/project/project-documentation-
 import { ShareOfferDialog } from "@/components/project/share-offer-dialog";
 import { ProjectTagsManager } from "@/components/project/project-tags-manager";
 import { ProjectColorPicker } from "@/components/project/project-color-picker";
-import { InvestmentContextPopup } from "@/components/knr/InvestmentContextPopup";
 import type { DialogHostAction } from "./ProjectHeaderDialogHost";
 
 interface ProjectHeaderToolbarProps {
@@ -119,7 +118,6 @@ export function ProjectHeaderToolbar({
 
   const [esAssistOpen, setEsAssistOpen] = useState(false);
   const [esWycenaOpen, setEsWycenaOpen] = useState(false);
-  const [investmentContextOpen, setInvestmentContextOpen] = useState(false);
 
   return (
     <div className="mb-4">
@@ -292,14 +290,6 @@ export function ProjectHeaderToolbar({
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start" className="w-56">
                     <DropdownMenuLabel className="text-[10px] text-slate-400 font-normal uppercase tracking-wide">Inteligentna wycena</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={() => setInvestmentContextOpen(true)}>
-                      <Brain className="mr-2 h-4 w-4 text-amber-500" />
-                      <div className="flex flex-col">
-                        <span className="text-xs font-medium">Kontekst Inwestycji</span>
-                        <span className="text-[10px] text-slate-400">Typ obiektu → trafniejsze normy i ceny</span>
-                      </div>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onClick={() => {
                         if (isFinal) { toast({ title: "🔒 Projekt zablokowany", description: "Odblokuj projekt, aby używać ES-Engine", variant: "destructive" }); return; }
@@ -367,10 +357,6 @@ export function ProjectHeaderToolbar({
                   isReadOnly={isReadOnly}
                   externalOpen={isExternalSync ? (externalPanelOpen ?? false) : undefined}
                   onExternalOpenChange={(v) => onBroadcastDialog("headerPanelOpen", v)}
-                />
-                <InvestmentContextPopup
-                  externalOpen={investmentContextOpen}
-                  onExternalOpenChange={setInvestmentContextOpen}
                 />
                 <DocumentationDialog
                   projectId={projectId}
