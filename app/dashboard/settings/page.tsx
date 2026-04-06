@@ -5,6 +5,7 @@ import { isAdmin } from "./finance-actions";
 import { getHiddenCatalogItems } from "../catalog/actions";
 import { getPortfolioItems } from "../portfolio/actions";
 import { getProfileStats } from "../profile/actions";
+import { getRegions } from "../actions";
 import { createClient } from "@/utils/supabase/server";
 
 export const dynamic = 'force-dynamic';
@@ -28,10 +29,11 @@ export default async function SettingsPage({
   // Check if user is admin
   const isUserAdmin = await isAdmin();
 
-  // Fetch hidden catalog items + catalog stats (server-side to avoid SSR fetch waterfall)
-  const [hiddenItems, catalogStats] = await Promise.all([
+  // Fetch hidden catalog items + catalog stats + regions (server-side to avoid SSR fetch waterfall)
+  const [hiddenItems, catalogStats, regions] = await Promise.all([
     getHiddenCatalogItems(),
     getCatalogStats(),
+    getRegions(),
   ]);
 
   // Fetch portfolio data
@@ -62,6 +64,7 @@ export default async function SettingsPage({
       portfolioError={portfolioError}
       profileData={profileData}
       initialCatalogStats={catalogStats}
+      regions={regions}
     />
   );
 }

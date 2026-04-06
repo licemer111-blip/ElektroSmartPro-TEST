@@ -29,12 +29,13 @@ import {
   Sparkles,
   MessageCircleHeart,
   Brain,
-  Calculator,
+  Banknote,
   Briefcase,
   UserCircle,
 } from "lucide-react";
-import type { Profile } from "@/lib/types/database";
+import type { Profile, Region } from "@/lib/types/database";
 import { cn } from "@/lib/utils";
+import { InlineRateRegion } from "@/components/settings/inline-rate-region";
 
 interface CatalogStats {
   globalCount: number;
@@ -54,11 +55,12 @@ interface SettingsContentProps {
   portfolioError?: string;
   profileData?: ProfileStats | null;
   initialCatalogStats?: CatalogStats;
+  regions?: Region[];
 }
 
 type Tab = "guide" | "knr" | "profile" | "database" | "subscription" | "konto" | "admin";
 
-export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems = [], activeTab: initialTab, portfolioItems = [], portfolioVisible = true, portfolioLimit = 5, portfolioError, profileData = null, initialCatalogStats }: SettingsContentProps) {
+export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems = [], activeTab: initialTab, portfolioItems = [], portfolioVisible = true, portfolioLimit = 5, portfolioError, profileData = null, initialCatalogStats, regions = [] }: SettingsContentProps) {
   const router = useRouter();
   const activeTab = (initialTab as Tab) || "guide";
   const [profileSubTab, setProfileSubTab] = useState<"info" | "portfolio">("info");
@@ -73,9 +75,9 @@ export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems
     },
     {
       id: "knr" as Tab,
-      label: "Moja Baza KNR",
-      icon: Brain,
-      color: "violet",
+      label: "Finanse",
+      icon: Banknote,
+      color: "emerald",
     },
     {
       id: "profile" as Tab,
@@ -256,7 +258,7 @@ export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems
                     <p>Dane firmy pojawią się na wszystkich dokumentach PDF.</p>
                   )}
                   {activeTab === "knr" && (
-                    <p>Wgraj własne cenniki, normy KNR i stawki r-g — ES-Engine będzie z nich korzystać w pierwszej kolejności (Priorytet L1).</p>
+                    <p>Ustaw stawkę roboczogodziny i województwo — to podstawa wszystkich wycen kosztorysowych.</p>
                   )}
                   {activeTab === "database" && (
                     <p>
@@ -307,34 +309,13 @@ export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems
               </div>
             )}
 
-            {/* KNR Tab */}
+            {/* Finanse Tab — inline rate + region */}
             {activeTab === "knr" && (
-              <div className="space-y-4">
-                <Link href="/dashboard/settings/knr-calculator">
-                  <div className="rounded-xl border-2 border-violet-200 dark:border-violet-800/50 bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-950/20 dark:to-purple-950/20 p-5 hover:shadow-lg transition-all cursor-pointer group">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-md">
-                          <Calculator className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <p className="text-base font-bold text-violet-900 dark:text-violet-100">Centrum Kalkulacji i Norm (KNR)</p>
-                          <p className="text-[10px] text-violet-500 dark:text-violet-400 mt-0.5 font-medium">KNR — Katalog Nakładów Rzeczowych (normy czasu pracy i materiałów dla branży budowlano-elektrycznej)</p>
-                          <p className="text-xs text-violet-700 dark:text-violet-300 leading-relaxed mt-1">
-                            Moja Baza KNR (upload plików) + Hierarchia źródeł norm + Stawka r-g + Kalkulator narzutów + Sandbox testowy
-                          </p>
-                          <div className="flex gap-2 mt-2">
-                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 font-medium">📂 Upload KNR</span>
-                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 font-medium">🧮 Kalkulacje</span>
-                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 font-medium">🔍 Sandbox</span>
-                          </div>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-6 h-6 text-violet-400 group-hover:translate-x-1 transition-transform flex-shrink-0" />
-                    </div>
-                  </div>
-                </Link>
-              </div>
+              <InlineRateRegion
+                initialRate={initialProfile?.hourly_rate ?? 0}
+                initialRegionId={initialProfile?.default_region_id ?? null}
+                regions={regions}
+              />
             )}
 
             {/* Profile Tab */}

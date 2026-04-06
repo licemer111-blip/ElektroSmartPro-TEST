@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Card, CardContent } from "@/components/ui/card";
 import { NewProjectButton } from "@/components/dashboard/new-project-button";
 import { getProjects, getRegions, getObjectTypes, getUserProfile, getRecentClientActivity } from "./actions";
-import { FileText, Clock, CheckCircle, Lightbulb, LayoutDashboard, Sparkles, Boxes } from "lucide-react";
+import { FileText, Clock, CheckCircle, LayoutDashboard, Boxes } from "lucide-react";
 import { PageContainer } from "@/components/layout/page-container";
 import { EmptyProjectsState } from "@/components/dashboard/empty-projects-state";
 import { ProjectsManagerView } from "@/components/dashboard/projects-manager-view";
 import { createClient } from "@/utils/supabase/server";
 import { OnboardingTour } from "@/components/onboarding/onboarding-tour";
+import { OnboardingWizard } from "@/components/onboarding/onboarding-wizard";
 import { ClientActivityWidget } from "@/components/dashboard/client-activity-widget";
 
 export const dynamic = 'force-dynamic';
@@ -38,6 +38,24 @@ export default async function DashboardPage({
 
   const categories = categoriesData.data || [];
 
+  // ── Onboarding gate: show wizard if user hasn't set up basics ──────────
+  const needsOnboarding = profile != null
+    && !profile.onboarding_completed
+    && (!profile.hourly_rate || profile.hourly_rate <= 0);
+
+  if (needsOnboarding) {
+    return (
+      <div className="min-h-screen animate-in fade-in duration-500">
+        <PageContainer maxWidth="xl">
+          <OnboardingWizard
+            regions={regions}
+            userName={profile?.full_name ?? profile?.company_name ?? null}
+          />
+        </PageContainer>
+      </div>
+    );
+  }
+
   // Calculate stats
   const draftCount = projects.filter((p) => p.status === "draft").length;
   const finalCount = projects.filter((p) => p.status === "final").length;
@@ -66,6 +84,7 @@ export default async function DashboardPage({
                 isPro={profile?.is_pro || false}
                 maxProjects={profile?.max_projects || 3}
                 defaultRegionId={profile?.default_region_id ?? null}
+                hourlyRate={profile?.hourly_rate ?? 0}
               />
             </div>
           </div>
@@ -155,93 +174,6 @@ export default async function DashboardPage({
               selectedCategoryId={params.category || null}
               currentUserId={user?.id}
             />
-
-            {/* Informational Footer Banner */}
-            <Card className="mt-6 border-blue-200 dark:border-blue-800 bg-gradient-to-br from-slate-50/50 to-blue-50/50 dark:from-slate-950/20 dark:to-blue-950/20 hover:shadow-md transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex items-start gap-3 mb-4">
-                  <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/50">
-                    <Lightbulb className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100 mb-1">
-                      💡 Zaawansowane funkcje projektów
-                    </h3>
-                    <p className="text-xs text-slate-600 dark:text-slate-400">
-                      Wykorzystaj pełny potencjał kreatora kosztorysów
-                    </p>
-                  </div>
-                </div>
-
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="flex items-start gap-2 p-3 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
-                    <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-xs font-semibold text-blue-900 dark:text-blue-100">🔌 Konfigurator Rozdzielnicy</p>
-                      <p className="text-[10px] text-blue-700 dark:text-blue-400 mt-0.5">
-                        120+ modułów DIN w 15 kategoriach — schemat jednokreskowy AI, eksport PDF/SVG
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2 p-3 rounded-lg bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-800">
-                    <Sparkles className="w-4 h-4 text-violet-600 dark:text-violet-400 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-xs font-semibold text-violet-900 dark:text-violet-100">📐 Nakłady r-g (KNR)</p>
-                      <p className="text-[10px] text-violet-700 dark:text-violet-400 mt-0.5">
-                        600+ norm KNR 5-04/5-08/5-09 — rbh w PDF, Zestawy 360°
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2 p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800">
-                    <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-xs font-semibold text-emerald-900 dark:text-emerald-100">🤝 Współpraca Zespołowa</p>
-                      <p className="text-[10px] text-emerald-700 dark:text-emerald-400 mt-0.5">
-                        Zaproś współpracownika — wspólne projekty i katalog
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2 p-3 rounded-lg bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800">
-                    <Sparkles className="w-4 h-4 text-orange-600 dark:text-orange-400 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-xs font-semibold text-orange-900 dark:text-orange-100">⚡ Szybka Wycena</p>
-                      <p className="text-[10px] text-orange-700 dark:text-orange-400 mt-0.5">
-                        Kosztorys AI w 60 sekund — typ obiektu, metraż, region
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2 p-3 rounded-lg bg-white/50 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-700">
-                    <FileText className="w-4 h-4 text-slate-600 dark:text-slate-400 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-xs font-semibold text-slate-900 dark:text-slate-100">📋 Szablony</p>
-                      <p className="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5">
-                        Twórz projekty z gotowych szablonów w sekundy
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2 p-3 rounded-lg bg-white/50 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-700">
-                    <Boxes className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-xs font-semibold text-slate-900 dark:text-slate-100">� ES Import</p>
-                      <p className="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5">
-                        Wgraj PDF/Excel → ES-Engine wyciągnie materiały z cenami
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4 pt-4 border-t border-blue-200 dark:border-blue-800">
-                  <p className="text-[10px] text-slate-500 dark:text-slate-400 text-center">
-                    <strong className="text-blue-600 dark:text-blue-400">Wskazówka:</strong> Zestawy 360° automatycznie dodają Puszkę + Kabel + Bruzdę do każdego punktu elektrycznego!
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
 
             {/* Extra spacing at bottom */}
             <div className="h-12"></div>

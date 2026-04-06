@@ -57,7 +57,7 @@ export function HeaderMobileMenu({ isAuthenticated, isPro }: HeaderMobileMenuPro
               {/* Kosztorysy */}
               <div className="space-y-0.5">
                 <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-3 mb-1.5">
-                  AI i Kosztorysy
+                  Kosztorysy
                 </p>
                 <SheetClose asChild>
                   <div className="px-0">
@@ -67,106 +67,43 @@ export function HeaderMobileMenu({ isAuthenticated, isPro }: HeaderMobileMenuPro
                 <HeaderMobileNavItem href="/dashboard/projects" icon="FileText" variant="glow-blue" desc="Kosztorys elektryczny — ostatni edytowany projekt">
                   Kreator
                 </HeaderMobileNavItem>
-              </div>
-
-              {/* Baza danych */}
-              <div className="space-y-0.5 border-t border-slate-200 dark:border-slate-700/50 pt-3">
-                <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-3 mb-1.5">
-                  Baza danych
-                </p>
                 <HeaderMobileNavItem href="/dashboard" icon="FolderKanban">
                   Projekty
                 </HeaderMobileNavItem>
+              </div>
+
+              {/* Baza i Narzędzia */}
+              <div className="space-y-0.5 border-t border-slate-200 dark:border-slate-700/50 pt-3">
+                <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-3 mb-1.5">
+                  Baza i Narzędzia
+                </p>
                 <HeaderMobileNavItem href="/dashboard/catalog" icon="PackageSearch">
                   Katalog
                 </HeaderMobileNavItem>
                 <HeaderMobileNavItem href="/dashboard/assemblies" icon="Boxes" desc="Gniazdo = urządzenie + puszka + kabel + bruzda">
                   Zestawy
                 </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/dashboard/templates" icon="Copy">
-                  Szablony
-                </HeaderMobileNavItem>
-              </div>
-
-              {/* Narzędzia */}
-              <div className="space-y-0.5 border-t border-slate-200 dark:border-slate-700/50 pt-3">
-                <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-3 mb-1.5">
-                  Narzędzia
-                </p>
-                <HeaderMobileNavItem href="/dashboard/panel-configurator" icon="LayoutGrid" desc="Konfigurator tablic DIN — moduły, balans faz, schemat">
-                  Rozdzielnica
-                </HeaderMobileNavItem>
                 <HeaderMobileNavItem href="/dashboard/tools" icon="Wrench">
                   Kalkulatory
                 </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/dashboard/settings/knr-calculator" icon="Calculator" desc="Katalog Nakładów Rzeczowych — normy czasu pracy">
-                  Centrum KNR
+                <HeaderMobileNavItem href="/dashboard/panel-configurator" icon="LayoutGrid" desc="Konfigurator tablic DIN — moduły, balans faz">
+                  Rozdzielnica
                 </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/dashboard/market" icon="TrendingUp">
-                  Rynek
-                </HeaderMobileNavItem>
-              </div>
-
-              {/* Zarządzanie */}
-              <div className="space-y-0.5 border-t border-slate-200 dark:border-slate-700/50 pt-3">
-                <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-3 mb-1.5">
-                  Zarządzanie
-                </p>
-                <HeaderMobileNavItem href="/dashboard/clients" icon="UserCircle">
-                  Klienci
-                </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/dashboard/team" icon="Users">
-                  Zespół
-                </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/dashboard/sent-offers" icon="Send">
-                  Wysłane oferty
-                </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/dashboard/invoices" icon="Receipt">
-                  Subskrypcja i Faktury
-                </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/dashboard/time" icon="Clock">
-                  Czas pracy
-                </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/dashboard/portfolio" icon="Briefcase">
-                  Portfolio
+                <HeaderMobileNavItem href="/dashboard/templates" icon="Copy">
+                  Szablony
                 </HeaderMobileNavItem>
               </div>
 
               {/* Konto */}
               <div className="space-y-0.5 border-t border-slate-200 dark:border-slate-700/50 pt-3">
                 <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-3 mb-1.5">
-                  Moje Konto
+                  Konto
                 </p>
-                <HeaderMobileNavItem href="/dashboard/settings?tab=konto" icon="UserCircle">
-                  Moje Konto
-                </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/dashboard/settings?tab=subscription" icon="CreditCard">
-                  Subskrypcja
-                </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/dashboard/analytics" icon="BarChart3">
-                  Analityka
-                </HeaderMobileNavItem>
                 <HeaderMobileNavItem href="/dashboard/settings" icon="Settings">
                   Ustawienia
                 </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/dashboard/feedback" icon="MessageSquare">
-                  Opinie
-                </HeaderMobileNavItem>
-              </div>
-
-              {/* Informacje */}
-              <div className="space-y-0.5 border-t border-slate-200 dark:border-slate-700/50 pt-3">
-                <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-3 mb-1.5">
-                  Informacje
-                </p>
-                <HeaderMobileNavItem href="/blog" icon="BookOpen">
-                  Blog
-                </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/o-nas" icon="Info">
-                  O nas
-                </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/kontakt" icon="Mail">
-                  Kontakt
+                <HeaderMobileNavItem href="/dashboard/market" icon="TrendingUp">
+                  Rynek
                 </HeaderMobileNavItem>
               </div>
 

@@ -12,6 +12,7 @@ interface NewProjectButtonProps {
   isPro: boolean;
   maxProjects: number;
   defaultRegionId?: string | null;
+  hourlyRate?: number;
 }
 
 export function NewProjectButton({
@@ -21,6 +22,7 @@ export function NewProjectButton({
   isPro,
   maxProjects,
   defaultRegionId,
+  hourlyRate,
 }: NewProjectButtonProps) {
   const { onOpen } = useModalStore();
   
@@ -39,6 +41,7 @@ export function NewProjectButton({
         isPro,
         maxProjects,
         defaultRegionId,
+        hourlyRate,
       });
     }
   };

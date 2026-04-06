@@ -34,7 +34,7 @@ export function EmptyProjectsState({
     <EmptyState
       icon={FileText}
       title="Zacznij od swojego pierwszego projektu!"
-      description="Masz 4 sposoby: (1) ⚡ Szybka Wycena — kosztorys w 60 sekund. (2) � ES Import — wgraj PDF/Excel, ES-Engine wyciągnie materiały z cenami. (3) 📋 Szablony — użyj gotowego wzorca. (4) ✏️ Ręcznie — dodaj pozycje z katalogu. Ceny automatycznie dostosowane do Twojego województwa!"
+      description="Utwórz swój pierwszy kosztorys — dodaj pozycje z katalogu, a ES-Engine automatycznie wyliczy robociznę na podstawie norm KNR i Twojej stawki r-g."
       action={{
         label: "Nowy Projekt",
         onClick: handleCreateProject,

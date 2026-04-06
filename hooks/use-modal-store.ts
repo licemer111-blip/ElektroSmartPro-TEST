@@ -11,6 +11,7 @@ interface ModalData {
   isPro?: boolean;
   maxProjects?: number;
   defaultRegionId?: string | null;
+  hourlyRate?: number;
   materials?: ExtractedMaterial[];
   onSuccess?: () => void;
 }

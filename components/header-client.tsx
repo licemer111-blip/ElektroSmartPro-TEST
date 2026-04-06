@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Settings, Zap, Boxes, TrendingUp, FileText, Users, Crown, Send, Wrench, Phone, Receipt, ClipboardCheck, LayoutGrid, BookOpen, Calculator, BarChart3, Clock, MessageSquare, Briefcase, ClipboardList } from "lucide-react";
+import { Settings, Zap, TrendingUp, FileText, Crown, LayoutGrid } from "lucide-react";
 import { SzybkaWycenaNavLink } from "@/components/szybka-wycena-nav-link";
 import { Button } from "@/components/ui/button";
 import { HeaderNewProjectButton } from "@/components/header-new-project-button";
@@ -67,10 +67,6 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                             {/* Kreator - Smart link to last project */}
                             <KreatorNavLink />
 
-                            <NavLink href="/dashboard/panel-configurator" icon="LayoutGrid" title="Konfigurator rozdzielnic elektrycznych — moduły DIN, balans faz, schemat jednokreskowy">
-                                Rozdzielnica
-                            </NavLink>
-
                             <NavLink href="/dashboard" icon="FolderKanban" title="Lista wszystkich kosztorysów i wycen">
                                 Projekty
                             </NavLink>
@@ -87,11 +83,7 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                                 Kalkulatory
                             </NavLink>
 
-                            <NavLink href="/dashboard/settings/knr-calculator" icon="Calculator" title="KNR — Katalog Nakładów Rzeczowych. Normy czasu pracy i materiałów dla branży elektrycznej (5-04, 5-08, 5-09)">
-                                KNR
-                            </NavLink>
-
-                            {/* Więcej — secondary items */}
+                            {/* Więcej — compact secondary items */}
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="ghost" size="sm" className="flex items-center gap-1.5 px-3 py-2 rounded-md text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-sm font-medium h-auto">
@@ -99,8 +91,13 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                                         Więcej
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="start" className="w-56">
-                                    <DropdownMenuLabel className="text-[10px] uppercase tracking-widest text-slate-400">Nawigacja</DropdownMenuLabel>
+                                <DropdownMenuContent align="start" className="w-52">
+                                    <DropdownMenuItem asChild>
+                                        <Link href="/dashboard/panel-configurator" className="flex items-center gap-2 cursor-pointer">
+                                            <LayoutGrid className="w-4 h-4" />
+                                            Rozdzielnica
+                                        </Link>
+                                    </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
                                         <Link href="/dashboard/templates" className="flex items-center gap-2 cursor-pointer">
                                             <FileText className="w-4 h-4" />
@@ -114,61 +111,10 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuLabel className="text-[10px] uppercase tracking-widest text-slate-400">Zarządzanie</DropdownMenuLabel>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/analytics" className="flex items-center gap-2 cursor-pointer">
-                                            <BarChart3 className="w-4 h-4" />
-                                            Analityka
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/clients" className="flex items-center gap-2 cursor-pointer">
-                                            <Phone className="w-4 h-4" />
-                                            Klienci
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/invoices" className="flex items-center gap-2 cursor-pointer">
-                                            <Receipt className="w-4 h-4" />
-                                            Subskrypcja i Faktury
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/sent-offers" className="flex items-center gap-2 cursor-pointer">
-                                            <Send className="w-4 h-4" />
-                                            Wysłane oferty
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/time" className="flex items-center gap-2 cursor-pointer">
-                                            <Clock className="w-4 h-4" />
-                                            Czas pracy
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/portfolio" className="flex items-center gap-2 cursor-pointer">
-                                            <Briefcase className="w-4 h-4" />
-                                            Portfolio
-                                        </Link>
-                                    </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
                                         <Link href="/dashboard/settings" className="flex items-center gap-2 cursor-pointer">
                                             <Settings className="w-4 h-4" />
                                             Ustawienia
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/team" className="flex items-center gap-2 cursor-pointer">
-                                            <Users className="w-4 h-4" />
-                                            Zespół
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/feedback" className="flex items-center gap-2 cursor-pointer">
-                                            <MessageSquare className="w-4 h-4" />
-                                            Opinie
                                         </Link>
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
