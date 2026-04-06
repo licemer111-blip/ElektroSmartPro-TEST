@@ -494,7 +494,7 @@ export const EstimateRow = React.memo(function EstimateRow({
                             : "bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-700 hover:border-purple-300 hover:text-purple-500"
                         )}>
                           <LayoutGrid className="w-2.5 h-2.5 flex-shrink-0" />
-                          <span className="max-w-[120px] truncate">{editingState!.section || "Wybierz sekcj\u0119"}</span>
+                          <span className="max-w-[120px] truncate">{editingState!.section || "Wybierz sekcję"}</span>
                           <ChevronDown className="w-2.5 h-2.5 flex-shrink-0 opacity-60" />
                         </button>
                       </PopoverTrigger>
@@ -517,12 +517,12 @@ export const EstimateRow = React.memo(function EstimateRow({
                           <Input type="text" value={editingState!.section}
                             onChange={(e) => onEditingChange({ ...editingState!, section: e.target.value })}
                             className="h-7 text-[10px] px-2 dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-                            placeholder="W\u0142asna nazwa..."
+                            placeholder="Własna nazwa..."
                           />
                           {editingState!.section && (
                             <button type="button" onClick={() => onEditingChange({ ...editingState!, section: "" })}
                               className="flex items-center gap-0.5 w-full justify-center text-[9px] text-slate-400 hover:text-red-500 transition-colors py-0.5">
-                              <X className="w-2.5 h-2.5" />Wyczy\u015b\u0107 sekcj\u0119
+                              <X className="w-2.5 h-2.5" />Wyczyść sekcję
                             </button>
                           )}
                         </div>
@@ -547,7 +547,7 @@ export const EstimateRow = React.memo(function EstimateRow({
                   </datalist>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block">Ilo\u015b\u0107</label>
+                  <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block">Ilość</label>
                   <Input type="number" step="0.01" min="0.01"
                     value={editingState!.quantity}
                     onChange={(e) => onEditingChange({ ...editingState!, quantity: e.target.value })}
@@ -557,7 +557,7 @@ export const EstimateRow = React.memo(function EstimateRow({
                 </div>
                 {showMaterialsColumn && !editingState!.isAssemblyParent && !materialsOwnedByCustomer ? (
                   <div className="space-y-1">
-                    <label className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 block">Materia\u0142 (z\u0142/jm.)</label>
+                    <label className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 block">Materiał (zł/jm.)</label>
                     {showPrices ? (
                       <Input type="number" step="0.01" min="0"
                         value={editingState!.materialPrice}
@@ -572,7 +572,7 @@ export const EstimateRow = React.memo(function EstimateRow({
                 ) : <div />}
                 {showLaborColumn && !editingState!.isAssemblyParent ? (
                   <div className="space-y-1">
-                    <label className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 block">Robocizna (z\u0142/jm.)</label>
+                    <label className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 block">Robocizna (zł/jm.)</label>
                     {showPrices ? (
                       <Input type="number" step="0.01" min="0"
                         value={editingState!.laborPrice}
