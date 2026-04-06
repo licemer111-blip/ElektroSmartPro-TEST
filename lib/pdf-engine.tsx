@@ -330,7 +330,7 @@ const base = StyleSheet.create({
     backgroundColor: '#ffffff',
     paddingTop: 25,
     paddingRight: 25,
-    paddingBottom: 40,
+    paddingBottom: 50,
     paddingLeft: 25,
   },
   pageFooter: {
@@ -374,9 +374,9 @@ const base = StyleSheet.create({
   tableRow: { flexDirection: 'row', borderBottomWidth: 0.5, borderBottomColor: '#e5e7eb' },
   tableCell: { paddingVertical: 4, paddingHorizontal: 4, fontSize: 8 },
   // Summary
-  summaryContainer: { marginTop: 16, alignItems: 'flex-end' },
+  summaryContainer: { marginTop: 10, alignItems: 'flex-end' },
   summaryBox: {
-    width: '52%',
+    width: '58%',
     borderWidth: 1,
     borderRadius: 3,
     paddingHorizontal: 12,
@@ -389,11 +389,11 @@ const base = StyleSheet.create({
   summaryGrossLabel: { fontSize: 10, fontWeight: 'bold' },
   summaryGrossValue: { fontSize: 10, fontWeight: 'bold', textAlign: 'right' },
   // Signatures
-  signaturesRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 40 },
+  signaturesRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 },
   signatureBlock: { width: '44%' },
   signatureLine: { borderBottomWidth: 1, borderBottomColor: '#374151', marginBottom: 4 },
   signatureLabel: { fontSize: 7.5, color: '#6b7280' },
-  disclaimer: { fontSize: 6.5, fontStyle: 'italic', color: '#9ca3af', textAlign: 'center', marginTop: 18 },
+  disclaimer: { fontSize: 6.5, fontStyle: 'italic', color: '#9ca3af', textAlign: 'center', marginTop: 10 },
   // Cover page
   coverPage: {
     fontFamily: 'Roboto',
@@ -881,32 +881,34 @@ const ContentPage = ({
         />
       ))}
 
-      {/* Summary + Signatures */}
-      <SummarySection data={data} palette={palette} />
+      {/* Summary + Signatures + Disclaimer — kept together to avoid empty trailing page */}
+      <View wrap={false}>
+        <SummarySection data={data} palette={palette} />
 
-      {/* Signatures */}
-      <View style={base.signaturesRow}>
-        <View style={base.signatureBlock}>
-          <View style={[base.signatureLine, { borderBottomColor: palette.accentPrimary }]} />
-          <Text style={[base.signatureLabel, { color: palette.textSecondary }]}>Sporządził / Wykonawca</Text>
+        {/* Signatures */}
+        <View style={base.signaturesRow}>
+          <View style={base.signatureBlock}>
+            <View style={[base.signatureLine, { borderBottomColor: palette.accentPrimary }]} />
+            <Text style={[base.signatureLabel, { color: palette.textSecondary }]}>Sporządził / Wykonawca</Text>
+          </View>
+          <View style={base.signatureBlock}>
+            <View style={[base.signatureLine, { borderBottomColor: palette.accentPrimary }]} />
+            <Text style={[base.signatureLabel, { color: palette.textSecondary }]}>Zatwierdził / Zleceniodawca</Text>
+          </View>
         </View>
-        <View style={base.signatureBlock}>
-          <View style={[base.signatureLine, { borderBottomColor: palette.accentPrimary }]} />
-          <Text style={[base.signatureLabel, { color: palette.textSecondary }]}>Zatwierdził / Zleceniodawca</Text>
-        </View>
+
+        {data.notes ? (
+          <View style={{ marginTop: 10, padding: 8, backgroundColor: palette.accentLight, borderRadius: 3, borderLeftWidth: 2, borderLeftColor: palette.accentPrimary }}>
+            <Text style={{ fontSize: 7.5, color: palette.textSecondary, fontStyle: 'italic' }}>
+              {`Uwagi: ${data.notes}`}
+            </Text>
+          </View>
+        ) : null}
+
+        <Text style={[base.disclaimer, { color: palette.textSecondary }]}>
+          Niniejszy kosztorys ma charakter informacyjny i nie stanowi oferty handlowej w rozumieniu art. 66 Kodeksu Cywilnego.
+        </Text>
       </View>
-
-      {data.notes ? (
-        <View style={{ marginTop: 16, padding: 8, backgroundColor: palette.accentLight, borderRadius: 3, borderLeftWidth: 2, borderLeftColor: palette.accentPrimary }}>
-          <Text style={{ fontSize: 7.5, color: palette.textSecondary, fontStyle: 'italic' }}>
-            {`Uwagi: ${data.notes}`}
-          </Text>
-        </View>
-      ) : null}
-
-      <Text style={[base.disclaimer, { color: palette.textSecondary }]}>
-        Niniejszy kosztorys ma charakter informacyjny i nie stanowi oferty handlowej w rozumieniu art. 66 Kodeksu Cywilnego.
-      </Text>
 
       <PageFooter companyName={companyName} palette={palette} />
     </Page>
