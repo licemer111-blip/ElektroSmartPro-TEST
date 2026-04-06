@@ -15,6 +15,7 @@ import {
 } from "./actions";
 import { PendingInvitations, type PendingInvitation } from "@/components/team/pending-invitations";
 import { Loader2 } from "lucide-react";
+import { requireMinProjects } from "@/lib/guards/feature-gate";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +25,7 @@ export const metadata: Metadata = {
 };
 
 export default async function TeamPage() {
+  await requireMinProjects();
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
