@@ -6,6 +6,8 @@ import { Folder, FolderOpen, Pencil, Trash2, MoreVertical, Share2 } from "lucide
 import { cn } from "@/lib/utils";
 import { CategoryDialog } from "./category-dialog";
 import { DeleteCategoryDialog } from "./delete-category-dialog";
+import { SearchModeSelector } from "./SearchModeSelector";
+import type { DataSourceMode } from "@/hooks/use-search-mode";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -79,6 +81,17 @@ export function CategorySidebar({
     ? categories.filter((c) => (itemsPerCategory[c.id] || 0) > 0)
     : categories;
 
+  // Map currentView (core/own/all) ↔ DataSourceMode (engine/own/hybrid)
+  const displayMode: DataSourceMode =
+    currentView === "own" ? "own" :
+    currentView === "core" ? "engine" :
+    "hybrid";
+
+  const handleModeChange = (mode: DataSourceMode) => {
+    const viewValue = mode === "own" ? "own" : mode === "engine" ? "core" : "all";
+    onViewChange?.(viewValue);
+  };
+
   return (
     <>
       <div className="w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm flex flex-col h-fit max-h-[calc(100vh-16rem)] overflow-hidden">
@@ -89,6 +102,12 @@ export function CategorySidebar({
             Kategorie Pozycji
           </h3>
 
+          {/* Source mode switcher — same as in Kreator */}
+          <SearchModeSelector
+            mode={displayMode}
+            onChange={handleModeChange}
+            className="w-full mb-3"
+          />
 
           {isOwnView && (
             <div className="flex items-center gap-1 rounded-xl bg-slate-100 dark:bg-slate-800 p-0.5 border-2 border-slate-200 dark:border-slate-700 shadow-sm">

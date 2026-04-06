@@ -136,7 +136,10 @@ export function CatalogTable({
 
   const handleViewChange = (view: string) => {
     const params = new URLSearchParams(window.location.search);
-    params.set("view", view);
+    // Map internal view names to URL mode values
+    const modeValue = view === "core" ? "engine" : view === "all" ? "hybrid" : view;
+    params.set("mode", modeValue);
+    params.delete("view"); // clean up legacy param
     params.delete("page");
     params.delete("category");
     router.replace(`/dashboard/catalog?${params.toString()}`, { scroll: false });
