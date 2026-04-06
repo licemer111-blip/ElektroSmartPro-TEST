@@ -70,7 +70,7 @@ export function GuideAccordion({ catalogCount = 1400, dinCount = 295 }: GuideAcc
           </div>
         </AccordionTrigger>
         <AccordionContent className="text-slate-700 dark:text-slate-300 leading-relaxed pt-4">
-          <p>ElektroSmart PRO oferuje <strong>3 tryby pracy silnika wyceny</strong>. Wybierasz w <strong>Ustawienia → KNR</strong> (sekcja &quot;Stawka Robocizny R-G&quot;):</p>
+          <p>ElektroSmart PRO oferuje <strong>3 tryby pracy silnika wyceny</strong>. Przełączasz w <strong>Katalogu</strong> (panel kategorii) lub w <strong>Kreatorze</strong> (sidebar):</p>
           <p className="mt-3">
             <strong className="text-orange-600 dark:text-orange-400">🟠 ES-Engine (domyślny)</strong>
           </p>
@@ -97,7 +97,7 @@ export function GuideAccordion({ catalogCount = 1400, dinCount = 295 }: GuideAcc
             <li>• Dla firm z własnym, kompletnym cennikiem</li>
           </ul>
           <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
-            💡 <em>Zmiana trybu w <strong>Ustawienia → KNR → Stawka Robocizny R-G</strong>. Tryb widoczny w prawym górnym rogu panelu ustawień.</em>
+            💡 <em>Tryb widoczny w panelu kategorii (Własna / ES-Engine / Hybrydowy). Zmiana natychmiast filtruje pozycje.</em>
           </p>
         </AccordionContent>
       </AccordionItem>
@@ -155,10 +155,11 @@ export function GuideAccordion({ catalogCount = 1400, dinCount = 295 }: GuideAcc
         </AccordionTrigger>
         <AccordionContent className="text-slate-700 dark:text-slate-300 leading-relaxed pt-4">
           <p>W zakładce <strong className="text-purple-600 dark:text-purple-400">&quot;Katalog&quot;</strong> masz pełną kontrolę nad bazą pozycji:</p>
-          <p className="mt-3"><strong className="text-indigo-600 dark:text-indigo-400">Przełącznik Katalog / Własne</strong></p>
+          <p className="mt-3"><strong className="text-indigo-600 dark:text-indigo-400">3 tryby źródła (przełącznik w panelu kategorii)</strong></p>
           <ul className="mt-2 ml-6 space-y-1 list-disc text-sm">
-            <li><strong>Katalog</strong> — widok bazy pozycji opartych na normach KNR (materiały + robocizna)</li>
-            <li><strong>Własne</strong> — widok tylko Twoich pozycji; tu możesz dodawać kategorie i pozycje</li>
+            <li><strong>Własna</strong> — tylko Twoje pozycje; możesz dodawać kategorie i edytować ceny</li>
+            <li><strong>ES-Engine</strong> — globalna baza 8500+ norm KNR z cenami materiału i robocizny</li>
+            <li><strong>Hybrydowy</strong> — oba źródła razem, Twoje pozycje mają priorytet</li>
           </ul>
           <p className="mt-3"><strong className="text-green-600 dark:text-green-400">Własne Pozycje i ES-Engine</strong></p>
           <ul className="mt-2 ml-6 space-y-1 list-disc text-sm">
@@ -167,7 +168,7 @@ export function GuideAccordion({ catalogCount = 1400, dinCount = 295 }: GuideAcc
             <li>Importuj pozycje przez <strong>ES Import</strong> z pliku Excel/CSV</li>
           </ul>
           <p className="mt-3 text-sm text-purple-600 dark:text-purple-400">
-            💡 <em>Normy KNR i ES-Engine są wspólne dla wszystkich. Twoje własne pozycje są prywatne i widoczne tylko dla Ciebie.</em>
+            💡 <em>Baza KNR jest wspólna dla wszystkich użytkowników. Twoje pozycje są prywatne i widoczne tylko dla Ciebie (lub zespołu).</em>
           </p>
         </AccordionContent>
       </AccordionItem>
