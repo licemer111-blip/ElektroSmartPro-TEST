@@ -220,7 +220,7 @@ export function MaterialSuggestionsPanel({ projectId, vatRate }: MaterialSuggest
               </div>
               <p className="text-[10px] text-slate-400 mt-1">
                 <Zap className="w-2.5 h-2.5 inline mr-0.5 text-amber-400" />
-                Sugestie — nie są dodane do kosztorysu. Służą do wyceny i zakupu materiałów.
+                Sugestie materiałowe na podstawie pozycji w kosztorysie — kliknij aby dodać do listy zakupów.
               </p>
             </div>
           </>

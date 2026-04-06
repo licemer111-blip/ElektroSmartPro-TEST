@@ -206,8 +206,8 @@ export function RentownoscTab({ projectId, isPro }: RentownoscTabProps) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center gap-3">
         <BarChart3 className="w-10 h-10 text-slate-300" />
-        <p className="text-sm text-slate-500">Brak danych do analizy rentowności.</p>
-        <p className="text-xs text-slate-400">Dodaj pozycje do kosztorysu, aby zobaczyć raport.</p>
+        <p className="text-sm text-slate-500">Brak danych do analizy.</p>
+        <p className="text-xs text-slate-400">Dodaj pozycje i wyceń je, aby zobaczyć raport rentowności.</p>
       </div>
     );
   }
@@ -219,7 +219,7 @@ export function RentownoscTab({ projectId, isPro }: RentownoscTabProps) {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-base font-bold text-slate-800 dark:text-slate-100">Analiza rentowności</h2>
-          <p className="text-xs text-slate-500 mt-0.5">Kalkulacja na podstawie aktualnych pozycji kosztorysu</p>
+          <p className="text-xs text-slate-500 mt-0.5">Zysk, narzut i marża — obliczane na żywo z pozycji kosztorysu</p>
         </div>
         <button
           onClick={load}

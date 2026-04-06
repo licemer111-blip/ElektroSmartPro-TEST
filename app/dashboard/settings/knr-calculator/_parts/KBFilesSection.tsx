@@ -314,7 +314,7 @@ export function KBFilesSection({ onStatsChange }: KBFilesSectionProps) {
           <div>
             <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">Brak wgranych cenników</p>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto leading-relaxed">
-              Wgraj swoje cenniki w PDF lub Excel, aby ES Engine przestał zgadywać i zaczął używać Twoich realnych stawek.
+              Wgraj cenniki z hurtowni (PDF/Excel) lub normy własne — system automatycznie użyje Twoich cen zamiast szacować.
             </p>
           </div>
           <div className="pt-2">

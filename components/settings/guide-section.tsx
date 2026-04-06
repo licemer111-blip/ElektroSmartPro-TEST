@@ -23,7 +23,7 @@ export function GuideSection({ catalogCount: catalogCountProp }: GuideSectionPro
             <div className="min-w-0">
               <CardTitle className="text-base sm:text-lg">Przewodnik ElektroSmart PRO</CardTitle>
               <CardDescription className="text-xs sm:text-sm">
-                Profesjonalny system kosztorysowy: ES-Engine z normami KNR, Konfigurator Rozdzielnic, Portal Klienta, Szybka Wycena, Zestawy, 12 Kalkulatorów i więcej!
+                System kosztorysowy dla elektryków: wyceny AI (8500+ norm KNR), konfigurator rozdzielnic, zestawy, kalkulatory, portal klienta i więcej.
               </CardDescription>
             </div>
           </div>
@@ -49,23 +49,19 @@ export function GuideSection({ catalogCount: catalogCountProp }: GuideSectionPro
                 Szybki Start — ElektroSmart PRO
               </h3>
               <ol className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-indigo-800 dark:text-indigo-200">
-                <li><strong>1.</strong> <strong>Zainstaluj aplikację</strong> (PWA) → Pracuj offline, powiadomienia push!</li>
-                <li><strong>2.</strong> Uzupełnij <strong>&quot;Profil Firmy&quot;</strong> (dane kontaktowe, NIP, Logo)</li>
-                <li><strong>3.</strong> Wybierz <strong>województwo</strong> → Ceny dostosują się automatycznie!</li>
-                <li><strong>4.</strong> Wypróbuj <strong>&quot;Szybką Wycenę&quot;</strong> → Kosztorys w 60 sekund!</li>
-                <li><strong>5.</strong> Wybierz <strong>Tryb Wyceny</strong> w KNR: ES-Engine / Hybrydowy / Własna Baza</li>
-                <li><strong>6.</strong> Wgraj własne normy KNR do <strong>&quot;Moja Baza KNR&quot;</strong> → ES-Engine będzie z nich korzystać!</li>
-                <li><strong>7.</strong> Wgraj dokument (PDF/Excel/KNR) → <strong>ES Import / Kreator</strong> wyciągnie pozycje automatycznie</li>
-                <li><strong>8.</strong> Utwórz <strong>Szablony</strong> z gotowych projektów → Używaj wielokrotnie!</li>
-                <li><strong>9.</strong> Skonfiguruj <strong>&quot;Rozdzielnicę&quot;</strong> → {dinCount}+ modułów DIN + schemat wieloliniowy!</li>
-                <li><strong>10.</strong> Wyślij <strong>Portal Klienta</strong> → Negocjacje online + e-podpis!</li>
-                <li><strong>11.</strong> Eksportuj PDF z logo → Wyślij do Klienta emailem!</li>
-                <li><strong>12.</strong> Sprawdź <strong>Analitykę</strong> → Wykresy i statystyki biznesu</li>
-                <li><strong>13.</strong> Zaproś <strong>Zespół</strong> → Współpraca w czasie rzeczywistym!</li>
+                <li><strong>1.</strong> Uzupełnij <strong>Profil Firmy</strong> (NIP, logo, dane) — pojawią się na PDF-ach</li>
+                <li><strong>2.</strong> Ustaw <strong>województwo</strong> i <strong>stawkę R-G</strong> w Ustawienia → Finanse</li>
+                <li><strong>3.</strong> Utwórz pierwszy <strong>projekt</strong> i dodaj pozycje ręcznie lub przez <strong>ES Import</strong></li>
+                <li><strong>4.</strong> Kliknij <strong>ES Wycena</strong> — system przeliczy ceny na podstawie 8500+ norm KNR</li>
+                <li><strong>5.</strong> Wgraj własne cenniki do <strong>Moje Dane</strong> — Twoje ceny będą miały priorytet P1</li>
+                <li><strong>6.</strong> Stwórz <strong>Zestawy</strong> (np. „Punkt gniazda”) — dodawaj gotowe komplety jednym klikiem</li>
+                <li><strong>7.</strong> Skonfiguruj <strong>Rozdzielnicę</strong> — {dinCount}+ modułów DIN, bilans faz, schemat PDF</li>
+                <li><strong>8.</strong> Eksportuj <strong>PDF z logo</strong> i wyślij klientowi lub użyj <strong>Portalu Klienta</strong></li>
+                <li><strong>9.</strong> <strong>Zainstaluj aplikację</strong> (PWA) — działa też na telefonie i offline</li>
               </ol>
               <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-indigo-200 dark:border-indigo-800">
                 <p className="text-[10px] sm:text-xs text-indigo-700 dark:text-indigo-300">
-                  <strong>ElektroSmart PRO:</strong> Konfigurator Rozdzielnic ({dinCount}+ DIN), Schemat Wieloliniowy, ES-Engine z normami KNR, Portal Klienta (negocjacje + e-podpis), Sekcje kosztorysu wg pomieszczeń, Współpraca Realtime
+                  <strong>W skrócie:</strong> 8500+ norm KNR · Konfigurator rozdzielnic ({dinCount}+ DIN) · Wyceny AI · Zestawy · Portal Klienta · PDF z logo · Sekcje wg pomieszczeń · Współpraca zespołowa
                 </p>
               </div>
             </div>

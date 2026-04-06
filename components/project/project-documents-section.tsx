@@ -238,7 +238,7 @@ export function ProjectDocumentsSection({ projectId }: ProjectDocumentsSectionPr
           Dokumentacja projektu
         </CardTitle>
         <p className="text-sm text-muted-foreground">
-          Załaduj rysunki, specyfikacje, PDF — wszystko w jednym miejscu. Analiza ES-Engine dostępna przez ES Import w Kreatorze.
+          Wgraj rysunki, specyfikacje, przedmiary PDF — pliki są dostępne w projekcie. Chcesz wyciągnąć pozycje z pliku? Użyj ES Import.
         </p>
       </CardHeader>
       <CardContent className="space-y-4">

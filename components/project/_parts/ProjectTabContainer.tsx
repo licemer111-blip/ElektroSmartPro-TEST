@@ -33,7 +33,7 @@ const ProjectNotes = dynamic(
 
 // Static — defined outside component to avoid new array reference on every render
 const TAB_CONFIG = [
-  { id: "estimate", label: "Kosztorys", shortLabel: "Koszt.", icon: FileText, lockedWhenFinal: false },
+  { id: "estimate", label: "Kosztorysy", shortLabel: "Koszt.", icon: FileText, lockedWhenFinal: false },
   { id: "materials", label: "Do wyceny", shortLabel: "Wycena", icon: Package, lockedWhenFinal: true },
   { id: "rentownosc", label: "Rentowność", shortLabel: "Rent.", icon: BarChart3, lockedWhenFinal: false },
   { id: "notes", label: "Notatki", shortLabel: "Notat.", icon: Mic, lockedWhenFinal: true },
