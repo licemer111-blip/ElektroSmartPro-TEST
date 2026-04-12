@@ -19,6 +19,7 @@ import { getRegionByName } from "@/lib/config/regions";
 interface BenchmarkCache {
   market_rbh_rate: number;
   material_inflation_multiplier: number;
+  knr_2026_multiplier: number;
   fetchedAt: number;
 }
 
@@ -38,10 +39,11 @@ async function fetchBenchmarks(): Promise<BenchmarkCache> {
       .eq("key", "global_benchmarks")
       .single();
 
-    const val = data?.value as { market_rbh_rate?: number; material_inflation_multiplier?: number } | null;
+    const val = data?.value as { market_rbh_rate?: number; material_inflation_multiplier?: number; knr_2026_multiplier?: number } | null;
     _cache = {
       market_rbh_rate: val?.market_rbh_rate ?? 85,
       material_inflation_multiplier: val?.material_inflation_multiplier ?? 1.08,
+      knr_2026_multiplier: val?.knr_2026_multiplier ?? 1.4,
       fetchedAt: now,
     };
   } catch {
@@ -49,6 +51,7 @@ async function fetchBenchmarks(): Promise<BenchmarkCache> {
     _cache = {
       market_rbh_rate: 85,
       material_inflation_multiplier: 1.08,
+      knr_2026_multiplier: 1.4,
       fetchedAt: now,
     };
   }
@@ -73,6 +76,11 @@ export async function getMaterialMultiplier(): Promise<number> {
   return (await fetchBenchmarks()).material_inflation_multiplier;
 }
 
+/** KNR 2026 labor norm multiplier from admin_settings. Default: 1.4 */
+export async function getKnrMultiplier(): Promise<number> {
+  return (await fetchBenchmarks()).knr_2026_multiplier;
+}
+
 /** Final labor rate for a voivodeship = baseRate × voivodeshipModifier */
 export async function getLaborRateForVoivodeship(voivodeship?: string | null): Promise<number> {
   const base = await getBaseRbhRate();
@@ -83,11 +91,11 @@ export async function getLaborRateForVoivodeship(voivodeship?: string | null): P
 /**
  * Returns both benchmarks in one call — use when you need both.
  * Example:
- *   const { rbhRate, matMultiplier } = await getGlobalBenchmarks();
+ *   const { rbhRate, matMultiplier, knrMultiplier } = await getGlobalBenchmarks();
  */
-export async function getGlobalBenchmarks(): Promise<{ rbhRate: number; matMultiplier: number }> {
+export async function getGlobalBenchmarks(): Promise<{ rbhRate: number; matMultiplier: number; knrMultiplier: number }> {
   const b = await fetchBenchmarks();
-  return { rbhRate: b.market_rbh_rate, matMultiplier: b.material_inflation_multiplier };
+  return { rbhRate: b.market_rbh_rate, matMultiplier: b.material_inflation_multiplier, knrMultiplier: b.knr_2026_multiplier };
 }
 
 /**

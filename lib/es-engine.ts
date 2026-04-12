@@ -20,7 +20,7 @@
  */
 
 import { getKnrMetadata, type KnrMetadata } from "@/lib/ai-master-brain";
-import { getEffectiveRate } from "@/lib/global-benchmarks";
+import { getEffectiveRate, getKnrMultiplier } from "@/lib/global-benchmarks";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -243,13 +243,17 @@ export async function calcLaborWithHybridKnr(params: {
 
   const knr = lookupKnr(knrCodeOrName, category, userNorms, moduleName, modules, useExpertMode);
   const rateResult = await resolveEffectiveLaborRate(voivodeship, laborRate);
+  const knrMultiplier = await getKnrMultiplier();
 
-  const laborHoursTotal = Math.round(quantity * knr.laborNorm * 100) / 100;
-  const laborPrice = Math.round(knr.laborNorm * rateResult.laborRate * 100) / 100;
+  // Apply KNR 2026 multiplier to adjust labor norms to market reality
+  const adjustedLaborNorm = Math.round(knr.laborNorm * knrMultiplier * 1000) / 1000;
+
+  const laborHoursTotal = Math.round(quantity * adjustedLaborNorm * 100) / 100;
+  const laborPrice = Math.round(adjustedLaborNorm * rateResult.laborRate * 100) / 100;
   const laborTotal = Math.round(laborHoursTotal * rateResult.laborRate * 100) / 100;
 
   return {
-    laborNorm: knr.laborNorm,
+    laborNorm: adjustedLaborNorm,
     laborPrice,
     laborHoursTotal,
     laborTotal,
@@ -278,11 +282,13 @@ export async function createBatchCalculator(
   useExpertMode: boolean = true,
 ) {
   const rateResult = await resolveEffectiveLaborRate(voivodeship, laborRate);
+  const knrMultiplier = await getKnrMultiplier();
 
   return {
     laborRate: rateResult.laborRate,
     source: rateResult.source,
     regionModifier: rateResult.regionModifier,
+    knrMultiplier,
 
     /** Synchronous labor calculation for a single item — no async needed */
     calcItem(params: {
@@ -300,11 +306,14 @@ export async function createBatchCalculator(
         params.modules,
         useExpertMode,
       );
-      const laborHoursTotal = Math.round(params.quantity * knr.laborNorm * 100) / 100;
-      const laborPrice = Math.round(knr.laborNorm * rateResult.laborRate * 100) / 100;
+      // Apply KNR 2026 multiplier to adjust labor norms to market reality
+      const adjustedLaborNorm = Math.round(knr.laborNorm * knrMultiplier * 1000) / 1000;
+
+      const laborHoursTotal = Math.round(params.quantity * adjustedLaborNorm * 100) / 100;
+      const laborPrice = Math.round(adjustedLaborNorm * rateResult.laborRate * 100) / 100;
       const laborTotal = Math.round(laborHoursTotal * rateResult.laborRate * 100) / 100;
       return {
-        laborNorm: knr.laborNorm,
+        laborNorm: adjustedLaborNorm,
         laborPrice,
         laborHoursTotal,
         laborTotal,

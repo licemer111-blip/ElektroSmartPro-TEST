@@ -7,7 +7,7 @@ Disallow: /api
 Disallow: /auth
 
 # Host
-Host: https://elektrosmart.pro
+Host: https://www.elektrosmart.pro
 
 # Sitemaps
-Sitemap: https://elektrosmart.pro/sitemap.xml
+Sitemap: https://www.elektrosmart.pro/sitemap.xml
