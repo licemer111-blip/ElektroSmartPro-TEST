@@ -114,35 +114,40 @@ UKŁADANIE KABLI (KNR 5-08 — instalacja mieszkaniowa p/t w bruzdzie):
 • YKXs 5×95mm²: 0,550 rbh/m    • YKXs 5×120mm²: 0,650 rbh/m
 • UTP Cat6 (n/t lub korytko): 0,045 rbh/m  • HDGs 2×1,0: 0,040 rbh/m
 • Kabel solarny DC 6mm²: 0,030 rbh/m
-OSPRZĘT (KNR 5-08):
-• Gniazdo 230V p/t pojedyncze (Schuko): 0,350 rbh/szt  • Gniazdo podwójne p/t: 0,450 rbh/szt
-• Gniazdo hermetyczne IP44: 0,500 rbh/szt  • Gniazdo n/t 230V: 0,300 rbh/szt
-• Gniazdo 3-fazowe CEE 16A 5P (400V): 0,600 rbh/szt  • Gniazdo 3-fazowe CEE 32A 5P: 0,700 rbh/szt
-• Wyłącznik 1-biegunowy S1 p/t: 0,250 rbh/szt  • Wyłącznik schodowy S6/S7: 0,300 rbh/szt
-• Puszka p/t 60mm: 0,150 rbh/szt           • Puszka rozgałęźna: 0,200 rbh/szt
-OŚWIETLENIE:
-• Oprawa LED panel 60×60: 0,500 rbh/szt    • Oprawa LED downlight: 0,450 rbh/szt
+OSPRZĘT (KNR 5-08, normy dla mieszkania/remontu, stawka 95 zł/h):
+• Gniazdo 230V p/t pojedyncze (Schuko): 0,420 rbh/szt  • Gniazdo 230V podwójne p/t: 0,500 rbh/szt
+• Gniazdo hermetyczne IP44 p/t: 0,560 rbh/szt  • Gniazdo n/t 230V: 0,330 rbh/szt
+• Gniazdo 3-fazowe CEE 16A 5P (400V): 0,700 rbh/szt  • Gniazdo 3-fazowe CEE 32A 5P: 0,850 rbh/szt
+• Wyłącznik 1-biegunowy S1 p/t: 0,270 rbh/szt  • Wyłącznik schodowy S6/S7: 0,330 rbh/szt
+• Puszka p/t 60mm: 0,200 rbh/szt  • Puszka rozgałęźna p/t: 0,250 rbh/szt
+OŚWIETLENIE (normy mieszkaniowe/remontowe, stawka 95 zł/h):
+• Oprawa LED downlight podtynkowa: 0,480 rbh/szt  • Oprawa LED panel 60×60: 0,560 rbh/szt
+• Oprawa naścienna (kinkiet): 0,400 rbh/szt  • Listwa LED z zasilaczem do 3m (kpl): 0,750 rbh/kpl
 • Oprawa LED hermetyczna: 0,600 rbh/szt    • HighBay LED: 1,000 rbh/szt
 • Naświetlacz ≤100W: 0,800 rbh/szt         • Oprawa awaryjna: 0,500 rbh/szt
 TRASY KABLOWE:
 • Koryto 40×25mm: 0,100 rbh/m              • Koryto 100×60mm: 0,150 rbh/m
 • Koryto 200×60mm: 0,200 rbh/m             • Drabinka 200mm: 0,200 rbh/m
 • Rura karbowana Ø20mm: 0,030 rbh/m        • Rura karbowana Ø32mm: 0,040 rbh/m
-BRUZDY (KNR 5-08 — UWAGA: normy są znacznie wyższe niż układanie kabla!):
-• Bruzda tynk/gips lekki: 0,180 rbh/m  • Bruzda cegła/silikat/pustak: 0,850 rbh/m
-• Bruzda beton/żelbet: 2,000 rbh/m    • Bruzda ytong/bloczek: 0,350 rbh/m
-• Bruzda g-k (płyta gipsowo-kartonowa): 0,180 rbh/m  • Zasypanie bruzdy: 0,120 rbh/m
-ROZDZIELNICE:
-• Rozdzielnica 24-mod.: 4,0 rbh/szt   • Rozdzielnica 48-mod.: 6,0 rbh/szt
-• Rozdzielnica 72-mod.: 8,0 rbh/szt   • MCB 1P: 0,20 rbh/szt
-• RCD 2P: 0,25 rbh/szt                • RCD 4P: 0,35 rbh/szt
+BRUZDY (normy 2026 — narzędzia elektryczne: bruzdownica, kątowa; nie kowadek ręczny):
+• Bruzda tynk gipsowy/g-k: 0,180 rbh/m  • Bruzda tynk wapienny/ce mentowy: 0,220 rbh/m
+• Bruzda cegła tynkowana (ceglano-tynkowa): 0,280 rbh/m  • Bruzda cegła pełna (ręcznie): 0,850 rbh/m
+• Bruzda silikat/pustak/ytong: 0,250 rbh/m  • Bruzda beton/żelbet (diamentowa): 2,000 rbh/m
+• Zasypanie bruzdy gipsem: 0,120 rbh/m  • Zamurowanie bruzdy: 0,200 rbh/m
+APARATURA ROZDZIELNICZA (montaz w tablicy, KNR 5-08):
+• Rozdzielnica podtynkowa 24-mod.: 3,5 rbh/szt  • Rozdzielnica podtynkowa 36-mod.: 5,0 rbh/szt
+• Rozdzielnica natynkowa 24-mod.: 3,0 rbh/szt  • Rozdzielnica 48-mod.: 6,0 rbh/szt
+• MCB (wyłącznik nadprądowy) 1P: 0,360 rbh/szt  • MCB 2P: 0,450 rbh/szt  • MCB 3P: 0,550 rbh/szt
+• RCD (różnicowoprądowy) 2P 40A: 0,820 rbh/szt  • RCD 4P 40A: 1,200 rbh/szt
+• RCBO (kombinowany) 1P: 0,500 rbh/szt
+• SPD/Ogranicznik przepięć T2 1-faz.: 1,200 rbh/szt  • SPD T1+T2: 1,600 rbh/szt
 FOTOWOLTAIKA:
 • Panel PV dach skośny: 0,500 rbh/szt  • Inwerter PV ≤10kW: 4,0 rbh/szt
 • Kabel solarny 6mm²: 0,030 rbh/m     • Złącze MC4: 0,100 rbh/szt
-TELETECHNIKA:
-• Kamera IP (kopułka): 1,0 rbh/szt    • Czujka PIR: 0,300 rbh/szt
+TELETECHNIKA (normy mieszkaniowe):
+• Kamera IP (kopułka): 1,0 rbh/szt    • Czujka PIR/ruchu 230V p/t: 0,490 rbh/szt
 • Czujka dymu SSP: 0,350 rbh/szt      • Centrala SSP: 6,0 rbh/szt
-• Punkt RJ45 Cat6: 0,800 rbh/szt      • Access point WiFi: 0,800 rbh/szt
+• Gniazdo RJ45 Cat.6 p/t (punkt LAN): 0,370 rbh/szt  • Access point WiFi: 0,800 rbh/szt
 POMIARY:
 • Pomiary obwodu (rez. izol.): 0,100 rbh/szt  • Protokół odbioru: 2,0 rbh/kpl
 • Pomiary kompleksowe: 0,200 rbh/szt           • Termowizja rozdzielnicy: 1,0 rbh/kpl
