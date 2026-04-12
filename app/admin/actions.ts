@@ -410,7 +410,7 @@ export async function updateGlobalBenchmarks(
     if (!admin) return { success: false, error: "Unauthorized" };
 
     // Get current value first
-    const { data: current } = await supabaseAdmin
+    const { data: current, error: fetchError } = await supabaseAdmin
       .from("admin_settings")
       .select("value")
       .eq("key", "global_benchmarks")
@@ -424,17 +424,26 @@ export async function updateGlobalBenchmarks(
 
     // Preserve existing fields, only update knr_2026_multiplier
     const newValue = {
-      market_rbh_rate: currentValue?.market_rbh_rate ?? 85,
-      material_inflation_multiplier: currentValue?.material_inflation_multiplier ?? 1.08,
+      market_rbh_rate: currentValue?.market_rbh_rate ?? 75,
+      material_inflation_multiplier: currentValue?.material_inflation_multiplier ?? 1.05,
       knr_2026_multiplier: benchmarks.knr_2026_multiplier ?? currentValue?.knr_2026_multiplier ?? 1.4,
     };
 
+    // Use upsert: insert if not exists, update if exists
     const { error } = await supabaseAdmin
       .from("admin_settings")
-      .update({ value: newValue, updated_at: new Date().toISOString() })
-      .eq("key", "global_benchmarks");
+      .upsert({
+        key: "global_benchmarks",
+        value: newValue,
+        updated_at: new Date().toISOString(),
+      }, {
+        onConflict: "key",
+      });
 
-    if (error) return { success: false, error: error.message };
+    if (error) {
+      logger.error("updateGlobalBenchmarks DB error", { error, newValue }, error);
+      return { success: false, error: error.message };
+    }
 
     // Invalidate cache in global-benchmarks.ts
     const { invalidateBenchmarkCache } = await import("@/lib/global-benchmarks");

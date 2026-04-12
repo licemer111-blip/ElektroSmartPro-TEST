@@ -41,16 +41,16 @@ async function fetchBenchmarks(): Promise<BenchmarkCache> {
 
     const val = data?.value as { market_rbh_rate?: number; material_inflation_multiplier?: number; knr_2026_multiplier?: number } | null;
     _cache = {
-      market_rbh_rate: val?.market_rbh_rate ?? 85,
-      material_inflation_multiplier: val?.material_inflation_multiplier ?? 1.08,
+      market_rbh_rate: val?.market_rbh_rate ?? 75,
+      material_inflation_multiplier: val?.material_inflation_multiplier ?? 1.05,
       knr_2026_multiplier: val?.knr_2026_multiplier ?? 1.4,
       fetchedAt: now,
     };
   } catch {
     // Fallback to defaults — never throw, always return usable values
     _cache = {
-      market_rbh_rate: 85,
-      material_inflation_multiplier: 1.08,
+      market_rbh_rate: 75,
+      material_inflation_multiplier: 1.05,
       knr_2026_multiplier: 1.4,
       fetchedAt: now,
     };
@@ -66,12 +66,12 @@ export function invalidateBenchmarkCache(): void {
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
-/** Base labor rate (PLN/rbh) from admin_settings. Default: 85 */
+/** Base labor rate (PLN/rbh) from admin_settings. Default: 75 */
 export async function getBaseRbhRate(): Promise<number> {
   return (await fetchBenchmarks()).market_rbh_rate;
 }
 
-/** Material inflation multiplier from admin_settings. Default: 1.08 */
+/** Material inflation multiplier from admin_settings. Default: 1.05 */
 export async function getMaterialMultiplier(): Promise<number> {
   return (await fetchBenchmarks()).material_inflation_multiplier;
 }
