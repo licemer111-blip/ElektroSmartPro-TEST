@@ -260,13 +260,37 @@ export async function estimatePricesWithAI(
     }
 
     type PricingItem = { id: string; name: string; unit: string; quantity: number; material_price: number | null; labor_price: number | null; final_material_price: number | null; final_labor_price: number | null; section: string | null; description: string | null; parent_assembly_id: string | null; knr_code: string | null; is_assembly_child: boolean | null };
-    let topLevelItems = ((items || []) as PricingItem[]).filter((item) => !item.parent_assembly_id);
-    if (topLevelItems.length === 0) return { success: false, error: "Brak pozycji w kosztorysie" };
-
+    const allItems = (items || []) as PricingItem[];
+    
+    // Assembly expansion: if targetItemIds contains assembly parents, expand to their children
+    // Children (is_assembly_child=true) are the actual priceable items; parents are just headers
+    let expandedTargetIds: Set<string> | null = null;
     if (targetItemIds && targetItemIds.length > 0) {
-      const idSet = new Set(targetItemIds);
-      topLevelItems = topLevelItems.filter((item) => idSet.has(item.id));
-      if (topLevelItems.length === 0) return { success: false, error: "Zadna z zaznaczonych pozycji nie jest dostepna do wyceny" };
+      expandedTargetIds = new Set(targetItemIds);
+      // Find assembly parents in target and add their children
+      for (const id of targetItemIds) {
+        const item = allItems.find(i => i.id === id);
+        if (item && !item.parent_assembly_id) {
+          // This is a top-level item — check if it's an assembly parent
+          const children = allItems.filter(i => i.parent_assembly_id === id);
+          if (children.length > 0) {
+            // It's an assembly parent — add children instead of parent
+            expandedTargetIds.delete(id); // Don't price the parent header
+            children.forEach(c => expandedTargetIds!.add(c.id));
+          }
+        }
+      }
+    }
+
+    // Include ALL items (including assembly children) for pricing
+    // Assembly parents (items with children) are excluded — only children get priced
+    const assemblyParentIds = new Set(allItems.filter(i => i.parent_assembly_id).map(i => i.parent_assembly_id!));
+    let itemsForPricing = allItems.filter((item) => !assemblyParentIds.has(item.id));
+    if (itemsForPricing.length === 0) return { success: false, error: "Brak pozycji w kosztorysie" };
+
+    if (expandedTargetIds && expandedTargetIds.size > 0) {
+      itemsForPricing = itemsForPricing.filter((item) => expandedTargetIds!.has(item.id));
+      if (itemsForPricing.length === 0) return { success: false, error: "Zadna z zaznaczonych pozycji nie jest dostepna do wyceny" };
     }
 
     // RULE 0: 0.00 = Pustka. Używamy final_* jako źródło prawdy (uwzględnia ręczne edycje i bulk).
@@ -278,7 +302,7 @@ export async function estimatePricesWithAI(
 
     const userSelectedItems = !!(targetItemIds && targetItemIds.length > 0);
 
-    const itemsToPrice = topLevelItems.filter((item) => {
+    const itemsToPrice = itemsForPricing.filter((item) => {
       // Explicit selection = always reprice (user command overrides everything)
       if (userSelectedItems) return true;
 
