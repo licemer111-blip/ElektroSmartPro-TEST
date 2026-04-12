@@ -100,14 +100,14 @@ REGUŁY:
 - Jednostki wg KNR: m (metry), szt (sztuki), kpl (komplet), m² (metry kwadratowe)
 - KRYTYCZNE: NIGDY nie zwracaj null dla nakładu rbh. Jeśli brak dokładnej normy → SZACUJ:
   Prosta wymiana → 0.15–0.30 rbh/szt | Standardowy montaż → 0.20–0.60 rbh/szt
-  Układanie kabla YDYp p/t → 0.07–0.15 rbh/mb | Bruzda/kucie cegła → 0.85 rbh/mb | Bruzda beton → 2.0 rbh/mb
-  Złożony montaż (rozdzielnica, szafa) → 2.0–14.0 rbh/szt | Minimum → 0.05 rbh
+  Układanie kabla YDYp p/t → 0.13–0.28 rbh/mb | Bruzda/kucie cegła → 0.85 rbh/mb | Bruzda beton → 2.0 rbh/mb
+  Złożony montaż (rozdzielnica, szafa) → 3.0–14.0 rbh/szt | Minimum → 0.05 rbh
 
 REFERENCJA NAKŁADÓW ROBOCIZNY 2026 (rbh/jedn.):
 UKŁADANIE KABLI (KNR 5-08 — instalacja mieszkaniowa p/t w bruzdzie):
-• YDYp 3×1,5mm²: 0,070 rbh/m   • YDYp 3×2,5mm²: 0,080 rbh/m
-• YDYp 5×1,5mm²: 0,090 rbh/m   • YDYp 5×2,5mm²: 0,110 rbh/m
-• YDYp 5×4mm²: 0,130 rbh/m     • YDYp 5×6mm²: 0,150 rbh/m
+• YDYp 3×1,5mm²: 0,130 rbh/m   • YDYp 3×2,5mm²: 0,160 rbh/m
+• YDYp 5×1,5mm²: 0,145 rbh/m   • YDYp 5×2,5mm²: 0,200 rbh/m
+• YDYp 5×4mm²: 0,240 rbh/m     • YDYp 5×6mm²: 0,280 rbh/m
 • YKXs/YKY 5×10mm²: 0,180 rbh/m  • YKXs/YKY 5×16mm²: 0,210 rbh/m
 • YKXs 5×25mm²: 0,260 rbh/m    • YKXs 5×35mm²: 0,310 rbh/m
 • YKXs 5×50mm²: 0,370 rbh/m    • YKXs 5×70mm²: 0,450 rbh/m
@@ -115,14 +115,14 @@ UKŁADANIE KABLI (KNR 5-08 — instalacja mieszkaniowa p/t w bruzdzie):
 • UTP Cat6 (n/t lub korytko): 0,045 rbh/m  • HDGs 2×1,0: 0,040 rbh/m
 • Kabel solarny DC 6mm²: 0,030 rbh/m
 OSPRZĘT (KNR 5-08, normy dla mieszkania/remontu, stawka 95 zł/h):
-• Gniazdo 230V p/t pojedyncze (Schuko): 0,420 rbh/szt  • Gniazdo 230V podwójne p/t: 0,500 rbh/szt
-• Gniazdo hermetyczne IP44 p/t: 0,560 rbh/szt  • Gniazdo n/t 230V: 0,330 rbh/szt
-• Gniazdo 3-fazowe CEE 16A 5P (400V): 0,700 rbh/szt  • Gniazdo 3-fazowe CEE 32A 5P: 0,850 rbh/szt
-• Wyłącznik 1-biegunowy S1 p/t: 0,270 rbh/szt  • Wyłącznik schodowy S6/S7: 0,330 rbh/szt
+• Gniazdo 230V p/t pojedyncze (Schuko): 0,680 rbh/szt  • Gniazdo 230V podwójne p/t: 0,820 rbh/szt
+• Gniazdo hermetyczne IP44 p/t: 0,980 rbh/szt  • Gniazdo n/t 230V: 0,540 rbh/szt
+• Gniazdo 3-fazowe CEE 16A 5P (400V): 1,180 rbh/szt  • Gniazdo 3-fazowe CEE 32A 5P: 1,450 rbh/szt
+• Wyłącznik 1-biegunowy S1 p/t: 0,450 rbh/szt  • Wyłącznik schodowy S6/S7: 0,540 rbh/szt
 • Puszka p/t 60mm: 0,200 rbh/szt  • Puszka rozgałęźna p/t: 0,250 rbh/szt
 OŚWIETLENIE (normy mieszkaniowe/remontowe, stawka 95 zł/h):
-• Oprawa LED downlight podtynkowa: 0,480 rbh/szt  • Oprawa LED panel 60×60: 0,560 rbh/szt
-• Oprawa naścienna (kinkiet): 0,400 rbh/szt  • Listwa LED z zasilaczem do 3m (kpl): 0,750 rbh/kpl
+• Oprawa LED downlight podtynkowa: 0,310 rbh/szt  • Oprawa LED panel 60×60: 0,720 rbh/szt
+• Oprawa naścienna (kinkiet): 0,650 rbh/szt  • Listwa LED z zasilaczem do 3m (kpl): 1,220 rbh/kpl
 • Oprawa LED hermetyczna: 0,600 rbh/szt    • HighBay LED: 1,000 rbh/szt
 • Naświetlacz ≤100W: 0,800 rbh/szt         • Oprawa awaryjna: 0,500 rbh/szt
 TRASY KABLOWE:
@@ -135,19 +135,19 @@ BRUZDY (normy 2026 — narzędzia elektryczne: bruzdownica, kątowa; nie kowadek
 • Bruzda silikat/pustak/ytong: 0,250 rbh/m  • Bruzda beton/żelbet (diamentowa): 2,000 rbh/m
 • Zasypanie bruzdy gipsem: 0,120 rbh/m  • Zamurowanie bruzdy: 0,200 rbh/m
 APARATURA ROZDZIELNICZA (montaz w tablicy, KNR 5-08):
-• Rozdzielnica podtynkowa 24-mod.: 3,5 rbh/szt  • Rozdzielnica podtynkowa 36-mod.: 5,0 rbh/szt
-• Rozdzielnica natynkowa 24-mod.: 3,0 rbh/szt  • Rozdzielnica 48-mod.: 6,0 rbh/szt
+• Rozdzielnica podtynkowa 24-mod.: 3,0 rbh/szt  • Rozdzielnica podtynkowa 36-mod.: 4,5 rbh/szt
+• Rozdzielnica natynkowa 24-mod.: 2,5 rbh/szt  • Rozdzielnica 48-mod.: 6,0 rbh/szt
 • MCB (wyłącznik nadprądowy) 1P: 0,360 rbh/szt  • MCB 2P: 0,450 rbh/szt  • MCB 3P: 0,550 rbh/szt
-• RCD (różnicowoprądowy) 2P 40A: 0,820 rbh/szt  • RCD 4P 40A: 1,200 rbh/szt
+• RCD (różnicowoprądowy) 2P 40A: 0,770 rbh/szt  • RCD 4P 40A: 1,100 rbh/szt
 • RCBO (kombinowany) 1P: 0,500 rbh/szt
-• SPD/Ogranicznik przepięć T2 1-faz.: 1,200 rbh/szt  • SPD T1+T2: 1,600 rbh/szt
+• SPD/Ogranicznik przepięć T2 1-faz.: 1,150 rbh/szt  • SPD T1+T2: 1,600 rbh/szt
 FOTOWOLTAIKA:
 • Panel PV dach skośny: 0,500 rbh/szt  • Inwerter PV ≤10kW: 4,0 rbh/szt
 • Kabel solarny 6mm²: 0,030 rbh/m     • Złącze MC4: 0,100 rbh/szt
 TELETECHNIKA (normy mieszkaniowe):
-• Kamera IP (kopułka): 1,0 rbh/szt    • Czujka PIR/ruchu 230V p/t: 0,490 rbh/szt
+• Kamera IP (kopułka): 1,0 rbh/szt    • Czujka PIR/ruchu 230V p/t: 0,810 rbh/szt
 • Czujka dymu SSP: 0,350 rbh/szt      • Centrala SSP: 6,0 rbh/szt
-• Gniazdo RJ45 Cat.6 p/t (punkt LAN): 0,370 rbh/szt  • Access point WiFi: 0,800 rbh/szt
+• Gniazdo RJ45 Cat.6 p/t (punkt LAN): 0,600 rbh/szt  • Access point WiFi: 0,800 rbh/szt
 POMIARY:
 • Pomiary obwodu (rez. izol.): 0,100 rbh/szt  • Protokół odbioru: 2,0 rbh/kpl
 • Pomiary kompleksowe: 0,200 rbh/szt           • Termowizja rozdzielnicy: 1,0 rbh/kpl

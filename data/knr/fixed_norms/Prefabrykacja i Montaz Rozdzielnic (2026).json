@@ -23,7 +23,7 @@
     "column_number": "02",
     "description": "Montaż i podłączenie aparatury modułowej (nadprądowe, RCD, ochronniki) w gotowej rozdzielnicy",
     "unit": "szt",
-    "labor_norm": 0.4,
+    "labor_norm": 0.36,
     "knr_category": "Rozdzielnice",
     "is_industrial": false,
     "synonyms": [
@@ -41,7 +41,7 @@
     "column_number": "03",
     "description": "Osadzenie i montaż obudowy rozdzielnicy podtynkowej/natynkowej na obiekcie",
     "unit": "szt",
-    "labor_norm": 2.5,
+    "labor_norm": 3.0,
     "knr_category": "Rozdzielnice",
     "is_industrial": false,
     "synonyms": [
@@ -267,6 +267,82 @@
       "as-built rozdzielnica",
       "panel documentation",
       "panel schematics"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "16",
+    "description": "Montaż wyłącznika różnicowo-prądowego RCD/RCCB 2P 40A 30mA w rozdzielnicy",
+    "unit": "szt",
+    "labor_norm": 0.77,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": false,
+    "synonyms": [
+      "rcd 2p",
+      "wyłącznik różnicowy 2p",
+      "fi 2p 40a",
+      "rcd 30ma",
+      "wyłącznik różnicowo-prądowy",
+      "rccb 40a",
+      "wyłącznik fi"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "17",
+    "description": "Montaż ogranicznika przepięć SPD Typ 2 (T2) w rozdzielnicy — ochrona przeciwprzepięciowa",
+    "unit": "szt",
+    "labor_norm": 1.15,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": false,
+    "synonyms": [
+      "ogranicznik przepięć",
+      "spd t2",
+      "spd typ 2",
+      "ochronnik przepięć t2",
+      "ochrona przepięciowa",
+      "surge arrester t2",
+      "spd rozdzielnica"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "18",
+    "description": "Montaż bezpiecznika nadprądowego jednobiegunowego MCB 1P B/C 6-32A w rozdzielnicy",
+    "unit": "szt",
+    "labor_norm": 0.36,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": false,
+    "synonyms": [
+      "mcb 1p",
+      "bezpiecznik 1-biegunowy",
+      "wyłącznik nadprądowy 1p",
+      "b16a 1p",
+      "c16 1p",
+      "nadprądowy 1 biegunowy",
+      "ls 1p"
+    ]
+  },
+  {
+    "catalog_code": "KNR 5-08",
+    "table_number": "9032",
+    "column_number": "19",
+    "description": "Montaż wyłącznika różnicowo-prądowego RCD 4P 63A 30mA lub wyłącznika głównego 4P w rozdzielnicy",
+    "unit": "szt",
+    "labor_norm": 1.10,
+    "knr_category": "Rozdzielnice",
+    "is_industrial": false,
+    "synonyms": [
+      "rcd 4p",
+      "fi 4p",
+      "wyłącznik różnicowy 4p",
+      "rcd 63a 4p",
+      "wyłącznik główny 4p",
+      "4-biegunowy fi",
+      "rccb 4p"
     ]
   }
 ]

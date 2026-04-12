@@ -132,7 +132,7 @@
     "column_number": "08",
     "description": "Ułożenie przewodu YDYp 3x1,5 mm² p/t w bruździe lub rurce",
     "unit": "m",
-    "labor_norm": 0.07,
+    "labor_norm": 0.13,
     "knr_category": "kablowanie",
     "is_industrial": false,
     "synonyms": [
@@ -151,7 +151,7 @@
     "column_number": "09",
     "description": "Ułożenie przewodu YDYp 3x2,5 mm² p/t w bruździe lub rurce",
     "unit": "m",
-    "labor_norm": 0.08,
+    "labor_norm": 0.16,
     "knr_category": "kablowanie",
     "is_industrial": false,
     "synonyms": [
@@ -170,7 +170,7 @@
     "column_number": "10",
     "description": "Ułożenie przewodu YDYp 5x2,5 mm² p/t w bruździe (3-fazowy)",
     "unit": "m",
-    "labor_norm": 0.11,
+    "labor_norm": 0.20,
     "knr_category": "kablowanie",
     "is_industrial": false,
     "synonyms": [
@@ -188,7 +188,7 @@
     "column_number": "11",
     "description": "Ułożenie przewodu YDYp 5x4 mm² p/t lub w rurce (silnik, piekarnik, klimatyzacja)",
     "unit": "m",
-    "labor_norm": 0.13,
+    "labor_norm": 0.24,
     "knr_category": "kablowanie",
     "is_industrial": false,
     "synonyms": [
@@ -207,7 +207,7 @@
     "column_number": "12",
     "description": "Ułożenie przewodu YDYp 5x6 mm² p/t (zasilanie kuchenki elektrycznej / pralki)",
     "unit": "m",
-    "labor_norm": 0.15,
+    "labor_norm": 0.28,
     "knr_category": "kablowanie",
     "is_industrial": false,
     "synonyms": [
@@ -369,7 +369,7 @@
     "column_number": "21",
     "description": "Montaż gniazda 230V 16A pojedynczego podtynkowego (z bolcem, z uziemieniem)",
     "unit": "szt",
-    "labor_norm": 0.2,
+    "labor_norm": 0.68,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -389,7 +389,7 @@
     "column_number": "22",
     "description": "Montaż gniazda 230V 16A podwójnego podtynkowego (2x230V w jednej puszce)",
     "unit": "szt",
-    "labor_norm": 0.25,
+    "labor_norm": 0.82,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -407,7 +407,7 @@
     "column_number": "23",
     "description": "Montaż gniazda 230V potrójnego (3x230V w ramce lub bloku gniazd)",
     "unit": "szt",
-    "labor_norm": 0.35,
+    "labor_norm": 0.95,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -425,7 +425,7 @@
     "column_number": "24",
     "description": "Montaż gniazda 230V z ładowarką USB-A/C (2x230V + 2xUSB)",
     "unit": "szt",
-    "labor_norm": 0.3,
+    "labor_norm": 0.72,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -444,7 +444,7 @@
     "column_number": "25",
     "description": "Montaż gniazda bryzgoszczelnego 230V IP44 (łazienka, kuchnia, zewnętrzne)",
     "unit": "szt",
-    "labor_norm": 0.3,
+    "labor_norm": 0.98,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -463,7 +463,7 @@
     "column_number": "26",
     "description": "Montaż gniazda natynkowego 230V (na tynku, w listwie, w mieszkaniach po renowacji)",
     "unit": "szt",
-    "labor_norm": 0.22,
+    "labor_norm": 0.54,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -480,7 +480,7 @@
     "column_number": "27",
     "description": "Montaż gniazda siłowego 1-fazowego 16A (230V, CEE)",
     "unit": "szt",
-    "labor_norm": 0.35,
+    "labor_norm": 0.68,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -498,7 +498,7 @@
     "column_number": "28",
     "description": "Montaż gniazda siłowego 3-fazowego 16A (400V, CEE 5-pin)",
     "unit": "szt",
-    "labor_norm": 0.5,
+    "labor_norm": 1.18,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -517,7 +517,7 @@
     "column_number": "29",
     "description": "Montaż gniazda siłowego 3-fazowego 32A (400V, CEE 5-pin)",
     "unit": "szt",
-    "labor_norm": 0.65,
+    "labor_norm": 1.45,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -535,7 +535,7 @@
     "column_number": "30",
     "description": "Montaż łącznika jednobiegunowego (wyłącznik światła) podtynkowego",
     "unit": "szt",
-    "labor_norm": 0.15,
+    "labor_norm": 0.45,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -554,7 +554,7 @@
     "column_number": "31",
     "description": "Montaż łącznika dwuklawiszowego (wyłącznik 2-obwodowy) podtynkowego",
     "unit": "szt",
-    "labor_norm": 0.2,
+    "labor_norm": 0.54,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -572,7 +572,7 @@
     "column_number": "32",
     "description": "Montaż łącznika schodowego (dwubiegunowego) — para dla obwodu schodowego",
     "unit": "szt",
-    "labor_norm": 0.2,
+    "labor_norm": 0.54,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -590,7 +590,7 @@
     "column_number": "33",
     "description": "Montaż łącznika krzyżowego (do obwodów 3 i więcej punktów sterowania)",
     "unit": "szt",
-    "labor_norm": 0.22,
+    "labor_norm": 0.60,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -607,7 +607,7 @@
     "column_number": "34",
     "description": "Montaż ściemniacza (dimmera) podtynkowego 0-300W",
     "unit": "szt",
-    "labor_norm": 0.3,
+    "labor_norm": 0.82,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -626,7 +626,7 @@
     "column_number": "35",
     "description": "Montaż łącznika natynkowego (na tynku, remontowy)",
     "unit": "szt",
-    "labor_norm": 0.17,
+    "labor_norm": 0.40,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -680,7 +680,7 @@
     "column_number": "38",
     "description": "Montaż gniazda RJ-45 (LAN/Data) w ramce elektrycznej podtynkowej",
     "unit": "szt",
-    "labor_norm": 0.3,
+    "labor_norm": 0.60,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -771,7 +771,7 @@
     "column_number": "43",
     "description": "Montaż czujnika ruchu PIR podtynkowego / natynkowego 230V (sterowanie oświetleniem)",
     "unit": "szt",
-    "labor_norm": 0.4,
+    "labor_norm": 0.81,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
