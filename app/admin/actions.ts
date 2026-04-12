@@ -373,8 +373,6 @@ export async function resetStats(): Promise<{ success: boolean; error?: string }
 // ─── Global Benchmarks Management ─────────────────────────────────────────────
 
 export interface GlobalBenchmarks {
-  market_rbh_rate: number;
-  material_inflation_multiplier: number;
   knr_2026_multiplier: number;
 }
 
@@ -391,16 +389,10 @@ export async function getGlobalBenchmarks(): Promise<{ data: GlobalBenchmarks | 
 
     if (error) return { data: null, error: error.message };
 
-    const val = data?.value as {
-      market_rbh_rate?: number;
-      material_inflation_multiplier?: number;
-      knr_2026_multiplier?: number;
-    } | null;
+    const val = data?.value as { knr_2026_multiplier?: number } | null;
 
     return {
       data: {
-        market_rbh_rate: val?.market_rbh_rate ?? 85,
-        material_inflation_multiplier: val?.material_inflation_multiplier ?? 1.08,
         knr_2026_multiplier: val?.knr_2026_multiplier ?? 1.4,
       },
     };
@@ -424,11 +416,16 @@ export async function updateGlobalBenchmarks(
       .eq("key", "global_benchmarks")
       .single();
 
-    const currentValue = current?.value as GlobalBenchmarks | null;
+    const currentValue = current?.value as {
+      market_rbh_rate?: number;
+      material_inflation_multiplier?: number;
+      knr_2026_multiplier?: number;
+    } | null;
 
+    // Preserve existing fields, only update knr_2026_multiplier
     const newValue = {
-      market_rbh_rate: benchmarks.market_rbh_rate ?? currentValue?.market_rbh_rate ?? 85,
-      material_inflation_multiplier: benchmarks.material_inflation_multiplier ?? currentValue?.material_inflation_multiplier ?? 1.08,
+      market_rbh_rate: currentValue?.market_rbh_rate ?? 85,
+      material_inflation_multiplier: currentValue?.material_inflation_multiplier ?? 1.08,
       knr_2026_multiplier: benchmarks.knr_2026_multiplier ?? currentValue?.knr_2026_multiplier ?? 1.4,
     };
 
