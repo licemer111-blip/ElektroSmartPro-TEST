@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { addProjectItemDirect } from "@/app/dashboard/projects/[id]/actions";
 import { notifyDataChanged } from "@/hooks/use-synced-action";
 import { cn } from "@/lib/utils";
@@ -40,6 +41,7 @@ export function QuickItemDialog({
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
+  const { multiplier: knrMultiplier } = useKnrMultiplier();
 
   const [name, setName] = useState("");
   const [unit, setUnit] = useState("szt");
@@ -202,8 +204,8 @@ export function QuickItemDialog({
               <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-sm">
                 <span className="text-slate-500 dark:text-slate-400">Suma pozycji:</span>
                 <span className="font-semibold text-blue-600 dark:text-blue-400">
-                  {((parseFloat(materialPrice) || 0) + (parseFloat(laborPrice) || 0)) * (parseFloat(quantity) || 1) > 0
-                    ? `${(((parseFloat(materialPrice) || 0) + (parseFloat(laborPrice) || 0)) * (parseFloat(quantity) || 1)).toFixed(2)} zł`
+                  {((parseFloat(materialPrice) || 0) + (parseFloat(laborPrice) || 0) * knrMultiplier) * (parseFloat(quantity) || 1) > 0
+                    ? `${(((parseFloat(materialPrice) || 0) + (parseFloat(laborPrice) || 0) * knrMultiplier) * (parseFloat(quantity) || 1)).toFixed(2)} zł`
                     : "—"}
                 </span>
               </div>

@@ -67,10 +67,8 @@ export async function addCatalogItemToProject(
   if (!catalogItem) return { error: "Nie znaleziono pozycji katalogowej" };
 
   const priceModifier = (project.regions as { price_modifier: number } | null)?.price_modifier || 1.0;
-  // Apply KNR 2026 multiplier to labor price
-  const knrMultiplier = await getKnrMultiplier();
-  // Iron Rule: labor stored as BASE — calcRowPrices applies regionModifier at display time
-  const finalLaborPrice = catalogItem.base_labor_price * knrMultiplier;
+  // Iron Rule: labor stored as BASE — calcRowPrices applies regionModifier and knrMultiplier at display time
+  const finalLaborPrice = catalogItem.base_labor_price;
   const finalMaterialPrice = catalogItem.base_material_price;
   const priceMin = catalogItem.price_min ? catalogItem.price_min * priceModifier : null;
   const priceMax = catalogItem.price_max ? catalogItem.price_max * priceModifier : null;
@@ -423,9 +421,8 @@ export async function addProjectItemDirect(
 
   const nextSortOrder = (maxSortData?.sort_order || 0) + 1;
 
-  // Apply KNR 2026 multiplier to labor price
-  const knrMultiplier = await getKnrMultiplier();
-  const finalLaborPrice = (data.labor_price ?? 0) * knrMultiplier;
+  // Iron Rule: labor stored as BASE — calcRowPrices applies knrMultiplier at display time
+  const finalLaborPrice = data.labor_price ?? 0;
 
   const { data: inserted, error } = await supabase.from("project_items").insert({
     project_id: projectId,
