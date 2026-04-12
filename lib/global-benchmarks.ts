@@ -20,7 +20,7 @@ interface BenchmarkCache {
 }
 
 let _cache: BenchmarkCache | null = null;
-const CACHE_TTL_MS = 60_000; // 60 seconds
+const CACHE_TTL_MS = 10_000; // 10 seconds
 
 async function fetchBenchmarks(): Promise<BenchmarkCache> {
   const now = Date.now();

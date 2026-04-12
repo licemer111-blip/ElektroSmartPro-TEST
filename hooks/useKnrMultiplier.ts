@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from "react";
 
+const KNR_MULTIPLIER_CHANNEL = "knr-multiplier-updates";
+
 /**
  * Hook to fetch KNR 2026 multiplier from admin_settings.
  * Uses server action to avoid prop drilling.
+ * Auto-refreshes every 30s and listens for BroadcastChannel updates.
  */
 export function useKnrMultiplier() {
   const [multiplier, setMultiplier] = useState(1.4);
@@ -25,7 +28,22 @@ export function useKnrMultiplier() {
       }
     }
 
+    // Initial fetch
     fetchMultiplier();
+
+    // Periodic refresh every 30s
+    const interval = setInterval(fetchMultiplier, 30000);
+
+    // Listen for BroadcastChannel updates (from Admin Panel)
+    const channel = new BroadcastChannel(KNR_MULTIPLIER_CHANNEL);
+    channel.onmessage = () => {
+      fetchMultiplier();
+    };
+
+    return () => {
+      clearInterval(interval);
+      channel.close();
+    };
   }, []);
 
   return { multiplier, isLoading };

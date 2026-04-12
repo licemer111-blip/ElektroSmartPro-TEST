@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { updateGlobalBenchmarks } from "../actions";
 import { Settings, Calculator, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 
+const KNR_MULTIPLIER_CHANNEL = "knr-multiplier-updates";
+
 interface Props {
   initialKnrMultiplier: number;
 }
@@ -25,6 +27,10 @@ export function SettingsClient({ initialKnrMultiplier }: Props) {
       if (result.success) {
         setSaveState("success");
         setTimeout(() => setSaveState("idle"), 3000);
+        // Notify all open tabs to refresh the multiplier
+        const channel = new BroadcastChannel(KNR_MULTIPLIER_CHANNEL);
+        channel.postMessage({ type: "multiplier-updated" });
+        channel.close();
       } else {
         setErrorMessage(result.error ?? "Błąd zapisu");
         setSaveState("error");
