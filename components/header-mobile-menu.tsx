@@ -92,6 +92,18 @@ export function HeaderMobileMenu({ isAuthenticated, isPro }: HeaderMobileMenuPro
                 <HeaderMobileNavItem href="/dashboard/templates" icon="Copy">
                   Szablony
                 </HeaderMobileNavItem>
+                <HeaderMobileNavItem href="/dashboard/analytics" icon="BarChart2">
+                  Analityka
+                </HeaderMobileNavItem>
+                <HeaderMobileNavItem href="/dashboard/time" icon="Clock">
+                  Czas pracy
+                </HeaderMobileNavItem>
+                <HeaderMobileNavItem href="/dashboard/team" icon="Users">
+                  Zespół
+                </HeaderMobileNavItem>
+                <HeaderMobileNavItem href="/dashboard/portfolio" icon="Briefcase">
+                  Portfolio
+                </HeaderMobileNavItem>
               </div>
 
               {/* Konto */}
