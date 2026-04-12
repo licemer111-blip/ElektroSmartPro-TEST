@@ -7,6 +7,7 @@ import { projectItemUpdateSchema, validate } from "@/lib/validations";
 import { logger } from "@/lib/logger";
 import type { ProjectItem } from "@/lib/types/database";
 import { canUserEditProject, revalidateProject } from "./utils";
+import { getKnrMultiplier } from "@/lib/global-benchmarks";
 
 // Fetch project items
 export async function getProjectItems(projectId: string): Promise<ProjectItem[]> {
@@ -66,8 +67,10 @@ export async function addCatalogItemToProject(
   if (!catalogItem) return { error: "Nie znaleziono pozycji katalogowej" };
 
   const priceModifier = (project.regions as { price_modifier: number } | null)?.price_modifier || 1.0;
+  // Apply KNR 2026 multiplier to labor price
+  const knrMultiplier = await getKnrMultiplier();
   // Iron Rule: labor stored as BASE — calcRowPrices applies regionModifier at display time
-  const finalLaborPrice = catalogItem.base_labor_price;
+  const finalLaborPrice = catalogItem.base_labor_price * knrMultiplier;
   const finalMaterialPrice = catalogItem.base_material_price;
   const priceMin = catalogItem.price_min ? catalogItem.price_min * priceModifier : null;
   const priceMax = catalogItem.price_max ? catalogItem.price_max * priceModifier : null;

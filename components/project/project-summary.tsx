@@ -13,6 +13,7 @@ import { toggleMaterialsOwnedByCustomer } from "@/app/dashboard/projects/[id]/ac
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { notifyDataChanged } from "@/hooks/use-synced-action";
+import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { Calculator, CheckCircle, AlertTriangle, Sparkles, TrendingUp, Percent, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ProjectItem, ProjectWithRelations, Profile } from "@/lib/types/database";
@@ -76,6 +77,7 @@ export function ProjectSummary({
   // The pricing engine already bakes them into stored labor_price at estimation time.
   // Applying them again at display would cause double-counting (e.g. height×1.25² instead of ×1.25).
   const pricingCfg = buildPricingConfig(profile, project.pricing_overrides);
+  const { multiplier: knrMultiplier } = useKnrMultiplier();
 
   // Calculate totals - use real prices from database
   const calculateTotals = useMemo(() => () => {
@@ -103,7 +105,7 @@ export function ProjectSummary({
         baseMaterialTotal += effectiveMaterialPrice * item.quantity * matMarkupMult;
       }
       rawLaborBase += effectiveLaborPrice * item.quantity;
-      baseLaborTotal += effectiveLaborPrice * item.quantity * effectiveRegion * labMarkupMult * complexityFactor;
+      baseLaborTotal += effectiveLaborPrice * item.quantity * effectiveRegion * labMarkupMult * complexityFactor * knrMultiplier;
       rawEquipmentBase += (item.equipment_price ?? 0) * item.quantity;
     });
 
@@ -145,8 +147,7 @@ export function ProjectSummary({
       regionName,
       equipmentTotal: rawEquipmentBase,
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items, project, regionModifier, regionName, materialsOwnedByCustomer, vatRate]);
+  }, [items, project, regionModifier, regionName, materialsOwnedByCustomer, vatRate, knrMultiplier]);
 
   const totals = calculateTotals();
 
@@ -167,7 +168,7 @@ export function ProjectSummary({
           const isChildManual = c.confidence_level === "manual";
           const effRegion = isChildManual ? 1.0 : regionModifier;
           const cMat = materialsOwnedByCustomer ? 0 : (c.final_material_price ?? c.material_price ?? 0) * c.quantity * adjustmentMultiplier;
-          const cLab = (c.final_labor_price ?? c.labor_price ?? 0) * c.quantity * adjustmentMultiplier * effRegion * complexityFactorSec;
+          const cLab = (c.final_labor_price ?? c.labor_price ?? 0) * c.quantity * adjustmentMultiplier * effRegion * complexityFactorSec * knrMultiplier;
           prev.mat += cMat;
           prev.lab += cLab;
         });
@@ -175,7 +176,7 @@ export function ProjectSummary({
         const isManual = item.confidence_level === "manual";
         const effRegion = isManual ? 1.0 : regionModifier;
         const mat = materialsOwnedByCustomer ? 0 : (item.final_material_price ?? item.material_price ?? 0) * item.quantity * adjustmentMultiplier;
-        const lab = (item.final_labor_price ?? item.labor_price ?? 0) * item.quantity * adjustmentMultiplier * effRegion * complexityFactorSec;
+        const lab = (item.final_labor_price ?? item.labor_price ?? 0) * item.quantity * adjustmentMultiplier * effRegion * complexityFactorSec * knrMultiplier;
         prev.mat += mat;
         prev.lab += lab;
       }
@@ -186,7 +187,7 @@ export function ProjectSummary({
     return Array.from(sections.entries())
       .map(([name, data]) => ({ name, ...data, total: data.mat + data.lab }))
       .sort((a, b) => b.total - a.total);
-  }, [items, project, regionModifier, materialsOwnedByCustomer]);
+  }, [items, project, regionModifier, materialsOwnedByCustomer, knrMultiplier]);
 
   const handleToggleMaterials = async (enabled: boolean) => {
     const result = await toggleMaterialsOwnedByCustomer(projectId, enabled);

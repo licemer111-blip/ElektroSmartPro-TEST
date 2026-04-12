@@ -47,6 +47,7 @@ export interface RowPrices {
  * @param materialsOwnedByCustomer  if true, material = 0
  * @param filterType        "all" | "materials" | "labor" — controls rowTotal
  * @param regionModifier    voivodeship price modifier (default 1.0)
+ * @param knrMultiplier     KNR 2026 labor norm multiplier (default 1.0)
  */
 export function calcRowPrices(
   item: ProjectItem,
@@ -57,6 +58,7 @@ export function calcRowPrices(
   matMarkupMult: number = 1.0,  // v3.0: 1 + mat_markup_pct/100
   labMarkupMult: number = 1.0,  // v3.0: 1 + lab_markup_pct/100
   complexityFactor: number = 1.0, // v3.0: labor complexity multiplier at display time
+  knrMultiplier: number = 1.0, // KNR 2026 multiplier applied at display time
 ): RowPrices {
   const rawMat = item.final_material_price ?? item.material_price ?? 0;
   const rawLab = item.final_labor_price ?? item.labor_price ?? 0;
@@ -82,9 +84,9 @@ export function calcRowPrices(
 
   // ── Smart Total — with adjustment + region modifier + v3 markups ─────────────
   // roundPrice() applied ONLY to final totals — not to unit prices.
-  // v3 order: base × matMarkup × adjMult (negocjacje)
+  // v3 order: base × matMarkup × adjMult (negocjacje) × knrMultiplier
   const materialUnit = suppressMaterial ? 0 : rawMat * matMarkupMult * effectiveAdjMult;
-  const laborUnit = rawLab * labMarkupMult * complexityFactor * effectiveAdjMult * effectiveRegionModifier;
+  const laborUnit = rawLab * labMarkupMult * complexityFactor * knrMultiplier * effectiveAdjMult * effectiveRegionModifier;
   const materialTotal = roundPrice(materialUnit * effectiveQty);
   const laborTotal = roundPrice(laborUnit * effectiveQty);
 
@@ -127,6 +129,7 @@ export interface ProjectTotals {
  * @param vatRateMaterial       VAT rate for materials (default 0.23)
  * @param vatRateLabor          VAT rate for labor (default 0.08)
  * @param costBase              Optional cost base for margin calculation
+ * @param knrMultiplier         KNR 2026 labor norm multiplier (default 1.0)
  */
 export function calcProjectTotals(
   items: ProjectItem[],
@@ -140,6 +143,7 @@ export function calcProjectTotals(
   matMarkupMult: number = 1.0,       // v3.0: 1 + mat_markup_pct/100
   labMarkupMult: number = 1.0,       // v3.0: 1 + lab_markup_pct/100
   complexityFactor: number = 1.0,    // v3.0: labor complexity multiplier
+  knrMultiplier: number = 1.0,       // KNR 2026 multiplier
 ): ProjectTotals {
   let totalMaterialNet = 0;
   let totalLaborNet = 0;
@@ -154,6 +158,7 @@ export function calcProjectTotals(
       matMarkupMult,
       labMarkupMult,
       complexityFactor,
+      knrMultiplier,
     );
     totalMaterialNet += materialTotal;
     totalLaborNet += laborTotal;
@@ -246,17 +251,18 @@ export function calcSectionSubtotal(
   matMarkupMult: number = 1.0,    // v3.0: 1 + mat_markup_pct/100
   labMarkupMult: number = 1.0,    // v3.0: 1 + lab_markup_pct/100
   complexityFactor: number = 1.0, // v3.0: labor complexity multiplier
+  knrMultiplier: number = 1.0,   // KNR 2026 multiplier
 ): number {
   let subtotal = 0;
   for (const item of sectionTopItems) {
     const children = childrenMap.get(item.id) || [];
     if (children.length > 0) {
       for (const child of children) {
-        const { rowTotal } = calcRowPrices(child, adjustmentMult, materialsOwnedByCustomer, "all", regionModifier, matMarkupMult, labMarkupMult, complexityFactor);
+        const { rowTotal } = calcRowPrices(child, adjustmentMult, materialsOwnedByCustomer, "all", regionModifier, matMarkupMult, labMarkupMult, complexityFactor, knrMultiplier);
         subtotal += rowTotal;
       }
     } else {
-      const { rowTotal } = calcRowPrices(item, adjustmentMult, materialsOwnedByCustomer, "all", regionModifier, matMarkupMult, labMarkupMult, complexityFactor);
+      const { rowTotal } = calcRowPrices(item, adjustmentMult, materialsOwnedByCustomer, "all", regionModifier, matMarkupMult, labMarkupMult, complexityFactor, knrMultiplier);
       subtotal += rowTotal;
     }
   }
