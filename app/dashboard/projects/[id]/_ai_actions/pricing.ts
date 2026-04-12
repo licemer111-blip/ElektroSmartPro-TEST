@@ -1,7 +1,7 @@
 "use server";
 
 import { logger } from "@/lib/logger";
-import { guardUnit } from "@/lib/unit-guard";
+// UnitGuard removed — units are preserved as-is from the user's estimate
 // ═══════════════════════════════════════════════════════════════════
 // _ai_actions/pricing.ts — AI Pricing Server Actions
 // estimatePricesWithAI, applyAiPrices
@@ -312,14 +312,6 @@ export async function estimatePricesWithAI(
       return { success: false, error: "Brak pozycji do wyceny. Zaznacz pozycje lub ustaw ceny na 0, aby ponownie wycenić." };
     }
 
-    // ─── Unit Guard 2.0 (ES-Engine 3.0) ──────────────────────────────────────
-    // Delegates to lib/unit-guard.ts (single source of truth, identical to import logic)
-    // DB is NOT touched — purely in-memory correction for AI context accuracy.
-    const itemsToPriceGuarded = itemsToPrice.map(item => {
-      const corrected = guardUnit(item.name, item.unit || "");
-      return corrected !== item.unit ? { ...item, unit: corrected as typeof item.unit } : item;
-    });
-
     const { data: userProfile } = await supabase
       .from("profiles")
       .select("coeff_height, coeff_difficulty, coeff_surface, investment_context, hourly_rate")
@@ -384,7 +376,7 @@ export async function estimatePricesWithAI(
     const l0Estimates: AiPriceEstimate[] = [];
     const l0ResolvedIds = new Set<string>();
 
-    const itemsWithKnr = itemsToPriceGuarded.filter(item => {
+    const itemsWithKnr = itemsToPrice.filter(item => {
       const code = (item as typeof item & { knr_code?: string | null }).knr_code;
       return typeof code === "string" && code.trim().length > 0;
     });
@@ -533,9 +525,9 @@ export async function estimatePricesWithAI(
         knr_code: c.knr_code ?? null,
       }));
 
-      logger.info(`[L1-STEP1] catalog=${catalogForMatch.length} items=${itemsToPriceGuarded.length}`);
+      logger.info(`[L1-STEP1] catalog=${catalogForMatch.length} items=${itemsToPrice.length}`);
 
-      type NotInCatalogEntry = typeof itemsToPriceGuarded[number] & {
+      type NotInCatalogEntry = typeof itemsToPrice[number] & {
         __catalogHint?: { name: string; score: number } | null;
         __catalogCandidates?: Array<{ name: string; mat: number; lab: number; score: number }>;
       };
@@ -543,7 +535,7 @@ export async function estimatePricesWithAI(
       // ── Phase A: synchronous keyword matching for ALL items ──────────────────
       const keywordMisses: NotInCatalogEntry[] = [];
 
-      for (const item of itemsToPriceGuarded) {
+      for (const item of itemsToPrice) {
         if (l0ResolvedIds.has(item.id)) continue; // L0: already priced via direct KNR lookup
         if (detectAmbiguity(item.name)) {
           l1ResolvedIds.add(item.id);
@@ -614,7 +606,7 @@ export async function estimatePricesWithAI(
 
     // ─── STEP 2: ES-Engine dictionary pre-resolution (L2) ──────────────────────
     // Filter to items NOT resolved by L1 (ID-based — no splice, no index issues)
-    const l2Candidates = itemsToPriceGuarded.filter((item) => !l0ResolvedIds.has(item.id) && !l1ResolvedIds.has(item.id));
+    const l2Candidates = itemsToPrice.filter((item) => !l0ResolvedIds.has(item.id) && !l1ResolvedIds.has(item.id));
 
     // L2 FIX: strip embedded KNR code references from item names before matching.
     // PDF imports sometimes store "Bruzdowanie w betonie (KNR 5-08 0701-01)" as the name.
@@ -683,7 +675,6 @@ export async function estimatePricesWithAI(
     // ─── Build L2 estimates — no AI (L3 is on-demand only via triggerL3Estimation) ───
     const l2Estimates: AiPriceEstimate[] = clearItems.map((item) => {
       const originalItem = itemsToPrice.find((o) => o.id === item.id);
-      const unitWasCorrected = originalItem && originalItem.unit !== item.unit;
       const l2Idx = l2IndexByItemId.get(item.id);
       const esRow = l2Idx !== undefined ? esResolved[l2Idx] : undefined;
       const m: MatchResult | undefined = esRow?._match;
@@ -749,8 +740,7 @@ export async function estimatePricesWithAI(
         // Unit Scaling v2.3: normalize rawNorm from dict unit to item unit
         // formula: scaledNorm = rawNorm × (itemBaseSize / dictBaseSize)
         // → stored labor_norm is ALWAYS rbh per 1 item unit, labor_hours_total = qty × norm
-        // IMPORTANT: use item.unit (after guardUnit correction) FIRST, not originalItem.unit.
-        // originalItem.unit may be stale "mb" for corrected podlaczenie/device items.
+        // Use item.unit directly (no guardUnit correction applied).
         const itemUnitForScale = (item.unit ?? originalItem?.unit ?? "");
         const scaledNorm = laborNorm != null
           ? scaleLaborNorm(laborNorm, esRow.unit, itemUnitForScale)
@@ -853,7 +843,6 @@ export async function estimatePricesWithAI(
           itemId: item.id,
           name: item.name,
           unit: originalItem?.unit ?? item.unit,
-          guardedUnit: unitWasCorrected ? item.unit : undefined,
           quantity: item.quantity,
           currentMaterial: item.material_price || 0,
           currentLabor: item.labor_price || 0,
@@ -889,7 +878,6 @@ export async function estimatePricesWithAI(
         itemId: item.id,
         name: item.name,
         unit: originalItem?.unit ?? item.unit,
-        guardedUnit: unitWasCorrected ? item.unit : undefined,
         quantity: item.quantity,
         currentMaterial: item.material_price || 0,
         currentLabor: item.labor_price || 0,
@@ -898,7 +886,7 @@ export async function estimatePricesWithAI(
         confidence: isConnMiss ? "medium" as const : "low" as const,
         note: isConnMiss
           ? `ES-Engine: Brak dokładnej normy KNR. Zastosowano minimalny koszt podłączenia: ${connFloorMiss.toFixed(2)} PLN/szt.`
-          : `Brak w katalogu osobistym i ES-Dictionary. Kliknij „Wyceń” aby uruchomić wycenę AI.`,
+          : `Brak w katalogu osobistym i ES-Dictionary. Kliknij „Wyceń" aby uruchomić wycenę AI.`,
         knrCode: null,
         knrSource: null,
         laborNorm: isConnMiss ? (isHeavyConnMiss ? HEAVY_CONNECTION_MIN_NORM : CONNECTION_MIN_NORM) : null,

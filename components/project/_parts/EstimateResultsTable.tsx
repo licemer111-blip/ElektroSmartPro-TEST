@@ -266,7 +266,13 @@ export function EstimateResultsTable({
                               <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[8px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
                                 <Zap className="w-2.5 h-2.5" />Uściślone
                               </span>
-                              <p className="text-[9px] text-slate-400 italic truncate max-w-[160px]">{est.note}</p>
+                              <button
+                                onClick={(e) => { e.stopPropagation(); openInlineEdit(est); }}
+                                className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[8px] font-medium bg-slate-100 text-slate-500 hover:bg-blue-100 hover:text-blue-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-blue-900/30 dark:hover:text-blue-400 border border-slate-200 dark:border-slate-700 transition-colors"
+                              >
+                                <PenLine className="w-2.5 h-2.5" />
+                                Koryguj
+                              </button>
                             </div>
                           ) : (needsIntervention || rowType === "poza-knr") ? (
                             <div className="flex items-center gap-1 mt-0.5 flex-wrap">
@@ -279,8 +285,15 @@ export function EstimateResultsTable({
                               </button>
                             </div>
                           ) : (
-                            <div className="space-y-0.5">
-                              {est.note && <p className="text-[9px] text-slate-400 italic">{est.note}</p>}
+                            <div className="flex items-center gap-1 mt-0.5">
+                              {est.note && <p className="text-[9px] text-slate-400 italic truncate max-w-[160px]">{est.note}</p>}
+                              <button
+                                onClick={(e) => { e.stopPropagation(); openInlineEdit(est); }}
+                                className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[8px] font-medium bg-slate-100 text-slate-500 hover:bg-blue-100 hover:text-blue-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-blue-900/30 dark:hover:text-blue-400 border border-slate-200 dark:border-slate-700 transition-colors flex-shrink-0"
+                              >
+                                <PenLine className="w-2.5 h-2.5" />
+                                Koryguj
+                              </button>
                             </div>
                           )}
                         </div>
@@ -288,14 +301,7 @@ export function EstimateResultsTable({
                     </TableCell>
 
                     <TableCell className="text-[10px] text-center">
-                      {est.guardedUnit ? (
-                        <span title={`Unit Guard 2.0: skorygowano z "${est.unit}" na "${est.guardedUnit}"`} className="inline-flex flex-col items-center gap-0 cursor-help">
-                          <span className="text-emerald-600 dark:text-emerald-400 font-bold">{est.guardedUnit}</span>
-                          <span className="text-[8px] text-slate-400 line-through">{est.unit}</span>
-                        </span>
-                      ) : (
-                        <span className="text-slate-500">{est.unit}</span>
-                      )}
+                      <span className="text-slate-500">{est.unit}</span>
                     </TableCell>
 
                     <TableCell className="text-[10px] text-center text-slate-600 font-medium">{est.quantity}</TableCell>
@@ -410,7 +416,7 @@ export function EstimateResultsTable({
                           <div className="flex items-center justify-between">
                             <p className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate max-w-[300px]">
                               {est.name}
-                              <span className="ml-1.5 text-slate-400 font-normal">× {est.quantity} {est.guardedUnit ?? est.unit}</span>
+                              <span className="ml-1.5 text-slate-400 font-normal">× {est.quantity} {est.unit}</span>
                             </p>
                             <button onClick={closeInlineEdit} className="p-0.5 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
                               <X className="w-3.5 h-3.5" />

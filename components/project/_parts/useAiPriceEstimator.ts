@@ -227,7 +227,7 @@ export function useAiPriceEstimator({
         itemId: e.itemId,
         material_price: e.suggestedMaterial,
         labor_price: e.suggestedLabor,
-        unit: e.guardedUnit ?? undefined,
+        unit: undefined,
         knr_code: e.knrCode ?? undefined,
         knr_source: e.knrSource ?? undefined,
         labor_norm: e.laborNorm ?? undefined,
