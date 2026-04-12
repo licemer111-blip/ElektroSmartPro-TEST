@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Loader2, ChevronDown, ChevronUp, Building2, Percent, PiggyBank, Package, FlaskConical, Cable, TrendingUp, ShieldAlert, Cpu } from "lucide-react";
+import { Loader2, ChevronDown, ChevronUp, Building2, Percent, PiggyBank, Package, TrendingUp, ShieldAlert, Cpu } from "lucide-react";
 import { BlurredPrice } from "@/components/ui/blurred-price";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { updateProjectNarzuty } from "@/app/dashboard/projects/[id]/actions";
@@ -270,76 +270,6 @@ export function NarzutyPanel({
 
       {(expanded || hideHeader) && (
         <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
-
-          {/* ── Safety Factors (Współczynniki materiałowe) ── */}
-          <TooltipProvider>
-            <div className="rounded-lg border border-teal-200/70 dark:border-teal-800/50 bg-teal-50/40 dark:bg-teal-950/20 p-2 space-y-1.5">
-              <div className="flex items-center gap-1.5">
-                <FlaskConical className="w-3 h-3 text-teal-600 dark:text-teal-400" />
-                <span className="text-[10px] font-semibold text-teal-800 dark:text-teal-300">Współczynniki materiałowe</span>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="text-[9px] text-teal-500 cursor-help border-b border-dashed border-teal-400">?</span>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" className="max-w-[220px] text-xs">
-                    <p className="font-semibold mb-1">Stosowane PRZED Kp/Z/Kz</p>
-                    <p><strong>Mat. pomocnicze</strong> — izolenta, dybele, wkręty (wszystkie pozycje z materiałem)</p>
-                    <p className="mt-1"><strong>Zapas kabli</strong> — odpad cięcia, zwis, zakręty (tylko mb/m)</p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-              <div className="grid grid-cols-2 gap-1.5">
-                {/* Materiały pomocnicze */}
-                <div className="space-y-0.5">
-                  <div className="flex items-center gap-1">
-                    <FlaskConical className="w-2.5 h-2.5 text-teal-500" />
-                    <Label htmlFor="aux-pct" className="text-[9px] font-medium text-teal-700 dark:text-teal-400">Mat. pomocnicze</Label>
-                  </div>
-                  <div className="relative">
-                    <Input
-                      id="aux-pct"
-                      type="number"
-                      aria-label="Materiały pomocnicze %"
-                      value={auxPct}
-                      onChange={(e) => handleFactorChange("aux", e.target.value)}
-                      className="h-6 text-xs text-right pr-5 bg-white dark:bg-slate-900 border-teal-200 dark:border-teal-800"
-                      min={0} max={20} step={0.5}
-                      disabled={disabled}
-                    />
-                    <span className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[9px] text-teal-500 pointer-events-none">%</span>
-                  </div>
-                </div>
-                {/* Zapas kabli */}
-                <div className="space-y-0.5">
-                  <div className="flex items-center gap-1">
-                    <Cable className="w-2.5 h-2.5 text-teal-500" />
-                    <Label htmlFor="cable-waste-pct" className="text-[9px] font-medium text-teal-700 dark:text-teal-400">Zapas kabli/rur</Label>
-                  </div>
-                  <div className="relative">
-                    <Input
-                      id="cable-waste-pct"
-                      type="number"
-                      aria-label="Zapas kabli/rur %"
-                      value={cableWastePct}
-                      onChange={(e) => handleFactorChange("cable", e.target.value)}
-                      className="h-6 text-xs text-right pr-5 bg-white dark:bg-slate-900 border-teal-200 dark:border-teal-800"
-                      min={0} max={20} step={0.5}
-                      disabled={disabled}
-                    />
-                    <span className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[9px] text-teal-500 pointer-events-none">%</span>
-                  </div>
-                </div>
-              </div>
-              {(auxPct > 0 || cableWastePct > 0) && (
-                <p className="text-[9px] text-teal-600/70 dark:text-teal-400/60">
-                  Cena mat. × {auxPct > 0 ? `${(1 + auxPct/100).toFixed(2)}` : "1.00"}{cableWastePct > 0 ? ` × ${(1 + cableWastePct/100).toFixed(2)} (kable mb)` : ""}
-                </p>
-              )}
-            </div>
-          </TooltipProvider>
-
-          {/* separator */}
-          <div className="border-t border-slate-200/60 dark:border-slate-700/40" />
 
           {/* Presets — unified segmented control */}
           <div className="grid grid-cols-4 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
