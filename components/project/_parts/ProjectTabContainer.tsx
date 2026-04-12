@@ -209,7 +209,7 @@ export function ProjectTabContainer({
               currentAssemblyCount={currentAssemblyCount}
               projectStatus={project.status}
               className="w-full justify-center"
-              showOnboardingPulse={items.length === 0}
+              showOnboardingPulse={false}
             />
           </div>
           <div className="hidden lg:flex flex-col gap-1 w-[148px] flex-shrink-0 ml-auto">
@@ -219,7 +219,7 @@ export function ProjectTabContainer({
               currentAssemblyCount={currentAssemblyCount}
               projectStatus={project.status}
               className="w-full justify-center"
-              showOnboardingPulse={items.length === 0}
+              showOnboardingPulse={false}
             />
             <QuickItemDialog
               projectId={projectId}
