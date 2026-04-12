@@ -20,7 +20,6 @@ import { calcNarzuty } from "@/lib/pricing-calculations";
 import { buildPricingConfig } from "@/lib/services/pricing-config";
 import { SummaryFinancialTotals } from "./_parts/summary/SummaryFinancialTotals";
 import { SummaryExportPanel } from "./_parts/summary/SummaryExportPanel";
-import { ProjectPricingOverrides } from "./_parts/ProjectPricingOverrides";
 
 interface RegionItem {
   id: string;
@@ -310,15 +309,6 @@ export function ProjectSummary({
             </div>
           </CollapsibleContent>
         </Collapsible>
-
-        {/* Project-level KNR multiplier overrides */}
-        <ProjectPricingOverrides
-          projectId={projectId}
-          profile={profile}
-          overrides={project.pricing_overrides}
-          isFinal={isFinal}
-          isPro={isPro}
-        />
 
         <PriceAdjuster
           projectId={projectId}
