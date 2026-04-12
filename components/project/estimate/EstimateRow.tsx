@@ -14,7 +14,6 @@ import { UNIT_PRESETS } from "@/lib/validations";
 import { calcRowPrices } from "@/lib/pricing-calculations";
 import type { ProjectItem } from "@/lib/types/database";
 import { roundPrice, useGlobalSettings } from "@/hooks/use-global-settings";
-import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { ConfidenceDot, UncertainPriceWarning } from "@/components/project/estimate/ConfidenceBadge";
 import { useMaterialBrainCtx } from "@/components/project/_parts/MaterialBrainContext";
 import { RowActions } from "@/components/project/estimate/_parts/RowActions";
@@ -163,7 +162,6 @@ export const EstimateRow = React.memo(function EstimateRow({
   const brainCtx  = useMaterialBrainCtx();
   const brainBill  = brainCtx?.bills.get(item.id);
   const { showHints } = useGlobalSettings();
-  const { multiplier: knrMultiplier } = useKnrMultiplier();
 
   const {
     materialUnitBase, laborUnitBase, materialTotalBase, laborTotalBase,
@@ -177,7 +175,6 @@ export const EstimateRow = React.memo(function EstimateRow({
     1.0, // matMarkupMult
     1.0, // labMarkupMult
     1.0, // complexityFactor
-    knrMultiplier,
   );
 
   const isZeroPrice = (
