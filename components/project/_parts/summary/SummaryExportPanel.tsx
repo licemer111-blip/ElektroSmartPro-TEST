@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Download, FileSpreadsheet, Save, Check, Lock } from "lucide-react";
-import { SendEmailDialog } from "@/components/project/send-email-dialog";
 import { ShareOfferDialog } from "@/components/project/share-offer-dialog";
 import { useState as useLocalState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -144,29 +143,6 @@ export function SummaryExportPanel({
               phone: profile.phone || undefined,
               email: profile.email || undefined,
             } : undefined}
-          />
-        </div>
-      </div>
-
-      {/* Wyślij emailem */}
-      <div
-        className={`relative w-full transition-all duration-150 ${!isFinal ? "opacity-50 cursor-pointer active:scale-95 active:opacity-40" : "hover:brightness-110 hover:scale-[1.01]"}`}
-        onClick={!isFinal ? () => toast({ title: "📋 Najpierw zapisz projekt", description: "Kliknij 'Zapisz', aby odblokować wysyłkę emailem", variant: "destructive" }) : undefined}
-      >
-        <div className={`[&>div]:w-full [&_button]:w-full [&_button]:h-10 [&_button]:text-sm ${!isFinal ? "pointer-events-none" : ""}`}>
-          <SendEmailDialog
-            projectId={project.id}
-            projectName={project.name}
-            projectTotal={grandTotal}
-            projectStatus={project.status}
-            disabled={!isFinal}
-            userProfile={profile ? {
-              full_name: profile.full_name || undefined,
-              company_name: profile.company_name || undefined,
-              phone: profile.phone || undefined,
-              email: profile.email || undefined,
-            } : undefined}
-            triggerLabel="Wyślij emailem"
           />
         </div>
       </div>
