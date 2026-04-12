@@ -192,7 +192,6 @@ export async function POST(req: Request) {
       blindMode: false,
       showRg: false,
       showKnr: false,
-      showKnrCoeffsInPdf: false,
       matOwnedByClient: false,
       totalMatSum,
       totalLabSum,

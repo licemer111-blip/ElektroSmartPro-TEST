@@ -16,7 +16,7 @@ import { type PdfNarzutyDisplay, type PdfRow } from "@/lib/pdf-renderer";
 import { calcNarzuty } from "@/lib/pricing-calculations";
 import { classifyIntent } from "@/lib/services/semantic-classifier";
 import { renderToBuffer, type DocumentProps } from "@react-pdf/renderer";
-import { PremiumPdfDocument, type PdfEngineData, type ThemeName } from "@/lib/pdf-engine";
+import { PremiumPdfDocument, type PdfEngineData, type ThemeName, type PdfStructureOptions } from "@/lib/pdf-engine";
 
 // ─── Logo fetch ──────────────────────────────────────────────────────────────
 
@@ -102,9 +102,18 @@ export async function POST(req: Request) {
       template = "klasyczny",
       vatMode = 23,
       priceDisplay = "netto",
-      showKnrCoeffsInPdf = false,
       blindMode = false,      // v3.0: Kosztorys ślepy — hide all prices
+      pdfStructure: rawPdfStructure,
     } = await req.json();
+
+    const pdfStructure: PdfStructureOptions = {
+      showCoverPage:      rawPdfStructure?.showCoverPage      ?? false,
+      showCompanyHeader:  rawPdfStructure?.showCompanyHeader  ?? true,
+      showProjectMeta:    rawPdfStructure?.showProjectMeta    ?? true,
+      showSectionGroups:  rawPdfStructure?.showSectionGroups  ?? true,
+      showSummaryBlock:   rawPdfStructure?.showSummaryBlock   ?? true,
+      showLegend:         rawPdfStructure?.showLegend         ?? true,
+    };
 
     const pricingParams = {
       vatMode: Number(vatMode),
@@ -313,48 +322,48 @@ export async function POST(req: Request) {
       st.lab += item.finalLab * item.quantity;
     }
 
-    // Step 3: build final rows grouped by semantic section (preserving sort_order within each)
+    // Step 3: build final rows — grouped by semantic section OR flat (based on showSectionGroups)
     const rows: PdfRow[] = [];
-    for (const secDef of PDF_SECTIONS) {
-      const secRawRows = rowsRaw
-        .map((row, idx) => ({ row, itemId: calcItems[idx].id as string }))
-        .filter(({ itemId }) => semanticSectionMap.get(itemId) === secDef.id);
+    if (pdfStructure.showSectionGroups) {
+      for (const secDef of PDF_SECTIONS) {
+        const secRawRows = rowsRaw
+          .map((row, idx) => ({ row, itemId: calcItems[idx].id as string }))
+          .filter(({ itemId }) => semanticSectionMap.get(itemId) === secDef.id);
 
-      if (secRawRows.length === 0) continue;
+        if (secRawRows.length === 0) continue;
 
-      const secT   = sectionTotalsMap.get(secDef.id)!;
-      const secTot = secT.mat + secT.lab;
-      const secItemCount = secRawRows.filter(({ row }) => !row.isChild).length;
+        const secT   = sectionTotalsMap.get(secDef.id)!;
+        const secTot = secT.mat + secT.lab;
+        const secItemCount = secRawRows.filter(({ row }) => !row.isChild).length;
 
-      // Section header row
-      rows.push({
-        index: "",
-        name: `${secDef.roman}. ${secDef.label}  (${secItemCount} poz.)`,
-        knrCode: "", unit: "", qty: 0,
-        rg: "", mat: "", lab: "", combined: "",
-        total: maskPrices ? "" : fMoney(secTot),
-        rawTotal: secTot,
-        rowType: "section_header", isParent: false, isChild: false,
-      });
+        rows.push({
+          index: "",
+          name: `${secDef.roman}. ${secDef.label}  (${secItemCount} poz.)`,
+          knrCode: "", unit: "", qty: 0,
+          rg: "", mat: "", lab: "", combined: "",
+          total: maskPrices ? "" : fMoney(secTot),
+          rawTotal: secTot,
+          rowType: "section_header", isParent: false, isChild: false,
+        });
 
-      // Items (in original sort_order)
-      for (const { row } of secRawRows) {
-        rows.push(row);
+        for (const { row } of secRawRows) rows.push(row);
+
+        rows.push({
+          index: "",
+          name: sanitize(`Suma sekcji: Material ${fMoney(secT.mat)} PLN | Robocizna ${fMoney(secT.lab)} PLN`, true),
+          knrCode: "", unit: "", qty: 0,
+          rg: "",
+          mat: maskPrices ? "" : fMoney(secT.mat),
+          lab: maskPrices ? "" : fMoney(secT.lab),
+          combined: "",
+          total: maskPrices ? "" : fMoney(secTot),
+          rawTotal: secTot,
+          rowType: "section_subtotal", isParent: false, isChild: false,
+        });
       }
-
-      // Section subtotal row
-      rows.push({
-        index: "",
-        name: sanitize(`Suma sekcji: Material ${fMoney(secT.mat)} PLN | Robocizna ${fMoney(secT.lab)} PLN`, true),
-        knrCode: "", unit: "", qty: 0,
-        rg: "",
-        mat: maskPrices ? "" : fMoney(secT.mat),
-        lab: maskPrices ? "" : fMoney(secT.lab),
-        combined: "",
-        total: maskPrices ? "" : fMoney(secTot),
-        rawTotal: secTot,
-        rowType: "section_subtotal", isParent: false, isChild: false,
-      });
+    } else {
+      // Flat mode — preserve original sort_order, no section headers
+      rows.push(...rowsRaw);
     }
 
     // ── Re-number all LP sequentially in final PDF display order ──────────────
@@ -435,7 +444,7 @@ export async function POST(req: Request) {
       blindMode: Boolean(blindMode),
       showRg,
       showKnr: showKnrInPdf,
-      showKnrCoeffsInPdf: Boolean(showKnrCoeffsInPdf),
+      pdfStructure,
       matOwnedByClient,
       totalMatSum,
       totalLabSum,

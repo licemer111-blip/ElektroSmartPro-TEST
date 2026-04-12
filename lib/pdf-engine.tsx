@@ -242,6 +242,24 @@ export interface PdfNarzutyDisplay {
   totalNarzuty: number;
 }
 
+export interface PdfStructureOptions {
+  showCoverPage: boolean;
+  showCompanyHeader: boolean;
+  showProjectMeta: boolean;
+  showSectionGroups: boolean;
+  showSummaryBlock: boolean;
+  showLegend: boolean;
+}
+
+const DEFAULT_PDF_STRUCTURE: PdfStructureOptions = {
+  showCoverPage: false,
+  showCompanyHeader: true,
+  showProjectMeta: true,
+  showSectionGroups: true,
+  showSummaryBlock: true,
+  showLegend: true,
+};
+
 export interface PdfEngineData {
   theme: ThemeName;
   profile: PdfProfile | null;
@@ -252,7 +270,6 @@ export interface PdfEngineData {
   blindMode: boolean;
   showRg: boolean;
   showKnr: boolean;
-  showKnrCoeffsInPdf?: boolean;
   matOwnedByClient: boolean;
   totalMatSum: number;
   totalLabSum: number;
@@ -264,6 +281,7 @@ export interface PdfEngineData {
   pdfNarzuty?: PdfNarzutyDisplay;
   priceDisplay: string;
   notes: string;
+  pdfStructure?: PdfStructureOptions;
 }
 
 // ─── Column Width Calculator ───────────────────────────────────────────────────
@@ -805,6 +823,24 @@ const SummarySection = ({
   );
 };
 
+// ─── Legend Block ─────────────────────────────────────────────────────────────
+
+const LegendBlock = ({ palette }: { palette: ThemePalette }) => (
+  <View style={{ flexDirection: 'row', gap: 12, marginBottom: 8, flexWrap: 'wrap' }}>
+    {[
+      { color: palette.setParentBorder,  label: 'Zestaw (komplet)' },
+      { color: '#f59e0b',                label: 'Materiał' },
+      { color: '#22c55e',                label: 'Robocizna' },
+      { color: palette.sectionHeaderBg,  label: 'Sekcja' },
+    ].map(({ color, label }) => (
+      <View key={label} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+        <View style={{ width: 8, height: 8, backgroundColor: color, borderRadius: 1 }} />
+        <Text style={{ fontSize: 7, color: palette.textSecondary }}>{label}</Text>
+      </View>
+    ))}
+  </View>
+);
+
 // ─── Content Page (table + summary + signatures on last page) ─────────────────
 
 const ContentPage = ({
@@ -816,30 +852,33 @@ const ContentPage = ({
   palette: ThemePalette;
   isFirstContent: boolean;
 }) => {
-  const { profile, project, rows, showKnr, showRg, matOwnedByClient, blindMode, isPro } = data as PdfEngineData & { isPro?: boolean };
+  const { profile, project, rows, showKnr, showRg, matOwnedByClient, blindMode } = data as PdfEngineData & { isPro?: boolean };
+  const s = { ...DEFAULT_PDF_STRUCTURE, ...(data.pdfStructure ?? {}) };
   const companyName = profile?.company_name || 'ElektroSmart PRO';
   const cols = calcColWidths(showKnr, showRg, matOwnedByClient);
   const docNumber = `KO/${new Date().getFullYear()}/${project.id.slice(0, 8).toUpperCase()}`;
 
   return (
     <Page size="A4" style={base.page}>
-      {/* Mini header on every content page */}
-      <View style={[base.headerRow, { borderBottomWidth: 1, borderBottomColor: palette.borderColor, paddingBottom: 8, marginBottom: 8 }]}>
-        <View style={base.companyBlock}>
-          <Text style={[base.companyName, { color: palette.textPrimary }]}>{companyName}</Text>
-          <Text style={[base.companyDetail, { color: palette.textSecondary }]}>
-            {[profile?.street, [profile?.postal_code, profile?.city].filter(Boolean).join(' ')].filter(Boolean).join(', ')}
-          </Text>
+      {/* Company header — controlled by showCompanyHeader */}
+      {s.showCompanyHeader && (
+        <View style={[base.headerRow, { borderBottomWidth: 1, borderBottomColor: palette.borderColor, paddingBottom: 8, marginBottom: 8 }]}>
+          <View style={base.companyBlock}>
+            <Text style={[base.companyName, { color: palette.textPrimary }]}>{companyName}</Text>
+            <Text style={[base.companyDetail, { color: palette.textSecondary }]}>
+              {[profile?.street, [profile?.postal_code, profile?.city].filter(Boolean).join(' ')].filter(Boolean).join(', ')}
+            </Text>
+          </View>
+          <View style={base.docMetaBlock}>
+            <Text style={[base.docTitle, { color: palette.accentPrimary, fontSize: 11 }]}>KOSZTORYS OFERTOWY</Text>
+            <Text style={[base.docNumber, { color: palette.textSecondary }]}>{docNumber}</Text>
+            <Text style={[base.docNumber, { color: palette.textSecondary }]}>{new Date().toLocaleDateString('pl-PL')}</Text>
+          </View>
         </View>
-        <View style={base.docMetaBlock}>
-          <Text style={[base.docTitle, { color: palette.accentPrimary, fontSize: 11 }]}>KOSZTORYS OFERTOWY</Text>
-          <Text style={[base.docNumber, { color: palette.textSecondary }]}>{docNumber}</Text>
-          <Text style={[base.docNumber, { color: palette.textSecondary }]}>{new Date().toLocaleDateString('pl-PL')}</Text>
-        </View>
-      </View>
+      )}
 
-      {/* Project strip */}
-      {isFirstContent && (
+      {/* Project meta strip — controlled by showProjectMeta */}
+      {isFirstContent && s.showProjectMeta && (
         <View style={[base.projectStrip, { borderLeftColor: palette.accentPrimary, backgroundColor: palette.accentLight }]}>
           <View>
             <Text style={[base.projectName, { color: palette.textPrimary }]}>{project.name}</Text>
@@ -865,6 +904,9 @@ const ContentPage = ({
         </View>
       )}
 
+      {/* Legend — controlled by showLegend */}
+      {isFirstContent && s.showLegend && <LegendBlock palette={palette} />}
+
       {/* Table */}
       <TableHeaderRow palette={palette} cols={cols} showKnr={showKnr} showRg={showRg} matOwned={matOwnedByClient} />
       {rows.map((row, idx) => (
@@ -882,7 +924,8 @@ const ContentPage = ({
 
       {/* Summary + Signatures + Disclaimer — kept together to avoid empty trailing page */}
       <View wrap={false}>
-        <SummarySection data={data} palette={palette} />
+        {/* Summary block — controlled by showSummaryBlock */}
+        {s.showSummaryBlock && <SummarySection data={data} palette={palette} />}
 
         {/* Signatures */}
         <View style={base.signaturesRow}>
@@ -918,10 +961,11 @@ const ContentPage = ({
 
 export const PremiumPdfDocument = ({ data }: { data: PdfEngineData }) => {
   const palette = THEMES[data.theme] ?? THEMES.klasyczny;
+  const s = { ...DEFAULT_PDF_STRUCTURE, ...(data.pdfStructure ?? {}) };
 
   return (
     <Document>
-      <CoverPage data={data} palette={palette} />
+      {s.showCoverPage && <CoverPage data={data} palette={palette} />}
       <ContentPage data={data} palette={palette} isFirstContent={true} />
     </Document>
   );

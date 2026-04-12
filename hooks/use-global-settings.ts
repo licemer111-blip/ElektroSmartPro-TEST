@@ -2,19 +2,12 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { PdfStructureOptions } from "@/lib/pdf-engine";
 
+export type { PdfStructureOptions };
 export type VatMode = 8 | 23;
 export type PriceDisplay = "netto" | "brutto";
 export type PriceInputMode = "base" | "with_narzuty";
-
-export interface PdfStructureOptions {
-  showCoverPage: boolean;      // Pierwsza strona tytułowa
-  showCompanyHeader: boolean;  // Nagłówek z danymi firmy
-  showProjectMeta: boolean;    // Blok metadanych projektu
-  showSectionGroups: boolean;  // Grupowanie po sekcjach
-  showSummaryBlock: boolean;   // Blok podsumowania na końcu
-  showLegend: boolean;         // Legenda kolorów
-}
 
 interface GlobalSettingsState {
   vatMode: VatMode;
