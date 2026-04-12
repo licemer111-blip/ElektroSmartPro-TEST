@@ -27,7 +27,7 @@ import {
   GEMINI_PRO_MODEL,
 } from "@/lib/ai-master-brain";
 import { getExpertDirectives } from "@/app/actions/admin-settings";
-import { getEffectiveRate, getBaseRbhRate } from "@/lib/global-benchmarks";
+import { getEffectiveRate } from "@/lib/global-benchmarks";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -361,7 +361,7 @@ export async function suggestLaborTime(
   priceModifier = 1.0,
   userId?: string
 ): Promise<AdvisorResult<LaborTimeSuggestion>> {
-  const globalRate = await getBaseRbhRate();
+  const globalRate = 75; // hardcoded base rate (project-specific)
   const baseRate = Math.round(globalRate * priceModifier);
   return askExpert(
     `Region: ${regionName} (współczynnik cenowy: ${priceModifier}). Stawka robocizny dla tego regionu: ~${baseRate} PLN/rbh netto.`,

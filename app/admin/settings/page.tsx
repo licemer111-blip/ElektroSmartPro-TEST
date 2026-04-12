@@ -1,13 +1,9 @@
 import { redirect } from "next/navigation";
-import { getGlobalBenchmarks } from "../actions";
+import { getKnrMultiplier } from "@/lib/global-benchmarks";
 import { SettingsClient } from "./settings-client";
 
 export default async function AdminSettingsPage() {
-  const { data: benchmarks, error } = await getGlobalBenchmarks();
+  const knrMultiplier = await getKnrMultiplier();
 
-  if (error || !benchmarks) {
-    redirect("/admin");
-  }
-
-  return <SettingsClient initialBenchmarks={benchmarks} />;
+  return <SettingsClient initialKnrMultiplier={knrMultiplier} />;
 }

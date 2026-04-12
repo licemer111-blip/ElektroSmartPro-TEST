@@ -5,15 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { updateGlobalBenchmarks, type GlobalBenchmarks } from "../actions";
+import { updateGlobalBenchmarks } from "../actions";
 import { Settings, Calculator, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 
 interface Props {
-  initialBenchmarks: GlobalBenchmarks;
+  initialKnrMultiplier: number;
 }
 
-export function SettingsClient({ initialBenchmarks }: Props) {
-  const [knrMultiplier, setKnrMultiplier] = useState(initialBenchmarks.knr_2026_multiplier);
+export function SettingsClient({ initialKnrMultiplier }: Props) {
+  const [knrMultiplier, setKnrMultiplier] = useState(initialKnrMultiplier);
   const [isPending, startTransition] = useTransition();
   const [saveState, setSaveState] = useState<"idle" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");

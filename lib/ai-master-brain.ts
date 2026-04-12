@@ -85,11 +85,9 @@ export async function buildDynamicSystemPrompt(
   expertDirectives?: string,
   userEffectiveRate?: number | null,
 ): Promise<string> {
-  const { buildDynamicRegionRule, getBaseRbhRate } = await import("@/lib/global-benchmarks");
-  const [dynamicRegionRule, adminRbhRate] = await Promise.all([
-    buildDynamicRegionRule(),
-    getBaseRbhRate(),
-  ]);
+  const { buildDynamicRegionRule } = await import("@/lib/global-benchmarks");
+  const dynamicRegionRule = await buildDynamicRegionRule();
+  const adminRbhRate = 75; // hardcoded base rate (project-specific)
   // {rbh_rate} resolves to user's effective rate (P1/P2/P3 hierarchy result).
   // Falls back to admin benchmark only when user rate is unknown.
   const rateForSubstitution = userEffectiveRate != null && userEffectiveRate > 0

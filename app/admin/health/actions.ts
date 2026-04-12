@@ -11,7 +11,6 @@ import {
   BUSBAR_LOGIC,
   PANEL_ASSEMBLY,
 } from "@/lib/zestawy-logic";
-import { getBaseRbhRate, getMaterialMultiplier } from "@/lib/global-benchmarks";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -361,10 +360,8 @@ export async function getCatalogHealthReport(): Promise<{ data: CatalogHealthRep
     ]);
 
     // ── 7. Engine runtime stats ────────────────────────────────────────────────
-    const [rbhRate, matMult] = await Promise.all([
-      getBaseRbhRate(),
-      getMaterialMultiplier(),
-    ]);
+    const rbhRate = 75; // hardcoded base rate (project-specific)
+    const matMult = 1.05; // hardcoded material multiplier (project-specific)
 
     // ── 8. KNR Norms DB stats (real data from knr_norms table) ──────────────────
     const { data: knrCatalogRows } = await supabase

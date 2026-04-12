@@ -1,29 +1,23 @@
 -- Add KNR 2026 labor norm multiplier to global_benchmarks in admin_settings
 -- This multiplier adjusts KNR labor norms to 2026 market reality (default: 1.4)
 
--- Update existing row to add knr_2026_multiplier if missing
+-- Remove redundant fields from existing global_benchmarks (market_rbh_rate, material_inflation_multiplier are project-specific)
 UPDATE admin_settings
-SET value = jsonb_set(
-  value,
-  '{knr_2026_multiplier}',
-  '1.4'::jsonb,
-  true
+SET value = jsonb_build_object(
+  'knr_2026_multiplier',
+  COALESCE(value->>'knr_2026_multiplier', '1.4')::numeric
 )
-WHERE key = 'global_benchmarks'
-AND value->'knr_2026_multiplier' IS NULL;
+WHERE key = 'global_benchmarks';
 
--- If the row doesn't exist, insert with default values
--- Note: market_rbh_rate and material_inflation_multiplier use seed values from 20260224_admin_settings.sql
+-- If the row doesn't exist, insert with only knr_2026_multiplier
 INSERT INTO admin_settings (key, value, updated_at)
 VALUES (
   'global_benchmarks',
   jsonb_build_object(
-    'market_rbh_rate', 75,
-    'material_inflation_multiplier', 1.05,
     'knr_2026_multiplier', 1.4
   ),
   now()
 )
 ON CONFLICT (key) DO NOTHING;
 
-COMMENT ON COLUMN admin_settings.value IS 'JSONB payload: global_benchmarks (market_rbh_rate, material_inflation_multiplier, knr_2026_multiplier) | expert_directives';
+COMMENT ON COLUMN admin_settings.value IS 'JSONB payload: global_benchmarks (knr_2026_multiplier) | expert_directives';

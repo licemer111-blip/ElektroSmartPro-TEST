@@ -6,9 +6,7 @@
  * Server-side only — do NOT import in client components.
  *
  * Usage:
- *   const rate = await getBaseRbhRate();
- *   const mult = await getMaterialMultiplier();
- *   const rateForVoivodeship = await getLaborRateForVoivodeship("Mazowieckie");
+ *   const knrMult = await getKnrMultiplier();
  */
 
 import { supabaseAdmin } from "@/lib/supabase-admin";
@@ -17,8 +15,6 @@ import { getRegionByName } from "@/lib/config/regions";
 // ─── In-process cache (Node.js module scope, TTL 60s) ─────────────────────────
 
 interface BenchmarkCache {
-  market_rbh_rate: number;
-  material_inflation_multiplier: number;
   knr_2026_multiplier: number;
   fetchedAt: number;
 }
@@ -39,18 +35,14 @@ async function fetchBenchmarks(): Promise<BenchmarkCache> {
       .eq("key", "global_benchmarks")
       .single();
 
-    const val = data?.value as { market_rbh_rate?: number; material_inflation_multiplier?: number; knr_2026_multiplier?: number } | null;
+    const val = data?.value as { knr_2026_multiplier?: number } | null;
     _cache = {
-      market_rbh_rate: val?.market_rbh_rate ?? 75,
-      material_inflation_multiplier: val?.material_inflation_multiplier ?? 1.05,
       knr_2026_multiplier: val?.knr_2026_multiplier ?? 1.4,
       fetchedAt: now,
     };
   } catch {
     // Fallback to defaults — never throw, always return usable values
     _cache = {
-      market_rbh_rate: 75,
-      material_inflation_multiplier: 1.05,
       knr_2026_multiplier: 1.4,
       fetchedAt: now,
     };
@@ -59,43 +51,16 @@ async function fetchBenchmarks(): Promise<BenchmarkCache> {
   return _cache;
 }
 
-/** Invalidate cache — call after saveGlobalBenchmarks() to reflect immediately */
+/** Invalidate cache — call after updateGlobalBenchmarks() to reflect immediately */
 export function invalidateBenchmarkCache(): void {
   _cache = null;
 }
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
-/** Base labor rate (PLN/rbh) from admin_settings. Default: 75 */
-export async function getBaseRbhRate(): Promise<number> {
-  return (await fetchBenchmarks()).market_rbh_rate;
-}
-
-/** Material inflation multiplier from admin_settings. Default: 1.05 */
-export async function getMaterialMultiplier(): Promise<number> {
-  return (await fetchBenchmarks()).material_inflation_multiplier;
-}
-
 /** KNR 2026 labor norm multiplier from admin_settings. Default: 1.4 */
 export async function getKnrMultiplier(): Promise<number> {
   return (await fetchBenchmarks()).knr_2026_multiplier;
-}
-
-/** Final labor rate for a voivodeship = baseRate × voivodeshipModifier */
-export async function getLaborRateForVoivodeship(voivodeship?: string | null): Promise<number> {
-  const base = await getBaseRbhRate();
-  const modifier = voivodeship ? (getRegionByName(voivodeship)?.multiplier ?? 1.0) : 1.0;
-  return Math.round(base * modifier);
-}
-
-/**
- * Returns both benchmarks in one call — use when you need both.
- * Example:
- *   const { rbhRate, matMultiplier, knrMultiplier } = await getGlobalBenchmarks();
- */
-export async function getGlobalBenchmarks(): Promise<{ rbhRate: number; matMultiplier: number; knrMultiplier: number }> {
-  const b = await fetchBenchmarks();
-  return { rbhRate: b.market_rbh_rate, matMultiplier: b.material_inflation_multiplier, knrMultiplier: b.knr_2026_multiplier };
 }
 
 /**
@@ -108,7 +73,7 @@ export async function getGlobalBenchmarks(): Promise<{ rbhRate: number; matMulti
  *
  * @param voivodeship            - optional region name, defaults to national average (×1.0)
  * @param laborRate              - project.default_hourly_rate (PLN/rbh), set per-project
- * @param userMaterialMultiplier - from profiles.material_multiplier (overrides admin_settings)
+ * @param userMaterialMultiplier - from profiles.material_multiplier (project-specific)
  */
 export async function getEffectiveRate(
   voivodeship?: string | null,
@@ -116,27 +81,27 @@ export async function getEffectiveRate(
   userMaterialMultiplier?: number | null,
 ): Promise<{
   laborRate: number;        // PLN/rbh after region modifier (final value for calculations)
-  matMultiplier: number;    // material inflation multiplier
-  baseRbhRate: number;      // raw base from admin_settings (for material multiplier only)
+  matMultiplier: number;    // material inflation multiplier (project-specific)
+  baseRbhRate: number;      // hardcoded base rate for reference (75 PLN/rbh)
   regionModifier: number;   // voivodeship coefficient
   source: "project_rate" | "default_rate";
   usedDefaultRate: boolean; // true when project.default_hourly_rate == 0
 }> {
-  const b = await fetchBenchmarks();
   const regionModifier = voivodeship ? (getRegionByName(voivodeship)?.multiplier ?? 1.0) : 1.0;
 
   const baseForCalc = (laborRate != null && laborRate > 0) ? laborRate : 0;
   const laborRateResult = Math.round(baseForCalc * regionModifier);
   const usedDefaultRate = baseForCalc <= 0;
 
+  // Material multiplier is project-specific (from profiles), with fallback to 1.05
   const matMultiplier = (userMaterialMultiplier != null && userMaterialMultiplier > 0)
     ? userMaterialMultiplier
-    : b.material_inflation_multiplier;
+    : 1.05;
 
   return {
     laborRate: laborRateResult,
     matMultiplier,
-    baseRbhRate: b.market_rbh_rate,
+    baseRbhRate: 75, // hardcoded base rate for reference
     regionModifier,
     source: usedDefaultRate ? "default_rate" : "project_rate",
     usedDefaultRate,
@@ -148,7 +113,7 @@ export async function getEffectiveRate(
  * Replaces the hardcoded string in ai-master-brain.ts at prompt build time.
  */
 export async function buildDynamicRegionRule(): Promise<string> {
-  const base = await getBaseRbhRate();
+  const base = 75; // hardcoded base rate (project-specific, not global anymore)
   // Multipliers from POLISH_REGIONS (regions.ts) — SEKOCENBUD Q1/2026
   const regions: Array<[string, number]> = [
     ["Mazowieckie (Warszawa)",       1.20],
@@ -174,7 +139,7 @@ export async function buildDynamicRegionRule(): Promise<string> {
   return `<iron_rule_3_region>
 ŻELAZNA ZASADA — WSPÓŁCZYNNIK REGIONALNY (Województwo):
 - Stawki robocizny MUSZĄ uwzględniać współczynnik regionalny dla wybranego województwa.
-- Bazowa stawka robocizny: ${base} PLN/rbh (Polska średnia — aktualna stawka admina).
+- Bazowa stawka robocizny: ${base} PLN/rbh (Polska średnia — stawka projektowa).
 - Współczynniki wg województw (SEKOCENBUD Q1/2026):
 ${rows}
 - Jeśli województwo nieznane — użyj współczynnika ×1.0 (średnia krajowa).

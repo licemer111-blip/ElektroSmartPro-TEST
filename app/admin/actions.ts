@@ -417,15 +417,11 @@ export async function updateGlobalBenchmarks(
       .single();
 
     const currentValue = current?.value as {
-      market_rbh_rate?: number;
-      material_inflation_multiplier?: number;
       knr_2026_multiplier?: number;
     } | null;
 
-    // Preserve existing fields, only update knr_2026_multiplier
+    // Only save knr_2026_multiplier
     const newValue = {
-      market_rbh_rate: currentValue?.market_rbh_rate ?? 75,
-      material_inflation_multiplier: currentValue?.material_inflation_multiplier ?? 1.05,
       knr_2026_multiplier: benchmarks.knr_2026_multiplier ?? currentValue?.knr_2026_multiplier ?? 1.4,
     };
 
