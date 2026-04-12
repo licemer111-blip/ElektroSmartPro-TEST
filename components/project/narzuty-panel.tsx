@@ -9,7 +9,6 @@ import { Loader2, ChevronDown, ChevronUp, Building2, Percent, PiggyBank, Package
 import { BlurredPrice } from "@/components/ui/blurred-price";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { updateProjectNarzuty } from "@/app/dashboard/projects/[id]/actions";
-import { updateProjectSafetyFactors } from "@/app/dashboard/projects/[id]/_actions/project-meta";
 import { useToast } from "@/hooks/use-toast";
 import { useDebouncedCallback } from "use-debounce";
 import { notifyDataChanged } from "@/hooks/use-synced-action";
@@ -21,8 +20,6 @@ interface NarzutyPanelProps {
   initialKp: number;
   initialZ: number;
   initialKz: number;
-  initialAuxPct?: number;
-  initialCableWastePct?: number;
   isPro?: boolean;
   disabled?: boolean;
   hideHeader?: boolean;
@@ -43,8 +40,6 @@ export function NarzutyPanel({
   initialKp,
   initialZ,
   initialKz,
-  initialAuxPct = 3,
-  initialCableWastePct = 5,
   isPro = false,
   disabled = false,
   hideHeader = false,
@@ -54,8 +49,6 @@ export function NarzutyPanel({
   const [kp, setKp] = useState(initialKp);
   const [z, setZ] = useState(initialZ);
   const [kz, setKz] = useState(initialKz);
-  const [auxPct, setAuxPct] = useState(initialAuxPct);
-  const [cableWastePct, setCableWastePct] = useState(initialCableWastePct);
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
 
@@ -64,11 +57,6 @@ export function NarzutyPanel({
     setZ(initialZ);
     setKz(initialKz);
   }, [initialKp, initialZ, initialKz]);
-
-  useEffect(() => {
-    setAuxPct(initialAuxPct);
-    setCableWastePct(initialCableWastePct);
-  }, [initialAuxPct, initialCableWastePct]);
 
   // Calculations per Polish narzuty system:
   // Kp = kp% × R (labor)
@@ -103,33 +91,6 @@ export function NarzutyPanel({
   };
 
   const debouncedSave = useDebouncedCallback(saveNarzuty, 600);
-
-  const saveFactors = async (auxVal: number, cableVal: number) => {
-    setIsSaving(true);
-    onSavingChange?.(true);
-    const result = await updateProjectSafetyFactors(projectId, {
-      aux_material_pct: auxVal,
-      cable_waste_pct: cableVal,
-    });
-    setIsSaving(false);
-    onSavingChange?.(false);
-    if (result.error) {
-      toast({ title: "Błąd", description: result.error, variant: "destructive" });
-    } else {
-      notifyDataChanged("safety-factors-update");
-    }
-  };
-  const debouncedSaveFactors = useDebouncedCallback(saveFactors, 600);
-
-  const handleFactorChange = (field: "aux" | "cable", value: string) => {
-    if (disabled) return;
-    const num = Math.max(0, Math.min(20, parseFloat(value) || 0));
-    const newAux = field === "aux" ? num : auxPct;
-    const newCable = field === "cable" ? num : cableWastePct;
-    if (field === "aux") setAuxPct(num);
-    if (field === "cable") setCableWastePct(num);
-    debouncedSaveFactors(newAux, newCable);
-  };
 
   const handleChange = (field: "kp" | "z" | "kz", value: string) => {
     if (disabled) {

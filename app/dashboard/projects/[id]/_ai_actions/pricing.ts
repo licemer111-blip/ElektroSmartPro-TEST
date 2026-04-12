@@ -346,12 +346,6 @@ export async function estimatePricesWithAI(
     // Do NOT include it here — that would cause double-count: DB×display = complexityFactor².
     const globalLaborMod = rawGlobalLaborMod;
 
-    // Safety factors from project settings (v2.4 — transparent, user-configurable)
-    const auxMatPct      = (project.aux_material_pct as number | null) ?? 3.0;
-    const cableWastePct  = (project.cable_waste_pct  as number | null) ?? 5.0;
-    const auxFactor      = 1 + auxMatPct  / 100;  // e.g. 1.03
-    const cableWasteFact = 1 + cableWastePct / 100; // e.g. 1.05
-
     // D2: project-level context fallback for getSurfaceModifier when item.section is null
     const projectFallback = (
       (project.description as string | null) ||
@@ -1249,28 +1243,13 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
         return { ...e, suggestedLabor: demontazLabor, note: existingNote + suffix };
       }
       if (mode === "labor") return e; // material unchanged in labor-only mode
-      // Rule 2: material safety factors for physical-installation items
+      // v3.1: Bulk discount for large cable orders (>100 mb)
       if (e.suggestedMaterial > 0 && isMaterialMandatory(e.name)) {
         const itemUnit = (e.guardedUnit ?? e.unit ?? "").toLowerCase().trim();
         const isLinear = itemUnit === "mb" || itemUnit === "m";
-        let mat = e.suggestedMaterial;
-        const factorNotes: string[] = [];
-        if (isLinear && isCableItem(e.name) && cableWastePct > 0) {
-          mat = Math.round(mat * cableWasteFact * 100) / 100;
-          factorNotes.push(`+${cableWastePct}% zapas`);
-        }
-        if (auxMatPct > 0) {
-          mat = Math.round(mat * auxFactor * 100) / 100;
-          factorNotes.push(`+${auxMatPct}% mat.pom.`);
-        }
-        // v3.0: Bulk discount for large cable orders (>100 mb)
         if (isLinear && isCableItem(e.name) && (e.quantity ?? 0) > 100) {
-          mat = Math.round(mat * 0.95 * 100) / 100;
-          factorNotes.push("-5% bulk");
-        }
-        if (mat !== e.suggestedMaterial) {
-          const factorSuffix = factorNotes.length > 0 ? ` | ${factorNotes.join(" ")}` : "";
-          return { ...e, suggestedMaterial: mat, note: e.note + factorSuffix };
+          const mat = Math.round(e.suggestedMaterial * 0.95 * 100) / 100;
+          return { ...e, suggestedMaterial: mat, note: e.note + " | -5% bulk" };
         }
       }
       return e;
