@@ -2,7 +2,9 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, FileText, SlidersHorizontal, CircleDollarSign, Info } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Calendar, FileText, CircleDollarSign, Info, LayoutTemplate, FileImage, Building2, FolderTree, Calculator, Palette } from "lucide-react";
 import type { ProjectWithRelations } from "@/lib/types/database";
 import { PDFTemplateInline } from "@/components/project/pdf-template-dialog";
 import { useGlobalSettings } from "@/hooks/use-global-settings";
@@ -13,7 +15,7 @@ interface ProjectSettingsProps {
 }
 
 export function ProjectSettings({ project, isPro }: ProjectSettingsProps) {
-  const { priceInputMode, setPriceInputMode } = useGlobalSettings();
+  const { priceInputMode, setPriceInputMode, pdfStructure, setPdfStructure } = useGlobalSettings();
 
   const isFinal = project.status === "final";
   const isArchived = project.status === "archived";
@@ -86,15 +88,152 @@ export function ProjectSettings({ project, isPro }: ProjectSettingsProps) {
         </CardContent>
       </Card>
 
-      {/* ── SECTION 2: Szablon PDF ── */}
+      {/* ── SECTION 2: Struktura PDF ── */}
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-sm">
-            <FileText className="w-4 h-4 text-blue-500" />
-            Szablon dokumentu PDF
+            <LayoutTemplate className="w-4 h-4 text-blue-500" />
+            Struktura dokumentu PDF
           </CardTitle>
           <CardDescription className="text-[11px]">
-            Styl kolorystyczny generowanego kosztorysu — zmień w dowolnym momencie
+            Wybierz, które elementy mają się pojawić w wygenerowanym PDF
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="pt-0 space-y-3">
+          {/* Structure toggles grid */}
+          <div className="grid grid-cols-2 gap-2">
+            {/* Cover Page */}
+            <div className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg border transition-colors ${
+              pdfStructure.showCoverPage 
+                ? "border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/20" 
+                : "border-slate-200 dark:border-slate-700"
+            }`}>
+              <div className="flex items-center gap-2 min-w-0">
+                <FileImage className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                <Label htmlFor="pdf-cover" className="text-[11px] font-medium text-slate-700 dark:text-slate-300 cursor-pointer">
+                  Strona tytułowa
+                </Label>
+              </div>
+              <Switch
+                id="pdf-cover"
+                checked={pdfStructure.showCoverPage}
+                onCheckedChange={(v) => setPdfStructure({ showCoverPage: v })}
+                className="scale-75"
+              />
+            </div>
+
+            {/* Company Header */}
+            <div className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg border transition-colors ${
+              pdfStructure.showCompanyHeader 
+                ? "border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/20" 
+                : "border-slate-200 dark:border-slate-700"
+            }`}>
+              <div className="flex items-center gap-2 min-w-0">
+                <Building2 className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                <Label htmlFor="pdf-header" className="text-[11px] font-medium text-slate-700 dark:text-slate-300 cursor-pointer">
+                  Nagłówek firmy
+                </Label>
+              </div>
+              <Switch
+                id="pdf-header"
+                checked={pdfStructure.showCompanyHeader}
+                onCheckedChange={(v) => setPdfStructure({ showCompanyHeader: v })}
+                className="scale-75"
+              />
+            </div>
+
+            {/* Project Meta */}
+            <div className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg border transition-colors ${
+              pdfStructure.showProjectMeta 
+                ? "border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/20" 
+                : "border-slate-200 dark:border-slate-700"
+            }`}>
+              <div className="flex items-center gap-2 min-w-0">
+                <FileText className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                <Label htmlFor="pdf-meta" className="text-[11px] font-medium text-slate-700 dark:text-slate-300 cursor-pointer">
+                  Dane projektu
+                </Label>
+              </div>
+              <Switch
+                id="pdf-meta"
+                checked={pdfStructure.showProjectMeta}
+                onCheckedChange={(v) => setPdfStructure({ showProjectMeta: v })}
+                className="scale-75"
+              />
+            </div>
+
+            {/* Section Groups */}
+            <div className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg border transition-colors ${
+              pdfStructure.showSectionGroups 
+                ? "border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/20" 
+                : "border-slate-200 dark:border-slate-700"
+            }`}>
+              <div className="flex items-center gap-2 min-w-0">
+                <FolderTree className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                <Label htmlFor="pdf-sections" className="text-[11px] font-medium text-slate-700 dark:text-slate-300 cursor-pointer">
+                  Grupuj sekcje
+                </Label>
+              </div>
+              <Switch
+                id="pdf-sections"
+                checked={pdfStructure.showSectionGroups}
+                onCheckedChange={(v) => setPdfStructure({ showSectionGroups: v })}
+                className="scale-75"
+              />
+            </div>
+
+            {/* Summary Block */}
+            <div className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg border transition-colors ${
+              pdfStructure.showSummaryBlock 
+                ? "border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/20" 
+                : "border-slate-200 dark:border-slate-700"
+            }`}>
+              <div className="flex items-center gap-2 min-w-0">
+                <Calculator className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                <Label htmlFor="pdf-summary" className="text-[11px] font-medium text-slate-700 dark:text-slate-300 cursor-pointer">
+                  Podsumowanie
+                </Label>
+              </div>
+              <Switch
+                id="pdf-summary"
+                checked={pdfStructure.showSummaryBlock}
+                onCheckedChange={(v) => setPdfStructure({ showSummaryBlock: v })}
+                className="scale-75"
+              />
+            </div>
+
+            {/* Legend */}
+            <div className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg border transition-colors ${
+              pdfStructure.showLegend 
+                ? "border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/20" 
+                : "border-slate-200 dark:border-slate-700"
+            }`}>
+              <div className="flex items-center gap-2 min-w-0">
+                <Palette className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                <Label htmlFor="pdf-legend" className="text-[11px] font-medium text-slate-700 dark:text-slate-300 cursor-pointer">
+                  Legenda kolorów
+                </Label>
+              </div>
+              <Switch
+                id="pdf-legend"
+                checked={pdfStructure.showLegend}
+                onCheckedChange={(v) => setPdfStructure({ showLegend: v })}
+                className="scale-75"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* ── SECTION 3: Szablon kolorów PDF ── */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-sm">
+            <Palette className="w-4 h-4 text-violet-500" />
+            Kolorystyka PDF
+          </CardTitle>
+          <CardDescription className="text-[11px]">
+            Wybierz schemat kolorów dla dokumentu
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-0">

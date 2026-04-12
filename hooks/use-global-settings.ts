@@ -7,19 +7,28 @@ export type VatMode = 8 | 23;
 export type PriceDisplay = "netto" | "brutto";
 export type PriceInputMode = "base" | "with_narzuty";
 
+export interface PdfStructureOptions {
+  showCoverPage: boolean;      // Pierwsza strona tytułowa
+  showCompanyHeader: boolean;  // Nagłówek z danymi firmy
+  showProjectMeta: boolean;    // Blok metadanych projektu
+  showSectionGroups: boolean;  // Grupowanie po sekcjach
+  showSummaryBlock: boolean;   // Blok podsumowania na końcu
+  showLegend: boolean;         // Legenda kolorów
+}
+
 interface GlobalSettingsState {
   vatMode: VatMode;
   priceDisplay: PriceDisplay;
   demoMode: boolean;
   priceInputMode: PriceInputMode;
-  showKnrCoeffsInPdf: boolean;
   showHints: boolean;
+  pdfStructure: PdfStructureOptions;
   setVatMode: (mode: VatMode) => void;
   setPriceDisplay: (display: PriceDisplay) => void;
   setDemoMode: (enabled: boolean) => void;
   setPriceInputMode: (mode: PriceInputMode) => void;
-  setShowKnrCoeffsInPdf: (enabled: boolean) => void;
   setShowHints: (enabled: boolean) => void;
+  setPdfStructure: (options: Partial<PdfStructureOptions>) => void;
 }
 
 export const useGlobalSettings = create<GlobalSettingsState>()(
@@ -29,14 +38,23 @@ export const useGlobalSettings = create<GlobalSettingsState>()(
       priceDisplay: "netto",
       demoMode: false,
       priceInputMode: "base",
-      showKnrCoeffsInPdf: false,
       showHints: true,
+      pdfStructure: {
+        showCoverPage: false,
+        showCompanyHeader: true,
+        showProjectMeta: true,
+        showSectionGroups: true,
+        showSummaryBlock: true,
+        showLegend: true,
+      },
       setVatMode: (mode) => set({ vatMode: mode }),
       setPriceDisplay: (display) => set({ priceDisplay: display }),
       setDemoMode: (enabled) => set({ demoMode: enabled }),
       setPriceInputMode: (mode) => set({ priceInputMode: mode }),
-      setShowKnrCoeffsInPdf: (enabled) => set({ showKnrCoeffsInPdf: enabled }),
       setShowHints: (enabled) => set({ showHints: enabled }),
+      setPdfStructure: (options) => set((state) => ({
+        pdfStructure: { ...state.pdfStructure, ...options },
+      })),
     }),
     {
       name: "elektrosmart-global-settings",

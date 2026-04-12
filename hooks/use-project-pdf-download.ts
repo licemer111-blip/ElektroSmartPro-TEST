@@ -18,7 +18,7 @@ export function useProjectPdfDownload({
   colorMode,
 }: UseProjectPdfDownloadOptions) {
   const { toast } = useToast();
-  const { vatMode, priceDisplay, showKnrCoeffsInPdf } = useGlobalSettings();
+  const { vatMode, priceDisplay, pdfStructure } = useGlobalSettings();
 
   const [isDownloading, setIsDownloading] = useState(false);
   const [pdfNotes, setPdfNotes] = useState("");
@@ -48,7 +48,7 @@ export function useProjectPdfDownload({
               : "klasyczny",
           vatMode,
           priceDisplay,
-          showKnrCoeffsInPdf,
+          pdfStructure,
         }),
       });
 
