@@ -296,12 +296,6 @@ export function ProjectSummary({
                 initialKp={project.kp_percent || 0}
                 initialZ={project.z_percent || 0}
                 initialKz={project.kz_percent || 0}
-                initialAuxPct={(project.aux_material_pct as number | null) ?? 3}
-                initialCableWastePct={(project.cable_waste_pct as number | null) ?? 5}
-                initialMatMarkup={project.mat_markup_pct || 0}
-                initialLabMarkup={project.lab_markup_pct || 0}
-                initialContingency={project.contingency_pct || 0}
-                initialComplexity={project.complexity_factor || 1.0}
                 isPro={isPro}
                 disabled={isFinal}
                 hideHeader

@@ -5,11 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Loader2, ChevronDown, ChevronUp, Building2, Percent, PiggyBank, Package, TrendingUp, ShieldAlert, Cpu } from "lucide-react";
+import { Loader2, ChevronDown, ChevronUp, Building2, Percent, PiggyBank, Package } from "lucide-react";
 import { BlurredPrice } from "@/components/ui/blurred-price";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { updateProjectNarzuty } from "@/app/dashboard/projects/[id]/actions";
-import { updateProjectSafetyFactors, updateProjectV3Settings } from "@/app/dashboard/projects/[id]/_actions/project-meta";
+import { updateProjectSafetyFactors } from "@/app/dashboard/projects/[id]/_actions/project-meta";
 import { useToast } from "@/hooks/use-toast";
 import { useDebouncedCallback } from "use-debounce";
 import { notifyDataChanged } from "@/hooks/use-synced-action";
@@ -23,11 +23,6 @@ interface NarzutyPanelProps {
   initialKz: number;
   initialAuxPct?: number;
   initialCableWastePct?: number;
-  // v3.0 Finance Core
-  initialMatMarkup?: number;
-  initialLabMarkup?: number;
-  initialContingency?: number;
-  initialComplexity?: number;
   isPro?: boolean;
   disabled?: boolean;
   hideHeader?: boolean;
@@ -50,10 +45,6 @@ export function NarzutyPanel({
   initialKz,
   initialAuxPct = 3,
   initialCableWastePct = 5,
-  initialMatMarkup = 0,
-  initialLabMarkup = 0,
-  initialContingency = 0,
-  initialComplexity = 1.0,
   isPro = false,
   disabled = false,
   hideHeader = false,
@@ -65,10 +56,6 @@ export function NarzutyPanel({
   const [kz, setKz] = useState(initialKz);
   const [auxPct, setAuxPct] = useState(initialAuxPct);
   const [cableWastePct, setCableWastePct] = useState(initialCableWastePct);
-  const [matMarkup, setMatMarkup] = useState(initialMatMarkup);
-  const [labMarkup, setLabMarkup] = useState(initialLabMarkup);
-  const [contingency, setContingency] = useState(initialContingency);
-  const [complexity, setComplexity] = useState(initialComplexity);
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
 
@@ -82,13 +69,6 @@ export function NarzutyPanel({
     setAuxPct(initialAuxPct);
     setCableWastePct(initialCableWastePct);
   }, [initialAuxPct, initialCableWastePct]);
-
-  useEffect(() => {
-    setMatMarkup(initialMatMarkup);
-    setLabMarkup(initialLabMarkup);
-    setContingency(initialContingency);
-    setComplexity(initialComplexity);
-  }, [initialMatMarkup, initialLabMarkup, initialContingency, initialComplexity]);
 
   // Calculations per Polish narzuty system:
   // Kp = kp% × R (labor)
@@ -140,48 +120,6 @@ export function NarzutyPanel({
     }
   };
   const debouncedSaveFactors = useDebouncedCallback(saveFactors, 600);
-
-  const saveV3 = async (mat: number, lab: number, cont: number, comp: number) => {
-    setIsSaving(true);
-    onSavingChange?.(true);
-    const result = await updateProjectV3Settings(projectId, {
-      mat_markup_pct: mat,
-      lab_markup_pct: lab,
-      contingency_pct: cont,
-      complexity_factor: comp,
-    });
-    setIsSaving(false);
-    onSavingChange?.(false);
-    if (result.error) {
-      toast({ title: "B\u0142\u0105d", description: result.error, variant: "destructive" });
-    } else {
-      notifyDataChanged("v3-settings-update");
-    }
-  };
-  const debouncedSaveV3 = useDebouncedCallback(saveV3, 600);
-
-  const handleV3Change = (field: "mat" | "lab" | "cont" | "comp", value: string) => {
-    if (disabled) return;
-    const isComp = field === "comp";
-    const num = isComp
-      ? Math.max(0.5, Math.min(3.0, parseFloat(value) || 1.0))
-      : Math.max(0, Math.min(field === "cont" ? 20 : 100, parseFloat(value) || 0));
-    const newMat  = field === "mat"  ? num : matMarkup;
-    const newLab  = field === "lab"  ? num : labMarkup;
-    const newCont = field === "cont" ? num : contingency;
-    const newComp = field === "comp" ? num : complexity;
-    if (field === "mat")  setMatMarkup(num);
-    if (field === "lab")  setLabMarkup(num);
-    if (field === "cont") setContingency(num);
-    if (field === "comp") setComplexity(num);
-    debouncedSaveV3(newMat, newLab, newCont, newComp);
-  };
-
-  const COMPLEXITY_PRESETS = [
-    { label: "Standard", value: 1.0, icon: "\uD83C\uDFE0" },
-    { label: "Smart/KNX", value: 1.3, icon: "\uD83E\uDD16" },
-    { label: "Przemys\u0142", value: 1.2, icon: "\u26A1" },
-  ] as const;
 
   const handleFactorChange = (field: "aux" | "cable", value: string) => {
     if (disabled) return;
@@ -387,114 +325,6 @@ export function NarzutyPanel({
               </span>
             </div>
           )}
-
-          {/* separator v3 */}
-          <div className="border-t border-slate-200/60 dark:border-slate-700/40" />
-
-          {/* ── v3.0: Marże + Rezerwa + Typ obiektu ── */}
-          <div className="rounded-lg border border-violet-200/70 dark:border-violet-800/50 bg-violet-50/30 dark:bg-violet-950/15 p-2 space-y-2">
-            <div className="flex items-center gap-1.5">
-              <TrendingUp className="w-3 h-3 text-violet-600 dark:text-violet-400" />
-              <span className="text-[10px] font-semibold text-violet-800 dark:text-violet-300">Marże i Rezerwa (v3)</span>
-            </div>
-
-            {/* Split markups */}
-            <div className="grid grid-cols-2 gap-1.5">
-              <div className="space-y-0.5">
-                <div className="flex items-center gap-1">
-                  <Package className="w-2.5 h-2.5 text-amber-500" />
-                  <Label htmlFor="mat-markup" className="text-[9px] font-medium text-violet-700 dark:text-violet-400">Narzut M</Label>
-                </div>
-                <div className="relative">
-                  <Input
-                    id="mat-markup"
-                    type="number"
-                    aria-label="Narzut na materia\u0142y %"
-                    value={matMarkup}
-                    onChange={(e) => handleV3Change("mat", e.target.value)}
-                    className="h-6 text-xs text-right pr-5 bg-white dark:bg-slate-900 border-violet-200 dark:border-violet-800"
-                    min={0} max={100} step={1}
-                    disabled={disabled}
-                  />
-                  <span className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[9px] text-violet-500 pointer-events-none">%</span>
-                </div>
-              </div>
-              <div className="space-y-0.5">
-                <div className="flex items-center gap-1">
-                  <PiggyBank className="w-2.5 h-2.5 text-green-500" />
-                  <Label htmlFor="lab-markup" className="text-[9px] font-medium text-violet-700 dark:text-violet-400">Narzut R</Label>
-                </div>
-                <div className="relative">
-                  <Input
-                    id="lab-markup"
-                    type="number"
-                    aria-label="Narzut na robocizn\u0119 %"
-                    value={labMarkup}
-                    onChange={(e) => handleV3Change("lab", e.target.value)}
-                    className="h-6 text-xs text-right pr-5 bg-white dark:bg-slate-900 border-violet-200 dark:border-violet-800"
-                    min={0} max={100} step={1}
-                    disabled={disabled}
-                  />
-                  <span className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[9px] text-violet-500 pointer-events-none">%</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Rezerwa */}
-            <div className="space-y-0.5">
-              <div className="flex items-center gap-1">
-                <ShieldAlert className="w-2.5 h-2.5 text-orange-500" />
-                <Label htmlFor="contingency" className="text-[9px] font-medium text-violet-700 dark:text-violet-400">Rezerwa budżetowa</Label>
-              </div>
-              <div className="relative">
-                <Input
-                  id="contingency"
-                  type="number"
-                  aria-label="Rezerwa budżetowa %"
-                  value={contingency}
-                  onChange={(e) => handleV3Change("cont", e.target.value)}
-                  className="h-6 text-xs text-right pr-5 bg-white dark:bg-slate-900 border-violet-200 dark:border-violet-800"
-                  min={0} max={20} step={0.5}
-                  disabled={disabled}
-                />
-                <span className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[9px] text-orange-500 pointer-events-none">%</span>
-              </div>
-            </div>
-
-            {/* Typ obiektu — complexity */}
-            <div className="space-y-0.5">
-              <div className="flex items-center gap-1">
-                <Cpu className="w-2.5 h-2.5 text-violet-500" />
-                <span className="text-[9px] font-medium text-violet-700 dark:text-violet-400">Typ obiektu (robocizna)</span>
-              </div>
-              <div className="flex gap-1">
-                {COMPLEXITY_PRESETS.map((preset) => (
-                  <button
-                    key={preset.label}
-                    onClick={() => { if (!disabled) { setComplexity(preset.value); debouncedSaveV3(matMarkup, labMarkup, contingency, preset.value); } }}
-                    disabled={disabled}
-                    className={`flex-1 px-1 py-1 rounded text-[9px] font-medium border transition-all ${
-                      Math.abs(complexity - preset.value) < 0.01
-                        ? "bg-violet-600 text-white border-violet-600"
-                        : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-violet-300"
-                    } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-                  >
-                    {preset.icon} {preset.label}
-                  </button>
-                ))}
-              </div>
-              {Math.abs(complexity - 1.0) > 0.01 && (
-                <div className="flex items-center justify-between mt-0.5 px-1.5 py-0.5 rounded bg-violet-100/60 dark:bg-violet-900/20">
-                  <span className="text-[9px] text-violet-700 dark:text-violet-400 font-medium">
-                    Robocizna &times;{complexity.toFixed(2)}
-                  </span>
-                  <span className="text-[9px] font-mono font-semibold text-violet-700 dark:text-violet-300">
-                    +{Math.round(laborTotal * (complexity - 1.0)).toLocaleString("pl-PL")} zł
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
         </div>
       )}
     </div>
