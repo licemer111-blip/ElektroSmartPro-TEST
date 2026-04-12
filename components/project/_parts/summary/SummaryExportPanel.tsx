@@ -149,13 +149,18 @@ export function SummaryExportPanel({
       </div>
 
       {/* Dokumentacja */}
-      <div className="[&>button]:w-full [&>button]:h-9 [&>button]:text-sm">
-        <DocumentationDialog
-          projectId={project.id}
-          projectStatus={project.status as string}
-          projectName={project.name}
-          itemCount={items.length}
-        />
+      <div
+        className={`relative w-full transition-all duration-150 ${!isFinal ? "opacity-50 cursor-pointer active:scale-95 active:opacity-40" : "hover:brightness-110 hover:scale-[1.01]"}`}
+        onClick={!isFinal ? () => toast({ title: "📋 Najpierw zapisz projekt", description: "Kliknij 'Zapisz', aby odblokować Dokumentację", variant: "destructive" }) : undefined}
+      >
+        <div className={`[&>button]:w-full [&>button]:h-9 [&>button]:text-sm ${!isFinal ? "pointer-events-none" : ""}`}>
+          <DocumentationDialog
+            projectId={project.id}
+            projectStatus={project.status as string}
+            projectName={project.name}
+            itemCount={items.length}
+          />
+        </div>
       </div>
 
       {/* Export buttons — split button PDF | Excel */}
