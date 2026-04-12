@@ -423,6 +423,10 @@ export async function addProjectItemDirect(
 
   const nextSortOrder = (maxSortData?.sort_order || 0) + 1;
 
+  // Apply KNR 2026 multiplier to labor price
+  const knrMultiplier = await getKnrMultiplier();
+  const finalLaborPrice = (data.labor_price ?? 0) * knrMultiplier;
+
   const { data: inserted, error } = await supabase.from("project_items").insert({
     project_id: projectId,
     catalog_item_id: null,
@@ -431,7 +435,7 @@ export async function addProjectItemDirect(
     unit: data.unit || "szt",
     quantity: data.quantity ?? 1,
     final_material_price: data.material_price ?? 0,
-    final_labor_price: data.labor_price ?? 0,
+    final_labor_price: finalLaborPrice,
     is_custom: true,
     is_assembly_child: data.is_assembly_child || false,
     parent_assembly_id: data.parent_assembly_id || null,
