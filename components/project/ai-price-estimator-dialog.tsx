@@ -331,7 +331,6 @@ export function AiPriceEstimatorDialog({
                   est.handleRepriced(updated);
                 }}
                 onAddToRefreshing={(id) => est.setRefreshingIds((prev) => { const s = new Set(prev); s.add(id); return s; })}
-                selectedSummary={est.selectedSummary}
                 isApplying={est.isApplying}
               />
             )

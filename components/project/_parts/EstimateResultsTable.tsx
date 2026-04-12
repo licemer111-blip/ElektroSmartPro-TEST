@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useState, useTransition, useMemo } from "react";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
@@ -41,7 +41,6 @@ interface EstimateResultsTableProps {
   onCloseManualMatch: () => void;
   onRepriced: (updated: AiPriceEstimate) => void;
   onAddToRefreshing: (id: string) => void;
-  selectedSummary: { totalMat: number; totalLab: number; total: number };
   isApplying: boolean;
 }
 
@@ -56,7 +55,7 @@ export function EstimateResultsTable({
   projectId,
   onToggleItem, onToggleAll, onApplyCertainOnly, onBack, onApply,
   onOpenManualMatch, onManualMatchSearchChange, onApplyManualMatch, onCloseManualMatch,
-  onRepriced, onAddToRefreshing, selectedSummary, isApplying,
+  onRepriced, onAddToRefreshing, isApplying,
 }: EstimateResultsTableProps) {
   const showMatCol = mode !== "labor";
   const showLabCol = mode !== "material";
@@ -68,6 +67,17 @@ export function EstimateResultsTable({
     e.confidence === "low"
   ).length;
   const { multiplier: knrMultiplier } = useKnrMultiplier();
+
+  // Calculate selectedSummary locally with KNR multiplier
+  const selectedSummary = useMemo(() => {
+    const sel = estimates.filter(e => selectedIds.has(e.itemId));
+    const totalMat = sel.reduce((s, e) => s + e.suggestedMaterial * e.quantity, 0);
+    const totalLab = sel.reduce((s, e) => {
+      const regionMod = e.regionModifier ?? 1.0;
+      return s + e.suggestedLabor * regionMod * knrMultiplier * e.quantity;
+    }, 0);
+    return { totalMat, totalLab, total: totalMat + totalLab };
+  }, [estimates, selectedIds, knrMultiplier]);
 
   // Inline editing state
   const [editingRowId, setEditingRowId] = useState<string | null>(null);
