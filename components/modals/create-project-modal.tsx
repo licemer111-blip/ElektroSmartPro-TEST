@@ -8,13 +8,11 @@ import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, Loader2, Plus, AlertTriangle } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { AlertCircle, Loader2, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useModalStore } from "@/hooks/use-modal-store";
 import { createProject } from "@/app/dashboard/actions";
 import { getTemplates, createProjectFromTemplate, type ProjectTemplate } from "@/app/dashboard/templates/actions";
-import { updateGlobalHourlyRate } from "@/app/dashboard/settings/knr-calculator/actions";
 import { StepBasicInfo } from "@/components/modals/_parts/StepBasicInfo";
 
 function SubmitButton() {
@@ -58,13 +56,6 @@ export function CreateProjectModal() {
   const currentProjectCount = data.currentProjectCount || 0;
   const isPro = data.isPro || false;
   const maxProjects = data.maxProjects || 3;
-  const passedRate = data.hourlyRate ?? 0;
-
-  // Rate guard state
-  const [rateFixed, setRateFixed] = useState(false);
-  const [inlineRate, setInlineRate] = useState("75");
-  const [isSavingRate, setIsSavingRate] = useState(false);
-  const needsRate = passedRate <= 0 && !rateFixed;
 
   // Check if user hit project limit
   const isAtLimit = !isPro && currentProjectCount >= maxProjects;
@@ -87,23 +78,8 @@ export function CreateProjectModal() {
       setSelectedVatRate(23);
       setSelectedTemplate("");
       setError(null);
-      setRateFixed(false);
-      setInlineRate("75");
     }
   }, [isModalOpen]);
-
-  // Inline rate save handler
-  const handleSaveInlineRate = async () => {
-    const rate = parseFloat(inlineRate);
-    if (isNaN(rate) || rate < 1 || rate > 9999) return;
-    setIsSavingRate(true);
-    const result = await updateGlobalHourlyRate(rate);
-    setIsSavingRate(false);
-    if (result.success) {
-      setRateFixed(true);
-      toast({ title: "Stawka zapisana!", description: `${rate} PLN/r-g — możesz teraz utworzyć projekt.` });
-    }
-  };
 
   // Handle creating project from template
   const handleCreateFromTemplate = async (templateId: string, projectName: string) => {
@@ -275,42 +251,6 @@ export function CreateProjectModal() {
         </DialogHeader>
 
         <form action={handleSubmit} className="space-y-3">
-          {/* Rate guard — inline rate setter if hourly_rate is 0 */}
-          {needsRate && (
-            <div className="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 space-y-2">
-              <div className="flex items-start gap-2">
-                <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-xs font-semibold text-amber-800 dark:text-amber-200">Ustaw stawkę roboczogodziny</p>
-                  <p className="text-[11px] text-amber-700 dark:text-amber-300 mt-0.5">
-                    Bez stawki r-g wyceny będą nieprawidłowe. Podaj swoją stawkę netto (PLN/h):
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <Input
-                  type="number"
-                  min={1}
-                  max={9999}
-                  value={inlineRate}
-                  onChange={(e) => setInlineRate(e.target.value)}
-                  className="w-24 text-center font-bold"
-                  placeholder="75"
-                />
-                <span className="text-xs text-amber-600 dark:text-amber-400">PLN/r-g</span>
-                <Button
-                  type="button"
-                  size="sm"
-                  onClick={handleSaveInlineRate}
-                  disabled={isSavingRate || !inlineRate || parseFloat(inlineRate) < 1}
-                  className="bg-amber-600 hover:bg-amber-700 text-white text-xs ml-auto"
-                >
-                  {isSavingRate ? <Loader2 className="w-3 h-3 animate-spin" /> : "Zapisz"}
-                </Button>
-              </div>
-            </div>
-          )}
-
           {error && (
             <div className="flex items-center gap-2 p-2.5 rounded-lg bg-red-50 dark:bg-red-950/20 text-xs text-red-700 dark:text-red-300">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
