@@ -187,13 +187,13 @@ export const MATERIAL_BENCHMARKS: MaterialBenchmark[] = [
   // ═══════════════════════════════════════════════════════════════════
   // ROZDZIELNICE
   // ═══════════════════════════════════════════════════════════════════
-  { category: "rozdzielnice", keywords: ["rozdzielnica", "podtynkow", "12"], unit: "szt", min: 40.00, avg: 65.00, max: 110.00 },
-  { category: "rozdzielnice", keywords: ["rozdzielnica", "podtynkow", "24"], unit: "szt", min: 70.00, avg: 110.00, max: 180.00 },
-  { category: "rozdzielnice", keywords: ["rozdzielnica", "podtynkow", "36"], unit: "szt", min: 100.00, avg: 160.00, max: 250.00 },
-  { category: "rozdzielnice", keywords: ["rozdzielnica", "natynkow", "12"], unit: "szt", min: 30.00, avg: 50.00, max: 85.00 },
-  { category: "rozdzielnice", keywords: ["rozdzielnica", "natynkow", "24"], unit: "szt", min: 55.00, avg: 85.00, max: 140.00 },
-  { category: "rozdzielnice", keywords: ["rozdzielnica", "natynkow", "36"], unit: "szt", min: 80.00, avg: 130.00, max: 210.00 },
-  { category: "rozdzielnice", keywords: ["rozdzielnica", "ip65"], unit: "szt", min: 120.00, avg: 200.00, max: 350.00 },
+  { category: "rozdzielnice", keywords: ["rozdzielnic", "podtynkow", "12"], unit: "szt", min: 40.00, avg: 65.00, max: 110.00 },
+  { category: "rozdzielnice", keywords: ["rozdzielnic", "podtynkow", "24"], unit: "szt", min: 70.00, avg: 110.00, max: 180.00 },
+  { category: "rozdzielnice", keywords: ["rozdzielnic", "podtynkow", "36"], unit: "szt", min: 100.00, avg: 160.00, max: 250.00 },
+  { category: "rozdzielnice", keywords: ["rozdzielnic", "natynkow", "12"], unit: "szt", min: 30.00, avg: 50.00, max: 85.00 },
+  { category: "rozdzielnice", keywords: ["rozdzielnic", "natynkow", "24"], unit: "szt", min: 55.00, avg: 85.00, max: 140.00 },
+  { category: "rozdzielnice", keywords: ["rozdzielnic", "natynkow", "36"], unit: "szt", min: 80.00, avg: 130.00, max: 210.00 },
+  { category: "rozdzielnice", keywords: ["rozdzielnic", "ip65"], unit: "szt", min: 120.00, avg: 200.00, max: 350.00 },
 
   // ═══════════════════════════════════════════════════════════════════
   // OPRAWY OŚWIETLENIOWE
@@ -228,8 +228,11 @@ export const MATERIAL_BENCHMARKS: MaterialBenchmark[] = [
   // OCHRONA PRZEPIĘCIOWA (SPD)
   // ═══════════════════════════════════════════════════════════════════
   { category: "ochrona_przepieciowa", keywords: ["ogranicznik", "przepięć", "b+c"], unit: "szt", min: 120.00, avg: 200.00, max: 350.00 },
-  { category: "ochrona_przepieciowa", keywords: ["ogranicznik", "przepięć", "typ", "2"], unit: "szt", min: 80.00, avg: 140.00, max: 250.00 },
+  { category: "ochrona_przepieciowa", keywords: ["ogranicznik", "przepięć", "t2"], unit: "szt", min: 80.00, avg: 140.00, max: 250.00 },
+  { category: "ochrona_przepieciowa", keywords: ["ogranicznik", "przepięć", "typ 2"], unit: "szt", min: 80.00, avg: 140.00, max: 250.00 },
+  { category: "ochrona_przepieciowa", keywords: ["spd", "t1", "t2"], unit: "szt", min: 250.00, avg: 400.00, max: 650.00 },
   { category: "ochrona_przepieciowa", keywords: ["spd", "typ", "1+2"], unit: "szt", min: 250.00, avg: 400.00, max: 650.00 },
+  { category: "ochrona_przepieciowa", keywords: ["spd", "t2"], unit: "szt", min: 80.00, avg: 140.00, max: 250.00 },
   { category: "ochrona_przepieciowa", keywords: ["spd", "typ", "2"], unit: "szt", min: 80.00, avg: 140.00, max: 250.00 },
 
   // ═══════════════════════════════════════════════════════════════════

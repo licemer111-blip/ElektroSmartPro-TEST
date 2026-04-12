@@ -230,18 +230,21 @@ ZASADY WYCENY ES-ENGINE 2 (KRYTYCZNE — NIGDY nie ignoruj):
    - "WLZ", "wewnętrzna linia zasilająca" → linia kablowa
 4. Jeśli nazwa zawiera skrót jednostki (kpl, szt, mb, m) — NIE włączaj go do name. Tylko wstaw do unit.
 5. Przykładowe ceny rynkowe netto Polska 2026 (unit = podana jednostka):
-   - Kabel UTP kat.6 /mb: mat=2.80zł, rob=2.00zł (KNR 5-06)
-   - Gniazdo RJ45 /szt: mat=18zł, rob=20zł
+   - Kabel UTP kat.6 /mb: mat=3.50zł, rob=4.30zł (KNR 5-06, rbh=0.045)
+   - Gniazdo RJ45 /szt: mat=22zł, rob=30zł
    - Patchpanel 24p /szt: mat=180zł, rob=45zł
    - Szafa rack 42U /szt: mat=1800zł, rob=180zł
    - Szafa rack 12U /szt: mat=650zł, rob=90zł
-   - Gniazdo 230V /szt: mat=25zł, rob=18zł
-   - Wyłącznik nadprądowy 1P /szt: mat=35zł, rob=12zł
-   - Oprawa LED /szt: mat=120zł, rob=35zł
-   - Przewód YDYp 3x2.5 /mb: mat=4.50zł, rob=3.00zł
-   - Montaż gniazda LAN /szt: mat=0zł, rob=25zł
-   - Bruzda w tynku /mb: mat=0zł, rob=6.00zł
-   - Rura instalacyjna /mb: mat=1.20zł, rob=1.50zł
+   - Gniazdo 230V podtynkowe /szt: mat=22zł, rob=33zł (rbh=0.35)
+   - Wyłącznik nadprądowy B16 1P /szt: mat=22zł, rob=24zł (rbh=0.25)
+   - Wyłącznik różnicowoprądowy 40A/2P /szt: mat=100zł, rob=38zł (rbh=0.40)
+   - Oprawa LED downlight /szt: mat=45zł, rob=24zł (rbh=0.25)
+   - Przewód YDYp 3x1.5 /mb: mat=5.20zł, rob=6.65zł (rbh=0.07)
+   - Przewód YDYp 3x2.5 /mb: mat=7.20zł, rob=7.60zł (rbh=0.08)
+   - Montaż gniazda LAN /szt: mat=0zł, rob=28zł
+   - Bruzda w cegle (cegła/silikat) /mb: mat=0zł, rob=80.75zł (rbh=0.85)
+   - Bruzda w G-K /mb: mat=0zł, rob=17.10zł (rbh=0.18)
+   - Rura ochronna DVR 20mm /mb: mat=1.80zł, rob=5.04zł (rbh=0.053)
 6. Pozycja czysto materiałowa (kabel, osprzęt) → labor_price MOŻE być 0, ale material_price > 0.
 7. Pozycja robocizny (montaż, układanie) → material_price MOŻE być 0, ale labor_price > 0.
 8. KNR → polska techniczna nazwa (bez numeru KNR w nazwie).
@@ -249,13 +252,26 @@ ZASADY WYCENY ES-ENGINE 2 (KRYTYCZNE — NIGDY nie ignoruj):
 10. KNR CODES — dla każdej pozycji podaj knr_code i labor_norm (rbh/szt):
     ZASADA: NIGDY nie zwracaj null dla knr_code. Zawsze podaj kod (syntetyczny jeśli brak dokładnego).
     Kody pewne (confidence high):
-    - Gniazdo 230V → "KNR 5-01 0401-01", rbh=0.25
-    - Punkt oświetleniowy / oprawa LED → "KNR 5-01 0301-01", rbh=0.30
-    - Przewód YDYp 3x2.5 /mb → "KNR 5-04 0101-02", rbh=0.05
-    - Przewód YDYp 5x6 /mb → "KNR 5-04 0101-04", rbh=0.07
-    - Wyłącznik nadprądowy 1P → "KNR 5-08 0201-01", rbh=0.15
-    - Rozdzielnia/rozdzielnica → "KNR 5-08 0101-01", rbh=2.00
-    - Bruzda w tynku /mb → "KNR 2-02 0401-01", rbh=0.12
+    - Gniazdo 230V podtynkowe → "KNR 5-08 0401", rbh=0.35
+    - Gniazdo 230V natynkowe → "KNR 5-08 0404", rbh=0.30
+    - Gniazdo 3-fazowe CEE 16A 5P → "KNR 5-08 0407", rbh=0.60
+    - Wyłącznik 1-biegunowy (S1) → "KNR 5-08 0411", rbh=0.25
+    - Wyłącznik schodowy (S6/S7) → "KNR 5-08 0412", rbh=0.30
+    - Oprawa LED downlight → "KNR 5-08 0502", rbh=0.25
+    - Oprawa sufitowa LED panel → "KNR 5-08 0501", rbh=0.35
+    - Przewód YDYp 3x1.5 /mb → "KNR 5-08 0201", rbh=0.07
+    - Przewód YDYp 3x2.5 /mb → "KNR 5-08 0202", rbh=0.08
+    - Przewód YDYp 5x2.5 /mb → "KNR 5-08 0203", rbh=0.11
+    - Przewód YDYp 5x6 /mb → "KNR 5-08 0205", rbh=0.15
+    - Wyłącznik nadprądowy 1P → "KNR 5-08 0601", rbh=0.25
+    - Wyłącznik różnicowoprądowy 2P → "KNR 5-08 0701", rbh=0.40
+    - Rozdzielnica podtynkowa → "KNR 5-08 0901", rbh=2.63
+    - Ogranicznik przepięć SPD T2 → "KNR 5-08 1201", rbh=0.60
+    - Bruzda w cegle/silikatu /mb → "KNR 5-08 0101", rbh=0.85
+    - Bruzda w betonie/żelbecie /mb → "KNR 5-08 0103", rbh=2.00
+    - Bruzda w G-K/gipsie /mb → "KNR 5-08 0104", rbh=0.18
+    - Zasypanie bruzdy /mb → "KNR 5-08 0107", rbh=0.12
+    - Rura ochronna DVR 20mm /mb → "KNR 5-08 0801", rbh=0.053
     Kody syntetyczne LAN/IT (confidence low → knr_source="es_synthetic"):
     - Kabel UTP/U-UTP kat.5e/6/6a /mb → "KNR 5-06+ES", rbh=0.04
     - Gniazdo RJ45 / punkt LAN → "KNR 5-06+ES", rbh=0.25
@@ -269,6 +285,16 @@ ZASADY WYCENY ES-ENGINE 2 (KRYTYCZNE — NIGDY nie ignoruj):
     Kody syntetyczne pozostałe:
     - PV/fotowoltaika → "KNR AT-26+ES"
     - Wszystkie inne nieznane → "KNR-ES"
+
+ZASADA #11 — ZESTAWY (Assemblies) — BARDZO WAŻNE:
+Jeśli pozycja zawiera prefix "Zestaw:", "Zestaw ", "Punkt " lub opisuje kompletny punkt instalacyjny
+(np. "Punkt gniazda 230V", "Punkt oświetleniowy", "Komplet gniazda"), importuj ją jako JEDEN item:
+- Usuń prefix "Zestaw:" lub "Zestaw " z nazwy — zostaw tylko część opisową
+- unit = "kpl"
+- Wyceniaj jako kompletny punkt: materiał + robocizna łącznie
+- Przykład: "Zestaw: Punkt gniazda 230V kompletny" → name="Punkt gniazda 230V", unit="kpl"
+- Punkt gniazda 230V /kpl: mat=35zł (gniazdo+puszka+materiały), rob=190zł (montaż+bruzda+układanie)
+- Punkt oświetleniowy /kpl: mat=15zł (puszka+materiały), rob=220zł (montaż+bruzda+układanie)
 </import_context>`;
 
     const fullSystemPrompt = systemPrompt + "\n" + importContext + engineContextBlock + preResolutionContext;
