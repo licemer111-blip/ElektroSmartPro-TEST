@@ -2,8 +2,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { Calendar, FileText, SlidersHorizontal, CircleDollarSign, Info } from "lucide-react";
 import type { ProjectWithRelations } from "@/lib/types/database";
 import { PDFTemplateInline } from "@/components/project/pdf-template-dialog";
@@ -15,7 +13,7 @@ interface ProjectSettingsProps {
 }
 
 export function ProjectSettings({ project, isPro }: ProjectSettingsProps) {
-  const { priceInputMode, setPriceInputMode, showKnrCoeffsInPdf, setShowKnrCoeffsInPdf } = useGlobalSettings();
+  const { priceInputMode, setPriceInputMode } = useGlobalSettings();
 
   const isFinal = project.status === "final";
   const isArchived = project.status === "archived";
@@ -77,23 +75,6 @@ export function ProjectSettings({ project, isPro }: ProjectSettingsProps) {
                 Kp, Z, Kz <strong>wliczone</strong> w cenę — widoczna jedna kwota końcowa
               </p>
             </button>
-          </div>
-
-          {/* KNR coefficients toggle */}
-          <div className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700">
-            <div className="min-w-0">
-              <Label htmlFor="knr-coeff-toggle" className="text-xs font-semibold text-slate-700 dark:text-slate-200 cursor-pointer">
-                Współczynniki KNR w PDF
-              </Label>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">
-                Na wysokości ×1.25, Utrudnienia, Trudne podłoże
-              </p>
-            </div>
-            <Switch
-              id="knr-coeff-toggle"
-              checked={showKnrCoeffsInPdf}
-              onCheckedChange={setShowKnrCoeffsInPdf}
-            />
           </div>
 
           <div className="flex items-start gap-1.5 px-1">
