@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { updateProjectItem } from "@/app/dashboard/projects/[id]/_actions/project-items";
 import { repriceSingleItem } from "@/app/dashboard/projects/[id]/_ai_actions/pricing";
+import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import type { AiPriceEstimate } from "@/app/dashboard/projects/[id]/ai-actions";
 import type { PriceMode } from "./useAiPriceEstimator";
 
@@ -66,6 +67,7 @@ export function EstimateResultsTable({
     e.trace !== "unmatched" &&
     e.confidence === "low"
   ).length;
+  const { multiplier: knrMultiplier } = useKnrMultiplier();
 
   // Inline editing state
   const [editingRowId, setEditingRowId] = useState<string | null>(null);
@@ -203,7 +205,7 @@ export function EstimateResultsTable({
               {estimates.map((est) => {
                 const isSelected = selectedIds.has(est.itemId);
                 const regionMod = est.regionModifier ?? 1.0;
-                const laborWithRegion = Math.round(est.suggestedLabor * regionMod * 100) / 100;
+                const laborWithRegion = Math.round(est.suggestedLabor * regionMod * knrMultiplier * 100) / 100;
                 const totalPerUnit = est.suggestedMaterial + laborWithRegion;
                 const totalAll = Math.round(totalPerUnit * est.quantity * 100) / 100;
                 const materialChanged = est.suggestedMaterial !== est.currentMaterial;
