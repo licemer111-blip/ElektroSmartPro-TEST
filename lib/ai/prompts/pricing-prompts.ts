@@ -100,21 +100,25 @@ REGUŁY:
 - Jednostki wg KNR: m (metry), szt (sztuki), kpl (komplet), m² (metry kwadratowe)
 - KRYTYCZNE: NIGDY nie zwracaj null dla nakładu rbh. Jeśli brak dokładnej normy → SZACUJ:
   Prosta wymiana → 0.15–0.30 rbh/szt | Standardowy montaż → 0.20–0.60 rbh/szt
-  Układanie kabla → 0.025–0.060 rbh/mb | Bruzda/kucie → 0.080–0.200 rbh/mb
+  Układanie kabla YDYp p/t → 0.07–0.15 rbh/mb | Bruzda/kucie cegła → 0.85 rbh/mb | Bruzda beton → 2.0 rbh/mb
   Złożony montaż (rozdzielnica, szafa) → 2.0–14.0 rbh/szt | Minimum → 0.05 rbh
 
 REFERENCJA NAKŁADÓW ROBOCIZNY 2026 (rbh/jedn.):
-UKŁADANIE KABLI:
-• YDYp 3×1,5mm²: 0,025 rbh/m   • YDYp 3×2,5mm²: 0,028 rbh/m
-• YDYp 5×4mm²: 0,038 rbh/m     • YDYp 5×6mm²: 0,045 rbh/m
-• YKXs 5×10mm²: 0,060 rbh/m    • YKXs 5×16mm²: 0,070 rbh/m
-• YKXs 5×25mm²: 0,090 rbh/m    • YKXs 5×35mm²: 0,110 rbh/m
-• YKXs 5×50mm²: 0,130 rbh/m    • YKXs 5×70mm²: 0,160 rbh/m
-• YKXs 5×95mm²: 0,190 rbh/m    • YKXs 5×120mm²: 0,220 rbh/m
-• UTP Cat6: 0,030 rbh/m         • HDGs 2×1,0: 0,030 rbh/m
-OSPRZĘT:
-• Gniazdo 230V p/t 1-kr.: 0,300 rbh/szt   • Gniazdo podwójne: 0,400 rbh/szt
-• Gniazdo hermetyczne IP44: 0,450 rbh/szt  • Wyłącznik 1-klaw.: 0,250 rbh/szt
+UKŁADANIE KABLI (KNR 5-08 — instalacja mieszkaniowa p/t w bruzdzie):
+• YDYp 3×1,5mm²: 0,070 rbh/m   • YDYp 3×2,5mm²: 0,080 rbh/m
+• YDYp 5×1,5mm²: 0,090 rbh/m   • YDYp 5×2,5mm²: 0,110 rbh/m
+• YDYp 5×4mm²: 0,130 rbh/m     • YDYp 5×6mm²: 0,150 rbh/m
+• YKXs/YKY 5×10mm²: 0,180 rbh/m  • YKXs/YKY 5×16mm²: 0,210 rbh/m
+• YKXs 5×25mm²: 0,260 rbh/m    • YKXs 5×35mm²: 0,310 rbh/m
+• YKXs 5×50mm²: 0,370 rbh/m    • YKXs 5×70mm²: 0,450 rbh/m
+• YKXs 5×95mm²: 0,550 rbh/m    • YKXs 5×120mm²: 0,650 rbh/m
+• UTP Cat6 (n/t lub korytko): 0,045 rbh/m  • HDGs 2×1,0: 0,040 rbh/m
+• Kabel solarny DC 6mm²: 0,030 rbh/m
+OSPRZĘT (KNR 5-08):
+• Gniazdo 230V p/t pojedyncze (Schuko): 0,350 rbh/szt  • Gniazdo podwójne p/t: 0,450 rbh/szt
+• Gniazdo hermetyczne IP44: 0,500 rbh/szt  • Gniazdo n/t 230V: 0,300 rbh/szt
+• Gniazdo 3-fazowe CEE 16A 5P (400V): 0,600 rbh/szt  • Gniazdo 3-fazowe CEE 32A 5P: 0,700 rbh/szt
+• Wyłącznik 1-biegunowy S1 p/t: 0,250 rbh/szt  • Wyłącznik schodowy S6/S7: 0,300 rbh/szt
 • Puszka p/t 60mm: 0,150 rbh/szt           • Puszka rozgałęźna: 0,200 rbh/szt
 OŚWIETLENIE:
 • Oprawa LED panel 60×60: 0,500 rbh/szt    • Oprawa LED downlight: 0,450 rbh/szt
@@ -124,10 +128,10 @@ TRASY KABLOWE:
 • Koryto 40×25mm: 0,100 rbh/m              • Koryto 100×60mm: 0,150 rbh/m
 • Koryto 200×60mm: 0,200 rbh/m             • Drabinka 200mm: 0,200 rbh/m
 • Rura karbowana Ø20mm: 0,030 rbh/m        • Rura karbowana Ø32mm: 0,040 rbh/m
-BRUZDY (KNR 5-04/5-08):
-• Bruzda tynk: 0,060 rbh/m     • Bruzda cegła/pustak: 0,080 rbh/m
-• Bruzda beton: 0,120 rbh/m    • Bruzda żelbet: 0,180 rbh/m
-• Bruzda g-k: 0,150 rbh/m      • Bruzda ytong/bloczek: 0,200 rbh/m
+BRUZDY (KNR 5-08 — UWAGA: normy są znacznie wyższe niż układanie kabla!):
+• Bruzda tynk/gips lekki: 0,180 rbh/m  • Bruzda cegła/silikat/pustak: 0,850 rbh/m
+• Bruzda beton/żelbet: 2,000 rbh/m    • Bruzda ytong/bloczek: 0,350 rbh/m
+• Bruzda g-k (płyta gipsowo-kartonowa): 0,180 rbh/m  • Zasypanie bruzdy: 0,120 rbh/m
 ROZDZIELNICE:
 • Rozdzielnica 24-mod.: 4,0 rbh/szt   • Rozdzielnica 48-mod.: 6,0 rbh/szt
 • Rozdzielnica 72-mod.: 8,0 rbh/szt   • MCB 1P: 0,20 rbh/szt
