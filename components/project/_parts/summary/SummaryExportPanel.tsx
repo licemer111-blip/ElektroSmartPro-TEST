@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Download, FileSpreadsheet, Save, Check, Lock } from "lucide-react";
 import { ShareOfferDialog } from "@/components/project/share-offer-dialog";
+import { DocumentationDialog } from "@/components/project/project-documentation-tab";
 import { useState as useLocalState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { updateProjectPdfNotes } from "@/app/dashboard/projects/[id]/_actions/project-meta";
@@ -145,6 +146,16 @@ export function SummaryExportPanel({
             } : undefined}
           />
         </div>
+      </div>
+
+      {/* Dokumentacja */}
+      <div className="[&>button]:w-full [&>button]:h-9 [&>button]:text-sm">
+        <DocumentationDialog
+          projectId={project.id}
+          projectStatus={project.status as string}
+          projectName={project.name}
+          itemCount={items.length}
+        />
       </div>
 
       {/* Export buttons — split button PDF | Excel */}

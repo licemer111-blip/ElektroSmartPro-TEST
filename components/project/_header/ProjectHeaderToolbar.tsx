@@ -24,7 +24,6 @@ import { AIAssistantDialog } from "@/components/project/ai-assistant-dialog";
 import { AiPriceEstimatorDialog } from "@/components/project/ai-price-estimator-dialog";
 import { ProjectMembersDialog } from "@/components/project/project-members-dialog";
 import { PanelConfigurator } from "@/components/project/panel-configurator";
-import { DocumentationDialog } from "@/components/project/project-documentation-tab";
 import { ShareOfferDialog } from "@/components/project/share-offer-dialog";
 import { ProjectTagsManager } from "@/components/project/project-tags-manager";
 import { ProjectColorPicker } from "@/components/project/project-color-picker";
@@ -358,18 +357,7 @@ export function ProjectHeaderToolbar({
                   externalOpen={isExternalSync ? (externalPanelOpen ?? false) : undefined}
                   onExternalOpenChange={(v) => onBroadcastDialog("headerPanelOpen", v)}
                 />
-                <DocumentationDialog
-                  projectId={projectId}
-                  projectStatus={projectStatus}
-                  projectName={projectName}
-                  itemCount={projectItems.length}
-                  externalOpen={
-                    isExternalSync ? (externalDocsOpen ?? false) : undefined
-                  }
-                  onExternalOpenChange={(v) =>
-                    onBroadcastDialog("headerDocsOpen", v)
-                  }
-                />
+                {/* DocumentationDialog moved to SummaryExportPanel (Podsumowanie column) */}
                 {/* ShareOfferDialog moved to SummaryExportPanel — hidden here to avoid duplication */}
                 <div className="w-px h-5 bg-slate-200 dark:bg-slate-700 mx-0.5 flex-shrink-0" />
                 <Button
