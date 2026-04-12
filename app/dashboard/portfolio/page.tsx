@@ -3,7 +3,6 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { getPortfolioItems } from "./actions";
 import { PortfolioView } from "./portfolio-view";
-import { requireMinProjects } from "@/lib/guards/feature-gate";
 
 export const metadata: Metadata = {
   title: "Portfolio — Zrealizowane Projekty",
@@ -11,7 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default async function PortfolioPage() {
-  await requireMinProjects();
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");

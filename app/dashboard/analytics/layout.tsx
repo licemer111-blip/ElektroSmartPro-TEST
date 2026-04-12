@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { requireMinProjects } from "@/lib/guards/feature-gate";
 
 export const metadata: Metadata = {
   title: "Analityka Biznesowa — Raporty i Trendy",
@@ -7,6 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default async function AnalyticsLayout({ children }: { children: React.ReactNode }) {
-  await requireMinProjects();
   return children;
 }

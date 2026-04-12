@@ -7,7 +7,6 @@ import { TimeTrackingDashboard } from "@/components/time/time-tracking-dashboard
 import { getMyTimeEntries, getTimeSummary } from "./actions";
 import { getProjects } from "@/app/dashboard/actions";
 import { Clock, Loader2 } from "lucide-react";
-import { requireMinProjects } from "@/lib/guards/feature-gate";
 
 export const metadata: Metadata = {
   title: "Śledzenie Czasu Pracy",
@@ -17,7 +16,6 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function TimePage() {
-  await requireMinProjects();
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
