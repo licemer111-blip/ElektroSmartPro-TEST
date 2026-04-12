@@ -20,6 +20,7 @@ import {
   LayoutGrid,
   FlaskConical,
   Search,
+  Settings,
 } from "lucide-react";
 
 const NAV_GROUPS = [
@@ -28,6 +29,7 @@ const NAV_GROUPS = [
     items: [
       { href: "/admin/dashboard", label: "Dashboard",    icon: LayoutDashboard },
       { href: "/admin/users",     label: "Użytkownicy",  icon: Users           },
+      { href: "/admin/settings",  label: "Ustawienia",   icon: Settings        },
     ],
   },
   {

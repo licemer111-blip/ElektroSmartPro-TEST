@@ -370,6 +370,87 @@ export async function resetStats(): Promise<{ success: boolean; error?: string }
   }
 }
 
+// ─── Global Benchmarks Management ─────────────────────────────────────────────
+
+export interface GlobalBenchmarks {
+  market_rbh_rate: number;
+  material_inflation_multiplier: number;
+  knr_2026_multiplier: number;
+}
+
+export async function getGlobalBenchmarks(): Promise<{ data: GlobalBenchmarks | null; error?: string }> {
+  try {
+    const admin = await isAdmin();
+    if (!admin) return { data: null, error: "Unauthorized" };
+
+    const { data, error } = await supabaseAdmin
+      .from("admin_settings")
+      .select("value")
+      .eq("key", "global_benchmarks")
+      .single();
+
+    if (error) return { data: null, error: error.message };
+
+    const val = data?.value as {
+      market_rbh_rate?: number;
+      material_inflation_multiplier?: number;
+      knr_2026_multiplier?: number;
+    } | null;
+
+    return {
+      data: {
+        market_rbh_rate: val?.market_rbh_rate ?? 85,
+        material_inflation_multiplier: val?.material_inflation_multiplier ?? 1.08,
+        knr_2026_multiplier: val?.knr_2026_multiplier ?? 1.4,
+      },
+    };
+  } catch (error: unknown) {
+    logger.error("getGlobalBenchmarks failed", {}, error);
+    return { data: null, error: error instanceof Error ? error.message : "Błąd" };
+  }
+}
+
+export async function updateGlobalBenchmarks(
+  benchmarks: Partial<GlobalBenchmarks>
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const admin = await isAdmin();
+    if (!admin) return { success: false, error: "Unauthorized" };
+
+    // Get current value first
+    const { data: current } = await supabaseAdmin
+      .from("admin_settings")
+      .select("value")
+      .eq("key", "global_benchmarks")
+      .single();
+
+    const currentValue = current?.value as GlobalBenchmarks | null;
+
+    const newValue = {
+      market_rbh_rate: benchmarks.market_rbh_rate ?? currentValue?.market_rbh_rate ?? 85,
+      material_inflation_multiplier: benchmarks.material_inflation_multiplier ?? currentValue?.material_inflation_multiplier ?? 1.08,
+      knr_2026_multiplier: benchmarks.knr_2026_multiplier ?? currentValue?.knr_2026_multiplier ?? 1.4,
+    };
+
+    const { error } = await supabaseAdmin
+      .from("admin_settings")
+      .update({ value: newValue, updated_at: new Date().toISOString() })
+      .eq("key", "global_benchmarks");
+
+    if (error) return { success: false, error: error.message };
+
+    // Invalidate cache in global-benchmarks.ts
+    const { invalidateBenchmarkCache } = await import("@/lib/global-benchmarks");
+    invalidateBenchmarkCache();
+
+    revalidatePath("/admin/settings");
+    return { success: true };
+  } catch (error: unknown) {
+    logger.error("updateGlobalBenchmarks failed", { benchmarks }, error);
+    return { success: false, error: error instanceof Error ? error.message : "Błąd" };
+  }
+}
+
 // ─── Event Logging (called from client via server action) ─────────────────────
 
 export async function logAnalyticsEvent(
