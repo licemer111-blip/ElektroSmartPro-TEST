@@ -461,8 +461,8 @@ export function RowLaborCell({
 }
 
 export function RowRgCell({
-  item, colorMode, onGlobalFallbackAction, isLoading,
-}: { item: ProjectItem; colorMode: boolean; onGlobalFallbackAction?: (id: string) => void; isLoading?: boolean }) {
+  item, colorMode, onGlobalFallbackAction, isLoading, assemblyNorm,
+}: { item: ProjectItem; colorMode: boolean; onGlobalFallbackAction?: (id: string) => void; isLoading?: boolean; assemblyNorm?: number | null }) {
   const [isPending, startTransition] = useTransition();
   const [confirmReset, setConfirmReset] = useState(false);
 
@@ -476,7 +476,7 @@ export function RowRgCell({
 
   return (
     <TableCell className={`text-right min-w-[90px] w-[90px] ${singleCellBorderClass} ${colorMode ? "bg-blue-50/40 dark:bg-blue-950/10" : ""}`}>
-      {item.confidence_level !== "manual" && item.labor_norm != null && item.labor_norm > 0 ? (
+      {item.confidence_level !== "manual" && (assemblyNorm != null ? assemblyNorm > 0 : (item.labor_norm != null && item.labor_norm > 0)) ? (
         <div className="space-y-0.5">
           <div className="flex items-center gap-1">
             {item.norm_protected && (
@@ -509,7 +509,8 @@ export function RowRgCell({
               </TooltipProvider>
             )}
             <span className={`text-xs font-medium ${colorMode ? "text-blue-700 dark:text-blue-400" : "text-slate-600 dark:text-slate-400"}`}>
-              {item.labor_norm.toFixed(3)} rbh/{item.unit ?? "szt"}
+              {(assemblyNorm ?? item.labor_norm!).toFixed(3)} rbh/{item.unit ?? "szt"}
+              {assemblyNorm != null && <span className="ml-0.5 text-[9px] text-orange-500" title="Suma norm zestawu"> Σ</span>}
             </span>
             {(() => {
               const knrUnitMatch = item.confidence_note?.match(/\[KNR:\s*([^\]]+)\]/);

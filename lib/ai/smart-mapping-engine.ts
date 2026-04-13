@@ -151,9 +151,10 @@ const PUNKT_RESIDENTIAL: AssemblyTemplate = {
   description: "Bruzda w cegle/betonie + kabel YDYp 3×2.5mm² + puszka p/t + montaż urządzenia",
   items: [
     { label: "Bruzdowanie ściany (cegła/beton)", knrCode: "KNR 4-01 0101-02", unit: "mb",  qtyMultiplier: 1.5, rbhPerUnit: 0.10, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Kabel YDYp 3×2.5mm²",              knrCode: "KNR 5-08 0101-02", unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.16, isLabor: false, materialPricePerUnit: 3.20 },
+    { label: "Kabel YDYp 3×2.5mm²",              knrCode: "KNR 5-08 0101-02", unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.16, isLabor: false, materialPricePerUnit: 5.50 },
     { label: "Układanie kabla p/t",               knrCode: "KNR 5-08 0201-01", unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.08, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Puszka podtynkowa Ø60mm",           knrCode: "KNR 5-08 0301-01", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.15, isLabor: false, materialPricePerUnit: 1.80 },
+    { label: "Puszka podtynkowa Ø60mm",           knrCode: "KNR 5-08 0301-01", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.15, isLabor: false, materialPricePerUnit: 3.50 },
+    { label: "Urządzenie p/t (gniazdo/wyłącznik)", knrCode: "MAT-GN-01",       unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 30.00 },
     { label: "Montaż urządzenia p/t",             knrCode: "KNR 5-08 0401-03", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.68, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
@@ -167,9 +168,10 @@ const PUNKT_COMMERCIAL: AssemblyTemplate = {
   sector: "COMMERCIAL",
   description: "Kabel YDYp 3×2.5mm² w korytku/gofre + puszka pod G-K + montaż urządzenia",
   items: [
-    { label: "Kabel YDYp 3×2.5mm²",           knrCode: "KNR 5-08 0101-02", unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.16, isLabor: false, materialPricePerUnit: 3.20 },
+    { label: "Kabel YDYp 3×2.5mm²",           knrCode: "KNR 5-08 0101-02", unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.16, isLabor: false, materialPricePerUnit: 5.50 },
     { label: "Układanie kabla w korytku",      knrCode: "KNR 5-08 0202-01", unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.08, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Puszka podtynkowa pod G-K",      knrCode: "KNR 5-08 0301-03", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.18, isLabor: false, materialPricePerUnit: 2.40 },
+    { label: "Puszka podtynkowa pod G-K",      knrCode: "KNR 5-08 0301-03", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.18, isLabor: false, materialPricePerUnit: 4.00 },
+    { label: "Urządzenie p/t (gniazdo/wyłącznik)", knrCode: "MAT-GN-01",       unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 30.00 },
     { label: "Montaż urządzenia (biuro/G-K)",  knrCode: "KNR 5-08 0401-03", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.68, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
@@ -183,10 +185,11 @@ const PUNKT_INDUSTRIAL: AssemblyTemplate = {
   sector: "INDUSTRIAL",
   description: "Kabel YDYp 3×2.5mm² w rurze PVC + puszka natynkowa IP44 + montaż urządzenia",
   items: [
-    { label: "Kabel YDYp 3×2.5mm²",           knrCode: "KNR 5-08 0101-02", unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.16, isLabor: false, materialPricePerUnit: 3.20 },
-    { label: "Rura karbowana PVC M20",         knrCode: "KNR 5-08 0501-01", unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.07, isLabor: false, materialPricePerUnit: 0.85 },
+    { label: "Kabel YDYp 3×2.5mm²",           knrCode: "KNR 5-08 0101-02", unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.16, isLabor: false, materialPricePerUnit: 5.50 },
+    { label: "Rura karbowana PVC M20",         knrCode: "KNR 5-08 0501-01", unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.07, isLabor: false, materialPricePerUnit: 1.20 },
     { label: "Układanie rur + mocowania",      knrCode: "KNR 5-08 0503-01", unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.05, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Puszka natynkowa IP44",          knrCode: "KNR 5-08 0301-04", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.20, isLabor: false, materialPricePerUnit: 5.50 },
+    { label: "Puszka natynkowa IP44",          knrCode: "KNR 5-08 0301-04", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.20, isLabor: false, materialPricePerUnit: 7.50 },
+    { label: "Urządzenie natynkowe IP44",      knrCode: "MAT-GN-02",       unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 35.00 },
     { label: "Montaż urządzenia natynk. IP44", knrCode: "KNR 5-08 0401-06", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.54, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
@@ -250,7 +253,7 @@ const BIALY_MONTAZ_RESIDENTIAL: AssemblyTemplate = {
   sector: "RESIDENTIAL",
   description: "Tylko czysta robocizna montażu mechanizmu p/t (bez kabla i bruzdy)",
   items: [
-    { label: "Montaż urządzenia p/t", knrCode: "KNR 5-08 0401-03", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.68, isLabor: true, materialPricePerUnit: 0.00 },
+    { label: "Montaż urządzenia p/t", knrCode: "KNR 5-08 0401-03", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.17, isLabor: true, materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -261,7 +264,7 @@ const BIALY_MONTAZ_COMMERCIAL: AssemblyTemplate = {
   sector: "COMMERCIAL",
   description: "Tylko czysta robocizna montażu urządzenia w zabudowie biurowej",
   items: [
-    { label: "Montaż urządzenia (biuro/G-K)", knrCode: "KNR 5-08 0401-03", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.68, isLabor: true, materialPricePerUnit: 0.00 },
+    { label: "Montaż urządzenia (biuro/G-K)", knrCode: "KNR 5-08 0401-03", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.17, isLabor: true, materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -272,7 +275,7 @@ const BIALY_MONTAZ_INDUSTRIAL: AssemblyTemplate = {
   sector: "INDUSTRIAL",
   description: "Tylko czysta robocizna montażu urządzenia natynkowego IP44+",
   items: [
-    { label: "Montaż urządzenia natynk. IP44", knrCode: "KNR 5-08 0401-06", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.54, isLabor: true, materialPricePerUnit: 0.00 },
+    { label: "Montaż urządzenia natynk. IP44", knrCode: "KNR 5-08 0401-06", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.17, isLabor: true, materialPricePerUnit: 0.00 },
   ],
 };
 

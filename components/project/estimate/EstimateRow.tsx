@@ -16,6 +16,7 @@ import { calcRowPrices } from "@/lib/pricing-calculations";
 import type { ProjectItem } from "@/lib/types/database";
 import { detectSmartContext } from "@/lib/ai/smart-context-mapper";
 import { SmartAssemblyPanel } from "@/components/project/estimate/_parts/SmartAssemblyPanel";
+import { expandToAssembly } from "@/lib/ai/smart-mapping-engine";
 import type { ProjectSector } from "@/lib/ai/smart-mapping-engine";
 import { roundPrice, useGlobalSettings } from "@/hooks/use-global-settings";
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
@@ -177,7 +178,11 @@ export const EstimateRow = React.memo(function EstimateRow({
 
   const {
     materialUnitBase, laborUnitBase, materialTotalBase, laborTotalBase,
-    materialUnit, laborUnit, materialTotal, laborTotal, rowTotal,
+    materialUnit: calcMaterialUnit,
+    laborUnit: calcLaborUnit,
+    materialTotal: calcMaterialTotal,
+    laborTotal: calcLaborTotal,
+    rowTotal: calcRowTotal,
   } = calcRowPrices(
     displayItem,
     adjustmentMultiplier,
@@ -190,12 +195,41 @@ export const EstimateRow = React.memo(function EstimateRow({
     knrMultiplier,
   );
 
+  // ── Assembly Template Override ────────────────────────────────────────────────────────────────
+  // ZESTAW / BIALY_MONTAZ / TRASY trigger items: show template-derived totals so
+  // the row matches the SmartAssemblyPanel tooltip. project-summary.tsx applies
+  // the same logic, so table rows ≡ summary ≡ tooltip.
+  const isManualPrice = displayItem.confidence_level === "manual";
+  let materialUnit = calcMaterialUnit;
+  let laborUnit    = calcLaborUnit;
+  let materialTotal = calcMaterialTotal;
+  let laborTotal    = calcLaborTotal;
+  let rowTotal      = calcRowTotal;
+  let assemblyRBHPerUnit: number | null = null;
+
+  if (!isEditing && !isManualPrice && !isAssemblyChild) {
+    const scm = detectSmartContext(item.name);
+    if (scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY") {
+      const expansion = expandToAssembly(item.name, item.quantity, projectSector, projectLaborRate, knrMultiplier);
+      if (expansion.triggered) {
+        const qty = item.quantity || 1;
+        const effLab = expansion.totalLaborPLN * regionModifier * adjustmentMultiplier;
+        const effMat = materialsOwnedByCustomer ? 0 : expansion.totalMaterialPLN * adjustmentMultiplier;
+        laborTotal         = roundPrice(effLab);
+        materialTotal      = roundPrice(effMat);
+        rowTotal           = roundPrice(effLab + effMat);
+        laborUnit          = roundPrice(effLab / qty);
+        materialUnit       = roundPrice(effMat / qty);
+        assemblyRBHPerUnit = qty > 0 ? expansion.totalRBH / qty : null;
+      }
+    }
+  }
+
   const isZeroPrice = rowTotal === 0 && (
     (displayItem.final_material_price ?? displayItem.material_price ?? 0) +
     (displayItem.final_labor_price ?? displayItem.labor_price ?? 0)
   ) === 0;
 
-  const isManualPrice = displayItem.confidence_level === "manual";
   const isAmbiguous = isAmbiguousItem(item.name) && !isManualPrice;
   // kpl with high qty is suspicious — warn user (disabled in manual mode)
   const isKplWarning = !isManualPrice &&
@@ -481,6 +515,7 @@ export const EstimateRow = React.memo(function EstimateRow({
           colorMode={colorMode}
           onGlobalFallbackAction={(!isFinal && !isReadOnly) ? onGlobalFallbackAction : undefined}
           isLoading={fallbackLoadingIds?.has(item.id)}
+          assemblyNorm={assemblyRBHPerUnit}
         />
       )}
 

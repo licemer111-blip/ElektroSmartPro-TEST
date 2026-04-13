@@ -20,6 +20,8 @@ import { HINTS } from "@/lib/hints/hint-content";
 import { cn } from "@/lib/utils";
 import type { ProjectItem, ProjectWithRelations, Profile } from "@/lib/types/database";
 import { calcNarzuty } from "@/lib/pricing-calculations";
+import { detectSmartContext } from "@/lib/ai/smart-context-mapper";
+import { expandToAssembly, detectSector } from "@/lib/ai/smart-mapping-engine";
 import { SummaryFinancialTotals } from "./_parts/summary/SummaryFinancialTotals";
 import { SummaryExportPanel } from "./_parts/summary/SummaryExportPanel";
 
@@ -75,7 +77,7 @@ export function ProjectSummary({
 
   const { multiplier: knrMultiplier } = useKnrMultiplier();
 
-  // Calculate totals - use real prices from database
+  // Calculate totals - assembly trigger items use template prices for consistency with table rows
   const calculateTotals = useMemo(() => () => {
     let rawMaterialBase = 0; // pure base netto, no region, no adj
     let rawLaborBase = 0;    // pure base netto, no region, no adj
@@ -87,19 +89,46 @@ export function ProjectSummary({
     const labMarkupMult   = 1 + (project.lab_markup_pct  || 0) / 100;
     const contingencyPct  = project.contingency_pct   || 0;
 
+    // Items that have actual assembly children in DB — use child prices for those
+    const parentIds = new Set(
+      items.filter(i => i.is_assembly_child).map(i => i.parent_assembly_id).filter(Boolean)
+    );
+    const sector = detectSector((project as { object_types?: { slug?: string } }).object_types?.slug);
+    const projectLaborRate = project.default_hourly_rate ?? 100;
+
     items.forEach((item) => {
       const effectiveMaterialPrice = item.final_material_price ?? item.material_price ?? 0;
       const effectiveLaborPrice = item.final_labor_price ?? item.labor_price ?? 0;
       const isManual = item.confidence_level === "manual";
       const effectiveRegion = isManual ? 1.0 : regionModifier;
 
+      rawEquipmentBase += (item.equipment_price ?? 0) * item.quantity;
+
+      // Assembly override: ZESTAW/BIALY_MONTAZ/TRASY items without DB children
+      if (!item.is_assembly_child && !isManual && !parentIds.has(item.id)) {
+        const scm = detectSmartContext(item.name);
+        if (scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY") {
+          const expansion = expandToAssembly(item.name, item.quantity, sector, projectLaborRate, knrMultiplier);
+          if (expansion.triggered) {
+            // totalLaborPLN = totalRBH × projectLaborRate (base, no region, knrMult already inside)
+            rawLaborBase += expansion.totalLaborPLN;
+            baseLaborTotal += expansion.totalLaborPLN * regionModifier * labMarkupMult;
+            if (!materialsOwnedByCustomer) {
+              rawMaterialBase += expansion.totalMaterialPLN;
+              baseMaterialTotal += expansion.totalMaterialPLN * matMarkupMult;
+            }
+            return; // skip default pricing below
+          }
+        }
+      }
+
+      // Default: stored DB prices
       if (!materialsOwnedByCustomer) {
         rawMaterialBase += effectiveMaterialPrice * item.quantity;
         baseMaterialTotal += effectiveMaterialPrice * item.quantity * matMarkupMult;
       }
       rawLaborBase += effectiveLaborPrice * item.quantity;
       baseLaborTotal += effectiveLaborPrice * item.quantity * effectiveRegion * labMarkupMult * knrMultiplier;
-      rawEquipmentBase += (item.equipment_price ?? 0) * item.quantity;
     });
 
     const sumaBazowaNetto = rawMaterialBase + rawLaborBase;
