@@ -127,9 +127,6 @@ export interface Profile {
   custom_labor_rate?: number | null; // personal RBH rate (PLN/h), active when use_custom_rates=true (P1 mode)
   portfolio_visible?: boolean; // Show portfolio in client offers
   portfolio_limit?: number; // Max portfolio items shown in offers
-  coeff_height?: boolean;     // Sprint v1.2: Praca na wysokości >3m → ×1.25 robocizna
-  coeff_difficulty?: boolean; // Sprint v1.2: Utrudnienia / zamieszkały lokal → ×1.22 robocizna
-  coeff_surface?: boolean;    // Sprint v1.2: Trudne podłoże → +15% surface modifier
   investment_context?: string | null; // Sprint v1.2: ES-Engine AI context (e.g. "KNX villa 400m²")
   material_multiplier?: number | null; // Material price inflation multiplier (default 1.08)
   ai_usage_count?: number; // Monthly AI request counter
@@ -206,12 +203,6 @@ export interface Project {
   // Labor time support
   default_hourly_rate: number; // Stawka r-g in PLN (default 100.00)
   show_labor_hours_in_pdf: boolean; // Show Roboczogodziny column in PDF
-  // KNR pricing overrides (project-level) — Sprint v1.2+
-  pricing_overrides?: {
-    coeff_height?:     boolean | null;
-    coeff_difficulty?: boolean | null;
-    coeff_surface?:    boolean | null;
-  } | null;
   // Document output settings (Pult 5-w-1) — Iron Rule: affect PDF/Portal only, never the internal editor
   show_knr: boolean;        // Show KNR code prefix in PDF/Portal (e.g. "[KNR 5-08 0401-03] Montaż gniazda")
   brutto_mode: boolean;     // Show Brutto prices (with VAT) in PDF/Portal instead of Netto

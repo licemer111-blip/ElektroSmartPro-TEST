@@ -31,9 +31,7 @@ import { buildLocalKnrContext } from "@/lib/knr-local-context";
 import { scaleLaborNorm, getUnitBaseSize } from "@/lib/labor-time";
 import { getPricingCacheName, CACHE_MODEL_ID } from "@/lib/services/ai/gemini-context-cache";
 import {
-  buildPricingConfig,
   normalizeKnrCode,
-  type PricingOverrides,
 } from "@/lib/services/pricing-config";
 import { clampPrice } from "@/lib/utils/price-validator";
 import { applyRealityCheck } from "@/lib/services/reality-check";
@@ -339,7 +337,7 @@ export async function estimatePricesWithAI(
 
     const { data: userProfile } = await supabase
       .from("profiles")
-      .select("coeff_height, coeff_difficulty, coeff_surface, investment_context, hourly_rate")
+      .select("investment_context, hourly_rate")
       .eq("id", user.id)
       .single();
     const investmentContextDB = (userProfile?.investment_context as string | null) ?? "";
@@ -358,18 +356,8 @@ export async function estimatePricesWithAI(
       ? Math.round((rateResult.laborRate / rateResult.regionModifier) * 100) / 100
       : rateResult.laborRate;
 
-    // Sprint v1.2+: Centralized PricingConfig — Global profile defaults × Project-level overrides
-    const pricingCfg = buildPricingConfig(
-      userProfile as { coeff_height?: boolean | null; coeff_difficulty?: boolean | null; coeff_surface?: boolean | null } | null,
-      (project as { pricing_overrides?: PricingOverrides | null }).pricing_overrides,
-    );
-    // v3.0: complexity_factor — multiplies globalLaborMod (must be declared before pricingCfg destructure)
-    const complexityFactor = (project.complexity_factor as number | null) ?? 1.0;
-
-    const { globalLaborMod: rawGlobalLaborMod, surfaceExtraMod } = pricingCfg;
-    // complexityFactor is applied at DISPLAY TIME in calcRowPrices (lazy multiply).
-    // Do NOT include it here — that would cause double-count: DB×display = complexityFactor².
-    const globalLaborMod = rawGlobalLaborMod;
+    const globalLaborMod = 1.0;
+    const surfaceExtraMod = 1.0;
 
     // D2: project-level context fallback for getSurfaceModifier when item.section is null
     const projectFallback = (
@@ -465,7 +453,7 @@ export async function estimatePricesWithAI(
           })();
           const ceilingModL0 = getCeilingModifier(item.name, itemSectionCtxL0);
           const heightModL0  = getHeightModifier(item.name, itemSectionCtxL0);
-          const globalModTagL0 = globalLaborMod !== 1.0 ? ` ×${globalLaborMod.toFixed(3)}(wys/szt)` : "";
+          const globalModTagL0 = "";
           const ceilingTagL0  = ceilingModL0 !== 1.0 ? ` ×${ceilingModL0.toFixed(2)}(sufit)` : "";
           const heightTagL0   = heightModL0  !== 1.0 ? ` ×${heightModL0.toFixed(2)}(wysokość)` : "";
           const warnings = buildModifierWarnings(cableMod, surfaceModL0, ceilingModL0);
@@ -843,7 +831,7 @@ export async function estimatePricesWithAI(
               : `1.0(neutral)`;
         const ceilingTag = ceilingMod !== 1.0 ? ` ×${ceilingMod.toFixed(2)}(sufit)` : "";
         const heightTag  = heightMod  !== 1.0 ? ` ×${heightMod.toFixed(2)}(wysokość)` : "";
-        const globalModTag = globalLaborMod !== 1.0 ? ` ×${globalLaborMod.toFixed(3)}(wys/szt)` : "";
+        const globalModTag = "";
         const normFloorTag = normFloorApplied ? `[⬆floor ${GROOVE_ZELBET_MIN_NORM}] ` : "";
         const wymianaTag = wymianaActive ? ` ×${WYMIANA_FACTOR.toFixed(1)}(wymiana)` : "";
         const capTagL2 = localModL2 >= MAX_COMBINED_MODIFIER ? ` ⚠️cap×${MAX_COMBINED_MODIFIER}` : "";
@@ -1100,7 +1088,7 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
             ? `×${autoSurfaceML3.toFixed(2)}(auto)${projSurfaceML3 > 1.0 ? `×${projSurfaceML3.toFixed(2)}(proj)` : ""}`
             : `×1.0(neutral)`;
         const capTagL3 = localModL3 >= MAX_COMBINED_MODIFIER ? ` ⚠️cap×${MAX_COMBINED_MODIFIER}` : "";
-        const globalModTagL3 = globalLaborMod !== 1.0 ? ` ×${globalLaborMod.toFixed(3)}(wys/szt)` : "";
+        const globalModTagL3 = "";
         l2Estimates[i] = {
           ...est,
           suggestedMaterial: mode === "labor" ? est.currentMaterial
@@ -1110,7 +1098,7 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
           equipmentNorm: l3.equipment_norm ?? 0,
           confidence: l3.confidence,
           laborNorm: l3.labor_norm_rbh ?? null,
-          note: `L3 AI: ${l3.note} | ×${cML3.toFixed(2)}(kabel) ${surfaceTagL3}(podł)${globalLaborMod > 1 ? ` ×${globalLaborMod.toFixed(3)}(wys/szt)` : ""}${wL3}`,
+          note: `L3 AI: ${l3.note} | ×${cML3.toFixed(2)}(kabel) ${surfaceTagL3}(podł)${wL3}`,
           knrCode: (() => {
             const raw = l3.knr_code ?? null;
             if (raw && isSyntheticKnr(raw)) {
@@ -1443,7 +1431,7 @@ export async function repriceSingleItem(
     // \u2500\u2500 AI repricing \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
     const { data: userProfile } = await supabase
       .from("profiles")
-      .select("coeff_height, coeff_difficulty, coeff_surface, investment_context, hourly_rate")
+      .select("investment_context, hourly_rate")
       .eq("id", user.id)
       .single();
     const projectLaborRateRepr = (project.default_hourly_rate as number | null) ?? 0;
@@ -1459,11 +1447,6 @@ export async function repriceSingleItem(
       ? Math.round((rateResult.laborRate / rateResult.regionModifier) * 100) / 100
       : rateResult.laborRate;
     const rateSource: RateSource = "manual";
-    // Apply centralized PricingConfig (project overrides × global profile) to single-item repricing
-    const repriceCfg = buildPricingConfig(
-      userProfile as { coeff_height?: boolean | null; coeff_difficulty?: boolean | null; coeff_surface?: boolean | null } | null,
-      (project as { pricing_overrides?: PricingOverrides | null }).pricing_overrides,
-    );
 
     const regionName = (project.regions as { name: string; price_modifier: number } | null)?.name || "Polska";
     const priceModifier = (project.regions as { name: string; price_modifier: number } | null)?.price_modifier || 1.0;
@@ -1523,8 +1506,7 @@ export async function repriceSingleItem(
     const e = estResult.estimates[0];
     if (!e) return { success: false, error: "AI nie zwróciło wyceny" };
 
-    // Apply height/difficulty modifiers (globalLaborMod) — AI returns base price without these
-    const adjLabor = Math.round(Math.round((e.labor_price || 0) * 100) / 100 * repriceCfg.globalLaborMod * 100) / 100;
+    const adjLabor = Math.round((e.labor_price || 0) * 100) / 100;
     // Keyword safety: pure-labour items must have material=0; all AI prices pass through clampPrice
     const rawMatRepr = Math.round((e.material_price || 0) * 100) / 100;
     const clampedMatRepr = isPureLaborByKeyword(item.name)
@@ -1559,14 +1541,14 @@ export async function repriceSingleItem(
       suggestedMaterial: clampedMatRepr,
       suggestedLabor: adjLabor,
       confidence: e.confidence,
-      note: `Uścisłone${opts.extraContext ? ` (${opts.extraContext})` : ""}${opts.overrideUnit && opts.overrideUnit !== item.unit ? ` | jm. zmieniono: ${item.unit}→${opts.overrideUnit}` : ""}${repriceCfg.globalLaborMod > 1 ? ` | KNR ×${repriceCfg.globalLaborMod.toFixed(3)} rob.` : ""}: ${e.note}`,
+      note: `Uścisłone${opts.extraContext ? ` (${opts.extraContext})` : ""}${opts.overrideUnit && opts.overrideUnit !== item.unit ? ` | jm. zmieniono: ${item.unit}→${opts.overrideUnit}` : ""}: ${e.note}`,
       knrCode: rawKnrRepr,
       knrSource: knrSourceRepr,
       laborNorm: e.labor_norm ?? null,
       isAmbiguous: false,
       trace: `repriceSingleItem AI (${e.confidence})`,
     };
-    const processedRepr = applyPostProcessPipeline(rawEstRepr, baseRateForCalc, repriceCfg.globalLaborMod);
+    const processedRepr = applyPostProcessPipeline(rawEstRepr, baseRateForCalc, 1.0);
 
     return {
       success: true,

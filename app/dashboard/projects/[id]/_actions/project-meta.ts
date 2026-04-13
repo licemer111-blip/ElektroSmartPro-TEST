@@ -674,42 +674,6 @@ export async function updateProjectDocSettings(
   return { success: true };
 }
 
-// Update project-level KNR pricing overrides (Sprint v1.2+)
-// NULL value for a field means "use global profile setting" (no override)
-export async function updateProjectPricingOverrides(
-  projectId: string,
-  overrides: {
-    coeff_height?:     boolean | null;
-    coeff_difficulty?: boolean | null;
-    coeff_surface?:    boolean | null;
-  }
-): Promise<{ success?: boolean; error?: string }> {
-  const { user, supabase } = await tryAuth();
-  if (!user || !supabase) return { error: "Musisz być zalogowany" };
-
-  const canEdit = await canUserEditProject(supabase, projectId, user.id);
-  if (!canEdit) return { error: "Nie masz uprawnień do tego projektu" };
-
-  // Build the JSONB object — only include keys that are explicitly set (non-undefined)
-  // Passing null for a key removes the project override and falls back to global settings
-  const payload: Record<string, boolean | null> = {};
-  if (overrides.coeff_height     !== undefined) payload.coeff_height     = overrides.coeff_height;
-  if (overrides.coeff_difficulty !== undefined) payload.coeff_difficulty = overrides.coeff_difficulty;
-  if (overrides.coeff_surface    !== undefined) payload.coeff_surface    = overrides.coeff_surface;
-
-  const { error } = await supabase
-    .from("projects")
-    .update({ pricing_overrides: Object.keys(payload).length > 0 ? payload : null })
-    .eq("id", projectId);
-
-  if (error) {
-    logger.error("Error updating project pricing overrides", { projectId }, error);
-    return { error: "Błąd podczas zapisywania ustawień kalkulacji" };
-  }
-
-  revalidateProject(projectId);
-  return { success: true };
-}
 
 // Update project PDF notes (Uwagi do kosztorysu)
 export async function updateProjectPdfNotes(projectId: string, notes: string) {

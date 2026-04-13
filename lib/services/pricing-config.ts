@@ -1,93 +1,35 @@
 // ═══════════════════════════════════════════════════════════════════
-// lib/services/pricing-config.ts — Centralized Pricing Configuration
-// Sprint v1.2+: single source of truth for all KNR multipliers.
-//
-// Architecture:
-//   Global defaults  → profiles.coeff_height / coeff_difficulty / coeff_surface
-//   Project overrides→ projects.pricing_overrides (JSONB, nullable)
-//   Merge rule       → project override wins; null/undefined falls back to global
+// lib/services/pricing-config.ts
+// KNR multiplier coefficients (coeff_height, coeff_difficulty, coeff_surface)
+// have been removed. buildPricingConfig is kept as a no-op stub so that
+// existing callers compile without changes while they are cleaned up.
 // ═══════════════════════════════════════════════════════════════════
 
-// ─── Types ───────────────────────────────────────────────────────────────────
+/** @deprecated — coeff_height/difficulty/surface removed. Use stub only. */
+export interface PricingOverrides { [key: string]: unknown }
 
-/** Project-level KNR multiplier overrides stored as JSONB in projects.pricing_overrides */
-export interface PricingOverrides {
-  coeff_height?:     boolean | null;
-  coeff_difficulty?: boolean | null;
-  coeff_surface?:    boolean | null;
-}
+/** @deprecated */
+export interface GlobalPricingProfile { [key: string]: unknown }
 
-/** Profile shape consumed by buildPricingConfig (subset of profiles table) */
-export interface GlobalPricingProfile {
-  coeff_height?:     boolean | null;
-  coeff_difficulty?: boolean | null;
-  coeff_surface?:    boolean | null;
-}
-
-/**
- * Effective pricing configuration — result of merging global profile + project overrides.
- * All downstream pricing logic consumes this type instead of reading from DB directly.
- */
+/** @deprecated — all fields are always 1.0 / false now */
 export interface PricingConfig {
-  // ── Boolean flags (effective values after merge) ──────────────
-  coeff_height:     boolean; // Praca na wysokości >3m → ×1.25 robocizna
-  coeff_difficulty: boolean; // Utrudnienia / zamieszkały lokal → ×1.22 robocizna
-  coeff_surface:    boolean; // Trudne podłoże → +15% surface modifier
-
-  // ── Computed composite multipliers (read-only) ────────────────
-  /** (height?1.25:1) × (difficulty?1.22:1) — applied to ALL labor (L0 / L2 / L3) */
-  globalLaborMod:  number;
-  /** surface ? 1.15 : 1.0 — multiplied into getSurfaceModifier() result */
-  surfaceExtraMod: number;
-
-  // ── Provenance tracking ───────────────────────────────────────
-  /** Tracks which values came from project override vs global profile */
-  source: {
-    height:     "global" | "project";
-    difficulty: "global" | "project";
-    surface:    "global" | "project";
-  };
+  coeff_height:     false;
+  coeff_difficulty: false;
+  coeff_surface:    false;
+  globalLaborMod:   1;
+  surfaceExtraMod:  1;
+  source: { height: "global"; difficulty: "global"; surface: "global" };
 }
 
-// ─── Core function ───────────────────────────────────────────────────────────
-
-/**
- * Merges global profile defaults with project-level overrides.
- * Project overrides (non-null) take precedence over global profile settings.
- *
- * @param globalProfile    — User profile record (or null for anonymous/fallback)
- * @param projectOverrides — projects.pricing_overrides JSONB (null = use global)
- *
- * @example
- *   // Global: height=true, difficulty=false, surface=false
- *   // Project override: { coeff_height: false }
- *   // Result: height=false (project), difficulty=false (global), surface=false (global)
- */
+/** @deprecated — returns identity config (all multipliers = 1.0) */
 export function buildPricingConfig(
-  globalProfile:    GlobalPricingProfile | null | undefined,
-  projectOverrides: PricingOverrides     | null | undefined,
+  _globalProfile:    GlobalPricingProfile | null | undefined,
+  _projectOverrides: PricingOverrides     | null | undefined,
 ): PricingConfig {
-  const ov = projectOverrides ?? {};
-  const gp = globalProfile    ?? {};
-
-  // Project override wins when explicitly set (non-null/undefined).
-  const coeff_height     = ov.coeff_height     ?? gp.coeff_height     ?? false;
-  const coeff_difficulty = ov.coeff_difficulty  ?? gp.coeff_difficulty  ?? false;
-  const coeff_surface    = ov.coeff_surface     ?? gp.coeff_surface     ?? false;
-
   return {
-    coeff_height:     !!coeff_height,
-    coeff_difficulty: !!coeff_difficulty,
-    coeff_surface:    !!coeff_surface,
-
-    globalLaborMod:  (coeff_height ? 1.25 : 1.0) * (coeff_difficulty ? 1.22 : 1.0),
-    surfaceExtraMod: coeff_surface ? 1.15 : 1.0,
-
-    source: {
-      height:     ov.coeff_height     != null ? "project" : "global",
-      difficulty: ov.coeff_difficulty  != null ? "project" : "global",
-      surface:    ov.coeff_surface     != null ? "project" : "global",
-    },
+    coeff_height: false, coeff_difficulty: false, coeff_surface: false,
+    globalLaborMod: 1, surfaceExtraMod: 1,
+    source: { height: "global", difficulty: "global", surface: "global" },
   };
 }
 

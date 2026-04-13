@@ -42,11 +42,6 @@ interface Totals {
   vatLaborRate?: number;       // e.g. 8
 }
 
-interface ActiveCoefficients {
-  height: boolean;
-  difficulty: boolean;
-  surface: boolean;
-}
 
 interface SummaryFinancialTotalsProps {
   totals: Totals;
@@ -59,7 +54,6 @@ interface SummaryFinancialTotalsProps {
   sectionBreakdown: SectionBreakdownItem[];
   projectId: string;
   equipmentTotal?: number;
-  activeCoefficients?: ActiveCoefficients;
 }
 
 export function SummaryFinancialTotals({
@@ -73,7 +67,6 @@ export function SummaryFinancialTotals({
   sectionBreakdown,
   projectId,
   equipmentTotal = 0,
-  activeCoefficients,
 }: SummaryFinancialTotalsProps) {
   // VAT breakdown: use separate rates if provided, otherwise single rate for both
   const effectiveVatMat = vatRateMaterial ?? vatRate;
@@ -146,44 +139,6 @@ export function SummaryFinancialTotals({
           <span className="text-sm text-violet-600 dark:text-violet-400">
             <BlurredPrice value={equipmentTotal} isPro={isPro} />
           </span>
-        </div>
-      )}
-      {/* Active KNR coefficients indicator */}
-      {activeCoefficients && (activeCoefficients.height || activeCoefficients.difficulty || activeCoefficients.surface) && (
-        <div className="mt-1 rounded-md border border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-950/10 px-2.5 py-2">
-          <div className="text-[10px] font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wide mb-1.5 flex items-center gap-1">
-            <HardHat className="w-3 h-3" />
-            Aktywne współczynniki KNR
-          </div>
-          <div className="space-y-0.5">
-            {activeCoefficients.height && (
-              <div className={cn("flex items-center justify-between text-[11px] text-amber-600 dark:text-amber-400")}>
-                <span className="flex items-center gap-1"><HardHat className="w-2.5 h-2.5" />Na wysokości (&gt;3m)</span>
-                <span className="font-bold">×1.25</span>
-              </div>
-            )}
-            {activeCoefficients.difficulty && (
-              <div className={cn("flex items-center justify-between text-[11px] text-amber-600 dark:text-amber-400")}>
-                <span className="flex items-center gap-1"><Home className="w-2.5 h-2.5" />Utrudnienia</span>
-                <span className="font-bold">×1.22</span>
-              </div>
-            )}
-            {activeCoefficients.surface && (
-              <div className={cn("flex items-center justify-between text-[11px] text-amber-600 dark:text-amber-400")}>
-                <span className="flex items-center gap-1"><Wrench className="w-2.5 h-2.5" />Trudne podłoże</span>
-                <span className="font-bold">+15% podl.</span>
-              </div>
-            )}
-            {(activeCoefficients.height || activeCoefficients.difficulty) && (
-              <div className="flex items-center justify-between text-[11px] text-amber-700 dark:text-amber-300 font-semibold border-t border-amber-200 dark:border-amber-700 pt-0.5 mt-0.5">
-                <span>Składowe robocizna:</span>
-                <span>×{(
-                  (activeCoefficients.height ? 1.25 : 1.0) *
-                  (activeCoefficients.difficulty ? 1.22 : 1.0)
-                ).toFixed(3)}</span>
-              </div>
-            )}
-          </div>
         </div>
       )}
 

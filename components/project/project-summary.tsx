@@ -20,7 +20,6 @@ import { HINTS } from "@/lib/hints/hint-content";
 import { cn } from "@/lib/utils";
 import type { ProjectItem, ProjectWithRelations, Profile } from "@/lib/types/database";
 import { calcNarzuty } from "@/lib/pricing-calculations";
-import { buildPricingConfig } from "@/lib/services/pricing-config";
 import { SummaryFinancialTotals } from "./_parts/summary/SummaryFinancialTotals";
 import { SummaryExportPanel } from "./_parts/summary/SummaryExportPanel";
 
@@ -74,11 +73,6 @@ export function ProjectSummary({
   const isPro = profile?.is_pro || project.is_demo_project === true;
   const isFinal = projectStatus === "final";
 
-  // Effective KNR coefficients: project override wins over global profile default
-  // NOTE: knrLaborMod (globalLaborMod × surfaceExtraMod) and complexityFactor are NOT applied here.
-  // The pricing engine already bakes them into stored labor_price at estimation time.
-  // Applying them again at display would cause double-counting (e.g. height×1.25² instead of ×1.25).
-  const pricingCfg = buildPricingConfig(profile, project.pricing_overrides);
   const { multiplier: knrMultiplier } = useKnrMultiplier();
 
   // Calculate totals - use real prices from database
@@ -89,12 +83,9 @@ export function ProjectSummary({
     let baseLaborTotal = 0;    // with region modifier
     let rawEquipmentBase = 0;  // equipment (S) total
 
-    // v3.0: split markups + complexity
     const matMarkupMult   = 1 + (project.mat_markup_pct  || 0) / 100;
     const labMarkupMult   = 1 + (project.lab_markup_pct  || 0) / 100;
     const contingencyPct  = project.contingency_pct   || 0;
-    // complexityFactor: applied at display time (not stored in DB price since d38675bb)
-    const complexityFactor = (project.complexity_factor as number | null) || 1.0;
 
     items.forEach((item) => {
       const effectiveMaterialPrice = item.final_material_price ?? item.material_price ?? 0;
@@ -107,7 +98,7 @@ export function ProjectSummary({
         baseMaterialTotal += effectiveMaterialPrice * item.quantity * matMarkupMult;
       }
       rawLaborBase += effectiveLaborPrice * item.quantity;
-      baseLaborTotal += effectiveLaborPrice * item.quantity * effectiveRegion * labMarkupMult * complexityFactor * knrMultiplier;
+      baseLaborTotal += effectiveLaborPrice * item.quantity * effectiveRegion * labMarkupMult * knrMultiplier;
       rawEquipmentBase += (item.equipment_price ?? 0) * item.quantity;
     });
 
@@ -149,7 +140,7 @@ export function ProjectSummary({
       regionName,
       equipmentTotal: rawEquipmentBase,
     };
-  }, [items, project, regionModifier, regionName, materialsOwnedByCustomer, vatRate, knrMultiplier]);
+  }, [items, project, regionModifier, materialsOwnedByCustomer, vatRate, knrMultiplier]);
 
   const totals = calculateTotals();
 
@@ -157,7 +148,6 @@ export function ProjectSummary({
     const sections = new Map<string, { mat: number; lab: number; count: number }>();
     const parentIds = new Set(items.filter(i => i.is_assembly_child).map(i => i.parent_assembly_id).filter(Boolean));
     const adjustmentMultiplier = 1 + (project.adjustment_percentage || 0) / 100;
-    const complexityFactorSec = (project.complexity_factor as number | null) || 1.0;
 
     items.forEach(item => {
       if (item.is_assembly_child) return;
@@ -170,7 +160,7 @@ export function ProjectSummary({
           const isChildManual = c.confidence_level === "manual";
           const effRegion = isChildManual ? 1.0 : regionModifier;
           const cMat = materialsOwnedByCustomer ? 0 : (c.final_material_price ?? c.material_price ?? 0) * c.quantity * adjustmentMultiplier;
-          const cLab = (c.final_labor_price ?? c.labor_price ?? 0) * c.quantity * adjustmentMultiplier * effRegion * complexityFactorSec * knrMultiplier;
+          const cLab = (c.final_labor_price ?? c.labor_price ?? 0) * c.quantity * adjustmentMultiplier * effRegion * knrMultiplier;
           prev.mat += cMat;
           prev.lab += cLab;
         });
@@ -178,7 +168,7 @@ export function ProjectSummary({
         const isManual = item.confidence_level === "manual";
         const effRegion = isManual ? 1.0 : regionModifier;
         const mat = materialsOwnedByCustomer ? 0 : (item.final_material_price ?? item.material_price ?? 0) * item.quantity * adjustmentMultiplier;
-        const lab = (item.final_labor_price ?? item.labor_price ?? 0) * item.quantity * adjustmentMultiplier * effRegion * complexityFactorSec * knrMultiplier;
+        const lab = (item.final_labor_price ?? item.labor_price ?? 0) * item.quantity * adjustmentMultiplier * effRegion * knrMultiplier;
         prev.mat += mat;
         prev.lab += lab;
       }
@@ -259,11 +249,6 @@ export function ProjectSummary({
           sectionBreakdown={sectionBreakdown}
           projectId={projectId}
           equipmentTotal={totals.equipmentTotal}
-          activeCoefficients={{
-            height: pricingCfg.coeff_height,
-            difficulty: pricingCfg.coeff_difficulty,
-            surface: pricingCfg.coeff_surface,
-          }}
         />
 
         {/* Narzuty (Kp + Z + Kz + v3 marże) — collapsible */}

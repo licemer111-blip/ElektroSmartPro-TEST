@@ -16,7 +16,6 @@ import { listKbFileNames } from "@/lib/kb-storage";
 import { VOIVODESHIP_MODIFIERS } from "@/lib/ai-master-brain";
 import { getEffectiveRate, getKnrMultiplier } from "@/lib/global-benchmarks";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { buildPricingConfig } from "@/lib/services/pricing-config";
 import { z } from "zod";
 
 // ── Input types ──────────────────────────────────────────────────────────────
@@ -251,15 +250,12 @@ export async function pricePanelWithAI(
     use_custom_rates?: boolean | null;
     custom_labor_rate?: number | null;
     material_multiplier?: number | null;
-    coeff_height?: boolean | null;
-    coeff_difficulty?: boolean | null;
-    coeff_surface?: boolean | null;
   }
   let profileData: ProfileRateData | null = null;
   if (userId) {
     const { data } = await supabaseAdmin
       .from("profiles")
-      .select("hourly_rate, use_custom_rates, custom_labor_rate, material_multiplier, coeff_height, coeff_difficulty, coeff_surface")
+      .select("hourly_rate, use_custom_rates, custom_labor_rate, material_multiplier")
       .eq("id", userId)
       .single();
     profileData = data as unknown as ProfileRateData;
@@ -291,9 +287,6 @@ export async function pricePanelWithAI(
   const materialMultiplier = effectiveRate.matMultiplier;
   const laborRatePLN = effectiveRate.laborRate;
   const knrMultiplier = await getKnrMultiplier();
-
-  // PricingConfig: height ×1.25, difficulty ×1.22, surface ×1.15 — from user profile
-  const pricingConfig = buildPricingConfig(profileData, null);
 
   const totalModules = sections.reduce(
     (s, sec) => s + sec.modules.length + sec.accessories.length,
@@ -418,10 +411,8 @@ Zwróć kompletny obiekt JSON ze wszystkimi sekcjami, modułami i sumami.`;
 
       if (knrEntry) {
         // L0: KNR-verified — deterministic labor, no AI guessing
-        const unitLabor = Math.round(knrEntry.laborNorm * knrMultiplier * laborRatePLN * pricingConfig.globalLaborMod * 100) / 100;
-        const modStr = pricingConfig.globalLaborMod !== 1.0
-          ? ` × ${pricingConfig.globalLaborMod.toFixed(2)} (kof.)`
-          : "";
+        const unitLabor = Math.round(knrEntry.laborNorm * knrMultiplier * laborRatePLN * 100) / 100;
+        const modStr = "";
         const voivStr = request.voivodeshipName
           ? ` | ${request.voivodeshipName} ×${voivodeshipModifier.toFixed(2)}`
           : "";
@@ -464,7 +455,7 @@ Zwróć kompletny obiekt JSON ze wszystkimi sekcjami, modułami i sumami.`;
       const inputSec = sections.find(s => s.sectionName === sec.sectionName);
       const enclosureKnr = resolveEnclosureKnr(inputSec?.enclosureModules ?? 36);
       const enclosureLabor = Math.round(
-        enclosureKnr.laborNorm * knrMultiplier * laborRatePLN * pricingConfig.globalLaborMod * 100
+        enclosureKnr.laborNorm * knrMultiplier * laborRatePLN * 100
       ) / 100;
       // Apply manufacturerCoeff to enclosure material price
       const enclosureMaterialWithCoeff = Math.round((sec.enclosureMaterial ?? 0) * manufacturerCoeff * 100) / 100;

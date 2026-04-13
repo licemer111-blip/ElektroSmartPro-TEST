@@ -201,7 +201,7 @@ export async function POST(req: Request) {
     // v10.5 FIX: Apply v3.0 pricing multipliers — must match project-summary.tsx
     const matMarkupMult   = 1 + (Number((project as Record<string, unknown>).mat_markup_pct) || 0) / 100;
     const labMarkupMult   = 1 + (Number((project as Record<string, unknown>).lab_markup_pct) || 0) / 100;
-    const complexityFactor = Number((project as Record<string, unknown>).complexity_factor) || 1.0;
+    const complexityFactor = 1.0;
     const contingencyPct  = Number((project as Record<string, unknown>).contingency_pct) || 0;
     // KNR 2026 multiplier — must match display-time calcRowPrices() in EstimateRow
     const knrMultiplier = await getKnrMultiplier();
@@ -217,7 +217,7 @@ export async function POST(req: Request) {
         ...item,
         // matOwnedByClient or isInvestorMat: zero out material prices
         finalMat: (matOwnedByClient || isInvestorMat) ? 0 : getPrice(item, "mat") * matMarkupMult * adjustmentOnly * vatMultiplier,
-        finalLab: getPrice(item, "lab") * labMarkupMult * complexityFactor * knrMultiplier * adjustmentOnly * effectiveRegion * vatMultiplier,
+        finalLab: getPrice(item, "lab") * labMarkupMult * knrMultiplier * adjustmentOnly * effectiveRegion * vatMultiplier,
         laborNorm: Number((item as Record<string, unknown>).labor_norm ?? 0),
         isInvestorMat,
       };
