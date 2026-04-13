@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { UNIT_PRESETS } from "@/lib/validations";
 import { calcRowPrices } from "@/lib/pricing-calculations";
 import type { ProjectItem } from "@/lib/types/database";
+import { detectSmartContext, getSmartContextBadgeColor } from "@/lib/ai/smart-context-mapper";
 import { roundPrice, useGlobalSettings } from "@/hooks/use-global-settings";
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { ConfidenceDot, UncertainPriceWarning } from "@/components/project/estimate/ConfidenceBadge";
@@ -321,6 +322,18 @@ export const EstimateRow = React.memo(function EstimateRow({
                   Wymaga doprecyzowania
                 </span>
               )}
+              {!isEditing && !isAssemblyChild && (() => {
+                const scm = detectSmartContext(item.name);
+                if (scm.category === "NONE") return null;
+                return (
+                  <span
+                    title={`ES-Engine rozpoznał: ${scm.validationLabel}`}
+                    className={`inline-flex items-center gap-0.5 mr-1 px-1.5 py-0.5 rounded border text-[8px] font-semibold cursor-help ${getSmartContextBadgeColor(scm.category)}`}
+                  >
+                    ⚡ {scm.validationLabel}
+                  </span>
+                );
+              })()}
               {item.origin_id && (() => {
                 const ot = (item as { origin_type?: string | null }).origin_type;
                 const isAggregate = ot === "panel_consumable" || ot === "panel_busbar" || ot === "panel_assembly";

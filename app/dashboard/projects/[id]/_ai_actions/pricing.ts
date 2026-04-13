@@ -46,6 +46,7 @@ import {
   getCeilingModifier, getHeightModifier,
   classifyIntent, GROOVE_FLOOR_RE, DRILL_FLOOR_RE,
 } from "@/lib/services/semantic-classifier";
+import { buildEnrichedItemList } from "@/lib/ai/smart-context-mapper";
 
 // ── Re-export types for external consumers ────────────────────────
 export type { AiPriceEstimate } from "./pricing-types";
@@ -990,9 +991,9 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
 
       await Promise.all(chunks.map(async (chunk) => {
         try {
-          const itemList = chunk
-            .map((item, idx) => `${idx + 1}. "${item.name}" | jednostka: ${item.unit}`)
-            .join("\n");
+          const itemList = buildEnrichedItemList(
+            chunk.map((item) => ({ name: item.name, unit: item.unit }))
+          );
           const batchPrompt = `Region: ${regionName} | Stawka bazowa: ${baseRateForCalc} PLN/rbh\n\n${itemList}`;
 
           let batchResult: z.infer<typeof l3Schema>;
