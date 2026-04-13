@@ -14,7 +14,7 @@ import { logger } from "@/lib/logger";
 import { askExpertWithAudit } from "@/server/services/ai-advisor.service";
 import { listKbFileNames } from "@/lib/kb-storage";
 import { VOIVODESHIP_MODIFIERS } from "@/lib/ai-master-brain";
-import { getEffectiveRate } from "@/lib/global-benchmarks";
+import { getEffectiveRate, getKnrMultiplier } from "@/lib/global-benchmarks";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { buildPricingConfig } from "@/lib/services/pricing-config";
 import { z } from "zod";
@@ -290,6 +290,7 @@ export async function pricePanelWithAI(
   }
   const materialMultiplier = effectiveRate.matMultiplier;
   const laborRatePLN = effectiveRate.laborRate;
+  const knrMultiplier = await getKnrMultiplier();
 
   // PricingConfig: height ×1.25, difficulty ×1.22, surface ×1.15 — from user profile
   const pricingConfig = buildPricingConfig(profileData, null);
@@ -417,7 +418,7 @@ Zwróć kompletny obiekt JSON ze wszystkimi sekcjami, modułami i sumami.`;
 
       if (knrEntry) {
         // L0: KNR-verified — deterministic labor, no AI guessing
-        const unitLabor = Math.round(knrEntry.laborNorm * laborRatePLN * pricingConfig.globalLaborMod * 100) / 100;
+        const unitLabor = Math.round(knrEntry.laborNorm * knrMultiplier * laborRatePLN * pricingConfig.globalLaborMod * 100) / 100;
         const modStr = pricingConfig.globalLaborMod !== 1.0
           ? ` × ${pricingConfig.globalLaborMod.toFixed(2)} (kof.)`
           : "";
@@ -463,7 +464,7 @@ Zwróć kompletny obiekt JSON ze wszystkimi sekcjami, modułami i sumami.`;
       const inputSec = sections.find(s => s.sectionName === sec.sectionName);
       const enclosureKnr = resolveEnclosureKnr(inputSec?.enclosureModules ?? 36);
       const enclosureLabor = Math.round(
-        enclosureKnr.laborNorm * laborRatePLN * pricingConfig.globalLaborMod * 100
+        enclosureKnr.laborNorm * knrMultiplier * laborRatePLN * pricingConfig.globalLaborMod * 100
       ) / 100;
       // Apply manufacturerCoeff to enclosure material price
       const enclosureMaterialWithCoeff = Math.round((sec.enclosureMaterial ?? 0) * manufacturerCoeff * 100) / 100;

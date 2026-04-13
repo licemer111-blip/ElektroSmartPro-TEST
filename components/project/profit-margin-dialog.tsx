@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -65,6 +66,7 @@ export function ProfitMarginDialog({
   items,
   vatRate,
 }: ProfitMarginDialogProps) {
+  const { multiplier: knrMultiplier } = useKnrMultiplier();
   const blurPrice = (v: number) => isPro ? formatCurrency(v) : "*** zł";
   const [actualCosts, setActualCosts] = useState<Record<string, { material: number; labor: number }>>({});
 
@@ -99,7 +101,7 @@ export function ProfitMarginDialog({
     for (const item of items) {
       const qty = item.quantity || 1;
       quotedMaterial += (item.final_material_price || 0) * qty;
-      quotedLabor += (item.final_labor_price || 0) * qty;
+      quotedLabor += (item.final_labor_price || 0) * qty * knrMultiplier;
 
       const actual = actualCosts[item.id];
       if (actual && (actual.material > 0 || actual.labor > 0)) {
@@ -107,9 +109,9 @@ export function ProfitMarginDialog({
         actualMaterialTotal += (actual.material || 0) * qty;
         actualLaborTotal += (actual.labor || 0) * qty;
       } else {
-        // Default: assume actual = quoted
+        // Default: assume actual = quoted (with knrMultiplier applied)
         actualMaterialTotal += (item.final_material_price || 0) * qty;
-        actualLaborTotal += (item.final_labor_price || 0) * qty;
+        actualLaborTotal += (item.final_labor_price || 0) * qty * knrMultiplier;
       }
     }
 
