@@ -10,6 +10,8 @@ import { DocumentationDialog } from "@/components/project/project-documentation-
 import { useState as useLocalState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
+import { HintTooltip } from "@/components/ui/hint-tooltip";
+import { HINTS } from "@/lib/hints/hint-content";
 import { updateProjectPdfNotes } from "@/app/dashboard/projects/[id]/_actions/project-meta";
 import type { ProjectWithRelations, ProjectItem, Profile } from "@/lib/types/database";
 
@@ -126,6 +128,10 @@ export function SummaryExportPanel({
       </div>
 
       {/* Portal klienta */}
+      <div className="flex items-center justify-between mb-0.5">
+        <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Portal &amp; Dokumenty</span>
+        <HintTooltip content={HINTS.portalKlienta} side="left" iconOnly />
+      </div>
       <div
         className={`relative w-full transition-all duration-150 ${!isFinal ? "opacity-50 cursor-pointer active:scale-95 active:opacity-40" : "hover:brightness-110 hover:scale-[1.01]"}`}
         onClick={!isFinal ? () => toast({ title: "📋 Najpierw zapisz projekt", description: "Kliknij 'Zapisz', aby odblokować Portal klienta", variant: "destructive" }) : undefined}
@@ -196,6 +202,13 @@ export function SummaryExportPanel({
       ) : (
         /* ══ PRO USER: active export buttons ═══════════════════════ */
         <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Eksport</span>
+            <div className="flex gap-1">
+              <HintTooltip content={HINTS.pdfExport} side="left" iconOnly iconClassName="opacity-60" />
+              <HintTooltip content={HINTS.excelExport} side="left" iconOnly iconClassName="opacity-60" />
+            </div>
+          </div>
           {/* PDF + Excel buttons */}
           <div
             className={`relative w-full transition-all duration-150 ${!isFinal ? "opacity-50 cursor-pointer active:scale-95 active:opacity-40" : ""}`}

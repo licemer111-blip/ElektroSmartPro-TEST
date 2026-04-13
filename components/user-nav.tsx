@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { UserCircle, Crown, MapPin, CreditCard, LayoutDashboard } from "lucide-react";
+import { UserCircle, Crown, MapPin, CreditCard, LayoutDashboard, Lightbulb, LightbulbOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LogoutButton } from "@/components/logout-button";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +13,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useHints } from "@/hooks/useHints";
 
 interface UserNavProps {
     user: { email?: string } | null;
@@ -20,6 +21,7 @@ interface UserNavProps {
 }
 
 export function UserNav({ user, isPro = false }: UserNavProps) {
+    const { hintsEnabled, toggle: toggleHints } = useHints();
     if (!user) {
         return (
             <Button asChild className="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white shadow-md hover:shadow-lg transition-all">
@@ -116,6 +118,25 @@ export function UserNav({ user, isPro = false }: UserNavProps) {
                     </DropdownMenuItem>
                 )}
 
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                    onClick={(e) => { e.preventDefault(); toggleHints(); }}
+                    className="cursor-pointer"
+                >
+                    {hintsEnabled ? (
+                        <><LightbulbOff className="mr-2 h-4 w-4 text-amber-400" />
+                        <div className="flex flex-col">
+                            <span>Ukryj podpowiedzi</span>
+                            <span className="text-[10px] text-muted-foreground font-normal">Wyłącz ikony ❓ w interfejsie</span>
+                        </div></>
+                    ) : (
+                        <><Lightbulb className="mr-2 h-4 w-4 text-slate-400" />
+                        <div className="flex flex-col">
+                            <span>Pokaż podpowiedzi</span>
+                            <span className="text-[10px] text-muted-foreground font-normal">Włącz ikony ❓ z objaśnieniami</span>
+                        </div></>
+                    )}
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                     <LogoutButton />

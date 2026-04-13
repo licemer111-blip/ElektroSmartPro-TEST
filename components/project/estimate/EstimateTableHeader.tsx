@@ -4,6 +4,8 @@ import React, { useTransition } from "react";
 import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { CheckSquare, Square, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { HintTooltip } from "@/components/ui/hint-tooltip";
+import { HINTS } from "@/lib/hints/hint-content";
 
 interface EstimateTableHeaderProps {
   isFinal: boolean;
@@ -79,7 +81,10 @@ export function EstimateTableHeader({
           <TableHead className={`text-center min-w-[120px] w-[120px] text-xs border-r border-slate-200 dark:border-slate-700 ${colorMode ? "bg-amber-50 dark:bg-amber-950/20 text-amber-800 dark:text-amber-300" : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"}`}>
             <div className="flex flex-col items-center gap-0.5">
               <span>💰</span>
-              <span className="font-semibold">Materiał{materialsOwnedByCustomer && <span className="ml-0.5 text-[9px] opacity-75">(Klient)</span>}</span>
+              <div className="flex items-center gap-1">
+                <span className="font-semibold">Materiał{materialsOwnedByCustomer && <span className="ml-0.5 text-[9px] opacity-75">(Klient)</span>}</span>
+                <HintTooltip content={HINTS.columnMaterial} side="bottom" iconClassName="opacity-50 hover:opacity-100" />
+              </div>
               <span className={`text-[10px] font-normal opacity-70`}>(jedn. / suma)</span>
             </div>
           </TableHead>
@@ -89,7 +94,10 @@ export function EstimateTableHeader({
           <TableHead className={`text-center min-w-[120px] w-[120px] text-xs border-r border-slate-200 dark:border-slate-700 ${colorMode ? "bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-300" : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"}`}>
             <div className="flex flex-col items-center gap-0.5">
               <span>👷</span>
-              <span className="font-semibold">Robocizna (r-g)</span>
+              <div className="flex items-center gap-1">
+                <span className="font-semibold">Robocizna (r-g)</span>
+                <HintTooltip content={HINTS.columnLabor} side="bottom" iconClassName="opacity-50 hover:opacity-100" />
+              </div>
               <span className="text-[10px] font-normal opacity-70">(jedn. / suma)</span>
             </div>
           </TableHead>
@@ -99,7 +107,10 @@ export function EstimateTableHeader({
           <TableHead className={`text-center min-w-[120px] w-[120px] text-xs border-r border-slate-200 dark:border-slate-700 ${colorMode ? "bg-violet-100 dark:bg-violet-950/30 text-violet-800 dark:text-violet-300" : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"}`}>
             <div className="flex flex-col items-center gap-0.5">
               <span>📋</span>
-              <span className="font-semibold">Kod KNR</span>
+              <div className="flex items-center gap-1">
+                <span className="font-semibold">Kod KNR</span>
+                <HintTooltip content={HINTS.columnKnr} side="bottom" iconClassName="opacity-50 hover:opacity-100" />
+              </div>
               <span className="text-[10px] font-normal opacity-70">(Robocizna)</span>
             </div>
           </TableHead>
@@ -109,7 +120,10 @@ export function EstimateTableHeader({
           <TableHead className={`text-center min-w-[90px] w-[90px] text-xs border-r border-slate-200 dark:border-slate-700 ${colorMode ? "bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300" : "bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400"}`}>
             <div className="flex flex-col items-center gap-0.5">
               <span>⏱</span>
-              <span className="font-semibold">Czas pracy</span>
+              <div className="flex items-center gap-1">
+                <span className="font-semibold">Czas pracy</span>
+                <HintTooltip content={HINTS.columnTime} side="bottom" iconClassName="opacity-50 hover:opacity-100" />
+              </div>
               <span className="text-[10px] font-normal opacity-70">(rbh/jedn. × ilość)</span>
             </div>
           </TableHead>
@@ -123,7 +137,10 @@ export function EstimateTableHeader({
         )}>
           <div className="flex flex-col items-center gap-0.5">
             <span>{filterType === "materials" ? "💰" : filterType === "labor" ? "👷" : "💎"}</span>
+            <div className="flex items-center gap-1 justify-center">
             <span className="font-semibold">{filterType === "materials" ? "Suma mat." : filterType === "labor" ? "Suma rob." : "Suma"}</span>
+            <HintTooltip content={HINTS.columnSum} side="bottom" iconClassName="opacity-50 hover:opacity-100" />
+          </div>
           </div>
         </TableHead>
 
