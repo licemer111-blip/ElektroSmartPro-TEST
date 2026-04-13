@@ -207,7 +207,9 @@ export const EstimateRow = React.memo(function EstimateRow({
   let rowTotal      = calcRowTotal;
   let assemblyRBHPerUnit: number | null = null;
 
-  if (!isEditing && !isManualPrice && !isAssemblyChild) {
+  // Guard: only override items that have already been AI-priced (calcRowTotal > 0).
+  // Newly imported/zero-price items stay at 0 so user sees "Uzupełnij" and knows to run pricing.
+  if (!isEditing && !isManualPrice && !isAssemblyChild && calcRowTotal > 0) {
     const scm = detectSmartContext(item.name);
     if (scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY") {
       const expansion = expandToAssembly(item.name, item.quantity, projectSector, projectLaborRate, knrMultiplier);
