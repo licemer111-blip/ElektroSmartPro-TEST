@@ -211,7 +211,7 @@ export const EstimateRow = React.memo(function EstimateRow({
   // Newly imported/zero-price items stay at 0 so user sees "Uzupełnij" and knows to run pricing.
   if (!isEditing && !isManualPrice && !isAssemblyChild && calcRowTotal > 0) {
     const scm = detectSmartContext(item.name);
-    if (scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY") {
+    if (scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY" || scm.category === "ROZDZIELNICA") {
       const expansion = expandToAssembly(item.name, item.quantity, projectSector, projectLaborRate, knrMultiplier);
       if (expansion.triggered) {
         const qty = item.quantity || 1;

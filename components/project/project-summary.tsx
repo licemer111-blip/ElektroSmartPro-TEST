@@ -109,7 +109,7 @@ export function ProjectSummary({
       const hasStoredPrice = effectiveLaborPrice > 0 || effectiveMaterialPrice > 0;
       if (!item.is_assembly_child && !isManual && !parentIds.has(item.id) && hasStoredPrice) {
         const scm = detectSmartContext(item.name);
-        if (scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY") {
+        if (scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY" || scm.category === "ROZDZIELNICA") {
           const expansion = expandToAssembly(item.name, item.quantity, sector, projectLaborRate, knrMultiplier);
           if (expansion.triggered) {
             // totalLaborPLN = totalRBH × projectLaborRate (base, no region, knrMult already inside)

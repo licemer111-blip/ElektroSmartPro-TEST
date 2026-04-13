@@ -1299,7 +1299,7 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
       .map(securityAuditLayer);
 
     // ── Assembly Template Override ───────────────────────────────────────────────────────────────
-    // For ZESTAW/BIALY_MONTAZ/TRASY trigger items: replace AI-estimated prices with template-
+    // For ZESTAW/BIALY_MONTAZ/TRASY/ROZDZIELNICA trigger items: replace AI-estimated prices with template-
     // derived prices. This ensures dialog preview ≡ table display ≡ summary totals.
     // Iron Rule: store BASE prices (knrMult = 1.0). Display layers apply knrMult at render time.
     const assemblySector = detectSector((project.object_types as { slug?: string } | null)?.slug);
