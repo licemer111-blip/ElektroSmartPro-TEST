@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef } from "react";
+import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -99,6 +100,8 @@ export function VariantComparisonDialog({
   const blurPrice = (v: number) => isPro ? formatCurrency(v) : "*** zł";
   const printRef = useRef<HTMLDivElement>(null);
 
+  const { multiplier: knrMultiplier } = useKnrMultiplier();
+
   const variantTotals = useMemo(() => {
     return VARIANTS.map((variant) => {
       let materialTotal = 0;
@@ -106,7 +109,7 @@ export function VariantComparisonDialog({
 
       for (const item of projectItems) {
         materialTotal += (item.final_material_price || 0) * (item.quantity || 1) * variant.materialMult;
-        laborTotal += (item.final_labor_price || 0) * (item.quantity || 1) * variant.laborMult;
+        laborTotal += (item.final_labor_price || 0) * (item.quantity || 1) * knrMultiplier * variant.laborMult;
       }
 
       const net = materialTotal + laborTotal;
