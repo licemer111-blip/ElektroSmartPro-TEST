@@ -15,6 +15,7 @@ import {
   Package, Plus, Loader2, Edit2, Eye,
   DollarSign, Wrench, ArrowRight,
 } from "lucide-react";
+import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import type { ProjectTemplate, TemplateItem } from "@/app/dashboard/templates/actions";
 
 export interface TemplateRenameDialogProps {
@@ -156,9 +157,10 @@ export function TemplatePreviewDialog({
 
   if (!previewTemplate) return null;
 
+  const { multiplier: knrMultiplier } = useKnrMultiplier();
   const items = previewTemplate.items || [];
   const totalMaterial = items.reduce((s, i: TemplateItem) => s + (i.final_material_price || 0) * (i.quantity || 1), 0);
-  const totalLabor = items.reduce((s, i: TemplateItem) => s + (i.final_labor_price || 0) * (i.quantity || 1), 0);
+  const totalLabor = items.reduce((s, i: TemplateItem) => s + (i.final_labor_price || 0) * (i.quantity || 1) * knrMultiplier, 0);
   const total = totalMaterial + totalLabor;
 
   return (
@@ -212,7 +214,7 @@ export function TemplatePreviewDialog({
               <div className="flex items-center gap-3 flex-shrink-0 ml-2">
                 <span className="text-muted-foreground">{item.quantity} {item.unit}</span>
                 <span className="font-medium w-20 text-right">
-                  {fmtPln(((item.final_material_price || 0) + (item.final_labor_price || 0)) * (item.quantity || 1))}
+                  {fmtPln(((item.final_material_price || 0) + (item.final_labor_price || 0) * knrMultiplier) * (item.quantity || 1))}
                 </span>
               </div>
             </div>
