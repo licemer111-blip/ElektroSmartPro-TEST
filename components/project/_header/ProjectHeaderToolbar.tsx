@@ -28,6 +28,8 @@ import { ShareOfferDialog } from "@/components/project/share-offer-dialog";
 import { ProjectTagsManager } from "@/components/project/project-tags-manager";
 import { ProjectColorPicker } from "@/components/project/project-color-picker";
 import type { DialogHostAction } from "./ProjectHeaderDialogHost";
+import { HintTooltip } from "@/components/ui/hint-tooltip";
+import { HINTS } from "@/lib/hints/hint-content";
 
 interface ProjectHeaderToolbarProps {
   projectId: string;
@@ -275,6 +277,7 @@ export function ProjectHeaderToolbar({
               {/* Group 1: ES-Engine dropdown + Uczestnicy */}
               <div className="flex items-center gap-1 overflow-x-auto flex-nowrap no-scrollbar">
                 {/* ✨ ES-Engine unified dropdown */}
+                <div className="flex items-center gap-0.5">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -331,6 +334,8 @@ export function ProjectHeaderToolbar({
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
+                <HintTooltip content={HINTS.aiPricing} side="bottom" iconOnly iconClassName="text-amber-400 hover:text-amber-600" />
+                </div>
 
                 <ProjectMembersDialog
                   projectId={projectId}
@@ -360,6 +365,7 @@ export function ProjectHeaderToolbar({
                 {/* DocumentationDialog moved to SummaryExportPanel (Podsumowanie column) */}
                 {/* ShareOfferDialog moved to SummaryExportPanel — hidden here to avoid duplication */}
                 <div className="w-px h-5 bg-slate-200 dark:bg-slate-700 mx-0.5 flex-shrink-0" />
+                <HintTooltip content={HINTS.projectFinal} side="bottom" iconOnly iconClassName="opacity-50 hover:opacity-80" />
                 <Button
                   onClick={onToggleStatus}
                   disabled={isSaving}
