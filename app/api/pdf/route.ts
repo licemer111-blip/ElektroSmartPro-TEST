@@ -14,6 +14,7 @@ import {
 } from "@/lib/pdf-pricing";
 import { type PdfNarzutyDisplay, type PdfRow } from "@/lib/pdf-renderer";
 import { calcNarzuty } from "@/lib/pricing-calculations";
+import { getKnrMultiplier } from "@/lib/global-benchmarks";
 import { classifyIntent } from "@/lib/services/semantic-classifier";
 import { renderToBuffer, type DocumentProps } from "@react-pdf/renderer";
 import { PremiumPdfDocument, type PdfEngineData, type ThemeName, type PdfStructureOptions } from "@/lib/pdf-engine";
@@ -202,6 +203,8 @@ export async function POST(req: Request) {
     const labMarkupMult   = 1 + (Number((project as Record<string, unknown>).lab_markup_pct) || 0) / 100;
     const complexityFactor = Number((project as Record<string, unknown>).complexity_factor) || 1.0;
     const contingencyPct  = Number((project as Record<string, unknown>).contingency_pct) || 0;
+    // KNR 2026 multiplier — must match display-time calcRowPrices() in EstimateRow
+    const knrMultiplier = await getKnrMultiplier();
 
     const calcItems = flatItems.map(item => {
       const isManualItem = (item as Record<string, unknown>).confidence_level === "manual";
@@ -214,7 +217,7 @@ export async function POST(req: Request) {
         ...item,
         // matOwnedByClient or isInvestorMat: zero out material prices
         finalMat: (matOwnedByClient || isInvestorMat) ? 0 : getPrice(item, "mat") * matMarkupMult * adjustmentOnly * vatMultiplier,
-        finalLab: getPrice(item, "lab") * labMarkupMult * complexityFactor * adjustmentOnly * effectiveRegion * vatMultiplier,
+        finalLab: getPrice(item, "lab") * labMarkupMult * complexityFactor * knrMultiplier * adjustmentOnly * effectiveRegion * vatMultiplier,
         laborNorm: Number((item as Record<string, unknown>).labor_norm ?? 0),
         isInvestorMat,
       };

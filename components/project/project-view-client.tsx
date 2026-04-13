@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useMaterialBrain } from "@/hooks/useMaterialBrain";
+import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { ProjectSummary } from "./project-summary";
 import { useTabSyncOptional } from "./tab-sync-context";
 import { PanelRightClose, Calculator, FileText, Download, X as XIcon, ExternalLink } from "lucide-react";
@@ -57,6 +58,7 @@ export function ProjectViewClient({
   onCoPilotClose,
   isReadOnly = false,
 }: ProjectViewClientProps) {
+  const { multiplier: knrMultiplier } = useKnrMultiplier();
   const [colorMode, setColorMode] = useState(project.expert_coloring ?? true);
   const [compactView, setCompactView] = useState(() =>
     typeof window !== "undefined" ? window.innerWidth >= 640 : true
@@ -214,7 +216,7 @@ export function ProjectViewClient({
       // ── Excel ──────────────────────────────────────────────────────────────
       try {
         const { buildExcelBuffer } = await import("@/lib/utils/excel-export");
-        const result = buildExcelBuffer(project, items, isPro);
+        const result = buildExcelBuffer(project, items, isPro, knrMultiplier);
         if (result?.buffer) {
           const base64 = btoa(String.fromCharCode(...new Uint8Array(result.buffer)));
           const { saveGeneratedDocumentToProject } = await import("@/app/dashboard/projects/[id]/document-actions");
@@ -267,7 +269,7 @@ export function ProjectViewClient({
 
     window.addEventListener("project-finalized", handler);
     return () => window.removeEventListener("project-finalized", handler);
-  }, [projectId, project, items, isPro, colorMode, pdfNotes]);
+  }, [projectId, project, items, isPro, colorMode, pdfNotes, knrMultiplier]);
 
   // Material Brain disabled — simplification Phase 1 (AI material suggestions removed)
   const brain = useMaterialBrain(projectId, false, liveVatRate);

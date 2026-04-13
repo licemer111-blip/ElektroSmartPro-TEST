@@ -10,6 +10,7 @@ import { rateLimitEmail } from "@/lib/rate-limit";
 import * as XLSX from "xlsx-js-style";
 import { flattenProjectItems } from "@/lib/utils/flatten-project-items";
 import type { ProjectItem } from "@/lib/types/database";
+import { getKnrMultiplier } from "@/lib/global-benchmarks";
 
 function getResend(): Resend {
   const key = process.env.RESEND_API_KEY;
@@ -166,6 +167,7 @@ export async function sendProjectEmail(input: SendProjectEmailInput) {
 
     const isPro = profile?.is_pro || false;
     const regionModifier = (project.regions as { price_modifier: number } | null)?.price_modifier ?? 1.0;
+    const knrMultiplier = await getKnrMultiplier();
 
     // Prepare email content with variables filled
     const offerNumber = `OF-${project.id.substring(0, 8).toUpperCase()}`;
@@ -276,7 +278,7 @@ export async function sendProjectEmail(input: SendProjectEmailInput) {
             // Iron Rule: regionModifier applies to labor only, material is sovereign
             // For totals, skip assembly parents (their value comes from children)
             const materialTotal = flatItems.reduce((sum, item) => parentAssemblyIds.has(item.id) ? sum : sum + (getMaterialPrice(item) * item.quantity * adjMult), 0);
-            const laborTotal = flatItems.reduce((sum, item) => parentAssemblyIds.has(item.id) ? sum : sum + (getLaborPrice(item) * item.quantity * adjMult * regionModifier), 0);
+            const laborTotal = flatItems.reduce((sum, item) => parentAssemblyIds.has(item.id) ? sum : sum + (getLaborPrice(item) * item.quantity * adjMult * knrMultiplier * regionModifier), 0);
             const subtotal = materialTotal + laborTotal;
             const vatRate = project.vat_rate || 23;
             const vatAmount = (subtotal * vatRate) / 100;
@@ -320,7 +322,7 @@ export async function sendProjectEmail(input: SendProjectEmailInput) {
               const isParent = parentAssemblyIds.has(item.id);
               const materialPrice = getMaterialPrice(item) * adjMult;
               // Iron Rule: regionModifier on labor only
-              const laborPrice = getLaborPrice(item) * adjMult * regionModifier;
+              const laborPrice = getLaborPrice(item) * adjMult * knrMultiplier * regionModifier;
               const totalPrice = (materialPrice + laborPrice) * item.quantity;
 
               if (isParent) {
@@ -328,7 +330,7 @@ export async function sendProjectEmail(input: SendProjectEmailInput) {
                 const children = flatItems.filter(c => (c as unknown as Record<string, unknown>).parent_assembly_id === item.id);
                 const childTotal = children.reduce((acc, c) => {
                   const cm = getMaterialPrice(c) * adjMult;
-                  const cl = getLaborPrice(c) * adjMult * regionModifier;
+                  const cl = getLaborPrice(c) * adjMult * knrMultiplier * regionModifier;
                   return acc + (cm + cl) * c.quantity;
                 }, 0);
                 allData.push([

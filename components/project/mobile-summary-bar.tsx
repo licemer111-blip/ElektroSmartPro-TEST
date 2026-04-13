@@ -30,6 +30,7 @@ import { toggleMaterialsOwnedByCustomer } from "@/app/dashboard/projects/[id]/ac
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { notifyDataChanged } from "@/hooks/use-synced-action";
+import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import type { ProjectItem, ProjectWithRelations, Profile } from "@/lib/types/database";
 import { ProfitabilityReportDialog } from "@/components/project/profitability-report-dialog";
 import { ShareOfferDialog } from "@/components/project/share-offer-dialog";
@@ -57,6 +58,7 @@ export function MobileSummaryBar({
   const { toast } = useToast();
   const router = useRouter();
   const isPro = profile?.is_pro || false;
+  const { multiplier: knrMultiplier } = useKnrMultiplier();
   const isFinal = project.status === "final";
   const vatRate = project.vat_rate;
   const materialsOwnedByCustomer = project.materials_owned_by_customer;
@@ -105,7 +107,7 @@ export function MobileSummaryBar({
     }
     try {
       const { exportProjectToExcel } = await import("@/lib/utils/excel-export");
-      const result = exportProjectToExcel(project, items, isPro);
+      const result = exportProjectToExcel(project, items, isPro, knrMultiplier);
 
       // Save copy to project storage for client portal
       if (result?.buffer) {

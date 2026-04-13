@@ -9,6 +9,7 @@ import { ShareOfferDialog } from "@/components/project/share-offer-dialog";
 import { DocumentationDialog } from "@/components/project/project-documentation-tab";
 import { useState as useLocalState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { updateProjectPdfNotes } from "@/app/dashboard/projects/[id]/_actions/project-meta";
 import type { ProjectWithRelations, ProjectItem, Profile } from "@/lib/types/database";
 
@@ -40,6 +41,7 @@ export function SummaryExportPanel({
   onPdfNotesSaved,
 }: SummaryExportPanelProps) {
   const { toast } = useToast();
+  const { multiplier: knrMultiplier } = useKnrMultiplier();
   const [isSavingNotes, setIsSavingNotes] = useLocalState(false);
   const [notesSaved, setNotesSaved] = useLocalState(false);
 
@@ -68,7 +70,7 @@ export function SummaryExportPanel({
   const handleExportExcel = async () => {
     try {
       const { exportProjectToExcel } = await import("@/lib/utils/excel-export");
-      const result = exportProjectToExcel(project, items, isPro);
+      const result = exportProjectToExcel(project, items, isPro, knrMultiplier);
       if (result?.buffer) {
         try {
           const base64 = btoa(String.fromCharCode(...new Uint8Array(result.buffer)));

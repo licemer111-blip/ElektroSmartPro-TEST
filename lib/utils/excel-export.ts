@@ -104,6 +104,7 @@ function buildKosztorysSheet(
   showRg: boolean = false,
   matOwnedByClient: boolean = false,
   showKnr: boolean = false,
+  knrMultiplier: number = 1.0,
 ): BuildResult {
   // Flatten so every child item appears immediately after its parent
   const flatItems = flattenProjectItems(items);
@@ -113,7 +114,7 @@ function buildKosztorysSheet(
     return sum + ((item.final_material_price ?? item.material_price ?? 0) * item.quantity);
   }, 0);
   const laborTotal = flatItems.reduce((sum, item) => {
-    return sum + ((item.final_labor_price ?? item.labor_price ?? 0) * item.quantity);
+    return sum + ((item.final_labor_price ?? item.labor_price ?? 0) * item.quantity * knrMultiplier);
   }, 0);
   const subtotal = materialTotal + laborTotal;
   const adjMult = 1 + (project.adjustment_percentage || 0) / 100;
@@ -315,7 +316,7 @@ function buildKosztorysSheet(
     }
 
     const matPrice = item.final_material_price ?? item.material_price ?? 0;
-    const labPrice = item.final_labor_price ?? item.labor_price ?? 0;
+    const labPrice = (item.final_labor_price ?? item.labor_price ?? 0) * knrMultiplier;
     const isChild   = item.is_assembly_child === true;
     const isZestaw  = assemblyParentIds.has(item.id);
 
@@ -323,7 +324,7 @@ function buildKosztorysSheet(
     const ownTotal = (matPrice + labPrice) * item.quantity;
     const totalPrice = isZestaw
       ? flatItems.filter(c => c.parent_assembly_id === item.id).reduce(
-          (acc, c) => acc + ((c.final_material_price ?? c.material_price ?? 0) + (c.final_labor_price ?? c.labor_price ?? 0)) * c.quantity, 0
+          (acc, c) => acc + ((c.final_material_price ?? c.material_price ?? 0) + (c.final_labor_price ?? c.labor_price ?? 0) * knrMultiplier) * c.quantity, 0
         )
       : ownTotal;
 
@@ -624,13 +625,14 @@ function buildRowHeights(rowCount: number, headerRowIdx: number, grandTotalIdx: 
 export function exportProjectToExcel(
   project: ProjectWithRelations,
   items: ProjectItem[],
-  isPro: boolean = true
+  isPro: boolean = true,
+  knrMultiplier: number = 1.0,
 ) {
   const showRg = Boolean((project as unknown as Record<string, unknown>).show_labor_hours_in_pdf);
   const matOwnedByClient = Boolean((project as unknown as Record<string, unknown>).materials_owned_by_customer);
   const showKnr = Boolean((project as unknown as Record<string, unknown>).show_knr);
   const workbook = XLSXStyle.utils.book_new();
-  const result = buildKosztorysSheet(project, items, isPro, showRg, matOwnedByClient, showKnr);
+  const result = buildKosztorysSheet(project, items, isPro, showRg, matOwnedByClient, showKnr, knrMultiplier);
   const { ws, rowCount, headerRowIdx, grandTotalIdx, hasOpisData } = result;
 
   ws['!cols'] = buildColWidths(hasOpisData, showRg, matOwnedByClient, showKnr);
@@ -661,14 +663,15 @@ export function exportProjectToExcel(
 export function buildExcelBuffer(
   project: ProjectWithRelations,
   items: ProjectItem[],
-  isPro: boolean = true
+  isPro: boolean = true,
+  knrMultiplier: number = 1.0,
 ): { buffer: ArrayBuffer; storageName: string } | undefined {
   try {
     const showRg2 = Boolean((project as unknown as Record<string, unknown>).show_labor_hours_in_pdf);
     const matOwned2 = Boolean((project as unknown as Record<string, unknown>).materials_owned_by_customer);
     const showKnr2 = Boolean((project as unknown as Record<string, unknown>).show_knr);
     const workbook = XLSXStyle.utils.book_new();
-    const result = buildKosztorysSheet(project, items, isPro, showRg2, matOwned2, showKnr2);
+    const result = buildKosztorysSheet(project, items, isPro, showRg2, matOwned2, showKnr2, knrMultiplier);
     const { ws, rowCount, headerRowIdx, grandTotalIdx, hasOpisData } = result;
 
     ws['!cols'] = buildColWidths(hasOpisData, showRg2, matOwned2, showKnr2);

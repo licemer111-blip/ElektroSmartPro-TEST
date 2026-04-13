@@ -3,6 +3,7 @@
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { logger } from "@/lib/logger";
 import { Resend } from "resend";
+import { getKnrMultiplier } from "@/lib/global-benchmarks";
 
 // ============================================
 // SUPABASE JOIN TYPES
@@ -220,6 +221,7 @@ export async function getOfferByToken(token: string): Promise<{ offer?: OfferDat
   const labMarkupMult   = 1 + (project?.lab_markup_pct || 0) / 100;
   const complexityFactor = (project?.complexity_factor as number | undefined) || 1.0;
   const regionModifier  = project?.regions?.price_modifier ?? 1.0;
+  const knrMultiplier   = await getKnrMultiplier();
 
   const allItems = items || [];
 
@@ -234,7 +236,7 @@ export async function getOfferByToken(token: string): Promise<{ offer?: OfferDat
       const effRegion = isManual ? 1.0 : regionModifier;
       const existing = childSums.get(i.parent_assembly_id) || { mat: 0, lab: 0 };
       existing.mat += effectiveMat * i.quantity * matMarkupMult * adjMult;
-      existing.lab += lab * i.quantity * labMarkupMult * complexityFactor * adjMult * effRegion;
+      existing.lab += lab * i.quantity * labMarkupMult * complexityFactor * knrMultiplier * adjMult * effRegion;
       childSums.set(i.parent_assembly_id, existing);
     }
   }
@@ -250,7 +252,7 @@ export async function getOfferByToken(token: string): Promise<{ offer?: OfferDat
     // For assembly parents: show sum of children as their displayed price
     // v10.5: Material × matMarkupMult × adjMult | Labor × labMarkupMult × complexity × adjMult × region
     const displayMat = isParent ? (childSums.get(i.id)?.mat ?? 0) : effectiveMat * i.quantity * matMarkupMult * adjMult;
-    const displayLab = isParent ? (childSums.get(i.id)?.lab ?? 0) : lab * i.quantity * labMarkupMult * complexityFactor * adjMult * effRegion;
+    const displayLab = isParent ? (childSums.get(i.id)?.lab ?? 0) : lab * i.quantity * labMarkupMult * complexityFactor * knrMultiplier * adjMult * effRegion;
     const displayTotal = displayMat + displayLab;
 
     return {
