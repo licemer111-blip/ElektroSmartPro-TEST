@@ -15,6 +15,8 @@ import { useRouter } from "next/navigation";
 import { notifyDataChanged } from "@/hooks/use-synced-action";
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { Calculator, CheckCircle, AlertTriangle, Sparkles, TrendingUp, Percent, ChevronDown } from "lucide-react";
+import { HintTooltip } from "@/components/ui/hint-tooltip";
+import { HINTS } from "@/lib/hints/hint-content";
 import { cn } from "@/lib/utils";
 import type { ProjectItem, ProjectWithRelations, Profile } from "@/lib/types/database";
 import { calcNarzuty } from "@/lib/pricing-calculations";
@@ -279,6 +281,7 @@ export function ProjectSummary({
               <span className="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-300">
                 <Percent className="w-3.5 h-3.5" />
                 Narzuty i Marże
+                <HintTooltip content={HINTS.narzutyMarze} side="top" iconOnly iconClassName="opacity-50 hover:opacity-80" />
               </span>
               <span className="flex items-center gap-1.5">
                 {((project.kp_percent || 0) > 0 || (project.z_percent || 0) > 0 || (project.kz_percent || 0) > 0) && (

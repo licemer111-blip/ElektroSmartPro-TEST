@@ -6,6 +6,8 @@ import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { TrendingDown, TrendingUp, Target, Loader2, Lock, Crown } from "lucide-react";
+import { HintTooltip } from "@/components/ui/hint-tooltip";
+import { HINTS } from "@/lib/hints/hint-content";
 import { BlurredPrice } from "@/components/ui/blurred-price";
 import { updateAdjustmentPercentage } from "@/app/dashboard/projects/[id]/actions";
 import { useToast } from "@/hooks/use-toast";
@@ -121,6 +123,7 @@ export function PriceAdjuster({ projectId, basePrice, initialAdjustment, isPro =
           <Label htmlFor={`target-price-${instanceId}`} className="text-sm font-medium text-slate-700 dark:text-slate-300 whitespace-nowrap">
             Negocjacje Ceny
           </Label>
+          <HintTooltip content={HINTS.negotiationSlider} side="top" iconOnly iconClassName="opacity-50 hover:opacity-80" />
           <Loader2 className={`w-3 h-3 flex-shrink-0 text-slate-400 transition-opacity duration-150 ${isSaving && isPro ? 'opacity-100 animate-spin' : 'opacity-0'}`} />
         </div>
         {!isNeutral && (
