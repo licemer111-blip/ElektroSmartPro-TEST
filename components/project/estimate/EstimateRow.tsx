@@ -203,9 +203,14 @@ export const EstimateRow = React.memo(function EstimateRow({
   const scmForPricing = !isEditing && !isAssemblyChild
     ? detectSmartContext(item.name)
     : null;
-  const hasAssemblyTrigger = scmForPricing?.category === "ZESTAW"
-    || scmForPricing?.category === "BIALY_MONTAZ"
-    || scmForPricing?.category === "TRASY";
+  // Override guard: only aggregate when item has a stored AI price (>0) and is NOT manual.
+  // Zero-price items (never priced) and manual prices must NOT be touched.
+  const calcIsManual = displayItem.confidence_level === "manual";
+  const hasAssemblyTrigger = !calcIsManual
+    && calcRowTotal > 0
+    && (scmForPricing?.category === "ZESTAW"
+      || scmForPricing?.category === "BIALY_MONTAZ"
+      || scmForPricing?.category === "TRASY");
 
   let materialUnit = calcMaterialUnit;
   let laborUnit = calcLaborUnit;
