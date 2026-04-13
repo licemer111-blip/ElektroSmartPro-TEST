@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -106,11 +107,13 @@ export function AddKitDialog({ projectId, kitsByCategory, isPro = true }: AddKit
     }
   };
 
+  const { multiplier: knrMultiplier } = useKnrMultiplier();
+
   // Calculate total for preview
   const calculateKitTotal = (kit: KitWithItems, qty: number) => {
     if (!kit.kit_items) return 0;
     return kit.kit_items.reduce((sum, item) => {
-      const itemTotal = (item.labor_price + item.material_price) * item.quantity_multiplier;
+      const itemTotal = (item.labor_price * knrMultiplier + item.material_price) * item.quantity_multiplier;
       return sum + itemTotal * qty;
     }, 0);
   };
@@ -232,7 +235,7 @@ export function AddKitDialog({ projectId, kitsByCategory, isPro = true }: AddKit
                           • {item.item_name} ({item.quantity_multiplier * quantity} {item.item_unit})
                         </span>
                         <span className="font-medium">
-                          {isPro ? `${((item.labor_price + item.material_price) * item.quantity_multiplier * quantity).toFixed(2)} zł` : '*** zł'}
+                          {isPro ? `${((item.labor_price * knrMultiplier + item.material_price) * item.quantity_multiplier * quantity).toFixed(2)} zł` : '*** zł'}
                         </span>
                       </div>
                     ))}
