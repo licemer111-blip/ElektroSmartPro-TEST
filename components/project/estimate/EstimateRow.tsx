@@ -7,13 +7,14 @@ import { Badge } from "@/components/ui/badge";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { CheckSquare, Square, GripVertical, Shield, Flag, ChevronDown, ChevronRight, AlertTriangle, LayoutGrid, X, Check, PenLine } from "lucide-react";
+import { CheckSquare, Square, GripVertical, Shield, Flag, ChevronDown, ChevronRight, AlertTriangle, LayoutGrid, X, Check, PenLine, Zap } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { UNIT_PRESETS } from "@/lib/validations";
 import { calcRowPrices } from "@/lib/pricing-calculations";
 import type { ProjectItem } from "@/lib/types/database";
-import { detectSmartContext, getSmartContextBadgeColor } from "@/lib/ai/smart-context-mapper";
+import { detectSmartContext } from "@/lib/ai/smart-context-mapper";
 import { SmartAssemblyPanel } from "@/components/project/estimate/_parts/SmartAssemblyPanel";
 import type { ProjectSector } from "@/lib/ai/smart-mapping-engine";
 import { roundPrice, useGlobalSettings } from "@/hooks/use-global-settings";
@@ -334,19 +335,45 @@ export const EstimateRow = React.memo(function EstimateRow({
                 const scm = detectSmartContext(item.name);
                 if (scm.category === "NONE") return null;
                 const hasExpansion = scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY";
-                const badge = (
-                  <span
-                    className={`inline-flex items-center gap-0.5 mr-1 px-1.5 py-0.5 rounded border text-[8px] font-semibold ${hasExpansion ? "cursor-pointer hover:opacity-80" : "cursor-help"} ${getSmartContextBadgeColor(scm.category)}`}
+                const colorCls = {
+                  ZESTAW:      "bg-orange-100 dark:bg-orange-900/60 text-orange-600 dark:text-orange-400 ring-orange-300 dark:ring-orange-700 hover:bg-orange-200 dark:hover:bg-orange-800/80 hover:shadow-[0_0_6px_rgba(234,88,12,0.45)]",
+                  BIALY_MONTAZ:"bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 ring-emerald-300 dark:ring-emerald-700 hover:bg-emerald-200 dark:hover:bg-emerald-800/80",
+                  TRASY:       "bg-cyan-100 dark:bg-cyan-900/60 text-cyan-600 dark:text-cyan-400 ring-cyan-300 dark:ring-cyan-700 hover:bg-cyan-200 dark:hover:bg-cyan-800/80",
+                  ROZDZIELNICA:"bg-violet-100 dark:bg-violet-900/60 text-violet-600 dark:text-violet-400 ring-violet-300 dark:ring-violet-700 hover:bg-violet-200 dark:hover:bg-violet-800/80",
+                  NONE: "",
+                }[scm.category];
+                const iconBtn = (
+                  <button
+                    type="button"
+                    className={`inline-flex items-center justify-center w-4 h-4 rounded-full flex-shrink-0 ring-1 transition-all duration-150 mr-1 ${colorCls} ${hasExpansion ? "cursor-pointer" : "cursor-help"}`}
+                    onClick={(e) => e.stopPropagation()}
                   >
-                    ⚡ {scm.validationLabel}
-                  </span>
+                    <Zap className="w-2.5 h-2.5" />
+                  </button>
                 );
-                if (!hasExpansion) return badge;
+                const tooltipLabel = hasExpansion
+                  ? `ES-Engine: ${scm.validationLabel} — kliknij, aby zobaczyć zestaw`
+                  : `ES-Engine: ${scm.validationLabel}`;
+                if (!hasExpansion) {
+                  return (
+                    <TooltipProvider delayDuration={300}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>{iconBtn}</TooltipTrigger>
+                        <TooltipContent side="bottom" className="max-w-[240px] text-xs z-50">{tooltipLabel}</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  );
+                }
                 return (
                   <Popover>
-                    <PopoverTrigger asChild>
-                      {badge}
-                    </PopoverTrigger>
+                    <TooltipProvider delayDuration={300}>
+                      <Tooltip>
+                        <PopoverTrigger asChild>
+                          <TooltipTrigger asChild>{iconBtn}</TooltipTrigger>
+                        </PopoverTrigger>
+                        <TooltipContent side="bottom" className="max-w-[240px] text-xs z-50">{tooltipLabel}</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                     <PopoverContent side="bottom" align="start" className="p-0 w-auto border-orange-200 dark:border-orange-800 shadow-lg">
                       <SmartAssemblyPanel
                         itemName={item.name}

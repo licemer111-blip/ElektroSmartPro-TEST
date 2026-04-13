@@ -22,9 +22,11 @@ interface PriceAdjusterProps {
   isPro?: boolean;
   disabled?: boolean;
   instanceId?: string;
+  /** When true KWOTA KOŃCOWA shows brutto, otherwise netto. */
+  bruttoMode?: boolean;
 }
 
-export function PriceAdjuster({ projectId, basePrice, initialAdjustment, isPro = true, disabled = false, instanceId = "default" }: PriceAdjusterProps) {
+export function PriceAdjuster({ projectId, basePrice, initialAdjustment, isPro = true, disabled = false, instanceId = "default", bruttoMode = false }: PriceAdjusterProps) {
   // Ensure basePrice is a valid number
   const safeBasePrice = basePrice || 0;
   
@@ -201,7 +203,7 @@ export function PriceAdjuster({ projectId, basePrice, initialAdjustment, isPro =
           <Label htmlFor={`target-price-${instanceId}`} className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
             KWOTA KOŃCOWA
           </Label>
-          <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">brutto</span>
+          <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">{bruttoMode ? "brutto" : "netto"}</span>
         </div>
         <div className="relative">
           {disabled && (

@@ -308,14 +308,22 @@ export function ProjectSummary({
           </CollapsibleContent>
         </Collapsible>
 
-        <PriceAdjuster
-          projectId={projectId}
-          basePrice={totals.baseSubtotal + (totals.baseSubtotal * vatRate / 100)}
-          initialAdjustment={project.adjustment_percentage || 0}
-          isPro={isPro}
-          disabled={isFinal}
-          instanceId="desktop"
-        />
+        {(() => {
+          const adjMult = 1 + (project.adjustment_percentage || 0) / 100;
+          const nettoBase  = (totals.subtotalWithContingency ?? totals.subtotalWithNarzuty) / (adjMult || 1);
+          const bruttoBase = totals.grandTotal / (adjMult || 1);
+          return (
+            <PriceAdjuster
+              projectId={projectId}
+              basePrice={bruttoMode ? bruttoBase : nettoBase}
+              bruttoMode={bruttoMode}
+              initialAdjustment={project.adjustment_percentage || 0}
+              isPro={isPro}
+              disabled={isFinal}
+              instanceId="desktop"
+            />
+          );
+        })()}
 
         <SummaryExportPanel
           project={project}
