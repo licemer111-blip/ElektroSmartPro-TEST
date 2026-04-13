@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useMemo } from "react";
+import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BlurredPrice } from "@/components/ui/blurred-price";
@@ -37,11 +38,11 @@ interface SwipeState { id: string; x: number; committed: boolean }
 function calcItemMat(item: ProjectItem) {
   return (item.final_material_price ?? item.material_price ?? 0);
 }
-function calcItemLab(item: ProjectItem) {
-  return (item.final_labor_price ?? item.labor_price ?? 0);
+function calcItemLab(item: ProjectItem, knrMult: number = 1.0) {
+  return (item.final_labor_price ?? item.labor_price ?? 0) * knrMult;
 }
-function calcTotal(item: ProjectItem, adj: number): number {
-  const base = (calcItemMat(item) + calcItemLab(item)) * item.quantity;
+function calcTotal(item: ProjectItem, adj: number, knrMult: number = 1.0): number {
+  const base = (calcItemMat(item) + calcItemLab(item, knrMult)) * item.quantity;
   return adj !== 0 ? base * (1 + adj / 100) : base;
 }
 
@@ -63,6 +64,7 @@ export function EstimateMobileCards({
   onMoveDown,
   onSaveEdit,
 }: EstimateMobileCardsProps) {
+  const { multiplier: knrMultiplier } = useKnrMultiplier();
   const [expandedId, setExpandedId]       = useState<string | null>(null);
   const [editingCell, setEditingCell]     = useState<EditingCell | null>(null);
   const [editingNameId, setEditingNameId] = useState<string | null>(null);
@@ -170,8 +172,8 @@ export function EstimateMobileCards({
               const isExpanded  = expandedId === item.id;
               const isSelected  = selectedIds.has(item.id);
               const mat         = calcItemMat(item);
-              const lab         = calcItemLab(item);
-              const total       = calcTotal(item, adjustmentPercentage);
+              const lab         = calcItemLab(item, knrMultiplier);
+              const total       = calcTotal(item, adjustmentPercentage, knrMultiplier);
               const children    = childrenMap.get(item.id) ?? [];
               const isAssembly  = children.length > 0;
               const swipeX      = swipe?.id === item.id ? swipe.x : 0;
