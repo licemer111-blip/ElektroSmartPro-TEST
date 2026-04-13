@@ -46,7 +46,7 @@ import {
   getCeilingModifier, getHeightModifier,
   classifyIntent, GROOVE_FLOOR_RE, DRILL_FLOOR_RE,
 } from "@/lib/services/semantic-classifier";
-import { buildEnrichedItemList } from "@/lib/ai/smart-context-mapper";
+import { buildEnrichedItemListWithAssembly, detectSector } from "@/lib/ai/smart-mapping-engine";
 
 // ── Re-export types for external consumers ────────────────────────
 export type { AiPriceEstimate } from "./pricing-types";
@@ -242,7 +242,7 @@ export async function estimatePricesWithAI(
 
     const { data: project } = await supabase
       .from("projects")
-      .select("*, regions (name, price_modifier)")
+      .select("*, regions (name, price_modifier), object_types (slug)")
       .eq("id", projectId)
       .single();
 
@@ -991,8 +991,13 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
 
       await Promise.all(chunks.map(async (chunk) => {
         try {
-          const itemList = buildEnrichedItemList(
-            chunk.map((item) => ({ name: item.name, unit: item.unit }))
+          const objectTypeSlug = (project.object_types as { slug?: string } | null)?.slug ?? null;
+          const projectSectorL3 = detectSector(objectTypeSlug);
+          const knrMultiplierL3 = 1.4; // display-time only — used for assembly RBH hints
+          const itemList = buildEnrichedItemListWithAssembly(
+            chunk.map((item) => ({ name: item.name, unit: item.unit, quantity: item.quantity })),
+            projectSectorL3,
+            knrMultiplierL3,
           );
           const batchPrompt = `Region: ${regionName} | Stawka bazowa: ${baseRateForCalc} PLN/rbh\n\n${itemList}`;
 

@@ -26,6 +26,7 @@ import { useToast } from "@/hooks/use-toast";
 import { SortableRow, DragHandle } from "./_parts/EstimateDndWrappers";
 import { useEstimateTable } from "@/hooks/useEstimateTable";
 import type { ProjectItem } from "@/lib/types/database";
+import { detectSector, type ProjectSector } from "@/lib/ai/smart-mapping-engine";
 import { priceRowWithGlobalFallback } from "@/app/dashboard/projects/[id]/ai-actions";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -58,6 +59,10 @@ interface EstimateTableProps {
   useCustomRates?: boolean;
   /** False when user has no rate set — disables 'Szukaj w KNR/AI' per Iron Rule */
   rateIsSet?: boolean;
+  /** object_types.slug for Smart Assembly sector detection. */
+  objectTypeSlug?: string | null;
+  /** Effective labor rate PLN/rbh passed to SmartAssemblyPanel RBH preview. */
+  projectLaborRate?: number;
 }
 
 // ─── Component shell ──────────────────────────────────────────────────────────
@@ -70,7 +75,9 @@ export function EstimateTable({
   onSelectedIdsChange, regionModifier = 1.0,
   compactViewControlled, onCompactViewChange, bruttoMode = false, vatRate = 23,
   useCustomRates = false, regionName, rateIsSet = true,
+  objectTypeSlug, projectLaborRate = 100,
 }: EstimateTableProps) {
+  const projectSector: ProjectSector = detectSector(objectTypeSlug);
   const isFinal = projectStatus === "final" || isReadOnly;
   const { toast } = useToast();
   const dndId = useId();
@@ -243,6 +250,8 @@ export function EstimateTable({
         useCustomRates={useCustomRates}
         onGlobalFallbackAction={(isFinal || !rateIsSet) ? undefined : handleGlobalFallback}
         fallbackLoadingIds={fallbackLoadingIds}
+        projectSector={projectSector}
+        projectLaborRate={projectLaborRate}
       />
     );
   };

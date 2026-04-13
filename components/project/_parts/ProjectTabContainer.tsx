@@ -295,6 +295,8 @@ export function ProjectTabContainer({
               tabsSection={tabNav}
               useCustomRates={useCustomRates}
               rateIsSet={liveHourlyRate > 0}
+              objectTypeSlug={project.object_types?.slug ?? null}
+              projectLaborRate={liveHourlyRate}
             />
           </Card>
         </div>

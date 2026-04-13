@@ -14,6 +14,8 @@ import { UNIT_PRESETS } from "@/lib/validations";
 import { calcRowPrices } from "@/lib/pricing-calculations";
 import type { ProjectItem } from "@/lib/types/database";
 import { detectSmartContext, getSmartContextBadgeColor } from "@/lib/ai/smart-context-mapper";
+import { SmartAssemblyPanel } from "@/components/project/estimate/_parts/SmartAssemblyPanel";
+import type { ProjectSector } from "@/lib/ai/smart-mapping-engine";
 import { roundPrice, useGlobalSettings } from "@/hooks/use-global-settings";
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { ConfidenceDot, UncertainPriceWarning } from "@/components/project/estimate/ConfidenceBadge";
@@ -86,6 +88,10 @@ export interface EstimateRowProps {
   useCustomRates?: boolean;
   onGlobalFallbackAction?: (itemId: string) => void;
   fallbackLoadingIds?: Set<string>;
+  /** Project sector for Smart Assembly expansion (RESIDENTIAL/COMMERCIAL/INDUSTRIAL). */
+  projectSector?: ProjectSector;
+  /** Effective labor rate PLN/rbh for RBH cost preview in SmartAssemblyPanel. */
+  projectLaborRate?: number;
 }
 
 const SECTION_PRESETS = [
@@ -136,6 +142,8 @@ export const EstimateRow = React.memo(function EstimateRow({
   useCustomRates = false,
   onGlobalFallbackAction,
   fallbackLoadingIds,
+  projectSector = "RESIDENTIAL",
+  projectLaborRate = 100,
 }: EstimateRowProps) {
   // Blur strictly controlled by is_pro from Supabase — no client-side override
   const showPrices = isPro;
@@ -325,13 +333,30 @@ export const EstimateRow = React.memo(function EstimateRow({
               {!isEditing && !isAssemblyChild && (() => {
                 const scm = detectSmartContext(item.name);
                 if (scm.category === "NONE") return null;
-                return (
+                const hasExpansion = scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY";
+                const badge = (
                   <span
-                    title={`ES-Engine rozpoznał: ${scm.validationLabel}`}
-                    className={`inline-flex items-center gap-0.5 mr-1 px-1.5 py-0.5 rounded border text-[8px] font-semibold cursor-help ${getSmartContextBadgeColor(scm.category)}`}
+                    className={`inline-flex items-center gap-0.5 mr-1 px-1.5 py-0.5 rounded border text-[8px] font-semibold ${hasExpansion ? "cursor-pointer hover:opacity-80" : "cursor-help"} ${getSmartContextBadgeColor(scm.category)}`}
                   >
                     ⚡ {scm.validationLabel}
                   </span>
+                );
+                if (!hasExpansion) return badge;
+                return (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      {badge}
+                    </PopoverTrigger>
+                    <PopoverContent side="bottom" align="start" className="p-0 w-auto border-orange-200 dark:border-orange-800 shadow-lg">
+                      <SmartAssemblyPanel
+                        itemName={item.name}
+                        quantity={item.quantity}
+                        sector={projectSector}
+                        laborRate={projectLaborRate}
+                        knrMultiplier={knrMultiplier}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 );
               })()}
               {item.origin_id && (() => {
