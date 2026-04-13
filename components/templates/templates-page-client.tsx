@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
@@ -69,17 +70,19 @@ const SUGGESTED_TEMPLATES = [
   },
 ];
 
-const formatPrice = (items: TemplateItem[]) => {
-  if (!items || items.length === 0) return "0,00 z\u0142";
+const formatPrice = (items: TemplateItem[], knrMult: number = 1.0) => {
+  if (!items || items.length === 0) return "0,00 zł";
   const total = items.reduce(
     (sum: number, item: TemplateItem) =>
-      sum + ((item.final_material_price || 0) + (item.final_labor_price || 0)) * (item.quantity || 1),
+      sum + ((item.final_material_price || 0) + (item.final_labor_price || 0) * knrMult) * (item.quantity || 1),
     0
   );
   return new Intl.NumberFormat("pl-PL", { style: "currency", currency: "PLN" }).format(total);
 };
 
 export function TemplatesPageClient({ templates }: TemplatesPageClientProps) {
+  const { multiplier: knrMultiplier } = useKnrMultiplier();
+  const formatPriceBound = useCallback((items: TemplateItem[]) => formatPrice(items, knrMultiplier), [knrMultiplier]);
   const [searchTerm, setSearchTerm] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<ProjectTemplate | null>(null);
@@ -214,7 +217,7 @@ export function TemplatesPageClient({ templates }: TemplatesPageClientProps) {
                 onRename={() => { setRenamingTemplate(template); setNewName(template.name); }}
                 deleting={deletingId === template.id}
                 duplicating={duplicatingId === template.id}
-                formatPrice={formatPrice}
+                formatPrice={formatPriceBound}
                 isOwner={true}
               />
             ))}
@@ -235,7 +238,7 @@ export function TemplatesPageClient({ templates }: TemplatesPageClientProps) {
                 template={template}
                 onUse={() => handleUseTemplate(template)}
                 onPreview={() => setPreviewTemplate(template)}
-                formatPrice={formatPrice}
+                formatPrice={formatPriceBound}
               />
             ))}
           </div>
