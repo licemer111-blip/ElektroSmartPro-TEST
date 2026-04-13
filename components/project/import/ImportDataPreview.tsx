@@ -46,15 +46,18 @@ const ImportItemRow = memo(function ImportItemRow({
           {isEditing ? (
             <div className="space-y-1.5">
               {/* Row 1: Name */}
-              <Input
-                id={`import-name-${index}`}
-                name={`import-name-${index}`}
-                aria-label="Nazwa pozycji"
-                value={item.name}
-                onChange={(e) => onUpdate(index, "name", e.target.value)}
-                className="h-7 text-xs"
-                placeholder="Nazwa"
-              />
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 w-5 flex-shrink-0 text-right">{index + 1}.</span>
+                <Input
+                  id={`import-name-${index}`}
+                  name={`import-name-${index}`}
+                  aria-label="Nazwa pozycji"
+                  value={item.name}
+                  onChange={(e) => onUpdate(index, "name", e.target.value)}
+                  className="h-7 text-xs flex-1"
+                  placeholder="Nazwa"
+                />
+              </div>
               {/* Row 2: Qty + Unit */}
               <div className="grid grid-cols-2 gap-1.5">
                 <div>
@@ -83,7 +86,10 @@ const ImportItemRow = memo(function ImportItemRow({
             </div>
           ) : (
             <>
-              <p className="text-xs font-medium leading-snug line-clamp-2" title={item.name}>{item.name}</p>
+              <div className="flex items-start gap-1.5">
+                <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 flex-shrink-0 mt-0.5 w-5 text-right">{index + 1}.</span>
+                <p className="text-xs font-medium leading-snug line-clamp-2 flex-1" title={item.name}>{item.name}</p>
+              </div>
               <div className="flex items-center gap-1.5 mt-1 flex-wrap">
                 <Badge variant="outline" className="text-[10px] h-5 px-1.5">{item.quantity} {item.unit}</Badge>
                 <span className="text-[10px] text-muted-foreground">Mat: {isPro ? `${item.material_price.toFixed(2)} zł` : "***"}</span>

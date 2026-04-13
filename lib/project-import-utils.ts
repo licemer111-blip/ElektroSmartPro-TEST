@@ -244,6 +244,9 @@ const UNIT_TOKENS_RE = /\b(szt\.?|mb|m\.b\.?|m2|m²|m3|m³|kpl\.?|kg|l|godz\.?|r
 export function cleanItemName(raw: string): { name: string; extractedUnit?: string; extractedQty?: number } {
   let s = raw.trim();
 
+  // Strip leading position numbers: "1. ", "1) ", "1 - ", "Lp.1 " etc.
+  s = s.replace(/^(\d{1,3}[.)]\s+|Lp\.?\s*\d+\s+|\d{1,3}\s+-\s+)/, "").trim();
+
   // 1) Try: "Szafa 42U APC 3 kpl" → extract trailing qty+unit
   const trailingQtyUnit = s.match(/^(.+?)\s+(\d+[.,]?\d*)\s+(szt\.?|mb|m\.b\.?|m2|m²|kpl\.?|kg|l|h|op\.?|zest\.?|pcs?|pkt\.?)\s*$/i);
   if (trailingQtyUnit) {
