@@ -30,6 +30,10 @@ interface EstimateResultsTableProps {
   fullCatalog: Array<{ name: string; mat: number; lab: number; score: number }> | null;
   isLoadingCatalog: boolean;
   projectId: string;
+  /** When true, all preview prices are multiplied by (1 + vatRate/100). DB values stay netto. */
+  bruttoMode?: boolean;
+  /** VAT rate used for brutto preview (e.g. 23). */
+  vatRate?: number;
   onToggleItem: (id: string) => void;
   onToggleAll: () => void;
   onApplyCertainOnly: () => void;
@@ -52,7 +56,7 @@ export function EstimateResultsTable({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   estimates, selectedIds, mode, pricedCount, unmatchedCount,
   refreshingIds, manualMatchItemId, manualMatchSearch, fullCatalog, isLoadingCatalog,
-  projectId,
+  projectId, bruttoMode = false, vatRate = 23,
   onToggleItem, onToggleAll, onApplyCertainOnly, onBack, onApply,
   onOpenManualMatch, onManualMatchSearchChange, onApplyManualMatch, onCloseManualMatch,
   onRepriced, onAddToRefreshing, isApplying,
@@ -68,16 +72,20 @@ export function EstimateResultsTable({
   ).length;
   const { multiplier: knrMultiplier } = useKnrMultiplier();
 
-  // Calculate selectedSummary locally with KNR multiplier
+  // VAT multiplier for display-only brutto preview
+  const vatMult = bruttoMode ? 1 + vatRate / 100 : 1.0;
+  const priceLabel = bruttoMode ? "brutto" : "netto";
+
+  // Calculate selectedSummary locally with KNR multiplier + optional VAT
   const selectedSummary = useMemo(() => {
     const sel = estimates.filter(e => selectedIds.has(e.itemId));
-    const totalMat = sel.reduce((s, e) => s + e.suggestedMaterial * e.quantity, 0);
+    const totalMat = sel.reduce((s, e) => s + e.suggestedMaterial * e.quantity * vatMult, 0);
     const totalLab = sel.reduce((s, e) => {
       const regionMod = e.regionModifier ?? 1.0;
-      return s + e.suggestedLabor * regionMod * knrMultiplier * e.quantity;
+      return s + e.suggestedLabor * regionMod * knrMultiplier * e.quantity * vatMult;
     }, 0);
     return { totalMat, totalLab, total: totalMat + totalLab };
-  }, [estimates, selectedIds, knrMultiplier]);
+  }, [estimates, selectedIds, knrMultiplier, vatMult]);
 
   // Inline editing state
   const [editingRowId, setEditingRowId] = useState<string | null>(null);
@@ -205,9 +213,9 @@ export function EstimateResultsTable({
                 <TableHead className="text-[10px] font-semibold">Nazwa pozycji</TableHead>
                 <TableHead className="text-[10px] font-semibold w-12 text-center">Jm.</TableHead>
                 <TableHead className="text-[10px] font-semibold w-10 text-center">Ilość</TableHead>
-                {showMatCol && <TableHead className="text-[10px] font-semibold w-20 text-right">Mat./jm.</TableHead>}
-                {showLabCol && <TableHead className="text-[10px] font-semibold w-20 text-right">Rob./jm.</TableHead>}
-                <TableHead className="text-[10px] font-semibold w-24 text-right">Razem</TableHead>
+                {showMatCol && <TableHead className="text-[10px] font-semibold w-20 text-right">Mat./jm. <span className="font-normal text-slate-400">({priceLabel})</span></TableHead>}
+                {showLabCol && <TableHead className="text-[10px] font-semibold w-20 text-right">Rob./jm. <span className="font-normal text-slate-400">({priceLabel})</span></TableHead>}
+                <TableHead className="text-[10px] font-semibold w-24 text-right">Razem <span className="font-normal text-slate-400">({priceLabel})</span></TableHead>
                 <TableHead className="text-[10px] font-semibold w-28">Kod KNR</TableHead>
               </TableRow>
             </TableHeader>
@@ -215,8 +223,9 @@ export function EstimateResultsTable({
               {estimates.map((est) => {
                 const isSelected = selectedIds.has(est.itemId);
                 const regionMod = est.regionModifier ?? 1.0;
-                const laborWithRegion = Math.round(est.suggestedLabor * regionMod * knrMultiplier * 100) / 100;
-                const totalPerUnit = est.suggestedMaterial + laborWithRegion;
+                const laborWithRegion = Math.round(est.suggestedLabor * regionMod * knrMultiplier * vatMult * 100) / 100;
+                const matDisplay = Math.round(est.suggestedMaterial * vatMult * 100) / 100;
+                const totalPerUnit = matDisplay + laborWithRegion;
                 const totalAll = Math.round(totalPerUnit * est.quantity * 100) / 100;
                 const materialChanged = est.suggestedMaterial !== est.currentMaterial;
                 const laborChanged = est.suggestedLabor !== est.currentLabor;
@@ -324,15 +333,15 @@ export function EstimateResultsTable({
                         : needsIntervention ? <span className="text-xs text-slate-400">—</span>
                         : materialChanged ? (
                           <div className="flex flex-col items-end gap-0">
-                            <span className="text-[9px] text-slate-400 line-through">{formatPrice(est.currentMaterial)}</span>
-                            <span className="text-xs font-semibold text-emerald-600">{formatPrice(est.suggestedMaterial)}</span>
+                            <span className="text-[9px] text-slate-400 line-through">{formatPrice(Math.round(est.currentMaterial * vatMult * 100) / 100)}</span>
+                            <span className="text-xs font-semibold text-emerald-600">{formatPrice(matDisplay)}</span>
                             {est.matSource === "ai-market" && (
                               <span className="text-[8px] text-amber-600 dark:text-amber-400 font-medium">~rynk.</span>
                             )}
                           </div>
                         ) : (
                           <div className="flex flex-col items-end gap-0">
-                            <span className="text-xs text-slate-400">{formatPrice(est.suggestedMaterial)}</span>
+                            <span className="text-xs text-slate-400">{formatPrice(matDisplay)}</span>
                             {est.matSource === "ai-market" && (
                               <span className="text-[8px] text-amber-600 dark:text-amber-400 font-medium">~rynk.</span>
                             )}
@@ -533,9 +542,12 @@ export function EstimateResultsTable({
       <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 flex-shrink-0">
         <div className="text-[11px] text-slate-500 space-y-0.5">
           <p>Zaznaczone pozycje ({selectedIds.size}) zostaną zaktualizowane w kosztorysie</p>
+          {bruttoMode && (
+            <p className="text-amber-600 dark:text-amber-400 font-medium">Podgląd brutto (VAT {vatRate}%) — w bazie zapisywane są ceny netto.</p>
+          )}
           {selectedIds.size > 0 && (
             <p className="text-slate-700 dark:text-slate-300 font-medium">
-              Suma:{" "}
+              Suma ({priceLabel}):{" "}
               {showMatCol && (
                 <>mat. <span className="text-emerald-600">{selectedSummary.totalMat.toFixed(2)} zł</span>{showLabCol && " + "}</>
               )}

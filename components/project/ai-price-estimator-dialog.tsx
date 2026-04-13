@@ -18,6 +18,7 @@ import {
 import { useAiPriceEstimator } from "@/components/project/_parts/useAiPriceEstimator";
 import { EstimateResultsTable } from "@/components/project/_parts/EstimateResultsTable";
 import type { PriceMode } from "@/components/project/_parts/useAiPriceEstimator";
+import { useTabSyncOptional } from "@/components/project/tab-sync-context";
 
 interface AiPriceEstimatorDialogProps {
   projectId: string;
@@ -27,6 +28,8 @@ interface AiPriceEstimatorDialogProps {
   externalOpen?: boolean;
   onExternalOpenChange?: (open: boolean) => void;
   rateIsDefault?: boolean;
+  /** Project VAT rate for brutto preview in results table. */
+  vatRate?: number;
 }
 
 const modeButtons: { mode: PriceMode; label: string; desc: string; icon: typeof Banknote }[] = [
@@ -43,7 +46,12 @@ export function AiPriceEstimatorDialog({
   externalOpen,
   onExternalOpenChange,
   rateIsDefault = false,
+  vatRate = 23,
 }: AiPriceEstimatorDialogProps) {
+  // Read live bruttoMode from tab sync context (set by Pult 5-w-1 toggle)
+  const tabSyncCtx = useTabSyncOptional();
+  const bruttoMode = tabSyncCtx?.uiState?.liveBruttoMode ?? false;
+
   const est = useAiPriceEstimator({
     projectId, projectStatus, selectedRowIds, externalOpen, onExternalOpenChange,
   });
@@ -317,6 +325,8 @@ export function AiPriceEstimatorDialog({
                 fullCatalog={est.fullCatalog}
                 isLoadingCatalog={est.isLoadingCatalog}
                 projectId={projectId}
+                bruttoMode={bruttoMode}
+                vatRate={vatRate}
                 onToggleItem={est.toggleItem}
                 onToggleAll={est.toggleAll}
                 onApplyCertainOnly={est.applyCertainOnly}

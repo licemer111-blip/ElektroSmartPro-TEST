@@ -271,6 +271,7 @@ export function ProjectHeaderToolbar({
                   externalOpen={esWycenaOpen || (isExternalSync ? (externalAiPricerOpen ?? false) : false)}
                   onExternalOpenChange={(v) => { setEsWycenaOpen(v); onBroadcastDialog("headerAiPricerOpen", v); }}
                   rateIsDefault={!projectLaborRate || projectLaborRate <= 0}
+                  vatRate={vatRate}
                 />
               </div>
 
