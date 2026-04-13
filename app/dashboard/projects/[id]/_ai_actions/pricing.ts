@@ -1621,10 +1621,10 @@ export async function applyAiPrices(
     const itemIds = prices.map((p) => p.itemId);
     const { data: currentItems } = await adminClient
       .from("project_items")
-      .select("id, labor_norm, norm_protected, knr_code, material_price, quantity, confidence_level")
+      .select("id, labor_norm, norm_protected, knr_code, material_price, final_labor_price, quantity, confidence_level")
       .in("id", itemIds);
 
-    type CurrentItem = { id: string; labor_norm: number | null; norm_protected: boolean; knr_code: string | null; material_price: number | null; quantity: number; confidence_level: string | null };
+    type CurrentItem = { id: string; labor_norm: number | null; norm_protected: boolean; knr_code: string | null; material_price: number | null; final_labor_price: number | null; quantity: number; confidence_level: string | null };
     const currentMap = new Map<string, CurrentItem>(
       (currentItems ?? []).map((item) => [item.id as string, item as CurrentItem])
     );
@@ -1639,7 +1639,10 @@ export async function applyAiPrices(
         if (current?.confidence_level === "manual") return true;
 
         // 2. Sacred Non-Zero Rule — labor_norm > 0 or norm_protected flag set
-        const isNormProtected = current != null && (
+        // Exception: if final_labor_price was reset to 0 by user, bypass protection
+        // so that re-estimation can apply new prices normally.
+        const priceWasReset = current != null && (current.final_labor_price ?? 0) === 0;
+        const isNormProtected = !priceWasReset && current != null && (
           current.norm_protected === true ||
           (current.labor_norm != null && current.labor_norm > 0)
         );
