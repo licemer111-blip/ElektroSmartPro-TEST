@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -138,9 +139,11 @@ export function CopyFromProjectDialog({ open, onOpenChange, targetProjectId, isP
     }
   };
 
+  const { multiplier: knrMultiplier } = useKnrMultiplier();
+
   const formatPrice = (material: number, labor: number, qty: number) => {
     if (!isPro) return '*** zł';
-    const total = (material + labor) * qty;
+    const total = (material + labor * knrMultiplier) * qty;
     return total.toFixed(2) + " zł";
   };
 
