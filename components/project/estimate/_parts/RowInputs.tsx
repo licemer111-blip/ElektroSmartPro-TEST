@@ -550,7 +550,7 @@ export function RowRgCell({
                     </div>
                   </TooltipTrigger>
                   <TooltipContent side="left" className="text-xs max-w-[180px]">
-                    Twoja norma ({ln.toFixed(3)} rbh) różni się od KNR ({sn.toFixed(3)} rbh). Czy to zamierzone?
+                    Zapisana norma ({ln.toFixed(3)} rbh) różni się od aktualnej bazy KNR ({sn.toFixed(3)} rbh). Przelicz pozycję lub zresetuj normę (ikona 🛡).
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
