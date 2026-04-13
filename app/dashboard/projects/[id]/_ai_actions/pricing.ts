@@ -44,7 +44,7 @@ import {
   getCeilingModifier, getHeightModifier,
   classifyIntent, GROOVE_FLOOR_RE, DRILL_FLOOR_RE,
 } from "@/lib/services/semantic-classifier";
-import { buildEnrichedItemListWithAssembly, detectSector } from "@/lib/ai/smart-mapping-engine";
+import { buildEnrichedItemListWithAssembly, detectSector, expandToAssembly } from "@/lib/ai/smart-mapping-engine";
 
 // ── Re-export types for external consumers ────────────────────────
 export type { AiPriceEstimate } from "./pricing-types";
@@ -1297,7 +1297,22 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
       })
       // NUCLEAR VETO: hardcoded PLN floors — zero runtime dependencies.
       .map(securityAuditLayer);
-    return { success: true, estimates };
+
+    // ── Assembly Template Override ───────────────────────────────────────────────────────────────
+    // For ZESTAW/BIALY_MONTAZ/TRASY trigger items: replace AI-estimated prices with template-
+    // derived prices. This ensures dialog preview ≡ table display ≡ summary totals.
+    // Iron Rule: store BASE prices (knrMult = 1.0). Display layers apply knrMult at render time.
+    const assemblySector = detectSector((project.object_types as { slug?: string } | null)?.slug);
+    const assemblyEstimates = estimates.map((e) => {
+      if (e.isAmbiguous || e.trace === "unmatched") return e;
+      const qty = e.quantity || 1;
+      const expansion = expandToAssembly(e.name, qty, assemblySector, baseRateForCalc, 1.0);
+      if (!expansion.triggered) return e;
+      const labPerUnit = Math.round(expansion.totalLaborPLN / qty * 100) / 100;
+      const matPerUnit = Math.round(expansion.totalMaterialPLN / qty * 100) / 100;
+      return { ...e, suggestedLabor: labPerUnit, suggestedMaterial: matPerUnit };
+    });
+    return { success: true, estimates: assemblyEstimates };
   } catch (error) {
     logger.error("estimatePricesWithAI error:", {}, error);
     return { success: false, error: "Wystapil blad podczas wyceny AI" };
