@@ -83,7 +83,7 @@ export function EstimateTableHeader({
               <span>💰</span>
               <div className="flex items-center gap-1">
                 <span className="font-semibold">Materiał{materialsOwnedByCustomer && <span className="ml-0.5 text-[9px] opacity-75">(Klient)</span>}</span>
-                <HintTooltip content={HINTS.columnMaterial} side="bottom" iconClassName="opacity-50 hover:opacity-100" />
+                <HintTooltip content={HINTS.columnMaterial} side="bottom" />
               </div>
               <span className={`text-[10px] font-normal opacity-70`}>(jedn. / suma)</span>
             </div>
@@ -96,7 +96,7 @@ export function EstimateTableHeader({
               <span>👷</span>
               <div className="flex items-center gap-1">
                 <span className="font-semibold">Robocizna (r-g)</span>
-                <HintTooltip content={HINTS.columnLabor} side="bottom" iconClassName="opacity-50 hover:opacity-100" />
+                <HintTooltip content={HINTS.columnLabor} side="bottom" />
               </div>
               <span className="text-[10px] font-normal opacity-70">(jedn. / suma)</span>
             </div>
@@ -109,7 +109,7 @@ export function EstimateTableHeader({
               <span>📋</span>
               <div className="flex items-center gap-1">
                 <span className="font-semibold">Kod KNR</span>
-                <HintTooltip content={HINTS.columnKnr} side="bottom" iconClassName="opacity-50 hover:opacity-100" />
+                <HintTooltip content={HINTS.columnKnr} side="bottom" />
               </div>
               <span className="text-[10px] font-normal opacity-70">(Robocizna)</span>
             </div>
@@ -122,7 +122,7 @@ export function EstimateTableHeader({
               <span>⏱</span>
               <div className="flex items-center gap-1">
                 <span className="font-semibold">Czas pracy</span>
-                <HintTooltip content={HINTS.columnTime} side="bottom" iconClassName="opacity-50 hover:opacity-100" />
+                <HintTooltip content={HINTS.columnTime} side="bottom" />
               </div>
               <span className="text-[10px] font-normal opacity-70">(rbh/jedn. × ilość)</span>
             </div>
@@ -139,7 +139,7 @@ export function EstimateTableHeader({
             <span>{filterType === "materials" ? "💰" : filterType === "labor" ? "👷" : "💎"}</span>
             <div className="flex items-center gap-1 justify-center">
             <span className="font-semibold">{filterType === "materials" ? "Suma mat." : filterType === "labor" ? "Suma rob." : "Suma"}</span>
-            <HintTooltip content={HINTS.columnSum} side="bottom" iconClassName="opacity-50 hover:opacity-100" />
+            <HintTooltip content={HINTS.columnSum} side="bottom" />
           </div>
           </div>
         </TableHead>

@@ -281,7 +281,7 @@ export function ProjectSummary({
               <span className="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-300">
                 <Percent className="w-3.5 h-3.5" />
                 Narzuty i Marże
-                <HintTooltip content={HINTS.narzutyMarze} side="top" iconOnly iconClassName="opacity-50 hover:opacity-80" />
+                <HintTooltip content={HINTS.narzutyMarze} side="top" />
               </span>
               <span className="flex items-center gap-1.5">
                 {((project.kp_percent || 0) > 0 || (project.z_percent || 0) > 0 || (project.kz_percent || 0) > 0) && (

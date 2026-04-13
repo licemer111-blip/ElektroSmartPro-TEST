@@ -130,7 +130,7 @@ export function SummaryExportPanel({
       {/* Portal klienta */}
       <div className="flex items-center justify-between mb-0.5">
         <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Portal &amp; Dokumenty</span>
-        <HintTooltip content={HINTS.portalKlienta} side="left" iconOnly />
+        <HintTooltip content={HINTS.portalKlienta} side="left" />
       </div>
       <div
         className={`relative w-full transition-all duration-150 ${!isFinal ? "opacity-50 cursor-pointer active:scale-95 active:opacity-40" : "hover:brightness-110 hover:scale-[1.01]"}`}
@@ -205,8 +205,8 @@ export function SummaryExportPanel({
           <div className="flex items-center justify-between">
             <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Eksport</span>
             <div className="flex gap-1">
-              <HintTooltip content={HINTS.pdfExport} side="left" iconOnly iconClassName="opacity-60" />
-              <HintTooltip content={HINTS.excelExport} side="left" iconOnly iconClassName="opacity-60" />
+              <HintTooltip content={HINTS.pdfExport} side="left" />
+              <HintTooltip content={HINTS.excelExport} side="left" />
             </div>
           </div>
           {/* PDF + Excel buttons */}
