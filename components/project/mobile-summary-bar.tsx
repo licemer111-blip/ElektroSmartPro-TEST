@@ -74,13 +74,12 @@ export function MobileSummaryBar({
     if (!materialsOwnedByCustomer) baseMaterialTotal += matPrice * item.quantity;
     baseLaborTotal += labPrice * item.quantity;
   });
-  const baseSubtotal = baseMaterialTotal + baseLaborTotal;
   const adj = 1 + (project.adjustment_percentage || 0) / 100;
-  const subtotal = baseSubtotal * adj;
+  const materialTotal = baseMaterialTotal * adj;
+  const laborTotal = baseLaborTotal * knrMultiplier * adj;
+  const subtotal = materialTotal + laborTotal;
   const vatAmount = (subtotal * vatRate) / 100;
   const grandTotal = subtotal + vatAmount;
-  const materialTotal = baseMaterialTotal * adj;
-  const laborTotal = baseLaborTotal * adj;
 
   const handleToggleMaterials = async (enabled: boolean) => {
     const result = await toggleMaterialsOwnedByCustomer(project.id, enabled);
@@ -137,13 +136,13 @@ export function MobileSummaryBar({
         const children = items.filter(c => c.parent_assembly_id === item.id);
         const childSum = children.reduce((acc, c) => {
           const cMat = materialsOwnedByCustomer ? 0 : (c.final_material_price ?? c.material_price ?? 0) * c.quantity;
-          const cLab = (c.final_labor_price ?? c.labor_price ?? 0) * c.quantity;
+          const cLab = (c.final_labor_price ?? c.labor_price ?? 0) * c.quantity * knrMultiplier;
           return acc + (cMat + cLab);
         }, 0);
         sections.set(sec, prev + childSum * adj);
       } else {
         const mat = materialsOwnedByCustomer ? 0 : (item.final_material_price ?? item.material_price ?? 0) * item.quantity;
-        const lab = (item.final_labor_price ?? item.labor_price ?? 0) * item.quantity;
+        const lab = (item.final_labor_price ?? item.labor_price ?? 0) * item.quantity * knrMultiplier;
         sections.set(sec, prev + (mat + lab) * adj);
       }
     });
@@ -241,7 +240,7 @@ export function MobileSummaryBar({
             {/* Price adjuster */}
             <PriceAdjuster
               projectId={project.id}
-              basePrice={baseSubtotal + (baseSubtotal * vatRate / 100)}
+              basePrice={subtotal + (subtotal * vatRate / 100)}
               initialAdjustment={project.adjustment_percentage || 0}
               isPro={isPro}
               disabled={isFinal}
