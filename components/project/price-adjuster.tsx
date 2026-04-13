@@ -123,7 +123,7 @@ export function PriceAdjuster({ projectId, basePrice, initialAdjustment, isPro =
           <Label htmlFor={`target-price-${instanceId}`} className="text-sm font-medium text-slate-700 dark:text-slate-300 whitespace-nowrap">
             Negocjacje Ceny
           </Label>
-          <HintTooltip content={HINTS.negotiationSlider} side="top" />
+          <HintTooltip content={HINTS.negotiationSlider} side="top" iconOnly />
           <Loader2 className={`w-3 h-3 flex-shrink-0 text-slate-400 transition-opacity duration-150 ${isSaving && isPro ? 'opacity-100 animate-spin' : 'opacity-0'}`} />
         </div>
         {!isNeutral && (

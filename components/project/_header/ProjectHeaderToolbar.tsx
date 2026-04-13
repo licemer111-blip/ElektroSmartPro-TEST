@@ -334,7 +334,7 @@ export function ProjectHeaderToolbar({
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <HintTooltip content={HINTS.aiPricing} side="bottom" iconClassName="!bg-amber-100 dark:!bg-amber-900/60 !text-amber-600 dark:!text-amber-400 !ring-amber-300 dark:!ring-amber-700 hover:!bg-amber-200 hover:!shadow-[0_0_8px_rgba(245,158,11,0.55)]" />
+                <HintTooltip content={HINTS.aiPricing} side="bottom" iconOnly iconClassName="!bg-amber-100 dark:!bg-amber-900/60 !text-amber-600 dark:!text-amber-400 !ring-amber-300 dark:!ring-amber-700 hover:!bg-amber-200 hover:!shadow-[0_0_8px_rgba(245,158,11,0.55)]" />
                 </div>
 
                 <ProjectMembersDialog
@@ -365,7 +365,7 @@ export function ProjectHeaderToolbar({
                 {/* DocumentationDialog moved to SummaryExportPanel (Podsumowanie column) */}
                 {/* ShareOfferDialog moved to SummaryExportPanel — hidden here to avoid duplication */}
                 <div className="w-px h-5 bg-slate-200 dark:bg-slate-700 mx-0.5 flex-shrink-0" />
-                <HintTooltip content={HINTS.projectFinal} side="bottom" />
+                <HintTooltip content={HINTS.projectFinal} side="bottom" iconOnly />
                 <Button
                   onClick={onToggleStatus}
                   disabled={isSaving}

@@ -154,7 +154,7 @@ export function ProjectControlPanel({
             <div className="flex items-center gap-1">
               <Receipt className="w-3 h-3 text-blue-600 dark:text-blue-400 flex-shrink-0" />
               <span className="text-[9px] font-semibold text-blue-700 dark:text-blue-300 truncate">VAT</span>
-              <HintTooltip content={HINTS.vatSelector} side="top" iconClassName="!w-4 !h-4" />
+              <HintTooltip content={HINTS.vatSelector} side="top" iconOnly iconClassName="!w-4 !h-4" />
             </div>
             <div className="grid grid-cols-2 gap-0.5 mt-0.5">
               <button
@@ -225,7 +225,7 @@ export function ProjectControlPanel({
             <div className="flex items-center gap-1">
               <BookOpen className="w-3 h-3 text-violet-600 dark:text-violet-400 flex-shrink-0" />
               <span className="text-[9px] font-semibold text-violet-700 dark:text-violet-300 truncate">Kody KNR</span>
-              <HintTooltip content={HINTS.columnKnr} side="top" iconClassName="!w-4 !h-4" />
+              <HintTooltip content={HINTS.columnKnr} side="top" iconOnly iconClassName="!w-4 !h-4" />
             </div>
             <div className="flex items-center justify-between mt-1">
               <Label htmlFor={`knr-toggle-${projectId}`} className="text-[8px] text-violet-600 dark:text-violet-400 cursor-pointer leading-tight">
@@ -250,7 +250,7 @@ export function ProjectControlPanel({
             <div className="flex items-center gap-1">
               <Clock className="w-3 h-3 flex-shrink-0 text-emerald-600 dark:text-emerald-400" />
               <span className="text-[9px] font-semibold text-emerald-700 dark:text-emerald-300 truncate">Czas (r-g)</span>
-              <HintTooltip content={HINTS.columnTime} side="top" iconClassName="!w-4 !h-4" />
+              <HintTooltip content={HINTS.columnTime} side="top" iconOnly iconClassName="!w-4 !h-4" />
             </div>
             <div className="flex items-center justify-between mt-1">
               <Label htmlFor={`rg-toggle-${projectId}`} className="text-[8px] text-emerald-600 dark:text-emerald-400 cursor-pointer leading-tight">
