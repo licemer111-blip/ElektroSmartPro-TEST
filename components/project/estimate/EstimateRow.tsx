@@ -16,7 +16,6 @@ import { calcRowPrices } from "@/lib/pricing-calculations";
 import type { ProjectItem } from "@/lib/types/database";
 import { detectSmartContext } from "@/lib/ai/smart-context-mapper";
 import { SmartAssemblyPanel } from "@/components/project/estimate/_parts/SmartAssemblyPanel";
-import { expandToAssembly } from "@/lib/ai/smart-mapping-engine";
 import type { ProjectSector } from "@/lib/ai/smart-mapping-engine";
 import { roundPrice, useGlobalSettings } from "@/hooks/use-global-settings";
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
@@ -178,11 +177,7 @@ export const EstimateRow = React.memo(function EstimateRow({
 
   const {
     materialUnitBase, laborUnitBase, materialTotalBase, laborTotalBase,
-    materialUnit: calcMaterialUnit,
-    laborUnit: calcLaborUnit,
-    materialTotal: calcMaterialTotal,
-    laborTotal: calcLaborTotal,
-    rowTotal: calcRowTotal,
+    materialUnit, laborUnit, materialTotal, laborTotal, rowTotal,
   } = calcRowPrices(
     displayItem,
     adjustmentMultiplier,
@@ -195,52 +190,6 @@ export const EstimateRow = React.memo(function EstimateRow({
     knrMultiplier,
   );
 
-  // ── Smart Assembly Price Override ─────────────────────────────────────────
-  // When a Sacred Word trigger is detected, override the base-KNR prices with
-  // the AGGREGATED assembly total (Σ all ingredients).
-  // totalLaborPLN from expandToAssembly already includes: knrMultiplier + laborRate + qty.
-  // We apply ONLY the remaining project-level multipliers: regionModifier + adjustmentMultiplier.
-  const scmForPricing = !isEditing && !isAssemblyChild
-    ? detectSmartContext(item.name)
-    : null;
-  // Override guard: only aggregate when item has a stored AI price (>0) and is NOT manual.
-  // Zero-price items (never priced) and manual prices must NOT be touched.
-  const calcIsManual = displayItem.confidence_level === "manual";
-  const hasAssemblyTrigger = !calcIsManual
-    && calcRowTotal > 0
-    && (scmForPricing?.category === "ZESTAW"
-      || scmForPricing?.category === "BIALY_MONTAZ"
-      || scmForPricing?.category === "TRASY");
-
-  let materialUnit = calcMaterialUnit;
-  let laborUnit = calcLaborUnit;
-  let materialTotal = calcMaterialTotal;
-  let laborTotal = calcLaborTotal;
-  let rowTotal = calcRowTotal;
-
-  if (hasAssemblyTrigger) {
-    const expansion = expandToAssembly(
-      item.name,
-      item.quantity,
-      projectSector,
-      projectLaborRate,
-      knrMultiplier,
-    );
-    if (expansion.triggered) {
-      const qty = item.quantity || 1;
-      // totalLaborPLN: knrMult + laborRate + qty already applied → only regionMod + adjMult left
-      const effLab = expansion.totalLaborPLN * regionModifier * adjustmentMultiplier;
-      // totalMaterialPLN: qty already applied → only adjMult left (0 if customer owns materials)
-      const effMat = materialsOwnedByCustomer ? 0 : expansion.totalMaterialPLN * adjustmentMultiplier;
-      laborTotal   = roundPrice(effLab);
-      materialTotal = roundPrice(effMat);
-      rowTotal     = roundPrice(effLab + effMat);
-      laborUnit    = roundPrice(effLab / qty);
-      materialUnit = roundPrice(effMat / qty);
-    }
-  }
-
-  // After assembly override: use effective rowTotal to decide if price is missing
   const isZeroPrice = rowTotal === 0 && (
     (displayItem.final_material_price ?? displayItem.material_price ?? 0) +
     (displayItem.final_labor_price ?? displayItem.labor_price ?? 0)
