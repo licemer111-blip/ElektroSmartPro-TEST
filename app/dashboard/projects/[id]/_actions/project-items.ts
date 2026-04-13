@@ -7,7 +7,8 @@ import { projectItemUpdateSchema, validate } from "@/lib/validations";
 import { logger } from "@/lib/logger";
 import type { ProjectItem } from "@/lib/types/database";
 import { canUserEditProject, revalidateProject } from "./utils";
-import { getKnrMultiplier } from "@/lib/global-benchmarks";
+// NOTE: KNR multiplier is applied at DISPLAY-TIME only (pricing-calculations.ts)
+// Database stores BASE prices to allow instant recalculation when admin changes multiplier
 
 // Fetch project items
 export async function getProjectItems(projectId: string): Promise<ProjectItem[]> {

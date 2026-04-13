@@ -3,6 +3,28 @@
 // ============================================================
 // All functions are pure (no side effects) and unit-testable.
 // Used by EstimateRow, EstimateFooter, and estimate-table.tsx.
+//
+// KNR 2026 MULTIPLIER ARCHITECTURE (Display-Time Application):
+// ─────────────────────────────────────────────────────────────
+// The KNR multiplier adjusts outdated KNR labor norms to 2026 market reality.
+//
+// How it works:
+//   1. Database stores BASE prices (without multiplier)
+//   2. calcRowPrices() receives knrMultiplier from useKnrMultiplier() hook
+//   3. Multiplier is applied to labor at RENDER TIME
+//   4. Admin changes multiplier → BroadcastChannel → all tabs re-render
+//
+// Benefits:
+//   ✓ No database migration needed when multiplier changes
+//   ✓ Instant effect across all projects
+//   ✓ Easy to adjust based on market conditions
+//
+// Files involved:
+//   - hooks/useKnrMultiplier.ts — fetches multiplier from admin_settings
+//   - lib/global-benchmarks.ts — server-side getKnrMultiplier()
+//   - app/admin/settings/ — admin UI to change multiplier
+//   - This file — applies multiplier in calcRowPrices()
+// ============================================================
 
 import type { ProjectItem } from "@/lib/types/database";
 import { roundPrice } from "@/hooks/use-global-settings";

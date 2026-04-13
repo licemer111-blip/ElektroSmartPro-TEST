@@ -13,6 +13,12 @@
  *   Set from profiles.hourly_rate at project creation, editable per-project.
  *   No rate set (= 0): laborRate = 0 — caller must prompt user to set rate in Settings
  *
+ * KNR 2026 Multiplier Architecture:
+ *   ✓ Multiplier is applied at DISPLAY-TIME only (in pricing-calculations.ts)
+ *   ✓ Database stores BASE prices (without multiplier)
+ *   ✓ This allows instant recalculation when admin changes the multiplier
+ *   ✓ See: useKnrMultiplier hook + calcRowPrices() for implementation
+ *
  * Iron Rules enforced:
  *   ✓ Robocizna and Materiał NEVER merged prematurely
  *   ✓ VAT Guard applied externally (8% residential / 23% commercial)
@@ -20,7 +26,7 @@
  */
 
 import { getKnrMetadata, type KnrMetadata } from "@/lib/ai-master-brain";
-import { getEffectiveRate, getKnrMultiplier } from "@/lib/global-benchmarks";
+import { getEffectiveRate } from "@/lib/global-benchmarks";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -243,17 +249,15 @@ export async function calcLaborWithHybridKnr(params: {
 
   const knr = lookupKnr(knrCodeOrName, category, userNorms, moduleName, modules, useExpertMode);
   const rateResult = await resolveEffectiveLaborRate(voivodeship, laborRate);
-  const knrMultiplier = await getKnrMultiplier();
 
-  // Apply KNR 2026 multiplier to adjust labor norms to market reality
-  const adjustedLaborNorm = Math.round(knr.laborNorm * knrMultiplier * 1000) / 1000;
-
-  const laborHoursTotal = Math.round(quantity * adjustedLaborNorm * 100) / 100;
-  const laborPrice = Math.round(adjustedLaborNorm * rateResult.laborRate * 100) / 100;
+  // NOTE: KNR 2026 multiplier is applied at DISPLAY-TIME (pricing-calculations.ts)
+  // Database stores BASE prices to allow instant recalculation when multiplier changes
+  const laborHoursTotal = Math.round(quantity * knr.laborNorm * 100) / 100;
+  const laborPrice = Math.round(knr.laborNorm * rateResult.laborRate * 100) / 100;
   const laborTotal = Math.round(laborHoursTotal * rateResult.laborRate * 100) / 100;
 
   return {
-    laborNorm: adjustedLaborNorm,
+    laborNorm: knr.laborNorm,
     laborPrice,
     laborHoursTotal,
     laborTotal,
@@ -282,13 +286,11 @@ export async function createBatchCalculator(
   useExpertMode: boolean = true,
 ) {
   const rateResult = await resolveEffectiveLaborRate(voivodeship, laborRate);
-  const knrMultiplier = await getKnrMultiplier();
 
   return {
     laborRate: rateResult.laborRate,
     source: rateResult.source,
     regionModifier: rateResult.regionModifier,
-    knrMultiplier,
 
     /** Synchronous labor calculation for a single item — no async needed */
     calcItem(params: {
@@ -306,14 +308,12 @@ export async function createBatchCalculator(
         params.modules,
         useExpertMode,
       );
-      // Apply KNR 2026 multiplier to adjust labor norms to market reality
-      const adjustedLaborNorm = Math.round(knr.laborNorm * knrMultiplier * 1000) / 1000;
-
-      const laborHoursTotal = Math.round(params.quantity * adjustedLaborNorm * 100) / 100;
-      const laborPrice = Math.round(adjustedLaborNorm * rateResult.laborRate * 100) / 100;
+      // NOTE: KNR 2026 multiplier is applied at DISPLAY-TIME (pricing-calculations.ts)
+      const laborHoursTotal = Math.round(params.quantity * knr.laborNorm * 100) / 100;
+      const laborPrice = Math.round(knr.laborNorm * rateResult.laborRate * 100) / 100;
       const laborTotal = Math.round(laborHoursTotal * rateResult.laborRate * 100) / 100;
       return {
-        laborNorm: adjustedLaborNorm,
+        laborNorm: knr.laborNorm,
         laborPrice,
         laborHoursTotal,
         laborTotal,

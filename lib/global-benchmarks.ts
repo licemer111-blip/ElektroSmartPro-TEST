@@ -2,8 +2,14 @@
  * global-benchmarks.ts
  *
  * Single Source of Truth for globally-configurable benchmarks.
- * Reads from admin_settings (Supabase) and caches in-process for 60s.
+ * Reads from admin_settings (Supabase) and caches in-process for 10s.
  * Server-side only — do NOT import in client components.
+ *
+ * KNR 2026 MULTIPLIER:
+ *   - Default: 1.4 (40% increase to outdated KNR norms)
+ *   - Stored in admin_settings.value.knr_2026_multiplier
+ *   - Applied at DISPLAY-TIME only (see pricing-calculations.ts)
+ *   - Client-side: useKnrMultiplier() hook fetches via /api/admin/knr-multiplier
  *
  * Usage:
  *   const knrMult = await getKnrMultiplier();
