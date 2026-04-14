@@ -243,7 +243,7 @@ export function EstimateTable({
         adjustmentMultiplier={adjustmentMultiplier} regionModifier={regionModifier} filterType={filterType}
         isAssemblyParent={hasChildren && !item.is_assembly_child}
         isCollapsedAssembly={isCollapsedAssembly ?? collapsedAssemblies.has(item.id)}
-        onToggleAssemblyCollapse={() => toggleAssemblyCollapse(item.id)}
+        onToggleAssemblyCollapse={hasChildren ? () => toggleAssemblyCollapse(item.id) : undefined}
         isCurrentMatch={isCurrentMatch}
         searchRef={(el) => { if (el && matchIdx >= 0) matchRefs.current.set(matchIdx, el); }}
         highlightText={highlightText} uniqueSections={uniqueSections}
