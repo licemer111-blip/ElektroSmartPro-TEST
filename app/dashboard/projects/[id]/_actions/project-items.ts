@@ -449,3 +449,30 @@ export async function addProjectItemDirect(
   return { success: true, itemId: inserted?.id as string | undefined };
 }
 
+// Save per-row assembly overrides (keyed by item label)
+// overrides=null clears all overrides and restores template defaults
+export async function saveAssemblyOverrides(
+  projectId: string,
+  itemId: string,
+  overrides: Record<string, { qtyMultiplier?: number; materialPricePerUnit?: number; rbhPerUnit?: number }> | null,
+): Promise<{ success?: boolean; error?: string }> {
+  const { user, supabase } = await tryAuth();
+  if (!user || !supabase) return { error: "Musisz być zalogowany" };
+
+  const canEdit = await canUserEditProject(supabase, projectId, user.id);
+  if (!canEdit) return { error: "Nie masz uprawnień" };
+
+  const { error } = await supabase
+    .from("project_items")
+    .update({ assembly_overrides: overrides })
+    .eq("id", itemId)
+    .eq("project_id", projectId);
+
+  if (error) {
+    logger.error("Error saving assembly overrides", { projectId, itemId }, error);
+    return { error: "Błąd podczas zapisywania modyfikacji zestawu" };
+  }
+
+  revalidateProject(projectId);
+  return { success: true };
+}

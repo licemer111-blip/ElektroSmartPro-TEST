@@ -363,6 +363,8 @@ export interface ProjectItem {
   updated_at?: string;
   // ES-Engine Composer metadata (recipe_key, qty_factor, component_id, etc.)
   metadata?: Record<string, unknown> | null;
+  // Smart Assembly per-row overrides (keyed by item label)
+  assembly_overrides?: Record<string, { qtyMultiplier?: number; materialPricePerUnit?: number; rbhPerUnit?: number }> | null;
   // Joined from catalog_items → catalog_categories (optional, populated by getProjectItems)
   catalog_categories?: { id: string; name: string } | null;
 }

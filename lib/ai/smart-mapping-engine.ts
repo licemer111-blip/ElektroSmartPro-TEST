@@ -31,6 +31,17 @@ export const SECTOR_LABELS: Record<ProjectSector, string> = {
   INDUSTRIAL:  "Przemysłowy (Natynkowy IP44+)",
 };
 
+/**
+ * Per-item override map: keyed by item label, values override template defaults.
+ * Stored in project_items.assembly_overrides JSONB.
+ */
+export interface AssemblyItemOverride {
+  qtyMultiplier?: number;
+  materialPricePerUnit?: number;
+  rbhPerUnit?: number;
+}
+export type AssemblyOverrides = Record<string, AssemblyItemOverride>;
+
 /** One ingredient in an assembly template. */
 export interface AssemblyItemDef {
   label: string;
@@ -73,6 +84,8 @@ export interface ExpandedAssemblyItem {
   materialPricePerUnit: number;
   materialTotal: number;
   isLabor: boolean;
+  /** True if this item was modified by an AssemblyOverride. */
+  isOverridden?: boolean;
 }
 
 /** Result of expanding one estimate item into a full assembly. */
@@ -471,6 +484,7 @@ export function getTemplatesForSector(sector: ProjectSector): AssemblyTemplate[]
  * @param sector         Project sector (from detectSector).
  * @param laborRate      Effective labor rate PLN/rbh (after region modifier).
  * @param knrMultiplier  Admin KNR 2026 multiplier (default 1.4).
+ * @param overrides      Optional per-item overrides (from project_items.assembly_overrides).
  */
 export function expandToAssembly(
   itemName: string,
@@ -478,6 +492,7 @@ export function expandToAssembly(
   sector: ProjectSector,
   laborRate: number,
   knrMultiplier: number = 1.4,
+  overrides?: AssemblyOverrides | null,
 ): SmartExpansionOutcome {
   const ctx = detectSmartContext(itemName);
 
@@ -517,21 +532,26 @@ export function expandToAssembly(
   const template = TEMPLATE_INDEX[key];
   if (!template) return { triggered: false };
 
-  // Compute expanded items
+  // Compute expanded items (apply per-item overrides if present)
   const expandedItems: ExpandedAssemblyItem[] = template.items.map((def) => {
-    const quantity = def.qtyMultiplier * parentQty;
-    const rbhTotal = def.rbhPerUnit * quantity * knrMultiplier;
-    const materialTotal = def.isLabor ? 0 : def.materialPricePerUnit * quantity;
+    const ov = overrides?.[def.label];
+    const effQtyMult  = ov?.qtyMultiplier        ?? def.qtyMultiplier;
+    const effRbhUnit  = ov?.rbhPerUnit            ?? def.rbhPerUnit;
+    const effMatUnit  = ov?.materialPricePerUnit  ?? def.materialPricePerUnit;
+    const quantity    = effQtyMult * parentQty;
+    const rbhTotal    = effRbhUnit * quantity * knrMultiplier;
+    const materialTotal = def.isLabor ? 0 : effMatUnit * quantity;
     return {
       label: def.label,
       knrCode: def.knrCode,
       unit: def.unit,
       quantity,
-      rbhPerUnit: def.rbhPerUnit,
+      rbhPerUnit: effRbhUnit,
       rbhTotal,
-      materialPricePerUnit: def.materialPricePerUnit,
+      materialPricePerUnit: effMatUnit,
       materialTotal,
       isLabor: def.isLabor,
+      isOverridden: ov !== undefined,
     };
   });
 

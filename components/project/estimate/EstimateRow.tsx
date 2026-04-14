@@ -214,7 +214,7 @@ export const EstimateRow = React.memo(function EstimateRow({
   if (!isManualPrice && !isAssemblyChild && calcRowTotal > 0) {
     const scm = detectSmartContext(item.name);
     if (scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY" || scm.category === "ROZDZIELNICA") {
-      const expansion = expandToAssembly(item.name, item.quantity, projectSector, projectLaborRate, knrMultiplier);
+      const expansion = expandToAssembly(item.name, item.quantity, projectSector, projectLaborRate, knrMultiplier, item.assembly_overrides ?? undefined);
       if (expansion.triggered) {
         const qty = item.quantity || 1;
         const effLab = expansion.totalLaborPLN * regionModifier * adjustmentMultiplier;
@@ -419,6 +419,9 @@ export const EstimateRow = React.memo(function EstimateRow({
                         sector={projectSector}
                         laborRate={projectLaborRate}
                         knrMultiplier={knrMultiplier}
+                        itemId={item.id}
+                        projectId={item.project_id}
+                        initialOverrides={item.assembly_overrides ?? null}
                       />
                     </PopoverContent>
                   </Popover>
