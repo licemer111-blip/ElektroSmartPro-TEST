@@ -158,6 +158,8 @@ export const EstimateRow = React.memo(function EstimateRow({
 
   // Virtual expand state for AI-triggered ZESTAW rows (no real DB children)
   const [isVirtualExpanded, setIsVirtualExpanded] = useState(false);
+  // Controlled open state for Zap (SmartAssemblyPanel) popover
+  const [zapOpen, setZapOpen] = useState(false);
 
   // Prices — use editing values when in edit mode
   const editMat = isEditing ? (parseFloat(editingState!.materialPrice) || 0) : 0;
@@ -424,7 +426,7 @@ export const EstimateRow = React.memo(function EstimateRow({
                   );
                 }
                 return (
-                  <Popover>
+                  <Popover open={zapOpen} onOpenChange={setZapOpen}>
                     <TooltipProvider delayDuration={300}>
                       <Tooltip>
                         <PopoverTrigger asChild>
@@ -686,9 +688,18 @@ export const EstimateRow = React.memo(function EstimateRow({
                 {showPrices ? `${vTotal.toFixed(2)} zł` : "***"}
               </div>
             </TableCell>
-            {/* Akcje — empty */}
+            {/* Akcje — open parent SmartAssemblyPanel for editing component overrides */}
             {!isFinal && !isReadOnly && (
-              <TableCell className={`min-w-[80px] w-[80px] ${singleCellBorderClass}`} />
+              <TableCell className={`min-w-[80px] w-[80px] ${singleCellBorderClass} text-center`}>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setZapOpen(true); }}
+                  className="inline-flex items-center gap-0.5 px-1.5 py-1 rounded text-orange-500 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/40 transition-colors text-[10px] font-medium"
+                  title="Edytuj składniki zestawu w panelu AI"
+                >
+                  <PenLine className="w-2.5 h-2.5" />
+                  Edytuj
+                </button>
+              </TableCell>
             )}
           </TableRow>
         );
