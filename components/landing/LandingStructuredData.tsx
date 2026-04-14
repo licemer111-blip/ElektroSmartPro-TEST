@@ -1,5 +1,3 @@
-import Script from "next/script";
-
 interface LandingStructuredDataProps {
   catalogCount: number;
   dinCount?: number;
@@ -127,22 +125,19 @@ export function LandingStructuredData({ catalogCount, dinCount = 295 }: LandingS
 
   return (
     <>
-      <Script
+      <script
         id="ld-software"
         type="application/ld+json"
-        strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <Script
+      <script
         id="ld-organization"
         type="application/ld+json"
-        strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }}
       />
-      <Script
+      <script
         id="ld-faq"
         type="application/ld+json"
-        strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqData) }}
       />
     </>

@@ -36,14 +36,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // ── 1. Statyczne strony ────────────────────────────────────────────────────
   const staticPages: MetadataRoute.Sitemap = [
-    { url: baseUrl,                                    lastModified: now, changeFrequency: "weekly",  priority: 1.0 },
-    { url: `${baseUrl}/login`,                         lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/login?tab=signup`,              lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${baseUrl}/o-nas`,                         lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/kontakt`,                       lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/blog`,                          lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
-    { url: `${baseUrl}/polityka-prywatnosci`,          lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
-    { url: `${baseUrl}/regulamin`,                     lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
+    { url: baseUrl,                           lastModified: now, changeFrequency: "weekly",  priority: 1.0 },
+    { url: `${baseUrl}/login`,                lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/o-nas`,                lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${baseUrl}/kontakt`,              lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${baseUrl}/blog`,                 lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
+    { url: `${baseUrl}/polityka-prywatnosci`, lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
+    { url: `${baseUrl}/regulamin`,            lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
   ];
 
   // ── 2. Blog posts (hardcoded slugs) ───────────────────────────────────────
