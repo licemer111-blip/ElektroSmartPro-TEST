@@ -329,10 +329,7 @@ export const EstimateRow = React.memo(function EstimateRow({
               <button
                 onClick={(e) => { e.stopPropagation(); onToggleAssemblyCollapse(); }}
                 className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1.5 py-0.5 rounded border transition-colors flex-shrink-0 ml-1"
-                style={isCollapsedAssembly
-                  ? { borderColor: "#f97316", color: "#f97316", background: "transparent" }
-                  : { borderColor: "#fb923c", color: "#9a3412", background: "rgb(255 237 213 / 0.7)" }
-                }
+                style={{ borderColor: "#f97316", color: "#f97316", background: "transparent" }}
                 title={isCollapsedAssembly ? "Pokaż składniki zestawu" : "Ukryj składniki zestawu"}
               >
                 {isCollapsedAssembly
