@@ -574,6 +574,7 @@ export const EstimateRow = React.memo(function EstimateRow({
         isReadOnly={isReadOnly}
         compactView={compactView}
         isZestaw={isZestaw}
+        isAssemblyOverride={isAssemblyOverride}
         onSaveEdit={onSaveEdit}
         onCancelEdit={onCancelEdit}
         onStartEdit={onStartEdit}

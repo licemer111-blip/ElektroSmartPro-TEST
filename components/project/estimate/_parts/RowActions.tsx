@@ -16,6 +16,8 @@ export interface RowActionsProps {
   isReadOnly: boolean;
   compactView: boolean;
   isZestaw: boolean;
+  /** AI-triggered template override — hides pencil, shows '+' add-child button */
+  isAssemblyOverride?: boolean;
   onSaveEdit: () => void;
   onCancelEdit: () => void;
   onStartEdit: (item: ProjectItem) => void;
@@ -31,6 +33,7 @@ export function RowActions({
   isReadOnly,
   compactView,
   isZestaw,
+  isAssemblyOverride = false,
   onSaveEdit,
   onCancelEdit,
   onStartEdit,
@@ -61,21 +64,25 @@ export function RowActions({
         </div>
       ) : (
         <div className="flex items-center justify-center gap-0.5">
-          <Button
-            variant="ghost" size="icon"
-            onClick={() => onStartEdit(item)}
-            className={cn(
-              compactView ? "h-6 w-6" : "h-11 w-11 sm:h-8 sm:w-8",
-              "text-slate-600 hover:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800",
-              isFinal && "opacity-30 cursor-not-allowed",
-            )}
-            title={isFinal ? "Odblokuj projekt, aby edytować" : isZestaw ? "Edytuj ilość zestawu" : "Edytuj pozycję"}
-            aria-label="Edytuj pozycję"
-          >
-            <Pencil className={compactView ? "h-3 w-3" : "h-3.5 w-3.5"} />
-          </Button>
+          {/* Pencil — hidden for AI-override zestawy (edit via Zap popover / Pokaż rows) */}
+          {!isAssemblyOverride && (
+            <Button
+              variant="ghost" size="icon"
+              onClick={() => onStartEdit(item)}
+              className={cn(
+                compactView ? "h-6 w-6" : "h-11 w-11 sm:h-8 sm:w-8",
+                "text-slate-600 hover:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800",
+                isFinal && "opacity-30 cursor-not-allowed",
+              )}
+              title={isFinal ? "Odblokuj projekt, aby edytować" : isZestaw ? "Edytuj ilość zestawu" : "Edytuj pozycję"}
+              aria-label="Edytuj pozycję"
+            >
+              <Pencil className={compactView ? "h-3 w-3" : "h-3.5 w-3.5"} />
+            </Button>
+          )}
 
-          {isZestaw && (
+          {/* '+' Add child — for manual zestawy AND AI-override rows */}
+          {(isZestaw || isAssemblyOverride) && (
             <Button
               variant="ghost" size="icon"
               onClick={() => onStartAddChild(item.id)}
@@ -91,7 +98,8 @@ export function RowActions({
             </Button>
           )}
 
-          {!isZestaw && (
+          {/* Copy — only for non-zestaw, non-override rows */}
+          {!isZestaw && !isAssemblyOverride && (
             <Button
               variant="ghost" size="icon"
               onClick={() => onDuplicate(item)}

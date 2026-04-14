@@ -137,15 +137,6 @@ export function SmartAssemblyPanel({
           <span className="text-[9px] font-mono bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 px-1.5 py-0.5 rounded border border-orange-200 dark:border-orange-700">
             #{expansion.templateId.split("_").pop()}
           </span>
-          {canEdit && !isEditing && (
-            <button
-              onClick={() => { setDraftOverrides(initialOverrides ?? {}); setIsEditing(true); }}
-              className="ml-1 p-1 rounded text-orange-600 hover:bg-orange-100 dark:hover:bg-orange-900/40 transition-colors"
-              title="Edytuj skład zestawu"
-            >
-              <Pencil className="w-3 h-3" />
-            </button>
-          )}
         </div>
       </div>
 
@@ -373,15 +364,21 @@ export function SmartAssemblyPanel({
             )}
           </div>
         ) : (
-          <p className="text-[9px] text-slate-400 dark:text-slate-500 pt-1 border-t border-slate-100 dark:border-slate-800 leading-tight">
-            Formuła: Σ(RBH_bazowe × mnożnik_KNR {knrMultiplier.toFixed(2)} × ilość).
-            Stawka r-g: {laborRate} PLN/rbh.
+          <div className="pt-1 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+            <p className="text-[9px] text-slate-400 dark:text-slate-500 leading-tight flex-1">
+              Formuła: Σ(RBH × KNR×{knrMultiplier.toFixed(2)} × ilość). Stawka: {laborRate} PLN/rbh.
+            </p>
             {canEdit && (
-              <span className="ml-1 text-blue-400 dark:text-blue-500">
-                Kliknij <Pencil className="inline w-2.5 h-2.5" /> aby edytować skład.
-              </span>
+              <button
+                onClick={() => { setDraftOverrides(initialOverrides ?? {}); setIsEditing(true); }}
+                className="flex items-center gap-1 px-2 py-1 rounded border border-orange-300 dark:border-orange-700 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/40 text-[10px] font-semibold transition-colors flex-shrink-0"
+                title="Edytuj skład zestawu"
+              >
+                <Pencil className="w-2.5 h-2.5" />
+                Edytuj
+              </button>
             )}
-          </p>
+          </div>
         )}
       </div>
     </div>
