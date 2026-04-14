@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -155,6 +155,9 @@ export const EstimateRow = React.memo(function EstimateRow({
   const isEditing = editingState?.itemId === item.id;
   const isAssemblyChild = item.is_assembly_child === true;
   const isZestaw = isAssemblyParent && !isAssemblyChild;
+
+  // Virtual expand state for AI-triggered ZESTAW rows (no real DB children)
+  const [isVirtualExpanded, setIsVirtualExpanded] = useState(false);
 
   // Prices — use editing values when in edit mode
   const editMat = isEditing ? (parseFloat(editingState!.materialPrice) || 0) : 0;
@@ -333,6 +336,23 @@ export const EstimateRow = React.memo(function EstimateRow({
                 title={isCollapsedAssembly ? "Pokaż składniki zestawu" : "Ukryj składniki zestawu"}
               >
                 {isCollapsedAssembly
+                  ? <><ChevronRight className="w-2.5 h-2.5" />Pokaż</>
+                  : <><ChevronDown  className="w-2.5 h-2.5" />Ukryj</>
+                }
+              </button>
+            )}
+            {/* Virtual expand for AI-triggered ZESTAW (template-driven, no real DB children) */}
+            {isAssemblyOverride && !isAssemblyChild && !onToggleAssemblyCollapse && (
+              <button
+                onClick={(e) => { e.stopPropagation(); setIsVirtualExpanded(v => !v); }}
+                className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1.5 py-0.5 rounded border transition-colors flex-shrink-0 ml-1"
+                style={!isVirtualExpanded
+                  ? { borderColor: "#f97316", color: "#f97316", background: "transparent" }
+                  : { borderColor: "#fb923c", color: "#9a3412", background: "rgb(255 237 213 / 0.7)" }
+                }
+                title={!isVirtualExpanded ? "Pokaż składniki zestawu (szablon AI)" : "Ukryj składniki zestawu"}
+              >
+                {!isVirtualExpanded
                   ? <><ChevronRight className="w-2.5 h-2.5" />Pokaż</>
                   : <><ChevronDown  className="w-2.5 h-2.5" />Ukryj</>
                 }
@@ -562,6 +582,120 @@ export const EstimateRow = React.memo(function EstimateRow({
         onStartAddChild={onStartAddChild}
       />
     </TableRow>
+
+    {/* ── Virtual Assembly Rows (AI-triggered ZESTAW only, no real DB children) ── */}
+    {isAssemblyOverride && isVirtualExpanded && (() => {
+      const vExp = expandToAssembly(item.name, item.quantity, projectSector, projectLaborRate, knrMultiplier, item.assembly_overrides ?? undefined);
+      if (!vExp.triggered) return null;
+      return vExp.items.map((vRow, idx) => {
+        const vMat = vRow.isLabor ? 0 : roundPrice(vRow.materialTotal * adjustmentMultiplier);
+        const vLab = vRow.isLabor ? roundPrice(vRow.rbhTotal * projectLaborRate * regionModifier * adjustmentMultiplier) : 0;
+        const vTotal = roundPrice(vMat + vLab);
+        return (
+          <TableRow
+            key={`vrow-${item.id}-${idx}`}
+            className="bg-orange-50/30 dark:bg-orange-950/15 hover:bg-orange-50/50 dark:hover:bg-orange-950/20 border-l-2 border-l-orange-300 dark:border-l-orange-800"
+          >
+            {/* Checkbox placeholder */}
+            {!isFinal && !isReadOnly && (
+              <TableCell className={`min-w-[36px] w-[36px] ${singleCellBorderClass}`} />
+            )}
+            {/* DnD placeholder */}
+            {isDndEnabled && !isFinal && !isReadOnly && (
+              <TableCell className={`min-w-[28px] w-[28px] ${singleCellBorderClass}`} />
+            )}
+            {/* Row # → ↳ */}
+            <TableCell className={`text-center min-w-[40px] w-[40px] ${singleCellBorderClass}`}>
+              <span className="text-orange-400 dark:text-orange-600 text-xs font-bold">↳</span>
+            </TableCell>
+            {/* Nazwa */}
+            <TableCell className={`min-w-[180px] ${singleCellBorderClass}`}>
+              <div className="pl-2 flex flex-col gap-0">
+                <div className={cn("text-xs font-medium break-words",
+                  colorMode ? "text-orange-700 dark:text-orange-300" : "text-slate-600 dark:text-slate-400"
+                )}>
+                  {vRow.isOverridden && (
+                    <span className="mr-1 text-[9px] text-blue-500 font-bold">★</span>
+                  )}
+                  {vRow.label}
+                </div>
+                <div className="text-[9px] text-slate-400 dark:text-slate-500 font-mono">{vRow.knrCode}</div>
+              </div>
+            </TableCell>
+            {/* Jedn. */}
+            <TableCell className={`text-center min-w-[50px] w-[50px] ${singleCellBorderClass}`}>
+              <span className="text-xs text-slate-400 dark:text-slate-500">{vRow.unit}</span>
+            </TableCell>
+            {/* Ilość */}
+            <TableCell className={`text-center min-w-[80px] w-[80px] ${singleCellBorderClass}`}>
+              <span className="text-xs font-medium text-slate-600 dark:text-slate-300">
+                {vRow.quantity % 1 === 0 ? vRow.quantity : vRow.quantity.toFixed(2)}
+              </span>
+            </TableCell>
+            {/* Materiał */}
+            {showMaterialsColumn && (
+              <TableCell className={`text-right min-w-[120px] w-[120px] ${singleCellBorderClass} bg-amber-50/40 dark:bg-amber-950/10`}>
+                {vMat > 0 ? (
+                  <div className="space-y-0">
+                    <div className={cn("text-[11px]", colorMode ? "text-amber-500 dark:text-amber-600" : "text-slate-400 dark:text-slate-500")}>
+                      {showPrices ? `${vRow.materialPricePerUnit.toFixed(2)} /` : "***"}
+                    </div>
+                    <div className={cn("text-xs font-semibold", colorMode ? "text-amber-700 dark:text-amber-400" : "text-slate-700 dark:text-slate-200")}>
+                      {showPrices ? `${vMat.toFixed(2)} zł` : "***"}
+                    </div>
+                  </div>
+                ) : (
+                  <span className="text-[11px] text-slate-300 dark:text-slate-600">—</span>
+                )}
+              </TableCell>
+            )}
+            {/* Robocizna */}
+            {showLaborColumn && (
+              <TableCell className={`text-right min-w-[120px] w-[120px] ${singleCellBorderClass} bg-emerald-50/40 dark:bg-emerald-950/10`}>
+                {vLab > 0 ? (
+                  <div className="space-y-0">
+                    <div className={cn("text-[11px]", colorMode ? "text-emerald-500 dark:text-emerald-600" : "text-slate-400 dark:text-slate-500")}>
+                      {`${vRow.rbhPerUnit.toFixed(3)} rbh/jm`}
+                    </div>
+                    <div className={cn("text-xs font-semibold", colorMode ? "text-emerald-700 dark:text-emerald-400" : "text-slate-700 dark:text-slate-200")}>
+                      {showPrices ? `${vLab.toFixed(2)} zł` : "***"}
+                    </div>
+                  </div>
+                ) : (
+                  <span className="text-[11px] text-slate-300 dark:text-slate-600">—</span>
+                )}
+              </TableCell>
+            )}
+            {/* RBH (Czas pracy) */}
+            {showRgCol && (
+              <TableCell className={`text-right min-w-[90px] w-[90px] ${singleCellBorderClass}`}>
+                {vRow.isLabor && vRow.rbhTotal > 0 ? (
+                  <span className={cn("text-xs font-medium", colorMode ? "text-blue-700 dark:text-blue-400" : "text-slate-500 dark:text-slate-400")}>
+                    {(item.quantity > 0 ? vRow.rbhTotal / item.quantity : 0).toFixed(3)} rbh/{item.unit ?? "szt"}
+                  </span>
+                ) : null}
+              </TableCell>
+            )}
+            {/* KNR */}
+            {showKnrCol && (
+              <TableCell className={`min-w-[110px] w-[110px] ${singleCellBorderClass}`}>
+                <span className="text-[9px] text-slate-400 dark:text-slate-500 font-mono">{vRow.knrCode}</span>
+              </TableCell>
+            )}
+            {/* Suma */}
+            <TableCell className={`text-right min-w-[90px] w-[90px] ${singleCellBorderClass}`}>
+              <div className={cn("text-xs font-semibold", colorMode ? "text-slate-700 dark:text-slate-200" : "text-slate-700 dark:text-slate-200")}>
+                {showPrices ? `${vTotal.toFixed(2)} zł` : "***"}
+              </div>
+            </TableCell>
+            {/* Akcje — empty */}
+            {!isFinal && !isReadOnly && (
+              <TableCell className={`min-w-[80px] w-[80px] ${singleCellBorderClass}`} />
+            )}
+          </TableRow>
+        );
+      });
+    })()}
 
     {/* ── Edit Panel Row ── */}
     {isEditing && (
