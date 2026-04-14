@@ -324,7 +324,7 @@ export const EstimateRow = React.memo(function EstimateRow({
         {rowNumber !== null && (
           <div className={cn("font-bold text-sm", !colorMode
             ? "text-slate-600 dark:text-slate-400"
-            : isZestaw ? "text-orange-600 dark:text-orange-400" : "text-blue-600 dark:text-blue-400"
+            : (isZestaw || isAssemblyOverride) ? "text-orange-600 dark:text-orange-400" : "text-blue-600 dark:text-blue-400"
           )}>
             {rowNumber}
             {isZestaw && onToggleAssemblyCollapse && (
@@ -693,11 +693,10 @@ export const EstimateRow = React.memo(function EstimateRow({
               <TableCell className={`min-w-[80px] w-[80px] ${singleCellBorderClass} text-center`}>
                 <button
                   onClick={(e) => { e.stopPropagation(); setZapOpen(true); }}
-                  className="inline-flex items-center gap-0.5 px-1.5 py-1 rounded text-orange-500 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/40 transition-colors text-[10px] font-medium"
+                  className="p-1 rounded text-slate-500 dark:text-slate-400 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/40 transition-colors"
                   title="Edytuj składniki zestawu w panelu AI"
                 >
-                  <PenLine className="w-2.5 h-2.5" />
-                  Edytuj
+                  <PenLine className="w-3.5 h-3.5" />
                 </button>
               </TableCell>
             )}
@@ -792,90 +791,88 @@ export const EstimateRow = React.memo(function EstimateRow({
                 )}
               </div>
 
-              {/* Row 2: Jm + Ilość + Materiał + Robocizna — aligned grid */}
-              <div className="grid grid-cols-[80px_90px_1fr_1fr] gap-2 items-end">
-                <div className="space-y-1">
-                  <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block">Jedn.</label>
-                  <Input type="text" list={`unit-presets-panel-${item.id}`}
-                    value={editingState!.unit}
-                    onChange={(e) => onEditingChange({ ...editingState!, unit: e.target.value })}
-                    className="h-9 text-sm text-center dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-                    placeholder="szt" onKeyDown={handleKeyDown}
-                  />
-                  <datalist id={`unit-presets-panel-${item.id}`}>
-                    {UNIT_PRESETS.map((u) => <option key={u} value={u} />)}
-                  </datalist>
+              {/* Row 2: Jm + Ilość (+ prices for non-zestaw rows) */}
+              {(isAssemblyOverride || editingState!.isAssemblyParent) ? (
+                /* Zestaw parent (both manual and AI): only Jedn. + Ilość — no price editing */
+                <div className="grid grid-cols-[80px_90px] gap-2 items-end">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block">Jedn.</label>
+                    <Input type="text" list={`unit-presets-panel-${item.id}`}
+                      value={editingState!.unit}
+                      onChange={(e) => onEditingChange({ ...editingState!, unit: e.target.value })}
+                      className="h-9 text-sm text-center dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                      placeholder="szt" onKeyDown={handleKeyDown}
+                    />
+                    <datalist id={`unit-presets-panel-${item.id}`}>
+                      {UNIT_PRESETS.map((u) => <option key={u} value={u} />)}
+                    </datalist>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block">Ilość</label>
+                    <Input type="number" step="0.01" min="0.01"
+                      value={editingState!.quantity}
+                      onChange={(e) => onEditingChange({ ...editingState!, quantity: e.target.value })}
+                      className="h-9 text-sm text-center dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                      onKeyDown={handleKeyDown}
+                    />
+                  </div>
                 </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block">Ilość</label>
-                  <Input type="number" step="0.01" min="0.01"
-                    value={editingState!.quantity}
-                    onChange={(e) => onEditingChange({ ...editingState!, quantity: e.target.value })}
-                    className="h-9 text-sm text-center dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-                    onKeyDown={handleKeyDown}
-                  />
+              ) : (
+                /* Regular row: Jedn. + Ilość + Material + Robocizna */
+                <div className="grid grid-cols-[80px_90px_1fr_1fr] gap-2 items-end">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block">Jedn.</label>
+                    <Input type="text" list={`unit-presets-panel-${item.id}`}
+                      value={editingState!.unit}
+                      onChange={(e) => onEditingChange({ ...editingState!, unit: e.target.value })}
+                      className="h-9 text-sm text-center dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                      placeholder="szt" onKeyDown={handleKeyDown}
+                    />
+                    <datalist id={`unit-presets-panel-${item.id}`}>
+                      {UNIT_PRESETS.map((u) => <option key={u} value={u} />)}
+                    </datalist>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block">Ilość</label>
+                    <Input type="number" step="0.01" min="0.01"
+                      value={editingState!.quantity}
+                      onChange={(e) => onEditingChange({ ...editingState!, quantity: e.target.value })}
+                      className="h-9 text-sm text-center dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                      onKeyDown={handleKeyDown}
+                    />
+                  </div>
+                  {showMaterialsColumn && !materialsOwnedByCustomer ? (
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 block">Materiał (zł/jm.)</label>
+                      {showPrices ? (
+                        <Input type="number" step="0.01" min="0"
+                          value={editingState!.materialPrice}
+                          onChange={(e) => onEditingChange({ ...editingState!, materialPrice: e.target.value })}
+                          className="h-9 text-sm text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                          placeholder="0.00" onKeyDown={handleKeyDown}
+                        />
+                      ) : (
+                        <div className="h-9 flex items-center justify-end border rounded-md px-3 bg-muted text-sm font-medium opacity-40 select-none tracking-widest">***</div>
+                      )}
+                    </div>
+                  ) : <div />}
+                  {showLaborColumn ? (
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 block">Robocizna (zł/jm.)</label>
+                      {showPrices ? (
+                        <Input type="number" step="0.01" min="0"
+                          value={editingState!.laborPrice}
+                          onChange={(e) => onEditingChange({ ...editingState!, laborPrice: e.target.value })}
+                          className="h-9 text-sm text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                          placeholder="0.00" onKeyDown={handleKeyDown}
+                        />
+                      ) : (
+                        <div className="h-9 flex items-center justify-end border rounded-md px-3 bg-muted text-sm font-medium opacity-40 select-none tracking-widest">***</div>
+                      )}
+                    </div>
+                  ) : <div />}
                 </div>
-                {/* For assembly-driven items: show read-only template totals instead of raw DB inputs */}
-                {isAssemblyOverride ? (
-                  <>
-                    {showMaterialsColumn && !materialsOwnedByCustomer && (
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 block flex items-center gap-1">
-                          Materiał <span className="text-[9px] bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400 px-1 rounded">zestaw</span>
-                        </label>
-                        <div className="h-9 flex items-center justify-end border border-orange-200 dark:border-orange-800 rounded-md px-3 bg-orange-50/60 dark:bg-orange-950/20 text-sm font-semibold text-amber-700 dark:text-amber-400 select-none">
-                          {showPrices ? `${materialTotal.toFixed(2)} zł` : "***"}
-                        </div>
-                        <p className="text-[9px] text-orange-500 dark:text-orange-500 leading-tight">Σ składników zestawu</p>
-                      </div>
-                    )}
-                    {showLaborColumn && (
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 block flex items-center gap-1">
-                          Robocizna <span className="text-[9px] bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 px-1 rounded">zestaw</span>
-                        </label>
-                        <div className="h-9 flex items-center justify-end border border-emerald-200 dark:border-emerald-800 rounded-md px-3 bg-emerald-50/60 dark:bg-emerald-950/20 text-sm font-semibold text-emerald-700 dark:text-emerald-400 select-none">
-                          {showPrices ? `${laborTotal.toFixed(2)} zł` : "***"}
-                        </div>
-                        <p className="text-[9px] text-emerald-500 dark:text-emerald-500 leading-tight">Σ robocizny zestawu</p>
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    {showMaterialsColumn && !editingState!.isAssemblyParent && !materialsOwnedByCustomer ? (
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 block">Materiał (zł/jm.)</label>
-                        {showPrices ? (
-                          <Input type="number" step="0.01" min="0"
-                            value={editingState!.materialPrice}
-                            onChange={(e) => onEditingChange({ ...editingState!, materialPrice: e.target.value })}
-                            className="h-9 text-sm text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-                            placeholder="0.00" onKeyDown={handleKeyDown}
-                          />
-                        ) : (
-                          <div className="h-9 flex items-center justify-end border rounded-md px-3 bg-muted text-sm font-medium opacity-40 select-none tracking-widest">***</div>
-                        )}
-                      </div>
-                    ) : <div />}
-                    {showLaborColumn && !editingState!.isAssemblyParent ? (
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 block">Robocizna (zł/jm.)</label>
-                        {showPrices ? (
-                          <Input type="number" step="0.01" min="0"
-                            value={editingState!.laborPrice}
-                            onChange={(e) => onEditingChange({ ...editingState!, laborPrice: e.target.value })}
-                            className="h-9 text-sm text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-                            placeholder="0.00" onKeyDown={handleKeyDown}
-                          />
-                        ) : (
-                          <div className="h-9 flex items-center justify-end border rounded-md px-3 bg-muted text-sm font-medium opacity-40 select-none tracking-widest">***</div>
-                        )}
-                      </div>
-                    ) : <div />}
-                  </>
-                )}
-              </div>
+              )}
 
               {/* ── Embedded SmartAssemblyPanel for ZESTAW items ── */}
               {isAssemblyOverride && projectSector && (

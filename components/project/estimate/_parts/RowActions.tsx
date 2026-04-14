@@ -64,23 +64,20 @@ export function RowActions({
         </div>
       ) : (
         <div className="flex items-center justify-center gap-0.5">
-          {/* Pencil — hidden only for manual zestawy (isZestaw without override);
-               visible for regular rows and AI-override rows (quantity editing) */}
-          {(!isZestaw || isAssemblyOverride) && (
-            <Button
-              variant="ghost" size="icon"
-              onClick={() => onStartEdit(item)}
-              className={cn(
-                compactView ? "h-6 w-6" : "h-11 w-11 sm:h-8 sm:w-8",
-                "text-slate-600 hover:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800",
-                isFinal && "opacity-30 cursor-not-allowed",
-              )}
-              title={isFinal ? "Odblokuj projekt, aby edytować" : isAssemblyOverride ? "Edytuj ilość zestawu" : "Edytuj pozycję"}
-              aria-label="Edytuj pozycję"
-            >
-              <Pencil className={compactView ? "h-3 w-3" : "h-3.5 w-3.5"} />
-            </Button>
-          )}
+          {/* Pencil — shown for ALL rows (including both manual and AI zestawy for qty editing) */}
+          <Button
+            variant="ghost" size="icon"
+            onClick={() => onStartEdit(item)}
+            className={cn(
+              compactView ? "h-6 w-6" : "h-11 w-11 sm:h-8 sm:w-8",
+              "text-slate-600 hover:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800",
+              isFinal && "opacity-30 cursor-not-allowed",
+            )}
+            title={isFinal ? "Odblokuj projekt, aby edytować" : (isZestaw || isAssemblyOverride) ? "Edytuj ilość zestawu" : "Edytuj pozycję"}
+            aria-label="Edytuj pozycję"
+          >
+            <Pencil className={compactView ? "h-3 w-3" : "h-3.5 w-3.5"} />
+          </Button>
 
           {/* '+' Add child — for manual zestawy AND AI-override rows */}
           {(isZestaw || isAssemblyOverride) && (
