@@ -18,6 +18,11 @@ import { getKnrMultiplier } from "@/lib/global-benchmarks";
 import { classifyIntent } from "@/lib/services/semantic-classifier";
 import { renderToBuffer, type DocumentProps } from "@react-pdf/renderer";
 import { PremiumPdfDocument, type PdfEngineData, type ThemeName, type PdfStructureOptions } from "@/lib/pdf-engine";
+import {
+  expandToAssembly, detectSector,
+  type ProjectSector, type SmartExpansionResult, type AssemblyOverrides,
+} from "@/lib/ai/smart-mapping-engine";
+import { detectSmartContext } from "@/lib/ai/smart-context-mapper";
 
 // ─── Logo fetch ──────────────────────────────────────────────────────────────
 
@@ -206,6 +211,12 @@ export async function POST(req: Request) {
     // KNR 2026 multiplier — must match display-time calcRowPrices() in EstimateRow
     const knrMultiplier = await getKnrMultiplier();
 
+    // Smart Assembly: sector + labor rate for AI-triggered zestaw expansion
+    const projectSector: ProjectSector = detectSector(
+      (project.object_types as { slug?: string } | null)?.slug
+    );
+    const projectLaborRate = Number((project as Record<string, unknown>).default_hourly_rate ?? 100);
+
     const calcItems = flatItems.map(item => {
       const isManualItem = (item as Record<string, unknown>).confidence_level === "manual";
       const isInvestorMat = Boolean((item as Record<string, unknown>).is_investor_material);
@@ -231,13 +242,40 @@ export async function POST(req: Request) {
         .filter(Boolean)
     );
 
+    // Pre-compute AI assembly expansions for items that trigger Smart Engine
+    // (items with no real DB children but matching Sacred Words in their name)
+    const aiExpansionMap = new Map<string, SmartExpansionResult>();
+    for (const item of calcItems) {
+      const rawI = item as Record<string, unknown>;
+      if (rawI.parent_assembly_id || rawI.is_assembly_child === true) continue;
+      if (parentIds.has(item.id as string)) continue; // already has real DB children
+      if (rawI.confidence_level === "manual") continue;
+      const scm = detectSmartContext(item.name as string);
+      if (scm.category === "NONE") continue;
+      const expansion = expandToAssembly(
+        item.name as string,
+        item.quantity as number,
+        projectSector,
+        projectLaborRate,
+        knrMultiplier,
+        (rawI.assembly_overrides as AssemblyOverrides) ?? undefined,
+      );
+      if (expansion.triggered) aiExpansionMap.set(item.id as string, expansion);
+    }
+
     let totalMatSum = 0;
     let totalLabSum = 0;
 
-    const rowsRaw: PdfRow[] = calcItems.map((item) => {
+    // Build rows — loop instead of map so we can insert virtual children for AI zestawy
+    const rowsRaw: PdfRow[] = [];
+    for (const item of calcItems) {
       const isParent = parentIds.has(item.id as string);
       const rawItem = item as Record<string, unknown>;
       const isChild = !!(item.parent_assembly_id) || rawItem.is_assembly_child === true;
+      const aiExpansion = aiExpansionMap.get(item.id as string);
+      const isAiParent = !!aiExpansion;
+      const isManualItem = rawItem.confidence_level === "manual";
+      const effRegion = isManualItem ? 1.0 : regionModifier;
       const unitCombined = item.finalMat + item.finalLab;
       let totalVal = unitCombined * item.quantity;
       let matDisplay = maskPrices ? "*** zl" : fMoney(item.finalMat);
@@ -246,7 +284,18 @@ export async function POST(req: Request) {
       let indexDisplay = "";
       let rowType = "single";
 
-      if (isParent) {
+      if (isAiParent) {
+        // AI-triggered zestaw: use expansion prices (honours assembly_overrides)
+        const expMatTotal = aiExpansion.totalMaterialPLN * matMarkupMult * adjustmentOnly * vatMultiplier;
+        const expLabTotal = aiExpansion.totalLaborPLN  * labMarkupMult * adjustmentOnly * effRegion * vatMultiplier;
+        totalVal = expMatTotal + expLabTotal;
+        matDisplay = "---";
+        labDisplay = "---";
+        indexDisplay = "";
+        rowType = "set_parent";
+        totalMatSum += expMatTotal;
+        totalLabSum += expLabTotal;
+      } else if (isParent) {
         const children = calcItems.filter(c => c.parent_assembly_id === item.id);
         totalVal = children.reduce((acc, c) => acc + (c.finalMat + c.finalLab) * c.quantity, 0);
         matDisplay = "---";
@@ -288,13 +337,38 @@ export async function POST(req: Request) {
         ? (item.laborNorm > 0 ? `${(item.laborNorm * item.quantity).toFixed(3)} rbh` : "—")
         : "";
 
-      return {
+      rowsRaw.push({
         index: indexDisplay, name, knrCode, unit: item.unit as string, qty: item.quantity as number,
         rg: laborNormDisplay, mat: matDisplay, lab: labDisplay, combined: combinedDisplay,
-        total: maskPrices ? (isPro && blindMode ? "---" : "*** zl") : fMoney(totalVal), rawTotal: blindMode ? 0 : totalVal, rowType, isParent, isChild,
+        total: maskPrices ? (isPro && blindMode ? "---" : "*** zl") : fMoney(totalVal), rawTotal: blindMode ? 0 : totalVal, rowType, isParent: isParent || isAiParent, isChild,
         isInvestorMat: item.isInvestorMat,
-      };
-    });
+      });
+
+      // AI parent: append virtual child rows derived from expandToAssembly
+      if (isAiParent) {
+        for (const vChild of aiExpansion.items) {
+          const vMat = vChild.materialTotal * matMarkupMult * adjustmentOnly * vatMultiplier;
+          const vLab = vChild.rbhTotal * projectLaborRate * labMarkupMult * adjustmentOnly * effRegion * vatMultiplier;
+          const vTotal = vMat + vLab;
+          const vRowType = vChild.isLabor ? "child_lab" : (vChild.materialTotal > 0 && vChild.rbhTotal > 0 ? "child_mat" : vChild.materialTotal > 0 ? "child_mat" : "child_lab");
+          const vRg = showRg && vChild.rbhTotal > 0 ? `${vChild.rbhTotal.toFixed(3)} rbh` : "";
+          rowsRaw.push({
+            index: "",
+            name: `  \u21b3 ${sanitize(vChild.label, true)}`,
+            knrCode: vChild.knrCode ? sanitize(vChild.knrCode, true) : "",
+            unit: vChild.unit,
+            qty: vChild.quantity,
+            rg: vRg,
+            mat: maskPrices ? "*** zl" : (vChild.materialTotal > 0 ? fMoney(vMat) : "---"),
+            lab: maskPrices ? "*** zl" : (vChild.rbhTotal > 0 ? fMoney(vLab) : "---"),
+            combined: maskPrices ? "*** zl" : fMoney(vTotal),
+            total: maskPrices ? "*** zl" : fMoney(vTotal),
+            rawTotal: blindMode ? 0 : vTotal,
+            rowType: vRowType, isParent: false, isChild: true,
+          });
+        }
+      }
+    }
 
     // ─── Smart PDF Grouping v2.0: Semantic Section Sorter ────────────────────
 
