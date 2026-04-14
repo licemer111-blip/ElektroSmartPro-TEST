@@ -214,6 +214,8 @@ export const EstimateRow = React.memo(function EstimateRow({
 
   // Detect assembly-driven items once; used both in price override and in edit panel render.
   const _scmCheck = !isManualPrice && !isAssemblyChild ? detectSmartContext(item.name) : null;
+  // Name-based detection without price/manual guards — used to simplify edit panel for ALL smart rows
+  const isSmartItem = !isAssemblyChild && detectSmartContext(item.name).category !== "NONE";
   const isAssemblyOverride =
     !!_scmCheck &&
     calcRowTotal > 0 &&
@@ -792,7 +794,7 @@ export const EstimateRow = React.memo(function EstimateRow({
               </div>
 
               {/* Row 2: Jm + Ilość (+ prices for non-zestaw rows) */}
-              {(isAssemblyOverride || editingState!.isAssemblyParent) ? (
+              {(isAssemblyOverride || editingState!.isAssemblyParent || isSmartItem) ? (
                 /* Zestaw parent (both manual and AI): only Jedn. + Ilość — no price editing */
                 <div className="grid grid-cols-[80px_90px] gap-2 items-end">
                   <div className="space-y-1">
