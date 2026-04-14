@@ -207,25 +207,29 @@ export const EstimateRow = React.memo(function EstimateRow({
   let rowTotal      = calcRowTotal;
   let assemblyRBHPerUnit: number | null = null;
 
+  // Detect assembly-driven items once; used both in price override and in edit panel render.
+  const _scmCheck = !isManualPrice && !isAssemblyChild ? detectSmartContext(item.name) : null;
+  const isAssemblyOverride =
+    !!_scmCheck &&
+    calcRowTotal > 0 &&
+    (_scmCheck.category === "ZESTAW" || _scmCheck.category === "BIALY_MONTAZ" ||
+     _scmCheck.category === "TRASY"  || _scmCheck.category === "ROZDZIELNICA");
+
   // Guard: only override items that have already been AI-priced (calcRowTotal > 0).
-  // Newly imported/zero-price items stay at 0 so user sees "Uzupełnij" and knows to run pricing.
   // Note: isEditing is intentionally NOT in this guard — display prices must not jump when the
   // edit panel opens. The edit panel inputs use a separate editedItem state (unaffected).
-  if (!isManualPrice && !isAssemblyChild && calcRowTotal > 0) {
-    const scm = detectSmartContext(item.name);
-    if (scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY" || scm.category === "ROZDZIELNICA") {
-      const expansion = expandToAssembly(item.name, item.quantity, projectSector, projectLaborRate, knrMultiplier, item.assembly_overrides ?? undefined);
-      if (expansion.triggered) {
-        const qty = item.quantity || 1;
-        const effLab = expansion.totalLaborPLN * regionModifier * adjustmentMultiplier;
-        const effMat = materialsOwnedByCustomer ? 0 : expansion.totalMaterialPLN * adjustmentMultiplier;
-        laborTotal         = roundPrice(effLab);
-        materialTotal      = roundPrice(effMat);
-        rowTotal           = roundPrice(effLab + effMat);
-        laborUnit          = roundPrice(effLab / qty);
-        materialUnit       = roundPrice(effMat / qty);
-        assemblyRBHPerUnit = qty > 0 ? expansion.totalRBH / qty : null;
-      }
+  if (isAssemblyOverride) {
+    const expansion = expandToAssembly(item.name, item.quantity, projectSector, projectLaborRate, knrMultiplier, item.assembly_overrides ?? undefined);
+    if (expansion.triggered) {
+      const qty = item.quantity || 1;
+      const effLab = expansion.totalLaborPLN * regionModifier * adjustmentMultiplier;
+      const effMat = materialsOwnedByCustomer ? 0 : expansion.totalMaterialPLN * adjustmentMultiplier;
+      laborTotal         = roundPrice(effLab);
+      materialTotal      = roundPrice(effMat);
+      rowTotal           = roundPrice(effLab + effMat);
+      laborUnit          = roundPrice(effLab / qty);
+      materialUnit       = roundPrice(effMat / qty);
+      assemblyRBHPerUnit = qty > 0 ? expansion.totalRBH / qty : null;
     }
   }
 
@@ -668,37 +672,83 @@ export const EstimateRow = React.memo(function EstimateRow({
                     onKeyDown={handleKeyDown}
                   />
                 </div>
-                {showMaterialsColumn && !editingState!.isAssemblyParent && !materialsOwnedByCustomer ? (
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 block">Materiał (zł/jm.)</label>
-                    {showPrices ? (
-                      <Input type="number" step="0.01" min="0"
-                        value={editingState!.materialPrice}
-                        onChange={(e) => onEditingChange({ ...editingState!, materialPrice: e.target.value })}
-                        className="h-9 text-sm text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-                        placeholder="0.00" onKeyDown={handleKeyDown}
-                      />
-                    ) : (
-                      <div className="h-9 flex items-center justify-end border rounded-md px-3 bg-muted text-sm font-medium opacity-40 select-none tracking-widest">***</div>
+                {/* For assembly-driven items: show read-only template totals instead of raw DB inputs */}
+                {isAssemblyOverride ? (
+                  <>
+                    {showMaterialsColumn && !materialsOwnedByCustomer && (
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 block flex items-center gap-1">
+                          Materiał <span className="text-[9px] bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400 px-1 rounded">zestaw</span>
+                        </label>
+                        <div className="h-9 flex items-center justify-end border border-orange-200 dark:border-orange-800 rounded-md px-3 bg-orange-50/60 dark:bg-orange-950/20 text-sm font-semibold text-amber-700 dark:text-amber-400 select-none">
+                          {showPrices ? `${materialTotal.toFixed(2)} zł` : "***"}
+                        </div>
+                        <p className="text-[9px] text-orange-500 dark:text-orange-500 leading-tight">Σ składników zestawu</p>
+                      </div>
                     )}
-                  </div>
-                ) : <div />}
-                {showLaborColumn && !editingState!.isAssemblyParent ? (
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 block">Robocizna (zł/jm.)</label>
-                    {showPrices ? (
-                      <Input type="number" step="0.01" min="0"
-                        value={editingState!.laborPrice}
-                        onChange={(e) => onEditingChange({ ...editingState!, laborPrice: e.target.value })}
-                        className="h-9 text-sm text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-                        placeholder="0.00" onKeyDown={handleKeyDown}
-                      />
-                    ) : (
-                      <div className="h-9 flex items-center justify-end border rounded-md px-3 bg-muted text-sm font-medium opacity-40 select-none tracking-widest">***</div>
+                    {showLaborColumn && (
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 block flex items-center gap-1">
+                          Robocizna <span className="text-[9px] bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 px-1 rounded">zestaw</span>
+                        </label>
+                        <div className="h-9 flex items-center justify-end border border-emerald-200 dark:border-emerald-800 rounded-md px-3 bg-emerald-50/60 dark:bg-emerald-950/20 text-sm font-semibold text-emerald-700 dark:text-emerald-400 select-none">
+                          {showPrices ? `${laborTotal.toFixed(2)} zł` : "***"}
+                        </div>
+                        <p className="text-[9px] text-emerald-500 dark:text-emerald-500 leading-tight">Σ robocizny zestawu</p>
+                      </div>
                     )}
-                  </div>
-                ) : <div />}
+                  </>
+                ) : (
+                  <>
+                    {showMaterialsColumn && !editingState!.isAssemblyParent && !materialsOwnedByCustomer ? (
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 block">Materiał (zł/jm.)</label>
+                        {showPrices ? (
+                          <Input type="number" step="0.01" min="0"
+                            value={editingState!.materialPrice}
+                            onChange={(e) => onEditingChange({ ...editingState!, materialPrice: e.target.value })}
+                            className="h-9 text-sm text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                            placeholder="0.00" onKeyDown={handleKeyDown}
+                          />
+                        ) : (
+                          <div className="h-9 flex items-center justify-end border rounded-md px-3 bg-muted text-sm font-medium opacity-40 select-none tracking-widest">***</div>
+                        )}
+                      </div>
+                    ) : <div />}
+                    {showLaborColumn && !editingState!.isAssemblyParent ? (
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 block">Robocizna (zł/jm.)</label>
+                        {showPrices ? (
+                          <Input type="number" step="0.01" min="0"
+                            value={editingState!.laborPrice}
+                            onChange={(e) => onEditingChange({ ...editingState!, laborPrice: e.target.value })}
+                            className="h-9 text-sm text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                            placeholder="0.00" onKeyDown={handleKeyDown}
+                          />
+                        ) : (
+                          <div className="h-9 flex items-center justify-end border rounded-md px-3 bg-muted text-sm font-medium opacity-40 select-none tracking-widest">***</div>
+                        )}
+                      </div>
+                    ) : <div />}
+                  </>
+                )}
               </div>
+
+              {/* ── Embedded SmartAssemblyPanel for ZESTAW items ── */}
+              {isAssemblyOverride && projectSector && (
+                <div className="border-t border-orange-200 dark:border-orange-800 pt-3 mt-1">
+                  <SmartAssemblyPanel
+                    itemName={item.name}
+                    quantity={parseFloat(editingState!.quantity) || item.quantity}
+                    sector={projectSector}
+                    laborRate={projectLaborRate}
+                    knrMultiplier={knrMultiplier}
+                    itemId={item.id}
+                    projectId={item.project_id}
+                    initialOverrides={item.assembly_overrides ?? null}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </TableCell>
