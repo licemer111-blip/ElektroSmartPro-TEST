@@ -11,6 +11,7 @@ import { UnlockPdfButton } from "@/components/billing/unlock-pdf-button";
 import { StartTrialButton } from "@/components/billing/start-trial-button";
 import { TrialStatusBadge } from "@/components/billing/trial-status-badge";
 import { hasUsedTrial, isTrialActive } from "@/lib/auth/entitlements";
+import { PAY_PER_EXPORT_ENABLED } from "@/lib/config/tier-limits";
 import { useState as useLocalState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
@@ -192,25 +193,32 @@ export function SummaryExportPanel({
           </div>
         )}
 
-        {/* v2.1: FREE — banner Demo + Trial CTA + Pay-per-Export CTA */}
+        {/* v2.1: FREE — banner Demo + Trial CTA + (optional) Pay-per-Export CTA */}
         {!isPro && !project.paid_export_unlocked_at && (
           <>
             <div className="flex items-start gap-2 px-3 py-2 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
               <Lock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
               <p className="text-[10px] text-blue-800 dark:text-blue-200 leading-tight">
                 <span className="font-semibold">Tryb Demo:</span> PDF zostanie oznaczony znakiem wodnym „DEMO”.
-                Aby wysłać czysty PDF do klienta — aktywuj darmowy trial lub kup jednorazowy eksport.
+                {PAY_PER_EXPORT_ENABLED
+                  ? " Aby wysłać czysty PDF do klienta — aktywuj darmowy trial lub kup jednorazowy eksport."
+                  : " Aby wysłać czysty PDF do klienta — aktywuj darmowy 7-dniowy trial PRO."}
               </p>
             </div>
             {/* Trial button — only shown to users who have NEVER started a trial */}
             {!hasUsedTrial(profile ?? null) && (
               <StartTrialButton />
             )}
-            <UnlockPdfButton projectId={project.id} />
+            {/* Pay-per-Export CTA — hidden via feature flag during Stripe Tax + BLIK/P24 validation */}
+            {PAY_PER_EXPORT_ENABLED && (
+              <UnlockPdfButton projectId={project.id} />
+            )}
           </>
         )}
 
-        {/* v2.0: FREE — już opłacono jednorazowy eksport */}
+        {/* v2.0: FREE — już opłacono jednorazowy eksport.
+            Keep this rendering even when PAY_PER_EXPORT_ENABLED=false so that
+            users who paid BEFORE we flipped the flag still see the confirmation. */}
         {!isPro && Boolean(project.paid_export_unlocked_at) && (
           <UnlockPdfButton projectId={project.id} alreadyUnlocked />
         )}
