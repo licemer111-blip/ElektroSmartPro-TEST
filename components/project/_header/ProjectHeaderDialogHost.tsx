@@ -157,7 +157,6 @@ export function ProjectHeaderDialogHost({
         onOpenChange={(open) => dispatch({ type: "SET_MARGIN", open })}
         projectId={projectId}
         projectName={projectName}
-        isPro={isPro}
         items={(projectItems).map((item) => ({
           id: item.id,
           name: item.name,

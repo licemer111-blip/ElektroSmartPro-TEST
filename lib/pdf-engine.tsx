@@ -282,6 +282,13 @@ export interface PdfEngineData {
   priceDisplay: string;
   notes: string;
   pdfStructure?: PdfStructureOptions;
+  /**
+   * v2.0: when true (FREE tier without pay-per-export unlock), render a large
+   * diagonal "DEMO — ElektroSmart PRO" watermark across every page.
+   * The document stays fully readable for the electrician but cannot be sent
+   * to a paying client as-is.
+   */
+  showDemoWatermark?: boolean;
 }
 
 // ─── Column Width Calculator ───────────────────────────────────────────────────
@@ -953,9 +960,87 @@ const ContentPage = ({
       </View>
 
       <PageFooter companyName={companyName} palette={palette} />
+      {data.showDemoWatermark ? <DemoWatermark /> : null}
     </Page>
   );
 };
+
+// ─── Demo Watermark (v2.0 FREE tier) ─────────────────────────────────────────
+// Big diagonal "DEMO — ElektroSmart PRO" across the whole page + red footer CTA.
+// Absolutely positioned so it overlays the content without disturbing layout.
+
+const watermarkStyles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    pointerEvents: 'none',
+  },
+  textBig: {
+    fontSize: 78,
+    fontWeight: 'bold',
+    color: '#DC2626',
+    opacity: 0.14,
+    transform: 'rotate(-32deg)',
+    letterSpacing: 4,
+    textAlign: 'center',
+  },
+  textSmall: {
+    fontSize: 14,
+    color: '#DC2626',
+    opacity: 0.18,
+    transform: 'rotate(-32deg)',
+    marginTop: 6,
+    textAlign: 'center',
+  },
+  ctaBar: {
+    position: 'absolute',
+    bottom: 32,
+    left: 25,
+    right: 25,
+    paddingTop: 4,
+    paddingBottom: 4,
+    paddingLeft: 6,
+    paddingRight: 6,
+    backgroundColor: '#FEF2F2',
+    borderRadius: 3,
+    borderLeftWidth: 3,
+    borderLeftColor: '#DC2626',
+  },
+  ctaText: {
+    fontSize: 7.5,
+    color: '#991B1B',
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  ctaSubText: {
+    fontSize: 6.5,
+    color: '#B91C1C',
+    textAlign: 'center',
+    marginTop: 1,
+  },
+});
+
+const DemoWatermark = () => (
+  <>
+    <View style={watermarkStyles.container} fixed>
+      <Text style={watermarkStyles.textBig}>DEMO</Text>
+      <Text style={watermarkStyles.textSmall}>ElektroSmart PRO — wersja demonstracyjna</Text>
+    </View>
+    <View style={watermarkStyles.ctaBar} fixed>
+      <Text style={watermarkStyles.ctaText}>
+        Ten dokument jest wygenerowany w trybie DEMO i nie nadaje się do przekazania klientowi.
+      </Text>
+      <Text style={watermarkStyles.ctaSubText}>
+        Aktywuj ElektroSmart PRO (159 zł/m-c) lub kup pojedynczy czysty PDF (29 zł) → elektrosmart.pro/pro
+      </Text>
+    </View>
+  </>
+);
 
 // ─── Main Document Export ─────────────────────────────────────────────────────
 

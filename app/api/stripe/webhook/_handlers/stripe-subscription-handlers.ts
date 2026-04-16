@@ -19,6 +19,54 @@ export async function handleCheckoutCompleted(
     throw new Error("Missing userId in session metadata");
   }
 
+  // v2.0 Pay-per-Export: one-time payment that unlocks a single clean PDF
+  // for a specific project. Distinguished from PRO test-payment by
+  // metadata.type === "pay_per_export".
+  if (session.mode === "payment" && session.metadata?.type === "pay_per_export") {
+    const projectId = session.metadata?.projectId;
+    if (!projectId) {
+      logger.error("[Stripe Webhook] pay_per_export session missing projectId", { sessionId: session.id, userId });
+      throw new Error("pay_per_export session missing projectId in metadata");
+    }
+
+    // Atomic unlock: set `paid_export_unlocked_at = now()`, but ONLY if the
+    // project belongs to this user AND isn't already unlocked. This prevents
+    // cross-user exploits via crafted metadata.
+    const nowIso = new Date().toISOString();
+    const { data: updated, error: unlockErr } = await supabaseAdmin
+      .from("projects")
+      .update({ paid_export_unlocked_at: nowIso })
+      .eq("id", projectId)
+      .eq("user_id", userId)
+      .is("paid_export_unlocked_at", null)
+      .select("id")
+      .maybeSingle();
+
+    if (unlockErr) {
+      logger.error("[Stripe Webhook] pay_per_export: DB unlock failed", { projectId, userId }, unlockErr);
+      throw new Error(`pay_per_export DB unlock failed: ${unlockErr.message}`);
+    }
+
+    if (!updated) {
+      // Either project not owned by user OR already unlocked — log but don't throw
+      // so the webhook is marked as processed (Stripe has already charged the user).
+      logger.error(
+        "[Stripe Webhook] pay_per_export: no-op (wrong owner or already unlocked)",
+        { projectId, userId, sessionId: session.id }
+      );
+    } else {
+      logger.info("[Stripe Webhook] pay_per_export: unlocked project", {
+        projectId,
+        userId,
+        sessionId: session.id,
+      });
+    }
+
+    // Generate InFakt invoice for the 29 PLN charge (no PRO activation).
+    await generateInvoiceFn(userId, session);
+    return;
+  }
+
   // payment mode ONLY (mode strictly === "payment", not subscription).
   // isTestPayment flag does NOT determine the branch — session.mode does.
   // For mode=subscription, invoice.payment_succeeded handles InFakt regardless of isTest.

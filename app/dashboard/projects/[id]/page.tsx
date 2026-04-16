@@ -7,6 +7,7 @@ import { ProjectLayoutWithHeader } from "@/components/project/project-layout-wit
 import { AddUserAssemblyDialog } from "@/components/project/add-user-assembly-dialog";
 import { ProjectPageClient } from "@/components/project/project-page-client";
 import { AutoNegotiationReview } from "@/components/project/auto-negotiation-review";
+import { PayPerExportResultToast } from "@/components/billing/pay-per-export-result-toast";
 import { ProjectContentClient } from "@/components/project/project-content-client";
 import { ProjectQuickSwitcher } from "@/components/project/project-quick-switcher";
 import { ProjectTracker } from "@/components/project/project-tracker";
@@ -26,6 +27,7 @@ import { getUserAssemblies } from "@/app/dashboard/assemblies/actions";
 import { getProjects, getRegions } from "@/app/dashboard/actions";
 import { createClient } from "@/utils/supabase/server";
 import { logger } from "@/lib/logger";
+import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 
 // ⚡ CRITICAL: Force dynamic rendering for collaborative features
 // This ensures shared projects always show fresh data
@@ -106,8 +108,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     // All team members (editor, elektryk, kierownik, admin, owner) have full access.
     // Demo projects are always read-only — showcase mode.
     const isReadOnly = userRole === "viewer" || isDemoProject;
-    // showPrices: PRO users OR demo project → no blur, full prices visible
-    const showPrices = (profile?.is_pro || false) || isDemoProject;
+    // v2.1: showPrices flag feeds downstream `isPro` prop. Effective PRO =
+    // paid subscription OR active 7-day trial. Demo projects bypass as before.
+    const showPrices = getEffectiveIsPro(profile) || isDemoProject;
 
     // ⚡ OPTIMIZATION: Don't fetch all catalog items initially (lazy load in sidebar)
     // This prevents huge payload size and net::ERR_ABORTED errors
@@ -138,6 +141,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           {/* Auto-open negotiation review from notification click */}
           <Suspense fallback={null}>
             <AutoNegotiationReview />
+          </Suspense>
+
+          {/* v2.0 Pay-per-Export: show success/cancel toast after Stripe redirect */}
+          <Suspense fallback={null}>
+            <PayPerExportResultToast />
           </Suspense>
 
           {/* Track project visit */}

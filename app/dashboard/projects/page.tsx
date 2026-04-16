@@ -40,7 +40,7 @@ export default async function ProjectsPage() {
       regions={regions}
       objectTypes={objectTypes}
       isPro={profile?.is_pro || false}
-      maxProjects={profile?.max_projects || 3}
+      maxProjects={profile?.max_projects || 999}
       currentProjectCount={projects.length}
       defaultRegionId={profile?.default_region_id ?? null}
     />

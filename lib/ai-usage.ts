@@ -2,6 +2,7 @@
 
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { DEMO_AI_LIMIT, PRO_AI_LIMIT, FUNCTION_LIMITS } from "@/lib/ai-quota-config";
+import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 
 function getLimitForFunction(isPro: boolean, functionName?: string): number {
   if (!functionName) return isPro ? PRO_AI_LIMIT : DEMO_AI_LIMIT;
@@ -9,6 +10,13 @@ function getLimitForFunction(isPro: boolean, functionName?: string): number {
   if (override) return isPro ? override.pro : override.demo;
   return isPro ? PRO_AI_LIMIT : DEMO_AI_LIMIT;
 }
+
+/**
+ * Select the exact columns needed to resolve effective PRO status (paid OR
+ * active 7-day trial) + usage counters. Keep in one place so adding new
+ * entitlement inputs (e.g. team licence) doesn't miss any call site.
+ */
+const ENTITLEMENT_COLUMNS = "is_pro, trial_started_at, trial_ends_at, ai_usage_count, ai_usage_reset_at";
 
 interface AiUsageResult {
   allowed: boolean;
@@ -29,7 +37,7 @@ interface AiUsageResult {
 export async function checkAndIncrementAiUsage(userId: string, functionName?: string): Promise<AiUsageResult> {
   const { data: profile, error } = await supabaseAdmin
     .from("profiles")
-    .select("is_pro, ai_usage_count, ai_usage_reset_at")
+    .select(ENTITLEMENT_COLUMNS)
     .eq("id", userId)
     .single();
 
@@ -37,7 +45,12 @@ export async function checkAndIncrementAiUsage(userId: string, functionName?: st
     return { allowed: false, remaining: 0, error: "Nie można zweryfikować profilu użytkownika" };
   }
 
-  const isPro = (profile as Record<string, unknown>).is_pro as boolean;
+  // v2.1: effective PRO = paid subscription OR active 7-day trial
+  const isPro = getEffectiveIsPro(profile as {
+    is_pro?: boolean | null;
+    trial_started_at?: string | null;
+    trial_ends_at?: string | null;
+  });
   const limit = getLimitForFunction(isPro, functionName);
   const now = new Date();
 
@@ -116,11 +129,15 @@ export async function checkAndIncrementAiUsage(userId: string, functionName?: st
 export async function getAiUsageInfo(userId: string): Promise<{ used: number; limit: number; isPro: boolean }> {
   const { data: profile } = await supabaseAdmin
     .from("profiles")
-    .select("is_pro, ai_usage_count, ai_usage_reset_at")
+    .select(ENTITLEMENT_COLUMNS)
     .eq("id", userId)
     .single();
 
-  const isPro = ((profile as Record<string, unknown> | null)?.is_pro as boolean) ?? false;
+  const isPro = getEffectiveIsPro(profile as {
+    is_pro?: boolean | null;
+    trial_started_at?: string | null;
+    trial_ends_at?: string | null;
+  } | null);
   let used = ((profile as Record<string, unknown> | null)?.ai_usage_count as number | null) ?? 0;
 
   const now = new Date();
@@ -145,11 +162,15 @@ export async function getAiUsageInfo(userId: string): Promise<{ used: number; li
 export async function getAiFunctionUsage(userId: string, functionName: string): Promise<{ used: number; limit: number; remaining: number }> {
   const { data: profile } = await supabaseAdmin
     .from("profiles")
-    .select("is_pro")
+    .select("is_pro, trial_started_at, trial_ends_at")
     .eq("id", userId)
     .single();
 
-  const isPro = ((profile as Record<string, unknown> | null)?.is_pro as boolean) ?? false;
+  const isPro = getEffectiveIsPro(profile as {
+    is_pro?: boolean | null;
+    trial_started_at?: string | null;
+    trial_ends_at?: string | null;
+  } | null);
   const fnOverride = FUNCTION_LIMITS[functionName];
   const limit = fnOverride
     ? (isPro ? fnOverride.pro : fnOverride.demo)
@@ -182,11 +203,15 @@ export async function getAiQuotaForFunctions(
 ): Promise<Record<string, { used: number; limit: number; remaining: number; isPro: boolean }>> {
   const { data: profile } = await supabaseAdmin
     .from("profiles")
-    .select("is_pro")
+    .select("is_pro, trial_started_at, trial_ends_at")
     .eq("id", userId)
     .single();
 
-  const isPro = ((profile as Record<string, unknown> | null)?.is_pro as boolean) ?? false;
+  const isPro = getEffectiveIsPro(profile as {
+    is_pro?: boolean | null;
+    trial_started_at?: string | null;
+    trial_ends_at?: string | null;
+  } | null);
 
   const { data: stats } = await supabaseAdmin
     .from("ai_usage_stats")

@@ -11,6 +11,7 @@ import { logger } from "@/lib/logger";
 import { buildDynamicSystemPrompt, injectKbContext, GEMINI_RAG_MODEL } from "@/lib/ai-master-brain";
 import { fetchKbContext, listKbFileNames } from "@/lib/kb-storage";
 import { estimatePricesWithAI, applyAiPrices } from "@/app/dashboard/projects/[id]/_ai_actions/pricing";
+import { getEffectiveMaxProjects } from "@/lib/config/tier-limits";
 
 // --- RAG KB loader ---
 async function fetchQuickEstimateKbContext(): Promise<string | null> {
@@ -263,17 +264,19 @@ export async function createQuickEstimateProject(params: {
     });
   }
 
-  // Free-tier limit check
-  if (existingProfile && !existingProfile.is_pro) {
-    const maxAllowed = (existingProfile as { max_projects?: number }).max_projects ?? 3;
-    const { count } = await supabase
-      .from("projects")
-      .select("*", { count: "exact", head: true })
-      .eq("user_id", user.id);
-    if (count !== null && count >= maxAllowed) {
-      return {
-        error: `Plan darmowy pozwala na ${maxAllowed} aktywne projekt${maxAllowed === 1 ? '' : 'y'}. Przejdź na PRO, aby tworzyć nielimitowane projekty.`,
-      };
+  // v2.0: free tier — limit tylko jeśli admin jawnie ustawił niski limit (<100).
+  {
+    const maxAllowed = getEffectiveMaxProjects(existingProfile as { is_pro?: boolean; max_projects?: number } | null);
+    if (existingProfile && !existingProfile.is_pro && maxAllowed < 100) {
+      const { count } = await supabase
+        .from("projects")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id);
+      if (count !== null && count >= maxAllowed) {
+        return {
+          error: `Dla Twojego konta obowiązuje limit ${maxAllowed} projektów. Przejdź na PRO, aby tworzyć nielimitowane projekty.`,
+        };
+      }
     }
   }
 

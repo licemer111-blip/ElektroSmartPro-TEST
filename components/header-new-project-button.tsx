@@ -36,7 +36,7 @@ export function HeaderNewProjectButton() {
         objectTypes,
         currentProjectCount: projects.length,
         isPro: profile?.is_pro || false,
-        maxProjects: profile?.max_projects || 3,
+        maxProjects: profile?.max_projects || 999,
         defaultRegionId: profile?.default_region_id ?? null,
       });
     } catch (error: unknown) {

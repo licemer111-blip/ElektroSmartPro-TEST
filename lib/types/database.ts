@@ -116,6 +116,8 @@ export interface Profile {
   current_period_start: string | null;
   current_period_end: string | null;
   cancel_at_period_end: boolean;
+  trial_started_at: string | null;
+  trial_ends_at: string | null;
   role: 'user' | 'admin';
   default_region_id: string | null;
   show_global_catalog: boolean; // When true, shows global catalog (simplified single toggle)
@@ -208,6 +210,8 @@ export interface Project {
   brutto_mode: boolean;     // Show Brutto prices (with VAT) in PDF/Portal instead of Netto
   expert_coloring: boolean; // Use color coding in PDF (green=labor, orange=materials)
   is_demo_project: boolean; // System-generated showcase — bypasses free-tier blur + PDF paywall; permanently read-only
+  /** v2.0 Pay-per-Export: timestamp of Stripe 29 zł unlock; cleared after the next clean PDF export consumes it. */
+  paid_export_unlocked_at: string | null;
   created_at: string;
   updated_at: string;
 }

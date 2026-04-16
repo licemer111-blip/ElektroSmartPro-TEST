@@ -2,7 +2,9 @@ import { logger } from "@/lib/logger";
 import React from "react";
 import { NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 import { flattenProjectItems } from "@/lib/utils/flatten-project-items";
 import type { ProjectItem } from "@/lib/types/database";
 import {
@@ -131,7 +133,7 @@ export async function POST(req: Request) {
 
     const { data: project } = await supabase
       .from("projects")
-      .select("*, regions(*), object_types(*)")
+      .select("*, regions(*), object_types(*), paid_export_unlocked_at")
       .eq("id", projectId)
       .single();
 
@@ -161,27 +163,39 @@ export async function POST(req: Request) {
 
     const { data: requestingProfile } = await supabase
       .from("profiles")
-      .select("is_pro")
+      .select("is_pro, trial_started_at, trial_ends_at")
       .eq("id", requestingUser.id)
       .single();
 
-    const isPro = requestingProfile?.is_pro || false;
+    // v2.1: effective PRO = paid subscription OR active 7-day trial
+    const isPro = getEffectiveIsPro(requestingProfile as {
+      is_pro?: boolean | null;
+      trial_started_at?: string | null;
+      trial_ends_at?: string | null;
+    } | null);
     const isDemoProject = Boolean((project as Record<string, unknown>).is_demo_project);
 
-    // Rate limiting: 20 PDF exports per minute per user
-    const pdfRl = checkRateLimit({ key: `pdf:${requestingUser.id}`, limit: 20, windowMs: 60_000 });
+    // v2.0 Pay-per-Export: one-time unlock (29 zł) lets FREE user export ONE
+    // clean PDF for THIS project. Only the project owner can consume it —
+    // otherwise team members could drain an unlock bought by someone else.
+    const paidExportUnlockedAt = (project as Record<string, unknown>).paid_export_unlocked_at as string | null | undefined;
+    const isOwner = project.user_id === requestingUser.id;
+    const hasPaidUnlock = Boolean(paidExportUnlockedAt) && isOwner;
+
+    // v2.0: FREE tier CAN export PDF, but receives a diagonal "DEMO" watermark
+    // overlay + footer CTA on every page. Demo projects bypass the watermark
+    // (they're already marked as demo samples). A paid one-shot unlock also
+    // bypasses the watermark and is consumed by the very next export.
+    const showDemoWatermark = !isPro && !isDemoProject && !hasPaidUnlock;
+
+    // Rate limiting: FREE tier gets stricter caps to prevent automated scraping
+    // of the watermarked demo output. PRO keeps the generous limit.
+    const pdfLimit = isPro ? 20 : 5;
+    const pdfRl = checkRateLimit({ key: `pdf:${requestingUser.id}`, limit: pdfLimit, windowMs: 60_000 });
     if (!pdfRl.allowed) {
       return new NextResponse(
         JSON.stringify({ error: "Zbyt wiele żądań PDF. Spróbuj ponownie za chwilę." }),
         { status: 429, headers: { "Content-Type": "application/json", "Retry-After": String(Math.ceil((pdfRl.retryAfterMs ?? 60000) / 1000)) } }
-      );
-    }
-
-    // Demo projects bypass the PRO paywall so free users can see the full PDF value.
-    if (!isPro && !isDemoProject) {
-      return new NextResponse(
-        JSON.stringify({ error: "Eksport PDF wymaga planu PRO. Zupgraduj, aby odblokować eksport." }),
-        { status: 403, headers: { "Content-Type": "application/json" } }
       );
     }
 
@@ -198,7 +212,10 @@ export async function POST(req: Request) {
     const adjustmentOnly = 1 + Number(priceModifier) / 100;
     // [A1] showRg and showKnrInPdf read directly from project settings (no pricingMode gate)
     const showRg = Boolean(project.show_labor_hours_in_pdf);
-    const maskPrices = (!isPro && !isDemoProject) || Boolean(blindMode); // blind mode also masks prices
+    // v2.0: maskPrices is only for explicit "kosztorys ślepy" (blindMode).
+    // Free tier gets the watermark overlay instead of masked numbers — they need
+    // to see the exact prices to evaluate ROI and commit to PRO.
+    const maskPrices = Boolean(blindMode);
     const showKnrInPdf = Boolean((project as Record<string, unknown>).show_knr);
     // If materials are provided by the client — hide Material column entirely from PDF
     const matOwnedByClient = Boolean((project as Record<string, unknown>).materials_owned_by_customer);
@@ -533,14 +550,38 @@ export async function POST(req: Request) {
       pdfNarzuty: pdfNarzuty as PdfNarzutyDisplay | undefined,
       priceDisplay: priceDisplay as string,
       notes: notes as string,
+      showDemoWatermark,
     };
 
     const pdfBuffer = await renderToBuffer(
       React.createElement(PremiumPdfDocument, { data: engineData }) as React.ReactElement<DocumentProps>
     );
 
+    // v2.0 Pay-per-Export: consume the one-shot unlock AFTER successful render.
+    // Atomic: only clear the flag if it still points to the same timestamp we
+    // observed at request start — prevents double-consumption under parallel
+    // requests and preserves the unlock if renderToBuffer throws (handled by
+    // catch block below).
+    if (hasPaidUnlock && paidExportUnlockedAt) {
+      const { error: consumeErr } = await supabaseAdmin
+        .from("projects")
+        .update({ paid_export_unlocked_at: null })
+        .eq("id", projectId)
+        .eq("user_id", requestingUser.id)
+        .eq("paid_export_unlocked_at", paidExportUnlockedAt);
+      if (consumeErr) {
+        // Non-fatal — PDF has already been generated cleanly. Just log for audit.
+        logger.error("[PDF] Failed to consume pay-per-export unlock (PDF already generated):", { projectId }, consumeErr);
+      } else {
+        logger.info("[PDF] Consumed pay-per-export unlock", { projectId, userId: requestingUser.id });
+      }
+    }
+
     const safeName = (project.name as string).replace(/[^a-zA-Z0-9\-_]/g, '_');
-    const filename = `${blindMode && isPro ? 'Kosztorys_Slepy' : 'Kosztorys'}_${safeName}.pdf`;
+    const filePrefix = showDemoWatermark
+      ? 'DEMO_Kosztorys'
+      : (blindMode && isPro ? 'Kosztorys_Slepy' : 'Kosztorys');
+    const filename = `${filePrefix}_${safeName}.pdf`;
 
     return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {

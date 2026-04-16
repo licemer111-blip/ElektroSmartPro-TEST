@@ -7,6 +7,7 @@ import {
   findBestCatalogMatch,
   type ExtractedMaterial,
 } from "./ai-excel-actions";
+import { getEffectiveMaxProjects } from "@/lib/config/tier-limits";
 
 // ─── Read helpers ─────────────────────────────────────────────────────────────
 
@@ -178,17 +179,20 @@ export async function createQuickEstimateFromMaterials(input: {
       .eq("id", user.id)
       .single();
 
-    if (profile && !profile.is_pro) {
-      const maxAllowed = (profile as { is_pro: boolean; max_projects?: number }).max_projects ?? 3;
-      const { count } = await supabase
-        .from("projects")
-        .select("*", { count: "exact", head: true })
-        .eq("user_id", user.id);
-      if (count !== null && count >= maxAllowed) {
-        return {
-          success: false,
-          error: `Plan darmowy pozwala na ${maxAllowed} aktywne projekty. Przejdź na PRO, aby tworzyć nielimitowane projekty.`,
-        };
+    // v2.0: limit tylko jeśli admin jawnie ustawił niski limit (<100).
+    {
+      const maxAllowed = getEffectiveMaxProjects(profile as { is_pro?: boolean; max_projects?: number } | null);
+      if (profile && !profile.is_pro && maxAllowed < 100) {
+        const { count } = await supabase
+          .from("projects")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", user.id);
+        if (count !== null && count >= maxAllowed) {
+          return {
+            success: false,
+            error: `Dla Twojego konta obowiązuje limit ${maxAllowed} projektów. Przejdź na PRO, aby tworzyć nielimitowane projekty.`,
+          };
+        }
       }
     }
 

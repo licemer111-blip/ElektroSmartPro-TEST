@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 import { checkAndIncrementAiUsage } from "@/lib/ai-usage";
 import { AI_FUNCTION_NAMES } from "@/lib/ai-quota-config";
+import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 import { generateExpertResponse } from "@/server/services/hybrid-ai.service";
 
 export async function POST(req: NextRequest) {
@@ -39,15 +40,21 @@ export async function POST(req: NextRequest) {
       content: m.content,
     }));
 
-    // Check subscription tier for Hard Demo price-blur rule
+    // v2.1: effective PRO = paid subscription OR active 7-day trial.
+    // Passed into generateExpertResponse to customize system prompt tone
+    // (not for price-gating — v2.1 shows all prices regardless of tier).
     let isPro = false;
     try {
       const { data: profile } = await supabase
         .from("profiles")
-        .select("is_pro")
+        .select("is_pro, trial_started_at, trial_ends_at")
         .eq("id", user.id)
         .single();
-      isPro = profile?.is_pro ?? false;
+      isPro = getEffectiveIsPro(profile as {
+        is_pro?: boolean | null;
+        trial_started_at?: string | null;
+        trial_ends_at?: string | null;
+      } | null);
     } catch {
       // default to free tier on error (safe)
     }

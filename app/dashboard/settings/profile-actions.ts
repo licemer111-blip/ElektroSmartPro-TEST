@@ -32,7 +32,9 @@ export async function getProfile(): Promise<{ data: Profile | null; error: strin
         .upsert({
           id: user.id,
           is_pro: false,
-          max_projects: 3,
+          // v2.0: do NOT hardcode max_projects — DB keeps NULL and
+          // getEffectiveMaxProjects() returns FREE_TIER_MAX_PROJECTS by default.
+          // Admin may override this per-user via admin panel.
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         }, { onConflict: "id", ignoreDuplicates: true });

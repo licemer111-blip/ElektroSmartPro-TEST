@@ -6,6 +6,7 @@ import { tryAuth } from "@/lib/auth";
 // requirePro removed — demo users can access all features
 import { templateUpdateSchema, validate } from "@/lib/validations";
 import { logger } from "@/lib/logger";
+import { getEffectiveMaxProjects } from "@/lib/config/tier-limits";
 
 export type ProjectTemplate = {
   id: string;
@@ -171,17 +172,19 @@ export async function createProjectFromTemplate(
     .single();
   const defaultHourlyRate = (profileForRate as { hourly_rate?: number | null } | null)?.hourly_rate ?? 0;
 
-  // Free-tier limit check
-  if (profileForRate && !profileForRate.is_pro) {
-    const maxAllowed = (profileForRate as { max_projects?: number }).max_projects ?? 3;
-    const { count } = await supabase
-      .from("projects")
-      .select("*", { count: "exact", head: true })
-      .eq("user_id", user.id);
-    if (count !== null && count >= maxAllowed) {
-      return {
-        error: `Plan darmowy pozwala na ${maxAllowed} aktywne projekt${maxAllowed === 1 ? '' : 'y'}. Przejdź na PRO, aby tworzyć nielimitowane projekty.`,
-      };
+  // v2.0: free tier — limit tylko jeśli admin jawnie ustawił niski limit (<100).
+  {
+    const maxAllowed = getEffectiveMaxProjects(profileForRate as { is_pro?: boolean; max_projects?: number } | null);
+    if (profileForRate && !profileForRate.is_pro && maxAllowed < 100) {
+      const { count } = await supabase
+        .from("projects")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id);
+      if (count !== null && count >= maxAllowed) {
+        return {
+          error: `Dla Twojego konta obowiązuje limit ${maxAllowed} projektów. Przejdź na PRO, aby tworzyć nielimitowane projekty.`,
+        };
+      }
     }
   }
 

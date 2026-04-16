@@ -31,111 +31,141 @@ export function SubscriptionPanel({ profile }: SubscriptionPanelProps) {
   const hasStripeCustomer = !!profile?.stripe_customer_id;
 
   if (!isPro) {
-    // FREE USER VIEW - Compact for Settings Tab
+    // ══════════════════════════════════════════════════════════════════════
+    // FREE USER VIEW — v2.0 (Freemium z zablokowaną monetyzacją)
+    // Kluczowa zmiana: FREE user ma PEŁNY kalkulator. Blokada jest na
+    // WYSYŁCE do klienta (PDF bez DEMO, Portal Klienta, branding, team).
+    // ══════════════════════════════════════════════════════════════════════
     return (
       <div className="space-y-4 sm:space-y-6">
-        {/* Current Plan Status */}
-        <Card className="border-2 border-slate-200/80 dark:border-slate-800/80">
+        {/* ─── Current FREE plan: co masz ─────────────────────────── */}
+        <Card className="border-2 border-green-200/80 dark:border-green-800/60 bg-gradient-to-br from-green-50/60 to-emerald-50/40 dark:from-green-950/20 dark:to-emerald-950/10">
           <CardHeader className="pb-3 sm:pb-4 px-4 sm:px-6 pt-4 sm:pt-6">
-            <CardTitle className="text-base sm:text-lg">Plan Demo (Bezpłatny)</CardTitle>
-            <CardDescription className="text-xs sm:text-sm">Wypróbuj system z ograniczeniami</CardDescription>
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary" className="bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300 text-[10px] uppercase">Plan Demo</Badge>
+              <CardTitle className="text-base sm:text-lg">Masz pełny dostęp do narzędzia</CardTitle>
+            </div>
+            <CardDescription className="text-xs sm:text-sm">
+              Licz, wyceniaj, planuj bez ograniczeń. Płacisz dopiero kiedy chcesz wysłać <strong>czysty PDF</strong> klientowi.
+            </CardDescription>
           </CardHeader>
-          
-          <CardContent className="space-y-3 sm:space-y-4 px-4 sm:px-6">
-            {/* Current Limitations */}
-            <div className="space-y-2">
-              <div className="flex items-start gap-2.5 sm:gap-3 p-2.5 sm:p-3 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-100 dark:border-red-900/30">
-                <X className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
-                <div>
-                  <div className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100">Tylko 1 aktywny projekt</div>
-                  <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400">Usuń stary, aby stworzyć nowy</p>
+
+          <CardContent className="space-y-2 px-4 sm:px-6">
+            {[
+              { icon: Infinity, title: "Nielimitowane projekty i pozycje", desc: "Buduj kosztorysy dla 1 mieszkania lub 100 obiektów" },
+              { icon: DollarSign, title: "Pełna widoczność wszystkich cen", desc: "Materiał / Robocizna / VAT / Brutto — bez zamazywania" },
+              { icon: Zap, title: "ES-Engine + KNR 2026 + AI", desc: "Silnik kalkulacji, zestawy 360°, rozpoznawanie importu PDF/Excel" },
+              { icon: FileText, title: "Eksport PDF ze znakiem wodnym DEMO", desc: "Do Twojej pracy wewnętrznej — do klienta potrzebujesz PRO lub Pay-per-Export" },
+            ].map(({ icon: Icon, title, desc }) => (
+              <div key={title} className="flex items-start gap-2.5 p-2.5 rounded-lg bg-white/70 dark:bg-slate-900/40 border border-green-200/60 dark:border-green-800/30">
+                <Check className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <div className="flex items-center gap-1.5">
+                    <Icon className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400 flex-shrink-0" />
+                    <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100">{title}</span>
+                  </div>
+                  <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400 ml-5">{desc}</p>
                 </div>
               </div>
-              <div className="flex items-start gap-2.5 sm:gap-3 p-2.5 sm:p-3 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-100 dark:border-red-900/30">
-                <X className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+            ))}
+          </CardContent>
+        </Card>
+
+        {/* ─── PRO upgrade card — co odblokowujesz ────────────────── */}
+        <Card className="border-2 border-amber-300 dark:border-amber-700/60 bg-gradient-to-br from-amber-50/80 via-orange-50/60 to-amber-50/80 dark:from-amber-950/20 dark:via-orange-950/20 dark:to-amber-950/20 shadow-lg shadow-amber-500/10">
+          <CardHeader className="px-4 sm:px-6 py-4 sm:py-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 shadow-md">
+                <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <CardTitle className="text-lg sm:text-xl bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+                  Zupgraduj do PRO
+                </CardTitle>
+                <CardDescription className="text-xs sm:text-sm">
+                  159 zł/m-c • Anuluj kiedy chcesz • 1 wycena dla klienta zwraca koszt
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+
+          <CardContent className="space-y-2 px-4 sm:px-6">
+            <div className="rounded-lg bg-white/80 dark:bg-slate-900/50 p-3 border border-amber-200/70 dark:border-amber-800/30 mb-2">
+              <p className="text-[11px] sm:text-xs font-semibold text-amber-900 dark:text-amber-200">
+                🎯 Co odblokowujesz w PRO:
+              </p>
+            </div>
+
+            {[
+              { icon: FileText, title: "Czysty PDF bez znaku wodnego", desc: "Gotowy do wysłania klientowi — profesjonalny, z Twoim logo i NIP" },
+              { icon: Sparkles, title: "Portal Klienta z e-podpisem", desc: "Klient akceptuje wycenę online — bez maila, bez drukarki" },
+              { icon: Crown, title: "Własne branding firmy w PDF", desc: "Logo, dane firmy, kolory dokumentów — wyglądasz jak wielka firma" },
+              { icon: Zap, title: "Tryb zespołowy (multi-user)", desc: "Zapraszaj pracowników do projektów, role i uprawnienia" },
+              { icon: Shield, title: "Tryb offline + sync PWA", desc: "Pracuj bez internetu na placu budowy — synchronizacja po powrocie" },
+              { icon: Headphones, title: "Wsparcie priorytetowe", desc: "Odpowiadamy w ciągu 2h w dni robocze" },
+            ].map(({ icon: Icon, title, desc }) => (
+              <div key={title} className="flex items-start gap-2.5 p-2.5 bg-white/70 dark:bg-slate-900/40 rounded-lg border border-amber-200/50 dark:border-amber-800/30">
+                <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <div className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100">Ceny ukryte (blur)</div>
-                  <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400">Nie widzisz kosztów materiałów i robocizny</p>
+                  <h4 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100">{title}</h4>
+                  <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400 mt-0.5">{desc}</p>
                 </div>
               </div>
-              <div className="flex items-start gap-2.5 sm:gap-3 p-2.5 sm:p-3 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-100 dark:border-red-900/30">
-                <X className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+            ))}
+
+            {/* ROI banner */}
+            <div className="mt-3 rounded-lg p-3 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30 border border-emerald-300 dark:border-emerald-700/50">
+              <div className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <div className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100">Brak eksportu PDF</div>
-                  <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400">Nie możesz wysłać oferty do klienta</p>
+                  <p className="text-xs font-bold text-emerald-900 dark:text-emerald-200">
+                    PRO zwraca się po 1 kliencie
+                  </p>
+                  <p className="text-[10px] sm:text-xs text-emerald-800 dark:text-emerald-300 mt-0.5">
+                    Jedna profesjonalna wycena z własnym logo i Portalem Klienta buduje zaufanie
+                    warte znacznie więcej niż 159 zł/m-c. Średni elektryk oszczędza <strong>8–12 h/m-c</strong> dzięki automatyzacji KNR.
+                  </p>
                 </div>
               </div>
             </div>
 
             {/* Upgrade CTA */}
-            <UpgradeProButton 
-              size="lg" 
-              className="w-full bg-gradient-to-r from-amber-500 via-orange-600 to-amber-600 hover:from-amber-600 hover:via-orange-700 hover:to-amber-700"
+            <UpgradeProButton
+              size="lg"
+              className="w-full bg-gradient-to-r from-amber-500 via-orange-600 to-amber-600 hover:from-amber-600 hover:via-orange-700 hover:to-amber-700 mt-3"
               fullWidth
             />
-          </CardContent>
-        </Card>
 
-        {/* PRO Benefits */}
-        <Card className="border-2 border-amber-200 dark:border-amber-800/60 bg-gradient-to-br from-amber-50/80 via-orange-50/60 to-amber-50/80 dark:from-amber-950/20 dark:via-orange-950/20 dark:to-amber-950/20">
-          <CardHeader className="px-4 sm:px-6 py-4 sm:py-6">
-            <div className="flex items-center gap-2.5 sm:gap-3">
-              <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600 dark:text-amber-400 flex-shrink-0" />
-              <div>
-                <CardTitle className="text-base sm:text-lg">ElektroSmart PRO</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">159 zł/miesiąc • Anuluj kiedy chcesz</CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          
-          <CardContent className="space-y-1.5 sm:space-y-2 px-4 sm:px-6">
-            <div className="flex items-start gap-2.5 sm:gap-3 p-2.5 sm:p-3 bg-white/80 dark:bg-slate-900/60 backdrop-blur-sm rounded-lg">
-              <Infinity className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-              <div>
-                <h4 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100">Nielimitowane projekty</h4>
-                <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400">Twórz dowolną ilość wycen bez ograniczeń</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-2.5 sm:gap-3 p-2.5 sm:p-3 bg-white/80 dark:bg-slate-900/60 backdrop-blur-sm rounded-lg">
-              <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-              <div>
-                <h4 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100">Pełna widoczność cen</h4>
-                <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400">Dostęp do wszystkich kalkulacji i marż</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-2.5 sm:gap-3 p-2.5 sm:p-3 bg-white/80 dark:bg-slate-900/60 backdrop-blur-sm rounded-lg">
-              <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-              <div>
-                <h4 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100">Profesjonalny eksport PDF</h4>
-                <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400">Oferty z Twoim logo i brandingiem</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-2.5 sm:gap-3 p-2.5 sm:p-3 bg-white/80 dark:bg-slate-900/60 backdrop-blur-sm rounded-lg">
-              <Headphones className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 dark:text-purple-400 flex-shrink-0 mt-0.5" />
-              <div>
-                <h4 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100">Wsparcie priorytetowe</h4>
-                <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400">Szybka pomoc dedykowana dla PRO</p>
+            {/* Pay-per-export alternative */}
+            <div className="mt-2 rounded-lg p-2.5 bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-700">
+              <div className="flex items-start gap-2">
+                <DollarSign className="w-4 h-4 text-slate-500 dark:text-slate-400 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-[11px] font-semibold text-slate-800 dark:text-slate-200">
+                    Robisz wyceny tylko sporadycznie?
+                  </p>
+                  <p className="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5">
+                    <strong>Pay-per-Export (29 zł)</strong> — jedna płatność zdejmuje znak wodny z konkretnego PDF-a.
+                    Bez subskrypcji. <span className="italic">Wkrótce dostępne w panelu projektu.</span>
+                  </p>
+                </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* Trust Signals */}
-        <Card className="border-2 border-green-200 dark:border-green-800/60 bg-gradient-to-br from-green-50/80 to-emerald-50/60 dark:from-green-950/20 dark:to-emerald-950/15">
-          <CardContent className="pt-6 pb-6">
-            <div className="space-y-3">
-              <div className="flex items-center justify-center">
-                <div className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-900 rounded-full border-2 border-green-600 dark:border-green-500">
-                  <Shield className="w-4 h-4 text-green-600 dark:text-green-400" />
-                  <span className="text-xs font-bold text-green-700 dark:text-green-400">Bank-level security</span>
-                </div>
+        <Card className="border border-slate-200 dark:border-slate-800">
+          <CardContent className="pt-4 pb-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <div className="flex items-center gap-2">
+                <Shield className="w-4 h-4 text-green-600 dark:text-green-400" />
+                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">Płatność Stripe</span>
               </div>
-              <p className="text-xs text-center text-slate-700 dark:text-slate-300">
-                Płatności obsługiwane przez <span className="font-bold text-[#635BFF]">Stripe</span>
-              </p>
+              <span className="hidden sm:inline text-slate-300 dark:text-slate-600">•</span>
+              <span className="text-xs text-slate-600 dark:text-slate-400">Anuluj w każdej chwili</span>
+              <span className="hidden sm:inline text-slate-300 dark:text-slate-600">•</span>
+              <span className="text-xs text-slate-600 dark:text-slate-400">Bez kontraktu długoterminowego</span>
             </div>
           </CardContent>
         </Card>

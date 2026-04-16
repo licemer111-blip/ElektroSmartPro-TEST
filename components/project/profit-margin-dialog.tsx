@@ -22,7 +22,6 @@ interface ProfitMarginDialogProps {
   onOpenChange: (open: boolean) => void;
   projectId: string;
   projectName: string;
-  isPro?: boolean;
   items: {
     id: string;
     name: string;
@@ -62,12 +61,13 @@ export function ProfitMarginDialog({
   onOpenChange,
   projectId,
   projectName,
-  isPro = false,
   items,
   vatRate,
 }: ProfitMarginDialogProps) {
   const { multiplier: knrMultiplier } = useKnrMultiplier();
-  const blurPrice = (v: number) => isPro ? formatCurrency(v) : "*** zł";
+  // v2.0: prices are always visible — margin analysis is internal data that
+  // doesn't drive conversion when hidden. Conversion is driven by PDF export / portal klienta.
+  const blurPrice = (v: number) => formatCurrency(v);
   const [actualCosts, setActualCosts] = useState<Record<string, { material: number; labor: number }>>({});
 
   useEffect(() => {
@@ -164,16 +164,16 @@ export function ProfitMarginDialog({
           <div className="grid grid-cols-2 gap-2">
             <div className="rounded-xl border bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800 p-3 text-center">
               <p className="text-[10px] text-muted-foreground uppercase font-medium">Wycena netto</p>
-              <p className={`text-sm font-bold text-blue-700 dark:text-blue-300 ${!isPro ? "blur-sm select-none" : ""}`}>{blurPrice(analysis.quotedNet)}</p>
+              <p className="text-sm font-bold text-blue-700 dark:text-blue-300">{blurPrice(analysis.quotedNet)}</p>
             </div>
             <div className="rounded-xl border bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 p-3 text-center">
               <p className="text-[10px] text-muted-foreground uppercase font-medium">Koszty rzeczywiste</p>
-              <p className={`text-sm font-bold ${!isPro ? "blur-sm select-none" : ""}`}>{blurPrice(analysis.actualNet)}</p>
+              <p className="text-sm font-bold">{blurPrice(analysis.actualNet)}</p>
             </div>
             <div className={`rounded-xl border p-3 text-center ${marginBg}`}>
               <p className="text-[10px] text-muted-foreground uppercase font-medium">Zysk netto</p>
-              <p className={`text-sm font-bold ${marginColor} ${!isPro ? "blur-sm select-none" : ""}`}>
-                {isPro ? (analysis.profit >= 0 ? "+" : "") + formatCurrency(analysis.profit) : "*** zł"}
+              <p className={`text-sm font-bold ${marginColor}`}>
+                {(analysis.profit >= 0 ? "+" : "") + formatCurrency(analysis.profit)}
               </p>
             </div>
             <div className={`rounded-xl border p-3 text-center ${marginBg}`}>
@@ -212,15 +212,15 @@ export function ProfitMarginDialog({
               <div className="space-y-1 text-xs">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Wycena:</span>
-                  <span className={`font-medium ${!isPro ? "blur-sm select-none" : ""}`}>{blurPrice(analysis.quotedMaterial)}</span>
+                  <span className="font-medium">{blurPrice(analysis.quotedMaterial)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Rzeczywiste:</span>
-                  <span className={`font-medium ${!isPro ? "blur-sm select-none" : ""}`}>{blurPrice(analysis.actualMaterial)}</span>
+                  <span className="font-medium">{blurPrice(analysis.actualMaterial)}</span>
                 </div>
                 <div className="flex justify-between pt-1 border-t">
                   <span className="text-muted-foreground">Różnica:</span>
-                  <span className={`font-bold ${analysis.quotedMaterial - analysis.actualMaterial >= 0 ? "text-emerald-600" : "text-red-600"} ${!isPro ? "blur-sm select-none" : ""}`}>
+                  <span className={`font-bold ${analysis.quotedMaterial - analysis.actualMaterial >= 0 ? "text-emerald-600" : "text-red-600"}`}>
                     {blurPrice(Math.abs(analysis.quotedMaterial - analysis.actualMaterial))}
                   </span>
                 </div>
@@ -231,15 +231,15 @@ export function ProfitMarginDialog({
               <div className="space-y-1 text-xs">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Wycena:</span>
-                  <span className={`font-medium ${!isPro ? "blur-sm select-none" : ""}`}>{blurPrice(analysis.quotedLabor)}</span>
+                  <span className="font-medium">{blurPrice(analysis.quotedLabor)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Rzeczywiste:</span>
-                  <span className={`font-medium ${!isPro ? "blur-sm select-none" : ""}`}>{blurPrice(analysis.actualLabor)}</span>
+                  <span className="font-medium">{blurPrice(analysis.actualLabor)}</span>
                 </div>
                 <div className="flex justify-between pt-1 border-t">
                   <span className="text-muted-foreground">Różnica:</span>
-                  <span className={`font-bold ${analysis.quotedLabor - analysis.actualLabor >= 0 ? "text-emerald-600" : "text-red-600"} ${!isPro ? "blur-sm select-none" : ""}`}>
+                  <span className={`font-bold ${analysis.quotedLabor - analysis.actualLabor >= 0 ? "text-emerald-600" : "text-red-600"}`}>
                     {blurPrice(Math.abs(analysis.quotedLabor - analysis.actualLabor))}
                   </span>
                 </div>
@@ -267,7 +267,7 @@ export function ProfitMarginDialog({
                       <div className="min-w-0">
                         <p className="text-[11px] font-medium truncate">{item.name}</p>
                         <p className="text-[9px] text-muted-foreground">
-                          Wycena: <span className={!isPro ? "blur-sm select-none" : ""}>{blurPrice(item.final_material_price)}</span> + <span className={!isPro ? "blur-sm select-none" : ""}>{blurPrice(item.final_labor_price)}</span> / {item.unit}
+                          Wycena: <span>{blurPrice(item.final_material_price)}</span> + <span>{blurPrice(item.final_labor_price)}</span> / {item.unit}
                         </p>
                       </div>
                       <Input

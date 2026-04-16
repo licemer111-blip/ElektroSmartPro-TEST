@@ -50,7 +50,8 @@ export function StepReview({
   updateItemQuantity, removeItem,
 }: StepReviewProps) {
   const allBlankPrices = items.every(i => i.base_material_price === 0 && i.base_labor_price === 0);
-  const blurPrice = (v: number) => isPro ? formatCurrency(v) : "*** zł";
+  // v2.0: FREE users always see full prices. Monetization moved to PDF export / portal klienta.
+  const blurPrice = (v: number) => formatCurrency(v);
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -121,10 +122,10 @@ export function StepReview({
         </div>
       )}
 
-      {/* Demo price blur notice */}
+      {/* v2.0: Free-tier info banner — prices visible, PDF export requires PRO */}
       {!isPro && (
-        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700 text-xs text-amber-700 dark:text-amber-400">
-          <span className="font-semibold">Tryb Demo:</span> Zupgraduj do PRO, aby zobaczyć dokładne ceny.
+        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-300 dark:border-blue-700 text-xs text-blue-700 dark:text-blue-400">
+          <span className="font-semibold">Tryb Demo:</span> Wszystkie ceny widoczne. Eksport PDF bez znaku wodnego — tylko w PRO (159 zł/m-c) lub pojedynczy PDF za 29 zł.
         </div>
       )}
 
@@ -150,7 +151,7 @@ export function StepReview({
               : "bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700 opacity-40"
           }`}>
             <p className="text-[10px] text-muted-foreground uppercase font-medium">Materiały</p>
-            <p className={`text-sm font-bold text-orange-700 dark:text-orange-300 ${!isPro ? "blur-sm select-none" : ""}`}>{blurPrice(totals.material)}</p>
+            <p className="text-sm font-bold text-orange-700 dark:text-orange-300">{blurPrice(totals.material)}</p>
           </div>
           <div className={`rounded-xl p-3 text-center border transition-all ${
             viewMode === "labor" || viewMode === "all"
@@ -158,15 +159,15 @@ export function StepReview({
               : "bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700 opacity-40"
           }`}>
             <p className="text-[10px] text-muted-foreground uppercase font-medium">Robocizna</p>
-            <p className={`text-sm font-bold text-amber-700 dark:text-amber-300 ${!isPro ? "blur-sm select-none" : ""}`}>{blurPrice(totals.labor)}</p>
+            <p className="text-sm font-bold text-amber-700 dark:text-amber-300">{blurPrice(totals.labor)}</p>
           </div>
           <div className="rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 p-3 text-center">
             <p className="text-[10px] text-muted-foreground uppercase font-medium">VAT {vatRate}%</p>
-            <p className={`text-sm font-bold ${!isPro ? "blur-sm select-none" : ""}`}>{blurPrice(totals.vatAmount)}</p>
+            <p className="text-sm font-bold">{blurPrice(totals.vatAmount)}</p>
           </div>
           <div className="rounded-xl bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30 border border-emerald-200 dark:border-emerald-800 p-3 text-center">
             <p className="text-[10px] text-muted-foreground uppercase font-medium">Brutto</p>
-            <p className={`text-sm font-bold text-emerald-700 dark:text-emerald-300 ${!isPro ? "blur-sm select-none" : ""}`}>{blurPrice(totals.gross)}</p>
+            <p className="text-sm font-bold text-emerald-700 dark:text-emerald-300">{blurPrice(totals.gross)}</p>
           </div>
         </div>
       )}
@@ -202,12 +203,12 @@ export function StepReview({
                         </span>
                       ) : (
                         <>
-                          <span className={!isPro ? "blur-sm select-none" : ""}>{blurPrice(unitPrice)}</span> / {item.unit}
+                          <span>{blurPrice(unitPrice)}</span> / {item.unit}
                           {" · "}
-                          Razem: <span className={!isPro ? "blur-sm select-none" : ""}>{blurPrice(unitPrice * item.quantity)}</span>
+                          Razem: <span>{blurPrice(unitPrice * item.quantity)}</span>
                           {viewMode === "all" && item.base_material_price > 0 && item.base_labor_price > 0 && (
-                            <span className={`ml-1 text-slate-400 ${!isPro ? "blur-sm select-none" : ""}`}>
-                              {isPro ? `(Mat: ${formatCurrency(item.base_material_price)} · Rob: ${formatCurrency(item.base_labor_price)})` : "(Mat: *** · Rob: ***)"}
+                            <span className="ml-1 text-slate-400">
+                              (Mat: {formatCurrency(item.base_material_price)} · Rob: {formatCurrency(item.base_labor_price)})
                             </span>
                           )}
                         </>
@@ -272,7 +273,7 @@ export function StepReview({
           ) : (
             allBlankPrices
               ? <><Zap className="w-4 h-4 mr-2" />Utwórz i wyceń z KNR</>
-              : <><FileText className="w-4 h-4 mr-2" />{"Utwórz projekt "}{isPro ? `(${formatCurrency(totals.gross)})` : "(***)"}  </>
+              : <><FileText className="w-4 h-4 mr-2" />{`Utwórz projekt (${formatCurrency(totals.gross)})`}</>
           )}
         </Button>
       </div>

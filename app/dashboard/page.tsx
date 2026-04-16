@@ -9,6 +9,7 @@ import { createClient } from "@/utils/supabase/server";
 import { OnboardingTour } from "@/components/onboarding/onboarding-tour";
 import { OnboardingWizard } from "@/components/onboarding/onboarding-wizard";
 import { ClientActivityWidget } from "@/components/dashboard/client-activity-widget";
+import { FREE_TIER_MAX_PROJECTS } from "@/lib/config/tier-limits";
 
 export const dynamic = 'force-dynamic';
 
@@ -82,7 +83,7 @@ export default async function DashboardPage({
                 objectTypes={objectTypes}
                 currentProjectCount={projects.length}
                 isPro={profile?.is_pro || false}
-                maxProjects={profile?.max_projects || 3}
+                maxProjects={profile?.max_projects || FREE_TIER_MAX_PROJECTS}
                 defaultRegionId={profile?.default_region_id ?? null}
                 hourlyRate={profile?.hourly_rate ?? 0}
               />
@@ -124,7 +125,7 @@ export default async function DashboardPage({
             regions={regions}
             objectTypes={objectTypes}
             isPro={profile?.is_pro || false}
-            maxProjects={profile?.max_projects || 3}
+            maxProjects={profile?.max_projects || FREE_TIER_MAX_PROJECTS}
           />
         ) : (
           <>

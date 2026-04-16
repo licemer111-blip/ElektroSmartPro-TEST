@@ -334,16 +334,22 @@ export const WYMIANA_FACTOR = 1.5; // labor = montaż_norm + 0.5 × montaż_norm
 // Prevents L3 AI hallucinations (e.g. 4 rbh/m for cable) from
 // silently propagating into the kosztorys.
 
-/** Max labor norm (rbh) per unit type for non-linear units. */
+/** Max labor norm (rbh) per unit type for non-linear units.
+ * v2.0 calibration (Apr 2026): raised linear cap from 0.35 → 0.50 because heavy-
+ * gauge Cu (YKY 5×240) in grooves legitimately reaches ~0.50 rbh/mb even at
+ * baseline surface; cable complexity multiplier then scales it up from there.
+ * `szt` raised from 8 → 12 to accommodate complex single-device installs
+ * (industrial PLCs, large EV chargers with commissioning).
+ */
 const SANITY_MAX_RBH: Record<string, number> = {
-  m:    0.35,  // linear: cable/pipe — groove & large sections use dynamic check below
-  mb:   0.35,
-  mb2:  0.35,
+  m:    0.50,  // linear: cable/pipe — groove & large sections use dynamic check below
+  mb:   0.50,
+  mb2:  0.50,
   "m²": 3.00,
   m2:   3.00,
-  szt:  8.00,  // single device installation
-  kpl: 20.00,  // complex assembly
-  "r-g": 8.00,  // engineering tasks (commissioning, measurements, programming) can take hours
+  szt: 12.00,  // single device installation (up from 8)
+  kpl: 24.00,  // complex assembly (up from 20)
+  "r-g": 8.00, // engineering tasks (commissioning, measurements, programming)
   t:   12.00,  // per tonne
   kg:   0.20,
 };
@@ -480,9 +486,16 @@ export function enforceExpertGuards(
 /**
  * Maximum labor price (PLN) per unit that SAL will ever enforce via floor × multipliers.
  * Guards against degenerate cases: e.g. HEAVY_CONNECTION floor 140.40 × 2.25 × 2.50 × 1.40 ≈ 1106 PLN.
- * 2000 PLN is a safe absolute ceiling for a single unit of labor (not the total job).
+ *
+ * v2.0 calibration (Apr 2026): raised 2000 → 5000. Real-world per-unit labor that
+ * exceeds 2000 PLN is legitimate for:
+ *   - Rozdzielnica 3-fazowa mieszkaniowa + uruchomienie + pomiary (2500–3500 PLN)
+ *   - Podłączenie pompy ciepła 16 kW / klimatyzatora multi + konfiguracja (2000–3000 PLN)
+ *   - Stacja ładowania EV 22 kW + integracja z rozdzielnicą (2500–4000 PLN)
+ *   - Silnik przemysłowy 55+ kW + zabezpieczenia (3000–5000 PLN)
+ * 5000 PLN is the new ceiling for a SINGLE UNIT of labor (not the total job).
  */
-const SAL_MAX_LABOR_PLN = 2000;
+const SAL_MAX_LABOR_PLN = 5000;
 
 export function securityAuditLayer(est: AiPriceEstimate): AiPriceEstimate {
   const name    = est.name ?? "";

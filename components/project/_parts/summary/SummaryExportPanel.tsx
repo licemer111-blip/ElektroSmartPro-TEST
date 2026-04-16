@@ -7,6 +7,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Download, FileSpreadsheet, Save, Check, Lock } from "lucide-react";
 import { ShareOfferDialog } from "@/components/project/share-offer-dialog";
 import { DocumentationDialog } from "@/components/project/project-documentation-tab";
+import { UnlockPdfButton } from "@/components/billing/unlock-pdf-button";
+import { StartTrialButton } from "@/components/billing/start-trial-button";
+import { TrialStatusBadge } from "@/components/billing/trial-status-badge";
+import { hasUsedTrial, isTrialActive } from "@/lib/auth/entitlements";
 import { useState as useLocalState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
@@ -171,77 +175,78 @@ export function SummaryExportPanel({
         </div>
       </div>
 
-      {/* Export buttons — split button PDF | Excel */}
-      {!isPro ? (
-        /* ══ FREE USER: locked export block ════════════════════════ */
-        <div className="space-y-2">
-          <div className="flex items-start gap-2 px-3 py-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700">
-            <Lock className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="text-xs font-semibold text-amber-900 dark:text-amber-100">Eksport zablokowany (wersja Demo)</p>
-              <p className="text-[10px] text-amber-700 dark:text-amber-300 mt-0.5">
-                Przejdź na <strong>PRO</strong>, aby pobrać PDF i Excel z pełnymi cenami.
+      {/* Export buttons — v2.0: FREE tier może eksportować, PDF dostaje watermark DEMO */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Eksport</span>
+          <div className="flex gap-1">
+            <HintTooltip content={HINTS.pdfExport} side="left" iconOnly />
+            <HintTooltip content={HINTS.excelExport} side="left" iconOnly />
+          </div>
+        </div>
+
+        {/* v2.1: Trial status badge — visible during active 7-day trial */}
+        {isTrialActive(profile ?? null) && (
+          <div className="flex justify-end">
+            <TrialStatusBadge profile={profile ?? null} />
+          </div>
+        )}
+
+        {/* v2.1: FREE — banner Demo + Trial CTA + Pay-per-Export CTA */}
+        {!isPro && !project.paid_export_unlocked_at && (
+          <>
+            <div className="flex items-start gap-2 px-3 py-2 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
+              <Lock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+              <p className="text-[10px] text-blue-800 dark:text-blue-200 leading-tight">
+                <span className="font-semibold">Tryb Demo:</span> PDF zostanie oznaczony znakiem wodnym „DEMO”.
+                Aby wysłać czysty PDF do klienta — aktywuj darmowy trial lub kup jednorazowy eksport.
               </p>
             </div>
-          </div>
-          <div className="flex w-full rounded-lg overflow-hidden shadow-sm border-2 border-slate-200 dark:border-slate-700 opacity-50 cursor-not-allowed select-none">
-            <div className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-red-300 to-red-400">
-              <Lock className="h-4 w-4 flex-shrink-0" />
-              <span>PDF</span>
-            </div>
-            <div className="w-px bg-slate-300 dark:bg-slate-600 flex-shrink-0" />
-            <div className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-slate-400 to-slate-500">
-              <Lock className="h-4 w-4 flex-shrink-0" />
+            {/* Trial button — only shown to users who have NEVER started a trial */}
+            {!hasUsedTrial(profile ?? null) && (
+              <StartTrialButton />
+            )}
+            <UnlockPdfButton projectId={project.id} />
+          </>
+        )}
+
+        {/* v2.0: FREE — już opłacono jednorazowy eksport */}
+        {!isPro && Boolean(project.paid_export_unlocked_at) && (
+          <UnlockPdfButton projectId={project.id} alreadyUnlocked />
+        )}
+
+        {/* PDF + Excel buttons */}
+        <div
+          className={`relative w-full transition-all duration-150 ${!isFinal ? "opacity-50 cursor-pointer active:scale-95 active:opacity-40" : ""}`}
+          onClick={!isFinal ? () => toast({ title: "📋 Najpierw zapisz projekt", description: "Kliknij 'Zapisz', aby odblokować eksport PDF i Excel", variant: "destructive" }) : undefined}
+        >
+          <div className={`flex w-full rounded-lg overflow-hidden shadow-lg border-2 border-red-400/50 ${!isFinal ? "pointer-events-none" : ""}`}>
+            <button
+              onClick={handleExportPDF}
+              disabled={isDownloading}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-red-500 to-red-600 disabled:cursor-not-allowed"
+              data-export-pdf
+            >
+              {isDownloading ? (
+                <span className="animate-spin">⏳</span>
+              ) : (
+                <Download className="h-4 w-4 flex-shrink-0" />
+              )}
+              <span>PDF{!isPro && !project.paid_export_unlocked_at && " (Demo)"}</span>
+            </button>
+            <div className="w-px flex-shrink-0 bg-red-300/60" />
+            <button
+              onClick={handleExportExcel}
+              disabled={isDownloading}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-green-500 to-emerald-500 disabled:cursor-not-allowed"
+              data-export-excel
+            >
+              <FileSpreadsheet className="h-4 w-4 flex-shrink-0" />
               <span>Excel</span>
-            </div>
-          </div>
-          <p className="text-center text-[10px] text-slate-500 dark:text-slate-400">
-            Zupgraduj, aby zobaczyć ceny i eksportować dokumenty
-          </p>
-        </div>
-      ) : (
-        /* ══ PRO USER: active export buttons ═══════════════════════ */
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Eksport</span>
-            <div className="flex gap-1">
-              <HintTooltip content={HINTS.pdfExport} side="left" iconOnly />
-              <HintTooltip content={HINTS.excelExport} side="left" iconOnly />
-            </div>
-          </div>
-          {/* PDF + Excel buttons */}
-          <div
-            className={`relative w-full transition-all duration-150 ${!isFinal ? "opacity-50 cursor-pointer active:scale-95 active:opacity-40" : ""}`}
-            onClick={!isFinal ? () => toast({ title: "📋 Najpierw zapisz projekt", description: "Kliknij 'Zapisz', aby odblokować eksport PDF i Excel", variant: "destructive" }) : undefined}
-          >
-            <div className={`flex w-full rounded-lg overflow-hidden shadow-lg border-2 border-red-400/50 ${!isFinal ? "pointer-events-none" : ""}`}>
-              <button
-                onClick={handleExportPDF}
-                disabled={isDownloading}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-red-500 to-red-600 disabled:cursor-not-allowed"
-                data-export-pdf
-              >
-                {isDownloading ? (
-                  <span className="animate-spin">⏳</span>
-                ) : (
-                  <Download className="h-4 w-4 flex-shrink-0" />
-                )}
-                <span>PDF</span>
-              </button>
-              <div className="w-px flex-shrink-0 bg-red-300/60" />
-              <button
-                onClick={handleExportExcel}
-                disabled={isDownloading}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-green-500 to-emerald-500 disabled:cursor-not-allowed"
-                data-export-excel
-              >
-                <FileSpreadsheet className="h-4 w-4 flex-shrink-0" />
-                <span>Excel</span>
-              </button>
-            </div>
+            </button>
           </div>
         </div>
-      )}
+      </div>
 
       {/* Footer info */}
       <div className="text-xs text-muted-foreground pt-2 border-t">

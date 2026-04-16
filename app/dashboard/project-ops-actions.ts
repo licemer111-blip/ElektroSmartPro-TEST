@@ -7,6 +7,7 @@ import { tryAuth } from "@/lib/auth";
 import { projectSettingsSchema, validate } from "@/lib/validations";
 import type { Region, ObjectType, ProjectWithRelations } from "@/lib/types/database";
 import { logger } from "@/lib/logger";
+import { getEffectiveMaxProjects } from "@/lib/config/tier-limits";
 
 export async function getProjects(): Promise<ProjectWithRelations[]> {
   const { user, supabase } = await tryAuth();
@@ -153,16 +154,18 @@ export async function createProject(formData: FormData) {
     profile = newProfile;
   }
 
-  // Use max_projects from DB (default 3 for free tier, set by migrations/stripe webhook)
-  const maxAllowed = (profile as { is_pro: boolean; max_projects?: number } | null)?.max_projects ?? 3;
-  if (profile && !profile.is_pro) {
+  // v2.0: free tier ma praktycznie nielimitowane projekty (FREE_TIER_MAX_PROJECTS=999).
+  // Admin może w DB ustawić konkretny limit per-user — getEffectiveMaxProjects to honoruje.
+  const maxAllowed = getEffectiveMaxProjects(profile as { is_pro?: boolean; max_projects?: number } | null);
+  if (profile && !profile.is_pro && maxAllowed < 100) {
+    // Enforce tylko kiedy admin jawnie ustawił niski limit dla tego konta.
     const { count } = await supabase
       .from("projects")
       .select("*", { count: "exact", head: true })
       .eq("user_id", user.id);
     if (count !== null && count >= maxAllowed) {
       return {
-        error: `Plan darmowy pozwala na ${maxAllowed} aktywn${maxAllowed === 1 ? 'y' : 'e'} projekt${maxAllowed === 1 ? '' : 'y'}. Usuń istniejący projekt lub przejdź na PRO, aby mieć nielimitowane projekty.`,
+        error: `Dla Twojego konta obowiązuje limit ${maxAllowed} projektów. Usuń istniejący projekt lub przejdź na PRO.`,
         requiresUpgrade: true,
       };
     }
@@ -226,24 +229,25 @@ export async function duplicateProject(projectId: string) {
   const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
-  // Free-tier limit check — same as createProject
+  // v2.0: patrz createProject — limit tylko gdy admin explicit ustawił <100.
   const { data: profile } = await supabase
     .from("profiles")
     .select("is_pro, max_projects")
     .eq("id", user.id)
     .single();
-
-  if (profile && !profile.is_pro) {
-    const maxAllowed = (profile as { max_projects?: number }).max_projects ?? 3;
-    const { count } = await supabase
-      .from("projects")
-      .select("*", { count: "exact", head: true })
-      .eq("user_id", user.id);
-    if (count !== null && count >= maxAllowed) {
-      return {
-        error: `Plan darmowy pozwala na ${maxAllowed} aktywn${maxAllowed === 1 ? "y" : "e"} projekt${maxAllowed === 1 ? "" : "y"}. Usuń istniejący projekt lub przejdź na PRO.`,
-        requiresUpgrade: true,
-      };
+  {
+    const maxAllowed = getEffectiveMaxProjects(profile as { is_pro?: boolean; max_projects?: number } | null);
+    if (profile && !profile.is_pro && maxAllowed < 100) {
+      const { count } = await supabase
+        .from("projects")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id);
+      if (count !== null && count >= maxAllowed) {
+        return {
+          error: `Dla Twojego konta obowiązuje limit ${maxAllowed} projektów. Usuń istniejący projekt lub przejdź na PRO.`,
+          requiresUpgrade: true,
+        };
+      }
     }
   }
 

@@ -64,6 +64,10 @@ export function RowTotalCell({
   const displayTotal = bruttoMode ? rowTotalBrutto : rowTotalNetto;
   const displayUnit  = bruttoMode ? rowUnitBrutto  : rowUnitNetto;
 
+  // v2.0 P2d: low-confidence badge — surface AI estimation uncertainty in UI
+  // so user knows which rows to manually verify before sending to client.
+  const isLowConfidence = confidenceLevel === "estimated" || confidenceLevel === "uncertain";
+
   const content = (
     <div className="space-y-0.5">
       {!compactView && (
@@ -90,6 +94,15 @@ export function RowTotalCell({
       </div>
       {isAnomalyHigh && isPro && (
         <div className="text-[9px] text-red-500 dark:text-red-400 font-medium">Sprawdź ceny!</div>
+      )}
+      {isLowConfidence && !isAnomalyHigh && (
+        <div
+          title="Cena została oszacowana przez AI (brak dokładnej normy KNR). Zweryfikuj ręcznie przed wysłaniem klientowi."
+          className="text-[9px] text-amber-600 dark:text-amber-400 font-semibold flex items-center justify-end gap-1 cursor-help"
+        >
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-500" />
+          Niska pewność · zweryfikuj
+        </div>
       )}
       {bruttoMode && isPro && vatRate > 0 && (
         <div className="text-[9px] text-slate-400 dark:text-slate-500">
