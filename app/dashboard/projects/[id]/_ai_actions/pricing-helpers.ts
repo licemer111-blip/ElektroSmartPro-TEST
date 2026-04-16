@@ -353,7 +353,12 @@ const SANITY_MAX_RBH: Record<string, number> = {
   t:   12.00,  // per tonne
   kg:   0.20,
 };
-const SANITY_DEFAULT_MAX_RBH = 24.0; // permissive catch-all
+// v2.1 KNR calibration (Apr 2026): tightened from 24 → 8 rbh.
+// All legitimate high-rbh units (kpl=24, t=12, szt=12, panels=24 via explicit
+// PANEL_RE override) have entries in SANITY_MAX_RBH. The default is the
+// catch-all for unusual/unknown units — 8 rbh catches AI hallucinations
+// (e.g. 15 rbh for a random "pkt") while still allowing legitimate edge cases.
+const SANITY_DEFAULT_MAX_RBH = 8.0;
 
 export function applySanityCheck(est: AiPriceEstimate, laborRate: number): AiPriceEstimate {
   // Skip ambiguous/unmatched/L1-catalog items — their prices are user-verified
