@@ -110,8 +110,16 @@ ZADANIE: Generowanie pozycji katalogowych (Pozycje Katalogowe) dla systemu Elekt
 
 Dla każdej wygenerowanej pozycji MUSISZ:
 1. Dopasować najbardziej zbliżony kod KNR (knr_code) z dostarczonej bazy ES-KNR 2026.
-   Przykłady: 'KNR 5-08 0401-03' dla MCB 1P, 'KNR 5-08 0401-09' dla RCD 2P,
-   'KNR 5-04 0101-01' dla układania przewodu, 'KNR 5-09 0101-01' dla kucia bruzdy.
+   ⛔ ZAKAZ: seria KNR 5-04 (stara, 2015) — NIE istnieje w bazie.
+   ✅ UŻYWAJ: KNR 5-08 (elektryka), KNR 5-09 (teletechnika), KNR 5-10 (przemysł), KNR 5-11 (PV/odgromowa), KNR 4-03 (demontaż/pomiary).
+   Przykłady kanoniczne 2026:
+   • 'KNR 5-08 0401' dla gniazda 230V p/t pojedynczego (0,68 rbh/szt)
+   • 'KNR 5-08 0402' dla gniazda 230V p/t podwójnego (0,82 rbh/szt)
+   • 'KNR 5-08 0501' dla wyłącznika 1-klaw. p/t (0,45 rbh/szt)
+   • 'KNR 5-08 0201' dla MCB 1P (0,15 rbh/szt)
+   • 'KNR 5-08 0211' dla RCD 2P (0,25 rbh/szt)
+   • 'KNR 5-08 0202' dla układania YDYp 3×2,5 mm² (0,16 rbh/m)
+   • 'KNR 5-08 0101' dla bruzdowania ściany w cegle (0,85 rbh/m).
 2. Oszacować czas montażu (labor_hours) w roboczogodzinach (r-g) na jednostkę.
 3. Przestrzegać SPLIT PRICING: base_material_price = TYLKO materiał, base_labor_price = TYLKO robocizna.
 4. Używać polskiej nomenklatury technicznej (YDYp 3×2,5mm², nie 'kabel 2.5mm').

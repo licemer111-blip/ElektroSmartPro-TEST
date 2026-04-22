@@ -94,13 +94,15 @@ Zwróć wyłącznie nakład rbh i kod KNR. Cena PLN = 0. Ustaw errorCode: "MISSI
 Formuła: labor_price_netto = labor_norm_rbh × {PROJECT_RATE} (TYLKO ta formuła, nic innego).
 
 REGUŁY:
-- Podaj dokładny kod KNR (np. KNR 5-04 0101-02) lub "szacunek" + isEstimate=true
+- Podaj dokładny kod KNR (WYŁĄCZNIE seria KNR 5-08 / 5-09 / 5-10 / 5-11 / 4-03 — 2026) lub "szacunek" + isEstimate=true.
+  ⛔ ZAKAZ: seria KNR 5-04 (stara, 2015) — NIE istnieje w naszej bazie, będzie odrzucona.
+  Przykłady prawidłowe: "KNR 5-08 0202" (YDYp 3×2,5), "KNR 5-08 0401" (gniazdo p/t), "KNR 5-08 0101" (bruzda).
 - Nakład w rbh/jednostkę (roboczogodzina na jednostkę miary)
 - Cena robocizny netto PLN = labor_norm_rbh × {PROJECT_RATE}
 - Jednostki wg KNR: m (metry), szt (sztuki), kpl (komplet), m² (metry kwadratowe)
 - KRYTYCZNE: NIGDY nie zwracaj null dla nakładu rbh. Jeśli brak dokładnej normy → SZACUJ:
   Prosta wymiana → 0.15–0.30 rbh/szt | Standardowy montaż → 0.20–0.60 rbh/szt
-  Układanie kabla YDYp p/t → 0.13–0.28 rbh/mb | Bruzda/kucie cegła → 0.85 rbh/mb | Bruzda beton → 2.0 rbh/mb
+  Układanie kabla YDYp p/t → 0.13–0.28 rbh/m | Bruzda/kucie cegła → 0.85 rbh/m | Bruzda beton → 2.0 rbh/m
   Złożony montaż (rozdzielnica, szafa) → 3.0–14.0 rbh/szt | Minimum → 0.05 rbh
 
 REFERENCJA NAKŁADÓW ROBOCIZNY 2026 (rbh/jedn.):

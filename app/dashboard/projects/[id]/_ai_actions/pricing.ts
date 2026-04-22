@@ -1512,7 +1512,7 @@ export async function repriceSingleItem(
       }
     }
 
-    // \u2500\u2500 AI repricing \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+    // ── AI repricing ────────────────────────────────────────────────────────
     const { data: userProfile } = await supabase
       .from("profiles")
       .select("investment_context, hourly_rate")
@@ -1531,6 +1531,51 @@ export async function repriceSingleItem(
       ? Math.round((rateResult.laborRate / rateResult.regionModifier) * 100) / 100
       : rateResult.laborRate;
     const rateSource: RateSource = "manual";
+
+    // ── L2.5 Name-Based KNR Lookup (pre-AI) ─────────────────────────────
+    // v2.5: Before calling Gemini for single-item repricing, try fuzzy name match
+    // against local KNR JSON files. Skip when user provided extraContext
+    // (signaling they want AI to consider that context) or overrideUnit.
+    if (!opts.extraContext && !opts.overrideUnit) {
+      const l25Repr = lookupKnrByName(item.name);
+      if (l25Repr) {
+        const cableModR = getCableComplexityModifier(item.name);
+        const surfaceModR = getSurfaceModifier(item.name, "");
+        const ceilingModR = getCeilingModifier(item.name, "");
+        const heightModR = getHeightModifier(item.name, "");
+        const localModR = clampLocalModifiers(cableModR, surfaceModR, ceilingModR, heightModR);
+        const scaledNormR = scaleLaborNorm(l25Repr.laborNorm, l25Repr.unit, effectiveUnit);
+        const isConnR = CONNECTION_RE.test(normalizePlName(item.name));
+        const isHeavyR = isConnR && HEAVY_APPLIANCE_RE.test(normalizePlName(item.name) + " " + item.name);
+        const normFloorR = isHeavyR ? Math.max(scaledNormR, HEAVY_CONNECTION_MIN_NORM)
+          : isConnR ? Math.max(scaledNormR, CONNECTION_MIN_NORM)
+          : scaledNormR;
+        const mFactorR = getModernizationFactor(classifyIntent(item.name).intent,
+          isCableItem(item.name)
+            ? (() => { const _m = item.name.match(CABLE_SECTION_RE); return _m ? parseFloat(_m[2].replace(",", ".")) : null; })()
+            : null);
+        const wymianaActiveR = WYMIANA_RE.test(item.name) || DEMONTAZ_MONTAZ_RE.test(item.name);
+        const wymianaFactorR = wymianaActiveR ? WYMIANA_FACTOR : 1.0;
+        const sugLabRBase = Math.round(normFloorR * mFactorR * localModR * baseRateForCalc * 100) / 100;
+        const sugLabR = Math.round(sugLabRBase * wymianaFactorR * 100) / 100;
+        const rawL25ReprEst: AiPriceEstimate = {
+          itemId: item.id, name: item.name, unit: item.unit, quantity: item.quantity,
+          currentMaterial: item.final_material_price ?? item.material_price ?? 0,
+          currentLabor: item.final_labor_price ?? item.labor_price ?? 0,
+          suggestedMaterial: 0, // material handled separately via benchmarks
+          suggestedLabor: sugLabR,
+          confidence: "medium" as const,
+          note: `L2.5 Name-match: ${item.name} → ${l25Repr.code} (${normFloorR.toFixed(4)} rbh/${effectiveUnit} × ${mFactorR.toFixed(2)} × ${localModR.toFixed(2)} × ${baseRateForCalc} PLN/h)`,
+          knrCode: l25Repr.code,
+          knrSource: isOfficialKnr(l25Repr.code) ? "official" : "es-synthetic",
+          laborNorm: normFloorR,
+          isAmbiguous: false,
+          trace: `L2.5 reprice pre-AI match: ${l25Repr.code}`,
+        };
+        const processedReprL25 = applyPostProcessPipeline(rawL25ReprEst, baseRateForCalc, 1.0);
+        return { success: true, estimate: processedReprL25 };
+      }
+    }
 
     const regionName = (project.regions as { name: string; price_modifier: number } | null)?.name || "Polska";
     const priceModifier = (project.regions as { name: string; price_modifier: number } | null)?.price_modifier || 1.0;
@@ -1857,6 +1902,62 @@ export async function triggerL3Estimation(
       : rateResult.laborRate;
     const rateSource: RateSource = "manual";
     const knrInstruction = buildRateSourceInstruction(rateSource, baseRateForCalc);
+
+    // ── L2.5 Name-Based KNR Lookup (pre-AI) ─────────────────────────────
+    // v2.5: Before calling Gemini for single-item L3 pricing, try fuzzy name match
+    // against local KNR JSON files. This returns a canonical 2026 norm instantly
+    // and avoids AI hallucination for common items (gniazdo, MCB, kabel, oprawa).
+    // Only skip if user explicitly wants full AI context (not applicable here —
+    // triggerL3 is always a simple position name without extra context).
+    const l25Trigger = lookupKnrByName(positionName);
+    if (l25Trigger) {
+      // Build full modifier cascade (consistent with L2 HIT and L2.5 in estimate batch)
+      const ctxStr = voivodeship ? `region:${voivodeship}` : "";
+      const cableModT = getCableComplexityModifier(positionName);
+      const surfaceModT = getSurfaceModifier(positionName, ctxStr);
+      const ceilingModT = getCeilingModifier(positionName, ctxStr);
+      const heightModT = getHeightModifier(positionName, ctxStr);
+      const localModT = clampLocalModifiers(cableModT, surfaceModT, ceilingModT, heightModT);
+      const scaledNormT = scaleLaborNorm(l25Trigger.laborNorm, l25Trigger.unit, unit);
+      const isConnT = CONNECTION_RE.test(normalizePlName(positionName));
+      const isHeavyT = isConnT && HEAVY_APPLIANCE_RE.test(normalizePlName(positionName) + " " + positionName);
+      const normFloorT = isHeavyT ? Math.max(scaledNormT, HEAVY_CONNECTION_MIN_NORM)
+        : isConnT ? Math.max(scaledNormT, CONNECTION_MIN_NORM)
+        : scaledNormT;
+      const mFactorT = getModernizationFactor(classifyIntent(positionName).intent,
+        isCableItem(positionName)
+          ? (() => { const _m = positionName.match(CABLE_SECTION_RE); return _m ? parseFloat(_m[2].replace(",", ".")) : null; })()
+          : null);
+      const wymianaActiveT = WYMIANA_RE.test(positionName) || DEMONTAZ_MONTAZ_RE.test(positionName);
+      const wymianaFactorT = wymianaActiveT ? WYMIANA_FACTOR : 1.0;
+      const sugLabTBase = Math.round(normFloorT * mFactorT * localModT * baseRateForCalc * 100) / 100;
+      const sugLabT = Math.round(sugLabTBase * wymianaFactorT * 100) / 100;
+      const knrCodeT = l25Trigger.code;
+      // Run through sanity + guards for consistency with full pipeline
+      const rawL25Est: AiPriceEstimate = {
+        itemId, name: positionName, unit, quantity: 1,
+        currentMaterial: 0, currentLabor: 0,
+        suggestedMaterial: 0, // material handled by separate benchmark path
+        suggestedLabor: sugLabT,
+        confidence: "medium" as const,
+        note: `L2.5 Name-match: ${positionName} → ${knrCodeT} (${normFloorT.toFixed(4)} rbh/${unit} × ${mFactorT.toFixed(2)} × ${localModT.toFixed(2)} × ${baseRateForCalc} PLN/h)`,
+        knrCode: knrCodeT,
+        knrSource: isOfficialKnr(knrCodeT) ? "official" : "es-synthetic",
+        laborNorm: normFloorT,
+        isAmbiguous: false,
+        trace: `L2.5 triggerL3 pre-AI match: ${knrCodeT}`,
+      };
+      const processedT = applyPostProcessPipeline(rawL25Est, baseRateForCalc, 1.0);
+      return {
+        success: true,
+        price_labor: processedT.suggestedLabor,
+        price_material: 0,
+        justification: processedT.note ?? `L2.5: ${knrCodeT}`,
+        match_trace: processedT.trace ?? `L2.5 Name Lookup → ${knrCodeT}`,
+        knr_code: processedT.knrCode ?? knrCodeT,
+        labor_norm: processedT.laborNorm ?? normFloorT,
+      };
+    }
 
     // v10.5: Inject real material price references into L3 prompt
     const l3PriceRef = buildBenchmarkPromptContext();
