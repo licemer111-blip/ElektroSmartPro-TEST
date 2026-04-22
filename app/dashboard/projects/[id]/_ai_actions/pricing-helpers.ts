@@ -360,6 +360,14 @@ const SANITY_MAX_RBH: Record<string, number> = {
 // (e.g. 15 rbh for a random "pkt") while still allowing legitimate edge cases.
 const SANITY_DEFAULT_MAX_RBH = 8.0;
 
+// v2.6 Sanity Calibration (Apr 2026): specific caps for modular aparatura on DIN rail.
+// These catch AI hallucinations like "RCD 40A 2P: 5.0 rbh/szt" (correct: 0.25 rbh/szt).
+// Match names targeting aparatura szynowa — MCB/RCD/RCBO/SPD/rozłącznik/wyłącznik modułowy.
+// Rozdzielnica (whole enclosure) is NOT here — handled by PANEL_RE → 24 rbh cap.
+const MODULAR_APPARATUS_RE = /\b(?:MCB|RCD|RCBO|SPD|ogranicznik\s+przepi|wyłącznik\s+(?:nadpr|różnic|roznic|izolac|główny)|rozłącznik\s+(?:izolac|bezpiec)|r[oó]żnicowoprąd|roznicowoprad|aparatura\s+modul|szyna\s+DIN|złączka\s+szynow|zlaczk[ai]\s+szyn)\b/i;
+/** Max labor norm for single modular apparatus mounting on DIN rail (per 1 szt). */
+const MODULAR_APPARATUS_MAX_RBH = 0.8;
+
 export function applySanityCheck(est: AiPriceEstimate, laborRate: number): AiPriceEstimate {
   // Skip ambiguous/unmatched/L1-catalog items — their prices are user-verified
   if (est.isAmbiguous || est.trace === "unmatched" || est.knrSource === "catalog-l1") return est;
@@ -380,6 +388,12 @@ export function applySanityCheck(est: AiPriceEstimate, laborRate: number): AiPri
   } else {
     maxRbh = SANITY_MAX_RBH[unit] ?? SANITY_DEFAULT_MAX_RBH;
     if (unit === "szt" && PANEL_RE.test(est.name)) maxRbh = 24.0;
+    // v2.6: narrow cap for modular DIN-rail apparatus (single MCB/RCD/SPD install)
+    // Overrides the generic `szt`=12.0 cap to catch AI hallucinations (5 rbh for RCD).
+    // Applied ONLY when not already panel (PANEL_RE wins to keep rozdzielnica cap=24).
+    else if (unit === "szt" && MODULAR_APPARATUS_RE.test(est.name)) {
+      maxRbh = MODULAR_APPARATUS_MAX_RBH;
+    }
   }
 
   // Derive implied norm: either stored laborNorm or back-calculated from price
@@ -397,6 +411,29 @@ export function applySanityCheck(est: AiPriceEstimate, laborRate: number): AiPri
       note: `⚠️ Weryfikacja: norma ${impliedNorm.toFixed(2)} rbh/${unit} przekracza próg ${maxRbh.toFixed(2)} rbh/${unit}. Sprawdź ręcznie.`,
       trace: `${est.trace} → SANITY_FAIL (${impliedNorm.toFixed(2)} > ${maxRbh.toFixed(2)} rbh/${unit})`,
     };
+  }
+
+  // v2.6 Implied-rate cap: catches L3 AI hallucinations where labor_price has no
+  // relation to labor_norm × baseRate. Example: AI returned labor=1320 PLN for
+  // "Rozdzielnica 24-mod" with norm=2.5 rbh and project baseRate=120 PLN/h.
+  // Implied rate = 1320/2.5 = 528 PLN/h (4.4× baseRate) — clearly invented.
+  // Legitimate M-Factor + modifiers (cable/surface/ceiling/height) combined cap
+  // at ~1.8× baseRate (M_STD 0.85 × localMod 1.5 × wymiana 1.5 ≈ 1.9). We use
+  // 2.5× as DETECTION threshold (wide margin) and 1.8× as CLAMP target.
+  if (laborRate > 0 && impliedNorm > 0 && est.suggestedLabor > 0) {
+    const impliedRate = est.suggestedLabor / impliedNorm;
+    const rateDetectionCeiling = laborRate * 2.5;
+    if (impliedRate > rateDetectionCeiling) {
+      const clampRate = laborRate * 1.8;
+      const clampedLabor = Math.round(impliedNorm * clampRate * 100) / 100;
+      return {
+        ...est,
+        suggestedLabor: clampedLabor,
+        confidence: "low" as const,
+        note: `⚠️ Weryfikacja: implied rate ${impliedRate.toFixed(0)} PLN/h (norm=${impliedNorm.toFixed(2)} rbh × ${clampRate.toFixed(0)} PLN/h) przekracza ${rateDetectionCeiling.toFixed(0)} PLN/h (baseRate×2.5). Obnizono do ${clampedLabor.toFixed(2)} PLN.`,
+        trace: `${est.trace} → RATE_CAP (${impliedRate.toFixed(0)} > ${rateDetectionCeiling.toFixed(0)} PLN/h → clamp ×1.8 = ${clampedLabor.toFixed(2)}PLN)`,
+      };
+    }
   }
 
   // Unit-mismatch detection: absurdly high unit price suggests AI returned a package/box price

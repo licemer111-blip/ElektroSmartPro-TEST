@@ -27,7 +27,7 @@ import {
   resolveImportedRows,
   type MatchResult,
 } from "@/lib/services/matching-engine";
-import { buildLocalKnrContext } from "@/lib/knr-local-context";
+import { buildLocalKnrContext, lookupKnrByName } from "@/lib/knr-local-context";
 import { scaleLaborNorm, getUnitBaseSize } from "@/lib/labor-time";
 import { getPricingCacheName, CACHE_MODEL_ID } from "@/lib/services/ai/gemini-context-cache";
 import {
@@ -868,12 +868,81 @@ export async function estimatePricesWithAI(
         };
       }
 
-      // ── L2 MISS: not in personal catalog or ES-Dictionary → unmatched ─────
-      // Connection/commissioning items MUST still get their PLN floor even on miss,
-      // otherwise they’d be returned as suggestedLabor=0 with note="kliknij Wyceń".
+      // ── L2 MISS: not in personal catalog or ES-Dictionary → try L2.5 name-lookup ─
+      // v2.5 Name-Lookup Fallback: Before falling through to L3 AI (which frequently
+      // hallucinates KNR codes and norms), try local fuzzy name-matching against the
+      // 35+ KNR JSON files via lookupKnrByName(). This catches the common failure mode
+      // where Quick-Estimate AI generates wrong/fake KNR codes (e.g. "KNR 5-04 0501-01"
+      // — an outdated series that doesn't exist in knr_norms) but the item name clearly
+      // maps to a known norm (e.g. "Gniazdo pojedyncze" → KNR 5-08 0401, 0.68 rbh/szt).
+      // Without this layer, such items went to L3 AI which hallucinated labor_norm=0.33
+      // rbh (wrong) instead of the correct 0.68 rbh.
       const normalizedItemName_miss = normalizePlName(item.name);
       const isConnMiss = CONNECTION_RE.test(normalizedItemName_miss);
       const isHeavyConnMiss = isConnMiss && HEAVY_APPLIANCE_RE.test(normalizedItemName_miss + " " + item.name);
+
+      const l25Match = lookupKnrByName(item.name);
+      if (l25Match) {
+        // Re-compute context + modifiers (same cascade as L2 HIT for pricing consistency)
+        const itemWithCtx25 = item as typeof item & { section?: string | null; description?: string | null };
+        const itemSectionCtx25 = `${itemWithCtx25.section ?? ""} ${itemWithCtx25.description ?? ""}`.trim();
+        const globalCtx25 = itemSectionCtx25 || projectFallback;
+        const cableMod25 = getCableComplexityModifier(item.name);
+        const autoSurfaceMod25 = getSurfaceModifier(item.name, globalCtx25);
+        let surfaceMod25 = autoSurfaceMod25 * (autoSurfaceMod25 > 1.0 ? surfaceExtraMod : 1.0);
+        if (isZelbet(item.name) || isZelbet(globalCtx25)) surfaceMod25 = Math.max(surfaceMod25, 2.25);
+        else if (/silk[aąei]|silce/i.test(item.name + " " + globalCtx25)) surfaceMod25 = Math.max(surfaceMod25, 1.75);
+        else if (/\bbeton/i.test(item.name + " " + globalCtx25)) surfaceMod25 = Math.max(surfaceMod25, 1.50);
+        const ceilingMod25 = getCeilingModifier(item.name, globalCtx25);
+        const heightMod25 = getHeightModifier(item.name, globalCtx25);
+        // Unit scaling: convert dict norm (per dict unit) to item unit (per 1 item unit)
+        const itemUnitForScale25 = (item.unit ?? originalItem?.unit ?? "");
+        const scaledNorm25 = scaleLaborNorm(l25Match.laborNorm, l25Match.unit, itemUnitForScale25);
+        // Apply connection floor (heavy appliance or general commissioning)
+        const normWithFloor25 = isHeavyConnMiss
+          ? Math.max(scaledNorm25, HEAVY_CONNECTION_MIN_NORM)
+          : isConnMiss
+            ? Math.max(scaledNorm25, CONNECTION_MIN_NORM)
+            : scaledNorm25;
+        const l25CableSection = isCableItem(item.name)
+          ? (() => { const _m = item.name.match(CABLE_SECTION_RE); return _m ? parseFloat(_m[2].replace(",", ".")) : null; })()
+          : null;
+        const mFactor25 = getModernizationFactor(classifyIntent(item.name).intent, l25CableSection);
+        const mLabel25 = getMFactorLabel(mFactor25);
+        const localMod25 = clampLocalModifiers(cableMod25, surfaceMod25, ceilingMod25, heightMod25);
+        const wymianaActive25 = WYMIANA_RE.test(item.name) || DEMONTAZ_MONTAZ_RE.test(item.name);
+        const wymianaFactor25 = wymianaActive25 ? WYMIANA_FACTOR : 1.0;
+        const sugLab25Base = Math.round(normWithFloor25 * mFactor25 * localMod25 * baseRateForCalc * globalLaborMod * 100) / 100;
+        const sugLab25 = Math.round(sugLab25Base * wymianaFactor25 * 100) / 100;
+        const laborHoursTotal25 = baseRateForCalc > 0
+          ? Math.round(sugLab25 / baseRateForCalc * (item.quantity ?? 1) * 1000) / 1000
+          : null;
+        const regionHint25 = rateResult.regionModifier !== 1.0
+          ? ` → ×${rateResult.regionModifier.toFixed(2)}(${projectRegionName ?? ""}) → ${(sugLab25 * rateResult.regionModifier).toFixed(2)}PLN`
+          : "";
+        return {
+          itemId: item.id,
+          name: item.name,
+          unit: originalItem?.unit ?? item.unit,
+          quantity: item.quantity,
+          currentMaterial: item.material_price || 0,
+          currentLabor: item.labor_price || 0,
+          suggestedMaterial: 0, // L2.5 lookup has no material price — Task3 mat-fallback will supply
+          suggestedLabor: mode === "material" ? (item.labor_price || 0) : sugLab25,
+          laborHoursTotal: laborHoursTotal25,
+          regionModifier: rateResult.regionModifier,
+          confidence: "medium" as const,
+          note: `L2.5 Name-match: "${item.name}" → ${l25Match.code} | norma: ${normWithFloor25.toFixed(4)} rbh/${itemUnitForScale25} × ${mFactor25.toFixed(2)}[M:${mLabel25}] × ${localMod25.toFixed(2)}(local) × ${baseRateForCalc.toFixed(1)}PLN/h = ${sugLab25.toFixed(2)} PLN${regionHint25}`,
+          knrCode: l25Match.code,
+          knrSource: isOfficialKnr(l25Match.code) ? ("official" as const) : ("es-synthetic" as const),
+          laborNorm: normWithFloor25,
+          suggestedNorm: normWithFloor25,
+          isAmbiguous: false,
+          trace: `L2.5 Name Lookup: "${item.name}" → ${l25Match.code} | ${normWithFloor25.toFixed(4)}rbh × ${mFactor25.toFixed(2)}[M:${mLabel25}] × ${localMod25.toFixed(2)}(local) × ${baseRateForCalc.toFixed(1)}PLN/h = ${sugLab25.toFixed(2)}PLN`,
+        };
+      }
+
+      // L2.5 also missed → existing connection floor (or full L3 AI fallback for non-connection)
       const missMFactor = getModernizationFactor(isHeavyConnMiss ? "HEAVY_CONNECTION" : "STANDARD_ACTION");
       const connFloorMiss = isConnMiss
         ? Math.round(

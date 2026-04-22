@@ -174,15 +174,69 @@ export async function generateQuickEstimateWithAI(params: {
 - Zakres prac: ${zakresList}${cfLines.length > 0 ? "\n" + cfLines.join("\n") : ""}${expertBlock}
 
 ZASADY GENEROWANIA (KRYTYCZNE):
-1. KNR KODY OBOWIAZKOWE: Podaj kod KNR w polu knr_code — NIE w nazwie pozycji!
-   Format pola knr_code: "KNR 5-04 0101-02" lub "KNR 5-08 0401-01" itp.
-   JESLI nie znasz kodu dla danej pozycji (PA, RCU, BMS, KNX, naglosnienie) — podaj null w knr_code.
+1. KNR KODY — UZYWAJ TYLKO SERII KNR 5-08 (2026):
+   ⛔ ZAKAZ: seria KNR 5-04 (stara, 2015) — NIE istnieje w naszej bazie norm.
+   ⛔ ZAKAZ: wymyslanie sufiksow typu "-01/-02/-03" jesli nie jestes PEWIEN kodu.
+   ✅ JESLI nie jestes pewien dokladnego kodu — podaj null w knr_code (silnik znajdzie norme po nazwie pozycji automatycznie).
+   ✅ UZYWAJ PROSTEJ FORMY: "KNR 5-08 0401" (bez sufiksu) zamiast "KNR 5-04 0501-01".
+
+   KANONICZNE KODY KNR 5-08 (2026) — UZYWAJ TYCH:
+   — Gniazda / wylaczniki / oprawy:
+     • KNR 5-08 0401 → Gniazdo pojedyncze 230V/16A Schuko p/t
+     • KNR 5-08 0402 → Gniazdo podwojne 230V/16A (2xSchuko) p/t
+     • KNR 5-08 0403 → Gniazdo potrojne 230V/16A (3xSchuko) p/t
+     • KNR 5-08 0405 → Gniazdo 230V IP44/IP54 (lazienka, zewn.)
+     • KNR 5-08 0501 → Oprawa sufitowa (plafon/panel LED)
+     • KNR 5-08 0502 → Oprawa downlight LED (wpuszczana w sufit)
+     • KNR 5-08 0701 → Oprawa zewnetrzna fasadowa LED IP65
+   — Wylaczniki oswietlenia (uzyj KNR 5-08 0501 z opisem "lacznik"):
+     • lacznik jednobiegunowy p/t — norma w bazie
+   — Kable / rury / bruzda:
+     • KNR 5-08 0201 → YDYp 3x1,5 mm2 p/t w bruzdzie (0.13 rbh/m)
+     • KNR 5-08 0202 → YDYp 3x2,5 mm2 p/t w bruzdzie (0.16 rbh/m)
+     • KNR 5-08 0101 → Bruzdowanie sciany cegla/silikat (0.85 rbh/m)
+     • KNR 5-08 0301 → Puszka p/t PCV fi60/68
+     • KNR 5-08 0303 → Puszka hermetyczna IP55 n/t
+   — Rozdzielnica / aparatura modulowa:
+     • KNR 5-08 0201 → MCB 1P na szynie TH35 (0.15 rbh/szt)
+     • KNR 5-08 0202 → MCB 2P na szynie TH35 (0.20 rbh/szt)
+     • KNR 5-08 0205 → Wylacznik glowny / rozlacznik izolacyjny (0.35 rbh/szt)
+     • KNR 5-08 0211 → RCD 2P na szynie TH35 (0.25 rbh/szt)
+     • KNR 5-08 0212 → RCD 4P na szynie TH35 (0.30 rbh/szt)
+     • KNR 5-08 0221 → RCBO 1P+N (0.20 rbh/szt)
+     • KNR 5-08 0231 → SPD T1/T2 ogranicznik przepiec (0.40 rbh/szt)
+     • KNR 5-08 0301 → Zlaczka szynowa ZUG (0.10 rbh/szt)
+   — Teletechnika / LAN / CCTV / SSWiN:
+     • KNR 5-09 0101 → UTP Cat5e (0.08 rbh/m) | KNR 5-09 0106 → gniazdo RJ45 podwojne
+     • KNR 5-09 0201 → kamera IP dome | KNR 5-09 0202 → kamera IP bullet
+     • KNR 5-09 0301 → centrala SSWiN | KNR 5-09 0303 → czujka PIR
+   — Pomiary (KNR 4-03 lub KNR 5-08 91xx):
+     • KNR 5-08 9101 → pomiar rezystancji izolacji | 9102 → ciaglosc PE
+     • KNR 5-08 9103 → impedancja petli zwarcia | 9104 → pomiar RCD
+     • KNR 5-08 9105 → rezystancja uziemienia | 9305 → instalacja odgromowa
+
+   Przyklady prawidlowe:
+   • name="Gniazdo 230V p/t pojedyncze",  knr_code="KNR 5-08 0401"
+   • name="Gniazdo 230V p/t podwojne",    knr_code="KNR 5-08 0402"
+   • name="Gniazdo 230V IP44 bryzgoszczelne", knr_code="KNR 5-08 0405"
+   • name="Przewod YDYp 3x2,5mm2",        knr_code="KNR 5-08 0202"
+   • name="Bruzda w cegle",               knr_code="KNR 5-08 0101"
+   • name="Wylacznik roznicowopradowy RCD 40A/30mA 2P", knr_code="KNR 5-08 0211"
+   • name="Rozdzielnica p/t 24-modulowa", knr_code=null  (silnik znajdzie po nazwie)
    Nazwy pozycji MUSZA byc CZYSTE — bez zadnych kodow, nawiasow ani dopisksow technicznych.
-   Przyklady prawidlowe: name="Gniazdo wtyczkowe 230V", knr_code="KNR 5-04 0201-01".
-2. ZAKRES KOMPLETNY: Wygeneruj pozycje dla WSZYSTKICH wybranych zakresow prac (${zakresList}).
-3. ILOSCI REALISTYCZNE: Oblicz ilosci na podstawie powierzchni ${params.areaM2}m2 i liczby pomieszczen ${params.roomCount}.
+
+2. SANITY NORM DLA OSPRZETU (samokontrola):
+   • Gniazdo podwojne > pojedyncze (norma p-dwojnego ZAWSZE wyzsza niz pojedynczego).
+   • Gniazdo IP44 > gniazdo zwykle p/t (o ~30%).
+   • RCD/MCB: norma montazu APARATU na szynie 0.15-0.40 rbh/szt (NIE 5 rbh!).
+   • Rozdzielnica 24-modulowa p/t: pelny montaz aparatury ~3.0 rbh/szt (nie 2.5, nie 1320 PLN).
+
+3. ZAKRES KOMPLETNY: Wygeneruj pozycje dla WSZYSTKICH wybranych zakresow prac (${zakresList}).
+
+4. ILOSCI REALISTYCZNE: Oblicz ilosci na podstawie powierzchni ${params.areaM2}m2 i liczby pomieszczen ${params.roomCount}.
    Kontekst wysokosci/specjalistow: height_mult=${knrHeightMult} expert_mult=${expertRbhMult} (stosowany przez silnik KNR automatycznie).
-4. TYLKO POZYCJE I ILOSCI: NIE generuj cen — zostan wyliczone przez silnik KNR 2026 z baza ${params.areaM2 > 0 ? "regionalna" : "krajowa"}.`;
+
+5. TYLKO POZYCJE I ILOSCI: NIE generuj cen — zostan wyliczone przez silnik KNR 2026 z baza ${params.areaM2 > 0 ? "regionalna" : "krajowa"}.`;
 
     const kbContext = await fetchQuickEstimateKbContext();
     const basePrompt = await buildDynamicSystemPrompt("quick-estimate");
