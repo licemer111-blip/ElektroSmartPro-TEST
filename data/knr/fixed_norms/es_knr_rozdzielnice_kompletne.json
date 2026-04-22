@@ -1,0 +1,197 @@
+[
+  {
+    "catalog_code": "ES-KNR-ROZ",
+    "table_number": "FULL",
+    "column_number": "12PT",
+    "description": "Rozdzielnica mieszkaniowa podtynkowa 12-modułowa — KOMPLET (obudowa p/t + aparatura modułowa standard ~6 MCB + 1 RCD + SPD T2 + szyny PE/N + podłączenia + testy + oznakowanie) — 1 szt pełnego montażu",
+    "unit": "szt",
+    "labor_norm": 6.0,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice-kompletne",
+    "synonyms": [
+      "rozdzielnica 12 mod pt",
+      "rozdzielnica mieszkaniowa 12 modul podtynkowa",
+      "rozdzielnica 12-modulowa pt",
+      "tablica 12 mod pt",
+      "tablica podtynkowa 12 modul",
+      "rozdzielnica domowa 12 mod",
+      "rozdzielnia 12 mod pt",
+      "12 mod pt komplet"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-ROZ",
+    "table_number": "FULL",
+    "column_number": "24PT",
+    "description": "Rozdzielnica mieszkaniowa podtynkowa 24-modułowa — KOMPLET (obudowa p/t + aparatura modułowa standard ~12 MCB + 2 RCD + SPD T2 + szyny PE/N + okablowanie + testy + oznakowanie + dokumentacja) — 1 szt pełnego montażu",
+    "unit": "szt",
+    "labor_norm": 10.0,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice-kompletne",
+    "synonyms": [
+      "rozdzielnica 24 mod pt",
+      "rozdzielnica 24 modulowa podtynkowa",
+      "rozdzielnica mieszkaniowa 24",
+      "tablica 24 mod pt",
+      "tablica podtynkowa 24 modul",
+      "rozdzielnia 24 mod pt",
+      "rozdzielnica domowa 24 mod",
+      "24-modulowa rozdzielnica pt",
+      "24 mod pt komplet",
+      "szafka elektryczna 24 pt"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-ROZ",
+    "table_number": "FULL",
+    "column_number": "36PT",
+    "description": "Rozdzielnica mieszkaniowa/biurowa podtynkowa 36-modułowa — KOMPLET (obudowa p/t + aparatura ~18 MCB + 3 RCD + SPD T2 + wyłącznik główny + szyny + okablowanie + testy + dokumentacja) — 1 szt pełnego montażu",
+    "unit": "szt",
+    "labor_norm": 14.0,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice-kompletne",
+    "synonyms": [
+      "rozdzielnica 36 mod pt",
+      "rozdzielnica 36 modulowa podtynkowa",
+      "rozdzielnica domowa 36",
+      "tablica 36 mod pt",
+      "tablica podtynkowa 36 modul",
+      "rozdzielnia 36 mod pt",
+      "36-modulowa rozdzielnica pt",
+      "36 mod pt komplet"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-ROZ",
+    "table_number": "FULL",
+    "column_number": "48PT",
+    "description": "Rozdzielnica mieszkaniowa 3-fazowa podtynkowa 48-modułowa — KOMPLET (obudowa p/t + ~24 MCB + 4 RCD + SPD T1+T2 + wyłącznik główny 3P + szyny zbiorcze + okablowanie + testy + dokumentacja + schemat) — 1 szt pełnego montażu",
+    "unit": "szt",
+    "labor_norm": 18.0,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice-kompletne",
+    "synonyms": [
+      "rozdzielnica 48 mod pt",
+      "rozdzielnica 48 modulowa podtynkowa",
+      "rozdzielnica domowa 48",
+      "tablica 48 mod pt",
+      "tablica podtynkowa 48 modul",
+      "rozdzielnia 48 mod pt",
+      "rozdzielnica 3-fazowa pt",
+      "48-modulowa rozdzielnica pt",
+      "48 mod pt komplet"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-ROZ",
+    "table_number": "FULL",
+    "column_number": "72PT",
+    "description": "Rozdzielnica biurowa/piętrowa podtynkowa 72-modułowa — KOMPLET (obudowa 3-rzędowa p/t + ~36 MCB + 6 RCD + SPD T1+T2 + wyłącznik główny MCCB + szyny + okablowanie wewnętrzne + testy + selektywność + dokumentacja) — 1 szt pełnego montażu",
+    "unit": "szt",
+    "labor_norm": 25.0,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice-kompletne",
+    "synonyms": [
+      "rozdzielnica 72 mod pt",
+      "rozdzielnica 72 modulowa podtynkowa",
+      "rozdzielnica pietrowa 72",
+      "rozdzielnica biurowa 72",
+      "tablica 72 mod pt",
+      "tablica podtynkowa 72 modul",
+      "rozdzielnia 72 mod pt",
+      "72-modulowa rozdzielnica pt"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-ROZ",
+    "table_number": "FULL",
+    "column_number": "96PT",
+    "description": "Rozdzielnica główna / biurowa podtynkowa 96-modułowa — KOMPLET (obudowa 4-rzędowa p/t + ~48 MCB + 8 RCD + SPD Typ1+2 + MCCB główny 100-160A + szyny zbiorcze Cu + okablowanie + licznik + testy + selektywność + dokumentacja DTR) — 1 szt pełnego montażu",
+    "unit": "szt",
+    "labor_norm": 32.0,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice-kompletne",
+    "synonyms": [
+      "rozdzielnica 96 mod pt",
+      "rozdzielnica 96 modulowa podtynkowa",
+      "rozdzielnica glowna 96",
+      "rozdzielnica biurowa 96",
+      "tablica 96 mod pt",
+      "tablica podtynkowa 96 modul",
+      "rozdzielnia 96 mod pt",
+      "96-modulowa rozdzielnica pt"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-ROZ",
+    "table_number": "FULL",
+    "column_number": "12NT",
+    "description": "Rozdzielnica mieszkaniowa natynkowa 12-modułowa — KOMPLET (obudowa n/t + aparatura ~6 MCB + 1 RCD + SPD T2 + szyny + podłączenia + testy) — 1 szt pełnego montażu",
+    "unit": "szt",
+    "labor_norm": 4.5,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice-kompletne",
+    "synonyms": [
+      "rozdzielnica 12 mod nt",
+      "rozdzielnica 12 modulowa natynkowa",
+      "tablica 12 mod nt",
+      "tablica natynkowa 12 modul",
+      "rozdzielnia 12 mod nt",
+      "12-modulowa rozdzielnica nt"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-ROZ",
+    "table_number": "FULL",
+    "column_number": "24NT",
+    "description": "Rozdzielnica mieszkaniowa natynkowa 24-modułowa — KOMPLET (obudowa n/t + ~12 MCB + 2 RCD + SPD T2 + szyny PE/N + okablowanie + testy + oznakowanie) — 1 szt pełnego montażu",
+    "unit": "szt",
+    "labor_norm": 7.5,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice-kompletne",
+    "synonyms": [
+      "rozdzielnica 24 mod nt",
+      "rozdzielnica 24 modulowa natynkowa",
+      "tablica 24 mod nt",
+      "tablica natynkowa 24 modul",
+      "rozdzielnia 24 mod nt",
+      "24-modulowa rozdzielnica nt"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-ROZ",
+    "table_number": "FULL",
+    "column_number": "36NT",
+    "description": "Rozdzielnica natynkowa 36-modułowa — KOMPLET (obudowa n/t + ~18 MCB + 3 RCD + SPD T2 + wyłącznik główny + szyny + okablowanie + testy + dokumentacja) — 1 szt pełnego montażu",
+    "unit": "szt",
+    "labor_norm": 11.0,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice-kompletne",
+    "synonyms": [
+      "rozdzielnica 36 mod nt",
+      "rozdzielnica 36 modulowa natynkowa",
+      "tablica 36 mod nt",
+      "tablica natynkowa 36 modul",
+      "rozdzielnia 36 mod nt",
+      "36-modulowa rozdzielnica nt"
+    ]
+  },
+  {
+    "catalog_code": "ES-KNR-ROZ",
+    "table_number": "FULL",
+    "column_number": "48NT",
+    "description": "Rozdzielnica 3-fazowa natynkowa 48-modułowa — KOMPLET (obudowa n/t + ~24 MCB + 4 RCD + SPD T1+T2 + wyłącznik główny 3P + szyny + okablowanie + testy + schemat) — 1 szt pełnego montażu",
+    "unit": "szt",
+    "labor_norm": 15.0,
+    "is_industrial": false,
+    "knr_category": "rozdzielnice-kompletne",
+    "synonyms": [
+      "rozdzielnica 48 mod nt",
+      "rozdzielnica 48 modulowa natynkowa",
+      "tablica 48 mod nt",
+      "tablica natynkowa 48 modul",
+      "rozdzielnia 48 mod nt",
+      "48-modulowa rozdzielnica nt"
+    ]
+  }
+]

@@ -13,6 +13,7 @@ import zasilanie from "@/data/knr/fixed_norms/es_knr_zasilanie_wlz_szr.json";
 import teletechnika from "@/data/knr/fixed_norms/es_knr_teletechnika_kompletna.json";
 import odgromowka from "@/data/knr/fixed_norms/es_knr_odgromowka_uziemienie.json";
 import trasyRozszerzone from "@/data/knr/fixed_norms/es_knr_trasy_rozszerzone_2026.json";
+import rozdzielniceKompletne from "@/data/knr/fixed_norms/es_knr_rozdzielnice_kompletne.json";
 // Cluster 9–12: Ultra-Max 2.0 — Industrial & Green Energy sources
 import fotowoltaika from "@/data/knr/fixed_norms/es_knr_fotowoltaika_kompletna.json";
 import halePrzemysl from "@/data/knr/fixed_norms/es_knr_instalacje_przemyslowe_hale.json";
@@ -49,6 +50,7 @@ const CORE_KNR_SOURCES: unknown[] = [
   teletechnika,
   odgromowka,
   trasyRozszerzone,
+  rozdzielniceKompletne, // v2.7: composite rozdzielnica norms (12/24/36/48/72/96 mod p/t + n/t)
   // Cluster 9–12 (Ultra-Max 2.0)
   fotowoltaika,
   halePrzemysl,
