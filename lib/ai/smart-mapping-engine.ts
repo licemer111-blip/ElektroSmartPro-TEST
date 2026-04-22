@@ -164,12 +164,12 @@ const PUNKT_RESIDENTIAL: AssemblyTemplate = {
   sector: "RESIDENTIAL",
   description: "Bruzda w cegle/betonie + kabel YDYp 3×2.5mm² (4mb) + puszka p/t + montaż urządzenia (~65 PLN mat.)",
   items: [
-    { label: "Bruzdowanie ściany (cegła/beton)", knrCode: "KNR 4-01 0101-02", unit: "mb",  qtyMultiplier: 1.5, rbhPerUnit: 0.10, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Kabel YDYp 3×2.5mm²",              knrCode: "KNR 5-08 0101-02", unit: "mb",  qtyMultiplier: 4.0, rbhPerUnit: 0.16, isLabor: false, materialPricePerUnit: 7.00 },
-    { label: "Układanie kabla p/t",               knrCode: "KNR 5-08 0201-01", unit: "mb",  qtyMultiplier: 4.0, rbhPerUnit: 0.08, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Puszka podtynkowa Ø60mm",           knrCode: "KNR 5-08 0301-01", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.15, isLabor: false, materialPricePerUnit: 6.50 },
-    { label: "Urządzenie p/t (gniazdo/wyłącznik)", knrCode: "MAT-GN-01",       unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 30.50 },
-    { label: "Montaż urządzenia p/t",             knrCode: "KNR 5-08 0401-03", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.68, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Bruzdowanie ściany (cegła)",         knrCode: "KNR 5-08 0101",    unit: "mb",  qtyMultiplier: 1.5, rbhPerUnit: 0.85, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Kabel YDYp 3×2.5mm²",              knrCode: "KNR 5-08 0202",    unit: "mb",  qtyMultiplier: 4.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 7.20 },
+    { label: "Układanie kabla YDYp 3×2.5 p/t",     knrCode: "KNR 5-08 0202",    unit: "mb",  qtyMultiplier: 4.0, rbhPerUnit: 0.16, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Puszka podtynkowa Ø60mm",           knrCode: "KNR 5-08 0301",    unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.12, isLabor: false, materialPricePerUnit: 3.00 },
+    { label: "Urządzenie p/t (gniazdo/wyłącznik)", knrCode: "MAT-GN-01",        unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 22.00 },
+    { label: "Montaż urządzenia p/t",             knrCode: "KNR 5-08 0401",    unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.68, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -182,11 +182,11 @@ const PUNKT_COMMERCIAL: AssemblyTemplate = {
   sector: "COMMERCIAL",
   description: "Kabel N2XH LSOH 3G2.5mm² (5mb) w korytku + Floorbox podłogowy + montaż urządzenia (~280 PLN mat.)",
   items: [
-    { label: "Kabel N2XH 3G2.5mm² (LSOH, bezhalog.)", knrCode: "KNR 5-08 0101-06", unit: "mb",  qtyMultiplier: 5.0, rbhPerUnit: 0.18, isLabor: false, materialPricePerUnit: 18.50 },
-    { label: "Układanie kabla LSOH w korytku",         knrCode: "KNR 5-08 0202-01", unit: "mb",  qtyMultiplier: 5.0, rbhPerUnit: 0.09, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Floorbox podłogowy (lućzek + ramka)",    knrCode: "KNR 5-08 0301-06", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.35, isLabor: false, materialPricePerUnit: 145.00 },
-    { label: "Urządzenie biurowe (moduł 45×45)",       knrCode: "MAT-GN-03",        unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 42.50 },
-    { label: "Montaż urządzenia (biuro/Floorbox)",     knrCode: "KNR 5-08 0401-04", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.75, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Kabel NHXMH 3×2.5mm² (LSOH, bezhalog.)", knrCode: "KNR 5-08 0303B",   unit: "mb",  qtyMultiplier: 5.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 14.50 },
+    { label: "Układanie kabla LSOH w korytku",         knrCode: "KNR 5-08 0303B",   unit: "mb",  qtyMultiplier: 5.0, rbhPerUnit: 0.12, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Floorbox podłogowy (mechanizm + ramka)", knrCode: "KNR 5-08 0409",   unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 340.00 },
+    { label: "Urządzenie biurowe (moduł 45×45)",       knrCode: "MAT-GN-03",        unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 55.00 },
+    { label: "Montaż floorboxa + urządzenia",           knrCode: "KNR 5-08 0409",   unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 1.80, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -199,12 +199,12 @@ const PUNKT_INDUSTRIAL: AssemblyTemplate = {
   sector: "INDUSTRIAL",
   description: "Kabel YDYp 3×2.5mm² (8mb) w rurze sztywnej PVC + puszka IP54 + gniazdo natynkowe IP44 (~180 PLN mat.)",
   items: [
-    { label: "Kabel YDYp 3×2.5mm²",           knrCode: "KNR 5-08 0101-02", unit: "mb",  qtyMultiplier: 8.0, rbhPerUnit: 0.16, isLabor: false, materialPricePerUnit: 7.00 },
-    { label: "Rura sztywna PVC M20",           knrCode: "KNR 5-08 0501-02", unit: "mb",  qtyMultiplier: 8.0, rbhPerUnit: 0.09, isLabor: false, materialPricePerUnit: 3.50 },
-    { label: "Układanie rur + mocowania",      knrCode: "KNR 5-08 0503-01", unit: "mb",  qtyMultiplier: 8.0, rbhPerUnit: 0.05, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Puszka natynkowa IP54",          knrCode: "KNR 5-08 0301-04", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.20, isLabor: false, materialPricePerUnit: 18.00 },
-    { label: "Gniazdo natynkowe IP44 Schuko",  knrCode: "MAT-GN-04",        unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 78.00 },
-    { label: "Montaż urządzenia natynk. IP44", knrCode: "KNR 5-08 0401-06", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.54, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Kabel YDYp 3×2.5mm²",           knrCode: "KNR 5-08 0202",    unit: "mb",  qtyMultiplier: 8.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 7.20 },
+    { label: "Rura sztywna PVC RS fi 25",      knrCode: "KNR 5-08 0804",    unit: "mb",  qtyMultiplier: 8.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 2.80 },
+    { label: "Układanie kabla + rur + mocowania", knrCode: "KNR 5-08 0804",    unit: "mb",  qtyMultiplier: 8.0, rbhPerUnit: 0.15, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Puszka hermetyczna IP55 n/t",    knrCode: "KNR 5-08 0303",    unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 18.00 },
+    { label: "Gniazdo IP44/IP54 Schuko",       knrCode: "MAT-GN-04",        unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 35.00 },
+    { label: "Montaż puszki + gniazda IP44 n/t", knrCode: "KNR 5-08 0405",  unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.98, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -217,11 +217,11 @@ const PUNKT_3PHASE_RESIDENTIAL: AssemblyTemplate = {
   sector: "RESIDENTIAL",
   description: "Bruzda + kabel YDYp 5×2.5mm² + puszka głęboka p/t + gniazdo CEE 16A",
   items: [
-    { label: "Bruzdowanie ściany (cegła/beton)",  knrCode: "KNR 4-01 0101-02", unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.12, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Kabel YDYp 5×2.5mm²",               knrCode: "KNR 5-08 0101-04", unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.20, isLabor: false, materialPricePerUnit: 5.80 },
-    { label: "Układanie kabla p/t",                knrCode: "KNR 5-08 0201-01", unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.08, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Puszka podtynkowa głęboka",          knrCode: "KNR 5-08 0301-02", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.20, isLabor: false, materialPricePerUnit: 3.20 },
-    { label: "Gniazdo 3-faz CEE 16A p/t",          knrCode: "KNR 5-08 0403-01", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 1.18, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Bruzdowanie ściany (cegła)",         knrCode: "KNR 5-08 0101",    unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.85, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Kabel YDYp 5×2.5mm²",               knrCode: "KNR 5-08 0203",    unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 10.50 },
+    { label: "Układanie kabla 5×2.5 p/t",          knrCode: "KNR 5-08 0203",    unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.20, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Puszka podtynkowa głęboka",          knrCode: "KNR 5-08 0302",    unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.18, isLabor: false, materialPricePerUnit: 6.00 },
+    { label: "Gniazdo 3-faz CEE 16A p/t",          knrCode: "KNR 5-10 0602",    unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.50, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -234,10 +234,10 @@ const PUNKT_3PHASE_COMMERCIAL: AssemblyTemplate = {
   sector: "COMMERCIAL",
   description: "Kabel YDYp 5×2.5mm² w korytku + puszka głęboka + gniazdo CEE 16A",
   items: [
-    { label: "Kabel YDYp 5×2.5mm²",      knrCode: "KNR 5-08 0101-04", unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.20, isLabor: false, materialPricePerUnit: 5.80 },
-    { label: "Układanie w korytku",       knrCode: "KNR 5-08 0202-01", unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.08, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Puszka głęboka pod G-K",    knrCode: "KNR 5-08 0301-03", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.22, isLabor: false, materialPricePerUnit: 4.00 },
-    { label: "Gniazdo 3-faz CEE 16A p/t", knrCode: "KNR 5-08 0403-01", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 1.18, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Kabel YDYp 5×2.5mm²",      knrCode: "KNR 5-08 0203",    unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 10.50 },
+    { label: "Układanie kabla w korytku", knrCode: "KNR 5-08 0203",    unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.20, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Puszka głęboka pod G-K",    knrCode: "KNR 5-08 0302",    unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.18, isLabor: false, materialPricePerUnit: 6.00 },
+    { label: "Gniazdo 3-faz CEE 16A p/t", knrCode: "KNR 5-10 0602",    unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.50, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -250,11 +250,11 @@ const PUNKT_3PHASE_INDUSTRIAL: AssemblyTemplate = {
   sector: "INDUSTRIAL",
   description: "Rura stalowa EMT + kabel 5×2.5mm² + puszka IP54 + gniazdo CEE 32A natynkowe",
   items: [
-    { label: "Kabel YDYp 5×2.5mm²",             knrCode: "KNR 5-08 0101-04", unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.20, isLabor: false, materialPricePerUnit: 5.80 },
-    { label: "Rura stalowa giętka EMT 20mm",     knrCode: "KNR 5-08 0502-02", unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.10, isLabor: false, materialPricePerUnit: 2.20 },
-    { label: "Mocowanie rur stalowych",          knrCode: "KNR 5-08 0503-02", unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.06, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Puszka natynkowa IP54",            knrCode: "KNR 5-08 0301-05", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.25, isLabor: false, materialPricePerUnit: 8.50 },
-    { label: "Gniazdo 3-faz CEE 32A natynkowe", knrCode: "KNR 5-08 0403-03", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 1.45, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Kabel YDYp 5×2.5mm²",             knrCode: "KNR 5-08 0203",    unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 10.50 },
+    { label: "Rura stalowa BST fi 20-32",        knrCode: "KNR 5-10 1205",    unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 4.50 },
+    { label: "Układanie kabla w rurze stalowej", knrCode: "KNR 5-10 1205",    unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.22, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Puszka hermetyczna IP55 n/t",      knrCode: "KNR 5-08 0303",    unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.20, isLabor: false, materialPricePerUnit: 18.00 },
+    { label: "Gniazdo 3-faz CEE 32A n/t",        knrCode: "KNR 5-10 0603",    unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.60, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -267,29 +267,29 @@ const BIALY_MONTAZ_RESIDENTIAL: AssemblyTemplate = {
   sector: "RESIDENTIAL",
   description: "Tylko czysta robocizna montażu mechanizmu p/t (bez kabla i bruzdy)",
   items: [
-    { label: "Montaż urządzenia p/t", knrCode: "KNR 5-08 0401-03", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.17, isLabor: true, materialPricePerUnit: 0.00 },
+    { label: "Montaż urządzenia p/t", knrCode: "KNR 5-08 0401", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.68, isLabor: true, materialPricePerUnit: 0.00 },
   ],
 };
 
 const BIALY_MONTAZ_COMMERCIAL: AssemblyTemplate = {
   id: "BIALY_MONTAZ_COMMERCIAL_302",
-  name: "Biały montaż — Biuro",
+  name: "Biały Montaż — Biuro",
   triggerKey: "BIALY_MONTAZ",
   sector: "COMMERCIAL",
   description: "Tylko czysta robocizna montażu urządzenia w zabudowie biurowej",
   items: [
-    { label: "Montaż urządzenia (biuro/G-K)", knrCode: "KNR 5-08 0401-03", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.17, isLabor: true, materialPricePerUnit: 0.00 },
+    { label: "Montaż urządzenia (biuro/G-K)", knrCode: "KNR 5-08 0401", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.68, isLabor: true, materialPricePerUnit: 0.00 },
   ],
 };
 
 const BIALY_MONTAZ_INDUSTRIAL: AssemblyTemplate = {
   id: "BIALY_MONTAZ_INDUSTRIAL_303",
-  name: "Biały montaż — Hala",
+  name: "Biały Montaż — Hala",
   triggerKey: "BIALY_MONTAZ",
   sector: "INDUSTRIAL",
   description: "Tylko czysta robocizna montażu urządzenia natynkowego IP44+",
   items: [
-    { label: "Montaż urządzenia natynk. IP44", knrCode: "KNR 5-08 0401-06", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.17, isLabor: true, materialPricePerUnit: 0.00 },
+    { label: "Montaż urządzenia natynk. IP44", knrCode: "KNR 5-08 0405", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.98, isLabor: true, materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -302,9 +302,9 @@ const WYPUST_RESIDENTIAL: AssemblyTemplate = {
   sector: "RESIDENTIAL",
   description: "Bruzda + kabel YDYp 3×1.5mm² p/t (bez montażu urządzenia końcowego)",
   items: [
-    { label: "Bruzdowanie ściany (cegła/beton)", knrCode: "KNR 4-01 0101-02", unit: "mb",  qtyMultiplier: 1.5, rbhPerUnit: 0.10, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Kabel YDYp 3×1.5mm²",              knrCode: "KNR 5-08 0101-01", unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.13, isLabor: false, materialPricePerUnit: 2.20 },
-    { label: "Układanie kabla p/t",               knrCode: "KNR 5-08 0201-01", unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.08, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Bruzdowanie ściany (cegła)",         knrCode: "KNR 5-08 0101",    unit: "mb",  qtyMultiplier: 1.5, rbhPerUnit: 0.85, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Kabel YDYp 3×1.5mm²",              knrCode: "KNR 5-08 0201",    unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 5.20 },
+    { label: "Układanie kabla YDYp 3×1.5 p/t",     knrCode: "KNR 5-08 0201",    unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.13, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -315,8 +315,8 @@ const WYPUST_COMMERCIAL: AssemblyTemplate = {
   sector: "COMMERCIAL",
   description: "Kabel YDYp 3×1.5mm² w korytku (bez montażu urządzenia końcowego)",
   items: [
-    { label: "Kabel YDYp 3×1.5mm²",      knrCode: "KNR 5-08 0101-01", unit: "mb", qtyMultiplier: 3.5, rbhPerUnit: 0.13, isLabor: false, materialPricePerUnit: 2.20 },
-    { label: "Układanie kabla w korytku", knrCode: "KNR 5-08 0202-01", unit: "mb", qtyMultiplier: 3.5, rbhPerUnit: 0.08, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Kabel YDYp 3×1.5mm²",      knrCode: "KNR 5-08 0201",    unit: "mb", qtyMultiplier: 3.5, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 5.20 },
+    { label: "Układanie kabla w korytku", knrCode: "KNR 5-08 0201",    unit: "mb", qtyMultiplier: 3.5, rbhPerUnit: 0.13, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -327,9 +327,9 @@ const WYPUST_INDUSTRIAL: AssemblyTemplate = {
   sector: "INDUSTRIAL",
   description: "Kabel YDYp 3×1.5mm² w rurze PVC karbowanej (bez urządzenia końcowego)",
   items: [
-    { label: "Kabel YDYp 3×1.5mm²",      knrCode: "KNR 5-08 0101-01", unit: "mb", qtyMultiplier: 3.5, rbhPerUnit: 0.13, isLabor: false, materialPricePerUnit: 2.20 },
-    { label: "Rura karbowana PVC M20",    knrCode: "KNR 5-08 0501-01", unit: "mb", qtyMultiplier: 3.5, rbhPerUnit: 0.07, isLabor: false, materialPricePerUnit: 0.85 },
-    { label: "Układanie rur + mocowania", knrCode: "KNR 5-08 0503-01", unit: "mb", qtyMultiplier: 3.5, rbhPerUnit: 0.05, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Kabel YDYp 3×1.5mm²",      knrCode: "KNR 5-08 0201",    unit: "mb", qtyMultiplier: 3.5, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 5.20 },
+    { label: "Rura karbowana PVC fi 20", knrCode: "KNR 5-08 0801",    unit: "mb", qtyMultiplier: 3.5, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 1.20 },
+    { label: "Układanie kabla + rur n/t", knrCode: "KNR 5-08 0801",    unit: "mb", qtyMultiplier: 3.5, rbhPerUnit: 0.20, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -342,8 +342,8 @@ const TRASY_RESIDENTIAL: AssemblyTemplate = {
   sector: "RESIDENTIAL",
   description: "Bruzdowanie ściany + układanie kabli p/t (rozliczenie per mb)",
   items: [
-    { label: "Bruzdowanie ściany (cegła/beton)", knrCode: "KNR 4-01 0101-02", unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.10, isLabor: true, materialPricePerUnit: 0.00 },
-    { label: "Układanie kabla p/t",               knrCode: "KNR 5-08 0201-01", unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.08, isLabor: true, materialPricePerUnit: 0.00 },
+    { label: "Bruzdowanie ściany (cegła)",         knrCode: "KNR 5-08 0101",    unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.85, isLabor: true, materialPricePerUnit: 0.00 },
+    { label: "Układanie kabla YDYp p/t",            knrCode: "KNR 5-08 0201",    unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.13, isLabor: true, materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -354,9 +354,9 @@ const TRASY_COMMERCIAL: AssemblyTemplate = {
   sector: "COMMERCIAL",
   description: "Montaż korytka kablowego PVC 60×60 + układanie kabli (per mb)",
   items: [
-    { label: "Korytko kablowe PVC 60×60", knrCode: "KNR 5-08 0601-02", unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.12, isLabor: false, materialPricePerUnit: 12.50 },
-    { label: "Montaż korytka",            knrCode: "KNR 5-08 0601-01", unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.12, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Układanie kabla w korytku", knrCode: "KNR 5-08 0202-01", unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.08, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Korytko kablowe PVC 60×60", knrCode: "KNR 5-08 0703c", unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 18.00 },
+    { label: "Montaż korytka PVC",        knrCode: "KNR 5-08 0703c", unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.15, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Układanie kabla w korytku", knrCode: "KNR 5-08 0201",  unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.13, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -367,9 +367,9 @@ const TRASY_INDUSTRIAL: AssemblyTemplate = {
   sector: "INDUSTRIAL",
   description: "Drabinka kablowa stalowa 100mm + prowadzenie kabli (per mb)",
   items: [
-    { label: "Drabinka kablowa stalowa 100mm", knrCode: "KNR 5-08 0602-02", unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.18, isLabor: false, materialPricePerUnit: 22.00 },
-    { label: "Montaż drabinki kablowej",       knrCode: "KNR 5-08 0602-01", unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.18, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Prowadzenie/układanie kabla",    knrCode: "KNR 5-08 0203-01", unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.07, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Drabinka kablowa stalowa 100mm", knrCode: "KNR 5-10 1201", unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 65.00 },
+    { label: "Montaż drabinki kablowej",       knrCode: "KNR 5-10 1201", unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.18, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Prowadzenie/układanie kabla",    knrCode: "KNR 5-08 0203", unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.20, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -384,15 +384,13 @@ const ROZDZIELNICA_RESIDENTIAL: AssemblyTemplate = {
   sector: "RESIDENTIAL",
   description: "Obudowa 24-mod p/t + aparatura MCB/RCD/SPD + materiały montażowe (komplet ~2 000 PLN mat.)",
   items: [
-    { label: "Obudowa 24-mod p/t",                       knrCode: "KNR 5-08 0801-01", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 380.00 },
-    { label: "Aparatura MCB 1P (12szt, kpl)",             knrCode: "KNR 5-08 0802-01", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 420.00 },
-    { label: "Ochronniki RCD 2P × 2szt (kpl)",           knrCode: "KNR 5-08 0803-01", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 280.00 },
-    { label: "SPD T2 (ochronnik przepięć)",               knrCode: "KNR 5-08 0804-01", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 190.00 },
-    { label: "Materiały montażowe (szyna, opaski, kpl)",  knrCode: "MAT-ROZD-01",     unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 380.00 },
-    { label: "Oznaczniki, kable WLZ, przewody (kpl)",    knrCode: "MAT-ROZD-02",     unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 350.00 },
-    { label: "Prefabrykacja obudowy 24-mod",              knrCode: "KNR 5-08 0801-02", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 3.00, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Montaż aparatury MCB/RCD (12 elem.)",       knrCode: "KNR 5-08 0802-02", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 6.50, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Opisanie, sprawdzenie, protokół",           knrCode: "KNR 5-08 0805-01", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 1.50, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Obudowa 24-mod p/t",                       knrCode: "KNR 5-08 0301",    unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 220.00 },
+    { label: "Aparatura MCB 1P (12szt, kpl)",             knrCode: "KNR 5-08 0201a",   unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 168.00 },
+    { label: "Ochronniki RCD 2P × 2szt (kpl)",           knrCode: "KNR 5-08 0211",    unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 210.00 },
+    { label: "SPD T2 (ochronnik przepięć)",               knrCode: "KNR 5-08 0231",    unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 280.00 },
+    { label: "Materiały montażowe (szyny PE/N, opaski)",  knrCode: "MAT-ROZD-01",      unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 180.00 },
+    { label: "Oznaczniki, kable WLZ wewn. (kpl)",        knrCode: "MAT-ROZD-02",      unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 150.00 },
+    { label: "Montaż i okablowanie rozdzielnicy 24-mod", knrCode: "ES-KNR-ROZ FULL 24PT", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 10.00, isLabor: true, materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -403,15 +401,13 @@ const ROZDZIELNICA_COMMERCIAL: AssemblyTemplate = {
   sector: "COMMERCIAL",
   description: "Obudowa 48-mod n/t stalowa + aparatura 3P/1P + RCD + SPD + materiały (~5 000 PLN mat.)",
   items: [
-    { label: "Obudowa 48-mod n/t (stalowa)",             knrCode: "KNR 5-08 0801-03", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 650.00 },
-    { label: "Aparatura MCB 3P/1P × 24szt (kpl)",        knrCode: "KNR 5-08 0802-03", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 1200.00 },
-    { label: "RCD 4P + 2P × 4szt (kpl)",                 knrCode: "KNR 5-08 0803-02", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 800.00 },
-    { label: "SPD T2 3P+N (kpl)",                        knrCode: "KNR 5-08 0804-02", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 450.00 },
-    { label: "Materiały: szyny Cu, zaciski (kpl)",        knrCode: "MAT-ROZD-03",     unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 900.00 },
-    { label: "Kable zasilające WLZ (kpl)",               knrCode: "MAT-ROZD-04",     unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 1000.00 },
-    { label: "Prefabrykacja obudowy 48-mod",              knrCode: "KNR 5-08 0801-04", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 5.00, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Montaż aparatury (24 elem.)",               knrCode: "KNR 5-08 0802-04", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 12.00, isLabor: true, materialPricePerUnit: 0.00 },
-    { label: "Opisanie, sprawdzenie, protokół",           knrCode: "KNR 5-08 0805-02", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 3.00, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Obudowa 48-mod n/t (stalowa)",             knrCode: "KNR 5-08 0303",    unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 360.00 },
+    { label: "Aparatura MCB 3P/1P × 24szt (kpl)",        knrCode: "KNR 5-08 0203a",   unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 720.00 },
+    { label: "RCD 4P + 2P × 4szt (kpl)",                 knrCode: "KNR 5-08 0212",    unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 600.00 },
+    { label: "SPD T2 3P+N (kpl)",                        knrCode: "KNR 5-08 0231",    unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 280.00 },
+    { label: "Materiały: szyny Cu, zaciski (kpl)",        knrCode: "MAT-ROZD-03",      unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 450.00 },
+    { label: "Kable zasilające WLZ (kpl)",               knrCode: "MAT-ROZD-04",      unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 600.00 },
+    { label: "Montaż i okablowanie rozdzielnicy 48-mod", knrCode: "ES-KNR-ROZ FULL 48PT", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 18.00, isLabor: true, materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -422,16 +418,14 @@ const ROZDZIELNICA_INDUSTRIAL: AssemblyTemplate = {
   sector: "INDUSTRIAL",
   description: "Obudowa wolnostojąca IP54 600×800 + MCCB/MCB + RCD/RCBO + SPD T1+T2 + materiały (~8 000 PLN mat.)",
   items: [
-    { label: "Obudowa wolnostojąca IP54 600×800",         knrCode: "KNR 5-08 0801-05", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 1800.00 },
-    { label: "Aparatura MCCB + MCB (kpl)",                knrCode: "KNR 5-08 0802-05", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 2000.00 },
-    { label: "RCD + RCBO (kpl)",                         knrCode: "KNR 5-08 0803-03", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 1000.00 },
-    { label: "SPD T1+T2 (kpl)",                          knrCode: "KNR 5-08 0804-03", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 800.00 },
-    { label: "Szyny Cu, zaciski, grzebienie (kpl)",       knrCode: "MAT-ROZD-05",     unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 600.00 },
-    { label: "Materiały montażowe (kpl)",                 knrCode: "MAT-ROZD-06",     unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 1200.00 },
-    { label: "Kable i przewody wewnętrzne (kpl)",         knrCode: "MAT-ROZD-07",     unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 600.00 },
-    { label: "Prefabrykacja obudowy wolnostojącej",       knrCode: "KNR 5-08 0801-06", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 8.00, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Montaż aparatury MCCB/MCB (16 elem.)",      knrCode: "KNR 5-08 0802-06", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 16.00, isLabor: true, materialPricePerUnit: 0.00 },
-    { label: "Opisanie, sprawdzenie, protokół",           knrCode: "KNR 5-08 0805-03", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 4.00, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Obudowa wolnostojąca IP54 600×800",         knrCode: "KNR 5-10 0201",    unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 1800.00 },
+    { label: "Aparatura MCCB + MCB (kpl)",                knrCode: "KNR 5-10 0201a",   unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 2000.00 },
+    { label: "RCD + RCBO (kpl)",                         knrCode: "KNR 5-08 0212",    unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 900.00 },
+    { label: "SPD T1+T2 (kpl)",                          knrCode: "KNR 5-11 0114",    unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 800.00 },
+    { label: "Szyny Cu, zaciski, grzebienie (kpl)",       knrCode: "MAT-ROZD-05",      unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 600.00 },
+    { label: "Materiały montażowe (kpl)",                 knrCode: "MAT-ROZD-06",      unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 1200.00 },
+    { label: "Kable i przewody wewnętrzne (kpl)",         knrCode: "MAT-ROZD-07",      unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 600.00 },
+    { label: "Montaż i okablowanie rozdzielnicy przem. wolnostoj.", knrCode: "KNR 5-10 0201", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 28.00, isLabor: true, materialPricePerUnit: 0.00 },
   ],
 };
 
