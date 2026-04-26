@@ -1766,12 +1766,13 @@ export async function applyAiPrices(
         // 1. Manual override — skip engine entirely
         if (current?.confidence_level === "manual") return true;
 
-        // 2. Protected Data Logic v2.3 — protect only explicitly user-locked norms.
+        // 2. Protected Data Logic v2.5 — expert_override is an IRON LOCK.
         // (See repriceSingleItem above for the full rationale.) Engine-derived
         // norms (verified/analog/estimated/uncertain/unmatched) are eligible
         // for re-pricing so that "Wyceń wszystko" actually fixes AI-mistakes.
-        const priceWasReset = current != null && (current.final_labor_price ?? 0) === 0;
-        const isNormProtected = !priceWasReset && current != null && (
+        // CRITICAL v2.5: expert_override=true is ALWAYS protected, even if
+        // final_labor_price was 0 — the user has explicitly confirmed this row.
+        const isNormProtected = current != null && (
           current.norm_protected === true ||
           current.confidence_level === "manual" ||
           current.expert_override === true
@@ -2058,12 +2059,29 @@ Uzasadnij skąd pochodzi cena (KNR, norma, doświadczenie rynkowe 2026).
 
     const adminClient = createAdminClient();
 
-    // Fetch item quantity for labor_hours_total calculation
+    // v2.5 IRON LOCK: skip update entirely if user-confirmed expert_override=true
+    // OR confidence_level=manual OR norm_protected=true. AI must NEVER overwrite
+    // user-locked rows.
     const { data: itemRow } = await adminClient
       .from("project_items")
-      .select("quantity")
+      .select("quantity, expert_override, confidence_level, norm_protected, labor_price, labor_norm")
       .eq("id", itemId)
       .single();
+    if (itemRow && (
+      (itemRow.expert_override as boolean | null) === true ||
+      (itemRow.confidence_level as string | null) === "manual" ||
+      (itemRow.norm_protected as boolean | null) === true
+    )) {
+      return {
+        success: true,
+        price_labor: (itemRow.labor_price as number | null) ?? lab,
+        price_material: mat,
+        justification: "Pozycja chroniona (expert_override / manual / norm_protected) — AI nie nadpisuje",
+        match_trace: `L3 SKIPPED: Iron Lock`,
+        knr_code: knrCode,
+        labor_norm: (itemRow.labor_norm as number | null) ?? finalLaborNorm,
+      };
+    }
     const itemQty: number = (itemRow?.quantity as number | null) ?? 1;
     const laborHoursTotal = finalLaborNorm != null && finalLaborNorm > 0
       ? Math.round(finalLaborNorm * itemQty * 100) / 100

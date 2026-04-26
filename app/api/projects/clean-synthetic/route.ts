@@ -33,14 +33,22 @@ export async function POST(_req: NextRequest) {
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     // ── Fetch all KNR-ES items across user's projects ─────────────────────────
-    const { data: rawItems, error: itemsErr } = await supabase
+    // v2.5 Iron Lock: exclude user-confirmed rows (expert_override / manual / norm_protected)
+    const { data: rawItemsAll, error: itemsErr } = await supabase
       .from("project_items")
-      .select("id, name, unit, quantity, labor_price, knr_code, project_id")
+      .select("id, name, unit, quantity, labor_price, knr_code, project_id, expert_override, confidence_level, norm_protected")
       .like("knr_code", "KNR-ES-%");
 
     if (itemsErr) {
       return NextResponse.json({ error: "DB error fetching items" }, { status: 500 });
     }
+
+    const rawItems = (rawItemsAll ?? []).filter(
+      (i) =>
+        (i.expert_override as boolean | null) !== true &&
+        (i.confidence_level as string | null) !== "manual" &&
+        (i.norm_protected as boolean | null) !== true
+    );
 
     if (!rawItems || rawItems.length === 0) {
       return NextResponse.json({ total: 0, updated: 0, skipped: 0, results: [] });

@@ -26,9 +26,10 @@ export async function POST(
     }
 
     // Fetch project items that are linked to catalog items
+    // v2.5 Iron Lock: exclude user-confirmed rows (expert_override / manual / norm_protected)
     const { data: projectItems, error: itemsError } = await supabase
       .from("project_items")
-      .select("id, catalog_item_id, quantity")
+      .select("id, catalog_item_id, quantity, expert_override, confidence_level, norm_protected")
       .eq("project_id", projectId)
       .not("catalog_item_id", "is", null);
 
@@ -37,7 +38,11 @@ export async function POST(
     }
 
     const linkedItems = (projectItems ?? []).filter(
-      (pi) => pi.catalog_item_id
+      (pi) =>
+        pi.catalog_item_id &&
+        (pi.expert_override as boolean | null) !== true &&
+        (pi.confidence_level as string | null) !== "manual" &&
+        (pi.norm_protected as boolean | null) !== true
     );
 
     if (linkedItems.length === 0) {

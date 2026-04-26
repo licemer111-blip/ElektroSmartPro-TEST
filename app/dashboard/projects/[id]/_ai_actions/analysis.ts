@@ -152,14 +152,25 @@ export async function fillMissingKnrCodes(projectId: string): Promise<KnrCodeRes
 
     const { data: items } = await supabase
       .from("project_items")
-      .select("id, name, unit, quantity, knr_code, labor_price, parent_assembly_id")
+      .select("id, name, unit, quantity, knr_code, labor_price, parent_assembly_id, expert_override, confidence_level, norm_protected")
       .eq("project_id", projectId)
       .order("sort_order");
 
-    type KnrItem = { id: string; name: string; unit: string; quantity: number; knr_code: string | null; labor_price: number | null; parent_assembly_id: string | null };
+    type KnrItem = {
+      id: string; name: string; unit: string; quantity: number;
+      knr_code: string | null; labor_price: number | null;
+      parent_assembly_id: string | null;
+      expert_override: boolean | null;
+      confidence_level: string | null;
+      norm_protected: boolean | null;
+    };
+    // v2.5 Iron Lock: skip user-confirmed rows entirely
     const itemsNeedingCode = ((items || []) as KnrItem[]).filter(
       (i) => !i.parent_assembly_id
         && (!i.knr_code || i.knr_code.trim() === "")
+        && i.expert_override !== true
+        && i.confidence_level !== "manual"
+        && i.norm_protected !== true
     );
 
     if (itemsNeedingCode.length === 0) {
@@ -261,14 +272,25 @@ export async function fillMissingRbhNorms(projectId: string): Promise<RbhNormRes
 
     const { data: items } = await supabase
       .from("project_items")
-      .select("id, name, unit, quantity, labor_norm, labor_price, parent_assembly_id")
+      .select("id, name, unit, quantity, labor_norm, labor_price, parent_assembly_id, expert_override, confidence_level, norm_protected")
       .eq("project_id", projectId)
       .order("sort_order");
 
-    type NormItem = { id: string; name: string; unit: string; quantity: number; labor_norm: number | null; labor_price: number | null; parent_assembly_id: string | null };
+    type NormItem = {
+      id: string; name: string; unit: string; quantity: number;
+      labor_norm: number | null; labor_price: number | null;
+      parent_assembly_id: string | null;
+      expert_override: boolean | null;
+      confidence_level: string | null;
+      norm_protected: boolean | null;
+    };
+    // v2.5 Iron Lock: skip user-confirmed rows entirely
     const itemsNeedingNorm = ((items || []) as NormItem[]).filter(
       (i) => !i.parent_assembly_id
         && (i.labor_norm == null || i.labor_norm === 0)
+        && i.expert_override !== true
+        && i.confidence_level !== "manual"
+        && i.norm_protected !== true
     );
 
     if (itemsNeedingNorm.length === 0) {
