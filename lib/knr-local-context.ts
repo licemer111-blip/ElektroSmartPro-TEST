@@ -78,6 +78,54 @@ function normalize(s: string): string {
 }
 
 /**
+ * Slang → canonical KNR vocabulary substitutions, applied BEFORE fuzzy match.
+ *
+ * Why: lookupKnrByName scores against entry.description / entry.synonyms only.
+ * Common Polish installer slang (e.g. "bruzdowanie") doesn't appear verbatim
+ * in any KNR JSON, so fuzzy returns 0 → "Uzupełnij" fall-through. Expanding
+ * the needle string with canonical equivalents fixes recall without polluting
+ * the JSON datasets.
+ *
+ * Iron Rule: ADDITIVE — original tokens are preserved (we append, not replace).
+ */
+const NEEDLE_SLANG_MAP: ReadonlyArray<{ trigger: RegExp; canonical: string }> = [
+  // Bruzdy — wall chasing for cables / lamps
+  { trigger: /\bbruzd(owani[ea]|owac|uj|y)\b/, canonical: "wykucie bruzdy bruzdowanie sciany bruzda" },
+  { trigger: /\bsztrobow|\browkow|\bfrezowani|\bnacieci/, canonical: "wykucie bruzdy bruzda" },
+
+  // Demontaż instalacji
+  { trigger: /\bdemonta[zż]\b/, canonical: "demontaz rozbiorka usuniecie istniejacej instalacji" },
+  { trigger: /\bdemontuj|\brozbior|\bzdemont|\blikwidacj|\busuniec/, canonical: "demontaz rozbiorka" },
+
+  // Detektory obecności / ruchu — long-range corridor variants
+  { trigger: /\bdetektor(y|a|ow)?\s+(obecnosc|ruchu)/, canonical: "czujnik ruchu detektor obecnosci pir montaz" },
+  { trigger: /\bczujnik\s+pir\b|\bczujnik\s+ruchu\b/, canonical: "czujnik ruchu pir montaz" },
+
+  // Zasilanie urządzeń (klimatyzacja, agregaty, IT) — cable laying
+  { trigger: /\bzasilani[ea]\s+(systemu|jednostki|urzadzeni|klimatyz|sug|agregat|szafy|stacji)/,
+    canonical: "ulozenie kabla zasilanie wlz prowadzenie przewodu" },
+
+  // Okablowanie / przewody zasilające — generic cable laying
+  { trigger: /\bokablowani[ea]\b|\bprzewody\s+zasilaj/, canonical: "ulozenie przewodu kabla wciaganie" },
+
+  // Pomiary i odbiory
+  { trigger: /\bpomiar(y|ow)?\s+(instalacj|elektryczn|odbior)/, canonical: "pomiary odbiorcze badania instalacji" },
+
+  // Bruzdowanie + lamp / oprawy — composite fix for "Bruzdowanie do lamp"
+  { trigger: /\bbruzd.*lamp|\bbruzd.*oprawy/, canonical: "wykucie bruzdy pod oprawe oswietleniowa" },
+];
+
+function expandSlang(normalized: string): string {
+  const additions: string[] = [];
+  for (const { trigger, canonical } of NEEDLE_SLANG_MAP) {
+    if (trigger.test(normalized)) {
+      additions.push(canonical);
+    }
+  }
+  return additions.length === 0 ? normalized : `${normalized} ${additions.join(" ")}`;
+}
+
+/**
  * Fuzzy token match: exact substring OR shared prefix of length ≥5.
  * Handles typos like "gniazdko" ↔ "gniazdo", "przewod" ↔ "przewód" (after normalize).
  */
@@ -107,7 +155,9 @@ function scoreCandidate(needleTokens: string[], candidate: string): number {
  * Returns best match or null.
  */
 export function lookupKnrByName(itemName: string, preferResidential = true): KnrMatch | null {
-  const needle = normalize(itemName);
+  const baseNeedle = normalize(itemName);
+  // Expand installer slang → canonical KNR vocabulary (additive — original tokens kept)
+  const needle = expandSlang(baseNeedle);
   const needleTokens = needle.split(" ").filter((t) => t.length > 2);
   if (needleTokens.length === 0) return null;
 

@@ -39,7 +39,13 @@ export async function middleware(request: NextRequest) {
   }
 
   // ─── Rate limiting for AI and Admin API routes ───────────────────────────
-  if (pathname.startsWith("/api/ai/") || pathname.startsWith("/api/admin/")) {
+  // Exception: /api/admin/knr-multiplier is a public read-only endpoint hit by
+  // every EstimateRow / Summary / Dialog on mount. Server already caches 60s.
+  const isRateLimitedPath =
+    (pathname.startsWith("/api/ai/") || pathname.startsWith("/api/admin/")) &&
+    pathname !== "/api/admin/knr-multiplier";
+
+  if (isRateLimitedPath) {
     const ip =
       request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
       request.headers.get("x-real-ip") ??
