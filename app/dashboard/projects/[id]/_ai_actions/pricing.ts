@@ -37,7 +37,9 @@ import { clampPrice } from "@/lib/utils/price-validator";
 import { applyRealityCheck } from "@/lib/services/reality-check";
 import { findMaterialBenchmark, clampToBenchmark, buildBenchmarkPromptContext } from "@/lib/data/material-benchmarks";
 import {
-  getModernizationFactor, getMFactorLabel,
+  // v2.4: getModernizationFactor / getMFactorLabel are no longer used in
+  // storage formulas (KNR 2026 norms already factor in modern tooling).
+  // Re-import only if reintroducing M-Factor for AI L3 calibration context.
   CONNECTION_MIN_NORM, HEAVY_CONNECTION_MIN_NORM,
   CONNECTION_RE, HEAVY_APPLIANCE_RE,
   normalizePlName, isZelbet,
@@ -473,12 +475,16 @@ export async function estimatePricesWithAI(
           const laborNormScaled = Math.round(normBase * itemBase * 1_000_000) / 1_000_000;
           const scaleNote = (dictUnit && dictUnit !== "mb" && dictUnit !== "m" && dictUnit !== "szt" && dictUnit !== "kpl")
             ? ` [KNR: ${dictUnit}]` : "";
-          const l0CableSection = isCableItem(item.name) ? (() => { const _m = item.name.match(CABLE_SECTION_RE); return _m ? parseFloat(_m[2].replace(",", ".")) : null; })() : null;
-          const mFactorL0  = getModernizationFactor(classifyIntent(item.name).intent, l0CableSection);
-          const mLabelL0   = getMFactorLabel(mFactorL0);
+          // v2.4: M-Factor REMOVED from storage formula (KNR 2026 norms already
+          // factor in modern tooling — applying it again was double-discount).
+          // M-Factor remains available via getModernizationFactor() for AI L3
+          // calibration context only. See _l0CableSection / _mFactorL0Reference
+          // below — kept for trace continuity / future calibration logging.
+          const _l0CableSection = isCableItem(item.name) ? (() => { const _m = item.name.match(CABLE_SECTION_RE); return _m ? parseFloat(_m[2].replace(",", ".")) : null; })() : null;
+          void _l0CableSection; // reserved for future calibration logging
           const localModL0 = clampLocalModifiers(cableMod, surfaceModL0, ceilingModL0, heightModL0);
-          const sugLab = Math.round(laborNormScaled * mFactorL0 * localModL0 * baseRateForCalc * globalLaborMod * 100) / 100;
-          // Effective hours = norm × M-Factor × modifiers × qty (not bare norm × qty)
+          const sugLab = Math.round(laborNormScaled * localModL0 * baseRateForCalc * globalLaborMod * 100) / 100;
+          // Effective hours = norm × modifiers × qty (no M-Factor in storage formula)
           const laborHoursTotalL0 = baseRateForCalc > 0
             ? Math.round(sugLab / baseRateForCalc * (item.quantity ?? 1) * 1000) / 1000
             : null;
@@ -490,7 +496,7 @@ export async function estimatePricesWithAI(
             ? ` → ×${regionMod.toFixed(2)}(${regionLabel}) → ${(sugLab * regionMod).toFixed(2)}PLN`
             : "";
           const capTagL0 = localModL0 >= MAX_COMBINED_MODIFIER ? ` [⚠️ cap×${MAX_COMBINED_MODIFIER}]` : "";
-          const traceL0 = `${laborNormScaled.toFixed(4)}rbh × ${mFactorL0.toFixed(2)}[M:${mLabelL0}] × ${localModL0.toFixed(2)}(local${capTagL0}) × ${baseRateForCalc.toFixed(1)}PLN/h${globalModTagL0} = ${sugLab.toFixed(2)}PLN${regionHintL0}`;
+          const traceL0 = `${laborNormScaled.toFixed(4)}rbh × ${localModL0.toFixed(2)}(local${capTagL0}) × ${baseRateForCalc.toFixed(1)}PLN/h${globalModTagL0} = ${sugLab.toFixed(2)}PLN${regionHintL0}`;
           l0ResolvedIds.add(item.id);
           l0Estimates.push({
             itemId: item.id,
@@ -798,22 +804,19 @@ export async function estimatePricesWithAI(
         // Wymiana factor: replacement = montaż + 0.5 × demontaż = base × 1.5
         const wymianaActive = WYMIANA_RE.test(item.name) || DEMONTAZ_MONTAZ_RE.test(item.name);
         const wymianaFactor = wymianaActive ? WYMIANA_FACTOR : 1.0;
-        const l2CableSection = isCableItem(item.name) ? (() => { const _m = item.name.match(CABLE_SECTION_RE); return _m ? parseFloat(_m[2].replace(",", ".")) : null; })() : null;
-        const mFactorL2  = getModernizationFactor(classifyIntent(item.name).intent, l2CableSection);
-        const mLabelL2   = getMFactorLabel(mFactorL2);
+        // v2.4: M-Factor REMOVED — see L0 above for rationale.
+        const _l2CableSection = isCableItem(item.name) ? (() => { const _m = item.name.match(CABLE_SECTION_RE); return _m ? parseFloat(_m[2].replace(",", ".")) : null; })() : null;
+        void _l2CableSection;
         const localModL2 = clampLocalModifiers(cableMod, surfaceMod, ceilingMod, heightMod);
         const sugLabBase = normWithFloor != null
-          ? Math.round(normWithFloor * mFactorL2 * localModL2 * baseRateForCalc * globalLaborMod * 100) / 100
+          ? Math.round(normWithFloor * localModL2 * baseRateForCalc * globalLaborMod * 100) / 100
           : 0;
         // ── Absolute PLN floor for connection/commissioning items ─────────────────
-        // This bypasses the norm-based calculation entirely: if any multiplier chain
-        // (cableMod, surface, etc.) produces a price below the floor, we clamp it up.
-        // Floor = HEAVY_CONNECTION_MIN_NORM × M-Factor(intent) × baseRate × region
-        const connMFactor = getModernizationFactor(isHeavyConnectionItem ? "HEAVY_CONNECTION" : "STANDARD_ACTION");
+        // Floor = HEAVY_CONNECTION_MIN_NORM × baseRate (M-Factor=1.0 in v2.4)
         const connectionPriceFlatFloor = isConnectionItem
           ? Math.round(
               (isHeavyConnectionItem ? HEAVY_CONNECTION_MIN_NORM : CONNECTION_MIN_NORM)
-              * connMFactor * baseRateForCalc * globalLaborMod * 100
+              * baseRateForCalc * globalLaborMod * 100
             ) / 100
           : 0;
         const sugLabBaseFloored = Math.max(sugLabBase, connectionPriceFlatFloor);
@@ -848,7 +851,7 @@ export async function estimatePricesWithAI(
         const wymianaTag = wymianaActive ? ` ×${WYMIANA_FACTOR.toFixed(1)}(wymiana)` : "";
         const capTagL2 = localModL2 >= MAX_COMBINED_MODIFIER ? ` ⚠️cap×${MAX_COMBINED_MODIFIER}` : "";
         const traceFormula = normWithFloor != null
-          ? `${normFloorTag}${normWithFloor.toFixed(4)}rbh × ${mFactorL2.toFixed(2)}[M:${mLabelL2}] × ${localModL2.toFixed(2)}(local:${surfaceTag}${ceilingTag}${heightTag}${capTagL2}) × ${baseRateForCalc.toFixed(1)}PLN/h${globalModTag}${wymianaTag} = ${sugLab.toFixed(2)}PLN`
+          ? `${normFloorTag}${normWithFloor.toFixed(4)}rbh × ${localModL2.toFixed(2)}(local:${surfaceTag}${ceilingTag}${heightTag}${capTagL2}) × ${baseRateForCalc.toFixed(1)}PLN/h${globalModTag}${wymianaTag} = ${sugLab.toFixed(2)}PLN`
           : "brak normy";
         const regionModL2 = rateResult.regionModifier;
         const regionLabelL2 = projectRegionName ?? "brak";
@@ -856,7 +859,7 @@ export async function estimatePricesWithAI(
           ? ` → ×${regionModL2.toFixed(2)}(${regionLabelL2}) → ${(sugLab * regionModL2).toFixed(2)}PLN`
           : "";
         const noteFormula = normWithFloor != null
-          ? ` | norma: ${normFloorTag}${normWithFloor.toFixed(4)} rbh/${itemUnitForScale} × ${mFactorL2.toFixed(2)}[M:${mLabelL2}] × ${localModL2.toFixed(2)}(local${capTagL2}) × ${baseRateForCalc.toFixed(1)}PLN/h${globalModTag} = ${sugLab.toFixed(2)} PLN${regionHintL2}`
+          ? ` | norma: ${normFloorTag}${normWithFloor.toFixed(4)} rbh/${itemUnitForScale} × ${localModL2.toFixed(2)}(local${capTagL2}) × ${baseRateForCalc.toFixed(1)}PLN/h${globalModTag} = ${sugLab.toFixed(2)} PLN${regionHintL2}`
           : "";
         return {
           itemId: item.id,
@@ -916,15 +919,15 @@ export async function estimatePricesWithAI(
           : isConnMiss
             ? Math.max(scaledNorm25, CONNECTION_MIN_NORM)
             : scaledNorm25;
-        const l25CableSection = isCableItem(item.name)
+        // v2.4: M-Factor REMOVED — see L0 above for rationale.
+        const _l25CableSection = isCableItem(item.name)
           ? (() => { const _m = item.name.match(CABLE_SECTION_RE); return _m ? parseFloat(_m[2].replace(",", ".")) : null; })()
           : null;
-        const mFactor25 = getModernizationFactor(classifyIntent(item.name).intent, l25CableSection);
-        const mLabel25 = getMFactorLabel(mFactor25);
+        void _l25CableSection;
         const localMod25 = clampLocalModifiers(cableMod25, surfaceMod25, ceilingMod25, heightMod25);
         const wymianaActive25 = WYMIANA_RE.test(item.name) || DEMONTAZ_MONTAZ_RE.test(item.name);
         const wymianaFactor25 = wymianaActive25 ? WYMIANA_FACTOR : 1.0;
-        const sugLab25Base = Math.round(normWithFloor25 * mFactor25 * localMod25 * baseRateForCalc * globalLaborMod * 100) / 100;
+        const sugLab25Base = Math.round(normWithFloor25 * localMod25 * baseRateForCalc * globalLaborMod * 100) / 100;
         const sugLab25 = Math.round(sugLab25Base * wymianaFactor25 * 100) / 100;
         const laborHoursTotal25 = baseRateForCalc > 0
           ? Math.round(sugLab25 / baseRateForCalc * (item.quantity ?? 1) * 1000) / 1000
@@ -944,22 +947,21 @@ export async function estimatePricesWithAI(
           laborHoursTotal: laborHoursTotal25,
           regionModifier: rateResult.regionModifier,
           confidence: "medium" as const,
-          note: `L2.5 Name-match: "${item.name}" → ${l25Match.code} | norma: ${normWithFloor25.toFixed(4)} rbh/${itemUnitForScale25} × ${mFactor25.toFixed(2)}[M:${mLabel25}] × ${localMod25.toFixed(2)}(local) × ${baseRateForCalc.toFixed(1)}PLN/h = ${sugLab25.toFixed(2)} PLN${regionHint25}`,
+          note: `L2.5 Name-match: "${item.name}" → ${l25Match.code} | norma: ${normWithFloor25.toFixed(4)} rbh/${itemUnitForScale25} × ${localMod25.toFixed(2)}(local) × ${baseRateForCalc.toFixed(1)}PLN/h = ${sugLab25.toFixed(2)} PLN${regionHint25}`,
           knrCode: l25Match.code,
           knrSource: isOfficialKnr(l25Match.code) ? ("official" as const) : ("es-synthetic" as const),
           laborNorm: normWithFloor25,
           suggestedNorm: normWithFloor25,
           isAmbiguous: false,
-          trace: `L2.5 Name Lookup: "${item.name}" → ${l25Match.code} | ${normWithFloor25.toFixed(4)}rbh × ${mFactor25.toFixed(2)}[M:${mLabel25}] × ${localMod25.toFixed(2)}(local) × ${baseRateForCalc.toFixed(1)}PLN/h = ${sugLab25.toFixed(2)}PLN`,
+          trace: `L2.5 Name Lookup: "${item.name}" → ${l25Match.code} | ${normWithFloor25.toFixed(4)}rbh × ${localMod25.toFixed(2)}(local) × ${baseRateForCalc.toFixed(1)}PLN/h = ${sugLab25.toFixed(2)}PLN`,
         };
       }
 
       // L2.5 also missed → existing connection floor (or full L3 AI fallback for non-connection)
-      const missMFactor = getModernizationFactor(isHeavyConnMiss ? "HEAVY_CONNECTION" : "STANDARD_ACTION");
       const connFloorMiss = isConnMiss
         ? Math.round(
             (isHeavyConnMiss ? HEAVY_CONNECTION_MIN_NORM : CONNECTION_MIN_NORM)
-            * missMFactor * baseRateForCalc * globalLaborMod * 100
+            * baseRateForCalc * 100
           ) / 100
         : 0;
       return {
@@ -980,7 +982,7 @@ export async function estimatePricesWithAI(
         laborNorm: isConnMiss ? (isHeavyConnMiss ? HEAVY_CONNECTION_MIN_NORM : CONNECTION_MIN_NORM) : null,
         isAmbiguous: false,
         trace: isConnMiss
-          ? `L2 Miss → connection floor: ${isHeavyConnMiss ? "heavy" : "std"} (${isHeavyConnMiss ? HEAVY_CONNECTION_MIN_NORM : CONNECTION_MIN_NORM}rbh × ${missMFactor.toFixed(2)}[M:${getMFactorLabel(missMFactor)}] × ${baseRateForCalc.toFixed(1)}PLN/h = ${connFloorMiss.toFixed(2)}PLN)`
+          ? `L2 Miss → connection floor: ${isHeavyConnMiss ? "heavy" : "std"} (${isHeavyConnMiss ? HEAVY_CONNECTION_MIN_NORM : CONNECTION_MIN_NORM}rbh × ${baseRateForCalc.toFixed(1)}PLN/h = ${connFloorMiss.toFixed(2)}PLN)`
           : "unmatched",
       };
     });
@@ -1562,13 +1564,10 @@ export async function repriceSingleItem(
         const normFloorR = isHeavyR ? Math.max(scaledNormR, HEAVY_CONNECTION_MIN_NORM)
           : isConnR ? Math.max(scaledNormR, CONNECTION_MIN_NORM)
           : scaledNormR;
-        const mFactorR = getModernizationFactor(classifyIntent(item.name).intent,
-          isCableItem(item.name)
-            ? (() => { const _m = item.name.match(CABLE_SECTION_RE); return _m ? parseFloat(_m[2].replace(",", ".")) : null; })()
-            : null);
+        // v2.4: M-Factor REMOVED — see L0 above for rationale.
         const wymianaActiveR = WYMIANA_RE.test(item.name) || DEMONTAZ_MONTAZ_RE.test(item.name);
         const wymianaFactorR = wymianaActiveR ? WYMIANA_FACTOR : 1.0;
-        const sugLabRBase = Math.round(normFloorR * mFactorR * localModR * baseRateForCalc * 100) / 100;
+        const sugLabRBase = Math.round(normFloorR * localModR * baseRateForCalc * 100) / 100;
         const sugLabR = Math.round(sugLabRBase * wymianaFactorR * 100) / 100;
         const rawL25ReprEst: AiPriceEstimate = {
           itemId: item.id, name: item.name, unit: item.unit, quantity: item.quantity,
@@ -1577,7 +1576,7 @@ export async function repriceSingleItem(
           suggestedMaterial: 0, // material handled separately via benchmarks
           suggestedLabor: sugLabR,
           confidence: "medium" as const,
-          note: `L2.5 Name-match: ${item.name} → ${l25Repr.code} (${normFloorR.toFixed(4)} rbh/${effectiveUnit} × ${mFactorR.toFixed(2)} × ${localModR.toFixed(2)} × ${baseRateForCalc} PLN/h)`,
+          note: `L2.5 Name-match: ${item.name} → ${l25Repr.code} (${normFloorR.toFixed(4)} rbh/${effectiveUnit} × ${localModR.toFixed(2)} × ${baseRateForCalc} PLN/h)`,
           knrCode: l25Repr.code,
           knrSource: isOfficialKnr(l25Repr.code) ? "official" : "es-synthetic",
           laborNorm: normFloorR,
@@ -1938,13 +1937,10 @@ export async function triggerL3Estimation(
       const normFloorT = isHeavyT ? Math.max(scaledNormT, HEAVY_CONNECTION_MIN_NORM)
         : isConnT ? Math.max(scaledNormT, CONNECTION_MIN_NORM)
         : scaledNormT;
-      const mFactorT = getModernizationFactor(classifyIntent(positionName).intent,
-        isCableItem(positionName)
-          ? (() => { const _m = positionName.match(CABLE_SECTION_RE); return _m ? parseFloat(_m[2].replace(",", ".")) : null; })()
-          : null);
+      // v2.4: M-Factor REMOVED — see L0 above for rationale.
       const wymianaActiveT = WYMIANA_RE.test(positionName) || DEMONTAZ_MONTAZ_RE.test(positionName);
       const wymianaFactorT = wymianaActiveT ? WYMIANA_FACTOR : 1.0;
-      const sugLabTBase = Math.round(normFloorT * mFactorT * localModT * baseRateForCalc * 100) / 100;
+      const sugLabTBase = Math.round(normFloorT * localModT * baseRateForCalc * 100) / 100;
       const sugLabT = Math.round(sugLabTBase * wymianaFactorT * 100) / 100;
       const knrCodeT = l25Trigger.code;
       // Run through sanity + guards for consistency with full pipeline
@@ -1954,7 +1950,7 @@ export async function triggerL3Estimation(
         suggestedMaterial: 0, // material handled by separate benchmark path
         suggestedLabor: sugLabT,
         confidence: "medium" as const,
-        note: `L2.5 Name-match: ${positionName} → ${knrCodeT} (${normFloorT.toFixed(4)} rbh/${unit} × ${mFactorT.toFixed(2)} × ${localModT.toFixed(2)} × ${baseRateForCalc} PLN/h)`,
+        note: `L2.5 Name-match: ${positionName} → ${knrCodeT} (${normFloorT.toFixed(4)} rbh/${unit} × ${localModT.toFixed(2)} × ${baseRateForCalc} PLN/h)`,
         knrCode: knrCodeT,
         knrSource: isOfficialKnr(knrCodeT) ? "official" : "es-synthetic",
         laborNorm: normFloorT,

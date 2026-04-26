@@ -6,7 +6,8 @@
 
 import type { AiPriceEstimate } from "./pricing-types";
 import {
-  getModernizationFactor, getMFactorLabel,
+  // v2.4: M-Factor removed from floor formulas — KNR 2026 norms already
+  // factor in modern tooling. Re-import only if reintroducing M-Factor.
   CONNECTION_MIN_NORM, HEAVY_CONNECTION_MIN_NORM,
   SAL_HEAVY_CONN_FLOOR_PLN, SAL_STD_CONN_FLOOR_PLN,
   SAL_HARD_SURFACE_FLOOR_PLN, SAL_DRILLING_FLOOR_PLN, SAL_GROOVE_ZELBET_FLOOR_PLN,
@@ -473,10 +474,9 @@ export function enforceExpertGuards(
   const profile = classifyIntent(name);
 
   // A. Connection/commissioning formula floor — rate-dependent (contrast: securityAuditLayer is hardcoded)
-  // M-Matrix: HEAVY_CONNECTION ×1.0, STANDARD_ACTION ×0.85, DISTRIBUTION_BOARD ×1.0
+  // v2.4: M-Factor REMOVED — KNR 2026 baseNorm already accounts for modern tooling.
   if (profile.intent === "HEAVY_CONNECTION" || profile.intent === "STANDARD_ACTION" || profile.intent === "DISTRIBUTION_BOARD") {
-    const mFactor    = getModernizationFactor(profile.intent);
-    const priceFloor = Math.round(profile.baseNorm * mFactor * baseRate * globalMod * 100) / 100;
+    const priceFloor = Math.round(profile.baseNorm * baseRate * globalMod * 100) / 100;
     if ((est.suggestedLabor ?? 0) < priceFloor) {
       return {
         ...est,
@@ -490,7 +490,7 @@ export function enforceExpertGuards(
   }
 
   // B. Hard surface formula floor — using stored laborNorm (reliable for L0/L2; skip if null)
-  // Formula: surfaceFloor = laborNorm × M-Factor × surfaceTier × baseRate × globalMod
+  // v2.4: M-Factor REMOVED. Formula: surfaceFloor = laborNorm × surfaceTier × baseRate × globalMod
   // Uses a separate surface-tier matrix (silka 1.75x is not in classifyIntent — material property, not intent).
   if (est.laborNorm != null && est.laborNorm > 0) {
     const hardTier = isZelbet(name) ? 2.25
@@ -498,8 +498,7 @@ export function enforceExpertGuards(
       : /\bbeton/i.test(name) ? 1.50
       : 0;
     if (hardTier > 0) {
-      const mFactorHard = getModernizationFactor(profile.intent);
-      const surfaceFloor = Math.round(est.laborNorm * mFactorHard * hardTier * baseRate * globalMod * 100) / 100;
+      const surfaceFloor = Math.round(est.laborNorm * hardTier * baseRate * globalMod * 100) / 100;
       if ((est.suggestedLabor ?? 0) < surfaceFloor) {
         return {
           ...est,
