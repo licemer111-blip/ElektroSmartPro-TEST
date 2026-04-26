@@ -7,6 +7,6 @@ export async function GET() {
     return NextResponse.json({ multiplier });
   } catch (error) {
     console.error("Failed to fetch KNR multiplier:", error);
-    return NextResponse.json({ multiplier: 1.4 }, { status: 500 });
+    return NextResponse.json({ multiplier: 1.5 }, { status: 500 });
   }
 }

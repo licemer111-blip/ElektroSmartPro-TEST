@@ -6,7 +6,7 @@
  * Server-side only — do NOT import in client components.
  *
  * KNR 2026 MULTIPLIER:
- *   - Default: 1.4 (40% increase to outdated KNR norms)
+ *   - Default: 1.5 (50% increase to outdated KNR norms — matches LIVE admin_settings value)
  *   - Stored in admin_settings.value.knr_2026_multiplier
  *   - Applied at DISPLAY-TIME only (see pricing-calculations.ts)
  *   - Client-side: useKnrMultiplier() hook fetches via /api/admin/knr-multiplier
@@ -43,13 +43,13 @@ async function fetchBenchmarks(): Promise<BenchmarkCache> {
 
     const val = data?.value as { knr_2026_multiplier?: number } | null;
     _cache = {
-      knr_2026_multiplier: val?.knr_2026_multiplier ?? 1.4,
+      knr_2026_multiplier: val?.knr_2026_multiplier ?? 1.5,
       fetchedAt: now,
     };
   } catch {
     // Fallback to defaults — never throw, always return usable values
     _cache = {
-      knr_2026_multiplier: 1.4,
+      knr_2026_multiplier: 1.5,
       fetchedAt: now,
     };
   }
@@ -64,7 +64,7 @@ export function invalidateBenchmarkCache(): void {
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
-/** KNR 2026 labor norm multiplier from admin_settings. Default: 1.4 */
+/** KNR 2026 labor norm multiplier from admin_settings. Default: 1.5 */
 export async function getKnrMultiplier(): Promise<number> {
   return (await fetchBenchmarks()).knr_2026_multiplier;
 }
