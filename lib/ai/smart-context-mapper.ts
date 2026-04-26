@@ -83,11 +83,21 @@ const BIALY_WYMIANA_RE     = /\bwymiana\b/i;
 const BIALY_INST_OSP_RE    = /instalacja\s+osprzę?tu/i;
 
 // Category 3 — TRASY / OKABLOWANIE (Linear work per mb)
+// NOTE: TRASY assembly bundles bruzd + cable + mocowanie. It must be triggered
+// by an EXPLICIT cable-action verb (układanie/prowadzenie/wciąganie/mocowanie)
+// or by a "trasa kablowa" / "linia kablowa" composite name. Bare "Bruzdowanie"
+// is NOT a TRASY trigger — standalone bruzdowanie is a separate kosztorys line
+// (KNR 5-08 0101 cegła = 0.85 rbh/mb, KNR 5-08 0103 beton = 2.0 rbh/mb).
+// Triggering TRASY on bare "Bruzdowanie" caused (a) double-counting against
+// the user's separate cable lines and (b) flat 0.98 rbh/mb override of the
+// L0 canonical norms (cegła vs beton differentiation lost). v2.6.3.
 const TRASY_UKLADANIE_RE   = /\bu[lł][oó][zż]enie\b|\bukladanie\b|\bukladac\b/i;
 const TRASY_PROWADZENIE_RE = /\bprowadzenie\b/i;
 const TRASY_WCIAGANIE_RE   = /\bwci[aą]ganie\b/i;
 const TRASY_MOCOWANIE_RE   = /\bmocowanie\b/i;
-const TRASY_BRUZDA_RE      = /\bbruzda\b|\bbruzdowanie\b/i;
+// "trasa kablowa" / "linia kablowa" — explicit composite naming triggers bundle.
+// Standalone "Bruzdowanie" is INTENTIONALLY NOT in this regex.
+const TRASY_TRASA_RE       = /\b(?:trasa|linia)\s+kablow/i;
 
 // Category 4 — ROZDZIELNICE (Panel aggregation)
 const RZDZ_PREFABRYKACJA_RE = /\bprefabrykacja\b/i;
@@ -152,8 +162,9 @@ export function detectSmartContext(name: string): SmartContext {
   }
 
   // ── Category 3: TRASY / OKABLOWANIE ────────────────────────────────────────
-  if (TRASY_BRUZDA_RE.test(raw) || TRASY_BRUZDA_RE.test(nn)) {
-    return buildTrasy("Bruzda/Bruzdowanie", raw);
+  // v2.6.3: bare "Bruzdowanie" no longer triggers TRASY (see TRASY_TRASA_RE comment).
+  if (TRASY_TRASA_RE.test(raw) || TRASY_TRASA_RE.test(nn)) {
+    return buildTrasy("Trasa kablowa", raw);
   }
   if (TRASY_UKLADANIE_RE.test(raw) || TRASY_UKLADANIE_RE.test(nn)) {
     return buildTrasy("Układanie/Ułożenie", raw);
