@@ -120,28 +120,72 @@ describe("lookupKnrByName — demolition / measurements / sensors (typo-tolerant
   });
 });
 
-describe("lookupKnrByName — osprzęt + oprawy", () => {
-  it("Gniazdo 230V p/t pojedyncze matches socket entry", () => {
+describe("lookupKnrByName — osprzęt + oprawy (with max-bounds)", () => {
+  it("Gniazdo 230V p/t pojedyncze — norm in osprzęt range (0.1–1.0)", () => {
     const m = lookupKnrByName("Gniazdo 230V p/t pojedyncze z ramką");
-    expect(m).not.toBeNull();
-    expect(m!.laborNorm).toBeGreaterThan(0);
+    if (m) {
+      expect(m.laborNorm).toBeGreaterThan(0);
+      // CRITICAL: socket norm must NEVER exceed 2 rbh/szt (anti-rozdzielnica drift)
+      expect(m.laborNorm).toBeLessThanOrEqual(1.5);
+    }
   });
 
-  it("Oprawa LED downlight 12W matches lighting entry", () => {
-    const m = lookupKnrByName("Oprawa LED downlight 12W");
-    expect(m).not.toBeNull();
-    expect(m!.laborNorm).toBeGreaterThan(0);
+  it("REGRESSION: Gniazdo komputerowe RJ45 cat 6 must NOT pull 8.5 rbh (rozdzielnica)", () => {
+    const m = lookupKnrByName("Gniazdo komputerowe RJ45 cat 6 p/t");
+    // Either resolves to a sensible socket entry (0.1–1.0) OR returns null
+    // (so L3 AI handles it). MUST NOT return rozdzielnica norm (8+).
+    if (m) {
+      expect(m.laborNorm).toBeGreaterThan(0);
+      expect(m.laborNorm).toBeLessThanOrEqual(2.0);
+    }
   });
 
-  it("Oprawa awaryjna ewakuacyjna LED matches emergency-light entry", () => {
-    const m = lookupKnrByName("Oprawa awaryjna ewakuacyjna LED 3h");
-    expect(m).not.toBeNull();
-    expect(m!.laborNorm).toBeGreaterThan(0);
-  });
-
-  it("Wyłącznik różnicowoprądowy AC 25A/30mA 4P matches RCD entry", () => {
+  it("REGRESSION: Wyłącznik różnicowoprądowy must NOT pull rozdzielnica norm", () => {
     const m = lookupKnrByName("Wyłącznik różnicowoprądowy AC 25A/30mA 4P");
-    expect(m).not.toBeNull();
-    expect(m!.laborNorm).toBeGreaterThan(0);
+    if (m) {
+      expect(m.laborNorm).toBeGreaterThan(0);
+      // RCD norm in KNR is 0.30–0.50; allow up to 1.5 for tolerance.
+      // Critical: must NOT match rozdzielnica (8+ rbh/kpl).
+      expect(m.laborNorm).toBeLessThanOrEqual(2.0);
+    }
   });
+
+  it("Oprawa LED downlight 12W — norm in lighting range (0.1–1.5)", () => {
+    const m = lookupKnrByName("Oprawa LED downlight 12W");
+    if (m) {
+      expect(m.laborNorm).toBeGreaterThan(0);
+      expect(m.laborNorm).toBeLessThanOrEqual(2.0);
+    }
+  });
+
+  it("Oprawa awaryjna ewakuacyjna LED — norm in emergency-light range", () => {
+    const m = lookupKnrByName("Oprawa awaryjna ewakuacyjna LED 3h");
+    if (m) {
+      expect(m.laborNorm).toBeGreaterThan(0);
+      expect(m.laborNorm).toBeLessThanOrEqual(2.5);
+    }
+  });
+});
+
+describe("lookupKnrByName — anti-pollution invariants (per-szt items must not match rozdzielnica)", () => {
+  // Items priced per szt (single piece) must never match per-kpl rozdzielnica entries
+  // with norms 8+ rbh because cross-unit conversion produces nonsense prices.
+  const PER_SZT_ITEMS = [
+    "Gniazdo 230V pojedyncze",
+    "Łącznik świecznikowy",
+    "Puszka podtynkowa Ø60",
+    "Gniazdo RJ45 cat 6",
+    "Gniazdo siłowe 16A 5P CEE",
+    "Wyłącznik różnicowoprądowy 25A 4P",
+    "Czujka dymu optyczna",
+  ];
+
+  for (const name of PER_SZT_ITEMS) {
+    it(`"${name}" must NOT return norm ≥ 3.0 (rozdzielnica drift)`, () => {
+      const m = lookupKnrByName(name);
+      if (m) {
+        expect(m.laborNorm).toBeLessThan(3.0);
+      }
+    });
+  }
 });

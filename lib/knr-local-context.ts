@@ -214,50 +214,30 @@ const NEEDLE_SLANG_MAP: ReadonlyArray<SlangRule> = [
   { trigger: /\b(zasilan|zasialn)[a-z]*/, canonical: "ulozenie kabla zasilanie wlz prowadzenie przewodu" },
   { trigger: /\bklimatyz[a-z]*/, canonical: "klimatyzacja split jednostka" },
 
-  // === Cables — common Polish installer names ===
-  // YDYp/YDY — copper PVC cable, primary residential cable
-  { trigger: /\bydyp?[a-z]*\b|\bydy\b/, canonical: "ulozenie przewodu ydyp p t bruzda rurka kablowanie" },
+  // === Cables — narrow slang for legacy items ===
+  // CAUTION: cable slang is intentionally NARROW — broad triggers risk
+  // pulling sockets/panels toward cable entries (cross-unit norm bugs).
+  // Only fire when item name actually contains the cable abbreviation.
+  // YDYp/YDY — copper PVC cable
+  { trigger: /\bydyp?\b|\bydy\b/, canonical: "ulozenie przewodu ydyp" },
   // YKY/YKYzo — copper power cable
-  { trigger: /\byky(?:zo)?[a-z]*\b/, canonical: "ulozenie kabla yky miedziany rura korytko zasilanie" },
-  // NYM — round cable
-  { trigger: /\bnym[a-z]*\b/, canonical: "ulozenie kabla nym natynkowy rurka pcv" },
-  // UTP/skrętka cat 5/6
-  { trigger: /\butp\b|\bskretka\b|\bcat\s?[56][a-z]*\b/, canonical: "ulozenie skretki utp cat lan strukturalne okablowanie" },
-  // Generic cable cross-section pattern (3x1.5, 5x16 etc) — boost cable-laying entries
-  { trigger: /\b\d+\s*x\s*\d+(?:\s*[,.]?\s*\d+)?\s*(?:mm)?\b/, canonical: "ulozenie przewodu kabla okablowanie p t bruzda" },
+  { trigger: /\byky(?:zo)?\b/, canonical: "ulozenie kabla yky miedziany" },
+  // UTP/skrętka — must have explicit "utp" or "skretka" (NOT bare "cat 6"
+  // because RJ45 sockets also include cat 6 and we'd misroute them)
+  { trigger: /\butp\b|\bskretka\b/, canonical: "ulozenie skretki utp" },
 
-  // === Okablowanie / przewody zasilające ===
+  // === Okablowanie / przewody zasilające — generic cable laying ===
   { trigger: /\bokablowani[ea]\b|\bprzewody\s+zasilaj/, canonical: "ulozenie przewodu kabla wciaganie" },
 
-  // === Pomiary i odbiory ===
-  { trigger: /\bpomiar[a-z]*/, canonical: "pomiary odbiorcze badania instalacji rezystancja izolacji" },
+  // === Pomiary i odbiory — must include explicit pomiar+context ===
+  { trigger: /\bpomiar[a-z]*\s+(?:rezystancj|izolacj|skutec|odbior|elektryczn|instalacj)/,
+    canonical: "pomiary odbiorcze badania instalacji rezystancja izolacji" },
 
-  // === Osprzęt (gniazdo / łącznik / wyłącznik) ===
-  { trigger: /\bgniazd[a-z]*\s+(?:230|komputer|rj45|usb|silow|cee)/,
-    canonical: "montaz gniazda 230v podtynkowego osprzet" },
-  { trigger: /\b(?:lacznik|wylacznik)\s+(?:swiecznik|jednobiegun|krzyz|schodow|zaluzj|seryj)/,
-    canonical: "montaz lacznika wylacznika klawiszowego osprzet" },
-
-  // === Oprawy oświetleniowe ===
-  { trigger: /\b(?:oprawa|oprawe|oprawy)\s+(?:led|halogen|fluoresc|panel|downlight|liniow|zwies)/,
-    canonical: "montaz oprawy oswietleniowej led panel downlight" },
-  { trigger: /\boprawa\s+awaryjn|\bawaryjn[ea]\s+oprawa|\bewakuacyjn/,
-    canonical: "montaz oprawy awaryjnej ewakuacyjnej oswietleniowej led" },
-
-  // === Bruzdy do lamp / opraw — composite ===
+  // === Bruzdy do lamp — composite OPEN action ===
   { trigger: /\bbruzd.*(?:lamp|opraw)/, canonical: "wykucie bruzdy pod oprawe oswietleniowa", notWhenAction: "RESTORE" },
 
   // === Oświetlenie — typo-tolerant (oswietlen / osweitlen — transposition) ===
   { trigger: /\bo[sś]w(?:ietl|eitl)[a-z]*/, canonical: "oswietlenie oprawa oswietleniowa lampa" },
-
-  // === Rozdzielnice ===
-  { trigger: /\brozdzielni[a-z]*/, canonical: "montaz rozdzielnicy modulowej tablicy elektrycznej osprzet" },
-  { trigger: /\b(?:wylacznik|roznicowk[a-z]*)\s+(?:roznicowoprad|rozn|fi)/,
-    canonical: "montaz wylacznika roznicowopradowego rcd osprzet rozdzielnicy" },
-
-  // === SSP / Czujki dymu ===
-  { trigger: /\bczujka\s+dym|\bczujnik\s+dym|\bssp\b|\bsap\b/,
-    canonical: "montaz czujki dymu optyczna ssp ppoz adresowalna" },
 ];
 
 function expandSlang(normalized: string, action: ActionGroup | null): string {
@@ -382,9 +362,10 @@ export function lookupKnrByName(itemName: string, preferResidential = true): Knr
     }
   }
 
-  // Threshold: raw token-recall must clear 0.5 (50% of needle matched)
-  // OR effective score must clear 1.0 (action+substrate strongly anchored the match)
-  if (bestEntry && (bestRawScore >= 0.5 || bestScore >= 1.0)) {
+  // Threshold: raw token-recall must clear 0.5 (50% of needle matched).
+  // No score-fallback — boosts are tiebreakers among already-recalling entries,
+  // not a way to admit weak matches.
+  if (bestEntry && bestRawScore >= 0.5) {
     const adjustedNorm = bestEntry.labor_norm * (bestEntry.unit_factor ?? 1.0);
     return { code: bestEntry.catalog_code, laborNorm: adjustedNorm, unit: bestEntry.unit };
   }
