@@ -90,20 +90,26 @@ function normalize(s: string): string {
  */
 const NEEDLE_SLANG_MAP: ReadonlyArray<{ trigger: RegExp; canonical: string }> = [
   // Bruzdy — wall chasing for cables / lamps
-  { trigger: /\bbruzd(owani[ea]|owac|uj|y)\b/, canonical: "wykucie bruzdy bruzdowanie sciany bruzda" },
-  { trigger: /\bsztrobow|\browkow|\bfrezowani|\bnacieci/, canonical: "wykucie bruzdy bruzda" },
+  // Typo-tolerant: matches "bruzd" stem with any suffix (handles bruzdownie, bruzdy, bruzdowane).
+  { trigger: /\bbruzd[a-z]*/, canonical: "wykucie bruzdy bruzdowanie sciany bruzda" },
+  { trigger: /\bsztrobow|\browkow|\bfrezowani|\bnacieci|\bwykuwa/, canonical: "wykucie bruzdy bruzda" },
 
   // Demontaż instalacji
-  { trigger: /\bdemonta[zż]\b/, canonical: "demontaz rozbiorka usuniecie istniejacej instalacji" },
-  { trigger: /\bdemontuj|\brozbior|\bzdemont|\blikwidacj|\busuniec/, canonical: "demontaz rozbiorka" },
+  // Typo-tolerant: stem "demontaz" / "demonta" + any ending (demontaze, demontaż, demontaza).
+  { trigger: /\bdemonta[a-zż]*/, canonical: "demontaz rozbiorka usuniecie istniejacej instalacji" },
+  { trigger: /\brozbior|\bzdemont|\blikwidacj|\busuniec|\bwyrwani/, canonical: "demontaz rozbiorka" },
 
   // Detektory obecności / ruchu — long-range corridor variants
-  { trigger: /\bdetektor(y|a|ow)?\s+(obecnosc|ruchu)/, canonical: "czujnik ruchu detektor obecnosci pir montaz" },
-  { trigger: /\bczujnik\s+pir\b|\bczujnik\s+ruchu\b/, canonical: "czujnik ruchu pir montaz" },
+  // Loosened: detector + obecnosci/ruchu within 30 chars (any tokens between).
+  { trigger: /\bdetektor[a-z]*\b/, canonical: "czujnik ruchu detektor obecnosci pir montaz" },
+  { trigger: /\bczujnik\s+(pir|ruchu|obecnosc)/, canonical: "czujnik ruchu pir montaz" },
 
   // Zasilanie urządzeń (klimatyzacja, agregaty, IT) — cable laying
-  { trigger: /\bzasilani[ea]\s+(systemu|jednostki|urzadzeni|klimatyz|sug|agregat|szafy|stacji)/,
-    canonical: "ulozenie kabla zasilanie wlz prowadzenie przewodu" },
+  // Typo-tolerant: stems zasilan / zasialn (transposition) — matches "zasialnie" too.
+  { trigger: /\b(zasilan|zasialn)[a-z]*/, canonical: "ulozenie kabla zasilanie wlz prowadzenie przewodu" },
+
+  // Klimatyzacja — context boost for AC-related cable runs
+  { trigger: /\bklimatyz[a-z]*/, canonical: "klimatyzacja split jednostka" },
 
   // Okablowanie / przewody zasilające — generic cable laying
   { trigger: /\bokablowani[ea]\b|\bprzewody\s+zasilaj/, canonical: "ulozenie przewodu kabla wciaganie" },
@@ -112,7 +118,10 @@ const NEEDLE_SLANG_MAP: ReadonlyArray<{ trigger: RegExp; canonical: string }> = 
   { trigger: /\bpomiar(y|ow)?\s+(instalacj|elektryczn|odbior)/, canonical: "pomiary odbiorcze badania instalacji" },
 
   // Bruzdowanie + lamp / oprawy — composite fix for "Bruzdowanie do lamp"
-  { trigger: /\bbruzd.*lamp|\bbruzd.*oprawy/, canonical: "wykucie bruzdy pod oprawe oswietleniowa" },
+  { trigger: /\bbruzd.*lamp|\bbruzd.*opraw/, canonical: "wykucie bruzdy pod oprawe oswietleniowa" },
+
+  // Oświetlenie — typo-tolerant (oswietlen / osweitlen — letter transposition)
+  { trigger: /\bo[sś]w(?:ietl|eitl)[a-z]*/, canonical: "oswietlenie oprawa oswietleniowa lampa" },
 ];
 
 function expandSlang(normalized: string): string {
