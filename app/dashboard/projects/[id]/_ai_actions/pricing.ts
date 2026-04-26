@@ -151,16 +151,28 @@ export async function priceRowWithGlobalFallback(
     if ("error" in guard) return { success: false, error: guard.error };
     const { supabase } = guard;
 
-    // Protected Data Logic v2.2 — same rules as applyAiPrices
+    // Protected Data Logic v2.3 — protect only explicitly user-locked norms.
+    //
+    // CHANGED (v2.3): The original v2.2 "any non-zero labor_norm is protected"
+    // rule unintentionally locked AI-hallucinated norms (e.g. RJ45 priced at
+    // 8.5 rbh by an old L3 run) — preventing reprice on subsequent
+    // "Wyceń wszystko". Now only norms with an explicit user-set guard
+    // are protected:
+    //   - norm_protected         = true  (explicit lock toggle)
+    //   - confidence_level       = manual (user-entered)
+    //   - expert_override        = true  (Expert Shield raised the price)
+    // All engine-derived norms (verified/analog/estimated/uncertain/unmatched)
+    // are eligible for re-pricing.
     const { data: currentItem } = await supabase
       .from("project_items")
-      .select("id, labor_norm, norm_protected, knr_code, material_price, quantity, confidence_level")
+      .select("id, labor_norm, norm_protected, knr_code, material_price, quantity, confidence_level, expert_override")
       .eq("id", itemId)
       .single();
 
     const isNormProtected = currentItem != null && (
       (currentItem.norm_protected as boolean) === true ||
-      (currentItem.labor_norm != null && (currentItem.labor_norm as number) > 0)
+      (currentItem.confidence_level as string | null) === "manual" ||
+      (currentItem.expert_override as boolean) === true
     );
 
     const updatePayload: Record<string, unknown> = {};
@@ -1738,10 +1750,10 @@ export async function applyAiPrices(
     const itemIds = prices.map((p) => p.itemId);
     const { data: currentItems } = await adminClient
       .from("project_items")
-      .select("id, labor_norm, norm_protected, knr_code, material_price, final_labor_price, quantity, confidence_level")
+      .select("id, labor_norm, norm_protected, knr_code, material_price, final_labor_price, quantity, confidence_level, expert_override")
       .in("id", itemIds);
 
-    type CurrentItem = { id: string; labor_norm: number | null; norm_protected: boolean; knr_code: string | null; material_price: number | null; final_labor_price: number | null; quantity: number; confidence_level: string | null };
+    type CurrentItem = { id: string; labor_norm: number | null; norm_protected: boolean; knr_code: string | null; material_price: number | null; final_labor_price: number | null; quantity: number; confidence_level: string | null; expert_override: boolean | null };
     const currentMap = new Map<string, CurrentItem>(
       (currentItems ?? []).map((item) => [item.id as string, item as CurrentItem])
     );
@@ -1755,13 +1767,15 @@ export async function applyAiPrices(
         // 1. Manual override — skip engine entirely
         if (current?.confidence_level === "manual") return true;
 
-        // 2. Sacred Non-Zero Rule — labor_norm > 0 or norm_protected flag set
-        // Exception: if final_labor_price was reset to 0 by user, bypass protection
-        // so that re-estimation can apply new prices normally.
+        // 2. Protected Data Logic v2.3 — protect only explicitly user-locked norms.
+        // (See repriceSingleItem above for the full rationale.) Engine-derived
+        // norms (verified/analog/estimated/uncertain/unmatched) are eligible
+        // for re-pricing so that "Wyceń wszystko" actually fixes AI-mistakes.
         const priceWasReset = current != null && (current.final_labor_price ?? 0) === 0;
         const isNormProtected = !priceWasReset && current != null && (
           current.norm_protected === true ||
-          (current.labor_norm != null && current.labor_norm > 0)
+          current.confidence_level === "manual" ||
+          current.expert_override === true
         );
 
         const updatePayload: Record<string, unknown> = { updated_at: now };
