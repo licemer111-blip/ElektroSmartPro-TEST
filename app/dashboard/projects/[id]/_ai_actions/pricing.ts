@@ -28,6 +28,7 @@ import {
   type MatchResult,
 } from "@/lib/services/matching-engine";
 import { buildLocalKnrContext, lookupKnrByName } from "@/lib/knr-local-context";
+import { findCanonicalL0, validateAgainstCanonicalL0 } from "@/lib/services/canonical-knr-l0";
 import { scaleLaborNorm, getUnitBaseSize } from "@/lib/labor-time";
 import { getPricingCacheName, CACHE_MODEL_ID } from "@/lib/services/ai/gemini-context-cache";
 import {
@@ -522,6 +523,83 @@ export async function estimatePricesWithAI(
         }
         // L0 miss: item falls through to L1/L2/L3 (not added to l0ResolvedIds)
       }
+    }
+    // ────────────────────────────────────────────────────────────────────────────────
+
+    // ─── STEP 0.5: Canonical L0 by name pattern (verified KNR 2026 reference) ───
+    // For items WITHOUT pre-extracted knr_code, try the canonical reference table
+    // (lib/services/canonical-knr-l0.ts) — top ~60 most common Polish electrical
+    // positions with hardcoded high-precision regex patterns + verified KNR 2026
+    // norms. This bypasses the fuzzy L1/L2/L3 cascade for items where we already
+    // KNOW the right answer (cables, sockets, switches, light fixtures, chasing,
+    // breakers, measurements, fire detection).
+    //
+    // Effect: for the ~80% of typical estimates that match canonical patterns,
+    // labor_norm is correct out of the box — eliminates the per-project manual
+    // fix burden caused by L2 keyword matcher mismaps and L3 AI hallucinations.
+    const canonicalCandidates = itemsToPrice.filter(
+      (it) => !l0ResolvedIds.has(it.id),
+    );
+    for (const item of canonicalCandidates) {
+      const canonical = findCanonicalL0(item.name, item.unit);
+      if (!canonical) continue;
+      const itemUnit = (item.unit ?? "").toLowerCase().trim();
+      const cableMod = getCableComplexityModifier(item.name);
+      // Canonical norms encode substrate natively (e.g. bruzdowanie cegła vs beton
+      // are SEPARATE entries with separate norms). Surface modifier must NOT be
+      // re-applied — same rule as STEP 0 above.
+      const surfaceModC0 = 1.0;
+      const sectionCtxC0 = (() => {
+        const t = item as typeof item & { section?: string | null; description?: string | null };
+        return `${t.section ?? ""} ${t.description ?? ""}`.trim() || projectFallback;
+      })();
+      const ceilingModC0 = getCeilingModifier(item.name, sectionCtxC0);
+      const heightModC0 = getHeightModifier(item.name, sectionCtxC0);
+      const localModC0 = clampLocalModifiers(cableMod, surfaceModC0, ceilingModC0, heightModC0);
+      const wymianaActiveC0 = WYMIANA_RE.test(item.name) || DEMONTAZ_MONTAZ_RE.test(item.name);
+      const wymianaFactorC0 = wymianaActiveC0 ? WYMIANA_FACTOR : 1.0;
+      const sugLabBaseC0 = Math.round(canonical.laborNorm * localModC0 * baseRateForCalc * globalLaborMod * 100) / 100;
+      const sugLabC0 = Math.round(sugLabBaseC0 * wymianaFactorC0 * 100) / 100;
+      const laborHoursTotalC0 = baseRateForCalc > 0
+        ? Math.round(sugLabC0 / baseRateForCalc * (item.quantity ?? 1) * 1000) / 1000
+        : null;
+      const matBenchC0 = canonical.materialPrice ?? 0;
+      const isPureLaborC0 = isPureLaborByKeyword(item.name);
+      const sugMatC0 = mode === "labor"
+        ? (item.material_price || 0)
+        : isPureLaborC0
+          ? 0
+          : matBenchC0;
+      const regionMod = rateResult.regionModifier;
+      const regionLabel = projectRegionName ?? "brak";
+      const regionHintC0 = regionMod !== 1.0
+        ? ` → ×${regionMod.toFixed(2)}(${regionLabel}) → ${(sugLabC0 * regionMod).toFixed(2)}PLN`
+        : "";
+      const wymianaTagC0 = wymianaActiveC0 ? ` ×${WYMIANA_FACTOR.toFixed(1)}(wymiana)` : "";
+      const traceC0 = `${canonical.laborNorm.toFixed(4)}rbh × ${localModC0.toFixed(2)}(local) × ${baseRateForCalc.toFixed(1)}PLN/h${wymianaTagC0} = ${sugLabC0.toFixed(2)}PLN${regionHintC0}`;
+      l0ResolvedIds.add(item.id);
+      l0Estimates.push({
+        itemId: item.id,
+        name: item.name,
+        unit: item.unit,
+        quantity: item.quantity,
+        currentMaterial: item.material_price || 0,
+        currentLabor: item.labor_price || 0,
+        suggestedMaterial: sugMatC0,
+        suggestedLabor: mode === "material" ? (item.labor_price || 0) : sugLabC0,
+        laborHoursTotal: laborHoursTotalC0,
+        regionModifier: regionMod,
+        confidence: "high" as const,
+        note: `L0 Canonical KNR 2026: ${canonical.knrCode} (${canonical.description}) | ${traceC0}`,
+        knrCode: canonical.knrCode,
+        knrSource: "official" as const,
+        laborNorm: canonical.laborNorm,
+        suggestedNorm: canonical.laborNorm,
+        isAmbiguous: false,
+        trace: `L0 Canonical (${canonical.unitMatch}): "${item.name}" → ${canonical.knrCode} | ${traceC0}`,
+      });
+      // Use itemUnit only for trace (no-op assignment to keep var usage explicit)
+      void itemUnit;
     }
     // ────────────────────────────────────────────────────────────────────────────────
 
@@ -1163,7 +1241,29 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
         const ceilingML3 = getCeilingModifier(est.name, l3ItemCtx);
         const heightML3  = getHeightModifier(est.name, l3ItemCtx);
         const localModL3 = clampLocalModifiers(cML3, sML3, ceilingML3, heightML3);
-        const adjLab = Math.round(Math.round(l3.labor_price * 100) / 100 * localModL3 * globalLaborMod * 100) / 100;
+        // L3 AI sanity check vs L0 Canonical baseline. If AI norm deviates by
+        // >3× or <0.33× from a known canonical pattern, override with canonical
+        // norm + recompute price. Catches AI hallucinations like 0.025 rbh/mb
+        // for YDYp 3×1.5 (canonical = 0.13).
+        let l3LaborNorm = l3.labor_norm_rbh ?? null;
+        let l3LaborPriceRaw = Math.round(l3.labor_price * 100) / 100;
+        let l3SanityNote = "";
+        if (l3LaborNorm != null && l3LaborNorm > 0) {
+          const sanity = validateAgainstCanonicalL0(est.name, est.guardedUnit ?? est.unit, l3LaborNorm);
+          if (!sanity.ok) {
+            const corrected = sanity.canonical.laborNorm;
+            l3LaborNorm = corrected;
+            l3LaborPriceRaw = Math.round(corrected * baseRateForCalc * 100) / 100;
+            l3SanityNote = ` ⚠️ L3 norm ${(sanity.deviation).toFixed(2)}× off canonical → korekta na ${corrected.toFixed(4)} rbh (${sanity.canonical.knrCode})`;
+            logger.error(`[L0 Sanity] L3 norm rejected for "${est.name}"`, {
+              aiNorm: l3.labor_norm_rbh,
+              canonical: corrected,
+              deviation: sanity.deviation,
+              knrCode: sanity.canonical.knrCode,
+            });
+          }
+        }
+        const adjLab = Math.round(l3LaborPriceRaw * localModL3 * globalLaborMod * 100) / 100;
         // L3 trace: show surface source explicitly
         const surfaceTagL3 = nameEncodesSurface
           ? `×1.0(name-enc)`
@@ -1180,8 +1280,8 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
           equipmentPrice: l3.equipment_price ?? 0,
           equipmentNorm: l3.equipment_norm ?? 0,
           confidence: l3.confidence,
-          laborNorm: l3.labor_norm_rbh ?? null,
-          note: `L3 AI: ${l3.note} | ×${cML3.toFixed(2)}(kabel) ${surfaceTagL3}(podł)${wL3}`,
+          laborNorm: l3LaborNorm,
+          note: `L3 AI: ${l3.note} | ×${cML3.toFixed(2)}(kabel) ${surfaceTagL3}(podł)${wL3}${l3SanityNote}`,
           knrCode: (() => {
             const raw = l3.knr_code ?? null;
             if (raw && isSyntheticKnr(raw)) {
