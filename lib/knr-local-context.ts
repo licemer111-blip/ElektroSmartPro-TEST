@@ -78,6 +78,97 @@ function normalize(s: string): string {
 }
 
 /**
+ * Action-verb groups: each item has a primary work-action that determines
+ * which KNR family is appropriate. Two actions on the SAME stem (e.g. "bruzd")
+ * are mutually exclusive:
+ *   OPEN     — wykuwanie / bruzdowanie (cutting/opening a chase) — high norm
+ *   RESTORE  — zaprawianie / zatynkowanie (sealing/restoring chase) — low norm
+ *
+ * Iron Rule: when item starts with a RESTORE verb, KNR entries describing
+ * OPEN actions are HARD-BLOCKED (penalty -10) regardless of token overlap.
+ */
+type ActionLabel = "OPEN" | "RESTORE" | "DEMONTAZ" | "MEASURE" | "CONNECT" | "MOUNT_LAMP";
+
+interface ActionGroup {
+  label: ActionLabel;
+  /** Detect this action in the needle (item name). */
+  detect: RegExp;
+  /** KNR entry description must match this for a strong score boost. */
+  required: RegExp;
+  /** KNR entry description matching this is HARD-BLOCKED. */
+  forbidden?: RegExp;
+}
+
+const ACTION_GROUPS: ReadonlyArray<ActionGroup> = [
+  // RESTORE: zaprawianie / zatynkowanie / gipsowanie / uszczelnienie bruzdy
+  // Must match entries that talk about closing/sealing the chase.
+  // BLOCKED: wykuwanie / bruzdowanie / kucie / frezowanie (= opening chase).
+  {
+    label: "RESTORE",
+    detect: /\b(zaprawia|zatynkow|zamkni[ea]ci|zaslepi|gipsowa|uszczelni|odtwarzani|zasypa|zalewa)/,
+    required: /(zaprawia|zatynkow|zasypa|zamkni[ea]ci|zaslepi|gipsowa|uszczelni|odtwarzani|zalewa)/,
+    forbidden: /(wykuwa|wykuci|bruzdowani[ea]|kucie\b|frezowan[ie]|nacieci[ea]|sztrobow)/,
+  },
+  // OPEN: bruzdowanie / wykuwanie / kucie / frezowanie / nacinanie
+  // BLOCKED: zaprawianie / zatynkowanie (= opposite restoration action)
+  {
+    label: "OPEN",
+    detect: /\b(bruzdowa[a-z]*|wykuwa|wykuci|frezowa|nacieci|sztrobow|szlifow.*scian)/,
+    required: /(wykuwa|wykuci|bruzdowani[ea]|kucie|frezowan[ie]|naciec)/,
+    forbidden: /(zaprawia|zatynkow|zasypa|zamkni[ea]ci|zaslepi)/,
+  },
+  // DEMONTAZ: usunięcie istniejącej instalacji (handled separately by slang map)
+  {
+    label: "DEMONTAZ",
+    detect: /\b(demonta[a-zż]+|rozbior|zdemont|likwidacj)/,
+    required: /(demonta[zż]|rozbiorka|usuniec)/,
+    forbidden: /(montaz\s+(?:nowej|nowy|nowego)|wykonanie\s+nowej)/,
+  },
+  // MEASURE: pomiary instalacji (separate KNR family)
+  {
+    label: "MEASURE",
+    detect: /\bpomiar(?:y|ow)?\b/,
+    required: /(pomiar|badanie|odbior|sprawdz|kontrol)/,
+  },
+];
+
+function detectActionGroup(needle: string): ActionGroup | null {
+  let earliest: { group: ActionGroup; pos: number } | null = null;
+  for (const group of ACTION_GROUPS) {
+    const m = needle.match(group.detect);
+    if (m && m.index !== undefined) {
+      if (earliest === null || m.index < earliest.pos) {
+        earliest = { group, pos: m.index };
+      }
+    }
+  }
+  return earliest?.group ?? null;
+}
+
+/**
+ * Substrate tiers: harder material ⇒ higher tier ⇒ higher KNR labor norm.
+ * Used to disambiguate identically-named actions (bruzdowanie cegła vs beton).
+ *
+ * tier: 4 = ytong/gazobeton, 3 = żelbet/zbrojony, 2.5 = silikat,
+ *       2 = beton/g-k, 1 = cegła, 0 = neutral.
+ */
+const SUBSTRATE_TIERS: ReadonlyArray<{ stems: RegExp; tokens: readonly string[]; tier: number }> = [
+  { stems: /\b(ytong|gazobeton|siporex)/,                tokens: ["ytong", "gazobeton", "siporex"],   tier: 4 },
+  { stems: /\b(zelbe|zbrojon|monolit)/,                  tokens: ["zelbe", "zbrojon", "monolit"],     tier: 3 },
+  { stems: /\b(silk[aoie]|silikat|silce)/,                tokens: ["silk", "silikat", "silce"],         tier: 2.5 },
+  { stems: /\bbeton/,                                     tokens: ["beton", "zelbet"],                 tier: 2 },
+  { stems: /\b(gipsokart|gipsow|\bgk\b|karton)/,          tokens: ["gipsokart", "gipsow", " gk "],     tier: 2 },
+  { stems: /\b(cegl|cegiel|ceglan)/,                      tokens: ["cegl", "cegiel"],                   tier: 1 },
+];
+
+function detectSubstrate(needle: string): { tier: number; tokens: readonly string[] } {
+  for (const t of SUBSTRATE_TIERS) {
+    if (t.stems.test(needle)) return { tier: t.tier, tokens: t.tokens };
+  }
+  return { tier: -1, tokens: [] };
+}
+
+/**
  * Slang → canonical KNR vocabulary substitutions, applied BEFORE fuzzy match.
  *
  * Why: lookupKnrByName scores against entry.description / entry.synonyms only.
@@ -87,63 +178,123 @@ function normalize(s: string): string {
  * the JSON datasets.
  *
  * Iron Rule: ADDITIVE — original tokens are preserved (we append, not replace).
+ *
+ * Action-aware: if `action` is set, this slang fires ONLY when the detected
+ * action group label matches. Prevents bruzd-OPEN slang from hijacking
+ * RESTORE items (e.g. "Zaprawianie bruzd po ułożeniu kabli").
  */
-const NEEDLE_SLANG_MAP: ReadonlyArray<{ trigger: RegExp; canonical: string }> = [
-  // Bruzdy — wall chasing for cables / lamps
-  // Typo-tolerant: matches "bruzd" stem with any suffix (handles bruzdownie, bruzdy, bruzdowane).
-  { trigger: /\bbruzd[a-z]*/, canonical: "wykucie bruzdy bruzdowanie sciany bruzda" },
-  { trigger: /\bsztrobow|\browkow|\bfrezowani|\bnacieci|\bwykuwa/, canonical: "wykucie bruzdy bruzda" },
+interface SlangRule {
+  trigger: RegExp;
+  canonical: string;
+  /** Restrict firing to a specific action group (optional). */
+  onlyAction?: ActionLabel;
+  /** Suppress firing when this action group is detected (optional). */
+  notWhenAction?: ActionLabel;
+}
 
-  // Demontaż instalacji
-  // Typo-tolerant: stem "demontaz" / "demonta" + any ending (demontaze, demontaż, demontaza).
+const NEEDLE_SLANG_MAP: ReadonlyArray<SlangRule> = [
+  // === Bruzdy — wall chasing OPEN action ===
+  // CRITICAL: notWhenAction=RESTORE prevents this from polluting "zaprawianie bruzd"
+  { trigger: /\bbruzd[a-z]*/, canonical: "wykucie bruzdy bruzdowanie sciany bruzda", notWhenAction: "RESTORE" },
+  { trigger: /\bsztrobow|\browkow|\bfrezowani|\bnacieci|\bwykuwa/, canonical: "wykucie bruzdy bruzda", notWhenAction: "RESTORE" },
+
+  // === Bruzdy — RESTORE action (zaprawianie / zatynkowanie) ===
+  { trigger: /\b(zaprawia|zatynkow|gipsowa|zaslepi|zamkni[ea]ci|zasypa|uszczelni|odtwarzani)/,
+    canonical: "zaprawianie zatynkowanie bruzdy gips tynk renowacyjny zasypanie zalanie zamkniecie odtworzenie tynku" },
+
+  // === Demontaż instalacji ===
   { trigger: /\bdemonta[a-zż]*/, canonical: "demontaz rozbiorka usuniecie istniejacej instalacji" },
   { trigger: /\brozbior|\bzdemont|\blikwidacj|\busuniec|\bwyrwani/, canonical: "demontaz rozbiorka" },
 
-  // Detektory obecności / ruchu — long-range corridor variants
-  // Loosened: detector + obecnosci/ruchu within 30 chars (any tokens between).
+  // === Detektory obecności / ruchu ===
   { trigger: /\bdetektor[a-z]*\b/, canonical: "czujnik ruchu detektor obecnosci pir montaz" },
   { trigger: /\bczujnik\s+(pir|ruchu|obecnosc)/, canonical: "czujnik ruchu pir montaz" },
 
-  // Zasilanie urządzeń (klimatyzacja, agregaty, IT) — cable laying
-  // Typo-tolerant: stems zasilan / zasialn (transposition) — matches "zasialnie" too.
+  // === Zasilanie urządzeń (klimatyzacja, agregaty, IT) ===
   { trigger: /\b(zasilan|zasialn)[a-z]*/, canonical: "ulozenie kabla zasilanie wlz prowadzenie przewodu" },
-
-  // Klimatyzacja — context boost for AC-related cable runs
   { trigger: /\bklimatyz[a-z]*/, canonical: "klimatyzacja split jednostka" },
 
-  // Okablowanie / przewody zasilające — generic cable laying
+  // === Cables — common Polish installer names ===
+  // YDYp/YDY — copper PVC cable, primary residential cable
+  { trigger: /\bydyp?[a-z]*\b|\bydy\b/, canonical: "ulozenie przewodu ydyp p t bruzda rurka kablowanie" },
+  // YKY/YKYzo — copper power cable
+  { trigger: /\byky(?:zo)?[a-z]*\b/, canonical: "ulozenie kabla yky miedziany rura korytko zasilanie" },
+  // NYM — round cable
+  { trigger: /\bnym[a-z]*\b/, canonical: "ulozenie kabla nym natynkowy rurka pcv" },
+  // UTP/skrętka cat 5/6
+  { trigger: /\butp\b|\bskretka\b|\bcat\s?[56][a-z]*\b/, canonical: "ulozenie skretki utp cat lan strukturalne okablowanie" },
+  // Generic cable cross-section pattern (3x1.5, 5x16 etc) — boost cable-laying entries
+  { trigger: /\b\d+\s*x\s*\d+(?:\s*[,.]?\s*\d+)?\s*(?:mm)?\b/, canonical: "ulozenie przewodu kabla okablowanie p t bruzda" },
+
+  // === Okablowanie / przewody zasilające ===
   { trigger: /\bokablowani[ea]\b|\bprzewody\s+zasilaj/, canonical: "ulozenie przewodu kabla wciaganie" },
 
-  // Pomiary i odbiory
-  { trigger: /\bpomiar(y|ow)?\s+(instalacj|elektryczn|odbior)/, canonical: "pomiary odbiorcze badania instalacji" },
+  // === Pomiary i odbiory ===
+  { trigger: /\bpomiar[a-z]*/, canonical: "pomiary odbiorcze badania instalacji rezystancja izolacji" },
 
-  // Bruzdowanie + lamp / oprawy — composite fix for "Bruzdowanie do lamp"
-  { trigger: /\bbruzd.*lamp|\bbruzd.*opraw/, canonical: "wykucie bruzdy pod oprawe oswietleniowa" },
+  // === Osprzęt (gniazdo / łącznik / wyłącznik) ===
+  { trigger: /\bgniazd[a-z]*\s+(?:230|komputer|rj45|usb|silow|cee)/,
+    canonical: "montaz gniazda 230v podtynkowego osprzet" },
+  { trigger: /\b(?:lacznik|wylacznik)\s+(?:swiecznik|jednobiegun|krzyz|schodow|zaluzj|seryj)/,
+    canonical: "montaz lacznika wylacznika klawiszowego osprzet" },
 
-  // Oświetlenie — typo-tolerant (oswietlen / osweitlen — letter transposition)
+  // === Oprawy oświetleniowe ===
+  { trigger: /\b(?:oprawa|oprawe|oprawy)\s+(?:led|halogen|fluoresc|panel|downlight|liniow|zwies)/,
+    canonical: "montaz oprawy oswietleniowej led panel downlight" },
+  { trigger: /\boprawa\s+awaryjn|\bawaryjn[ea]\s+oprawa|\bewakuacyjn/,
+    canonical: "montaz oprawy awaryjnej ewakuacyjnej oswietleniowej led" },
+
+  // === Bruzdy do lamp / opraw — composite ===
+  { trigger: /\bbruzd.*(?:lamp|opraw)/, canonical: "wykucie bruzdy pod oprawe oswietleniowa", notWhenAction: "RESTORE" },
+
+  // === Oświetlenie — typo-tolerant (oswietlen / osweitlen — transposition) ===
   { trigger: /\bo[sś]w(?:ietl|eitl)[a-z]*/, canonical: "oswietlenie oprawa oswietleniowa lampa" },
+
+  // === Rozdzielnice ===
+  { trigger: /\brozdzielni[a-z]*/, canonical: "montaz rozdzielnicy modulowej tablicy elektrycznej osprzet" },
+  { trigger: /\b(?:wylacznik|roznicowk[a-z]*)\s+(?:roznicowoprad|rozn|fi)/,
+    canonical: "montaz wylacznika roznicowopradowego rcd osprzet rozdzielnicy" },
+
+  // === SSP / Czujki dymu ===
+  { trigger: /\bczujka\s+dym|\bczujnik\s+dym|\bssp\b|\bsap\b/,
+    canonical: "montaz czujki dymu optyczna ssp ppoz adresowalna" },
 ];
 
-function expandSlang(normalized: string): string {
+function expandSlang(normalized: string, action: ActionGroup | null): string {
   const additions: string[] = [];
-  for (const { trigger, canonical } of NEEDLE_SLANG_MAP) {
-    if (trigger.test(normalized)) {
-      additions.push(canonical);
+  for (const rule of NEEDLE_SLANG_MAP) {
+    if (rule.onlyAction && action?.label !== rule.onlyAction) continue;
+    if (rule.notWhenAction && action?.label === rule.notWhenAction) continue;
+    if (rule.trigger.test(normalized)) {
+      additions.push(rule.canonical);
     }
   }
   return additions.length === 0 ? normalized : `${normalized} ${additions.join(" ")}`;
 }
 
 /**
- * Fuzzy token match: exact substring OR shared prefix of length ≥5.
- * Handles typos like "gniazdko" ↔ "gniazdo", "przewod" ↔ "przewód" (after normalize).
+ * Fuzzy token match: exact substring OR shared prefix.
+ * P=4 covers Polish declension (cegle/cegla/cegly share "cegl");
+ * fallback P=3 for tokens ≥6 chars handles letter-transposition typos
+ * like "osweitlen" ↔ "oswietlen".
  */
 function tokenMatches(needle: string, haystack: string): boolean {
   if (haystack.includes(needle)) return true;
-  // prefix=4 handles Polish declension: cegle/cegla/cegly all share "cegl"
   const P = 4;
-  if (needle.length >= P && haystack.split(" ").some((t) => t.startsWith(needle.slice(0, P)))) return true;
+  const haystackTokens = haystack.split(" ");
+  if (needle.length >= P && haystackTokens.some((t) => t.startsWith(needle.slice(0, P)))) return true;
   if (needle.length >= P && needle.startsWith(haystack.slice(0, P))) return true;
+  // Loose prefix=3 for longer words only — limits false positives
+  if (needle.length >= 6 && haystackTokens.some((t) => t.length >= 6 && t.startsWith(needle.slice(0, 3)))) {
+    // Require at least 50% character overlap to avoid wild matches
+    const cand = haystackTokens.find((t) => t.length >= 6 && t.startsWith(needle.slice(0, 3)));
+    if (cand) {
+      const minLen = Math.min(needle.length, cand.length);
+      let common = 0;
+      for (let i = 0; i < minLen; i++) if (needle[i] === cand[i]) common++;
+      if (common / minLen >= 0.65) return true;
+    }
+  }
   return false;
 }
 
@@ -159,43 +310,81 @@ function scoreCandidate(needleTokens: string[], candidate: string): number {
 
 /**
  * Server-side KNR lookup by item name against local JSON synonyms + descriptions.
- * Uses fuzzy prefix matching — handles typos and Polish declension variations.
- * Prefers non-industrial entries for residential context (tie-breaking).
- * Returns best match or null.
+ *
+ * Disambiguation cascade (in priority order):
+ *   1. Action-verb gating  — RESTORE items can't match OPEN entries (and vice versa)
+ *   2. Substrate tier      — beton items prefer beton entries over cegła
+ *   3. Token recall score  — base fuzzy matching with prefix tolerance
+ *   4. Residential tiebreak — prefer is_industrial=false entries
+ *
+ * Returns best match or null when no entry passes the recall threshold.
  */
 export function lookupKnrByName(itemName: string, preferResidential = true): KnrMatch | null {
   const baseNeedle = normalize(itemName);
-  // Expand installer slang → canonical KNR vocabulary (additive — original tokens kept)
-  const needle = expandSlang(baseNeedle);
+  // Detect action and substrate ON THE RAW item name (before slang noise pollutes them)
+  const actionGroup = detectActionGroup(baseNeedle);
+  const substrate = detectSubstrate(baseNeedle);
+
+  // Expand slang AFTER action detection so RESTORE items don't get OPEN-bruzd canonical noise
+  const needle = expandSlang(baseNeedle, actionGroup);
   const needleTokens = needle.split(" ").filter((t) => t.length > 2);
   if (needleTokens.length === 0) return null;
 
   let bestEntry: KnrEntry | null = null;
-  let bestScore = 0;
+  let bestScore = -Infinity;
+  let bestRawScore = 0; // for threshold checking, separate from bonused score
 
   for (const entry of getAllEntries()) {
-    const candidates = [
-      normalize(entry.description),
-      ...(entry.synonyms ?? []).map(normalize),
-    ];
+    const descNorm = normalize(entry.description);
+    const synonymNorms = (entry.synonyms ?? []).map(normalize);
+    const candidates = [descNorm, ...synonymNorms];
 
-    let score = 0;
+    let rawScore = 0;
     for (const candidate of candidates) {
-      score = Math.max(score, scoreCandidate(needleTokens, candidate));
+      rawScore = Math.max(rawScore, scoreCandidate(needleTokens, candidate));
+    }
+    if (rawScore === 0) continue;
+
+    let effectiveScore = rawScore;
+
+    // ── Action-verb gating ──────────────────────────────────────────────
+    if (actionGroup) {
+      const allHaystack = [descNorm, ...synonymNorms].join(" ");
+      const matchesAllowed = actionGroup.required.test(allHaystack);
+      const matchesForbidden = actionGroup.forbidden?.test(allHaystack) ?? false;
+      if (matchesAllowed)        effectiveScore += 1.50;   // strong preference
+      else if (matchesForbidden) effectiveScore -= 10.0;   // HARD-BLOCK
     }
 
-    // Tie-breaking: prefer residential (is_industrial=false) entries
-    const residentialBonus = preferResidential && entry.is_industrial === false ? 0.05 : 0;
-    const effectiveScore = score + residentialBonus;
+    // ── Substrate tier matching ─────────────────────────────────────────
+    if (substrate.tier > 0) {
+      const allHaystack = [descNorm, ...synonymNorms].join(" ");
+      const candHasMatchingSubstrate = substrate.tokens.some((t) => allHaystack.includes(t));
+      if (candHasMatchingSubstrate) {
+        effectiveScore += 0.80;
+      } else {
+        // Penalize entries that explicitly state a SOFTER substrate than the item.
+        // Example: item="bruzdowanie w betonie" (tier 2) vs entry="bruzdowanie w cegle" (tier 1)
+        const candHasSofterSubstrate = SUBSTRATE_TIERS
+          .filter((s) => s.tier > 0 && s.tier < substrate.tier)
+          .some((s) => s.tokens.some((tok) => allHaystack.includes(tok)));
+        if (candHasSofterSubstrate) effectiveScore -= 2.50;
+      }
+    }
+
+    // ── Residential tiebreak ───────────────────────────────────────────
+    if (preferResidential && entry.is_industrial === false) effectiveScore += 0.05;
 
     if (effectiveScore > bestScore) {
       bestScore = effectiveScore;
+      bestRawScore = rawScore;
       bestEntry = entry;
     }
   }
 
-  // Minimum threshold: at least 50% of needle tokens matched
-  if (bestScore >= 0.5 && bestEntry) {
+  // Threshold: raw token-recall must clear 0.5 (50% of needle matched)
+  // OR effective score must clear 1.0 (action+substrate strongly anchored the match)
+  if (bestEntry && (bestRawScore >= 0.5 || bestScore >= 1.0)) {
     const adjustedNorm = bestEntry.labor_norm * (bestEntry.unit_factor ?? 1.0);
     return { code: bestEntry.catalog_code, laborNorm: adjustedNorm, unit: bestEntry.unit };
   }
