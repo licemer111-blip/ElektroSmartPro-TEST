@@ -229,8 +229,12 @@ export function clampLocalModifiers(
   return Math.min(raw, MAX_COMBINED_MODIFIER);
 }
 
-/** Bruzdowanie / groove-cutting items — legitimately high norms (up to 2.0 rbh/m in concrete) */
-export const GROOVE_RE = /\b(bruzd|kucie|rowek|kanal)\b/i;
+/** Bruzdowanie / groove-cutting items — legitimately high norms (up to 2.0 rbh/m in concrete)
+ *  Stem-based: trailing \b removed because Polish word stems extend (Bruzd-owanie, Kuci-e,
+ *  Wykuci-e). The previous \b(bruzd|kucie|...)\b failed on "Bruzdowanie" — letter `o` after
+ *  `bruzd` is a word char, so \b doesn't fire. Result was applySanityCheck zeroing canonical
+ *  norms (cegła 0.85, beton 2.00) using the cable-laying cap 0.35 rbh/mb instead of 3.0. */
+export const GROOVE_RE = /\b(?:bruzd|kuci|wykuci|rowek|kanal|kuc[ie])/i;
 /** Distribution panel / switchboard — assembly can legitimately take >8 rbh/szt */
 export const PANEL_RE = /\b(rozdzielnic|tablic|szaf)/i;
 
@@ -365,7 +369,10 @@ const SANITY_DEFAULT_MAX_RBH = 8.0;
 // These catch AI hallucinations like "RCD 40A 2P: 5.0 rbh/szt" (correct: 0.25 rbh/szt).
 // Match names targeting aparatura szynowa — MCB/RCD/RCBO/SPD/rozłącznik/wyłącznik modułowy.
 // Rozdzielnica (whole enclosure) is NOT here — handled by PANEL_RE → 24 rbh cap.
-const MODULAR_APPARATUS_RE = /\b(?:MCB|RCD|RCBO|SPD|ogranicznik\s+przepi|wyłącznik\s+(?:nadpr|różnic|roznic|izolac|główny)|rozłącznik\s+(?:izolac|bezpiec)|r[oó]żnicowoprąd|roznicowoprad|aparatura\s+modul|szyna\s+DIN|złączka\s+szynow|zlaczk[ai]\s+szyn)\b/i;
+// Trailing \b removed — Polish stems extend (przepi-ęć, nadpr-ądowy, różnic-owoprądowy,
+// izolac-yjny, główn-y, prąd-owy, modul-owa, szynow-a). Acronyms (MCB/RCD/RCBO/SPD/DIN)
+// keep working because they are followed by space or punctuation.
+const MODULAR_APPARATUS_RE = /\b(?:MCB|RCD|RCBO|SPD|ogranicznik\s+przepi|wyłącznik\s+(?:nadpr|różnic|roznic|izolac|główny)|rozłącznik\s+(?:izolac|bezpiec)|r[oó]żnicowoprąd|roznicowoprad|aparatura\s+modul|szyna\s+DIN|złączka\s+szynow|zlaczk[ai]\s+szyn)/i;
 /** Max labor norm for single modular apparatus mounting on DIN rail (per 1 szt). */
 const MODULAR_APPARATUS_MAX_RBH = 0.8;
 
