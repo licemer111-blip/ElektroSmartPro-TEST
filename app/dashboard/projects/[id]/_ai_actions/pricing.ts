@@ -1488,6 +1488,17 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
     const assemblySector = detectSector((project.object_types as { slug?: string } | null)?.slug);
     const assemblyEstimates = estimates.map((e) => {
       if (e.isAmbiguous || e.trace === "unmatched") return e;
+      // v2.6.2 L0 guard: items resolved by L0 Canonical (lib/services/canonical-knr-l0.ts)
+      // or STEP 0 direct KNR lookup are STANDALONE authoritative entries from the user's
+      // kosztorys (e.g. "Bruzdowanie w cegle" billed separately from cable laying — the
+      // user already has separate YDYp/UTP cable lines and puszka lines). Bundling them
+      // via assembly expansion (TRASY_RESIDENTIAL = bruzd 0.85 + kabel 0.13 = 0.98 rbh/mb)
+      // would (a) double-count materials/labor against the user's other line items and
+      // (b) overwrite the canonical KNR 2026 norm with a bundled total. Skip expansion.
+      const traceStr = (e.trace ?? "");
+      if (traceStr.startsWith("L0 Direct KNR") || traceStr.startsWith("L0 Canonical")) {
+        return e;
+      }
       const qty = e.quantity || 1;
       const expansion = expandToAssembly(e.name, qty, assemblySector, baseRateForCalc, 1.0);
       if (!expansion.triggered) return e;
