@@ -16,8 +16,8 @@ import { Button } from "@/components/ui/button";
 import {
   saveCanonicalL0Override,
   deleteCanonicalL0Override,
-  type AdminEntryView,
 } from "../actions";
+import type { AdminEntryView } from "@/lib/services/canonical-l0-overrides";
 
 interface RowDraft {
   laborNorm: string;

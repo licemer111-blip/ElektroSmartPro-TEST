@@ -11,7 +11,9 @@ import {
   type AdminEntryView,
 } from "@/lib/services/canonical-l0-overrides";
 
-export type { AdminEntryView };
+// NOTE: cannot `export type {AdminEntryView}` from a "use server" file —
+// Next.js enforces that all exports be async functions. Client components
+// import AdminEntryView directly from @/lib/services/canonical-l0-overrides.
 
 const SaveOverrideSchema = z.object({
   entry_description: z.string().min(1).max(500),
