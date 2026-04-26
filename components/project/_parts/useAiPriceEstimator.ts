@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, useEffect, useCallback, useMemo } from "react";
+import { useState, useTransition, useEffect, useCallback, useMemo, useRef } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useSingleAiQuota } from "@/hooks/use-ai-quota";
 import { AI_FUNCTION_NAMES } from "@/lib/ai-quota-config";
@@ -58,6 +58,18 @@ export function useAiPriceEstimator({
   const [fullCatalog, setFullCatalog] = useState<Array<{ name: string; mat: number; lab: number; score: number }> | null>(null);
   const [isLoadingCatalog, setIsLoadingCatalog] = useState(false);
 
+  // v2.7.1 — atomic in-flight refs (prevent triple-Wyceń race observed in audit logs).
+  // useTransition's isEstimating/isApplying flags are NOT synchronous — between
+  // user click and React re-render the button can still register another click.
+  // Refs flip immediately and survive across React's batching window.
+  const estimateInFlightRef = useRef(false);
+  const applyInFlightRef = useRef(false);
+  // Hash of the last successfully applied payload — reject identical re-applies
+  // within ESTIMATE_LOCKOUT_MS to prevent the audit-logged "Apply #3 zeroes again"
+  // pattern (user re-clicks Wyceń+Zastosuj on a stale empty result set).
+  const lastAppliedHashRef = useRef<string | null>(null);
+  const lastAppliedAtRef = useRef<number>(0);
+
   const { toast } = useToast();
   const { info: quotaInfo, refresh: refreshQuota } = useSingleAiQuota(userId, AI_FUNCTION_NAMES.aiPricing);
 
@@ -111,6 +123,10 @@ export function useAiPriceEstimator({
       toast({ title: "Projekt zablokowany", description: "Odblokuj projekt, aby wyceniać pozycje", variant: "destructive" });
       return;
     }
+    // v2.7.1 atomic guard — prevents concurrent estimate runs even when React's
+    // useTransition hasn't yet flipped isEstimating to true.
+    if (estimateInFlightRef.current) return;
+    estimateInFlightRef.current = true;
     setMode(selectedMode);
     setStep("loading");
     setError(null);
@@ -210,6 +226,16 @@ export function useAiPriceEstimator({
     });
   }, [isFinal, hasSelectedRows, selectedRowIds, projectId, refreshQuota, toast]);
 
+  // Release in-flight estimate guard when transition finishes (success OR error).
+  // useTransition pending flag transitions true → false on completion.
+  useEffect(() => {
+    if (!isEstimating && estimateInFlightRef.current) {
+      // small grace window so React state reconciliation finishes before next click
+      const t = setTimeout(() => { estimateInFlightRef.current = false; }, 150);
+      return () => clearTimeout(t);
+    }
+  }, [isEstimating]);
+
   const onAnimationComplete = useCallback(() => {
     if (!pendingData) return;
     setEstimates(pendingData.estimates);
@@ -221,6 +247,10 @@ export function useAiPriceEstimator({
   }, [pendingData, refreshQuota]);
 
   const handleApply = useCallback(() => {
+    // v2.7.1 atomic guard — prevents the triple-Apply race observed in audit logs
+    // where two rapid clicks both hit applyAiPrices() before the first one returned.
+    if (applyInFlightRef.current) return;
+
     const toApply = estimates
       .filter((e) => selectedIds.has(e.itemId) && e.trace !== "unmatched")
       .map((e) => ({
@@ -249,22 +279,68 @@ export function useAiPriceEstimator({
       return;
     }
 
+    // v2.7.1 zero-apply guard — if EVERY row would write material=0 AND labor=0
+    // (stale/empty estimate result), refuse to overwrite existing DB values.
+    // Root cause from audit logs: Wyceń pipeline returned empty estimates twice
+    // (Apply #1 and Apply #3), zeroing out the correct values written by Apply #2.
+    const allZero = toApply.every(
+      (r) => (r.material_price ?? 0) === 0 && (r.labor_price ?? 0) === 0,
+    );
+    if (allZero) {
+      toast({
+        title: "⚠️ Wszystkie ceny = 0 zł",
+        description: "Wycena nie zwróciła danych. Uruchom 'Wyceń' ponownie, aby uniknąć nadpisania poprawnych cen zerami.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // v2.7.1 same-payload re-apply guard — if user clicks Apply twice with
+    // identical payload within 5 seconds, treat second click as no-op.
+    const payloadHash = JSON.stringify(
+      toApply
+        .map((r) => `${r.itemId}:${r.material_price}:${r.labor_price}`)
+        .sort(),
+    );
+    const ESTIMATE_LOCKOUT_MS = 5000;
+    const sinceLast = Date.now() - lastAppliedAtRef.current;
+    if (
+      lastAppliedHashRef.current === payloadHash &&
+      sinceLast < ESTIMATE_LOCKOUT_MS
+    ) {
+      toast({
+        title: "Już zastosowano te ceny",
+        description: "Aby ponownie wycenić, kliknij 'Wyceń ponownie'.",
+        duration: 2500,
+      });
+      return;
+    }
+
+    applyInFlightRef.current = true;
+
     startApply(async () => {
-      const result = await applyAiPrices(projectId, toApply as Parameters<typeof applyAiPrices>[1]);
-      if (result.success) {
-        setAppliedCount(result.updatedCount);
-        toast({ title: `✅ Zastosowano ceny dla ${result.updatedCount} pozycji`, duration: 3000 });
-        // Stay on preview — remove applied items, keep unmatched/ambiguous for further work
-        const appliedIds = new Set(toApply.map((e) => e.itemId));
-        setEstimates((prev) => prev.filter((e) => !appliedIds.has(e.itemId)));
-        setSelectedIds(new Set());
-        setTimeout(() => {
-          window.dispatchEvent(new CustomEvent("ai-prices-applied", {
-            detail: { projectId, prices: toApply },
-          }));
-        }, 0);
-      } else {
-        toast({ title: "Błąd", description: result.error, variant: "destructive" });
+      try {
+        const result = await applyAiPrices(projectId, toApply as Parameters<typeof applyAiPrices>[1]);
+        if (result.success) {
+          lastAppliedHashRef.current = payloadHash;
+          lastAppliedAtRef.current = Date.now();
+          setAppliedCount(result.updatedCount);
+          toast({ title: `✅ Zastosowano ceny dla ${result.updatedCount} pozycji`, duration: 3000 });
+          // Stay on preview — remove applied items, keep unmatched/ambiguous for further work
+          const appliedIds = new Set(toApply.map((e) => e.itemId));
+          setEstimates((prev) => prev.filter((e) => !appliedIds.has(e.itemId)));
+          setSelectedIds(new Set());
+          setTimeout(() => {
+            window.dispatchEvent(new CustomEvent("ai-prices-applied", {
+              detail: { projectId, prices: toApply },
+            }));
+          }, 0);
+        } else {
+          toast({ title: "Błąd", description: result.error, variant: "destructive" });
+        }
+      } finally {
+        // Release after a short grace so subsequent state updates settle.
+        setTimeout(() => { applyInFlightRef.current = false; }, 200);
       }
     });
   }, [estimates, selectedIds, projectId, toast]);

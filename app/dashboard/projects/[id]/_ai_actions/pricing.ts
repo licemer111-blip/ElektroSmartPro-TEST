@@ -28,7 +28,8 @@ import {
   type MatchResult,
 } from "@/lib/services/matching-engine";
 import { buildLocalKnrContext, lookupKnrByName } from "@/lib/knr-local-context";
-import { findCanonicalL0, validateAgainstCanonicalL0 } from "@/lib/services/canonical-knr-l0";
+import { validateAgainstCanonicalL0 } from "@/lib/services/canonical-knr-l0";
+import { findCanonicalL0WithOverrides } from "@/lib/services/canonical-l0-overrides";
 import { scaleLaborNorm, getUnitBaseSize } from "@/lib/labor-time";
 import { getPricingCacheName, CACHE_MODEL_ID } from "@/lib/services/ai/gemini-context-cache";
 import {
@@ -541,7 +542,7 @@ export async function estimatePricesWithAI(
       (it) => !l0ResolvedIds.has(it.id),
     );
     for (const item of canonicalCandidates) {
-      const canonical = findCanonicalL0(item.name, item.unit);
+      const canonical = await findCanonicalL0WithOverrides(item.name, item.unit);
       if (!canonical) continue;
       const itemUnit = (item.unit ?? "").toLowerCase().trim();
       const cableMod = getCableComplexityModifier(item.name);

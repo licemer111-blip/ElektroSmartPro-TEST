@@ -332,3 +332,345 @@ describe("validateAgainstCanonicalL0 — AI hallucination detection", () => {
     if (r.ok) expect(r.baseline).toBeNull();
   });
 });
+
+/* ═══════════════════════════════════════════════════════════════════
+ * v2.7.0 EXPANSION TESTS — +40 NEW ENTRIES
+ * ═══════════════════════════════════════════════════════════════════ */
+
+describe("L0 v2.7.0 — Łącznik specialized (PIR / kartowy)", () => {
+  it("Łącznik z czujnikiem ruchu PIR → 0.81 rbh/szt (NOT generic 0.25)", () => {
+    const m = findCanonicalL0("Łącznik z czujnikiem ruchu PIR", "szt");
+    expect(m?.knrCode).toBe("KNR 5-04 0501-08");
+    expect(m?.laborNorm).toBe(0.81);
+  });
+
+  it("Łącznik kartowy hotelowy → 0.50 rbh/szt", () => {
+    const m = findCanonicalL0("Łącznik kartowy hotelowy 230V", "szt");
+    expect(m?.knrCode).toBe("KNR 5-04 0501-09");
+    expect(m?.laborNorm).toBe(0.50);
+  });
+
+  it("Generic łącznik fallback still works (precedence preserved)", () => {
+    const m = findCanonicalL0("Łącznik 1-biegunowy biały", "szt");
+    expect(m?.laborNorm).toBe(0.25);
+  });
+});
+
+describe("L0 v2.7.0 — Oprawy specialized (plafon / kinkiet / ogrodowa / reflektor / listwa LED)", () => {
+  it("Plafon LED sufitowy → 0.68 rbh/szt (NOT generic 0.40)", () => {
+    const m = findCanonicalL0("Plafon LED sufitowy 24W", "szt");
+    expect(m?.knrCode).toBe("KNR 5-04 0303-11");
+    expect(m?.laborNorm).toBe(0.68);
+  });
+
+  it("Kinkiet ścienny LED → 0.65 rbh/szt", () => {
+    const m = findCanonicalL0("Kinkiet ścienny LED zewnętrzny", "szt");
+    expect(m?.laborNorm).toBe(0.65);
+  });
+
+  it("Lampa ogrodowa słupkowa → 1.20 rbh/szt", () => {
+    const m = findCanonicalL0("Lampa ogrodowa słupkowa LED 60cm", "szt");
+    expect(m?.laborNorm).toBe(1.20);
+  });
+
+  it("Reflektor LED → 0.55 rbh/szt", () => {
+    const m = findCanonicalL0("Reflektor LED 50W IP65", "szt");
+    expect(m?.laborNorm).toBe(0.55);
+  });
+
+  it("Naświetlacz LED → 0.55 rbh/szt", () => {
+    const m = findCanonicalL0("Naświetlacz LED 100W", "szt");
+    expect(m?.laborNorm).toBe(0.55);
+  });
+
+  it("Listwa LED kpl → 1.22 rbh/kpl", () => {
+    const m = findCanonicalL0("Listwa LED 5m z zasilaczem", "kpl");
+    expect(m?.knrCode).toBe("KNR 5-04 0303-30");
+    expect(m?.laborNorm).toBe(1.22);
+  });
+
+  it("Taśma LED kpl → 1.22 rbh/kpl", () => {
+    const m = findCanonicalL0("Taśma LED RGB 5m", "kpl");
+    expect(m?.laborNorm).toBe(1.22);
+  });
+
+  it("Generic oprawa fallback still works → 0.40 rbh/szt", () => {
+    const m = findCanonicalL0("Oprawa biurowa standardowa", "szt");
+    expect(m?.laborNorm).toBe(0.40);
+  });
+});
+
+describe("L0 v2.7.0 — Sterowanie / automatyka", () => {
+  it("Ściemniacz / dimmer → 0.82 rbh/szt", () => {
+    const m = findCanonicalL0("Ściemniacz obrotowy 600W", "szt");
+    expect(m?.knrCode).toBe("KNR 5-04 0501-10");
+    expect(m?.laborNorm).toBe(0.82);
+  });
+
+  it("Czujnik ruchu PIR (NOT 'Łącznik z PIR') → 0.81 rbh/szt", () => {
+    const m = findCanonicalL0("Czujnik ruchu PIR sufitowy", "szt");
+    expect(m?.knrCode).toBe("KNR 5-09 0410");
+    expect(m?.laborNorm).toBe(0.81);
+  });
+
+  it("Czujnik zmierzchowy → 0.65 rbh/szt", () => {
+    const m = findCanonicalL0("Czujnik zmierzchowy IP44", "szt");
+    expect(m?.laborNorm).toBe(0.65);
+  });
+
+  it("Termostat pokojowy → 0.55 rbh/szt", () => {
+    const m = findCanonicalL0("Termostat pokojowy programowalny", "szt");
+    expect(m?.knrCode).toBe("KNR 5-09 0501");
+    expect(m?.laborNorm).toBe(0.55);
+  });
+
+  it("Regulator obrotów wentylatora → 0.45 rbh/szt", () => {
+    const m = findCanonicalL0("Regulator obrotów wentylatora 230V", "szt");
+    expect(m?.laborNorm).toBe(0.45);
+  });
+});
+
+describe("L0 v2.7.0 — Rozdzielnice komponenty", () => {
+  it("Obudowa rozdzielnicy 24-mod p/t → 3.00 rbh/szt", () => {
+    const m = findCanonicalL0("Obudowa rozdzielnicy p/t 24 modułów", "szt");
+    expect(m?.knrCode).toBe("KNR 5-08 0302");
+    expect(m?.laborNorm).toBe(3.00);
+  });
+
+  it("Obudowa rozdzielnicy 12-mod p/t → 1.80 rbh/szt", () => {
+    const m = findCanonicalL0("Rozdzielnica p/t 12 modułów RP-12", "szt");
+    expect(m?.knrCode).toBe("KNR 5-08 0301");
+    expect(m?.laborNorm).toBe(1.80);
+  });
+
+  it("Listwa zaciskowa N/PE → 0.20 rbh/szt", () => {
+    const m = findCanonicalL0("Listwa zaciskowa N w rozdzielnicy", "szt");
+    expect(m?.laborNorm).toBe(0.20);
+  });
+
+  it("Lampka kontrolna sygnalizacyjna → 0.15 rbh/szt", () => {
+    const m = findCanonicalL0("Lampka kontrolna LED 230V czerwona", "szt");
+    expect(m?.laborNorm).toBe(0.15);
+  });
+
+  it("Opisanie obwodów → 0.10 rbh/szt", () => {
+    const m = findCanonicalL0("Opisanie obwodów rozdzielnicy", "szt");
+    expect(m?.knrCode).toBe("ES-RPN-001");
+    expect(m?.laborNorm).toBe(0.10);
+  });
+});
+
+describe("L0 v2.7.0 — Antena / SAT / RTV", () => {
+  it("Antena DVB-T → 1.50 rbh/szt", () => {
+    const m = findCanonicalL0("Antena DVB-T2 zewnętrzna", "szt");
+    expect(m?.knrCode).toBe("KNR 5-12 0401");
+    expect(m?.laborNorm).toBe(1.50);
+  });
+
+  it("Antena satelitarna → 1.50 rbh/szt", () => {
+    const m = findCanonicalL0("Antena satelitarna 80cm", "szt");
+    expect(m?.laborNorm).toBe(1.50);
+  });
+
+  it("Multiswitch → 0.80 rbh/szt", () => {
+    const m = findCanonicalL0("Multiswitch 5/8 SAT", "szt");
+    expect(m?.laborNorm).toBe(0.80);
+  });
+
+  it("Wzmacniacz antenowy → 0.50 rbh/szt", () => {
+    const m = findCanonicalL0("Wzmacniacz antenowy szerokopasmowy", "szt");
+    expect(m?.laborNorm).toBe(0.50);
+  });
+
+  it("Maszt antenowy → 2.50 rbh/szt", () => {
+    const m = findCanonicalL0("Maszt antenowy 3m ocynkowany", "szt");
+    expect(m?.laborNorm).toBe(2.50);
+  });
+});
+
+describe("L0 v2.7.0 — Domofony", () => {
+  it("Panel zewnętrzny domofonu → 1.20 rbh/szt", () => {
+    const m = findCanonicalL0("Panel zewnętrzny wideodomofonu z kamerą", "szt");
+    expect(m?.knrCode).toBe("KNR 5-09 0801");
+    expect(m?.laborNorm).toBe(1.20);
+  });
+
+  it("Unifon → 0.80 rbh/szt", () => {
+    const m = findCanonicalL0("Unifon słuchawkowy domofonu", "szt");
+    expect(m?.laborNorm).toBe(0.80);
+  });
+
+  it("Wideounifon → 0.80 rbh/szt", () => {
+    const m = findCanonicalL0("Wideounifon 7'' kolorowy", "szt");
+    expect(m?.laborNorm).toBe(0.80);
+  });
+
+  it("Czytnik kart RFID → 0.65 rbh/szt", () => {
+    const m = findCanonicalL0("Czytnik kart RFID Mifare 13.56MHz", "szt");
+    expect(m?.knrCode).toBe("KNR 5-09 0803");
+    expect(m?.laborNorm).toBe(0.65);
+  });
+});
+
+describe("L0 v2.7.0 — Korytka / drabinki / kanały", () => {
+  it("Drabinka kablowa → 0.55 rbh/mb", () => {
+    const m = findCanonicalL0("Drabinka kablowa 200mm ocynk", "mb");
+    expect(m?.knrCode).toBe("KNR 5-08 0502");
+    expect(m?.laborNorm).toBe(0.55);
+  });
+
+  it("Korytko kablowe metalowe → 0.40 rbh/mb", () => {
+    const m = findCanonicalL0("Korytko kablowe metalowe 100×60", "mb");
+    expect(m?.laborNorm).toBe(0.40);
+  });
+
+  it("Korytko siatkowe → 0.40 rbh/mb", () => {
+    const m = findCanonicalL0("Korytko siatkowe druciane 100mm", "mb");
+    expect(m?.laborNorm).toBe(0.40);
+  });
+
+  it("Listwa PCV instalacyjna → 0.20 rbh/mb", () => {
+    const m = findCanonicalL0("Listwa PCV instalacyjna 25×16", "mb");
+    expect(m?.laborNorm).toBe(0.20);
+  });
+
+  it("Kanał kablowy → 0.20 rbh/mb", () => {
+    const m = findCanonicalL0("Kanał kablowy parapetowy 100×50", "mb");
+    expect(m?.laborNorm).toBe(0.20);
+  });
+});
+
+describe("L0 v2.7.0 — Pomiary rozszerzone", () => {
+  it("Pomiar natężenia oświetlenia (luksomierz) → 0.35 rbh/szt", () => {
+    const m = findCanonicalL0("Pomiar natężenia oświetlenia luksomierzem", "szt");
+    expect(m?.knrCode).toBe("ES-POM-005");
+    expect(m?.laborNorm).toBe(0.35);
+  });
+
+  it("Pomiar ciągłości przewodów ochronnych → 0.20 rbh/szt", () => {
+    const m = findCanonicalL0("Pomiar ciągłości przewodów ochronnych PE", "szt");
+    expect(m?.knrCode).toBe("ES-POM-006");
+    expect(m?.laborNorm).toBe(0.20);
+  });
+
+  it("Protokół końcowy z pomiarów → 1.50 rbh/kpl", () => {
+    const m = findCanonicalL0("Protokół końcowy z pomiarów elektrycznych", "kpl");
+    expect(m?.knrCode).toBe("ES-POM-099");
+    expect(m?.laborNorm).toBe(1.50);
+  });
+});
+
+describe("L0 v2.7.0 — SSP / DSO rozszerzenie", () => {
+  it("Centrala SSP → 5.00 rbh/szt", () => {
+    const m = findCanonicalL0("Centrala SSP 8-strefowa Polon-Alfa", "szt");
+    expect(m?.knrCode).toBe("KNR 5-09 0610");
+    expect(m?.laborNorm).toBe(5.00);
+  });
+
+  it("Moduł kontrolno-sterujący SSP → 1.20 rbh/szt", () => {
+    const m = findCanonicalL0("Moduł kontrolno-sterujący 2 wejścia/2 wyjścia", "szt");
+    expect(m?.laborNorm).toBe(1.20);
+  });
+
+  it("Czujka zalania → 0.40 rbh/szt", () => {
+    const m = findCanonicalL0("Czujka zalania wodne", "szt");
+    expect(m?.knrCode).toBe("KNR 5-09 0612");
+    expect(m?.laborNorm).toBe(0.40);
+  });
+
+  it("Czujka gazu → 0.40 rbh/szt", () => {
+    const m = findCanonicalL0("Czujka gazu metanu domowa", "szt");
+    expect(m?.knrCode).toBe("KNR 5-09 0613");
+    expect(m?.laborNorm).toBe(0.40);
+  });
+
+  it("Detektor gazu → 0.40 rbh/szt", () => {
+    const m = findCanonicalL0("Detektor gazu LPG", "szt");
+    expect(m?.laborNorm).toBe(0.40);
+  });
+
+  it("Czujka dymu (existing) NOT overridden by gas pattern → 0.40 / KNR 5-09 0602-01", () => {
+    const m = findCanonicalL0("Czujka dymu optyczna SSP", "szt");
+    expect(m?.knrCode).toBe("KNR 5-09 0602-01");
+  });
+});
+
+describe("L0 v2.7.0 — SSWiN / systemy alarmowe", () => {
+  it("Centrala alarmowa SSWiN → 4.50 rbh/szt", () => {
+    const m = findCanonicalL0("Centrala alarmowa SSWiN Satel", "szt");
+    expect(m?.knrCode).toBe("KNR 5-09 0620");
+    expect(m?.laborNorm).toBe(4.50);
+  });
+
+  it("Czujka kontaktron magnetyczny → 0.30 rbh/szt", () => {
+    const m = findCanonicalL0("Kontaktron magnetyczny do drzwi", "szt");
+    expect(m?.laborNorm).toBe(0.30);
+  });
+
+  it("Manipulator SSWiN → 0.80 rbh/szt", () => {
+    const m = findCanonicalL0("Manipulator alarmowy LCD", "szt");
+    expect(m?.laborNorm).toBe(0.80);
+  });
+
+  it("Sygnalizator alarmowy zewnętrzny → 0.90 rbh/szt", () => {
+    const m = findCanonicalL0("Sygnalizator alarmowy zewnętrzny IP65", "szt");
+    expect(m?.knrCode).toBe("KNR 5-09 0623");
+    expect(m?.laborNorm).toBe(0.90);
+  });
+
+  it("Existing 'Sygnalizator akustyczno-optyczny' NOT clobbered by SSWiN pattern", () => {
+    // Existing pattern should still match — akustyczno-optyczny precedence preserved
+    const m = findCanonicalL0("Sygnalizator akustyczno-optyczny", "szt");
+    expect(m?.knrCode).toBe("KNR 5-09 0604-01");
+    expect(m?.laborNorm).toBe(0.50);
+  });
+});
+
+describe("L0 v2.7.0 — Uziemienie / ochrona odgromowa", () => {
+  it("Bednarka FeZn 25×4 → 0.45 rbh/mb", () => {
+    const m = findCanonicalL0("Bednarka FeZn 25×4 ocynkowana", "mb");
+    expect(m?.knrCode).toBe("KNR 5-08 0701");
+    expect(m?.laborNorm).toBe(0.45);
+  });
+
+  it("Pręt uziemiający → 1.50 rbh/szt", () => {
+    const m = findCanonicalL0("Pręt uziemiający 1.5m FeZn", "szt");
+    expect(m?.laborNorm).toBe(1.50);
+  });
+
+  it("Sonda uziemiająca → 1.50 rbh/szt", () => {
+    const m = findCanonicalL0("Sonda uziemiająca głębinowa", "szt");
+    expect(m?.laborNorm).toBe(1.50);
+  });
+
+  it("Złącze kontrolne uziemienia → 0.50 rbh/szt", () => {
+    const m = findCanonicalL0("Złącze kontrolne uziemienia w obudowie", "szt");
+    expect(m?.laborNorm).toBe(0.50);
+  });
+});
+
+describe("L0 v2.7.0 — Precedence regression (no clobbering)", () => {
+  it("Czujka dymu still wins over generic czujka pattern", () => {
+    const m = findCanonicalL0("Czujka dymu optyczna", "szt");
+    expect(m?.knrCode).toBe("KNR 5-09 0602-01");
+  });
+
+  it("Existing Wyłącznik różnicowoprądowy still wins (no łącznik fallback)", () => {
+    const m = findCanonicalL0("Wyłącznik różnicowoprądowy 4P 40A/30mA", "szt");
+    expect(m?.knrCode).toBe("KNR 5-08 0212");
+    expect(m?.laborNorm).toBe(0.30);
+  });
+
+  it("Existing Bruzdowanie cegła not affected by new substrate-aware patterns", () => {
+    const m = findCanonicalL0("Bruzdowanie w cegle (1 przewód)", "mb");
+    expect(m?.laborNorm).toBe(0.85);
+  });
+
+  it("New Plafon does NOT match generic Oprawa fallback (different norm)", () => {
+    const m1 = findCanonicalL0("Plafon LED 24W", "szt");
+    const m2 = findCanonicalL0("Oprawa standardowa", "szt");
+    expect(m1?.laborNorm).toBe(0.68);
+    expect(m2?.laborNorm).toBe(0.40);
+    expect(m1?.laborNorm).not.toBe(m2?.laborNorm);
+  });
+});

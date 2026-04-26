@@ -56,7 +56,7 @@ export interface CanonicalL0Match extends CanonicalL0Entry {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
- * CANONICAL L0 REFERENCE — TOP-60 ITEMS
+ * CANONICAL L0 REFERENCE — TOP-100 ITEMS
  * ═══════════════════════════════════════════════════════════════════
  * Order matters: more-specific patterns FIRST (e.g. YDYp 5×6 before YDYp).
  * The first matching entry wins — keep the list sorted by specificity.
@@ -207,6 +207,13 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /(?:^|\W)(?:łącznik|lacznik)\s+(?:pojedyn|jednobiegun)/i,
     knrCode: "KNR 5-04 0501-04", laborNorm: 0.25, unit: "szt",
     description: "Łącznik pojedynczy p/t", materialPrice: 14.00 },
+  // Łącznik specialized — must precede generic fallback (each matches łącznik\W)
+  { pattern: /(?:^|\W)(?:łącznik|lacznik)\s+(?:z\s+)?(?:pir|czujnikiem\s+ruchu|ruchu|ruchem)/i,
+    knrCode: "KNR 5-04 0501-08", laborNorm: 0.81, unit: "szt",
+    description: "Łącznik z czujnikiem ruchu PIR", materialPrice: 95.00 },
+  { pattern: /(?:^|\W)(?:łącznik|lacznik)\s+(?:kart|hotelo)/i,
+    knrCode: "KNR 5-04 0501-09", laborNorm: 0.50, unit: "szt",
+    description: "Łącznik kartowy hotelowy", materialPrice: 65.00 },
   { pattern: /(?:^|\W)(?:łącznik|lacznik)(?=\s|$|\W)/i,
     knrCode: "KNR 5-04 0501-04", laborNorm: 0.25, unit: "szt",
     description: "Łącznik (generic) p/t", materialPrice: 14.00 },
@@ -249,6 +256,22 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /\bpunkt\s+(?:świetln[ya]|swietln|oświetlen|oswietlen)/i,
     knrCode: "KNR 5-04 0301-01", laborNorm: 0.35, unit: "szt",
     description: "Punkt świetlny p/t (montaż oprawy)", materialPrice: 0 },
+  // Oprawy specialized — must precede generic (lampa|oprawa|kinkiet|plafon) fallback
+  { pattern: /\bplafon\b/i,
+    knrCode: "KNR 5-04 0303-11", laborNorm: 0.68, unit: "szt",
+    description: "Plafon LED sufitowy", materialPrice: 90.00 },
+  { pattern: /\bkinkiet\b/i,
+    knrCode: "KNR 5-04 0303-12", laborNorm: 0.65, unit: "szt",
+    description: "Kinkiet ścienny LED", materialPrice: 75.00 },
+  { pattern: /\b(?:lampa|opraw[ay])\s+(?:ogrodow|s[lł]upkow|park)|\bs[lł]upek\s+ogrodow/i,
+    knrCode: "KNR 5-04 0303-20", laborNorm: 1.20, unit: "szt",
+    description: "Lampa ogrodowa słupkowa", materialPrice: 250.00 },
+  { pattern: /\b(?:reflektor|naświetlacz|naswietlacz|halogen)\b/i,
+    knrCode: "KNR 5-04 0303-13", laborNorm: 0.55, unit: "szt",
+    description: "Reflektor / naświetlacz LED", materialPrice: 95.00 },
+  { pattern: /\b(?:listwa|ta[śs]ma)\s+led\b/i,
+    knrCode: "KNR 5-04 0303-30", laborNorm: 1.22, unit: "kpl",
+    description: "Listwa / taśma LED kpl", materialPrice: 180.00 },
   { pattern: /\b(?:lampa|opraw[ay]|kinkiet|plafon)\b/i,
     knrCode: "KNR 5-04 0303-10", laborNorm: 0.40, unit: "szt",
     description: "Oprawa oświetleniowa (generic)", materialPrice: 60.00 },
@@ -311,6 +334,132 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /\bsygnaliz(?:ator|ac).*(?:akustyczn|optyczn|opt[\s-]akustyczn)/i,
     knrCode: "KNR 5-09 0604-01", laborNorm: 0.50, unit: "szt",
     description: "Sygnalizator akustyczno-optyczny", materialPrice: 140.00 },
+
+  // ── STEROWANIE / AUTOMATYKA (KNR 5-04, KNR 5-09) ──
+  // Polish-letter front-anchor: \b doesn't anchor before Ś (non-\w char in JS regex).
+  { pattern: /(?:^|\W)(?:[śs]ciemniacz|dimmer)(?=\W|$)/i,
+    knrCode: "KNR 5-04 0501-10", laborNorm: 0.82, unit: "szt",
+    description: "Ściemniacz / dimmer obrotowy lub klawiszowy", materialPrice: 85.00 },
+  // "Czujnik ruchu PIR" — distinct from "Łącznik z czujnikiem ruchu" (caught above)
+  { pattern: /\b(?:czujnik|detektor|sensor)\s+(?:ruchu|pir)\b|\bpir\s+(?:czujnik|detekt|sensor)/i,
+    knrCode: "KNR 5-09 0410", laborNorm: 0.81, unit: "szt",
+    description: "Czujnik ruchu PIR (sterowanie oświetleniem)", materialPrice: 75.00 },
+  { pattern: /\bczujnik\s+zmierz|\bzmierzchow[yao]/i,
+    knrCode: "KNR 5-09 0411", laborNorm: 0.65, unit: "szt",
+    description: "Czujnik zmierzchowy", materialPrice: 80.00 },
+  { pattern: /\btermostat\b/i,
+    knrCode: "KNR 5-09 0501", laborNorm: 0.55, unit: "szt",
+    description: "Termostat pokojowy / podłogówka", materialPrice: 95.00 },
+  { pattern: /\bregulator\s+(?:obrot|wentyl|pr[eę]dko[śs])/i,
+    knrCode: "KNR 5-09 0502", laborNorm: 0.45, unit: "szt",
+    description: "Regulator obrotów wentylatora", materialPrice: 65.00 },
+
+  // ── ROZDZIELNICE — KOMPONENTY (KNR 5-08 0301..0312) ──
+  // Specific (24-mod) BEFORE generic — order matters
+  { pattern: /\b(?:obudowa|rozdzielni[ac])\b.*\b(?:24|do\s*24)\s*mod|\brozdzielni[ac].*24[\s-]?mod/i,
+    knrCode: "KNR 5-08 0302", laborNorm: 3.00, unit: "szt",
+    description: "Obudowa rozdzielnicy p/t do 24 modułów", materialPrice: 290.00 },
+  { pattern: /\b(?:obudowa|rozdzielni[ac])\b.*\b(?:12|do\s*12)\s*mod|\brozdzielni[ac].*12[\s-]?mod/i,
+    knrCode: "KNR 5-08 0301", laborNorm: 1.80, unit: "szt",
+    description: "Obudowa rozdzielnicy p/t do 12 modułów", materialPrice: 180.00 },
+  { pattern: /\blistw[aą]\s+zaciskow|\bzacisk\s+(?:n|pe)\b/i,
+    knrCode: "KNR 5-08 0310", laborNorm: 0.20, unit: "szt",
+    description: "Listwa zaciskowa N/PE w rozdzielnicy", materialPrice: 25.00 },
+  { pattern: /\blampka\s+(?:kontroln|sygnaliz)/i,
+    knrCode: "KNR 5-08 0312", laborNorm: 0.15, unit: "szt",
+    description: "Lampka kontrolna / sygnalizacyjna", materialPrice: 18.00 },
+  { pattern: /\b(?:opisanie|opis|etykiet|znakowani)\b.*(?:obwod|rozdzielni)|\betykiet\s+(?:rozdzielni|obwod)/i,
+    knrCode: "ES-RPN-001", laborNorm: 0.10, unit: "szt",
+    description: "Opisanie obwodów / etykietowanie rozdzielnicy", materialPrice: 5.00 },
+
+  // ── ANTENA / SAT / RTV (KNR 5-12 04xx) ──
+  { pattern: /\bantena\s+(?:dvb|sat|tv|telewizyjn|naziemn|satelitar)/i,
+    knrCode: "KNR 5-12 0401", laborNorm: 1.50, unit: "szt",
+    description: "Antena DVB-T/T2 / SAT z montażem", materialPrice: 380.00 },
+  { pattern: /\bmulti[\s-]?switch\b/i,
+    knrCode: "KNR 5-12 0402", laborNorm: 0.80, unit: "szt",
+    description: "Multiswitch SAT/TV", materialPrice: 250.00 },
+  { pattern: /\bwzmacniacz\s+(?:anten|sygna[lł]u|tv|sat)/i,
+    knrCode: "KNR 5-12 0403", laborNorm: 0.50, unit: "szt",
+    description: "Wzmacniacz antenowy TV/SAT", materialPrice: 120.00 },
+  { pattern: /\bmaszt\s+(?:anten|tv)|\bmaszt\b(?!.*spaw)/i,
+    knrCode: "KNR 5-12 0404", laborNorm: 2.50, unit: "szt",
+    description: "Maszt antenowy z montażem", materialPrice: 250.00 },
+
+  // ── DOMOFONY / WIDEODOMOFONY (KNR 5-09 08xx) ──
+  { pattern: /\bpanel\s+(?:zewn[eę]trzn|domofon|wej[śs]ciow)|\b(?:wideo|video)?domofon.*panel/i,
+    knrCode: "KNR 5-09 0801", laborNorm: 1.20, unit: "szt",
+    description: "Panel zewnętrzny domofonu / wideodomofonu", materialPrice: 480.00 },
+  { pattern: /\b(?:unifon|wideounifon|videounifon|monitor\s+(?:domofon|wideodomofon))/i,
+    knrCode: "KNR 5-09 0802", laborNorm: 0.80, unit: "szt",
+    description: "Unifon / wideounifon", materialPrice: 320.00 },
+  { pattern: /\bczytnik\s+(?:kart|rfid|zbli[zż]eni|breloko)/i,
+    knrCode: "KNR 5-09 0803", laborNorm: 0.65, unit: "szt",
+    description: "Czytnik kart RFID / kontrola dostępu", materialPrice: 180.00 },
+
+  // ── KORYTKA / DRABINKI / KANAŁY (KNR 5-08 05xx) ──
+  { pattern: /\bdrabinka\s+kablow|\bdrabinka\b/i,
+    knrCode: "KNR 5-08 0502", laborNorm: 0.55, unit: "mb",
+    description: "Drabinka kablowa metalowa", materialPrice: 65.00 },
+  { pattern: /\bkorytko\s+(?:kablow|metalow|siatkow|drucian)|\bkorytk[ao]\b/i,
+    knrCode: "KNR 5-08 0501", laborNorm: 0.40, unit: "mb",
+    description: "Korytko kablowe metalowe / siatkowe", materialPrice: 35.00 },
+  { pattern: /\b(?:listwa\s+(?:pcv|elektroin|instalacyjn|kablowa)|kana[lł]\s+kablow|peszel)/i,
+    knrCode: "KNR 5-08 0503", laborNorm: 0.20, unit: "mb",
+    description: "Listwa PCV / kanał kablowy / peszel", materialPrice: 12.00 },
+
+  // ── POMIARY ROZSZERZONE (ES-POM 005..099) ──
+  { pattern: /\bpomiar.*(?:nat[eę][zż]eni[ae]\s+o[śs]wietl|luksomet|luxomet|jasno[śs])/i,
+    knrCode: "ES-POM-005", laborNorm: 0.35, unit: "szt",
+    description: "Pomiar natężenia oświetlenia (luksomierz)", materialPrice: 0 },
+  // Genitive case 'ciągłości' — stem matches 'ciągłośc' but then 'i' follows (no \s), so accept optional case ending [iy].
+  { pattern: /\bpomiar.*(?:ci[aą]g[lł]o[śs]ci|ciaglosci|ci[aą]g[lł]o[śs]c[iy]?)\s+(?:przewod|po[lł][aą]cze)|\bbadanie\s+ci[aą]g[lł]o[śs]c/i,
+    knrCode: "ES-POM-006", laborNorm: 0.20, unit: "szt",
+    description: "Pomiar ciągłości przewodów ochronnych", materialPrice: 0 },
+  { pattern: /\b(?:protokó[lł]|protokol)\s+(?:ko[nń]cow|odbiorow|pomiar|elektryczn|powykonaw)/i,
+    knrCode: "ES-POM-099", laborNorm: 1.50, unit: "kpl",
+    description: "Protokół końcowy z pomiarów elektrycznych", materialPrice: 0 },
+
+  // ── SSP / DSO ROZSZERZENIE (KNR 5-09 06xx) ──
+  { pattern: /\bcentrala\s+(?:ssp|sygnaliz.*po[zż]arow|po[zż]arow|alarm.*po[zż]arow)/i,
+    knrCode: "KNR 5-09 0610", laborNorm: 5.00, unit: "szt",
+    description: "Centrala SSP (sygnalizacji pożarowej)", materialPrice: 3500.00 },
+  { pattern: /\bmoduł\s+(?:kontroln|steruj|kontroln[\s-]?steruj)|\bmoduł\s+ks\b/i,
+    knrCode: "KNR 5-09 0611", laborNorm: 1.20, unit: "szt",
+    description: "Moduł kontrolno-sterujący SSP", materialPrice: 380.00 },
+  { pattern: /\bczujk[ai]\s+(?:zalan|wody|wodn|wycieku|przeciek)/i,
+    knrCode: "KNR 5-09 0612", laborNorm: 0.40, unit: "szt",
+    description: "Czujka zalania / wycieku wody", materialPrice: 85.00 },
+  // Note: czujka tlenku/CO already handled by line 305 dymu/CO pattern.
+  // This entry covers gas leak detectors (metan/propan/LPG).
+  { pattern: /\bczujk[ai]\s+(?:gazu|metanu|propan|wybuchowy|lpg)|\bdetektor\s+gazu\b/i,
+    knrCode: "KNR 5-09 0613", laborNorm: 0.40, unit: "szt",
+    description: "Czujka gazu (metan/propan/LPG)", materialPrice: 130.00 },
+
+  // ── SSWiN / SYSTEMY ALARMOWE (KNR 5-09 062x) ──
+  { pattern: /\bcentrala\s+(?:alarmow|sswin|w[lł]amaniow)/i,
+    knrCode: "KNR 5-09 0620", laborNorm: 4.50, unit: "szt",
+    description: "Centrala alarmowa SSWiN", materialPrice: 1200.00 },
+  { pattern: /\b(?:kontaktron|czujk[ai]\s+magnetyczn|czujnik\s+otwarcia)/i,
+    knrCode: "KNR 5-09 0621", laborNorm: 0.30, unit: "szt",
+    description: "Czujka kontaktron magnetyczny", materialPrice: 35.00 },
+  { pattern: /\b(?:manipulator|klawiatura)\s+(?:alarmow|sswin)|\bmanipulator\b/i,
+    knrCode: "KNR 5-09 0622", laborNorm: 0.80, unit: "szt",
+    description: "Manipulator / klawiatura SSWiN", materialPrice: 280.00 },
+  { pattern: /\bsygnalizator\s+(?:alarmow|zewn[eę]trzn|sswin)/i,
+    knrCode: "KNR 5-09 0623", laborNorm: 0.90, unit: "szt",
+    description: "Sygnalizator alarmowy zewnętrzny", materialPrice: 320.00 },
+
+  // ── UZIEMIENIE / OCHRONA ODGROMOWA (KNR 5-08 070x) ──
+  { pattern: /\bbednarka\b|\b(?:fezn|fe[\s-]?zn)\s+(?:25|30)/i,
+    knrCode: "KNR 5-08 0701", laborNorm: 0.45, unit: "mb",
+    description: "Bednarka FeZn 25×4 — układanie w wykopie", materialPrice: 18.00 },
+  { pattern: /\b(?:pr[eę]t\s+uziem|sonda\s+uziem|szpilka\s+uziem|elektroda\s+uziem)/i,
+    knrCode: "KNR 5-08 0702", laborNorm: 1.50, unit: "szt",
+    description: "Pręt uziemiający / sonda 1.5m", materialPrice: 65.00 },
+  { pattern: /\bzł[aą]cze\s+kontroln|\bszpilka\s+kontroln|\bzwora\s+pomiarow/i,
+    knrCode: "KNR 5-08 0703", laborNorm: 0.50, unit: "szt",
+    description: "Złącze kontrolne uziemienia", materialPrice: 25.00 },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════

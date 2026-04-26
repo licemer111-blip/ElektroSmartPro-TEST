@@ -19,6 +19,7 @@ import {
   MonitorDot,
   LayoutGrid,
   FlaskConical,
+  SlidersHorizontal,
   Search,
   Settings,
 } from "lucide-react";
@@ -39,6 +40,7 @@ const NAV_GROUPS = [
       { href: "/admin/health",        label: "Health Monitor",  icon: Activity    },
       { href: "/admin/audit",         label: "Audit Log",       icon: Shield      },
       { href: "/admin/knr-quality",   label: "KNR Quality Hub", icon: FlaskConical },
+      { href: "/admin/canonical-l0",  label: "L0 Canonical",    icon: SlidersHorizontal },
     ],
   },
   {
