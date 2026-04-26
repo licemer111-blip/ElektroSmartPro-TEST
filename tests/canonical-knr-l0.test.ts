@@ -395,7 +395,9 @@ describe("L0 v2.7.0 — Oprawy specialized (plafon / kinkiet / ogrodowa / reflek
   });
 
   it("Generic oprawa fallback still works → 0.40 rbh/szt", () => {
-    const m = findCanonicalL0("Oprawa biurowa standardowa", "szt");
+    // Use a name that matches none of the specialized oprawa patterns
+    // (no biurow/zwieszan/nablat/plafon/kinkiet/parkow/ogrodow/reflektor/listwa).
+    const m = findCanonicalL0("Oprawa zwykła sufitowa", "szt");
     expect(m?.laborNorm).toBe(0.40);
   });
 });
@@ -672,5 +674,474 @@ describe("L0 v2.7.0 — Precedence regression (no clobbering)", () => {
     expect(m1?.laborNorm).toBe(0.68);
     expect(m2?.laborNorm).toBe(0.40);
     expect(m1?.laborNorm).not.toBe(m2?.laborNorm);
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════════════
+ * v2.8.0 MAX EXPANSION TESTS — +71 NEW ENTRIES (PV/EV/smart/CCTV/etc.)
+ * ═══════════════════════════════════════════════════════════════════ */
+
+describe("L0 v2.8.0 — Kable dodatkowe (OWY / LgY / NHXH / dzwonkowe)", () => {
+  it("Kabel OWY 3×1.5 → 0.18 rbh/mb", () => {
+    const m = findCanonicalL0("Kabel OWY 3×1.5 mm² oponowy", "mb");
+    expect(m?.laborNorm).toBe(0.18);
+  });
+
+  it("Linka miedziana LgY → 0.10 rbh/mb", () => {
+    const m = findCanonicalL0("Linka miedziana LgY 6 mm²", "mb");
+    expect(m?.laborNorm).toBe(0.10);
+  });
+
+  it("Kabel NHXH ognioodporny → 0.16 rbh/mb (SSP/DSO)", () => {
+    const m = findCanonicalL0("Kabel NHXH FE180 3×2.5", "mb");
+    expect(m?.knrCode).toBe("KNR 5-12 0205");
+    expect(m?.laborNorm).toBe(0.16);
+  });
+
+  it("Dzwonek elektroniczny → 0.40 rbh/szt", () => {
+    const m = findCanonicalL0("Dzwonek elektroniczny przewodowy", "szt");
+    expect(m?.laborNorm).toBe(0.40);
+  });
+
+  it("Przycisk dzwonkowy → 0.20 rbh/szt", () => {
+    const m = findCanonicalL0("Przycisk dzwonkowy podświetlany", "szt");
+    expect(m?.laborNorm).toBe(0.20);
+  });
+});
+
+describe("L0 v2.8.0 — WLZ / Tablice / Złącza", () => {
+  it("Złącze kablowe WLZ słupek → 4.50 rbh/szt", () => {
+    const m = findCanonicalL0("Złącze kablowe ZK przyłączeniowe", "szt");
+    expect(m?.knrCode).toBe("KNR 5-08 0801");
+    expect(m?.laborNorm).toBe(4.50);
+  });
+
+  it("Tablica licznikowa TL → 3.80 rbh/szt", () => {
+    const m = findCanonicalL0("Tablica licznikowa TL z osprzętem", "szt");
+    expect(m?.laborNorm).toBe(3.80);
+  });
+
+  it("Tablica główna TG → 4.50 rbh/szt", () => {
+    const m = findCanonicalL0("Tablica główna TG mieszkaniowa", "szt");
+    expect(m?.laborNorm).toBe(4.50);
+  });
+
+  it("WLZ → 0.45 rbh/mb", () => {
+    const m = findCanonicalL0("WLZ wewnętrzna linia zasilająca", "mb");
+    expect(m?.laborNorm).toBe(0.45);
+  });
+});
+
+describe("L0 v2.8.0 — Fotowoltaika / PV", () => {
+  it("Panel fotowoltaiczny → 0.80 rbh/szt", () => {
+    const m = findCanonicalL0("Panel fotowoltaiczny 400W mono", "szt");
+    expect(m?.knrCode).toBe("ES-PV-001");
+    expect(m?.laborNorm).toBe(0.80);
+  });
+
+  it("Panel PV NOT confused with Oprawa LED panel", () => {
+    const pv = findCanonicalL0("Panel fotowoltaiczny 450W", "szt");
+    const led = findCanonicalL0("Oprawa LED panel 60×60", "szt");
+    expect(pv?.knrCode).toBe("ES-PV-001");
+    expect(led?.knrCode).toBe("KNR 5-04 0302-01");
+  });
+
+  it("Konstrukcja PV rail → 0.40 rbh/mb", () => {
+    const m = findCanonicalL0("Konstrukcja PV szyna montażowa", "mb");
+    expect(m?.laborNorm).toBe(0.40);
+  });
+
+  it("Hak PV dachowy → 0.30 rbh/szt", () => {
+    const m = findCanonicalL0("Hak PV dachowy regulowany", "szt");
+    expect(m?.laborNorm).toBe(0.30);
+  });
+
+  it("Inwerter PV 3-fazowy → 4.50 rbh/szt", () => {
+    const m = findCanonicalL0("Inwerter PV 10kW 3-fazowy", "szt");
+    expect(m?.knrCode).toBe("ES-PV-010");
+    expect(m?.laborNorm).toBe(4.50);
+  });
+
+  it("Inwerter PV 1-fazowy hybrydowy → 3.50 rbh/szt", () => {
+    const m = findCanonicalL0("Inwerter hybrydowy 5kW 1-fazowy", "szt");
+    expect(m?.knrCode).toBe("ES-PV-011");
+    expect(m?.laborNorm).toBe(3.50);
+  });
+
+  it("Optymalizator mocy PV → 0.45 rbh/szt", () => {
+    const m = findCanonicalL0("Optymalizator mocy SolarEdge", "szt");
+    expect(m?.laborNorm).toBe(0.45);
+  });
+
+  it("Mikroinwerter → 0.55 rbh/szt", () => {
+    const m = findCanonicalL0("Mikroinwerter Enphase IQ8", "szt");
+    expect(m?.laborNorm).toBe(0.55);
+  });
+
+  it("Kabel solarny PV1-F 6mm² → 0.12 rbh/mb", () => {
+    const m = findCanonicalL0("Kabel solarny PV1-F 6 mm²", "mb");
+    expect(m?.laborNorm).toBe(0.12);
+  });
+
+  it("Kabel solarny PV1-F 4mm² → 0.10 rbh/mb", () => {
+    const m = findCanonicalL0("Przewód solarny PV1-F 4 mm²", "mb");
+    expect(m?.laborNorm).toBe(0.10);
+  });
+
+  it("Konektor MC4 → 0.15 rbh/szt", () => {
+    const m = findCanonicalL0("Konektor MC4 zarobienie złącza", "szt");
+    expect(m?.laborNorm).toBe(0.15);
+  });
+
+  it("Rozłącznik DC pożarowy PV → 0.55 rbh/szt", () => {
+    const m = findCanonicalL0("Rozłącznik DC pożarowy PV 1000V", "szt");
+    expect(m?.laborNorm).toBe(0.55);
+  });
+
+  it("Ogranicznik DC T1+T2 → 0.55 rbh/szt", () => {
+    const m = findCanonicalL0("Ogranicznik DC T1+T2 1000V", "szt");
+    expect(m?.laborNorm).toBe(0.55);
+  });
+
+  it("Smart meter PV → 1.20 rbh/szt", () => {
+    const m = findCanonicalL0("Smart meter dwukierunkowy PV", "szt");
+    expect(m?.laborNorm).toBe(1.20);
+  });
+
+  it("Magazyn energii bateria → 6.00 rbh/kpl", () => {
+    const m = findCanonicalL0("Magazyn energii LiFePO4 10kWh", "kpl");
+    expect(m?.laborNorm).toBe(6.00);
+  });
+
+  it("String box PV → 1.80 rbh/szt", () => {
+    const m = findCanonicalL0("String box rozdzielnica PV DC", "szt");
+    expect(m?.laborNorm).toBe(1.80);
+  });
+});
+
+describe("L0 v2.8.0 — EV / Wallbox", () => {
+  it("Wallbox 22kW 3-faz → 3.00 rbh/szt", () => {
+    const m = findCanonicalL0("Wallbox 22kW 3-fazowy AC", "szt");
+    expect(m?.knrCode).toBe("ES-EV-002");
+    expect(m?.laborNorm).toBe(3.00);
+  });
+
+  it("Wallbox 11kW → 2.50 rbh/szt (generic)", () => {
+    const m = findCanonicalL0("Wallbox 11kW Easee Home", "szt");
+    expect(m?.knrCode).toBe("ES-EV-001");
+    expect(m?.laborNorm).toBe(2.50);
+  });
+
+  it("Stacja DC szybkiego ładowania → 8.00 rbh/szt", () => {
+    const m = findCanonicalL0("Stacja DC szybkiego ładowania 50kW", "szt");
+    expect(m?.laborNorm).toBe(8.00);
+  });
+
+  it("Stacja ładowania EV → 2.50 rbh/szt", () => {
+    const m = findCanonicalL0("Stacja ładowania EV 11kW", "szt");
+    expect(m?.laborNorm).toBe(2.50);
+  });
+});
+
+describe("L0 v2.8.0 — Ogrzewanie podłogowe / wentylacja", () => {
+  it("Mata grzewcza podłogowa → 0.65 rbh/m²", () => {
+    const m = findCanonicalL0("Mata grzewcza podłogowa 150W/m²", "m2");
+    expect(m?.knrCode).toBe("ES-OGR-001");
+    expect(m?.laborNorm).toBe(0.65);
+  });
+
+  it("Kabel grzewczy → 0.20 rbh/mb", () => {
+    const m = findCanonicalL0("Kabel grzewczy podłogowy 17W/m", "mb");
+    expect(m?.laborNorm).toBe(0.20);
+  });
+
+  it("Folia grzewcza → 0.55 rbh/m²", () => {
+    const m = findCanonicalL0("Folia grzewcza ścienna IR", "m2");
+    expect(m?.laborNorm).toBe(0.55);
+  });
+
+  it("Rekuperator → 6.00 rbh/kpl", () => {
+    const m = findCanonicalL0("Rekuperator centralny z BMS", "kpl");
+    expect(m?.laborNorm).toBe(6.00);
+  });
+
+  it("Wentylator łazienkowy → 0.55 rbh/szt", () => {
+    const m = findCanonicalL0("Wentylator łazienkowy z opóźnieniem", "szt");
+    expect(m?.laborNorm).toBe(0.55);
+  });
+});
+
+describe("L0 v2.8.0 — Smart home / KNX / DALI", () => {
+  it("Moduł KNX → 0.85 rbh/szt", () => {
+    const m = findCanonicalL0("Moduł KNX wejściowy ABB", "szt");
+    expect(m?.knrCode).toBe("ES-SMART-001");
+    expect(m?.laborNorm).toBe(0.85);
+  });
+
+  it("Czujnik KNX → 0.55 rbh/szt", () => {
+    const m = findCanonicalL0("Czujnik KNX ruchu i temperatury", "szt");
+    expect(m?.laborNorm).toBe(0.55);
+  });
+
+  it("Zasilacz KNX → 0.75 rbh/szt", () => {
+    const m = findCanonicalL0("Zasilacz KNX 640mA z dławikiem", "szt");
+    expect(m?.laborNorm).toBe(0.75);
+  });
+
+  it("DALI driver → 0.40 rbh/szt", () => {
+    const m = findCanonicalL0("DALI Driver Tridonic", "szt");
+    expect(m?.laborNorm).toBe(0.40);
+  });
+
+  it("Bramka smart home HUB → 0.45 rbh/szt", () => {
+    const m = findCanonicalL0("Bramka smart home ZigBee Hub", "szt");
+    expect(m?.laborNorm).toBe(0.45);
+  });
+
+  it("Inteligentny przełącznik ZigBee → 0.50 rbh/szt", () => {
+    const m = findCanonicalL0("Przełącznik smart ZigBee Aqara", "szt");
+    expect(m?.laborNorm).toBe(0.50);
+  });
+});
+
+describe("L0 v2.8.0 — Światłowody / sieć / rack", () => {
+  it("Kabel światłowodowy → 0.18 rbh/mb", () => {
+    const m = findCanonicalL0("Kabel światłowodowy 4F SM", "mb");
+    expect(m?.knrCode).toBe("ES-FO-001");
+    expect(m?.laborNorm).toBe(0.18);
+  });
+
+  it("Spawanie światłowodu → 0.60 rbh/szt", () => {
+    const m = findCanonicalL0("Spawanie światłowodu — per spaw", "szt");
+    expect(m?.laborNorm).toBe(0.60);
+  });
+
+  it("Patch panel 48-port → 1.50 rbh/szt", () => {
+    const m = findCanonicalL0("Patch panel 48-portowy 19''", "szt");
+    expect(m?.knrCode).toBe("ES-FO-011");
+    expect(m?.laborNorm).toBe(1.50);
+  });
+
+  it("Patch panel 24-port → 1.20 rbh/szt", () => {
+    const m = findCanonicalL0("Patch panel 24-portowy cat6", "szt");
+    expect(m?.knrCode).toBe("ES-FO-010");
+    expect(m?.laborNorm).toBe(1.20);
+  });
+
+  it("Switch sieciowy 24-port PoE → 0.85 rbh/szt", () => {
+    const m = findCanonicalL0("Switch sieciowy 24-port PoE", "szt");
+    expect(m?.laborNorm).toBe(0.85);
+  });
+
+  it("Szafa rack 19'' → 4.50 rbh/szt", () => {
+    const m = findCanonicalL0("Szafa rack 19'' 42U serwerowa", "szt");
+    expect(m?.laborNorm).toBe(4.50);
+  });
+
+  it("ONT światłowodowy → 0.55 rbh/szt", () => {
+    const m = findCanonicalL0("ONT GPON Huawei", "szt");
+    expect(m?.laborNorm).toBe(0.55);
+  });
+});
+
+describe("L0 v2.8.0 — CCTV / monitoring", () => {
+  it("Kamera IP CCTV → 1.20 rbh/szt", () => {
+    const m = findCanonicalL0("Kamera IP CCTV bullet 4MP", "szt");
+    expect(m?.knrCode).toBe("ES-CCTV-001");
+    expect(m?.laborNorm).toBe(1.20);
+  });
+
+  it("Rejestrator NVR 16-kanał → 1.50 rbh/szt", () => {
+    const m = findCanonicalL0("Rejestrator NVR 16-kanałowy", "szt");
+    expect(m?.laborNorm).toBe(1.50);
+  });
+
+  it("Czujka PIR zewnętrzna alarmowa → 0.55 rbh/szt", () => {
+    const m = findCanonicalL0("Czujka PIR zewnętrzna IP66", "szt");
+    expect(m?.knrCode).toBe("ES-CCTV-020");
+    expect(m?.laborNorm).toBe(0.55);
+  });
+
+  it("Bariera podczerwona → 1.20 rbh/szt", () => {
+    const m = findCanonicalL0("Bariera podczerwona aktywna", "szt");
+    expect(m?.laborNorm).toBe(1.20);
+  });
+
+  it("Czujka tłuczenia szyby → 0.40 rbh/szt", () => {
+    const m = findCanonicalL0("Czujka tłuczenia szyby Satel", "szt");
+    expect(m?.laborNorm).toBe(0.40);
+  });
+});
+
+describe("L0 v2.8.0 — Biuro / komercja", () => {
+  it("Floorbox kaseta podłogowa → 1.80 rbh/szt", () => {
+    const m = findCanonicalL0("Floorbox 4-mod podłogowy", "szt");
+    expect(m?.knrCode).toBe("ES-BIU-001");
+    expect(m?.laborNorm).toBe(1.80);
+  });
+
+  it("Oprawa LED biurowa zwieszana → 0.60 rbh/szt", () => {
+    const m = findCanonicalL0("Oprawa LED biurowa zwieszana 36W", "szt");
+    expect(m?.laborNorm).toBe(0.60);
+  });
+
+  it("UPS / zasilacz awaryjny → 1.50 rbh/szt", () => {
+    const m = findCanonicalL0("UPS 3kVA serwerowy", "szt");
+    expect(m?.laborNorm).toBe(1.50);
+  });
+
+  it("Tablica rozdzielcza piętrowa TR → 5.50 rbh/szt", () => {
+    const m = findCanonicalL0("Tablica rozdzielcza piętrowa TR-1", "szt");
+    expect(m?.laborNorm).toBe(5.50);
+  });
+});
+
+describe("L0 v2.8.0 — Klimatyzacja", () => {
+  it("Klimatyzator jednostka zewnętrzna → 2.50 rbh/szt", () => {
+    const m = findCanonicalL0("Klimatyzator zewnętrzna jednostka 5kW", "szt");
+    expect(m?.knrCode).toBe("ES-KLIM-001");
+    expect(m?.laborNorm).toBe(2.50);
+  });
+
+  it("Klimatyzator split jednostka wewnętrzna → 1.80 rbh/szt", () => {
+    const m = findCanonicalL0("Klimatyzator split ścienny", "szt");
+    expect(m?.laborNorm).toBe(1.80);
+  });
+
+  it("Sterownik klimatyzacji → 0.50 rbh/szt", () => {
+    const m = findCanonicalL0("Sterownik klimatyzacji przewodowy", "szt");
+    expect(m?.laborNorm).toBe(0.50);
+  });
+});
+
+describe("L0 v2.8.0 — Outdoor / oświetlenie zewn", () => {
+  it("Lampa parkowa → 2.50 rbh/szt", () => {
+    const m = findCanonicalL0("Lampa parkowa LED 4m", "szt");
+    expect(m?.laborNorm).toBe(2.50);
+  });
+
+  it("Reflektor architektoniczny → 0.85 rbh/szt", () => {
+    const m = findCanonicalL0("Reflektor LED architektoniczny", "szt");
+    expect(m?.laborNorm).toBe(0.85);
+  });
+
+  it("Iluminacja elewacji → 1.80 rbh/kpl", () => {
+    const m = findCanonicalL0("Iluminacja LED elewacji", "kpl");
+    expect(m?.laborNorm).toBe(1.80);
+  });
+});
+
+describe("L0 v2.8.0 — Pomiary rozszerzone II", () => {
+  it("Pomiar napięcia / parametrów sieci → 0.30 rbh/szt", () => {
+    const m = findCanonicalL0("Pomiar napięcia parametrów sieci", "szt");
+    expect(m?.knrCode).toBe("ES-POM-007");
+    expect(m?.laborNorm).toBe(0.30);
+  });
+
+  it("Inspekcja termowizyjna → 0.50 rbh/szt", () => {
+    const m = findCanonicalL0("Inspekcja termowizyjna rozdzielnicy", "szt");
+    expect(m?.laborNorm).toBe(0.50);
+  });
+
+  it("Pomiar oporu izolacji 1000V → 0.40 rbh/szt", () => {
+    const m = findCanonicalL0("Pomiar oporu izolacji 1000V", "szt");
+    expect(m?.laborNorm).toBe(0.40);
+  });
+});
+
+describe("L0 v2.8.0 — Roboty pomocnicze II", () => {
+  it("Rurka karbowana / peszel → 0.18 rbh/mb", () => {
+    const m = findCanonicalL0("Rurka karbowana RVS Ø20", "mb");
+    expect(m?.laborNorm).toBe(0.18);
+  });
+
+  it("Taśma ostrzegawcza → 0.05 rbh/mb", () => {
+    const m = findCanonicalL0("Taśma ostrzegawcza w wykopie", "mb");
+    expect(m?.laborNorm).toBe(0.05);
+  });
+});
+
+describe("L0 v2.8.0 — Stycznik mocy / falownik / silnik", () => {
+  it("Stycznik mocy 63A → 0.85 rbh/szt", () => {
+    const m = findCanonicalL0("Stycznik mocy 63A 3-faz", "szt");
+    expect(m?.knrCode).toBe("ES-STY-001");
+    expect(m?.laborNorm).toBe(0.85);
+  });
+
+  it("Stycznik 25A → 0.85 rbh/szt (specific over modular)", () => {
+    const m = findCanonicalL0("Stycznik 25A bez modułu", "szt");
+    expect(m?.laborNorm).toBe(0.85);
+  });
+
+  it("Existing 'Stycznik modułowy' STILL wins for explicit modulow", () => {
+    const m = findCanonicalL0("Stycznik modułowy 3-pol 25A", "szt");
+    expect(m?.knrCode).toBe("KNR 5-08 0220");
+    expect(m?.laborNorm).toBe(0.35);
+  });
+
+  it("Falownik / VFD → 2.50 rbh/szt", () => {
+    const m = findCanonicalL0("Falownik VFD 5.5kW", "szt");
+    expect(m?.laborNorm).toBe(2.50);
+  });
+
+  it("Silnik elektryczny — montaż → 3.50 rbh/szt", () => {
+    const m = findCanonicalL0("Montaż silnika elektrycznego 3-faz", "szt");
+    expect(m?.laborNorm).toBe(3.50);
+  });
+});
+
+describe("L0 v2.8.0 — Napędy / rolety / bramy", () => {
+  it("Napęd bramy garażowej → 3.50 rbh/szt", () => {
+    const m = findCanonicalL0("Napęd bramy garażowej Faac", "szt");
+    expect(m?.laborNorm).toBe(3.50);
+  });
+
+  it("Silnik rolety → 0.85 rbh/szt", () => {
+    const m = findCanonicalL0("Silnik rolety zewnętrznej Somfy", "szt");
+    expect(m?.laborNorm).toBe(0.85);
+  });
+
+  it("Elektrozaczep → 0.65 rbh/szt", () => {
+    const m = findCanonicalL0("Elektrozaczep do furtki 12V", "szt");
+    expect(m?.laborNorm).toBe(0.65);
+  });
+});
+
+describe("L0 v2.8.0 — Precedence regression", () => {
+  it("Existing YDYp 3×1.5 still wins (not OWY/PV/anything else)", () => {
+    const m = findCanonicalL0("Przewód YDYp 3×1.5 mm²", "mb");
+    expect(m?.knrCode).toBe("KNR 5-08 0201");
+    expect(m?.laborNorm).toBe(0.13);
+  });
+
+  it("Existing UTP cat 6 still wins (not światłowód)", () => {
+    const m = findCanonicalL0("UTP cat 6 ekranowana", "mb");
+    expect(m?.knrCode).toBe("KNR 5-12 0201");
+  });
+
+  it("Existing Czujka dymu still wins (not gaz/zalania)", () => {
+    const m = findCanonicalL0("Czujka dymu optyczna", "szt");
+    expect(m?.knrCode).toBe("KNR 5-09 0602-01");
+  });
+
+  it("Existing Centrala alarmowa SSWiN NOT clobbered by NVR pattern", () => {
+    const m = findCanonicalL0("Centrala alarmowa SSWiN Satel", "szt");
+    expect(m?.knrCode).toBe("KNR 5-09 0620");
+  });
+
+  it("New 'Wallbox 22kW' wins over generic 'Wallbox' (specific first)", () => {
+    const a = findCanonicalL0("Wallbox 22kW Tesla", "szt");
+    const b = findCanonicalL0("Wallbox standard 11kW", "szt");
+    expect(a?.knrCode).toBe("ES-EV-002");
+    expect(b?.knrCode).toBe("ES-EV-001");
+  });
+
+  it("Inwerter PV 3-faz wins over 1-faz / generic", () => {
+    const a = findCanonicalL0("Inwerter PV 3-fazowy 10kW", "szt");
+    const b = findCanonicalL0("Inwerter PV 1-fazowy 5kW", "szt");
+    const c = findCanonicalL0("Inwerter PV string", "szt");
+    expect(a?.laborNorm).toBe(4.50);
+    expect(b?.laborNorm).toBe(3.50);
+    expect(c?.laborNorm).toBe(4.00);
   });
 });

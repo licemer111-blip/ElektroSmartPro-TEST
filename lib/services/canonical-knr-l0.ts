@@ -56,7 +56,7 @@ export interface CanonicalL0Match extends CanonicalL0Entry {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
- * CANONICAL L0 REFERENCE — TOP-100 ITEMS
+ * CANONICAL L0 REFERENCE — TOP-170 ITEMS (v2.8.0 max coverage)
  * ═══════════════════════════════════════════════════════════════════
  * Order matters: more-specific patterns FIRST (e.g. YDYp 5×6 before YDYp).
  * The first matching entry wins — keep the list sorted by specificity.
@@ -184,7 +184,9 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /(?:^|\W)(?:wyłącznik|wylacznik)\s+(?:nadprądow|nadpradow|s30[1-3]|mcb|b\d{1,2}|c\d{1,2})/i,
     knrCode: "KNR 5-08 0211", laborNorm: 0.20, unit: "szt",
     description: "Wyłącznik nadprądowy 1P (B/C 6-32A)", materialPrice: 25.00 },
-  { pattern: /\bstycznik\s+(?:modulow|3-pol|4-pol|szynow)/i,
+  // Stycznik modułowy — use .* + Polish letter class so 'modułowy' (ł) and
+  // non-adjacent keywords like 'Stycznik modułowy 3-pol 25A' both match.
+  { pattern: /\bstycznik\b.*\b(?:modu[lł]ow|3[\s-]?pol|4[\s-]?pol|szynow)/i,
     knrCode: "KNR 5-08 0220", laborNorm: 0.35, unit: "szt",
     description: "Stycznik modułowy 3P/4P", materialPrice: 90.00 },
   { pattern: /\bogranicznik\s+(?:przep[ie]ci|spd|t1|t2|t3|b\+c|c\+d)/i,
@@ -263,15 +265,30 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /\bkinkiet\b/i,
     knrCode: "KNR 5-04 0303-12", laborNorm: 0.65, unit: "szt",
     description: "Kinkiet ścienny LED", materialPrice: 75.00 },
-  { pattern: /\b(?:lampa|opraw[ay])\s+(?:ogrodow|s[lł]upkow|park)|\bs[lł]upek\s+ogrodow/i,
+  // 'park' removed — 'Lampa parkowa' (4-5m uliczna) ma osobny wpis 2.50 rbh.
+  { pattern: /\b(?:lampa|opraw[ay])\s+(?:ogrodow|s[lł]upkow)|\bs[lł]upek\s+ogrodow/i,
     knrCode: "KNR 5-04 0303-20", laborNorm: 1.20, unit: "szt",
     description: "Lampa ogrodowa słupkowa", materialPrice: 250.00 },
+  // Reflektor architektoniczny / elewacyjny — BEFORE generic reflektor (specific first).
+  // Use .* between reflektor and qualifier — 'LED' model often appears between.
+  { pattern: /\b(?:reflektor|naświetlacz)\b.*\b(?:architekt|elewacyjn|fasadow|liniow.*zewn)/i,
+    knrCode: "KNR 5-04 0303-26", laborNorm: 0.85, unit: "szt",
+    description: "Reflektor LED architektoniczny / elewacyjny", materialPrice: 280.00 },
   { pattern: /\b(?:reflektor|naświetlacz|naswietlacz|halogen)\b/i,
     knrCode: "KNR 5-04 0303-13", laborNorm: 0.55, unit: "szt",
     description: "Reflektor / naświetlacz LED", materialPrice: 95.00 },
   { pattern: /\b(?:listwa|ta[śs]ma)\s+led\b/i,
     knrCode: "KNR 5-04 0303-30", laborNorm: 1.22, unit: "kpl",
     description: "Listwa / taśma LED kpl", materialPrice: 180.00 },
+  // Oprawa biurowa / zwieszana / nablat — BEFORE generic (specific first).
+  // Use .* — 'LED' model often appears between 'Oprawa' and 'biurowa'.
+  { pattern: /\bopraw[ay]\b.*\b(?:biurow|zwieszan|liniowa\s+led|nablat)/i,
+    knrCode: "ES-BIU-010", laborNorm: 0.60, unit: "szt",
+    description: "Oprawa LED biurowa zwieszana / nablat", materialPrice: 280.00 },
+  // Lampa parkowa / uliczna — BEFORE generic lampa fallback (4-5m uliczna != 1m ogrodowa).
+  { pattern: /\blampa\s+(?:parkow|uliczn|drogow|sodow)/i,
+    knrCode: "KNR 5-04 0303-25", laborNorm: 2.50, unit: "szt",
+    description: "Lampa parkowa / uliczna 4-5m", materialPrice: 850.00 },
   { pattern: /\b(?:lampa|opraw[ay]|kinkiet|plafon)\b/i,
     knrCode: "KNR 5-04 0303-10", laborNorm: 0.40, unit: "szt",
     description: "Oprawa oświetleniowa (generic)", materialPrice: 60.00 },
@@ -460,6 +477,274 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /\bzł[aą]cze\s+kontroln|\bszpilka\s+kontroln|\bzwora\s+pomiarow/i,
     knrCode: "KNR 5-08 0703", laborNorm: 0.50, unit: "szt",
     description: "Złącze kontrolne uziemienia", materialPrice: 25.00 },
+
+  // ═══ v2.8.0 MAX EXPANSION — 70+ entries: PV, EV, smart home, CCTV, klima ═══
+
+  // ── KABLE DODATKOWE (OWY, LgY, NHXH, dzwonkowe) ──
+  // OWY — kabel oponowy (gumowy) do użytku zewnętrznego/przenośnego
+  { pattern: /\bowy\s*[2-5]\s*[x×*]\s*\d|\bh07rn[\s-]?f/i,
+    knrCode: "KNR 5-08 0301", laborNorm: 0.18, unit: "mb",
+    description: "Kabel OWY / H07RN-F (oponowy zewnętrzny)", materialPrice: 8.50 },
+  // LgY — linka miedziana izolowana
+  { pattern: /\blg[yż][\s.]*(?:zo)?\s*\d|\blinka\s+miedzian/i,
+    knrCode: "KNR 5-08 0302", laborNorm: 0.10, unit: "mb",
+    description: "Linka miedziana LgY/LgYzo", materialPrice: 3.50 },
+  // NHXH / N2XH — kabel ognioodporny dla SSP/DSO
+  { pattern: /\b(?:nhxh|n2xh|hdgs|hlgs|xztkmxpw)\b/i,
+    knrCode: "KNR 5-12 0205", laborNorm: 0.16, unit: "mb",
+    description: "Kabel ognioodporny NHXH / N2XH (SSP/DSO)", materialPrice: 12.00 },
+  // Dzwonek / przycisk dzwonkowy
+  { pattern: /\bdzwonek\s+(?:elektroniczn|przewodow|bezprzewod)|\bgong\s+drzwi/i,
+    knrCode: "KNR 5-04 0610", laborNorm: 0.40, unit: "szt",
+    description: "Dzwonek elektroniczny / gong", materialPrice: 65.00 },
+  { pattern: /\bprzycisk\s+dzwonkow|\bprzycisk\s+drzwiow/i,
+    knrCode: "KNR 5-04 0611", laborNorm: 0.20, unit: "szt",
+    description: "Przycisk dzwonkowy", materialPrice: 22.00 },
+
+  // ── WLZ / TABLICE / ZŁĄCZA POMIAROWE ──
+  { pattern: /\b(?:zł[aą]cze\s+kablow|zk\s+przy[lł][aą]czeniow|s[lł]upek\s+(?:wlz|przy[lł][aą]czeniow))/i,
+    knrCode: "KNR 5-08 0801", laborNorm: 4.50, unit: "szt",
+    description: "Złącze kablowe / WLZ słupek przyłączeniowy", materialPrice: 850.00 },
+  { pattern: /\btablica\s+(?:licznikow|tl\b)|\bzestaw\s+licznikow/i,
+    knrCode: "KNR 5-08 0802", laborNorm: 3.80, unit: "szt",
+    description: "Tablica licznikowa TL", materialPrice: 450.00 },
+  { pattern: /\btablica\s+(?:gł[oó]wn|tg\b)|\bgłówn[ay]\s+rozdzielni/i,
+    knrCode: "KNR 5-08 0803", laborNorm: 4.50, unit: "szt",
+    description: "Tablica główna TG", materialPrice: 600.00 },
+  { pattern: /\bskrzynka\s+(?:pomiarow|licznik)|\bobudowa\s+licznik/i,
+    knrCode: "KNR 5-08 0804", laborNorm: 1.50, unit: "szt",
+    description: "Skrzynka pomiarowa licznika", materialPrice: 220.00 },
+  { pattern: /\bprzy[lł][aą]cze\s+(?:elektroenerg|napowietrz|kablow)/i,
+    knrCode: "KNR 5-08 0805", laborNorm: 8.00, unit: "kpl",
+    description: "Przyłącze elektroenergetyczne (kpl)", materialPrice: 0 },
+  { pattern: /\bwlz\b|\bwewn[eę]trzn[ae]\s+lini[ae]\s+zasilaj/i,
+    knrCode: "KNR 5-08 0806", laborNorm: 0.45, unit: "mb",
+    description: "WLZ — wewnętrzna linia zasilająca", materialPrice: 22.00 },
+
+  // ── FOTOWOLTAIKA / PV (ES-PV-xxx) ──
+  // Panel PV nie koliduje z "Oprawa LED panel" (tamten wymaga 'oprawa' prefix)
+  { pattern: /\bpanel\s+(?:fotowolt|pv|słonec|slonec)/i,
+    knrCode: "ES-PV-001", laborNorm: 0.80, unit: "szt",
+    description: "Panel fotowoltaiczny — montaż", materialPrice: 0 },
+  { pattern: /\bkonstrukcj[ae]\s+(?:pv|fotowolt)|\b(?:rail|szyna)\s+(?:pv|fotowolt|monta[zż]ow)/i,
+    knrCode: "ES-PV-002", laborNorm: 0.40, unit: "mb",
+    description: "Konstrukcja montażowa PV (rail / szyna)", materialPrice: 35.00 },
+  { pattern: /\b(?:hak|łapa|klamra|trzymak)\s+(?:pv|dachow|montażow)|\bzaczep\s+pv/i,
+    knrCode: "ES-PV-003", laborNorm: 0.30, unit: "szt",
+    description: "Hak / klamra montażowa PV", materialPrice: 18.00 },
+  // Inwerter 3-faz BEFORE 1-faz (more specific keywords first).
+  // Use .* between 'inwerter' and faz keyword — model name / kW often appear between.
+  // No trailing \b after Polish stem 'faz' — 'fazowy/fazowa' suffix would block boundary.
+  { pattern: /\binwerter\b.*\b(?:3[\s-]?faz|trójfaz|trojfaz|\b3p\b)/i,
+    knrCode: "ES-PV-010", laborNorm: 4.50, unit: "szt",
+    description: "Inwerter PV 3-fazowy (string)", materialPrice: 0 },
+  { pattern: /\binwerter\b.*\b(?:1[\s-]?faz|jednofaz|hybryd|\b1p\b)/i,
+    knrCode: "ES-PV-011", laborNorm: 3.50, unit: "szt",
+    description: "Inwerter PV 1-fazowy / hybrydowy", materialPrice: 0 },
+  { pattern: /\binwerter\b|\bfalownik\s+pv/i,
+    knrCode: "ES-PV-010", laborNorm: 4.00, unit: "szt",
+    description: "Inwerter PV (generic)", materialPrice: 0 },
+  { pattern: /\boptymalizator\s+(?:mocy|pv)|\b(?:tigo|solaredge)\s+optymaliz/i,
+    knrCode: "ES-PV-012", laborNorm: 0.45, unit: "szt",
+    description: "Optymalizator mocy PV", materialPrice: 320.00 },
+  { pattern: /\bmikroinwerter|\bmikro[\s-]inwerter/i,
+    knrCode: "ES-PV-013", laborNorm: 0.55, unit: "szt",
+    description: "Mikroinwerter PV", materialPrice: 480.00 },
+  // Kabel solarny PV1-F: specific (4mm/6mm) BEFORE generic
+  { pattern: /\b(?:kabel|przewód)\s+(?:solarn|pv1[\s-]?f|fotowolt).*\b6(?:[,.]0)?(?:\s*mm)?/i,
+    knrCode: "ES-PV-021", laborNorm: 0.12, unit: "mb",
+    description: "Kabel solarny PV1-F 6 mm²", materialPrice: 6.20 },
+  { pattern: /\b(?:kabel|przewód)\s+(?:solarn|pv1[\s-]?f|fotowolt).*\b4(?:[,.]0)?(?:\s*mm)?/i,
+    knrCode: "ES-PV-020", laborNorm: 0.10, unit: "mb",
+    description: "Kabel solarny PV1-F 4 mm²", materialPrice: 4.50 },
+  { pattern: /\b(?:kabel|przewód)\s+(?:solarn|pv1[\s-]?f|fotowolt)/i,
+    knrCode: "ES-PV-020", laborNorm: 0.10, unit: "mb",
+    description: "Kabel solarny PV1-F (generic)", materialPrice: 4.50 },
+  { pattern: /\b(?:konektor|złącze|wtyk)\s+mc4|\bmc4\s+(?:kompletn|zarobi|wykonan|para)/i,
+    knrCode: "ES-PV-022", laborNorm: 0.15, unit: "szt",
+    description: "Konektor MC4 — zarobienie złącza", materialPrice: 12.00 },
+  { pattern: /\broz[lł][aą]cznik\s+(?:dc|po[zż]arow|pv)|\bwy[lł][aą]cznik\s+po[zż]arow.*pv/i,
+    knrCode: "ES-PV-023", laborNorm: 0.55, unit: "szt",
+    description: "Rozłącznik DC pożarowy PV", materialPrice: 280.00 },
+  { pattern: /\bogranicznik\s+(?:dc|przep[ię][eę]ci.*dc|spd.*dc|t1\+t2.*dc)/i,
+    knrCode: "ES-PV-024", laborNorm: 0.55, unit: "szt",
+    description: "Ogranicznik przepięć DC T1+T2", materialPrice: 320.00 },
+  { pattern: /\b(?:smart\s*meter|licznik\s+dwukierunk|opomiarowanie\s+pv)/i,
+    knrCode: "ES-PV-030", laborNorm: 1.20, unit: "szt",
+    description: "Smart meter / licznik dwukierunkowy PV", materialPrice: 280.00 },
+  { pattern: /\b(?:magazyn\s+energii|battery|akumulator)\s+(?:pv|fotowolt|li|domow|tesla|powerwall)/i,
+    knrCode: "ES-PV-040", laborNorm: 6.00, unit: "kpl",
+    description: "Magazyn energii (bateria) — montaż", materialPrice: 0 },
+  { pattern: /\bstring\s*box|\bskrzynka\s+pv\b|\b(?:rozdzielnica|tablica)\s+pv/i,
+    knrCode: "ES-PV-050", laborNorm: 1.80, unit: "szt",
+    description: "String box / rozdzielnica PV DC", materialPrice: 480.00 },
+
+  // ── EV / WALLBOX / STACJE ŁADOWANIA (ES-EV-xxx) ──
+  { pattern: /\bwallbox\s*(?:22|22\s*kw)|\b(?:stacja|punkt)\s+ładowania.*22\s*kw/i,
+    knrCode: "ES-EV-002", laborNorm: 3.00, unit: "szt",
+    description: "Wallbox AC 22kW (3-faz) — montaż", materialPrice: 0 },
+  { pattern: /\bwallbox|\b(?:stacja|punkt)\s+ładowania\s+(?:ev|pojazd|elektr)|\bcharger\s+(?:ac|ev)/i,
+    knrCode: "ES-EV-001", laborNorm: 2.50, unit: "szt",
+    description: "Wallbox AC 11kW — montaż", materialPrice: 0 },
+  { pattern: /\bstacja\s+(?:dc\s+szybk|szybkiego\s+ładowania|fast\s+charg)/i,
+    knrCode: "ES-EV-010", laborNorm: 8.00, unit: "szt",
+    description: "Stacja DC szybkiego ładowania", materialPrice: 0 },
+
+  // ── OGRZEWANIE PRZEPONOWE / WENTYLACJA (ES-OGR-xxx) ──
+  { pattern: /\bmata\s+grzewcz/i,
+    knrCode: "ES-OGR-001", laborNorm: 0.65, unit: "m2",
+    description: "Mata grzewcza podłogowa", materialPrice: 95.00 },
+  { pattern: /\b(?:kabel|przewód)\s+grzewcz/i,
+    knrCode: "ES-OGR-002", laborNorm: 0.20, unit: "mb",
+    description: "Kabel grzewczy podłogowy", materialPrice: 18.00 },
+  { pattern: /\bfolia\s+grzewcz/i,
+    knrCode: "ES-OGR-003", laborNorm: 0.55, unit: "m2",
+    description: "Folia grzewcza ścienna / sufitowa", materialPrice: 75.00 },
+  { pattern: /\brekuperator|\bcentrala\s+wentylacyjn|\bwentylacja\s+mechaniczna\s+z\s+rekup/i,
+    knrCode: "ES-OGR-010", laborNorm: 6.00, unit: "kpl",
+    description: "Rekuperator — montaż + sterowanie (kpl)", materialPrice: 0 },
+  { pattern: /\b(?:wentylator|wywietrznik)\s+(?:łazienkow|kuchen|kanal|sufit|ścienn)/i,
+    knrCode: "ES-OGR-020", laborNorm: 0.55, unit: "szt",
+    description: "Wentylator łazienkowy / kuchenny / kanałowy", materialPrice: 65.00 },
+
+  // ── SMART HOME / KNX / DALI (ES-SMART-xxx) ──
+  { pattern: /\b(?:moduł|aktor|bramka)\s+knx|\bknx\s+(?:moduł|aktor|bramka|i\/o|wej[śs]cia)/i,
+    knrCode: "ES-SMART-001", laborNorm: 0.85, unit: "szt",
+    description: "Moduł / aktor KNX", materialPrice: 280.00 },
+  { pattern: /\bczujnik\s+knx|\bknx\s+czujnik/i,
+    knrCode: "ES-SMART-002", laborNorm: 0.55, unit: "szt",
+    description: "Czujnik KNX (temp / ruchu / wilgoci)", materialPrice: 220.00 },
+  { pattern: /\bzasilacz\s+knx|\bknx\s+(?:zasilacz|psu|640ma)/i,
+    knrCode: "ES-SMART-003", laborNorm: 0.75, unit: "szt",
+    description: "Zasilacz magistrali KNX", materialPrice: 320.00 },
+  { pattern: /\bdali\s+(?:driver|aktor|moduł|interfejs|sterow)|\bsterow.*dali\b/i,
+    knrCode: "ES-SMART-010", laborNorm: 0.40, unit: "szt",
+    description: "Driver / aktor DALI", materialPrice: 180.00 },
+  { pattern: /\b(?:bramka|hub|gateway)\s+(?:smart|home|zigbee|z[\s-]?wave|matter)/i,
+    knrCode: "ES-SMART-020", laborNorm: 0.45, unit: "szt",
+    description: "Bramka smart home (HUB)", materialPrice: 280.00 },
+  { pattern: /\b(?:przekaznik|aktor|przełącznik)\s+(?:smart|zigbee|z[\s-]?wave|wi[\s-]?fi|matter)/i,
+    knrCode: "ES-SMART-021", laborNorm: 0.50, unit: "szt",
+    description: "Inteligentny przełącznik / przekaznik (smart)", materialPrice: 95.00 },
+
+  // ── ŚWIATŁOWODY / SIEĆ / RACK (ES-FO-xxx) ──
+  { pattern: /\b(?:kabel|przewód)\s+(?:światłowodow|fo\b|swiatlowod|fiber)/i,
+    knrCode: "ES-FO-001", laborNorm: 0.18, unit: "mb",
+    description: "Kabel światłowodowy", materialPrice: 8.00 },
+  { pattern: /\bspaw(?:anie)?\s+(?:światłowod|fo|fiber)|\bzgrzew.*światłowod/i,
+    knrCode: "ES-FO-002", laborNorm: 0.60, unit: "szt",
+    description: "Spawanie światłowodu (per spaw)", materialPrice: 0 },
+  // Patch panel: specific (24/48) BEFORE generic
+  { pattern: /\bpatch[\s-]?panel\s*(?:48|48[\s-]?port)/i,
+    knrCode: "ES-FO-011", laborNorm: 1.50, unit: "szt",
+    description: "Patch panel 48-portowy", materialPrice: 480.00 },
+  { pattern: /\bpatch[\s-]?panel\s*(?:24|24[\s-]?port)/i,
+    knrCode: "ES-FO-010", laborNorm: 1.20, unit: "szt",
+    description: "Patch panel 24-portowy", materialPrice: 280.00 },
+  { pattern: /\bpatch[\s-]?panel\b/i,
+    knrCode: "ES-FO-010", laborNorm: 1.20, unit: "szt",
+    description: "Patch panel (generic)", materialPrice: 280.00 },
+  { pattern: /\b(?:switch|przełącznik)\s+(?:sieciow|gigabit|24[\s-]?port|48[\s-]?port|poe)/i,
+    knrCode: "ES-FO-020", laborNorm: 0.85, unit: "szt",
+    description: "Switch sieciowy 24/48-port", materialPrice: 0 },
+  { pattern: /\bszafa\s+(?:rack|serwerow|teleinform)|\brack\s+19/i,
+    knrCode: "ES-FO-030", laborNorm: 4.50, unit: "szt",
+    description: "Szafa rack 19'' — montaż", materialPrice: 0 },
+  { pattern: /\b(?:ont|onu)\s+(?:gpon|światłowodow|huawei)|\bmodem\s+światłowod/i,
+    knrCode: "ES-FO-040", laborNorm: 0.55, unit: "szt",
+    description: "ONT światłowodowy (terminal)", materialPrice: 0 },
+
+  // ── CCTV / MONITORING (ES-CCTV-xxx) ──
+  { pattern: /\bkamera\s+(?:ip|cctv|zewn|kopułow|kopulow|tubow|bullet|obrotow|ptz)/i,
+    knrCode: "ES-CCTV-001", laborNorm: 1.20, unit: "szt",
+    description: "Kamera IP CCTV — montaż", materialPrice: 350.00 },
+  { pattern: /\b(?:rejestrator|nvr|dvr)\s*(?:8|16|32)?[\s-]?kana[lł]|\b(?:nvr|dvr)\b/i,
+    knrCode: "ES-CCTV-010", laborNorm: 1.50, unit: "szt",
+    description: "Rejestrator NVR / DVR", materialPrice: 0 },
+  // Czujka PIR zewnętrzna (alarmowa, IP66) — często myli się z czujnikiem ruchu
+  // wewnętrznym (sterowanie oświetleniem). Wymagamy 'zewn' / 'alarm' / 'sswin'.
+  { pattern: /\bczujka\s+(?:pir\s+zewn|zewn[\s.]\s*pir|alarm.*pir|pir\s+sswin|pir\s+ip6)/i,
+    knrCode: "ES-CCTV-020", laborNorm: 0.55, unit: "szt",
+    description: "Czujka PIR zewnętrzna alarmowa", materialPrice: 130.00 },
+  { pattern: /\bbariera\s+(?:podczerw|aktywn|alarm|fotoelektr)/i,
+    knrCode: "ES-CCTV-021", laborNorm: 1.20, unit: "szt",
+    description: "Bariera podczerwona alarmowa", materialPrice: 280.00 },
+  { pattern: /\bczujka\s+(?:tłucz|zbicia|szyby|wibracj)/i,
+    knrCode: "ES-CCTV-022", laborNorm: 0.40, unit: "szt",
+    description: "Czujka tłuczenia szyby", materialPrice: 95.00 },
+
+  // ── BIURO / KOMERCJA (ES-BIU-xxx) ──
+  // Note: 'Oprawa biurowa' moved up to oprawy section (before generic fallback).
+  { pattern: /\b(?:floorbox|floor[\s-]?box|kaseta\s+podłogow|puszka\s+podłogow)/i,
+    knrCode: "ES-BIU-001", laborNorm: 1.80, unit: "szt",
+    description: "Floorbox / kaseta podłogowa", materialPrice: 380.00 },
+  { pattern: /\bups\b|\bzasilacz\s+(?:awaryjn|bezprzerw)|\b(?:no[\s-]?break)\b/i,
+    knrCode: "ES-BIU-020", laborNorm: 1.50, unit: "szt",
+    description: "UPS / zasilacz awaryjny — montaż", materialPrice: 0 },
+  { pattern: /\btablica\s+(?:rozdzielcz|pi[eę]trow|tr\b|tt\b)|\brozdzielnia\s+pi[eę]trow/i,
+    knrCode: "ES-BIU-030", laborNorm: 5.50, unit: "szt",
+    description: "Tablica rozdzielcza piętrowa TR/TT", materialPrice: 0 },
+
+  // ── KLIMATYZACJA (ES-KLIM-xxx) ──
+  // Jednostka zewn BEFORE jednostka wewn (specific keyword first)
+  { pattern: /\bklimatyzator\s+(?:zewn|jednost.*zewn|jedn[\s.]\s*zewn)|\bagregat\s+(?:klima|chillera)/i,
+    knrCode: "ES-KLIM-001", laborNorm: 2.50, unit: "szt",
+    description: "Klimatyzator split — jednostka zewnętrzna", materialPrice: 0 },
+  { pattern: /\bklimatyzator|\b(?:split|multi[\s-]?split|fan[\s-]?coil|fancoil)\b/i,
+    knrCode: "ES-KLIM-002", laborNorm: 1.80, unit: "szt",
+    description: "Klimatyzator split — jednostka wewnętrzna", materialPrice: 0 },
+  { pattern: /\bsterownik\s+klima|\bpilot\s+(?:klima|przewodow|naczynkow)/i,
+    knrCode: "ES-KLIM-010", laborNorm: 0.50, unit: "szt",
+    description: "Sterownik / pilot klimatyzacji", materialPrice: 95.00 },
+
+  // ── OUTDOOR LAMPY ZEWN (uzupełnienie KNR 5-04 0303-2x) ──
+  // Note: 'Reflektor architektoniczny' + 'Lampa parkowa' moved up to oprawy section.
+  { pattern: /\biluminacj[aą]\s+(?:led|elewac|świąteczn)|\boświetleni[ae]\s+(?:elewacyjn|fasadow|nastrojow)/i,
+    knrCode: "KNR 5-04 0303-27", laborNorm: 1.80, unit: "kpl",
+    description: "Iluminacja / oświetlenie elewacji LED", materialPrice: 0 },
+
+  // ── POMIARY ROZSZERZONE II (ES-POM-007..010) ──
+  { pattern: /\bpomiar\s+(?:napi[eę]ci|napiec|parametr.*sieci|jako[śs]ci\s+ene)/i,
+    knrCode: "ES-POM-007", laborNorm: 0.30, unit: "szt",
+    description: "Pomiar napięcia / parametrów sieci", materialPrice: 0 },
+  { pattern: /\binspekcja\s+termowizyjn|\btermowizyjn.*pomiar|\btermowizja/i,
+    knrCode: "ES-POM-008", laborNorm: 0.50, unit: "szt",
+    description: "Inspekcja termowizyjna", materialPrice: 0 },
+  { pattern: /\bpomiar.*1000\s*v|\b(?:opor|izolac).*1000\s*v/i,
+    knrCode: "ES-POM-009", laborNorm: 0.40, unit: "szt",
+    description: "Pomiar oporu izolacji 1000V (przemysł)", materialPrice: 0 },
+
+  // ── ROBOTY POMOCNICZE II (rurki / taśmy) ──
+  { pattern: /\b(?:rurka|rura)\s+(?:karbowan|ognioodporn|rvs|rvks)|\bpeszel\s+(?:karbowan|ognioodporn)/i,
+    knrCode: "KNR 5-08 0510", laborNorm: 0.18, unit: "mb",
+    description: "Rurka karbowana / peszel ognioodporny", materialPrice: 8.00 },
+  { pattern: /\btaśma\s+(?:ostrzegawcz|sygnaliz|kablow\s+ostrzeg)/i,
+    knrCode: "KNR 5-08 0520", laborNorm: 0.05, unit: "mb",
+    description: "Taśma ostrzegawcza w wykopie", materialPrice: 1.50 },
+
+  // ── STYCZNIK MOCY / FALOWNIK / SILNIK (ES-STY/PRZ-xxx) ──
+  // "Stycznik mocy" wymaga 'mocy/duży/3-faz' — nie koliduje z istniejącym
+  // "Stycznik modułowy" (linia 188) który wymaga modulow/3-pol/4-pol/szynow.
+  { pattern: /\bstycznik\s+(?:mocy|du[zż]y|mocow|pr[aą]du)|\bstycznik\b.*\b(?:25a|40a|63a|100a|160a)\b/i,
+    knrCode: "ES-STY-001", laborNorm: 0.85, unit: "szt",
+    description: "Stycznik mocy 25-160A", materialPrice: 280.00 },
+  { pattern: /\bfalownik\b|\bvfd\b|\bprzemiennik\s+cz[eę]stotliwośc/i,
+    knrCode: "ES-PRZ-001", laborNorm: 2.50, unit: "szt",
+    description: "Falownik / przemiennik częstotliwości", materialPrice: 0 },
+  { pattern: /\bsilnik\s+(?:elektryczn|asynchron|3[\s-]?faz|1[\s-]?faz).*monta[zż]|\bmonta[zż]\s+silnik/i,
+    knrCode: "ES-PRZ-010", laborNorm: 3.50, unit: "szt",
+    description: "Silnik elektryczny — montaż", materialPrice: 0 },
+
+  // ── ROLETY / BRAMY / NAPĘDY (ES-NAP-xxx) ──
+  { pattern: /\b(?:nap[eę]d|silnik)\s+(?:bramy\s+gara[zż]|gara[zż]ow|przesuwn|skrzyd[lł]ow)/i,
+    knrCode: "ES-NAP-001", laborNorm: 3.50, unit: "szt",
+    description: "Napęd bramy garażowej / skrzydłowej", materialPrice: 0 },
+  { pattern: /\b(?:silnik|nap[eę]d)\s+(?:rolet|markiz|żaluzj)|\brolet[aą]\s+elektryczn/i,
+    knrCode: "ES-NAP-010", laborNorm: 0.85, unit: "szt",
+    description: "Silnik / napęd rolety / markizy", materialPrice: 0 },
+  { pattern: /\belektrozaczep\b|\b(?:rygiel|zamek)\s+elektryczn/i,
+    knrCode: "ES-NAP-020", laborNorm: 0.65, unit: "szt",
+    description: "Elektrozaczep / rygiel elektryczny", materialPrice: 95.00 },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
