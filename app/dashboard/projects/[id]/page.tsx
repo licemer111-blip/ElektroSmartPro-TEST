@@ -190,6 +190,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               projectColor={project.color}
               photos={photos}
               isReadOnly={isReadOnly}
+              // v4.0: Preview=Apply parity — thread project-level multipliers to ES-Engine dialog
+              adjustmentMult={1 + (project.adjustment_percentage || 0) / 100}
+              matMarkupMult={1 + (project.mat_markup_pct || 0) / 100}
+              labMarkupMult={1 + (project.lab_markup_pct || 0) / 100}
+              complexityFactor={1.0}
+              materialsOwnedByCustomer={project.materials_owned_by_customer ?? false}
               catalogSidebar={
                 <DynamicCatalogSidebar
                   projectId={id}

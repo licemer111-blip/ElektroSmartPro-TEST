@@ -46,6 +46,12 @@ interface ProjectHeaderProps {
   photos?: import("@/lib/types/database").ProjectPhoto[];
   isReadOnly?: boolean;
   selectedRowIds?: Set<string>;
+  // v4.0: Preview=Apply parity — forwarded to AiPriceEstimatorDialog via toolbar
+  adjustmentMult?: number;
+  matMarkupMult?: number;
+  labMarkupMult?: number;
+  complexityFactor?: number;
+  materialsOwnedByCustomer?: boolean;
 }
 
 export function ProjectHeader({
@@ -70,6 +76,11 @@ export function ProjectHeader({
   isReadOnly = false,
   isPro = false,
   selectedRowIds,
+  adjustmentMult = 1.0,
+  matMarkupMult = 1.0,
+  labMarkupMult = 1.0,
+  complexityFactor = 1.0,
+  materialsOwnedByCustomer = false,
 }: ProjectHeaderProps) {
   const regionModifier =
     allRegions.find((r) => r.id === regionId)?.price_modifier ?? 1.0;
@@ -124,6 +135,11 @@ export function ProjectHeader({
         projectTotal={projectTotal}
         localSelectedRowIds={localSelectedRowIds}
         projectLaborRate={projectLaborRate}
+        adjustmentMult={adjustmentMult}
+        matMarkupMult={matMarkupMult}
+        labMarkupMult={labMarkupMult}
+        complexityFactor={complexityFactor}
+        materialsOwnedByCustomer={materialsOwnedByCustomer}
         userProfile={userProfile}
         isSaving={actions.isSaving}
         isDuplicating={actions.isDuplicating}

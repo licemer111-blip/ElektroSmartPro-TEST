@@ -41,7 +41,13 @@ interface ProjectLayoutWithHeaderProps {
   userId?: string;
   photos?: ProjectPhoto[];
   isReadOnly?: boolean;
-  
+  // v4.0: Preview=Apply parity — forwarded through the chain to the AI pricing dialog
+  adjustmentMult?: number;
+  matMarkupMult?: number;
+  labMarkupMult?: number;
+  complexityFactor?: number;
+  materialsOwnedByCustomer?: boolean;
+
   // Layout props
   catalogSidebar: React.ReactNode;
   children: React.ReactNode;
@@ -73,6 +79,11 @@ export function ProjectLayoutWithHeader({
   userId,
   photos,
   isReadOnly,
+  adjustmentMult = 1.0,
+  matMarkupMult = 1.0,
+  labMarkupMult = 1.0,
+  complexityFactor = 1.0,
+  materialsOwnedByCustomer = false,
   catalogSidebar,
   children,
 }: ProjectLayoutWithHeaderProps) {
@@ -120,6 +131,11 @@ export function ProjectLayoutWithHeader({
         userId={userId}
         photos={photos}
         isReadOnly={isReadOnly}
+        adjustmentMult={adjustmentMult}
+        matMarkupMult={matMarkupMult}
+        labMarkupMult={labMarkupMult}
+        complexityFactor={complexityFactor}
+        materialsOwnedByCustomer={materialsOwnedByCustomer}
       />
       
       <ProjectLayoutToggle

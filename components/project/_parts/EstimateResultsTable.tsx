@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition, useMemo } from "react";
+import React, { useState, useTransition, useMemo, useCallback } from "react";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
@@ -17,6 +17,8 @@ import { repriceSingleItem } from "@/app/dashboard/projects/[id]/_ai_actions/pri
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import type { AiPriceEstimate } from "@/app/dashboard/projects/[id]/ai-actions";
 import type { PriceMode } from "./useAiPriceEstimator";
+import { calcRowPrices } from "@/lib/pricing-calculations";
+import type { ProjectItem } from "@/lib/types/database";
 
 interface EstimateResultsTableProps {
   estimates: AiPriceEstimate[];
@@ -34,6 +36,19 @@ interface EstimateResultsTableProps {
   bruttoMode?: boolean;
   /** VAT rate used for brutto preview (e.g. 23). */
   vatRate?: number;
+  // ── Project pricing multipliers (for preview=apply parity) ────────────────
+  /** 1 + project.adjustment_percentage/100 — negocjacja slider. Default 1.0. */
+  adjustmentMult?: number;
+  /** 1 + project.mat_markup_pct/100 — narzut materiałów. Default 1.0. */
+  matMarkupMult?: number;
+  /** 1 + project.lab_markup_pct/100 — narzut robocizny. Default 1.0. */
+  labMarkupMult?: number;
+  /** Labor complexity multiplier (Pult 5-w-1). Default 1.0 (matches EstimateRow). */
+  complexityFactor?: number;
+  /** Region price modifier. Default 1.0. */
+  regionModifier?: number;
+  /** Materials owned by customer — if true, material = 0. */
+  materialsOwnedByCustomer?: boolean;
   onToggleItem: (id: string) => void;
   onToggleAll: () => void;
   onApplyCertainOnly: () => void;
@@ -57,6 +72,9 @@ export function EstimateResultsTable({
   estimates, selectedIds, mode, pricedCount, unmatchedCount,
   refreshingIds, manualMatchItemId, manualMatchSearch, fullCatalog, isLoadingCatalog,
   projectId, bruttoMode = false, vatRate = 23,
+  adjustmentMult = 1.0, matMarkupMult = 1.0, labMarkupMult = 1.0,
+  complexityFactor = 1.0, regionModifier: projectRegionModifier = 1.0,
+  materialsOwnedByCustomer = false,
   onToggleItem, onToggleAll, onApplyCertainOnly, onBack, onApply,
   onOpenManualMatch, onManualMatchSearchChange, onApplyManualMatch, onCloseManualMatch,
   onRepriced, onAddToRefreshing, isApplying,
@@ -76,16 +94,55 @@ export function EstimateResultsTable({
   const vatMult = bruttoMode ? 1 + vatRate / 100 : 1.0;
   const priceLabel = bruttoMode ? "brutto" : "netto";
 
-  // Calculate selectedSummary locally with KNR multiplier + optional VAT
+  // ── Preview=Apply parity (v4.0) ────────────────────────────────────────────
+  // Build a minimal ProjectItem from an AiPriceEstimate and run calcRowPrices
+  // with THE SAME multipliers the main table uses. Guarantees preview total
+  // bit-for-bit matches what the user will see after "Zastosuj ceny".
+  //
+  // Rationale: previously preview used a hand-rolled formula
+  //   suggestedLabor × regionMod × knrMult × vatMult
+  // which omitted labMarkupMult, complexityFactor, and adjustmentMult.
+  // After apply, calcRowPrices applied the full formula → cena rosła.
+  const calcEstimatePrices = useCallback((e: AiPriceEstimate) => {
+    const effectiveRegion = e.regionModifier ?? projectRegionModifier;
+    const fakeItem = {
+      id: e.itemId,
+      name: e.name,
+      unit: e.unit,
+      quantity: e.quantity,
+      final_material_price: e.suggestedMaterial,
+      final_labor_price: e.suggestedLabor,
+      material_price: e.suggestedMaterial,
+      labor_price: e.suggestedLabor,
+      confidence_level: null,
+      is_lump_sum: false,
+      is_investor_material: false,
+    } as unknown as ProjectItem;
+    return calcRowPrices(
+      fakeItem,
+      adjustmentMult,
+      materialsOwnedByCustomer,
+      "all",
+      effectiveRegion,
+      matMarkupMult,
+      labMarkupMult,
+      complexityFactor,
+      knrMultiplier,
+    );
+  }, [adjustmentMult, matMarkupMult, labMarkupMult, complexityFactor, projectRegionModifier, materialsOwnedByCustomer, knrMultiplier]);
+
+  // Calculate selectedSummary using the SAME calcRowPrices as the main table
   const selectedSummary = useMemo(() => {
     const sel = estimates.filter(e => selectedIds.has(e.itemId));
-    const totalMat = sel.reduce((s, e) => s + e.suggestedMaterial * e.quantity * vatMult, 0);
-    const totalLab = sel.reduce((s, e) => {
-      const regionMod = e.regionModifier ?? 1.0;
-      return s + e.suggestedLabor * regionMod * knrMultiplier * e.quantity * vatMult;
-    }, 0);
+    let totalMat = 0;
+    let totalLab = 0;
+    for (const e of sel) {
+      const p = calcEstimatePrices(e);
+      totalMat += p.materialTotal * vatMult;
+      totalLab += p.laborTotal * vatMult;
+    }
     return { totalMat, totalLab, total: totalMat + totalLab };
-  }, [estimates, selectedIds, knrMultiplier, vatMult]);
+  }, [estimates, selectedIds, calcEstimatePrices, vatMult]);
 
   // Inline editing state
   const [editingRowId, setEditingRowId] = useState<string | null>(null);
@@ -222,9 +279,12 @@ export function EstimateResultsTable({
             <TableBody>
               {estimates.map((est) => {
                 const isSelected = selectedIds.has(est.itemId);
-                const regionMod = est.regionModifier ?? 1.0;
-                const laborWithRegion = Math.round(est.suggestedLabor * regionMod * knrMultiplier * vatMult * 100) / 100;
-                const matDisplay = Math.round(est.suggestedMaterial * vatMult * 100) / 100;
+                const regionMod = est.regionModifier ?? projectRegionModifier;
+                // v4.0: Preview=Apply parity — use calcRowPrices (same as main table)
+                const rowPrices = calcEstimatePrices(est);
+                const qtyDiv = est.quantity || 1;
+                const laborWithRegion = Math.round((rowPrices.laborTotal / qtyDiv) * vatMult * 100) / 100;
+                const matDisplay = Math.round((rowPrices.materialTotal / qtyDiv) * vatMult * 100) / 100;
                 const totalPerUnit = matDisplay + laborWithRegion;
                 const totalAll = Math.round(totalPerUnit * est.quantity * 100) / 100;
                 const materialChanged = est.suggestedMaterial !== est.currentMaterial;

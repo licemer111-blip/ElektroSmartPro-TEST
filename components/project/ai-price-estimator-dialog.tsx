@@ -30,6 +30,19 @@ interface AiPriceEstimatorDialogProps {
   rateIsDefault?: boolean;
   /** Project VAT rate for brutto preview in results table. */
   vatRate?: number;
+  // ── Project pricing multipliers (v4.0: Preview=Apply parity) ───────────────
+  /** Negocjacja slider: 1 + project.adjustment_percentage/100. Default 1.0. */
+  adjustmentMult?: number;
+  /** Narzut materiałów: 1 + project.mat_markup_pct/100. Default 1.0. */
+  matMarkupMult?: number;
+  /** Narzut robocizny: 1 + project.lab_markup_pct/100. Default 1.0. */
+  labMarkupMult?: number;
+  /** Labor complexity factor (Pult 5-w-1). Default 1.0. */
+  complexityFactor?: number;
+  /** Region price modifier. Default 1.0. */
+  regionModifier?: number;
+  /** Materials owned by customer flag. */
+  materialsOwnedByCustomer?: boolean;
 }
 
 const modeButtons: { mode: PriceMode; label: string; desc: string; icon: typeof Banknote }[] = [
@@ -47,6 +60,12 @@ export function AiPriceEstimatorDialog({
   onExternalOpenChange,
   rateIsDefault = false,
   vatRate = 23,
+  adjustmentMult = 1.0,
+  matMarkupMult = 1.0,
+  labMarkupMult = 1.0,
+  complexityFactor = 1.0,
+  regionModifier = 1.0,
+  materialsOwnedByCustomer = false,
 }: AiPriceEstimatorDialogProps) {
   // Read live bruttoMode from tab sync context (set by Pult 5-w-1 toggle)
   const tabSyncCtx = useTabSyncOptional();
@@ -327,6 +346,12 @@ export function AiPriceEstimatorDialog({
                 projectId={projectId}
                 bruttoMode={bruttoMode}
                 vatRate={vatRate}
+                adjustmentMult={adjustmentMult}
+                matMarkupMult={matMarkupMult}
+                labMarkupMult={labMarkupMult}
+                complexityFactor={complexityFactor}
+                regionModifier={regionModifier}
+                materialsOwnedByCustomer={materialsOwnedByCustomer}
                 onToggleItem={est.toggleItem}
                 onToggleAll={est.toggleAll}
                 onApplyCertainOnly={est.applyCertainOnly}

@@ -47,6 +47,12 @@ interface ProjectHeaderToolbarProps {
   projectTotal?: number;
   localSelectedRowIds: Set<string>;
   projectLaborRate?: number;
+  // v4.0: Preview=Apply parity — forwarded to AiPriceEstimatorDialog
+  adjustmentMult?: number;
+  matMarkupMult?: number;
+  labMarkupMult?: number;
+  complexityFactor?: number;
+  materialsOwnedByCustomer?: boolean;
   userProfile?: {
     full_name?: string;
     company_name?: string;
@@ -95,6 +101,11 @@ export function ProjectHeaderToolbar({
   projectTotal = 0,
   localSelectedRowIds,
   projectLaborRate,
+  adjustmentMult = 1.0,
+  matMarkupMult = 1.0,
+  labMarkupMult = 1.0,
+  complexityFactor = 1.0,
+  materialsOwnedByCustomer = false,
   userProfile,
   isSaving,
   isDuplicating,
@@ -272,6 +283,12 @@ export function ProjectHeaderToolbar({
                   onExternalOpenChange={(v) => { setEsWycenaOpen(v); onBroadcastDialog("headerAiPricerOpen", v); }}
                   rateIsDefault={!projectLaborRate || projectLaborRate <= 0}
                   vatRate={vatRate}
+                  adjustmentMult={adjustmentMult}
+                  matMarkupMult={matMarkupMult}
+                  labMarkupMult={labMarkupMult}
+                  complexityFactor={complexityFactor}
+                  regionModifier={regionModifier}
+                  materialsOwnedByCustomer={materialsOwnedByCustomer}
                 />
               </div>
 
