@@ -1835,7 +1835,16 @@ export async function applyAiPrices(
     expert_override?: boolean;    // SAL flag: price was raised to expert floor
     is_low_confidence?: boolean;  // SAL flag: heavy noun without action verb → manual check needed
     calculation_log?: string;     // SAL explainability trace (max 500 chars)
-  }[]
+  }[],
+  options?: {
+    /**
+     * v4.0 (Phase 2): When "labor", NEVER touch material_price / final_material_price /
+     * equipment_price. Only labor fields are updated. This enforces the Iron Rule:
+     * "Wyceń robociznę" must never silently overwrite material prices with AI echoes.
+     * Default "all" preserves legacy behaviour.
+     */
+    mode?: "labor" | "all";
+  }
 ): Promise<{ success: boolean; updatedCount: number; error?: string }> {
   try {
     const guard = await checkAuthOnly();
@@ -1856,6 +1865,8 @@ export async function applyAiPrices(
 
     const adminClient = createAdminClient();
     const now = new Date().toISOString();
+    // v4.0 (Phase 2): labor-only mode — never touch material fields
+    const laborOnlyMode = options?.mode === "labor";
 
     // Protected Data Logic v2.2 — pre-fetch current item state in one batch
     const itemIds = prices.map((p) => p.itemId);
@@ -1893,8 +1904,9 @@ export async function applyAiPrices(
         const updatePayload: Record<string, unknown> = { updated_at: now };
 
         if (isNormProtected) {
-          // Protected mode: only fill material_price and knr_code if currently empty
-          if (!current.material_price || current.material_price === 0) {
+          // Protected mode: only fill material_price and knr_code if currently empty.
+          // v4.0 (Phase 2): in labor-only mode, NEVER fill material even if empty.
+          if (!laborOnlyMode && (!current.material_price || current.material_price === 0)) {
             updatePayload.material_price = p.material_price;
             updatePayload.final_material_price = p.material_price;
           }
@@ -1917,13 +1929,18 @@ export async function applyAiPrices(
           }
         } else {
           // Full update — normal path
-          updatePayload.material_price = p.material_price;
+          // v4.0 (Phase 2): in labor-only mode, NEVER write material_price, final_material_price,
+          // or equipment_price. The AI pipeline only returns labor estimates in this mode;
+          // echoing back the current material value would silently "confirm" stale data.
+          if (!laborOnlyMode) {
+            updatePayload.material_price = p.material_price;
+            updatePayload.final_material_price = p.material_price;
+            if (p.equipment_price !== undefined && p.equipment_price > 0) updatePayload.equipment_price = p.equipment_price;
+          }
           updatePayload.labor_price = p.labor_price;
-          updatePayload.final_material_price = p.material_price;
           updatePayload.final_labor_price = p.labor_price;
           updatePayload.confidence_level = p.confidence_level ?? "estimated";
           if (p.unit != null) updatePayload.unit = p.unit;
-          if (p.equipment_price !== undefined && p.equipment_price > 0) updatePayload.equipment_price = p.equipment_price;
           if (p.note !== undefined && p.note.length > 0) updatePayload.confidence_note = p.note.substring(0, 400);
           if (p.knr_code !== undefined) updatePayload.knr_code = p.knr_code;
           if (p.knr_source !== undefined) {

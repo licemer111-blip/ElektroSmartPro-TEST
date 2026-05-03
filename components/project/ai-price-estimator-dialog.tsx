@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { QuotaBadge, QuotaBlocker } from "@/components/ui/quota-badge";
 import Link from "next/link";
 import {
-  CircleDollarSign, Loader2, Check, AlertTriangle, Banknote, Wrench, Package,
+  CircleDollarSign, Loader2, Check, AlertTriangle, Banknote, Wrench,
   CheckCircle2, Info,
 } from "lucide-react";
 import { useAiPriceEstimator } from "@/components/project/_parts/useAiPriceEstimator";
@@ -45,10 +45,12 @@ interface AiPriceEstimatorDialogProps {
   materialsOwnedByCustomer?: boolean;
 }
 
+// v4.0 (Phase 2): simplified to labor-only. Material pricing moved to
+// manual input + catalog lookup — AI hallucinations on materials were
+// the #1 source of incorrect cens. Labor is driven by KNR norms which
+// are deterministic and accurate.
 const modeButtons: { mode: PriceMode; label: string; desc: string; icon: typeof Banknote }[] = [
-  { mode: "material", label: "Wyceń materiały", desc: "Uzupełnij brakujące ceny materiałów", icon: Package },
-  { mode: "labor", label: "Wyceń robociznę", desc: "Uzupełnij brakujące ceny robocizny", icon: Wrench },
-  { mode: "all", label: "Wyceń wszystko", desc: "Uzupełnij materiały i robociznę naraz", icon: Banknote },
+  { mode: "labor", label: "Wyceń robociznę", desc: "Normy KNR 2026 × stawka regionalna", icon: Wrench },
 ];
 
 export function AiPriceEstimatorDialog({
@@ -85,34 +87,20 @@ export function AiPriceEstimatorDialog({
   const phaseIdxRef = useRef(0);
   useEffect(() => { phaseIdxRef.current = phaseIdx; }, [phaseIdx]);
 
+  // v4.0 (Phase 2): single labor-only pipeline → only PHASES_LABOR remains.
+  // PHASES_MATERIAL and PHASES_SINGLE removed with AI material estimation.
   const PHASES_LABOR = [
     { label: "Wczytywanie pozycji kosztorysu...", pct: 8 },
     { label: "L0: Bezpośrednie kody KNR — wyliczenie norm...", pct: 25 },
     { label: "L1: Sprawdzam katalog prywatny...", pct: 45 },
     { label: "L2: Wyliczam robociznę z bazy ES-KNR 2026...", pct: 70 },
-    { label: "L3: AI — dopasowywanie brakujących pozycji...", pct: 88 },
+    { label: "L3: ES-Engine — dopasowywanie brakujących pozycji...", pct: 88 },
     { label: "Finalizowanie robocizny...", pct: 96 },
-  ];
-  const PHASES_MATERIAL = [
-    { label: "Przekazuję pozycje z brakiem cen materiałów...", pct: 15 },
-    { label: "ES-Słownik: szukam cen w bazie KNR...", pct: 45 },
-    { label: "AI: szacuję ceny rynkowe brakujących materiałów...", pct: 80 },
-    { label: "Finalizowanie i łączenie wyników...", pct: 96 },
-  ];
-  const PHASES_SINGLE = [
-    { label: "Wczytywanie pozycji kosztorysu...", pct: 8 },
-    { label: "L0: Bezpośrednie kody KNR — wyliczenie norm...", pct: 22 },
-    { label: "L1: Sprawdzam katalog prywatny...", pct: 38 },
-    { label: "L2: Wyliczam ceny z bazy ES-KNR 2026...", pct: 58 },
-    { label: "L3: ES-Słownik AI — dopasowywanie pozycji...", pct: 78 },
-    { label: "Finalizowanie wyników...", pct: 92 },
   ];
   // Each step shows for exactly PHASE_STEP_MS so every phase always completes fully
   const PHASE_STEP_MS = 1800;
 
-  const activePhases = est.allPhase === "labor" ? PHASES_LABOR
-    : est.allPhase === "material" ? PHASES_MATERIAL
-    : PHASES_SINGLE;
+  const activePhases = PHASES_LABOR;
 
   // Advance one step every PHASE_STEP_MS — guarantees every step is always shown
   useEffect(() => {
@@ -128,7 +116,7 @@ export function AiPriceEstimatorDialog({
     });
     return () => timers.forEach(clearTimeout);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [est.isEstimating, est.allPhase]);
+  }, [est.isEstimating]);
 
   // When AI data is ready, step through any remaining phases at 700ms each, then reveal
   useEffect(() => {
@@ -208,8 +196,9 @@ export function AiPriceEstimatorDialog({
                 <div className="flex items-start gap-2.5 p-3 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border border-amber-200 dark:border-amber-800">
                   <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
                   <div className="text-[11px] text-amber-800 dark:text-amber-300 leading-relaxed">
-                    <strong>Expert Engine</strong> stosuje hierarchię źródeł: <strong>P1 Katalog</strong> → <strong>L2 ES-Słownik</strong> → <strong>L3 ES Engine</strong>.
-                    Robocizna liczona wg stawki regionalnej (16 województw). Zweryfikuj kody KNR przed wysłaniem oferty.
+                    <strong>Expert Engine — tylko robocizna.</strong>{" "}
+                    Hierarchia: <strong>L0 kody KNR</strong> → <strong>L1 Twój katalog</strong> → <strong>L2 ES-Słownik</strong> → <strong>L3 ES-Engine</strong>.
+                    Stawka regionalna × norma 2026. <strong>Ceny materiałów ES-Engine nigdy nie nadpisuje</strong> — wpisz ręcznie lub użyj katalogu.
                   </div>
                 </div>
               )}
@@ -219,34 +208,35 @@ export function AiPriceEstimatorDialog({
                   {est.error}
                 </div>
               )}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* v4.0 (Phase 2): single labor-only CTA — replaces the 3-button grid
+                  (Materiały / Robocizna / Wszystko). AI material estimation removed. */}
+              <div className="flex justify-center">
                 {modeButtons.map((btn) => {
                   const Icon = btn.icon;
-                  const needsRate = btn.mode === "labor" || btn.mode === "all";
-                  const isDisabled = est.isEstimating || (needsRate && rateIsDefault);
+                  const isDisabled = est.isEstimating || rateIsDefault;
                   return (
                     <button
                       key={btn.mode}
                       onClick={() => est.handleEstimate(btn.mode)}
                       disabled={isDisabled}
-                      title={needsRate && rateIsDefault ? "Ustaw stawkę R-G w Ustawieniach, aby wycenić robociznę" : undefined}
-                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all text-center group ${
+                      title={rateIsDefault ? "Ustaw stawkę R-G w Ustawieniach, aby wycenić robociznę" : undefined}
+                      className={`flex flex-col items-center gap-3 p-6 w-full max-w-sm rounded-2xl border-2 transition-all text-center group ${
                         isDisabled
                           ? "border-slate-200 dark:border-slate-700 opacity-40 cursor-not-allowed"
-                          : "border-slate-200 dark:border-slate-700 hover:border-orange-400 dark:hover:border-orange-600 hover:bg-orange-50/50 dark:hover:bg-orange-950/20 cursor-pointer"
+                          : "border-orange-300 dark:border-orange-700 hover:border-orange-500 dark:hover:border-orange-500 hover:bg-orange-50 dark:hover:bg-orange-950/30 cursor-pointer shadow-sm hover:shadow-md"
                       }`}
                     >
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-sm transition-shadow ${
+                      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-sm transition-shadow ${
                         isDisabled
                           ? "bg-slate-300 dark:bg-slate-700"
-                          : "bg-gradient-to-br from-amber-500 to-orange-500 group-hover:shadow-md"
+                          : "bg-gradient-to-br from-amber-500 to-orange-500 group-hover:shadow-lg"
                       }`}>
-                        <Icon className="w-6 h-6 text-white" />
+                        <Icon className="w-8 h-8 text-white" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-slate-800 dark:text-slate-200">{btn.label}</p>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
-                          {needsRate && rateIsDefault ? "Wymaga stawki R-G" : btn.desc}
+                        <p className="text-base font-bold text-slate-800 dark:text-slate-200">{btn.label}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                          {rateIsDefault ? "Wymaga stawki R-G" : btn.desc}
                         </p>
                       </div>
                     </button>
@@ -255,7 +245,7 @@ export function AiPriceEstimatorDialog({
               </div>
               <div className="flex items-center gap-2 text-[11px] text-slate-400">
                 <Info className="w-3.5 h-3.5 flex-shrink-0" />
-                ES-Engine wyceni tylko pozycje z brakującą ceną (≤ 1 zł). Twoje ceny (powyżej 1 zł) nie zostaną nadpisane.
+                ES-Engine wyceni tylko pozycje z brakującą robocizną (≤ 1 zł). Twoje istniejące ceny nie zostaną nadpisane.
               </div>
             </div>
           )}
@@ -263,26 +253,16 @@ export function AiPriceEstimatorDialog({
           {/* Step 2: Loading */}
           {est.step === "loading" && (
             <div className="flex flex-col items-center justify-center py-8 space-y-5">
-              {/* Phase badge for 'all' mode */}
-              {est.mode === "all" && est.allPhase && (
-                <div className={`flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-semibold transition-all ${
-                  est.allPhase === "labor"
-                    ? "bg-orange-50 dark:bg-orange-950/20 border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-300"
-                    : "bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300"
-                }`}>
-                  {est.allPhase === "labor" ? (
-                    <><Wrench className="w-3.5 h-3.5" /> Faza 1/2 — Robocizna KNR</>
-                  ) : (
-                    <><Package className="w-3.5 h-3.5" /> Faza 2/2 — Materiały rynkowe</>
-                  )}
-                </div>
-              )}
+              {/* v4.0 (Phase 2): single-phase labor-only pipeline — 2-phase "all" mode removed */}
+              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-semibold bg-orange-50 dark:bg-orange-950/20 border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-300">
+                <Wrench className="w-3.5 h-3.5" /> Wycena robocizny (ES-Engine)
+              </div>
 
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 flex items-center justify-center">
                 <Loader2 className="w-8 h-8 text-orange-500 animate-spin" />
               </div>
               <div className="text-center space-y-1">
-                <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">ES Expert Engine wycenia kosztorys...</p>
+                <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">ES Expert Engine wycenia robociznę...</p>
                 <p className="text-xs text-orange-600 dark:text-orange-400 font-medium min-h-[1.25rem] transition-all">
                   {currentPhase.label}
                 </p>
@@ -295,10 +275,7 @@ export function AiPriceEstimatorDialog({
                   />
                 </div>
                 <p className="text-[10px] text-slate-400 text-center">
-                  {est.mode === "material" ? "Wycena materiałów" : est.mode === "labor" ? "Wycena robocizny"
-                    : est.allPhase === "labor" ? "Faza 1/2: Robocizna KNR"
-                    : est.allPhase === "material" ? "Faza 2/2: Materiały rynkowe"
-                    : "Pełna wycena"} · Nie zamykaj okna
+                  Wycena robocizny · Nie zamykaj okna
                 </p>
               </div>
               <div className="flex flex-col gap-1.5 w-full max-w-xs">

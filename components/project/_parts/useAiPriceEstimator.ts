@@ -137,92 +137,31 @@ export function useAiPriceEstimator({
       : undefined;
 
     startEstimate(async () => {
-      // ── Single-pass: material-only or labor-only ───────────────────────────────
-      if (selectedMode !== "all") {
-        const singleStart = Date.now();
-        const result = await estimatePricesWithAI(projectId, selectedMode, { targetItemIds });
-        if (result.success && result.estimates) {
-          // Ensure animation has time to step through all phases (6 steps × 1.8s = 10.8s)
-          const MIN_SINGLE_MS = selectedMode === "material" ? 7500 : 10500;
-          const elapsed = Date.now() - singleStart;
-          if (elapsed < MIN_SINGLE_MS) {
-            await new Promise<void>((r) => setTimeout(r, MIN_SINGLE_MS - elapsed));
-          }
-          const ids = new Set(
-            result.estimates
-              .filter((e) => !e.isAmbiguous && e.trace !== "unmatched")
-              .map((e) => e.itemId)
-          );
-          setPendingData({ estimates: result.estimates, initialSelectedIds: ids });
-        } else {
-          setError(result.error || "Błąd wyceny");
-          setStep("choose");
+      // v4.0 (Phase 2): labor-only pipeline — single pass, no "all" two-phase mode.
+      // AI material estimation removed (too many hallucinations on brand/model/volume).
+      // Materials come from: (a) user catalog (L1 match), (b) manual input.
+      // Always use "labor" mode regardless of selectedMode — legacy "material"/"all"
+      // callers get a labor-only result (backward compatible; they'll re-price material manually).
+      const singleStart = Date.now();
+      const result = await estimatePricesWithAI(projectId, "labor", { targetItemIds });
+      if (result.success && result.estimates) {
+        // Ensure animation has time to step through all labor phases (6 × 1800ms = 10.8s).
+        // Phase 3 (next commit) will shorten this; keeping parity for now.
+        const MIN_SINGLE_MS = 10500;
+        const elapsed = Date.now() - singleStart;
+        if (elapsed < MIN_SINGLE_MS) {
+          await new Promise<void>((r) => setTimeout(r, MIN_SINGLE_MS - elapsed));
         }
-        return;
-      }
-
-      // ── "Wyceń wszystko": Phase 1 (Labor KNR) → Phase 2 (Material fill) ────────
-      setAllPhase("labor");
-      const laborStart = Date.now();
-      const laborResult = await estimatePricesWithAI(projectId, "labor", { targetItemIds });
-      if (!laborResult.success || !laborResult.estimates) {
-        setError(laborResult.error || "Błąd wyceny robocizny");
+        const ids = new Set(
+          result.estimates
+            .filter((e) => !e.isAmbiguous && e.trace !== "unmatched")
+            .map((e) => e.itemId)
+        );
+        setPendingData({ estimates: result.estimates, initialSelectedIds: ids });
+      } else {
+        setError(result.error || "Błąd wyceny");
         setStep("choose");
-        setAllPhase(null);
-        return;
       }
-
-      // Ensure labor animation completes all 6 steps (6 × 1800ms = 10.8s)
-      const MIN_LABOR_MS = 10500;
-      const laborElapsed = Date.now() - laborStart;
-      if (laborElapsed < MIN_LABOR_MS) {
-        await new Promise<void>((r) => setTimeout(r, MIN_LABOR_MS - laborElapsed));
-      }
-
-      // Phase 2: only items that came back with 0 material (not pure-labor, not unmatched)
-      setAllPhase("material");
-      const materialStart = Date.now();
-      const zeroMatIds = laborResult.estimates
-        .filter((e) => e.suggestedMaterial === 0 && e.trace !== "unmatched" && !e.isAmbiguous)
-        .map((e) => e.itemId);
-
-      let finalEstimates = laborResult.estimates;
-
-      if (zeroMatIds.length > 0) {
-        const matResult = await estimatePricesWithAI(projectId, "material", { targetItemIds: zeroMatIds });
-        if (matResult.success && matResult.estimates) {
-          const matMap = new Map(matResult.estimates.map((e) => [e.itemId, e]));
-          finalEstimates = laborResult.estimates.map((e) => {
-            const matE = matMap.get(e.itemId);
-            if (!matE || matE.suggestedMaterial <= 0) return e;
-            return {
-              ...e,
-              suggestedMaterial: matE.suggestedMaterial,
-              matSource: matE.matSource,
-              note: e.note
-                .replace(" · ⚠️ brak ceny mat. w KNR — dodaj do własnego katalogu", "")
-                + (matE.matSource === "ai-market" ? " | ~rynk." : ""),
-            };
-          });
-        }
-        // Material phase failure is non-critical — labor results still shown
-      }
-
-      // Ensure material animation completes all 4 steps (4 × 1800ms = 7.2s)
-      const MIN_MATERIAL_MS = 7500;
-      const materialElapsed = Date.now() - materialStart;
-      if (materialElapsed < MIN_MATERIAL_MS) {
-        await new Promise<void>((r) => setTimeout(r, MIN_MATERIAL_MS - materialElapsed));
-      }
-
-      const finalIds = new Set(
-        finalEstimates
-          .filter((e) => !e.isAmbiguous && e.trace !== "unmatched")
-          .map((e) => e.itemId)
-      );
-      // NOTE: setAllPhase(null) is intentionally NOT called here.
-      // onAnimationComplete handles it after the animation finishes.
-      setPendingData({ estimates: finalEstimates, initialSelectedIds: finalIds });
     });
   }, [isFinal, hasSelectedRows, selectedRowIds, projectId, refreshQuota, toast]);
 
@@ -320,7 +259,15 @@ export function useAiPriceEstimator({
 
     startApply(async () => {
       try {
-        const result = await applyAiPrices(projectId, toApply as Parameters<typeof applyAiPrices>[1]);
+        // v4.0 (Phase 2): pass mode so applyAiPrices knows whether to touch material fields.
+        // "labor" → never overwrite material_price / final_material_price / equipment_price.
+        // "material" | "all" → legacy full-write behaviour.
+        const applyMode: "labor" | "all" = mode === "labor" ? "labor" : "all";
+        const result = await applyAiPrices(
+          projectId,
+          toApply as Parameters<typeof applyAiPrices>[1],
+          { mode: applyMode },
+        );
         if (result.success) {
           lastAppliedHashRef.current = payloadHash;
           lastAppliedAtRef.current = Date.now();
