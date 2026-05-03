@@ -1525,6 +1525,13 @@ export interface RepriceSingleOptions {
   overrideUnit?: string;       // user-corrected unit (e.g. "szt" instead of "mb")
   extraContext?: string;       // extra detail for AI (e.g. "kabel zewnętrzny układany w ziemi")
   presetPercent?: number;      // e.g. 2 → material = 2% of project material sum
+  /**
+   * v4.0 (Phase 3): when true, suggestedMaterial is echoed from the current row's
+   * material_price instead of running L2/L3 AI. Used by the labor-only preview
+   * modal so that "Koryguj" never hallucinates a new material price.
+   * L1 catalog match still returns the catalog's material (user-owned data).
+   */
+  laborOnly?: boolean;
 }
 
 export async function repriceSingleItem(
@@ -1696,6 +1703,10 @@ export async function repriceSingleItem(
           trace: `L2.5 reprice pre-AI match: ${l25Repr.code}`,
         };
         const processedReprL25 = applyPostProcessPipeline(rawL25ReprEst, baseRateForCalc, 1.0);
+        // v4.0 (Phase 3): laborOnly guard — preserve current material, never echo AI estimate
+        if (opts.laborOnly) {
+          processedReprL25.suggestedMaterial = item.final_material_price ?? item.material_price ?? 0;
+        }
         return { success: true, estimate: processedReprL25 };
       }
     }
@@ -1801,6 +1812,10 @@ export async function repriceSingleItem(
       trace: `repriceSingleItem AI (${e.confidence})`,
     };
     const processedRepr = applyPostProcessPipeline(rawEstRepr, baseRateForCalc, 1.0);
+    // v4.0 (Phase 3): laborOnly guard — preserve current material, never overwrite with AI estimate
+    if (opts.laborOnly) {
+      processedRepr.suggestedMaterial = item.final_material_price ?? item.material_price ?? 0;
+    }
 
     return {
       success: true,
@@ -1845,7 +1860,14 @@ export async function applyAiPrices(
      */
     mode?: "labor" | "all";
   }
-): Promise<{ success: boolean; updatedCount: number; error?: string }> {
+): Promise<{
+  success: boolean;
+  updatedCount: number;
+  /** v4.0 (Phase 3): rows where norm_protected / manual / expert_override was set —
+   *  labor_norm was NOT overwritten. UI shows a toast so users know these were skipped. */
+  protectedCount?: number;
+  error?: string;
+}> {
   try {
     const guard = await checkAuthOnly();
     if ("error" in guard) return { success: false, updatedCount: 0, error: guard.error };
@@ -1881,13 +1903,14 @@ export async function applyAiPrices(
     );
 
     // FIX a4: parallel Promise.all instead of sequential N+1 loop
+    // v4.0 (Phase 3): track which rows were protected so we can surface a toast.
     const updateResults = await Promise.all(
-      prices.map(async (p) => {
+      prices.map(async (p): Promise<{ ok: boolean; wasProtected: boolean }> => {
         const current = currentMap.get(p.itemId);
 
         // Protected Data Logic:
         // 1. Manual override — skip engine entirely
-        if (current?.confidence_level === "manual") return true;
+        if (current?.confidence_level === "manual") return { ok: true, wasProtected: true };
 
         // 2. Protected Data Logic v2.5 — expert_override is an IRON LOCK.
         // (See repriceSingleItem above for the full rationale.) Engine-derived
@@ -1976,15 +1999,16 @@ export async function applyAiPrices(
 
         if (error) {
           logger.error("applyAiPrices UPDATE error:", { itemId: p.itemId, projectId }, error);
-          return false;
+          return { ok: false, wasProtected: isNormProtected };
         }
-        return true;
+        return { ok: true, wasProtected: isNormProtected };
       })
     );
 
-    const count = updateResults.filter(Boolean).length;
+    const count = updateResults.filter((r) => r.ok).length;
+    const protectedCount = updateResults.filter((r) => r.ok && r.wasProtected).length;
     revalidatePath(`/dashboard/projects/${projectId}`);
-    return { success: true, updatedCount: count };
+    return { success: true, updatedCount: count, protectedCount };
   } catch (error) {
     logger.error("applyAiPrices error:", {}, error);
     return { success: false, updatedCount: 0, error: "Blad zapisu cen" };

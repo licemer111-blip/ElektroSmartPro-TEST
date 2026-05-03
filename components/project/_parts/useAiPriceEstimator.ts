@@ -142,16 +142,14 @@ export function useAiPriceEstimator({
       // Materials come from: (a) user catalog (L1 match), (b) manual input.
       // Always use "labor" mode regardless of selectedMode — legacy "material"/"all"
       // callers get a labor-only result (backward compatible; they'll re-price material manually).
-      const singleStart = Date.now();
+      //
+      // v4.0 (Phase 3): MIN_SINGLE_MS=10500 artificial delay REMOVED.
+      // Real labor wycena takes 2-4 sec; padding to 10.5 sec was a fake "ES-Engine
+      // is thinking hard" theatre that made users wait 3-5× longer than necessary.
+      // The phase animation in AiPriceEstimatorDialog now drains remaining steps
+      // at 700ms each after data arrives — feels fast and honest.
       const result = await estimatePricesWithAI(projectId, "labor", { targetItemIds });
       if (result.success && result.estimates) {
-        // Ensure animation has time to step through all labor phases (6 × 1800ms = 10.8s).
-        // Phase 3 (next commit) will shorten this; keeping parity for now.
-        const MIN_SINGLE_MS = 10500;
-        const elapsed = Date.now() - singleStart;
-        if (elapsed < MIN_SINGLE_MS) {
-          await new Promise<void>((r) => setTimeout(r, MIN_SINGLE_MS - elapsed));
-        }
         const ids = new Set(
           result.estimates
             .filter((e) => !e.isAmbiguous && e.trace !== "unmatched")
@@ -272,7 +270,20 @@ export function useAiPriceEstimator({
           lastAppliedHashRef.current = payloadHash;
           lastAppliedAtRef.current = Date.now();
           setAppliedCount(result.updatedCount);
-          toast({ title: `✅ Zastosowano ceny dla ${result.updatedCount} pozycji`, duration: 3000 });
+          // v4.0 (Phase 3): surface protected rows so users know which ones were skipped.
+          // Without this, AI-regenerated norms were silently dropped for expert_override
+          // rows and users wondered why "Wyceń" didn't fix those lines.
+          const protectedCount = result.protectedCount ?? 0;
+          const normalCount = result.updatedCount - protectedCount;
+          if (protectedCount > 0) {
+            toast({
+              title: `✅ Zaktualizowano ${normalCount} pozycji`,
+              description: `${protectedCount} ${protectedCount === 1 ? "pozycja chroniona" : "pozycji chronionych"} (norma ręczna / expert_override) — normy nie nadpisano.`,
+              duration: 5000,
+            });
+          } else {
+            toast({ title: `✅ Zastosowano ceny dla ${result.updatedCount} pozycji`, duration: 3000 });
+          }
           // Stay on preview — remove applied items, keep unmatched/ambiguous for further work
           const appliedIds = new Set(toApply.map((e) => e.itemId));
           setEstimates((prev) => prev.filter((e) => !appliedIds.has(e.itemId)));

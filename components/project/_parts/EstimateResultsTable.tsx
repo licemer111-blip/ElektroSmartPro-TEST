@@ -203,6 +203,9 @@ export function EstimateResultsTable({
         itemId: est.itemId,
         projectId,
         extraContext: undefined,
+        // v4.0 (Phase 3): labor-only pipeline — never overwrite material with AI estimate.
+        // Aligns single-row reprice with the batch "Wyceń robociznę" Iron Rule.
+        laborOnly: true,
       });
       if (result.success && result.estimate) {
         onRepriced(result.estimate);
