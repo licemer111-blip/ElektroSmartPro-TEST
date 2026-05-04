@@ -76,6 +76,14 @@ export interface EstimateRowProps {
   materialsOwnedByCustomer: boolean;
   adjustmentMultiplier: number;
   regionModifier: number;
+  /**
+   * v4.0 (Phase 6) Project-level multipliers — must equal those used in ProjectSummary
+   * so Σ(row totals in table) === SUMA NETTO. Default 1.0 keeps prior behaviour for
+   * any caller that doesn't pass them (back-compat).
+   */
+  matMarkupMult?: number;
+  labMarkupMult?: number;
+  complexityFactor?: number;
   filterType: "all" | "materials" | "labor";
   isAssemblyParent: boolean;
   isCollapsedAssembly?: boolean;
@@ -133,6 +141,9 @@ export const EstimateRow = React.memo(function EstimateRow({
   materialsOwnedByCustomer,
   adjustmentMultiplier,
   regionModifier,
+  matMarkupMult = 1.0,
+  labMarkupMult = 1.0,
+  complexityFactor = 1.0,
   filterType,
   isAssemblyParent,
   isCollapsedAssembly = false,
@@ -194,9 +205,9 @@ export const EstimateRow = React.memo(function EstimateRow({
     materialsOwnedByCustomer,
     filterType,
     regionModifier,
-    1.0, // matMarkupMult
-    1.0, // labMarkupMult
-    1.0, // complexityFactor
+    matMarkupMult,
+    labMarkupMult,
+    complexityFactor,
     knrMultiplier,
   );
 

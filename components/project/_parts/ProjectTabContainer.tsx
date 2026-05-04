@@ -297,6 +297,9 @@ export function ProjectTabContainer({
               rateIsSet={liveHourlyRate > 0}
               objectTypeSlug={project.object_types?.slug ?? null}
               projectLaborRate={liveHourlyRate}
+              matMarkupMult={1 + (project.mat_markup_pct || 0) / 100}
+              labMarkupMult={1 + (project.lab_markup_pct || 0) / 100}
+              complexityFactor={1.0}
             />
           </Card>
         </div>

@@ -425,7 +425,11 @@ const ROZDZIELNICA_INDUSTRIAL: AssemblyTemplate = {
     { label: "Szyny Cu, zaciski, grzebienie (kpl)",       knrCode: "MAT-ROZD-05",      unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 600.00 },
     { label: "Materiały montażowe (kpl)",                 knrCode: "MAT-ROZD-06",      unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 1200.00 },
     { label: "Kable i przewody wewnętrzne (kpl)",         knrCode: "MAT-ROZD-07",      unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 600.00 },
-    { label: "Montaż i okablowanie rozdzielnicy przem. wolnostoj.", knrCode: "KNR 5-10 0201", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 28.00, isLabor: true, materialPricePerUnit: 0.00 },
+    // v4.0 (Phase 6): bumped 28 → 40 rbh. KNR 5-10 0201 + 0202 for free-standing IP54
+    // 600×800 enclosure with full MCCB+RCD+SPD+RCBO assembly + internal cabling +
+    // grounding + commissioning is realistically 35–45 rbh. 28 was on the low end
+    // and produced under-priced industrial rozdzielnice in test projects.
+    { label: "Montaż i okablowanie rozdzielnicy przem. wolnostoj.", knrCode: "KNR 5-10 0201", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 40.00, isLabor: true, materialPricePerUnit: 0.00 },
   ],
 };
 
