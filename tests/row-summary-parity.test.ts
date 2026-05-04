@@ -44,6 +44,10 @@ function makeItem(partial: Partial<ProjectItem>): ProjectItem {
 /**
  * Replicates the labor side of project-summary.tsx::calculateTotals for ONE non-manual item.
  * Used to verify row laborTotal == summary contribution.
+ *
+ * v4.1 (Phase 7): mirrors calcRowPrices labor formula. Order of multipliers
+ * MUST match exactly otherwise floating-point order would break parity:
+ *   rawLab × qty × region × labMarkupMult × complexityFactor × knrMultiplier × adjMult
  */
 function summaryLaborContribution(
   item: ProjectItem,
@@ -51,12 +55,13 @@ function summaryLaborContribution(
   regionModifier: number,
   labMarkupMult: number,
   knrMultiplier: number,
+  complexityFactor: number = 1.0,
 ): number {
   const effectiveLaborPrice = item.final_labor_price ?? item.labor_price ?? 0;
   const isManual = item.confidence_level === "manual";
   const effectiveRegion = isManual ? 1.0 : regionModifier;
   // baseLaborTotal accumulator in project-summary.tsx
-  const baseLaborTotal = effectiveLaborPrice * item.quantity * effectiveRegion * labMarkupMult * knrMultiplier;
+  const baseLaborTotal = effectiveLaborPrice * item.quantity * effectiveRegion * labMarkupMult * complexityFactor * knrMultiplier;
   // Final laborTotal = baseLaborTotal × adjustmentMult
   return baseLaborTotal * adjustmentMult;
 }
@@ -81,6 +86,12 @@ describe("Phase 6 — row-cell totals match ProjectSummary contributions (with m
     { name: "negocjacja +5%", adj: 1.05, region: 1.0, mat: 1.0, lab: 1.0, complex: 1.0, knr: 1.0 },
     { name: "Mazowieckie region 1.12", adj: 1.0, region: 1.12, mat: 1.0, lab: 1.0, complex: 1.0, knr: 1.0 },
     { name: "ALL stacked (real prod scenario)", adj: 1.05, region: 1.12, mat: 1.10, lab: 1.20, complex: 1.0, knr: 1.5 },
+    // v4.1 (Phase 7): complexity_factor scenarios — Quick Estimate ceiling height + expert systems
+    { name: "complex 1.25 (hala 3-6m)", adj: 1.0, region: 1.0, mat: 1.0, lab: 1.0, complex: 1.25, knr: 1.0 },
+    { name: "complex 1.50 (hala >6m)", adj: 1.0, region: 1.0, mat: 1.0, lab: 1.0, complex: 1.50, knr: 1.0 },
+    { name: "complex 1.35 (SSP+KNX+PA expert)", adj: 1.0, region: 1.0, mat: 1.0, lab: 1.0, complex: 1.35, knr: 1.0 },
+    { name: "complex 1.625 (hala >6m + expert)", adj: 1.0, region: 1.0, mat: 1.0, lab: 1.0, complex: 1.625, knr: 1.0 },
+    { name: "PROD: hala >6m + expert + narzut + region + KNR + neg.", adj: 1.05, region: 1.12, mat: 1.10, lab: 1.20, complex: 1.625, knr: 1.5 },
   ];
 
   const ITEMS: ProjectItem[] = [
@@ -108,7 +119,7 @@ describe("Phase 6 — row-cell totals match ProjectSummary contributions (with m
           sc.knr,
         );
         rowLaborSum += row.laborTotal;
-        summaryLaborSum += summaryLaborContribution(item, sc.adj, sc.region, sc.lab, sc.knr);
+        summaryLaborSum += summaryLaborContribution(item, sc.adj, sc.region, sc.lab, sc.knr, sc.complex);
       }
 
       // Allow up to 1 zł rounding tolerance across 4 items × 2-pass rounding.

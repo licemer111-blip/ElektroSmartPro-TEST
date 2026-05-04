@@ -299,7 +299,7 @@ export function ProjectTabContainer({
               projectLaborRate={liveHourlyRate}
               matMarkupMult={1 + (project.mat_markup_pct || 0) / 100}
               labMarkupMult={1 + (project.lab_markup_pct || 0) / 100}
-              complexityFactor={1.0}
+              complexityFactor={project.complexity_factor || 1.0}
             />
           </Card>
         </div>

@@ -88,6 +88,10 @@ export function ProjectSummary({
     const matMarkupMult   = 1 + (project.mat_markup_pct  || 0) / 100;
     const labMarkupMult   = 1 + (project.lab_markup_pct  || 0) / 100;
     const contingencyPct  = project.contingency_pct   || 0;
+    // v4.1 (Phase 7): complexity_factor mirrors calcRowPrices in pricing-calculations.ts.
+    // Quick Estimate Wizard derives this from conditional fields (ceiling height, SSP/KNX/PA/RACS).
+    // MUST be applied to labor here so Σ(row laborTotal) === ProjectSummary.laborTotal.
+    const complexityFactor = project.complexity_factor || 1.0;
 
     // Items that have actual assembly children in DB — use child prices for those
     const parentIds = new Set(
@@ -120,7 +124,7 @@ export function ProjectSummary({
           if (expansion.triggered) {
             // totalLaborPLN = totalRBH × projectLaborRate (base, no region, knrMult already inside)
             rawLaborBase += expansion.totalLaborPLN;
-            baseLaborTotal += expansion.totalLaborPLN * regionModifier * labMarkupMult;
+            baseLaborTotal += expansion.totalLaborPLN * regionModifier * labMarkupMult * complexityFactor;
             if (!materialsOwnedByCustomer) {
               rawMaterialBase += expansion.totalMaterialPLN;
               baseMaterialTotal += expansion.totalMaterialPLN * matMarkupMult;
@@ -136,7 +140,7 @@ export function ProjectSummary({
         baseMaterialTotal += effectiveMaterialPrice * item.quantity * matMarkupMult;
       }
       rawLaborBase += effectiveLaborPrice * item.quantity;
-      baseLaborTotal += effectiveLaborPrice * item.quantity * effectiveRegion * labMarkupMult * knrMultiplier;
+      baseLaborTotal += effectiveLaborPrice * item.quantity * effectiveRegion * labMarkupMult * complexityFactor * knrMultiplier;
     });
 
     const sumaBazowaNetto = rawMaterialBase + rawLaborBase;

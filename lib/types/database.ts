@@ -202,6 +202,10 @@ export interface Project {
   lab_markup_pct: number;    // Narzut na robociznę % applied at display time (default 0)
   contingency_pct: number;   // Rezerwa budżetowa % — applied to totalNetto BEFORE VAT (default 0)
   complexity_factor: number; // Labor complexity multiplier: 1.0=Standard, 1.3=Smart/KNX, 1.2=Industrial (default 1.0)
+  /** Raw conditional fields captured by Quick Estimate Wizard (ceiling height, SSP/KNX/PA/RACS, EV chargers, etc.).
+   *  Used by computeComplexityFromContext() to derive complexity_factor and to render a transparent breakdown in UI.
+   *  Null for projects created outside the Quick Estimate flow. */
+  quick_estimate_context: import("@/lib/pricing-complexity").QuickEstimateContext | null;
   // Labor time support
   default_hourly_rate: number; // Stawka r-g in PLN (default 100.00)
   show_labor_hours_in_pdf: boolean; // Show Roboczogodziny column in PDF

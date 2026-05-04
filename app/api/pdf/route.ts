@@ -221,9 +221,12 @@ export async function POST(req: Request) {
     const matOwnedByClient = Boolean((project as Record<string, unknown>).materials_owned_by_customer);
 
     // v10.5 FIX: Apply v3.0 pricing multipliers — must match project-summary.tsx
-    const matMarkupMult   = 1 + (Number((project as Record<string, unknown>).mat_markup_pct) || 0) / 100;
-    const labMarkupMult   = 1 + (Number((project as Record<string, unknown>).lab_markup_pct) || 0) / 100;
-    const complexityFactor = 1.0;
+    // v4.1 (Phase 7): complexityFactor must read project.complexity_factor (was hardcoded
+    // 1.0 and not applied in any of the 3 labor formulas → PDF totals diverged from table
+    // for Quick Estimate hala/SSP projects with non-1.0 complexity).
+    const matMarkupMult    = 1 + (Number((project as Record<string, unknown>).mat_markup_pct) || 0) / 100;
+    const labMarkupMult    = 1 + (Number((project as Record<string, unknown>).lab_markup_pct) || 0) / 100;
+    const complexityFactor = Number((project as Record<string, unknown>).complexity_factor) || 1.0;
     const contingencyPct  = Number((project as Record<string, unknown>).contingency_pct) || 0;
     // KNR 2026 multiplier — must match display-time calcRowPrices() in EstimateRow
     const knrMultiplier = await getKnrMultiplier();
@@ -245,7 +248,7 @@ export async function POST(req: Request) {
         ...item,
         // matOwnedByClient or isInvestorMat: zero out material prices
         finalMat: (matOwnedByClient || isInvestorMat) ? 0 : getPrice(item, "mat") * matMarkupMult * adjustmentOnly * vatMultiplier,
-        finalLab: getPrice(item, "lab") * labMarkupMult * knrMultiplier * adjustmentOnly * effectiveRegion * vatMultiplier,
+        finalLab: getPrice(item, "lab") * labMarkupMult * complexityFactor * knrMultiplier * adjustmentOnly * effectiveRegion * vatMultiplier,
         laborNorm: Number((item as Record<string, unknown>).labor_norm ?? 0),
         isInvestorMat,
       };
@@ -283,8 +286,16 @@ export async function POST(req: Request) {
     let totalMatSum = 0;
     let totalLabSum = 0;
 
-    // Build rows — loop instead of map so we can insert virtual children for AI zestawy
+    // Build rows — loop instead of map so we can insert virtual children for AI zestawy.
+    //
+    // PROD BUG FIX (2026-05-04): rowItemIds is a parallel array tracking the semantic
+    // owner-item id for each row. We previously did `calcItems[idx].id` at line 427
+    // which crashed (`Cannot read properties of undefined (reading 'id')`) the moment
+    // any AI-parent expanded into virtual children, because rowsRaw.length grows past
+    // calcItems.length. Virtual children inherit their parent's id so they end up in
+    // the same semantic section as the parent.
     const rowsRaw: PdfRow[] = [];
+    const rowItemIds: string[] = [];
     for (const item of calcItems) {
       const isParent = parentIds.has(item.id as string);
       const rawItem = item as Record<string, unknown>;
@@ -304,7 +315,7 @@ export async function POST(req: Request) {
       if (isAiParent) {
         // AI-triggered zestaw: use expansion prices (honours assembly_overrides)
         const expMatTotal = aiExpansion.totalMaterialPLN * matMarkupMult * adjustmentOnly * vatMultiplier;
-        const expLabTotal = aiExpansion.totalLaborPLN  * labMarkupMult * adjustmentOnly * effRegion * vatMultiplier;
+        const expLabTotal = aiExpansion.totalLaborPLN  * labMarkupMult * complexityFactor * adjustmentOnly * effRegion * vatMultiplier;
         totalVal = expMatTotal + expLabTotal;
         matDisplay = "---";
         labDisplay = "---";
@@ -360,15 +371,19 @@ export async function POST(req: Request) {
         total: maskPrices ? (isPro && blindMode ? "---" : "*** zl") : fMoney(totalVal), rawTotal: blindMode ? 0 : totalVal, rowType, isParent: isParent || isAiParent, isChild,
         isInvestorMat: item.isInvestorMat,
       });
+      rowItemIds.push(item.id as string);
 
       // AI parent: append virtual child rows derived from expandToAssembly
       if (isAiParent) {
         for (const vChild of aiExpansion.items) {
           const vMat = vChild.materialTotal * matMarkupMult * adjustmentOnly * vatMultiplier;
-          const vLab = vChild.rbhTotal * projectLaborRate * labMarkupMult * adjustmentOnly * effRegion * vatMultiplier;
+          const vLab = vChild.rbhTotal * projectLaborRate * labMarkupMult * complexityFactor * adjustmentOnly * effRegion * vatMultiplier;
           const vTotal = vMat + vLab;
           const vRowType = vChild.isLabor ? "child_lab" : (vChild.materialTotal > 0 && vChild.rbhTotal > 0 ? "child_mat" : vChild.materialTotal > 0 ? "child_mat" : "child_lab");
           const vRg = showRg && vChild.rbhTotal > 0 ? `${vChild.rbhTotal.toFixed(3)} rbh` : "";
+          // Virtual child inherits parent's id so semanticSectionMap lookup
+          // assigns it to the same section as its parent.
+          rowItemIds.push(item.id as string);
           rowsRaw.push({
             index: "",
             name: `  \u21b3 ${sanitize(vChild.label, true)}`,
@@ -421,7 +436,7 @@ export async function POST(req: Request) {
     if (pdfStructure.showSectionGroups) {
       for (const secDef of PDF_SECTIONS) {
         const secRawRows = rowsRaw
-          .map((row, idx) => ({ row, itemId: calcItems[idx].id as string }))
+          .map((row, idx) => ({ row, itemId: rowItemIds[idx] }))
           .filter(({ itemId }) => semanticSectionMap.get(itemId) === secDef.id);
 
         if (secRawRows.length === 0) continue;
