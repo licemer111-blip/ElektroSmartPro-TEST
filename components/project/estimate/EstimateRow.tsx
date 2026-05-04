@@ -205,6 +205,16 @@ export const EstimateRow = React.memo(function EstimateRow({
   // the row matches the SmartAssemblyPanel tooltip. project-summary.tsx applies
   // the same logic, so table rows ≡ summary ≡ tooltip.
   const isManualPrice = displayItem.confidence_level === "manual";
+  // v4.0 (Phase 5): CRITICAL preview=apply parity fix.
+  // Any engine/AI-set price is ALSO protected from template override.
+  // Root cause: after "Wyceń", AI writes final_labor_price + confidence_level
+  // ("verified" / "analog" / "estimated" / "uncertain"). Template override was
+  // then replacing the AI price with `totalRBH × laborRate` computed FROM A
+  // DIFFERENT FORMULA, causing preview (33 zł/mb) vs kosztorys (147 zł/mb)
+  // divergence for every cable/zestaw item. Now template only fires when
+  // confidence_level is null (truly unpriced row) — exactly the flow for
+  // which smart assemblies were designed in the first place.
+  const hasEngineSetPrice = displayItem.confidence_level != null;
   let materialUnit = calcMaterialUnit;
   let laborUnit    = calcLaborUnit;
   let materialTotal = calcMaterialTotal;
@@ -213,7 +223,7 @@ export const EstimateRow = React.memo(function EstimateRow({
   let assemblyRBHPerUnit: number | null = null;
 
   // Detect assembly-driven items once; used both in price override and in edit panel render.
-  const _scmCheck = !isManualPrice && !isAssemblyChild ? detectSmartContext(item.name) : null;
+  const _scmCheck = !hasEngineSetPrice && !isAssemblyChild ? detectSmartContext(item.name) : null;
   // Name-based detection without price/manual guards — used to simplify edit panel for ALL smart rows
   const isSmartItem = !isAssemblyChild && detectSmartContext(item.name).category !== "NONE";
   const isAssemblyOverride =
@@ -222,7 +232,7 @@ export const EstimateRow = React.memo(function EstimateRow({
     (_scmCheck.category === "ZESTAW" || _scmCheck.category === "BIALY_MONTAZ" ||
      _scmCheck.category === "TRASY"  || _scmCheck.category === "ROZDZIELNICA");
 
-  // Guard: only override items that have already been AI-priced (calcRowTotal > 0).
+  // Guard: only override items that have no engine/manual price (confidence_level == null).
   // Note: isEditing is intentionally NOT in this guard — display prices must not jump when the
   // edit panel opens. The edit panel inputs use a separate editedItem state (unaffected).
   if (isAssemblyOverride) {

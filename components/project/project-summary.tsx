@@ -104,10 +104,16 @@ export function ProjectSummary({
 
       rawEquipmentBase += (item.equipment_price ?? 0) * item.quantity;
 
-      // Assembly override: only for AI-priced items (stored price > 0). Zero-price
-      // items stay at 0 so "Uzupełnij" badge shows correctly — consistent with EstimateRow.
-      const hasStoredPrice = effectiveLaborPrice > 0 || effectiveMaterialPrice > 0;
-      if (!item.is_assembly_child && !isManual && !parentIds.has(item.id) && hasStoredPrice) {
+      // v4.0 (Phase 5): Assembly override must respect engine-set prices —
+      // see EstimateRow.tsx for the full rationale. When AI "Wyceń" writes
+      // final_labor_price + confidence_level (verified/analog/estimated/uncertain),
+      // the summary MUST use the stored prices, not the template. Otherwise
+      // table rows (fixed) and summary totals (template-based) would diverge,
+      // which is exactly the bug the user reported (preview 33 zł/mb vs
+      // kosztorys 147 zł/mb for every "Układanie kabla ..." row).
+      // Template still fires for truly unpriced rows (confidence_level == null).
+      const hasEngineSetPrice = item.confidence_level != null;
+      if (!item.is_assembly_child && !hasEngineSetPrice && !parentIds.has(item.id)) {
         const scm = detectSmartContext(item.name);
         if (scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY" || scm.category === "ROZDZIELNICA") {
           const expansion = expandToAssembly(item.name, item.quantity, sector, projectLaborRate, knrMultiplier, item.assembly_overrides ?? undefined);
