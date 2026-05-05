@@ -289,6 +289,15 @@ export interface PdfEngineData {
    * to a paying client as-is.
    */
   showDemoWatermark?: boolean;
+  /**
+   * Zestaw Engine v2 (2026-05-04): when TRUE, the table renders monochrome —
+   * set_parent / child_mat / child_lab rows drop their yellow/amber/green tint
+   * and inherit the normal alternating row background. Useful for clients who
+   * want a neutral, print-safe kosztorys without the "traffic-light" look of
+   * auto-detected zestawy. Does NOT affect section_header, subtotal, warning
+   * coloring (those are semantic, not decorative).
+   */
+  monochrome?: boolean;
 }
 
 // ─── Column Width Calculator ───────────────────────────────────────────────────
@@ -615,6 +624,7 @@ const TableDataRow = ({
   showKnr,
   showRg,
   matOwned,
+  monochrome = false,
 }: {
   row: PdfRow;
   rowIndex: number;
@@ -623,6 +633,7 @@ const TableDataRow = ({
   showKnr: boolean;
   showRg: boolean;
   matOwned: boolean;
+  monochrome?: boolean;
 }) => {
   // Determine row background and text color based on rowType
   let rowBg = rowIndex % 2 === 0 ? palette.rowEven : palette.rowOdd;
@@ -639,25 +650,30 @@ const TableDataRow = ({
       fontWeight = 'bold';
       break;
     case 'set_parent':
-      rowBg = palette.setParentBg;
-      textColor = '#78350f';
+      // Zestaw Engine v2 (2026-05-04): monochrome mode drops the yellow tint +
+      // thick amber border; the row stays bold + indented by the '>> ' prefix
+      // already baked into row.name upstream, so hierarchy is still readable.
+      rowBg = monochrome ? rowBg : palette.setParentBg;
+      textColor = monochrome ? palette.textPrimary : '#78350f';
       fontWeight = 'bold';
-      borderLeftWidth = 4;
-      borderLeftColor = palette.setParentBorder;
+      borderLeftWidth = monochrome ? 0 : 4;
+      borderLeftColor = monochrome ? 'transparent' : palette.setParentBorder;
       break;
     case 'child_mat':
-      rowBg = palette.childMatBg;
-      textColor = '#92400e';
+      // Monochrome: drop amber bg + italic tint, keep '↳' caret from row.name.
+      rowBg = monochrome ? rowBg : palette.childMatBg;
+      textColor = monochrome ? palette.textSecondary : '#92400e';
       fontStyle = 'italic';
-      borderLeftWidth = 3;
-      borderLeftColor = '#f59e0b';
+      borderLeftWidth = monochrome ? 0 : 3;
+      borderLeftColor = monochrome ? 'transparent' : '#f59e0b';
       break;
     case 'child_lab':
-      rowBg = palette.childLabBg;
-      textColor = '#166534';
+      // Monochrome: drop green bg + italic tint, keep '↳' caret from row.name.
+      rowBg = monochrome ? rowBg : palette.childLabBg;
+      textColor = monochrome ? palette.textSecondary : '#166534';
       fontStyle = 'italic';
-      borderLeftWidth = 3;
-      borderLeftColor = '#22c55e';
+      borderLeftWidth = monochrome ? 0 : 3;
+      borderLeftColor = monochrome ? 'transparent' : '#22c55e';
       break;
     case 'section_subtotal':
       rowBg = palette.subtotalBg;
@@ -926,6 +942,7 @@ const ContentPage = ({
           showKnr={showKnr}
           showRg={showRg}
           matOwned={matOwnedByClient}
+          monochrome={Boolean(data.monochrome)}
         />
       ))}
 

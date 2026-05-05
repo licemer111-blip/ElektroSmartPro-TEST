@@ -652,6 +652,8 @@ export async function updateProjectDocSettings(
     brutto_mode?: boolean;
     expert_coloring?: boolean;
     show_labor_hours_in_pdf?: boolean;
+    /** Zestaw Engine v2 (2026-05-04): opt-in for Smart Mapping auto-expansion. */
+    auto_detect_zestawy?: boolean;
   }
 ): Promise<{ success?: boolean; error?: string }> {
   const { user, supabase } = await tryAuth();

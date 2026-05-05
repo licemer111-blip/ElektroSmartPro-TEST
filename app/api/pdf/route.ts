@@ -111,8 +111,15 @@ export async function POST(req: Request) {
       vatMode = 23,
       priceDisplay = "netto",
       blindMode = false,      // v3.0: Kosztorys ślepy — hide all prices
+      // Zestaw Engine v2 (2026-05-04): honour the UI colorMode toggle that was
+      // already being sent (showColors) but silently ignored by this route.
+      // Accept both names: `monochrome` (explicit) and `showColors` (inverse).
+      // When either signals no colors → table drops Zestaw row tinting.
+      showColors = true,
+      monochrome: rawMonochrome,
       pdfStructure: rawPdfStructure,
     } = await req.json();
+    const monochrome = Boolean(rawMonochrome ?? !showColors);
 
     const pdfStructure: PdfStructureOptions = {
       showCoverPage:      rawPdfStructure?.showCoverPage      ?? false,
@@ -264,23 +271,36 @@ export async function POST(req: Request) {
 
     // Pre-compute AI assembly expansions for items that trigger Smart Engine
     // (items with no real DB children but matching Sacred Words in their name)
+    //
+    // Zestaw Engine v2 (2026-05-04) gating:
+    //   • project.auto_detect_zestawy === false → skip ALL auto-expansion
+    //     (Quick Estimate items already produce explicit lines; auto-bundling
+    //     them duplicates bruzdowanie/cable. Default OFF for new projects.)
+    //   • item.is_quick_estimate === true → never expand a Quick Estimate row
+    //     even when the project flag is ON (the wizard line is canonical).
+    const autoDetectZestawy = Boolean(
+      (project as Record<string, unknown>).auto_detect_zestawy
+    );
     const aiExpansionMap = new Map<string, SmartExpansionResult>();
-    for (const item of calcItems) {
-      const rawI = item as Record<string, unknown>;
-      if (rawI.parent_assembly_id || rawI.is_assembly_child === true) continue;
-      if (parentIds.has(item.id as string)) continue; // already has real DB children
-      if (rawI.confidence_level === "manual") continue;
-      const scm = detectSmartContext(item.name as string);
-      if (scm.category === "NONE") continue;
-      const expansion = expandToAssembly(
-        item.name as string,
-        item.quantity as number,
-        projectSector,
-        projectLaborRate,
-        knrMultiplier,
-        (rawI.assembly_overrides as AssemblyOverrides) ?? undefined,
-      );
-      if (expansion.triggered) aiExpansionMap.set(item.id as string, expansion);
+    if (autoDetectZestawy) {
+      for (const item of calcItems) {
+        const rawI = item as Record<string, unknown>;
+        if (rawI.parent_assembly_id || rawI.is_assembly_child === true) continue;
+        if (parentIds.has(item.id as string)) continue; // already has real DB children
+        if (rawI.confidence_level === "manual") continue;
+        if (rawI.is_quick_estimate === true) continue; // wizard rows are canonical
+        const scm = detectSmartContext(item.name as string);
+        if (scm.category === "NONE") continue;
+        const expansion = expandToAssembly(
+          item.name as string,
+          item.quantity as number,
+          projectSector,
+          projectLaborRate,
+          knrMultiplier,
+          (rawI.assembly_overrides as AssemblyOverrides) ?? undefined,
+        );
+        if (expansion.triggered) aiExpansionMap.set(item.id as string, expansion);
+      }
     }
 
     let totalMatSum = 0;
@@ -566,6 +586,7 @@ export async function POST(req: Request) {
       priceDisplay: priceDisplay as string,
       notes: notes as string,
       showDemoWatermark,
+      monochrome: Boolean(monochrome),
     };
 
     const pdfBuffer = await renderToBuffer(

@@ -47,7 +47,12 @@ function makeItem(partial: Partial<ProjectItem>): ProjectItem {
   } as ProjectItem;
 }
 
-const CABLE_NAME = "Układanie kabla YKY 3×2,5";
+// Zestaw Engine v2 (2026-05-04): bare "Układanie kabla YKY 3×2,5" no longer triggers TRASY
+// auto-expansion. Only composite names "Trasa kablowa" / "Linia kablowa" trigger the bundle
+// (verbs are already complete line items). The Phase 5 guard under test here still applies
+// whenever a row DOES trigger — use a composite name to exercise the same code path.
+const LEGACY_UKLADANIE_NAME = "Układanie kabla YKY 3×2,5";
+const CABLE_NAME = "Trasa kablowa YDYp 5×4mm² — zasilanie oświetlenia";
 
 // Realistic AI output for cable laying: labor_norm ≈ 0.15 rbh/mb × 100 zł/rbh = 15 zł/mb base.
 // With KNR multiplier 1.241 and narzut 20%, preview shows ≈ 22 zł/mb.
@@ -58,10 +63,37 @@ const QTY = 1200;
 
 // ─── Tests ───────────────────────────────────────────────────────────────────
 
-describe("smart-context-mapper — 'Układanie kabla YKY' triggers TRASY", () => {
-  it("cable laying is detected as TRASY (pre-fix guarantee)", () => {
+describe("smart-context-mapper — semantic detection (Zestaw Engine v2)", () => {
+  it("composite 'Trasa kablowa' triggers TRASY (auto-expansion still fires for this name)", () => {
     const ctx = detectSmartContext(CABLE_NAME);
     expect(ctx.category).toBe("TRASY");
+    expect(ctx.matchedKeyword).toBe("Trasa kablowa");
+  });
+
+  it("Zestaw v2 narrowing: bare 'Układanie kabla' does NOT auto-expand to TRASY assembly", () => {
+    // detectSmartContext still tags the verb as TRASY for AI prompt hints, but
+    // expandToAssembly() rejects it (matchedKeyword !== "Trasa kablowa"). This
+    // prevents 1200 mb "Układanie kabla YKY" from silently adding 1200 mb of
+    // bruzdowanie — the regression the Technical Director reported.
+    const expansion = expandToAssembly(
+      LEGACY_UKLADANIE_NAME,
+      QTY,
+      detectSector(undefined),
+      100,
+      1.0,
+    );
+    expect(expansion.triggered).toBe(false);
+  });
+
+  it("Zestaw v2: BIALY_MONTAZ ('Montaż łączników') does NOT auto-expand (≤1 child template is noise)", () => {
+    const expansion = expandToAssembly(
+      "Montaż łączników instalacyjnych",
+      10,
+      detectSector(undefined),
+      100,
+      1.0,
+    );
+    expect(expansion.triggered).toBe(false);
   });
 
   it("rozdzielnica is detected as ROZDZIELNICA", () => {

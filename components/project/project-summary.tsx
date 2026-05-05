@@ -117,7 +117,16 @@ export function ProjectSummary({
       // kosztorys 147 zł/mb for every "Układanie kabla ..." row).
       // Template still fires for truly unpriced rows (confidence_level == null).
       const hasEngineSetPrice = item.confidence_level != null;
-      if (!item.is_assembly_child && !hasEngineSetPrice && !parentIds.has(item.id)) {
+      // Zestaw Engine v2 (2026-05-04): auto-expansion runs only when opted in
+      // per-project. Quick Estimate rows are never re-expanded — their children
+      // (bruzda, cable) are already explicit wizard outputs.
+      const autoDetectZestawy = Boolean(
+        (project as { auto_detect_zestawy?: boolean }).auto_detect_zestawy
+      );
+      const isQuickEstimateRow = Boolean(
+        (item as { is_quick_estimate?: boolean | null }).is_quick_estimate
+      );
+      if (autoDetectZestawy && !isQuickEstimateRow && !item.is_assembly_child && !hasEngineSetPrice && !parentIds.has(item.id)) {
         const scm = detectSmartContext(item.name);
         if (scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY" || scm.category === "ROZDZIELNICA") {
           const expansion = expandToAssembly(item.name, item.quantity, sector, projectLaborRate, knrMultiplier, item.assembly_overrides ?? undefined);

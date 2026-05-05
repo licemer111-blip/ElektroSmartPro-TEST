@@ -63,6 +63,9 @@ interface EstimateTableProps {
   objectTypeSlug?: string | null;
   /** Effective labor rate PLN/rbh passed to SmartAssemblyPanel RBH preview. */
   projectLaborRate?: number;
+  /** Zestaw Engine v2 (2026-05-04): when TRUE, EstimateRow virtually expands matching items
+   *  into Zestawy. Default FALSE — opt-in per project via projects.auto_detect_zestawy. */
+  autoDetectZestawy?: boolean;
   /**
    * v4.0 (Phase 6) Project-level multipliers — kept in sync with ProjectSummary so
    * Σ(row totals in table) === SUMA NETTO in summary panel even when narzuty/complexity
@@ -85,6 +88,7 @@ export function EstimateTable({
   useCustomRates = false, regionName, rateIsSet = true,
   objectTypeSlug, projectLaborRate = 100,
   matMarkupMult = 1.0, labMarkupMult = 1.0, complexityFactor = 1.0,
+  autoDetectZestawy = false,
 }: EstimateTableProps) {
   const projectSector: ProjectSector = detectSector(objectTypeSlug);
   const isFinal = projectStatus === "final" || isReadOnly;
@@ -262,6 +266,7 @@ export function EstimateTable({
         fallbackLoadingIds={fallbackLoadingIds}
         projectSector={projectSector}
         projectLaborRate={projectLaborRate}
+        autoDetectZestawy={autoDetectZestawy}
       />
     );
   };

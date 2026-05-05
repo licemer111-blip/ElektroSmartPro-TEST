@@ -102,6 +102,10 @@ export interface EstimateRowProps {
   projectSector?: ProjectSector;
   /** Effective labor rate PLN/rbh for RBH cost preview in SmartAssemblyPanel. */
   projectLaborRate?: number;
+  /** Zestaw Engine v2 (2026-05-04): when FALSE (default), Smart Mapping Engine does NOT
+   *  virtually expand this row into a Zestaw — even if detectSmartContext matches. User must
+   *  opt in per-project via Settings. Applies to price override + virtual children. */
+  autoDetectZestawy?: boolean;
 }
 
 const SECTION_PRESETS = [
@@ -157,6 +161,7 @@ export const EstimateRow = React.memo(function EstimateRow({
   fallbackLoadingIds,
   projectSector = "RESIDENTIAL",
   projectLaborRate = 100,
+  autoDetectZestawy = false,
 }: EstimateRowProps) {
   // Blur strictly controlled by is_pro from Supabase — no client-side override
   const showPrices = isPro;
@@ -237,7 +242,14 @@ export const EstimateRow = React.memo(function EstimateRow({
   const _scmCheck = !hasEngineSetPrice && !isAssemblyChild ? detectSmartContext(item.name) : null;
   // Name-based detection without price/manual guards — used to simplify edit panel for ALL smart rows
   const isSmartItem = !isAssemblyChild && detectSmartContext(item.name).category !== "NONE";
+  // Zestaw Engine v2 (2026-05-04): auto-expansion now gated by project flag and per-row
+  // is_quick_estimate. Manual SmartAssemblyPanel invocation remains available regardless.
+  const isQuickEstimateRow = Boolean(
+    (item as { is_quick_estimate?: boolean | null }).is_quick_estimate
+  );
   const isAssemblyOverride =
+    autoDetectZestawy &&
+    !isQuickEstimateRow &&
     !!_scmCheck &&
     calcRowTotal > 0 &&
     (_scmCheck.category === "ZESTAW" || _scmCheck.category === "BIALY_MONTAZ" ||

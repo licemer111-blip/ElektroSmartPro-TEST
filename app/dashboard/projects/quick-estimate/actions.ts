@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { tryAuth } from "@/lib/auth";
 import { checkAndIncrementAiUsage, getAiFunctionUsage } from "@/lib/ai-usage";
 import { generateEstimateItems, type EstimateItem, type ObjectTypeKey, type QualityStandard, type ZakresPrac, type ConditionalFields } from "@/lib/quick-estimate-config";
+import { computeComplexityFromContext } from "@/lib/pricing-complexity";
 import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
 import { z } from "zod";
@@ -290,6 +291,10 @@ export async function createQuickEstimateProject(params: {
   objectTypeId: string;
   vatRate: number;
   items: EstimateItem[];
+  /** v4.1 (Phase 7): wizard's conditional fields. Used to derive
+   *  project.complexity_factor (single labor multiplier) and persisted as-is
+   *  to project.quick_estimate_context for transparent UI breakdown. */
+  conditionalFields?: ConditionalFields;
 }): Promise<{ success?: boolean; error?: string; projectId?: string }> {
   const { user, supabase } = await tryAuth();
 
@@ -345,6 +350,11 @@ export async function createQuickEstimateProject(params: {
   // Keep priceModifier for reference (Iron Rule: only used on labor, and only to store BASE here)
   void (region?.price_modifier); // regionModifier applied by calcRowPrices at display time
 
+  // v4.1 (Phase 7): derive complexity_factor from wizard's conditional fields.
+  // Single labor multiplier that ProjectSummary + EstimateRow apply at display time.
+  // Raw fields persisted to quick_estimate_context for transparent UI breakdown.
+  const complexity = computeComplexityFromContext(params.conditionalFields);
+
   const { data: project, error: projectError } = await supabase
     .from("projects")
     .insert({
@@ -355,6 +365,8 @@ export async function createQuickEstimateProject(params: {
       vat_rate: params.vatRate,
       status: "draft",
       default_hourly_rate: defaultHourlyRate,
+      complexity_factor: complexity.factor,
+      quick_estimate_context: params.conditionalFields ?? null,
     })
     .select()
     .single();
@@ -364,7 +376,14 @@ export async function createQuickEstimateProject(params: {
     return { error: "Blad podczas tworzenia projektu" };
   }
 
-  // Save items with blank prices — KNR pipeline prices them immediately below
+  // Save items with blank prices — KNR pipeline prices them immediately below.
+  //
+  // Zestaw Engine v2 (2026-05-04): mark every wizard-generated row with
+  // is_quick_estimate=true so Smart Mapping Engine never silently wraps it
+  // as a virtual Zestaw (which caused 1200 mb "Układanie kabla YKY" to
+  // double-count with an extra 1200 mb of bruzdowanie). Quick Estimate
+  // already produces explicit, deterministic lines; auto-bundling is a
+  // net regression for this pathway regardless of project.auto_detect_zestawy.
   const projectItems = params.items.map((item, index) => ({
     project_id: project.id,
     name: item.name,
@@ -375,6 +394,7 @@ export async function createQuickEstimateProject(params: {
     material_price: 0,
     labor_price: 0,
     is_custom: true,
+    is_quick_estimate: true,
     knr_code: item.knr_code || null,
     knr_source: null as string | null,
     confidence_level: "uncertain" as string,

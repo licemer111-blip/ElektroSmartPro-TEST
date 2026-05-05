@@ -69,6 +69,10 @@ export function ProjectViewClient({
   const [liveBruttoMode, setLiveBruttoMode] = useState(project.brutto_mode ?? false);
   const [liveShowLaborHours, setLiveShowLaborHours] = useState(project.show_labor_hours_in_pdf ?? false);
   const [liveExpertColoring, setLiveExpertColoring] = useState(project.expert_coloring ?? true);
+  // Zestaw Engine v2 (2026-05-04): per-project flag. Default FALSE (radical-OFF migration).
+  const [liveAutoDetectZestawy, setLiveAutoDetectZestawy] = useState(
+    Boolean((project as { auto_detect_zestawy?: boolean }).auto_detect_zestawy)
+  );
   const [liveVatRate, setLiveVatRate] = useState(project.vat_rate ?? 23);
   const [selectedEstimateIds, setSelectedEstimateIds] = useState<Set<string>>(new Set());
   const handleSelectedIdsChange = useCallback((ids: Set<string>) => setSelectedEstimateIds(new Set(ids)), []);
@@ -318,9 +322,11 @@ export function ProjectViewClient({
             liveBruttoMode={liveBruttoMode}
             liveShowLaborHours={liveShowLaborHours}
             liveExpertColoring={liveExpertColoring}
+            liveAutoDetectZestawy={liveAutoDetectZestawy}
             onBruttoModeChange={setLiveBruttoMode}
             onLaborHoursChange={setLiveShowLaborHours}
             onKnrChange={setLiveShowKnr}
+            onAutoDetectZestawyChange={setLiveAutoDetectZestawy}
             liveVatRate={liveVatRate}
             onVatRateChange={setLiveVatRate}
           />
