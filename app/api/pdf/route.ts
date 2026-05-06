@@ -111,6 +111,7 @@ export async function POST(req: Request) {
       vatMode = 23,
       priceDisplay = "netto",
       blindMode = false,      // v3.0: Kosztorys ślepy — hide all prices
+      showColors = true,
       pdfStructure: rawPdfStructure,
     } = await req.json();
 
@@ -550,6 +551,7 @@ export async function POST(req: Request) {
       priceDisplay: priceDisplay as string,
       notes: notes as string,
       showDemoWatermark,
+      showColors: Boolean(showColors),
     };
 
     const pdfBuffer = await renderToBuffer(

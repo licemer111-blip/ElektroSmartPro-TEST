@@ -78,10 +78,10 @@ const THEMES: Record<ThemeName, ThemePalette> = {
     rowEven: '#ffffff',
     sectionHeaderBg: '#1f2937',
     sectionHeaderText: '#ffffff',
-    setParentBg: '#fde68a',
-    setParentBorder: '#d97706',
-    childMatBg: '#fef3c7',
-    childLabBg: '#dcfce7',
+    setParentBg: '#f5f3ef',
+    setParentBorder: '#9ca3af',
+    childMatBg: '#faf8f5',
+    childLabBg: '#f5f7f5',
     subtotalBg: '#f3f4f6',
     warningBg: '#fef2f2',
     warningText: '#dc2626',
@@ -102,10 +102,10 @@ const THEMES: Record<ThemeName, ThemePalette> = {
     rowEven: '#ffffff',
     sectionHeaderBg: '#1f2937',
     sectionHeaderText: '#fde68a',
-    setParentBg: '#fde68a',
-    setParentBorder: '#b45309',
-    childMatBg: '#fef3c7',
-    childLabBg: '#dcfce7',
+    setParentBg: '#f5f0e8',
+    setParentBorder: '#8b7355',
+    childMatBg: '#faf7f2',
+    childLabBg: '#f3f7f3',
     subtotalBg: '#f9f7f2',
     warningBg: '#fef2f2',
     warningText: '#dc2626',
@@ -126,10 +126,10 @@ const THEMES: Record<ThemeName, ThemePalette> = {
     rowEven: '#ffffff',
     sectionHeaderBg: '#1e40af',
     sectionHeaderText: '#ffffff',
-    setParentBg: '#fde68a',
-    setParentBorder: '#d97706',
-    childMatBg: '#fef9c3',
-    childLabBg: '#dcfce7',
+    setParentBg: '#eef2fa',
+    setParentBorder: '#6b83b0',
+    childMatBg: '#f5f7fc',
+    childLabBg: '#f0f5f0',
     subtotalBg: '#f1f5f9',
     warningBg: '#fef2f2',
     warningText: '#dc2626',
@@ -150,10 +150,10 @@ const THEMES: Record<ThemeName, ThemePalette> = {
     rowEven: '#ffffff',
     sectionHeaderBg: '#1e3a8a',
     sectionHeaderText: '#bfdbfe',
-    setParentBg: '#fde68a',
-    setParentBorder: '#d97706',
-    childMatBg: '#fef9c3',
-    childLabBg: '#dcfce7',
+    setParentBg: '#e8edf5',
+    setParentBorder: '#5b6a8a',
+    childMatBg: '#f0f2f8',
+    childLabBg: '#edf2ed',
     subtotalBg: '#e8edf8',
     warningBg: '#fef2f2',
     warningText: '#dc2626',
@@ -174,10 +174,10 @@ const THEMES: Record<ThemeName, ThemePalette> = {
     rowEven: '#ffffff',
     sectionHeaderBg: '#3b0764',
     sectionHeaderText: '#e9d5ff',
-    setParentBg: '#fde68a',
-    setParentBorder: '#d97706',
-    childMatBg: '#fef9c3',
-    childLabBg: '#dcfce7',
+    setParentBg: '#f0ecf8',
+    setParentBorder: '#7c6a9a',
+    childMatBg: '#f5f2fa',
+    childLabBg: '#f0f5f0',
     subtotalBg: '#f2eeff',
     warningBg: '#fef2f2',
     warningText: '#dc2626',
@@ -289,6 +289,7 @@ export interface PdfEngineData {
    * to a paying client as-is.
    */
   showDemoWatermark?: boolean;
+  showColors?: boolean;
 }
 
 // ─── Column Width Calculator ───────────────────────────────────────────────────
@@ -615,6 +616,7 @@ const TableDataRow = ({
   showKnr,
   showRg,
   matOwned,
+  showColors = true,
 }: {
   row: PdfRow;
   rowIndex: number;
@@ -623,6 +625,7 @@ const TableDataRow = ({
   showKnr: boolean;
   showRg: boolean;
   matOwned: boolean;
+  showColors?: boolean;
 }) => {
   // Determine row background and text color based on rowType
   let rowBg = rowIndex % 2 === 0 ? palette.rowEven : palette.rowOdd;
@@ -632,41 +635,49 @@ const TableDataRow = ({
   let borderLeftWidth = 0;
   let borderLeftColor = 'transparent';
 
+  // Monochrome overrides: neutral grays for assembly rows
+  const MONO = {
+    parentBg: '#f0f0f0',
+    parentBorder: '#6b7280',
+    childBg: '#f7f7f7',
+    childBorder: '#9ca3af',
+  };
+
   switch (row.rowType) {
     case 'section_header':
-      rowBg = palette.sectionHeaderBg;
-      textColor = palette.sectionHeaderText;
+      rowBg = showColors ? palette.sectionHeaderBg : '#374151';
+      textColor = showColors ? palette.sectionHeaderText : '#ffffff';
       fontWeight = 'bold';
       break;
     case 'set_parent':
-      rowBg = palette.setParentBg;
-      textColor = '#78350f';
+      rowBg = showColors ? palette.setParentBg : MONO.parentBg;
+      textColor = showColors ? palette.textPrimary : '#1f2937';
       fontWeight = 'bold';
-      borderLeftWidth = 4;
-      borderLeftColor = palette.setParentBorder;
+      borderLeftWidth = 3;
+      borderLeftColor = showColors ? palette.setParentBorder : MONO.parentBorder;
       break;
     case 'child_mat':
-      rowBg = palette.childMatBg;
-      textColor = '#92400e';
+      rowBg = showColors ? palette.childMatBg : MONO.childBg;
+      textColor = showColors ? '#78350f' : palette.textSecondary;
       fontStyle = 'italic';
-      borderLeftWidth = 3;
-      borderLeftColor = '#f59e0b';
+      borderLeftWidth = 2;
+      borderLeftColor = showColors ? palette.setParentBorder : MONO.childBorder;
       break;
     case 'child_lab':
-      rowBg = palette.childLabBg;
-      textColor = '#166534';
+      rowBg = showColors ? palette.childLabBg : MONO.childBg;
+      textColor = showColors ? '#1a4731' : palette.textSecondary;
       fontStyle = 'italic';
-      borderLeftWidth = 3;
-      borderLeftColor = '#22c55e';
+      borderLeftWidth = 2;
+      borderLeftColor = showColors ? palette.setParentBorder : MONO.childBorder;
       break;
     case 'section_subtotal':
-      rowBg = palette.subtotalBg;
+      rowBg = showColors ? palette.subtotalBg : '#f3f4f6';
       textColor = palette.textSecondary;
       fontStyle = 'italic';
       break;
     case 'warning':
-      rowBg = palette.warningBg;
-      textColor = palette.warningText;
+      rowBg = showColors ? palette.warningBg : '#f9fafb';
+      textColor = showColors ? palette.warningText : '#374151';
       fontWeight = 'bold';
       break;
     default:
@@ -832,21 +843,22 @@ const SummarySection = ({
 
 // ─── Legend Block ─────────────────────────────────────────────────────────────
 
-const LegendBlock = ({ palette }: { palette: ThemePalette }) => (
-  <View style={{ flexDirection: 'row', gap: 12, marginBottom: 8, flexWrap: 'wrap' }}>
-    {[
-      { color: palette.setParentBorder,  label: 'Zestaw (komplet)' },
-      { color: '#f59e0b',                label: 'Materiał' },
-      { color: '#22c55e',                label: 'Robocizna' },
-      { color: palette.sectionHeaderBg,  label: 'Sekcja' },
-    ].map(({ color, label }) => (
-      <View key={label} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-        <View style={{ width: 8, height: 8, backgroundColor: color, borderRadius: 1 }} />
-        <Text style={{ fontSize: 7, color: palette.textSecondary }}>{label}</Text>
-      </View>
-    ))}
-  </View>
-);
+const LegendBlock = ({ palette, showColors = true }: { palette: ThemePalette; showColors?: boolean }) => {
+  if (!showColors) return null;
+  return (
+    <View style={{ flexDirection: 'row', gap: 12, marginBottom: 8, flexWrap: 'wrap' }}>
+      {[
+        { color: palette.setParentBorder,  label: 'Zestaw (komplet)' },
+        { color: palette.sectionHeaderBg,   label: 'Sekcja' },
+      ].map(({ color, label }) => (
+        <View key={label} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+          <View style={{ width: 8, height: 8, backgroundColor: color, borderRadius: 1 }} />
+          <Text style={{ fontSize: 7, color: palette.textSecondary }}>{label}</Text>
+        </View>
+      ))}
+    </View>
+  );
+};
 
 // ─── Content Page (table + summary + signatures on last page) ─────────────────
 
@@ -912,7 +924,7 @@ const ContentPage = ({
       )}
 
       {/* Legend — controlled by showLegend */}
-      {isFirstContent && s.showLegend && <LegendBlock palette={palette} />}
+      {isFirstContent && s.showLegend && <LegendBlock palette={palette} showColors={data.showColors !== false} />}
 
       {/* Table */}
       <TableHeaderRow palette={palette} cols={cols} showKnr={showKnr} showRg={showRg} matOwned={matOwnedByClient} />
@@ -926,6 +938,7 @@ const ContentPage = ({
           showKnr={showKnr}
           showRg={showRg}
           matOwned={matOwnedByClient}
+          showColors={data.showColors !== false}
         />
       ))}
 
