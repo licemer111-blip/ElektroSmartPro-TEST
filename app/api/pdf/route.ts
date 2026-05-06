@@ -358,7 +358,7 @@ export async function POST(req: Request) {
         index: indexDisplay, name, knrCode, unit: item.unit as string, qty: item.quantity as number,
         rg: laborNormDisplay, mat: matDisplay, lab: labDisplay, combined: combinedDisplay,
         total: maskPrices ? (isPro && blindMode ? "---" : "*** zl") : fMoney(totalVal), rawTotal: blindMode ? 0 : totalVal, rowType, isParent: isParent || isAiParent, isChild,
-        isInvestorMat: item.isInvestorMat,
+        isInvestorMat: item.isInvestorMat, _itemId: item.id as string,
       });
 
       // AI parent: append virtual child rows derived from expandToAssembly
@@ -381,7 +381,7 @@ export async function POST(req: Request) {
             combined: maskPrices ? "*** zl" : fMoney(vTotal),
             total: maskPrices ? "*** zl" : fMoney(vTotal),
             rawTotal: blindMode ? 0 : vTotal,
-            rowType: vRowType, isParent: false, isChild: true,
+            rowType: vRowType, isParent: false, isChild: true, _itemId: item.id as string,
           });
         }
       }
@@ -421,14 +421,13 @@ export async function POST(req: Request) {
     if (pdfStructure.showSectionGroups) {
       for (const secDef of PDF_SECTIONS) {
         const secRawRows = rowsRaw
-          .map((row, idx) => ({ row, itemId: calcItems[idx].id as string }))
-          .filter(({ itemId }) => semanticSectionMap.get(itemId) === secDef.id);
+          .filter(row => row._itemId && semanticSectionMap.get(row._itemId) === secDef.id);
 
         if (secRawRows.length === 0) continue;
 
         const secT   = sectionTotalsMap.get(secDef.id)!;
         const secTot = secT.mat + secT.lab;
-        const secItemCount = secRawRows.filter(({ row }) => !row.isChild).length;
+        const secItemCount = secRawRows.filter(row => !row.isChild).length;
 
         rows.push({
           index: "",
@@ -440,7 +439,7 @@ export async function POST(req: Request) {
           rowType: "section_header", isParent: false, isChild: false,
         });
 
-        for (const { row } of secRawRows) rows.push(row);
+        for (const row of secRawRows) rows.push(row);
 
         rows.push({
           index: "",

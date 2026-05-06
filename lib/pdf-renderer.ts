@@ -43,6 +43,7 @@ export interface PdfRow {
   isParent: boolean;
   isChild: boolean;
   isInvestorMat?: boolean;
+  _itemId?: string;
 }
 
 export interface PdfProfile {
