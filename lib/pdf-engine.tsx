@@ -658,22 +658,19 @@ const TableDataRow = ({
       break;
     case 'child_mat':
       rowBg = showColors ? palette.childMatBg : MONO.childBg;
-      textColor = showColors ? '#78350f' : palette.textSecondary;
-      fontStyle = 'italic';
-      borderLeftWidth = 2;
+      textColor = showColors ? palette.textSecondary : palette.textSecondary;
+      borderLeftWidth = 3;
       borderLeftColor = showColors ? palette.setParentBorder : MONO.childBorder;
       break;
     case 'child_lab':
       rowBg = showColors ? palette.childLabBg : MONO.childBg;
-      textColor = showColors ? '#1a4731' : palette.textSecondary;
-      fontStyle = 'italic';
-      borderLeftWidth = 2;
+      textColor = showColors ? palette.textSecondary : palette.textSecondary;
+      borderLeftWidth = 3;
       borderLeftColor = showColors ? palette.setParentBorder : MONO.childBorder;
       break;
     case 'section_subtotal':
       rowBg = showColors ? palette.subtotalBg : '#f3f4f6';
       textColor = palette.textSecondary;
-      fontStyle = 'italic';
       break;
     case 'warning':
       rowBg = showColors ? palette.warningBg : '#f9fafb';
@@ -828,7 +825,7 @@ const SummarySection = ({
           <Text style={[base.summaryValue, { fontWeight: 'bold', color: palette.textPrimary }]}>{mask(totalNet)}</Text>
         </View>
         <View style={base.summaryRow}>
-          <Text style={[base.summaryLabel, { color: '#059669' }]}>VAT {vatRate}%:</Text>
+          <Text style={[base.summaryLabel, { color: '#059669' }]}>VAT {Math.round(vatRate * 100)}%:</Text>
           <Text style={[base.summaryValue, { color: '#059669' }]}>{mask(vatAmount)}</Text>
         </View>
         {/* Grand total */}

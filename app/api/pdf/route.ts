@@ -343,12 +343,10 @@ export async function POST(req: Request) {
       const rawKnrCode = (item as Record<string, unknown>).knr_code as string | null | undefined;
       const knrCode = rawKnrCode ? sanitize(rawKnrCode, true) : "";
       let name = sanitize(item.name as string, true);
-      if (rowType === "set_parent") name = `>> ${name}`;
+      if (rowType === "set_parent") name = `${name}`;
       else if (isChild) {
-        if (rowType === "warning") name = `  \u21b3 ${name} (BRAK CENY!)`;
-        else if (rowType === "child_mat") name = `  \u21b3 ${name}`;
-        else if (rowType === "child_lab") name = `  \u21b3 ${name}`;
-        else name = `  \u21b3 ${name}`;
+        if (rowType === "warning") name = `   - ${name} (BRAK CENY!)`;
+        else name = `   - ${name}`;
       } else if (rowType === "warning") name = `${name} (BRAK CENY!)`;
 
       const laborNormDisplay = showRg
@@ -372,7 +370,7 @@ export async function POST(req: Request) {
           const vRg = showRg && vChild.rbhTotal > 0 ? `${vChild.rbhTotal.toFixed(3)} rbh` : "";
           rowsRaw.push({
             index: "",
-            name: `  \u21b3 ${sanitize(vChild.label, true)}`,
+            name: `   - ${sanitize(vChild.label, true)}`,
             knrCode: vChild.knrCode ? sanitize(vChild.knrCode, true) : "",
             unit: vChild.unit,
             qty: vChild.quantity,
