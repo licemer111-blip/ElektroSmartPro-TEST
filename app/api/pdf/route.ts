@@ -343,11 +343,11 @@ export async function POST(req: Request) {
       const rawKnrCode = (item as Record<string, unknown>).knr_code as string | null | undefined;
       const knrCode = rawKnrCode ? sanitize(rawKnrCode, true) : "";
       let name = sanitize(item.name as string, true);
-      if (rowType === "set_parent") name = `${name}`;
-      else if (isChild) {
-        if (rowType === "warning") name = `   - ${name} (BRAK CENY!)`;
-        else name = `   - ${name}`;
-      } else if (rowType === "warning") name = `${name} (BRAK CENY!)`;
+      if (isChild) {
+        name = rowType === "warning" ? `   - ${name} (BRAK CENY!)` : `   - ${name}`;
+      } else if (rowType === "warning") {
+        name = `${name} (BRAK CENY!)`;
+      }
 
       const laborNormDisplay = showRg
         ? (item.laborNorm > 0 ? `${(item.laborNorm * item.quantity).toFixed(3)} rbh` : "—")

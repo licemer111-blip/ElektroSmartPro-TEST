@@ -635,46 +635,29 @@ const TableDataRow = ({
   let borderLeftWidth = 0;
   let borderLeftColor = 'transparent';
 
-  // Monochrome overrides: neutral grays for assembly rows
-  const MONO = {
-    parentBg: '#f0f0f0',
-    parentBorder: '#6b7280',
-    childBg: '#f7f7f7',
-    childBorder: '#9ca3af',
-  };
-
   switch (row.rowType) {
     case 'section_header':
-      rowBg = showColors ? palette.sectionHeaderBg : '#374151';
-      textColor = showColors ? palette.sectionHeaderText : '#ffffff';
+      rowBg = palette.sectionHeaderBg;
+      textColor = palette.sectionHeaderText;
       fontWeight = 'bold';
       break;
     case 'set_parent':
-      rowBg = showColors ? palette.setParentBg : MONO.parentBg;
-      textColor = showColors ? palette.textPrimary : '#1f2937';
+      rowBg = showColors ? palette.setParentBg : '#f3f4f6';
+      textColor = palette.textPrimary;
       fontWeight = 'bold';
-      borderLeftWidth = 3;
-      borderLeftColor = showColors ? palette.setParentBorder : MONO.parentBorder;
       break;
     case 'child_mat':
-      rowBg = showColors ? palette.childMatBg : MONO.childBg;
-      textColor = showColors ? palette.textSecondary : palette.textSecondary;
-      borderLeftWidth = 3;
-      borderLeftColor = showColors ? palette.setParentBorder : MONO.childBorder;
-      break;
     case 'child_lab':
-      rowBg = showColors ? palette.childLabBg : MONO.childBg;
-      textColor = showColors ? palette.textSecondary : palette.textSecondary;
-      borderLeftWidth = 3;
-      borderLeftColor = showColors ? palette.setParentBorder : MONO.childBorder;
-      break;
-    case 'section_subtotal':
-      rowBg = showColors ? palette.subtotalBg : '#f3f4f6';
+      // Children use normal alternating rows — they are already indented via text prefix
       textColor = palette.textSecondary;
       break;
+    case 'section_subtotal':
+      rowBg = '#f9fafb';
+      textColor = palette.textSecondary;
+      fontStyle = 'italic';
+      break;
     case 'warning':
-      rowBg = showColors ? palette.warningBg : '#f9fafb';
-      textColor = showColors ? palette.warningText : '#374151';
+      textColor = showColors ? '#b91c1c' : '#374151';
       fontWeight = 'bold';
       break;
     default:
