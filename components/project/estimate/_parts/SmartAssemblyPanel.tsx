@@ -205,7 +205,7 @@ export function SmartAssemblyPanel({
                   }`}
                 >
                   {it.isLabor
-                    ? `${it.rbhTotal.toFixed(3)} rbh`
+                    ? `${it.rbhTotal.toFixed(3)} rbh = ${(it.rbhTotal * laborRate).toFixed(2)} zł`
                     : `${it.materialTotal.toFixed(2)} zł`}
                 </span>
               </div>
@@ -280,6 +280,9 @@ export function SmartAssemblyPanel({
                           onChange={e => handleFieldChange(it.label, "rbhPerUnit", e.target.value)}
                           className="w-full text-[11px] px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-400"
                         />
+                        <span className="text-[9px] text-emerald-600 dark:text-emerald-400 mt-0.5 block">
+                          = {(parseFloat(getFieldValue(it.label, "rbhPerUnit", it.rbhPerUnit)) * laborRate).toFixed(2)} zł/jm
+                        </span>
                       </div>
                     )}
                     {/* materialPricePerUnit: for material items */}

@@ -548,6 +548,7 @@ export const EstimateRow = React.memo(function EstimateRow({
           onGlobalFallbackAction={(!isFinal && !isReadOnly) ? onGlobalFallbackAction : undefined}
           isLoading={fallbackLoadingIds?.has(item.id)}
           assemblyNorm={assemblyRBHPerUnit}
+          laborRate={projectLaborRate}
         />
       )}
 

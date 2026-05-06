@@ -461,8 +461,8 @@ export function RowLaborCell({
 }
 
 export function RowRgCell({
-  item, colorMode, onGlobalFallbackAction, isLoading, assemblyNorm,
-}: { item: ProjectItem; colorMode: boolean; onGlobalFallbackAction?: (id: string) => void; isLoading?: boolean; assemblyNorm?: number | null }) {
+  item, colorMode, onGlobalFallbackAction, isLoading, assemblyNorm, laborRate = 0,
+}: { item: ProjectItem; colorMode: boolean; onGlobalFallbackAction?: (id: string) => void; isLoading?: boolean; assemblyNorm?: number | null; laborRate?: number }) {
   const [isPending, startTransition] = useTransition();
   const [confirmReset, setConfirmReset] = useState(false);
 
@@ -530,9 +530,19 @@ export function RowRgCell({
               );
             })()}
           </div>
+          {laborRate > 0 && (
+            <div className={`text-[10px] font-medium ${colorMode ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 dark:text-slate-400"}`}>
+              = {((assemblyNorm ?? item.labor_norm!) * laborRate).toFixed(2)} zł/{item.unit ?? "szt"}
+            </div>
+          )}
           {item.labor_hours_total != null && (
             <div className={`text-[10px] ${colorMode ? "text-blue-500 dark:text-blue-500" : "text-slate-400 dark:text-slate-500"}`}>
               Σ {item.labor_hours_total.toFixed(2)} rbh
+              {laborRate > 0 && (
+                <span className="ml-1 text-emerald-600 dark:text-emerald-400">
+                  ({(item.labor_hours_total * laborRate).toFixed(2)} zł)
+                </span>
+              )}
             </div>
           )}
           {(() => {
