@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import Header from "@/components/header";
-import { StickyCTA } from "@/components/landing/sticky-cta";
 import { HeroSection } from "@/components/landing/HeroSection";
-import { FeaturesSection } from "@/components/landing/FeaturesSection";
-import { BentoFeaturesSection } from "@/components/landing/BentoFeaturesSection";
-import { FaqSection } from "@/components/landing/FaqSection";
-import { RoadmapSection } from "@/components/landing/RoadmapSection";
-import { FooterSection } from "@/components/landing/FooterSection";
 import { LandingStructuredData } from "@/components/landing/LandingStructuredData";
 import { getGlobalCatalogCount } from "./actions";
 import { DIN_MODULES_COUNT } from "@/lib/data/din-modules-stats";
 import { getSystemStats } from "@/lib/actions/system-stats";
 import { SYSTEM_STATS_FALLBACK } from "@/constants/system";
+
+const FeaturesSection    = dynamic(() => import("@/components/landing/FeaturesSection").then(m => ({ default: m.FeaturesSection })));
+const BentoFeaturesSection = dynamic(() => import("@/components/landing/BentoFeaturesSection").then(m => ({ default: m.BentoFeaturesSection })));
+const FaqSection         = dynamic(() => import("@/components/landing/FaqSection").then(m => ({ default: m.FaqSection })));
+const RoadmapSection     = dynamic(() => import("@/components/landing/RoadmapSection").then(m => ({ default: m.RoadmapSection })));
+const FooterSection      = dynamic(() => import("@/components/landing/FooterSection").then(m => ({ default: m.FooterSection })));
+const StickyCTA          = dynamic(() => import("@/components/landing/sticky-cta").then(m => ({ default: m.StickyCTA })), { ssr: false });
 
 export const revalidate = 3600; // ISR: regenerate landing page once per hour
 
@@ -88,25 +90,27 @@ export default async function Home() {
 
       <Header isDashboard={false} />
 
-      {/* 1. Hero */}
-      <HeroSection normsCount={systemStats.normsCount} categoriesCount={systemStats.categoriesCount} />
+      <main>
+        {/* 1. Hero — above fold, loaded eagerly */}
+        <HeroSection normsCount={systemStats.normsCount} categoriesCount={systemStats.categoriesCount} />
 
-      {/* 2. Three Pillars + Tools */}
-      <FeaturesSection dinCount={dinCount} normsCount={systemStats.normsCount} />
+        {/* 2. Three Pillars + Tools */}
+        <FeaturesSection dinCount={dinCount} normsCount={systemStats.normsCount} />
 
-      {/* 3. Bento Features — 2x3 grid */}
-      <BentoFeaturesSection catalogCount={catalogCount} />
+        {/* 3. Bento Features — 2x3 grid */}
+        <BentoFeaturesSection catalogCount={catalogCount} />
 
-      {/* 5. FAQ — 5 accordion items (SEO rich snippets) */}
-      <FaqSection catalogCount={catalogCount} dinCount={dinCount} />
+        {/* 5. FAQ — 5 accordion items (SEO rich snippets) */}
+        <FaqSection catalogCount={catalogCount} dinCount={dinCount} />
 
-      {/* 6. Roadmap badge */}
-      <RoadmapSection />
+        {/* 6. Roadmap badge */}
+        <RoadmapSection />
+      </main>
 
-      {/* 7. Sticky CTA for mobile */}
+      {/* Sticky CTA — client-only, ssr:false */}
       <StickyCTA />
 
-      {/* 9. Footer */}
+      {/* Footer */}
       <FooterSection />
     </div>
   );

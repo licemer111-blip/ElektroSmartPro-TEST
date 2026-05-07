@@ -1,7 +1,12 @@
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { Zap, ArrowRight, Sparkles, Shield } from "lucide-react";
 import Link from "next/link";
-import { PDFDemoButton } from "@/components/landing/pdf-demo-button";
+
+const PDFDemoButton = dynamic(
+  () => import("@/components/landing/pdf-demo-button").then(m => ({ default: m.PDFDemoButton })),
+  { ssr: false, loading: () => <div className="h-12 sm:h-14 w-40 rounded-xl bg-slate-200 dark:bg-slate-700 animate-pulse" /> }
+);
 
 interface HeroSectionProps {
   normsCount?: number;
