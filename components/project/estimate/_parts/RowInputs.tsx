@@ -553,11 +553,6 @@ export function RowRgCell({
               );
             })()}
           </div>
-          {laborRate > 0 && assemblyNorm != null && (
-            <div className={`text-[10px] font-medium ${colorMode ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 dark:text-slate-400"}`}>
-              = {((assemblyNorm ?? item.labor_norm!) * laborRate).toFixed(2)} zł/{item.unit ?? "szt"}
-            </div>
-          )}
           {item.labor_hours_total != null && (
             <div className={`text-[10px] ${colorMode ? "text-blue-500 dark:text-blue-500" : "text-slate-400 dark:text-slate-500"}`}>
               Σ {item.labor_hours_total.toFixed(2)} rbh

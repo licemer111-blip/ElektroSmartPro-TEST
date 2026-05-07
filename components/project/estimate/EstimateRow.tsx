@@ -244,9 +244,11 @@ export const EstimateRow = React.memo(function EstimateRow({
   const _scmCheck = !isManualPrice && !isAssemblyChild ? detectSmartContext(item.name) : null;
   // Name-based detection without price/manual guards — used to simplify edit panel for ALL smart rows
   const isSmartItem = !isAssemblyChild && detectSmartContext(item.name).category !== "NONE";
+  const _rawItemTotal = (displayItem.final_material_price ?? displayItem.material_price ?? 0)
+    + (displayItem.final_labor_price ?? displayItem.labor_price ?? 0);
   const isAssemblyOverride =
     !!_scmCheck &&
-    calcRowTotal > 0 &&
+    _rawItemTotal > 0 &&
     (_scmCheck.category === "ZESTAW" || _scmCheck.category === "BIALY_MONTAZ" ||
      _scmCheck.category === "TRASY"  || _scmCheck.category === "ROZDZIELNICA");
 
