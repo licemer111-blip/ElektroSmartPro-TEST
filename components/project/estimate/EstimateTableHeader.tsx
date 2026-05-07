@@ -138,7 +138,7 @@ export function EstimateTableHeader({
           <div className="flex flex-col items-center gap-0.5">
             <span>{filterType === "materials" ? "💰" : filterType === "labor" ? "👷" : "💎"}</span>
             <div className="flex items-center gap-1 justify-center">
-            <span className="font-semibold">{filterType === "materials" ? "Suma mat." : filterType === "labor" ? "Suma rob." : "Suma"}</span>
+            <span className="font-semibold">{filterType === "materials" ? "Suma mat." : filterType === "labor" ? "Suma rob." : "Suma ★"}</span>
             <HintTooltip content={HINTS.columnSum} side="bottom" iconOnly />
           </div>
           </div>
