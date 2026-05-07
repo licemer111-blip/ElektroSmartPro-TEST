@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import Header from "@/components/header";
 import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
 import { MobileBottomNavPadding } from "@/components/layout/mobile-bottom-nav";
