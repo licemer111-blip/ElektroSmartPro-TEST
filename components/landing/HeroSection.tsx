@@ -19,7 +19,7 @@ export function HeroSection({ normsCount = 8011, categoriesCount = 63 }: HeroSec
       <div className="relative grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
 
         {/* Left Side — Text Content */}
-        <div className="space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-left-8 duration-700">
+        <div className="space-y-6 sm:space-y-8">
           {/* Version badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 badge-blue rounded-full text-sm font-medium hover:scale-105 transition-transform duration-300 shadow-sm">
             <Sparkles className="w-4 h-4 animate-pulse" />
@@ -86,7 +86,7 @@ export function HeroSection({ normsCount = 8011, categoriesCount = 63 }: HeroSec
         </div>
 
         {/* Right Side — A4 PDF Mockup */}
-        <div className="relative flex justify-center lg:justify-end mt-8 lg:mt-0 animate-in fade-in slide-in-from-right-8 duration-700 delay-300">
+        <div className="relative flex justify-center lg:justify-end mt-8 lg:mt-0">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/15 via-slate-500/10 to-blue-500/15 blur-3xl rounded-3xl transform translate-x-4 translate-y-4 glow-subtle" />
 
           <div className="relative w-full max-w-sm sm:max-w-md aspect-[1/1.4142] bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl shadow-slate-500/10 transform rotate-1 hover:rotate-0 hover:scale-105 transition-all duration-500 overflow-hidden">
