@@ -18,7 +18,7 @@ import { useProjectTabSync } from "@/hooks/useProjectTabSync";
 import { ProjectTabContainer } from "./_parts/ProjectTabContainer";
 import { MaterialBrainProvider } from "./_parts/MaterialBrainContext";
 
-export type ProjectTab = "estimate" | "materials" | "notes" | "photos" | "settings" | "rentownosc";
+export type ProjectTab = "estimate" | "materials" | "notes" | "settings";
 
 interface Region {
   id: string;

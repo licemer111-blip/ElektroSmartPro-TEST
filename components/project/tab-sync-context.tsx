@@ -75,7 +75,7 @@ export function TabSyncProvider({ children }: { children: ReactNode }) {
 
   // Функция для синхронизации от внешнего источника (CollaboratorCursors)
   const syncTab = useCallback((tab: string) => {
-    const validTabs: ProjectTab[] = ["estimate", "materials", "notes", "photos", "settings", "rentownosc"];
+    const validTabs: ProjectTab[] = ["estimate", "materials", "notes", "settings"];
     if (validTabs.includes(tab as ProjectTab)) {
       setIsExternalSync(true);
       setActiveTabInternal(tab as ProjectTab);

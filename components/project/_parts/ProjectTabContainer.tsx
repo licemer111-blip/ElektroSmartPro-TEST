@@ -1,13 +1,10 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { EstimateTable } from "@/components/project/estimate-table";
 import { ProjectMaterialsList } from "@/components/project/project-materials-list";
 import { ProjectDocumentsSection } from "@/components/project/project-documents-section";
 import { ProjectSettings } from "@/components/project/project-settings";
-import { RentownoscTab } from "@/components/project/rentownosc-tab";
-import { ProjectPhotoGallery } from "@/components/project/project-photo-gallery";
 import { AddUserAssemblyDialog } from "@/components/project/add-user-assembly-dialog";
 import { QuickItemDialog } from "@/components/project/quick-item-dialog";
 import { CatalogMobileTrigger } from "@/components/project/catalog-mobile-trigger";
@@ -17,7 +14,7 @@ import { NormDivergenceBanner } from "@/components/project/_parts/NormDivergence
 import { ProjectPricingModeControl } from "@/components/project/_parts/ProjectPricingModeControl";
 import {
   Eye,
-  FileText, Package, BarChart3, Mic, Camera, Settings2, MapPin,
+  FileText, Package, Mic, Settings2, MapPin,
 } from "lucide-react";
 import { formatRegionCorrection, getRegionById } from "@/lib/config/regions";
 import { useToast } from "@/hooks/use-toast";
@@ -35,9 +32,7 @@ const ProjectNotes = dynamic(
 const TAB_CONFIG = [
   { id: "estimate", label: "Kosztorysy", shortLabel: "Koszt.", icon: FileText, lockedWhenFinal: false },
   { id: "materials", label: "Do wyceny", shortLabel: "Wycena", icon: Package, lockedWhenFinal: true },
-  { id: "rentownosc", label: "Rentowność", shortLabel: "Rent.", icon: BarChart3, lockedWhenFinal: false },
   { id: "notes", label: "Notatki", shortLabel: "Notat.", icon: Mic, lockedWhenFinal: true },
-  { id: "photos", label: "Zdjęcia", shortLabel: "Foto", icon: Camera, lockedWhenFinal: true },
   { id: "settings", label: "Ustawienia PDF", shortLabel: "PDF", icon: Settings2, lockedWhenFinal: true },
 ] as const;
 
@@ -320,20 +315,6 @@ export function ProjectTabContainer({
         <Card className="h-full p-4 md:p-6 bg-white dark:bg-slate-900 shadow-lg md:shadow-md rounded-xl">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">{tabNav}</div>
           <ProjectNotes projectId={projectId} initialNotes={project.notes} />
-        </Card>
-      )}
-
-      {activeTab === "photos" && (
-        <Card className="h-full p-4 md:p-6 bg-white dark:bg-slate-900 shadow-lg md:shadow-md rounded-xl">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">{tabNav}</div>
-          <ProjectPhotoGallery projectId={projectId} />
-        </Card>
-      )}
-
-      {activeTab === "rentownosc" && (
-        <Card className="h-full p-4 md:p-6 bg-white dark:bg-slate-900 shadow-lg md:shadow-md rounded-xl">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">{tabNav}</div>
-          <RentownoscTab projectId={projectId} isPro={isPro} />
         </Card>
       )}
 
