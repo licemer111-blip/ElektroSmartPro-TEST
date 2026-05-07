@@ -29,6 +29,32 @@ import type { ProjectItem } from "@/lib/types/database";
 import { detectSector, type ProjectSector } from "@/lib/ai/smart-mapping-engine";
 import { priceRowWithGlobalFallback } from "@/app/dashboard/projects/[id]/ai-actions";
 
+// ─── Labor keyword detector for assembly children ─────────────────────────────
+// Used to hide material-only children when "Tylko Robocizna" toggle is ON.
+// Labor children always start with action verbs; material children are nouns.
+const LABOR_CHILD_KEYWORDS = [
+  "montaz", "montaż", "demontaz", "demontaż",
+  "bruzdowanie", "bruzda",
+  "ukladanie", "układanie", "ulozenie", "ułożenie",
+  "podlaczenie", "podłączenie",
+  "kucie", "wiercenie", "przewiercenie",
+  "okablowanie",
+  "instalacja", "instalowanie",
+  "mocowanie", "zarabianie",
+  "pomiar", "badanie", "testowanie", "sprawdzenie",
+  "trasowanie", "wciaganie", "wciąganie",
+  "przygotowanie", "wykonanie",
+];
+function isLaborAssemblyChild(item: ProjectItem): boolean {
+  // 1. Metadata tag (set by newer zestaw-actions)
+  const meta = item.metadata as Record<string, unknown> | null;
+  if (meta?.childType === "robocizna") return true;
+  if (meta?.childType === "material") return false;
+  // 2. Keyword fallback
+  const n = item.name.toLowerCase();
+  return LABOR_CHILD_KEYWORDS.some((kw) => n.includes(kw));
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface EstimateTableProps {
@@ -394,9 +420,7 @@ export function EstimateTable({
                             {!collapsedAssemblies.has(topItem.id) && assemblyChildren
                               .filter((child) => {
                                 if (!materialsOwnedByCustomer) return true;
-                                // Hide material-only children: keep only those with labor price
-                                const labPrice = Number(child.final_labor_price ?? child.labor_price ?? 0);
-                                return labPrice > 0;
+                                return isLaborAssemblyChild(child);
                               })
                               .map((child) => (
                               <React.Fragment key={child.id}>

@@ -111,7 +111,7 @@ export async function addZestawToProject({
       catalog_item_id:   null,
       name:              child.label,
       description:       `Składnik zestawu: ${result.recipe.label}`,
-      metadata:          child.metadata,
+      metadata:          { ...child.metadata, childType: child.type },
       unit:              child.unit,
       quantity:          child.quantity,
       material_price:    child.type === "material" ? 0 : 0,
