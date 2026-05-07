@@ -31,6 +31,28 @@ import { RowTotalCell } from "@/components/project/estimate/_parts/RowTotalCell"
 const AMBIGUITY_KW = ["pomocnicze","dodatkowe","inne","pozostałe","materiały pomocnicze","różne","drobnica","nieprzewidziane","rezerwa","itp","itd"];
 const isAmbiguousItem = (name: string) => { const l = name.toLowerCase(); return AMBIGUITY_KW.some(k => l === k || l.includes(k)); };
 
+// ─── Labor/Material child detection (for Tylko Robocizna filter) ──────────────
+const LABOR_KEYWORDS = [
+  "montaz", "montaż", "demontaz", "demontaż",
+  "bruzdowanie", "bruzda",
+  "ukladanie", "układanie", "ulozenie", "ułożenie",
+  "podlaczenie", "podłączenie",
+  "kucie", "wiercenie", "przewiercenie",
+  "okablowanie",
+  "instalacja", "instalowanie",
+  "mocowanie", "zarabianie",
+  "pomiar", "badanie", "testowanie", "sprawdzenie",
+  "trasowanie", "wciaganie", "wciąganie",
+  "przygotowanie", "wykonanie",
+];
+function isLaborChild(item: ProjectItem): boolean {
+  const meta = item.metadata as Record<string, unknown> | null;
+  if (meta?.childType === "robocizna") return true;
+  if (meta?.childType === "material") return false;
+  const n = item.name.toLowerCase();
+  return LABOR_KEYWORDS.some((kw) => n.includes(kw));
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface EditingState {
@@ -180,6 +202,11 @@ export const EstimateRow = React.memo(function EstimateRow({
   const brainBill  = brainCtx?.bills.get(item.id);
   const { showHints } = useGlobalSettings();
   const { multiplier: knrMultiplier } = useKnrMultiplier();
+
+  // ── Self-filter: hide material children when "Tylko Robocizna" is ON ──
+  if (isAssemblyChild && materialsOwnedByCustomer && !isLaborChild(item)) {
+    return null;
+  }
 
   const {
     materialUnitBase, laborUnitBase, materialTotalBase, laborTotalBase,
