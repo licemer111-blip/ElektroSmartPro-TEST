@@ -90,7 +90,7 @@ export function NormDivergenceBanner({ items }: NormDivergenceBannerProps) {
           </div>
           <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">
             Weryfikuj te normy przed ostatecznym zatwierdzeniem kosztorysu.
-            Możesz zresetować normę klikając ikonę 🛡 w kolumnie r-g.
+            Możesz zresetować normę klikając ikonę ↺ (reset) w kolumnie r-g obok wartości rbh.
           </p>
         </div>
       )}

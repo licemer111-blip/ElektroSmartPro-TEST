@@ -497,12 +497,17 @@ export function RowRgCell({
     });
   };
 
+  const sn = item.suggested_norm;
+  const ln = item.labor_norm;
+  const isDivergent = !!(sn && ln && sn > 0 && ln > 0 && (ln / sn < 0.33 || ln / sn > 3.0));
+  const showResetBtn = item.norm_protected || isDivergent;
+
   return (
     <TableCell className={`text-right min-w-[90px] w-[90px] ${singleCellBorderClass} ${colorMode ? "bg-blue-50/40 dark:bg-blue-950/10" : ""}`}>
       {item.confidence_level !== "manual" && (assemblyNorm != null ? assemblyNorm > 0 : (item.labor_norm != null && item.labor_norm > 0)) ? (
         <div className="space-y-0.5">
           <div className="flex items-center gap-1">
-            {item.norm_protected && (
+            {showResetBtn && (
               <TooltipProvider delayDuration={200}>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -512,21 +517,27 @@ export function RowRgCell({
                       className={`shrink-0 rounded transition-colors ${
                         confirmReset
                           ? "text-rose-500 dark:text-rose-400"
-                          : "text-emerald-500 hover:text-amber-500 dark:hover:text-amber-400"
+                          : isDivergent && !item.norm_protected
+                            ? "text-amber-500 hover:text-rose-500 dark:text-amber-400 dark:hover:text-rose-400"
+                            : "text-emerald-500 hover:text-amber-500 dark:hover:text-amber-400"
                       }`}
-                      title={confirmReset ? "Kliknij ponownie, aby potwierdzić" : "Norma chroniona — kliknij, aby zresetować do KNR"}
+                      title={confirmReset ? "Kliknij ponownie, aby potwierdzić" : isDivergent && !item.norm_protected ? "Norma odbiega od KNR — kliknij, aby zresetować" : "Norma chroniona — kliknij, aby zresetować do KNR"}
                     >
                       {isPending
                         ? <Loader2 className="w-2.5 h-2.5 animate-spin" />
                         : confirmReset
                           ? <RotateCcw className="w-2.5 h-2.5" />
-                          : <ShieldCheck className="w-2.5 h-2.5" />}
+                          : item.norm_protected
+                            ? <ShieldCheck className="w-2.5 h-2.5" />
+                            : <RotateCcw className="w-2.5 h-2.5" />}
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="left" className="text-xs max-w-[180px]">
                     {confirmReset
                       ? "⚠️ Kliknij ponownie — norma zostanie usunięta i odblokowana"
-                      : "Norma chroniona. Kliknij, aby zresetować do KNR"}
+                      : isDivergent && !item.norm_protected
+                        ? `Norma ${ln && sn ? (ln / sn > 1 ? `×${(ln/sn).toFixed(1)} wyższa` : `×${(sn/ln!).toFixed(1)} niższa`) : ""} od bazy KNR. Kliknij, aby zresetować do KNR (${sn?.toFixed(3)} rbh)`
+                        : "Norma chroniona. Kliknij, aby zresetować do KNR"}
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
