@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useTransition } from "react";
-import { Zap, Hammer, Package, ArrowRight, Info, Pencil, RotateCcw, Check, X, Loader2 } from "lucide-react";
+import { Zap, Hammer, Package, ArrowRight, Info, Pencil, RotateCcw, Check, X, Loader2, ZapOff } from "lucide-react";
 import {
   expandToAssembly,
   SECTOR_LABELS,
@@ -27,6 +27,12 @@ interface SmartAssemblyPanelProps {
   initialOverrides?: AssemblyOverrides | null;
   /** When true, material rows are hidden (Tylko Robocizna mode). */
   materialsOwnedByCustomer?: boolean;
+  /** Whether smart assembly template is currently disabled for this item. */
+  isSmartDisabled?: boolean;
+  /** Called to toggle smart assembly on/off. */
+  onToggleSmartDisabled?: () => void;
+  /** Whether toggle action is pending. */
+  isTogglePending?: boolean;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -41,6 +47,9 @@ export function SmartAssemblyPanel({
   projectId,
   initialOverrides,
   materialsOwnedByCustomer = false,
+  isSmartDisabled = false,
+  onToggleSmartDisabled,
+  isTogglePending = false,
 }: SmartAssemblyPanelProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [draftOverrides, setDraftOverrides] = useState<AssemblyOverrides>(initialOverrides ?? {});
@@ -407,16 +416,39 @@ export function SmartAssemblyPanel({
             <p className="text-[9px] text-slate-400 dark:text-slate-500 leading-tight flex-1">
               Formuła: Σ(RBH × KNR×{knrMultiplier.toFixed(2)} × ilość). Stawka: {laborRate} PLN/rbh.
             </p>
-            {canEdit && (
-              <button
-                onClick={() => { setDraftOverrides(initialOverrides ?? {}); setIsEditing(true); }}
-                className="flex items-center gap-1 px-2 py-1 rounded border border-orange-300 dark:border-orange-700 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/40 text-[10px] font-semibold transition-colors flex-shrink-0"
-                title="Edytuj skład zestawu"
-              >
-                <Pencil className="w-2.5 h-2.5" />
-                Edytuj
-              </button>
-            )}
+            <div className="flex items-center gap-1 flex-shrink-0">
+              {canEdit && onToggleSmartDisabled && (
+                <button
+                  onClick={onToggleSmartDisabled}
+                  disabled={isTogglePending}
+                  className={`flex items-center gap-1 px-2 py-1 rounded border text-[10px] font-semibold transition-colors disabled:opacity-50 ${
+                    isSmartDisabled
+                      ? "border-emerald-300 dark:border-emerald-700 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
+                      : "border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:border-red-300 dark:hover:border-red-700"
+                  }`}
+                  title={isSmartDisabled ? "Włącz szablon AI dla tej pozycji" : "Wyłącz szablon AI — pozycja stanie się zwykłą pozycją z ceną ręczną"}
+                >
+                  {isTogglePending ? (
+                    <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                  ) : isSmartDisabled ? (
+                    <Zap className="w-2.5 h-2.5" />
+                  ) : (
+                    <ZapOff className="w-2.5 h-2.5" />
+                  )}
+                  {isSmartDisabled ? "Włącz AI" : "Wyłącz AI"}
+                </button>
+              )}
+              {canEdit && (
+                <button
+                  onClick={() => { setDraftOverrides(initialOverrides ?? {}); setIsEditing(true); }}
+                  className="flex items-center gap-1 px-2 py-1 rounded border border-orange-300 dark:border-orange-700 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/40 text-[10px] font-semibold transition-colors"
+                  title="Edytuj skład zestawu"
+                >
+                  <Pencil className="w-2.5 h-2.5" />
+                  Edytuj
+                </button>
+              )}
+            </div>
           </div>
         )}
       </div>

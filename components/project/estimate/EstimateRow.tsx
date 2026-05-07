@@ -186,6 +186,23 @@ export const EstimateRow = React.memo(function EstimateRow({
   const [zapOpen, setZapOpen] = useState(false);
   // Transition for virtual row delete
   const [isDeletePending, startDeleteTransition] = useTransition();
+  // Transition for smart assembly toggle
+  const [isSmartTogglePending, startSmartToggleTransition] = useTransition();
+
+  const isSmartDisabled = !!(item.assembly_overrides as AssemblyOverrides | null)?.__smart_disable?.disabled;
+
+  function handleToggleSmartDisabled() {
+    const existing = (item.assembly_overrides ?? {}) as AssemblyOverrides;
+    startSmartToggleTransition(async () => {
+      if (isSmartDisabled) {
+        const next = { ...existing };
+        delete next["__smart_disable"];
+        await saveAssemblyOverrides(item.project_id, item.id, Object.keys(next).length > 0 ? next : null);
+      } else {
+        await saveAssemblyOverrides(item.project_id, item.id, { ...existing, "__smart_disable": { disabled: true } });
+      }
+    });
+  }
 
   function handleDeleteVirtualRow(label: string) {
     const existing = (item.assembly_overrides ?? {}) as AssemblyOverrides;
@@ -259,6 +276,7 @@ export const EstimateRow = React.memo(function EstimateRow({
     + (displayItem.final_labor_price ?? displayItem.labor_price ?? 0);
   const isAssemblyOverride =
     !!_scmCheck &&
+    !isSmartDisabled &&
     _rawItemTotal > 0 &&
     (_scmCheck.category === "ZESTAW" || _scmCheck.category === "BIALY_MONTAZ" ||
      _scmCheck.category === "TRASY"  || _scmCheck.category === "ROZDZIELNICA");
@@ -384,7 +402,7 @@ export const EstimateRow = React.memo(function EstimateRow({
               </button>
             )}
             {/* Virtual expand for AI-triggered ZESTAW (template-driven, no real DB children) */}
-            {isAssemblyOverride && !isAssemblyChild && !onToggleAssemblyCollapse && (
+            {isAssemblyOverride && !isSmartDisabled && !isAssemblyChild && !onToggleAssemblyCollapse && (
               <button
                 onClick={(e) => { e.stopPropagation(); setIsVirtualExpanded(v => !v); }}
                 className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1.5 py-0.5 rounded border transition-colors flex-shrink-0 ml-1"
@@ -439,7 +457,9 @@ export const EstimateRow = React.memo(function EstimateRow({
                 const scm = detectSmartContext(item.name);
                 if (scm.category === "NONE") return null;
                 const hasExpansion = scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY";
-                const colorCls = {
+                const colorCls = isSmartDisabled
+                  ? "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 ring-slate-300 dark:ring-slate-600 hover:bg-slate-200 dark:hover:bg-slate-700"
+                  : {
                   ZESTAW:      "bg-orange-100 dark:bg-orange-900/60 text-orange-600 dark:text-orange-400 ring-orange-300 dark:ring-orange-700 hover:bg-orange-200 dark:hover:bg-orange-800/80 hover:shadow-[0_0_6px_rgba(234,88,12,0.45)]",
                   BIALY_MONTAZ:"bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 ring-emerald-300 dark:ring-emerald-700 hover:bg-emerald-200 dark:hover:bg-emerald-800/80",
                   TRASY:       "bg-cyan-100 dark:bg-cyan-900/60 text-cyan-600 dark:text-cyan-400 ring-cyan-300 dark:ring-cyan-700 hover:bg-cyan-200 dark:hover:bg-cyan-800/80",
@@ -489,6 +509,9 @@ export const EstimateRow = React.memo(function EstimateRow({
                         projectId={item.project_id}
                         initialOverrides={item.assembly_overrides ?? null}
                         materialsOwnedByCustomer={materialsOwnedByCustomer}
+                        isSmartDisabled={isSmartDisabled}
+                        onToggleSmartDisabled={handleToggleSmartDisabled}
+                        isTogglePending={isSmartTogglePending}
                       />
                     </PopoverContent>
                   </Popover>
