@@ -48,6 +48,36 @@ export function VersionChecker() {
   }, []);
 
   useEffect(() => {
+    // ─── Instant catch for stale Server Actions ────────────────────────────────
+    // When a new deployment happens, all Server Action hashes change.
+    // Users with old tabs get "Failed to find Server Action" immediately on
+    // their next interaction — long before the 5-min polling fires.
+    // We catch it here and show the reload toast right away.
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      const msg: string =
+        (event?.reason as Error)?.message ??
+        String(event?.reason ?? '');
+      if (
+        msg.includes('Failed to find Server Action') ||
+        msg.includes('Server Action') && msg.includes('not found')
+      ) {
+        if (hasNotified.current) return;
+        hasNotified.current = true;
+        toast('Nowa wersja aplikacji', {
+          description: 'Strona wymaga odświeżenia — proszę załadować ponownie.',
+          action: {
+            label: 'Odśwież teraz',
+            onClick: () => hardReload(),
+          },
+          duration: Infinity,
+          icon: <RefreshCcw className="h-4 w-4" />,
+        });
+      }
+    };
+
+    window.addEventListener('unhandledrejection', handleUnhandledRejection);
+
+    // ─── Polling version check ─────────────────────────────────────────────────
     const currentVersion = process.env.NEXT_PUBLIC_APP_VERSION;
 
     // Skip if we just reloaded (prevent loops)
@@ -59,7 +89,7 @@ export function VersionChecker() {
         ? `${window.location.pathname}?${urlParams.toString()}`
         : window.location.pathname;
       window.history.replaceState({}, '', cleanUrl);
-      return; // Don't check version on this load — we just reloaded
+      return () => window.removeEventListener('unhandledrejection', handleUnhandledRejection);
     }
 
     const checkVersion = async () => {
@@ -100,6 +130,7 @@ export function VersionChecker() {
     return () => {
       clearTimeout(initialTimeout);
       clearInterval(intervalId);
+      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
     };
   }, [hardReload]);
 
