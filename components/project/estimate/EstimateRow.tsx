@@ -204,6 +204,9 @@ export const EstimateRow = React.memo(function EstimateRow({
   const { multiplier: knrMultiplier } = useKnrMultiplier();
 
   // ── Self-filter: hide material children when "Tylko Robocizna" is ON ──
+  if (isAssemblyChild) {
+    console.error(`[FILTER] "${item.name}" | isChild=${isAssemblyChild} | matOwned=${materialsOwnedByCustomer} | isLabor=${isLaborChild(item)} | parentId=${item.parent_assembly_id}`);
+  }
   if (isAssemblyChild && materialsOwnedByCustomer && !isLaborChild(item)) {
     return null;
   }
