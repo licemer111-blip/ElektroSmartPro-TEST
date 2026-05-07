@@ -13,7 +13,7 @@ const BentoFeaturesSection = dynamic(() => import("@/components/landing/BentoFea
 const FaqSection         = dynamic(() => import("@/components/landing/FaqSection").then(m => ({ default: m.FaqSection })));
 const RoadmapSection     = dynamic(() => import("@/components/landing/RoadmapSection").then(m => ({ default: m.RoadmapSection })));
 const FooterSection      = dynamic(() => import("@/components/landing/FooterSection").then(m => ({ default: m.FooterSection })));
-const StickyCTA          = dynamic(() => import("@/components/landing/sticky-cta").then(m => ({ default: m.StickyCTA })), { ssr: false });
+const StickyCTA          = dynamic(() => import("@/components/landing/sticky-cta").then(m => ({ default: m.StickyCTA })));
 
 export const revalidate = 3600; // ISR: regenerate landing page once per hour
 

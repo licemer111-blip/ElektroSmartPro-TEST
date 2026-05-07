@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const PDFDemoButton = dynamic(
   () => import("@/components/landing/pdf-demo-button").then(m => ({ default: m.PDFDemoButton })),
-  { ssr: false, loading: () => <div className="h-12 sm:h-14 w-40 rounded-xl bg-slate-200 dark:bg-slate-700 animate-pulse" /> }
+  { loading: () => <div className="h-12 sm:h-14 w-40 rounded-xl bg-slate-200 dark:bg-slate-700 animate-pulse" /> }
 );
 
 interface HeroSectionProps {
