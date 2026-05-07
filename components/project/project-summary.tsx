@@ -107,11 +107,12 @@ export function ProjectSummary({
       // Assembly override: only for AI-priced items (stored price > 0). Zero-price
       // items stay at 0 so "Uzupełnij" badge shows correctly — consistent with EstimateRow.
       const hasStoredPrice = effectiveLaborPrice > 0 || effectiveMaterialPrice > 0;
-      if (!item.is_assembly_child && !isManual && !parentIds.has(item.id) && hasStoredPrice) {
+      const isSmartDisabled = (item.assembly_overrides as Record<string, { disabled?: boolean }> | null)?.__smart_disable?.disabled === true;
+      if (!isSmartDisabled && !item.is_assembly_child && !isManual && !parentIds.has(item.id) && hasStoredPrice) {
         const scm = detectSmartContext(item.name);
         if (scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY" || scm.category === "ROZDZIELNICA") {
           const expansion = expandToAssembly(item.name, item.quantity, sector, projectLaborRate, knrMultiplier, item.assembly_overrides ?? undefined);
-          if (expansion.triggered) {
+          if (expansion.triggered && (expansion.totalLaborPLN > 0 || expansion.totalMaterialPLN > 0)) {
             // totalLaborPLN = totalRBH × projectLaborRate (base, no region, knrMult already inside)
             rawLaborBase += expansion.totalLaborPLN;
             baseLaborTotal += expansion.totalLaborPLN * regionModifier * labMarkupMult;

@@ -290,11 +290,14 @@ export const EstimateRow = React.memo(function EstimateRow({
       const qty = item.quantity || 1;
       const effLab = expansion.totalLaborPLN * regionModifier * adjustmentMultiplier;
       const effMat = materialsOwnedByCustomer ? 0 : expansion.totalMaterialPLN * adjustmentMultiplier;
-      laborTotal         = roundPrice(effLab);
-      materialTotal      = roundPrice(effMat);
-      rowTotal           = roundPrice(effLab + effMat);
-      laborUnit          = roundPrice(effLab / qty);
-      materialUnit       = roundPrice(effMat / qty);
+      // B2: If all items were manually disabled, expansion gives 0. Fall back to DB prices.
+      if (effLab + effMat > 0) {
+        laborTotal         = roundPrice(effLab);
+        materialTotal      = roundPrice(effMat);
+        rowTotal           = roundPrice(effLab + effMat);
+        laborUnit          = roundPrice(effLab / qty);
+        materialUnit       = roundPrice(effMat / qty);
+      }
       assemblyRBHPerUnit = qty > 0 ? expansion.totalRBH / qty : null;
     }
   }
