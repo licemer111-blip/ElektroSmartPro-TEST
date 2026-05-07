@@ -417,6 +417,14 @@ export function EstimateTable({
                         {(!groupBySection || !isCollapsed) && (
                           <>
                             {renderItemRow(topItem, topIdx + 1, assemblyChildren)}
+                            {/* DEBUG: visible diagnostic — remove after verification */}
+                            {assemblyChildren.length > 0 && !collapsedAssemblies.has(topItem.id) && (
+                              <TableRow>
+                                <TableCell colSpan={99} className="bg-red-900 text-white text-xs py-1 px-2">
+                                  🔍 DEBUG: matOwned={String(materialsOwnedByCustomer)} | children={assemblyChildren.length} | laborChildren={assemblyChildren.filter(isLaborAssemblyChild).length} | names=[{assemblyChildren.map(c => c.name.slice(0,15)).join(", ")}]
+                                </TableCell>
+                              </TableRow>
+                            )}
                             {!collapsedAssemblies.has(topItem.id) && assemblyChildren
                               .filter((child) => {
                                 if (!materialsOwnedByCustomer) return true;
