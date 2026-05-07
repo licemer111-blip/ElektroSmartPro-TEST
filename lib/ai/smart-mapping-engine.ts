@@ -39,6 +39,7 @@ export interface AssemblyItemOverride {
   qtyMultiplier?: number;
   materialPricePerUnit?: number;
   rbhPerUnit?: number;
+  disabled?: boolean;
 }
 export type AssemblyOverrides = Record<string, AssemblyItemOverride>;
 
@@ -526,8 +527,10 @@ export function expandToAssembly(
   const template = TEMPLATE_INDEX[key];
   if (!template) return { triggered: false };
 
-  // Compute expanded items (apply per-item overrides if present)
-  const expandedItems: ExpandedAssemblyItem[] = template.items.map((def) => {
+  // Compute expanded items (apply per-item overrides if present; skip disabled)
+  const expandedItems: ExpandedAssemblyItem[] = template.items.filter((def) => {
+    return !(overrides?.[def.label]?.disabled === true);
+  }).map((def) => {
     const ov = overrides?.[def.label];
     const effQtyMult  = ov?.qtyMultiplier        ?? def.qtyMultiplier;
     const effRbhUnit  = ov?.rbhPerUnit            ?? def.rbhPerUnit;

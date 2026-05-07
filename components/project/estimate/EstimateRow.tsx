@@ -477,6 +477,7 @@ export const EstimateRow = React.memo(function EstimateRow({
                         itemId={item.id}
                         projectId={item.project_id}
                         initialOverrides={item.assembly_overrides ?? null}
+                        materialsOwnedByCustomer={materialsOwnedByCustomer}
                       />
                     </PopoverContent>
                   </Popover>

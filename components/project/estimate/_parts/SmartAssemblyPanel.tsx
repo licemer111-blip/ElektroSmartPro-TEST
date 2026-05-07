@@ -25,6 +25,8 @@ interface SmartAssemblyPanelProps {
   projectId?: string;
   /** Existing overrides from project_items.assembly_overrides. */
   initialOverrides?: AssemblyOverrides | null;
+  /** When true, material rows are hidden (Tylko Robocizna mode). */
+  materialsOwnedByCustomer?: boolean;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -38,6 +40,7 @@ export function SmartAssemblyPanel({
   itemId,
   projectId,
   initialOverrides,
+  materialsOwnedByCustomer = false,
 }: SmartAssemblyPanelProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [draftOverrides, setDraftOverrides] = useState<AssemblyOverrides>(initialOverrides ?? {});
@@ -45,8 +48,10 @@ export function SmartAssemblyPanel({
   const [isPending, startTransition] = useTransition();
 
   const result = expandToAssembly(itemName, quantity, sector, laborRate, knrMultiplier, isEditing ? draftOverrides : (initialOverrides ?? undefined));
+  // In edit mode, get FULL template (without disabled filter) so deleted items can be restored
+  const fullResult = expandToAssembly(itemName, quantity, sector, laborRate, knrMultiplier, undefined);
 
-  if (!result.triggered) {
+  if (!result.triggered || !fullResult.triggered) {
     return (
       <div className="p-3 text-xs text-slate-500 flex items-center gap-1.5">
         <Info className="w-3.5 h-3.5 flex-shrink-0" />
@@ -56,6 +61,7 @@ export function SmartAssemblyPanel({
   }
 
   const expansion = result as SmartExpansionResult;
+  const fullExpansion = fullResult as SmartExpansionResult;
   const rbhPerPoint = quantity > 0 ? expansion.totalRBH / quantity : expansion.totalRBH;
   const unitLabel = expansion.context.category === "TRASY" ? "mb" : expansion.context.category === "ROZDZIELNICA" ? "kpl" : "pkt";
   const canEdit = !!itemId && !!projectId;
@@ -78,10 +84,10 @@ export function SmartAssemblyPanel({
   function handleSave() {
     if (!canEdit) return;
     setSaveError(null);
-    // Remove entries where all fields are undefined (clean up)
+    // Remove entries where all fields are undefined (clean up); keep disabled=true entries
     const cleaned: AssemblyOverrides = {};
     for (const [lbl, ov] of Object.entries(draftOverrides)) {
-      if (ov.qtyMultiplier !== undefined || ov.materialPricePerUnit !== undefined || ov.rbhPerUnit !== undefined) {
+      if (ov.disabled === true || ov.qtyMultiplier !== undefined || ov.materialPricePerUnit !== undefined || ov.rbhPerUnit !== undefined) {
         cleaned[lbl] = ov;
       }
     }
@@ -173,7 +179,7 @@ export function SmartAssemblyPanel({
         {!isEditing ? (
           /* ─── VIEW MODE ─── */
           <div className="space-y-0.5">
-            {expansion.items.map((it, idx) => (
+            {expansion.items.filter(it => !materialsOwnedByCustomer || it.isLabor).map((it, idx) => (
               <div
                 key={idx}
                 className={`flex items-center gap-2 py-1 px-1.5 rounded ${
@@ -214,16 +220,19 @@ export function SmartAssemblyPanel({
         ) : (
           /* ─── EDIT MODE ─── */
           <div className="space-y-1">
-            {expansion.items.map((it, idx) => {
+            {fullExpansion.items.filter(it => !materialsOwnedByCustomer || it.isLabor).map((it, idx) => {
               const def = templateDefaults[it.label];
-              const isOv = draftOverrides[it.label] !== undefined;
+              const isDisabled = draftOverrides[it.label]?.disabled === true;
+              const isOv = draftOverrides[it.label] !== undefined && !isDisabled;
               return (
                 <div
                   key={idx}
                   className={`rounded border px-2 py-1.5 ${
-                    it.isLabor
-                      ? "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800"
-                      : "bg-orange-50 dark:bg-orange-950/20 border-orange-200 dark:border-orange-800"
+                    isDisabled
+                      ? "bg-slate-100 dark:bg-slate-800/40 border-slate-300 dark:border-slate-700 opacity-50"
+                      : it.isLabor
+                        ? "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800"
+                        : "bg-orange-50 dark:bg-orange-950/20 border-orange-200 dark:border-orange-800"
                   } ${isOv ? "ring-1 ring-blue-400 dark:ring-blue-600" : ""}`}
                 >
                   <div className="flex items-center gap-1 mb-1">
@@ -232,10 +241,12 @@ export function SmartAssemblyPanel({
                     ) : (
                       <Package className="w-2.5 h-2.5 text-orange-500 dark:text-orange-400 flex-shrink-0" />
                     )}
-                    <span className="font-medium text-slate-700 dark:text-slate-300 truncate flex-1 min-w-0">
+                    <span className={`font-medium truncate flex-1 min-w-0 ${
+                      isDisabled ? "line-through text-slate-400 dark:text-slate-500" : "text-slate-700 dark:text-slate-300"
+                    }`}>
                       {it.label}
                     </span>
-                    {isOv && (
+                    {isDisabled ? (
                       <button
                         onClick={() => {
                           setDraftOverrides(prev => {
@@ -244,14 +255,39 @@ export function SmartAssemblyPanel({
                             return next;
                           });
                         }}
-                        className="text-slate-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
-                        title="Przywróć domyślne dla tej pozycji"
+                        className="text-slate-400 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors"
+                        title="Przywróć pozycję"
                       >
                         <RotateCcw className="w-2.5 h-2.5" />
                       </button>
+                    ) : (
+                      <>
+                        {isOv && (
+                          <button
+                            onClick={() => {
+                              setDraftOverrides(prev => {
+                                const next = { ...prev };
+                                delete next[it.label];
+                                return next;
+                              });
+                            }}
+                            className="text-slate-400 hover:text-amber-500 dark:hover:text-amber-400 transition-colors"
+                            title="Przywróć domyślne dla tej pozycji"
+                          >
+                            <RotateCcw className="w-2.5 h-2.5" />
+                          </button>
+                        )}
+                        <button
+                          onClick={() => setDraftOverrides(prev => ({ ...prev, [it.label]: { ...prev[it.label], disabled: true } }))}
+                          className="text-slate-300 hover:text-red-500 dark:text-slate-600 dark:hover:text-red-400 transition-colors"
+                          title="Usuń tę pozycję z zestawu"
+                        >
+                          <X className="w-2.5 h-2.5" />
+                        </button>
+                      </>
                     )}
                   </div>
-                  <div className="flex gap-2">
+                  {!isDisabled && <div className="flex gap-2">
                     {/* qty multiplier: editable for all items */}
                     <div className="flex-1">
                       <label className="text-[9px] text-slate-400 dark:text-slate-500 block mb-0.5">
@@ -301,7 +337,7 @@ export function SmartAssemblyPanel({
                         />
                       </div>
                     )}
-                  </div>
+                  </div>}
                 </div>
               );
             })}
@@ -325,7 +361,7 @@ export function SmartAssemblyPanel({
             {expansion.totalLaborPLN.toFixed(2)} zł rob.
           </span>
         </div>
-        {expansion.totalMaterialPLN > 0 && (
+        {!materialsOwnedByCustomer && expansion.totalMaterialPLN > 0 && (
           <div className="flex justify-between items-center">
             <span className="text-slate-500 dark:text-slate-400">Materiały szacunkowe:</span>
             <span className="font-semibold text-orange-600 dark:text-orange-400">
