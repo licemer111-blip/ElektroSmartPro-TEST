@@ -794,11 +794,17 @@ export const EstimateRow = React.memo(function EstimateRow({
         style={{ transform: `translateY(${compactView ? -1 : -2}px)` }}
       >
         <TableCell colSpan={20} className="p-0 px-2 pb-2.5 border-b border-slate-200 dark:border-slate-700">
-          <div className="rounded-b-lg border border-t-0 border-blue-400/60 dark:border-blue-600 shadow-lg overflow-hidden">
+          <div className={`rounded-b-lg border border-t-0 shadow-lg overflow-hidden ${isAssemblyChild ? 'border-violet-400/60 dark:border-violet-600' : 'border-blue-400/60 dark:border-blue-600'}`}>
             {/* Header bar */}
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-700 dark:to-blue-800">
+            <div className={`flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r ${
+              isAssemblyChild
+                ? 'from-violet-600 to-purple-700 dark:from-violet-700 dark:to-purple-800'
+                : 'from-blue-600 to-blue-700 dark:from-blue-700 dark:to-blue-800'
+            }`}>
               <PenLine className="w-3.5 h-3.5 text-white/80 flex-shrink-0" />
-              <span className="text-[11px] font-medium text-white/90 truncate flex-1">Edycja pozycji</span>
+              <span className="text-[11px] font-medium text-white/90 truncate flex-1">
+                {isAssemblyChild ? `↳ Składnik zestawu: ${item.name.length > 35 ? item.name.slice(0, 35) + '…' : item.name}` : 'Edycja pozycji'}
+              </span>
               <button type="button" onClick={onSaveEdit}
                 className="flex items-center gap-1 px-3 py-1 rounded-md bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold transition-colors">
                 <Check className="w-3 h-3" />Zapisz
@@ -925,14 +931,27 @@ export const EstimateRow = React.memo(function EstimateRow({
                   </div>
                   {showMaterialsColumn && !materialsOwnedByCustomer ? (
                     <div className="space-y-1">
-                      <label className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 block">Materiał (zł/jm.)</label>
+                      <label className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 block">
+                        Materiał — cena/jm. netto
+                      </label>
                       {showPrices ? (
-                        <Input type="number" step="0.01" min="0"
-                          value={editingState!.materialPrice}
-                          onChange={(e) => onEditingChange({ ...editingState!, materialPrice: e.target.value })}
-                          className="h-9 text-sm text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-                          placeholder="0.00" onKeyDown={handleKeyDown}
-                        />
+                        <>
+                          <Input type="number" step="0.01" min="0"
+                            value={editingState!.materialPrice}
+                            onChange={(e) => onEditingChange({ ...editingState!, materialPrice: e.target.value })}
+                            className="h-9 text-sm text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                            placeholder="0.00" onKeyDown={handleKeyDown}
+                          />
+                          {(() => {
+                            const u = parseFloat(editingState!.materialPrice) || 0;
+                            const q = parseFloat(editingState!.quantity) || 0;
+                            return u > 0 && q > 0 ? (
+                              <div className="text-[9px] text-amber-600 dark:text-amber-400 text-right font-medium">
+                                {q} × {u.toFixed(2)} = <strong>{(q * u).toFixed(2)} zł</strong>
+                              </div>
+                            ) : null;
+                          })()}
+                        </>
                       ) : (
                         <div className="h-9 flex items-center justify-end border rounded-md px-3 bg-muted text-sm font-medium opacity-40 select-none tracking-widest">***</div>
                       )}
@@ -940,14 +959,27 @@ export const EstimateRow = React.memo(function EstimateRow({
                   ) : <div />}
                   {showLaborColumn ? (
                     <div className="space-y-1">
-                      <label className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 block">Robocizna (zł/jm.)</label>
+                      <label className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 block">
+                        Robocizna — stawka/jm. netto
+                      </label>
                       {showPrices ? (
-                        <Input type="number" step="0.01" min="0"
-                          value={editingState!.laborPrice}
-                          onChange={(e) => onEditingChange({ ...editingState!, laborPrice: e.target.value })}
-                          className="h-9 text-sm text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-                          placeholder="0.00" onKeyDown={handleKeyDown}
-                        />
+                        <>
+                          <Input type="number" step="0.01" min="0"
+                            value={editingState!.laborPrice}
+                            onChange={(e) => onEditingChange({ ...editingState!, laborPrice: e.target.value })}
+                            className="h-9 text-sm text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                            placeholder="0.00" onKeyDown={handleKeyDown}
+                          />
+                          {(() => {
+                            const u = parseFloat(editingState!.laborPrice) || 0;
+                            const q = parseFloat(editingState!.quantity) || 0;
+                            return u > 0 && q > 0 ? (
+                              <div className="text-[9px] text-emerald-600 dark:text-emerald-400 text-right font-medium">
+                                {q} × {u.toFixed(2)} = <strong>{(q * u).toFixed(2)} zł</strong>
+                              </div>
+                            ) : null;
+                          })()}
+                        </>
                       ) : (
                         <div className="h-9 flex items-center justify-end border rounded-md px-3 bg-muted text-sm font-medium opacity-40 select-none tracking-widest">***</div>
                       )}
