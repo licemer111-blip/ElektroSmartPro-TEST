@@ -10,7 +10,7 @@ import { DocumentationDialog } from "@/components/project/project-documentation-
 import { UnlockPdfButton } from "@/components/billing/unlock-pdf-button";
 import { StartTrialButton } from "@/components/billing/start-trial-button";
 import { TrialStatusBadge } from "@/components/billing/trial-status-badge";
-import { hasUsedTrial, isTrialActive } from "@/lib/auth/entitlements";
+import { hasUsedTrial, isTrialActive, TRIAL_DURATION_DAYS } from "@/lib/auth/entitlements";
 import { PAY_PER_EXPORT_ENABLED } from "@/lib/config/tier-limits";
 import { useState as useLocalState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -202,7 +202,7 @@ export function SummaryExportPanel({
                 <span className="font-semibold">Tryb Demo:</span> PDF zostanie oznaczony znakiem wodnym „DEMO”.
                 {PAY_PER_EXPORT_ENABLED
                   ? " Aby wysłać czysty PDF do klienta — aktywuj darmowy trial lub kup jednorazowy eksport."
-                  : " Aby wysłać czysty PDF do klienta — aktywuj darmowy 7-dniowy trial PRO."}
+                  : ` Aby wysłać czysty PDF do klienta — aktywuj darmowy ${TRIAL_DURATION_DAYS}-dniowy trial PRO.`}
               </p>
             </div>
             {/* Trial button — only shown to users who have NEVER started a trial */}

@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 
 interface OnboardingTourProps {
   onboardingCompleted?: boolean;
-  hasCompanyName?: boolean;
 }
 
 const COLOR_CLASSES = {
@@ -56,20 +55,33 @@ const COLOR_CLASSES = {
     ring: "ring-violet-400/70",
     spotlight: "rgba(139,92,246,0.25)",
   },
+  rose: {
+    gradient: "from-rose-500 to-pink-600",
+    dot: "bg-rose-500",
+    btn: "bg-rose-600 hover:bg-rose-700 text-white",
+    ring: "ring-rose-400/70",
+    spotlight: "rgba(244,63,94,0.25)",
+  },
+  teal: {
+    gradient: "from-teal-500 to-cyan-600",
+    dot: "bg-teal-500",
+    btn: "bg-teal-600 hover:bg-teal-700 text-white",
+    ring: "ring-teal-400/70",
+    spotlight: "rgba(20,184,166,0.25)",
+  },
 } as const;
 
-export function OnboardingTour({ onboardingCompleted, hasCompanyName }: OnboardingTourProps) {
+export function OnboardingTour({ onboardingCompleted }: OnboardingTourProps) {
   const [active, setActive] = useState(false);
   const [step, setStep] = useState(0);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
 
   useEffect(() => {
     if (onboardingCompleted) return;
-    if (!hasCompanyName) return;
     if (typeof window !== "undefined" && sessionStorage.getItem("onboarding_dismissed")) return;
-    const timer = setTimeout(() => setActive(true), 2500);
+    const timer = setTimeout(() => setActive(true), 1800);
     return () => clearTimeout(timer);
-  }, [onboardingCompleted, hasCompanyName]);
+  }, [onboardingCompleted]);
 
   useEffect(() => {
     if (!active) return;
@@ -208,7 +220,7 @@ export function OnboardingTour({ onboardingCompleted, hasCompanyName }: Onboardi
           <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-1.5 leading-snug">
             {currentStep.title}
           </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed whitespace-pre-line">
             {currentStep.description}
           </p>
           {currentStep.ctaLabel && currentStep.ctaHref && (

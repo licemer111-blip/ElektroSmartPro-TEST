@@ -17,7 +17,7 @@ interface StartTrialButtonProps {
 }
 
 /**
- * v2.1 UI entry point for activating the 7-day free PRO trial.
+ * v2.1 UI entry point for activating the 1-day free PRO trial.
  *
  * Flow:
  *   1. POST /api/billing/start-trial
@@ -48,7 +48,7 @@ export function StartTrialButton({
         toast({
           title: "Trial już wykorzystany",
           description:
-            data?.error ?? "Twój trial 7-dniowy został już wykorzystany. Aktywuj PRO (159 zł/m-c), aby odblokować AI i czysty PDF.",
+            data?.error ?? `Twój trial ${TRIAL_DURATION_DAYS}-dniowy został już wykorzystany. Aktywuj PRO (159 zł/m-c), aby odblokować AI i czysty PDF.`,
           variant: "destructive",
         });
         return;
@@ -112,7 +112,7 @@ export function StartTrialButton({
         ) : (
           <Rocket className="w-3 h-3" />
         )}
-        <span>{loading ? "Aktywuję..." : "Trial 7 dni"}</span>
+        <span>{loading ? "Aktywuję..." : `Trial ${TRIAL_DURATION_DAYS} ${TRIAL_DURATION_DAYS === 1 ? 'dzień' : 'dni'}`}</span>
       </button>
     );
   }

@@ -13,8 +13,8 @@
  *     ✓ Pay-per-Export (29 PLN) for one-shot clean PDF
  *     ✗ AI beyond 5/mo, clean PDF, Portal Klienta, branding → PRO
  *
- *   7-DAY FREE TRIAL (no card, one-shot per account)
- *     = Full PRO for 7 days. After expiry → automatic silent downgrade to FREE.
+ *   1-DAY FREE TRIAL (no card, one-shot per account)
+ *     = Full PRO for 1 day. After expiry → automatic silent downgrade to FREE.
  *     Activated via POST /api/billing/start-trial; tracked via
  *     profiles.trial_started_at + trial_ends_at.
  *
@@ -28,7 +28,7 @@
  */
 
 /** How long a trial lasts. Change here only — propagates everywhere. */
-export const TRIAL_DURATION_DAYS = 7;
+export const TRIAL_DURATION_DAYS = 1;
 
 /** Shape of the fields we need to decide PRO entitlement. */
 export interface EntitlementProfile {

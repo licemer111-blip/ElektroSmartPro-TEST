@@ -1,19 +1,17 @@
 "use client";
 
 /**
- * BlurredPrice / BlurredSection — v2.0 (Business Model Refresh)
+ * BlurredPrice / BlurredSection — v2.1 (Iron Rule enforcement)
  *
- * HISTORICAL:
- *   v1.x: FREE users saw HARD-BLURRED prices → zero value pre-subscription.
- *         Result: users couldn't evaluate the calculator → poor conversion.
+ * Iron Rule #1: Free users MUST see BLURRED prices in summaries.
+ * CTA: "Zupgraduj, aby zobaczyć ceny"
  *
- * v2.0 (Freemium z zablokowaną monetyzacją):
- *   FREE users see FULL prices (no blur). The block is moved to the EXPORT step
- *   (PDF watermark, client portal lock, team, branding). See `lib/config/tier-limits.ts`.
- *
- *   This component is kept for backward compatibility — all call sites now render
- *   the price cleanly for both FREE and PRO. `BlurredSection` still supports a
- *   hard gate for PRO-only UI (e.g. client portal preview) where needed.
+ * BLUR logic:
+ *   - `showBadge=true` → marks a KEY summary number (SUMA NETTO, KWOTA KOŃCOWA).
+ *     Free users see blur + lock icon on these.
+ *   - `showBadge=false` (default) → line-item prices stay visible for all users
+ *     so they can evaluate the calculator before upgrading.
+ *   - `isPro=true` or `hardGate=false` → always shows the price.
  */
 
 import { cn } from "@/lib/utils";
@@ -22,27 +20,41 @@ import { Lock } from "lucide-react";
 
 interface BlurredPriceProps {
   value: number;
-  /** Kept for compatibility; no longer blurs the price when false. */
+  /** True = PRO or trial active — always show price. False = FREE user. */
   isPro?: boolean;
   className?: string;
-  /** Ignored in v2.0 — prices always visible. */
+  /**
+   * When true AND isPro=false: blurs this price (it's a key summary total).
+   * When false (default): price visible to all users (line-item prices).
+   */
   showBadge?: boolean;
   unit?: string;
-  /** Ignored in v2.0 — prices always visible. */
   showTeaser?: boolean;
   voivodeship?: string;
   projectId?: string;
 }
 
 /**
- * v2.0: Always renders the exact price. `isPro` and gating props are ignored.
- * Kept as a drop-in replacement so we do not have to touch every call site.
+ * v2.1: Blurs KEY summary totals (showBadge=true) for FREE users.
+ * Line-item prices (showBadge=false, default) remain visible to all.
  */
 export function BlurredPrice({
   value,
+  isPro = true,
   className,
   unit = "zł",
+  showBadge = false,
 }: BlurredPriceProps) {
+  if (!isPro && showBadge) {
+    return (
+      <span className={cn("inline-flex items-center gap-1.5", className)}>
+        <span className="filter blur-sm select-none pointer-events-none text-slate-400 dark:text-slate-500 font-bold">
+          {value.toFixed(2).replace(".", ",")} {unit}
+        </span>
+        <Lock className="w-3 h-3 text-slate-400 dark:text-slate-500 flex-shrink-0" />
+      </span>
+    );
+  }
   return (
     <span className={className}>
       {value.toFixed(2).replace(".", ",")} {unit}
