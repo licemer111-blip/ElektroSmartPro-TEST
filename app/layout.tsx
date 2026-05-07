@@ -190,6 +190,13 @@ export default function RootLayout({
   return (
     <html lang="pl" suppressHydrationWarning>
       <head>
+        {/* Preconnect for LCP — tells browser to open connections early */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://jbxveulddoznswyeihda.supabase.co" />
+        <link rel="dns-prefetch" href="https://upwctgdpuckreoquofiu.supabase.co" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://vitals.vercel-insights.com" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="ElektroSmart" />
