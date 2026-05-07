@@ -3,7 +3,6 @@ import React from "react";
 import { NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { checkRateLimit } from "@/lib/rate-limit";
 import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 import { flattenProjectItems } from "@/lib/utils/flatten-project-items";
 import type { ProjectItem } from "@/lib/types/database";
@@ -189,15 +188,33 @@ export async function POST(req: Request) {
     // bypasses the watermark and is consumed by the very next export.
     const showDemoWatermark = !isPro && !isDemoProject && !hasPaidUnlock;
 
-    // Rate limiting: FREE tier gets stricter caps to prevent automated scraping
-    // of the watermarked demo output. PRO keeps the generous limit.
-    const pdfLimit = isPro ? 20 : 5;
-    const pdfRl = checkRateLimit({ key: `pdf:${requestingUser.id}`, limit: pdfLimit, windowMs: 60_000 });
-    if (!pdfRl.allowed) {
-      return new NextResponse(
-        JSON.stringify({ error: "Zbyt wiele żądań PDF. Spróbuj ponownie za chwilę." }),
-        { status: 429, headers: { "Content-Type": "application/json", "Retry-After": String(Math.ceil((pdfRl.retryAfterMs ?? 60000) / 1000)) } }
-      );
+    // DB-based rate limiting (works on Vercel serverless — in-memory Map resets per invocation).
+    // Tracks exports per hour in ai_usage_stats. FREE=3/h, PRO=20/h.
+    {
+      const pdfHourLimit = isPro ? 20 : 3;
+      const windowMs = 60 * 60 * 1000;
+      const now = new Date();
+      const { data: rlStat } = await supabaseAdmin
+        .from("ai_usage_stats")
+        .select("usage_count, reset_at")
+        .eq("user_id", requestingUser.id)
+        .eq("function_name", "pdf_ratelimit")
+        .maybeSingle();
+      const rlResetAt = rlStat?.reset_at ? new Date(rlStat.reset_at) : null;
+      const withinWindow = rlResetAt && (now.getTime() - rlResetAt.getTime()) < windowMs;
+      const rlCount = withinWindow ? (rlStat?.usage_count ?? 0) : 0;
+      if (rlCount >= pdfHourLimit) {
+        return new NextResponse(
+          JSON.stringify({ error: "Zbyt wiele żądań PDF w ciągu godziny. Spróbuj ponownie za chwilę." }),
+          { status: 429, headers: { "Content-Type": "application/json", "Retry-After": "3600" } }
+        );
+      }
+      await supabaseAdmin
+        .from("ai_usage_stats")
+        .upsert(
+          { user_id: requestingUser.id, function_name: "pdf_ratelimit", usage_count: rlCount + 1, reset_at: withinWindow ? (rlStat?.reset_at ?? now.toISOString()) : now.toISOString() },
+          { onConflict: "user_id,function_name" }
+        );
     }
 
     // Fetch owner's profile for branding data (logo, company name, etc.)

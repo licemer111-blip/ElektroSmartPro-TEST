@@ -56,8 +56,10 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        // Prevent caching of HTML pages — always fetch fresh from server
-        source: '/((?!_next/static|_next/image|.*\\.(?:js|css|woff2?|ttf|eot|png|jpg|jpeg|gif|webp|avif|svg|ico)$).*)',
+        // Prevent caching only for authenticated/sensitive routes.
+        // Public pages (/, /katalog, /blog, /o-nas, etc.) are excluded so that
+        // ISR (revalidate=3600 on landing page) works correctly via Vercel edge cache.
+        source: '/(dashboard|api|admin|reset-password|offline)(.*)',
         headers: [
           {
             key: 'Cache-Control',

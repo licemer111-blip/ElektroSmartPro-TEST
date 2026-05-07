@@ -2,7 +2,6 @@ import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { checkRateLimit } from "@/lib/rate-limit";
 import { TRIAL_DURATION_DAYS, hasUsedTrial, isTrialActive } from "@/lib/auth/entitlements";
 
 /**
@@ -35,15 +34,6 @@ export async function POST(_request: NextRequest) {
 
     if (authError || !user) {
       return NextResponse.json({ error: "Musisz być zalogowany." }, { status: 401 });
-    }
-
-    // Anti-abuse: cap trial-start attempts even for authenticated users.
-    const rl = checkRateLimit({ key: `trial:${user.id}`, limit: 5, windowMs: 5 * 60_000 });
-    if (!rl.allowed) {
-      return NextResponse.json(
-        { error: "Zbyt wiele prób. Spróbuj ponownie za kilka minut." },
-        { status: 429 },
-      );
     }
 
     // Fetch profile with trial + is_pro fields

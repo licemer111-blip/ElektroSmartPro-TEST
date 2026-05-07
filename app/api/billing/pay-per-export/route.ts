@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { createClient } from "@/utils/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { checkRateLimit } from "@/lib/rate-limit";
 import { PAY_PER_EXPORT_PRICE_PLN } from "@/lib/config/tier-limits";
 
 /**
@@ -34,15 +33,6 @@ export async function POST(request: NextRequest) {
 
     if (authError || !user) {
       return NextResponse.json({ error: "Musisz być zalogowany." }, { status: 401 });
-    }
-
-    // Rate limit: 10 attempts per 5 min per user (abuse guard on payment creation).
-    const rl = checkRateLimit({ key: `ppe:${user.id}`, limit: 10, windowMs: 5 * 60_000 });
-    if (!rl.allowed) {
-      return NextResponse.json(
-        { error: "Zbyt wiele prób. Spróbuj ponownie za kilka minut." },
-        { status: 429, headers: { "Retry-After": String(Math.ceil((rl.retryAfterMs ?? 60_000) / 1000)) } }
-      );
     }
 
     const body = await request.json().catch(() => ({}));

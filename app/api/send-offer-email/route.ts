@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createClient } from "@/utils/supabase/server";
-import { rateLimitEmail } from "@/lib/rate-limit";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 import { logger } from "@/lib/logger";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -14,9 +14,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const rateCheck = rateLimitEmail(user.id);
-    if (!rateCheck.allowed) {
-      return NextResponse.json({ error: "Zbyt wiele wiadomości. Spróbuj ponownie za chwilę." }, { status: 429 });
+    // DB-based email rate limit: 10 emails/hour (in-memory Map is useless on Vercel serverless)
+    {
+      const emailHourLimit = 10;
+      const windowMs = 60 * 60 * 1000;
+      const now = new Date();
+      const { data: rlStat } = await supabaseAdmin
+        .from("ai_usage_stats")
+        .select("usage_count, reset_at")
+        .eq("user_id", user.id)
+        .eq("function_name", "email_ratelimit")
+        .maybeSingle();
+      const rlResetAt = rlStat?.reset_at ? new Date(rlStat.reset_at) : null;
+      const withinWindow = rlResetAt && (now.getTime() - rlResetAt.getTime()) < windowMs;
+      const rlCount = withinWindow ? (rlStat?.usage_count ?? 0) : 0;
+      if (rlCount >= emailHourLimit) {
+        return NextResponse.json({ error: "Zbyt wiele wiadomości. Spróbuj ponownie za godzinę." }, { status: 429 });
+      }
+      await supabaseAdmin
+        .from("ai_usage_stats")
+        .upsert(
+          { user_id: user.id, function_name: "email_ratelimit", usage_count: rlCount + 1, reset_at: withinWindow ? (rlStat?.reset_at ?? now.toISOString()) : now.toISOString() },
+          { onConflict: "user_id,function_name" }
+        );
     }
 
     const { to, name, offerUrl } = await request.json();

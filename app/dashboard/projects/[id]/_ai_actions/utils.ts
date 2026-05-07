@@ -7,7 +7,6 @@
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { requireAuth, tryAuth } from "@/lib/auth";
 import { checkAndIncrementAiUsage } from "@/lib/ai-usage";
-import { rateLimitAI } from "@/lib/rate-limit";
 
 // ── Shared interfaces ─────────────────────────────────────────────
 
@@ -62,12 +61,6 @@ export async function checkGuard(featureName: string): Promise<GuardOk | GuardFa
 
   const aiCheck = await checkAndIncrementAiUsage(user.id, featureName);
   if (!aiCheck.allowed) return { error: aiCheck.error || "Limit AI wyczerpany" };
-
-  const rl = rateLimitAI(user.id);
-  if (!rl.allowed) {
-    const retrySec = Math.ceil((rl.retryAfterMs || 60000) / 1000);
-    return { error: `Zbyt wiele zapytań AI. Spróbuj za ${retrySec}s.` };
-  }
 
   if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
     return { error: "Usługa AI nie jest skonfigurowana" };

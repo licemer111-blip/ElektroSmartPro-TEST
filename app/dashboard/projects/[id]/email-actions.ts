@@ -6,7 +6,7 @@ import { tryAuth } from "@/lib/auth";
 
 import { revalidatePath } from "next/cache";
 import { fillTemplate } from "@/lib/email-templates";
-import { rateLimitEmail } from "@/lib/rate-limit";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 import * as XLSX from "xlsx-js-style";
 import { flattenProjectItems } from "@/lib/utils/flatten-project-items";
 import type { ProjectItem } from "@/lib/types/database";
@@ -139,11 +139,29 @@ export async function sendProjectEmail(input: SendProjectEmailInput) {
       return { success: false, error: "Musisz być zalogowany" };
     }
 
-    // Rate limit: max 10 emails per minute per user
-    const rl = rateLimitEmail(user.id);
-    if (!rl.allowed) {
-      const retrySec = Math.ceil((rl.retryAfterMs || 60000) / 1000);
-      return { success: false, error: `Zbyt wiele emaili. Spróbuj ponownie za ${retrySec}s.` };
+    // DB-based rate limit: 10 emails/hour (in-memory Map is useless on Vercel serverless)
+    {
+      const emailHourLimit = 10;
+      const windowMs = 60 * 60 * 1000;
+      const now = new Date();
+      const { data: rlStat } = await supabaseAdmin
+        .from("ai_usage_stats")
+        .select("usage_count, reset_at")
+        .eq("user_id", user.id)
+        .eq("function_name", "email_ratelimit")
+        .maybeSingle();
+      const rlResetAt = rlStat?.reset_at ? new Date(rlStat.reset_at) : null;
+      const withinWindow = rlResetAt && (now.getTime() - rlResetAt.getTime()) < windowMs;
+      const rlCount = withinWindow ? (rlStat?.usage_count ?? 0) : 0;
+      if (rlCount >= emailHourLimit) {
+        return { success: false, error: "Zbyt wiele emaili. Spróbuj ponownie za godzinę." };
+      }
+      await supabaseAdmin
+        .from("ai_usage_stats")
+        .upsert(
+          { user_id: user.id, function_name: "email_ratelimit", usage_count: rlCount + 1, reset_at: withinWindow ? (rlStat?.reset_at ?? now.toISOString()) : now.toISOString() },
+          { onConflict: "user_id,function_name" }
+        );
     }
 
     // Get project details (include region for Iron Rule: regionModifier applies to labor)
