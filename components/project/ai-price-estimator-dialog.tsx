@@ -50,7 +50,7 @@ interface AiPriceEstimatorDialogProps {
 // the #1 source of incorrect cens. Labor is driven by KNR norms which
 // are deterministic and accurate.
 const modeButtons: { mode: PriceMode; label: string; desc: string; icon: typeof Banknote }[] = [
-  { mode: "labor", label: "Wyceń robociznę", desc: "Normy KNR 2026 × stawka regionalna", icon: Wrench },
+  { mode: "labor", label: "Wyceń", desc: "Normy KNR 2026 × stawka regionalna", icon: Wrench },
 ];
 
 export function AiPriceEstimatorDialog({

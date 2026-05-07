@@ -637,8 +637,8 @@ const TableDataRow = ({
 
   switch (row.rowType) {
     case 'section_header':
-      rowBg = palette.sectionHeaderBg;
-      textColor = palette.sectionHeaderText;
+      rowBg = showColors ? palette.sectionHeaderBg : '#e2e8f0';
+      textColor = showColors ? palette.sectionHeaderText : '#1e293b';
       fontWeight = 'bold';
       break;
     case 'set_parent':
@@ -647,12 +647,15 @@ const TableDataRow = ({
       fontWeight = 'bold';
       break;
     case 'child_mat':
+      rowBg = showColors ? palette.childMatBg : (rowIndex % 2 === 0 ? palette.rowEven : palette.rowOdd);
+      textColor = palette.textSecondary;
+      break;
     case 'child_lab':
-      // Children use normal alternating rows — they are already indented via text prefix
+      rowBg = showColors ? palette.childLabBg : (rowIndex % 2 === 0 ? palette.rowEven : palette.rowOdd);
       textColor = palette.textSecondary;
       break;
     case 'section_subtotal':
-      rowBg = '#f9fafb';
+      rowBg = showColors ? palette.subtotalBg : '#f3f4f6';
       textColor = palette.textSecondary;
       fontStyle = 'italic';
       break;
