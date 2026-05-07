@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { CheckSquare, Square, GripVertical, Shield, Flag, ChevronDown, ChevronRight, AlertTriangle, LayoutGrid, X, Check, PenLine, Zap } from "lucide-react";
+import { CheckSquare, Square, GripVertical, Shield, Flag, ChevronDown, ChevronRight, AlertTriangle, LayoutGrid, X, Check, PenLine, Zap, Trash2 } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
@@ -17,13 +17,14 @@ import type { ProjectItem } from "@/lib/types/database";
 import { detectSmartContext } from "@/lib/ai/smart-context-mapper";
 import { SmartAssemblyPanel } from "@/components/project/estimate/_parts/SmartAssemblyPanel";
 import { expandToAssembly } from "@/lib/ai/smart-mapping-engine";
-import type { ProjectSector } from "@/lib/ai/smart-mapping-engine";
+import type { ProjectSector, AssemblyOverrides } from "@/lib/ai/smart-mapping-engine";
 import { roundPrice, useGlobalSettings } from "@/hooks/use-global-settings";
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { ConfidenceDot, UncertainPriceWarning } from "@/components/project/estimate/ConfidenceBadge";
 import { BlurredPrice } from "@/components/ui/blurred-price";
 import { useMaterialBrainCtx } from "@/components/project/_parts/MaterialBrainContext";
 import { RowActions } from "@/components/project/estimate/_parts/RowActions";
+import { saveAssemblyOverrides } from "@/app/dashboard/projects/[id]/_actions/project-items";
 import { RowUnitCell, RowQuantityCell, RowMaterialCell, RowLaborCell, RowRgCell } from "@/components/project/estimate/_parts/RowInputs";
 import { RowKnrCell } from "@/components/project/estimate/_parts/RowKnrCell";
 import { RowTotalCell } from "@/components/project/estimate/_parts/RowTotalCell";
@@ -183,6 +184,16 @@ export const EstimateRow = React.memo(function EstimateRow({
   const [isVirtualExpanded, setIsVirtualExpanded] = useState(false);
   // Controlled open state for Zap (SmartAssemblyPanel) popover
   const [zapOpen, setZapOpen] = useState(false);
+  // Transition for virtual row delete
+  const [isDeletePending, startDeleteTransition] = useTransition();
+
+  function handleDeleteVirtualRow(label: string) {
+    const existing = (item.assembly_overrides ?? {}) as AssemblyOverrides;
+    const updated: AssemblyOverrides = { ...existing, [label]: { ...existing[label], disabled: true } };
+    startDeleteTransition(async () => {
+      await saveAssemblyOverrides(item.project_id, item.id, updated);
+    });
+  }
 
   // Prices — use editing values when in edit mode
   const editMat = isEditing ? (parseFloat(editingState!.materialPrice) || 0) : 0;
@@ -729,16 +740,26 @@ export const EstimateRow = React.memo(function EstimateRow({
                 {showPrices ? `${vTotal.toFixed(2)} zł` : "***"}
               </div>
             </TableCell>
-            {/* Akcje — open parent SmartAssemblyPanel for editing component overrides */}
+            {/* Akcje — delete virtual row or open SmartAssemblyPanel */}
             {!isFinal && !isReadOnly && (
               <TableCell className={`min-w-[80px] w-[80px] ${singleCellBorderClass} text-center`}>
-                <button
-                  onClick={(e) => { e.stopPropagation(); setZapOpen(true); }}
-                  className="p-1 rounded text-slate-500 dark:text-slate-400 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/40 transition-colors"
-                  title="Edytuj składniki zestawu w panelu AI"
-                >
-                  <PenLine className="w-3.5 h-3.5" />
-                </button>
+                <div className="flex items-center justify-center gap-0.5">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleDeleteVirtualRow(vRow.label); }}
+                    disabled={isDeletePending}
+                    className="p-1 rounded text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors disabled:opacity-40"
+                    title="Usuń tę pozycję z zestawu"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setZapOpen(true); }}
+                    className="p-1 rounded text-slate-500 dark:text-slate-400 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/40 transition-colors"
+                    title="Edytuj składniki zestawu w panelu AI"
+                  >
+                    <PenLine className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </TableCell>
             )}
           </TableRow>

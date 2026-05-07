@@ -454,7 +454,7 @@ export async function addProjectItemDirect(
 export async function saveAssemblyOverrides(
   projectId: string,
   itemId: string,
-  overrides: Record<string, { qtyMultiplier?: number; materialPricePerUnit?: number; rbhPerUnit?: number }> | null,
+  overrides: Record<string, { qtyMultiplier?: number; materialPricePerUnit?: number; rbhPerUnit?: number; disabled?: boolean }> | null,
 ): Promise<{ success?: boolean; error?: string }> {
   const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
