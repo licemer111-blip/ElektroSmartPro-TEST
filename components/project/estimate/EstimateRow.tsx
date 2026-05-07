@@ -153,7 +153,7 @@ export const EstimateRow = React.memo(function EstimateRow({
   // bruttoMode only affects the Summary panel — never the table cells.
   const dp = (netto: number) => roundPrice(netto);
   const isEditing = editingState?.itemId === item.id;
-  const isAssemblyChild = item.is_assembly_child === true;
+  const isAssemblyChild = item.is_assembly_child === true || !!item.parent_assembly_id;
   const isZestaw = isAssemblyParent && !isAssemblyChild;
 
   // Virtual expand state for AI-triggered ZESTAW rows (no real DB children)

@@ -424,7 +424,7 @@ export function RowLaborCell({
             </span>
           </div>
         </div>
-      ) : item.is_assembly_child ? (
+      ) : (item.is_assembly_child || item.parent_assembly_id) ? (
         <div className="space-y-0.5">
           {/* Assembly child: per-unit price prominent with unit suffix */}
           <div className={cn("flex items-center justify-end gap-1", colorMode ? "text-emerald-700 dark:text-emerald-400" : "text-slate-800 dark:text-slate-100")}>
