@@ -391,7 +391,12 @@ export function EstimateTable({
                         {(!groupBySection || !isCollapsed) && (
                           <>
                             {renderItemRow(topItem, topIdx + 1, assemblyChildren)}
-                            {!collapsedAssemblies.has(topItem.id) && assemblyChildren.map((child) => (
+                            {!collapsedAssemblies.has(topItem.id) && assemblyChildren
+                              .filter((child) => {
+                                if (!materialsOwnedByCustomer) return true;
+                                return (child.labor_norm ?? 0) > 0;
+                              })
+                              .map((child) => (
                               <React.Fragment key={child.id}>
                                 {renderItemRow(child, null, [], false)}
                               </React.Fragment>

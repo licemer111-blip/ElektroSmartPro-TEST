@@ -424,6 +424,29 @@ export function RowLaborCell({
             </span>
           </div>
         </div>
+      ) : item.is_assembly_child ? (
+        <div className="space-y-0.5">
+          {/* Assembly child: per-unit price prominent with unit suffix */}
+          <div className={cn("flex items-center justify-end gap-1", colorMode ? "text-emerald-700 dark:text-emerald-400" : "text-slate-800 dark:text-slate-100")}>
+            {(item.confidence_level || item.knr_code) && item.confidence_level !== "manual" && laborUnit > 0 && (
+              <ConfidenceDot
+                level={item.confidence_level ?? "uncertain"}
+                note={item.confidence_note}
+                knrSource={item.knr_source}
+                knrCode={item.knr_code}
+                className="mt-px"
+              />
+            )}
+            <span className="text-xs font-semibold">
+              <BlurredPrice value={labUnitDisp} isPro={showPrices} />
+              <span className="text-[9px] font-normal text-slate-400 dark:text-slate-500 ml-0.5">zł/{item.unit ?? "szt"}</span>
+            </span>
+          </div>
+          {/* Total — smaller */}
+          <div className={cn("text-[10px] text-right", colorMode ? "text-emerald-500 dark:text-emerald-600" : "text-slate-400 dark:text-slate-500")}>
+            Σ <BlurredPrice value={labTotalDisp} isPro={showPrices} />
+          </div>
+        </div>
       ) : (
         <div className="space-y-0.5">
           {/* jedn. — small gray + ConfidenceDot left */}
@@ -530,7 +553,7 @@ export function RowRgCell({
               );
             })()}
           </div>
-          {laborRate > 0 && (
+          {laborRate > 0 && assemblyNorm != null && (
             <div className={`text-[10px] font-medium ${colorMode ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500 dark:text-slate-400"}`}>
               = {((assemblyNorm ?? item.labor_norm!) * laborRate).toFixed(2)} zł/{item.unit ?? "szt"}
             </div>
@@ -538,11 +561,6 @@ export function RowRgCell({
           {item.labor_hours_total != null && (
             <div className={`text-[10px] ${colorMode ? "text-blue-500 dark:text-blue-500" : "text-slate-400 dark:text-slate-500"}`}>
               Σ {item.labor_hours_total.toFixed(2)} rbh
-              {laborRate > 0 && (
-                <span className="ml-1 text-emerald-600 dark:text-emerald-400">
-                  ({(item.labor_hours_total * laborRate).toFixed(2)} zł)
-                </span>
-              )}
             </div>
           )}
           {(() => {
