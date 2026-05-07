@@ -394,7 +394,9 @@ export function EstimateTable({
                             {!collapsedAssemblies.has(topItem.id) && assemblyChildren
                               .filter((child) => {
                                 if (!materialsOwnedByCustomer) return true;
-                                return (child.labor_norm ?? 0) > 0;
+                                // Hide material-only children: keep only those with labor price
+                                const labPrice = Number(child.final_labor_price ?? child.labor_price ?? 0);
+                                return labPrice > 0;
                               })
                               .map((child) => (
                               <React.Fragment key={child.id}>
