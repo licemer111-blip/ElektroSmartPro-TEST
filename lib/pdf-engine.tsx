@@ -33,7 +33,7 @@ Font.registerHyphenationCallback(word => [word]);
 
 // ─── Theme System ──────────────────────────────────────────────────────────────
 
-export type ThemeName = 'klasyczny' | 'elegancki' | 'nowoczesny' | 'korporacyjny' | 'premium';
+export type ThemeName = 'klasyczny' | 'elegancki' | 'nowoczesny' | 'korporacyjny' | 'premium' | 'zielony';
 
 interface ThemePalette {
   // Header / cover page
@@ -52,6 +52,8 @@ interface ThemePalette {
   sectionHeaderText: string;
   setParentBg: string;
   setParentBorder: string;
+  /** Left-border color for child_mat / child_lab rows */
+  childBorder: string;
   childMatBg: string;
   childLabBg: string;
   subtotalBg: string;
@@ -67,56 +69,61 @@ interface ThemePalette {
 }
 
 const THEMES: Record<ThemeName, ThemePalette> = {
+  // ─── Klasyczny: Czarno-biały ─────────────────────────────────────────────────
   klasyczny: {
-    headerBg: '#111827',
+    headerBg: '#0f172a',
     headerText: '#ffffff',
-    accentPrimary: '#111827',
-    accentLight: '#f3f4f6',
-    tableHeaderBg: '#111827',
+    accentPrimary: '#0f172a',
+    accentLight: '#f8fafc',
+    tableHeaderBg: '#1e293b',
     tableHeaderText: '#ffffff',
-    rowOdd: '#f9fafb',
+    rowOdd: '#f8fafc',
     rowEven: '#ffffff',
-    sectionHeaderBg: '#1f2937',
+    sectionHeaderBg: '#334155',
     sectionHeaderText: '#ffffff',
-    setParentBg: '#f5f3ef',
-    setParentBorder: '#9ca3af',
-    childMatBg: '#faf8f5',
-    childLabBg: '#f5f7f5',
-    subtotalBg: '#f3f4f6',
+    setParentBg: '#f1f5f9',
+    setParentBorder: '#475569',
+    childBorder: '#cbd5e1',
+    childMatBg: '#f8fafc',
+    childLabBg: '#f5f7f9',
+    subtotalBg: '#e2e8f0',
     warningBg: '#fef2f2',
     warningText: '#dc2626',
-    totalBg: '#111827',
+    totalBg: '#0f172a',
     totalText: '#ffffff',
-    textPrimary: '#111827',
-    textSecondary: '#6b7280',
-    borderColor: '#e5e7eb',
+    textPrimary: '#0f172a',
+    textSecondary: '#475569',
+    borderColor: '#e2e8f0',
   },
+  // ─── Elegancki: Antracyt + złoto ─────────────────────────────────────────────
   elegancki: {
-    headerBg: '#374151',
+    headerBg: '#1c1917',
     headerText: '#ffffff',
     accentPrimary: '#b45309',
     accentLight: '#fffbeb',
-    tableHeaderBg: '#374151',
-    tableHeaderText: '#ffffff',
-    rowOdd: '#fafaf8',
+    tableHeaderBg: '#292524',
+    tableHeaderText: '#fbbf24',
+    rowOdd: '#fdfaf5',
     rowEven: '#ffffff',
-    sectionHeaderBg: '#1f2937',
-    sectionHeaderText: '#fde68a',
-    setParentBg: '#f5f0e8',
-    setParentBorder: '#8b7355',
-    childMatBg: '#faf7f2',
-    childLabBg: '#f3f7f3',
-    subtotalBg: '#f9f7f2',
+    sectionHeaderBg: '#292524',
+    sectionHeaderText: '#fcd34d',
+    setParentBg: '#fff8ed',
+    setParentBorder: '#d97706',
+    childBorder: '#fbbf24',
+    childMatBg: '#fffdf7',
+    childLabBg: '#f3faf4',
+    subtotalBg: '#fef3c7',
     warningBg: '#fef2f2',
     warningText: '#dc2626',
-    totalBg: '#374151',
-    totalText: '#fde68a',
-    textPrimary: '#1f2937',
-    textSecondary: '#6b7280',
-    borderColor: '#b4530940',
+    totalBg: '#292524',
+    totalText: '#fcd34d',
+    textPrimary: '#1c1917',
+    textSecondary: '#57534e',
+    borderColor: '#d6c4a0',
   },
+  // ─── Nowoczesny: Slate + niebieski ───────────────────────────────────────────
   nowoczesny: {
-    headerBg: '#475569',
+    headerBg: '#1d4ed8',
     headerText: '#ffffff',
     accentPrimary: '#2563eb',
     accentLight: '#eff6ff',
@@ -126,66 +133,97 @@ const THEMES: Record<ThemeName, ThemePalette> = {
     rowEven: '#ffffff',
     sectionHeaderBg: '#1e40af',
     sectionHeaderText: '#ffffff',
-    setParentBg: '#eef2fa',
-    setParentBorder: '#6b83b0',
-    childMatBg: '#f5f7fc',
-    childLabBg: '#f0f5f0',
-    subtotalBg: '#f1f5f9',
+    setParentBg: '#eff6ff',
+    setParentBorder: '#3b82f6',
+    childBorder: '#93c5fd',
+    childMatBg: '#f0f7ff',
+    childLabBg: '#f0f9f5',
+    subtotalBg: '#dbeafe',
     warningBg: '#fef2f2',
     warningText: '#dc2626',
-    totalBg: '#2563eb',
+    totalBg: '#1d4ed8',
     totalText: '#ffffff',
     textPrimary: '#0f172a',
-    textSecondary: '#64748b',
-    borderColor: '#cbd5e1',
+    textSecondary: '#475569',
+    borderColor: '#bfdbfe',
   },
+  // ─── Korporacyjny: Navy formalny ─────────────────────────────────────────────
   korporacyjny: {
-    headerBg: '#1e3a8a',
+    headerBg: '#0c2461',
     headerText: '#ffffff',
-    accentPrimary: '#1e3a8a',
+    accentPrimary: '#1e40af',
     accentLight: '#eff6ff',
     tableHeaderBg: '#1e3a8a',
     tableHeaderText: '#ffffff',
     rowOdd: '#f0f4ff',
     rowEven: '#ffffff',
-    sectionHeaderBg: '#1e3a8a',
+    sectionHeaderBg: '#0c2461',
     sectionHeaderText: '#bfdbfe',
-    setParentBg: '#e8edf5',
-    setParentBorder: '#5b6a8a',
-    childMatBg: '#f0f2f8',
-    childLabBg: '#edf2ed',
-    subtotalBg: '#e8edf8',
+    setParentBg: '#eef2ff',
+    setParentBorder: '#3b82f6',
+    childBorder: '#a5b4fc',
+    childMatBg: '#f5f8ff',
+    childLabBg: '#f0f5ee',
+    subtotalBg: '#dbeafe',
     warningBg: '#fef2f2',
     warningText: '#dc2626',
-    totalBg: '#1e3a8a',
+    totalBg: '#0c2461',
     totalText: '#ffffff',
-    textPrimary: '#0f172a',
-    textSecondary: '#4b5563',
-    borderColor: '#bfdbfe',
+    textPrimary: '#0c1445',
+    textSecondary: '#3d5a80',
+    borderColor: '#c7d2fe',
   },
+  // ─── Premium: Indygo luksus ───────────────────────────────────────────────────
   premium: {
-    headerBg: '#4c1d95',
+    headerBg: '#2e1065',
     headerText: '#ffffff',
-    accentPrimary: '#4c1d95',
+    accentPrimary: '#6d28d9',
     accentLight: '#faf5ff',
     tableHeaderBg: '#4c1d95',
     tableHeaderText: '#ffffff',
     rowOdd: '#faf5ff',
     rowEven: '#ffffff',
     sectionHeaderBg: '#3b0764',
-    sectionHeaderText: '#e9d5ff',
-    setParentBg: '#f0ecf8',
-    setParentBorder: '#7c6a9a',
-    childMatBg: '#f5f2fa',
-    childLabBg: '#f0f5f0',
-    subtotalBg: '#f2eeff',
+    sectionHeaderText: '#ddd6fe',
+    setParentBg: '#f5f3ff',
+    setParentBorder: '#7c3aed',
+    childBorder: '#c4b5fd',
+    childMatBg: '#faf7ff',
+    childLabBg: '#f7faf7',
+    subtotalBg: '#ede9fe',
     warningBg: '#fef2f2',
     warningText: '#dc2626',
-    totalBg: '#4c1d95',
+    totalBg: '#2e1065',
     totalText: '#ffffff',
     textPrimary: '#1e1b4b',
-    textSecondary: '#6b7280',
-    borderColor: '#c4b5fd',
+    textSecondary: '#5b21b6',
+    borderColor: '#ddd6fe',
+  },
+  // ─── Zielony: Natura / Ekologia ───────────────────────────────────────────────
+  zielony: {
+    headerBg: '#14532d',
+    headerText: '#ffffff',
+    accentPrimary: '#16a34a',
+    accentLight: '#f0fdf4',
+    tableHeaderBg: '#15803d',
+    tableHeaderText: '#ffffff',
+    rowOdd: '#f7fef9',
+    rowEven: '#ffffff',
+    sectionHeaderBg: '#166534',
+    sectionHeaderText: '#ffffff',
+    setParentBg: '#f0fdf4',
+    setParentBorder: '#16a34a',
+    childBorder: '#86efac',
+    childMatBg: '#f7fef9',
+    childLabBg: '#f7fef9',
+    subtotalBg: '#dcfce7',
+    warningBg: '#fef2f2',
+    warningText: '#dc2626',
+    totalBg: '#14532d',
+    totalText: '#ffffff',
+    textPrimary: '#052e16',
+    textSecondary: '#166534',
+    borderColor: '#bbf7d0',
   },
 };
 
@@ -396,9 +434,9 @@ const base = StyleSheet.create({
   projectMeta: { fontSize: 7.5, color: '#6b7280' },
   // Table
   tableHeaderRow: { flexDirection: 'row' },
-  tableHeaderCell: { paddingVertical: 5, paddingHorizontal: 4, fontSize: 7.5, fontWeight: 'bold' },
+  tableHeaderCell: { paddingVertical: 6, paddingHorizontal: 5, fontSize: 7.5, fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: 0.4 },
   tableRow: { flexDirection: 'row', borderBottomWidth: 0.5, borderBottomColor: '#e5e7eb' },
-  tableCell: { paddingVertical: 4, paddingHorizontal: 4, fontSize: 8 },
+  tableCell: { paddingVertical: 5, paddingHorizontal: 5, fontSize: 8 },
   // Summary
   summaryContainer: { marginTop: 10, alignItems: 'flex-end' },
   summaryBox: {
@@ -627,9 +665,9 @@ const TableDataRow = ({
   matOwned: boolean;
   showColors?: boolean;
 }) => {
-  // Determine row background and text color based on rowType
   let rowBg = rowIndex % 2 === 0 ? palette.rowEven : palette.rowOdd;
   let textColor = palette.textPrimary;
+  let amountColor = palette.textPrimary;    // price columns always stay readable
   let fontStyle: 'normal' | 'italic' = 'normal';
   let fontWeight: 'normal' | 'bold' = 'normal';
   let borderLeftWidth = 0;
@@ -637,39 +675,66 @@ const TableDataRow = ({
 
   switch (row.rowType) {
     case 'section_header':
-      rowBg = showColors ? palette.sectionHeaderBg : '#e2e8f0';
-      textColor = showColors ? palette.sectionHeaderText : '#1e293b';
+      // Strong coloured bar — readable in both modes
+      rowBg = showColors ? palette.sectionHeaderBg : '#1e293b';
+      textColor = showColors ? palette.sectionHeaderText : '#ffffff';
+      amountColor = showColors ? palette.sectionHeaderText : '#ffffff';
       fontWeight = 'bold';
       break;
+
     case 'set_parent':
-      rowBg = showColors ? palette.setParentBg : '#f3f4f6';
+      // Assembly parent — left accent border + tinted bg
+      rowBg = showColors ? palette.setParentBg : '#f1f5f9';
       textColor = palette.textPrimary;
+      amountColor = showColors ? palette.accentPrimary : palette.textPrimary;
       fontWeight = 'bold';
+      borderLeftWidth = 4;
+      borderLeftColor = showColors ? palette.setParentBorder : '#475569';
       break;
+
     case 'child_mat':
-      rowBg = showColors ? palette.childMatBg : (rowIndex % 2 === 0 ? palette.rowEven : palette.rowOdd);
+    case 'child_lab': {
+      // Child row — subtle bg with thin left border as tree indicator
+      const childBg = row.rowType === 'child_mat' ? palette.childMatBg : palette.childLabBg;
+      rowBg = showColors ? childBg : (rowIndex % 2 === 0 ? '#ffffff' : '#f5f7f9');
       textColor = palette.textSecondary;
+      amountColor = palette.textPrimary; // amounts always readable!
+      borderLeftWidth = 2;
+      borderLeftColor = showColors ? palette.childBorder : '#cbd5e1';
       break;
-    case 'child_lab':
-      rowBg = showColors ? palette.childLabBg : (rowIndex % 2 === 0 ? palette.rowEven : palette.rowOdd);
-      textColor = palette.textSecondary;
-      break;
+    }
+
     case 'section_subtotal':
-      rowBg = showColors ? palette.subtotalBg : '#f3f4f6';
+      rowBg = showColors ? palette.subtotalBg : '#e2e8f0';
       textColor = palette.textSecondary;
+      amountColor = palette.textPrimary;
       fontStyle = 'italic';
-      break;
-    case 'warning':
-      textColor = showColors ? '#b91c1c' : '#374151';
       fontWeight = 'bold';
       break;
+
+    case 'warning':
+      textColor = showColors ? '#b91c1c' : '#1e293b';
+      amountColor = textColor;
+      fontWeight = 'bold';
+      break;
+
     default:
+      // Normal row — amounts in accent
+      amountColor = showColors ? palette.accentPrimary : palette.textPrimary;
       break;
   }
 
   const cellStyle = {
     ...base.tableCell,
     color: textColor,
+    fontStyle,
+    fontWeight,
+    backgroundColor: rowBg,
+  };
+
+  const amountStyle = {
+    ...base.tableCell,
+    color: amountColor,
     fontStyle,
     fontWeight,
     backgroundColor: rowBg,
@@ -714,13 +779,13 @@ const TableDataRow = ({
       </View>
       {/* Nakłady r-g (optional) */}
       {showRg && cols.rg ? (
-        <View style={[cellStyle, { width: cols.rg, textAlign: 'right' }]}>
+        <View style={[amountStyle, { width: cols.rg, textAlign: 'right' }]}>
           <Text>{isSectionHeader ? '' : row.rg}</Text>
         </View>
       ) : null}
       {/* Materiał */}
       {!matOwned ? (
-        <View style={[cellStyle, { width: cols.mat, textAlign: 'right' }]}>
+        <View style={[amountStyle, { width: cols.mat, textAlign: 'right' }]}>
           {isSectionHeader ? (
             <Text></Text>
           ) : row.isInvestorMat ? (
@@ -731,11 +796,11 @@ const TableDataRow = ({
         </View>
       ) : null}
       {/* Robocizna */}
-      <View style={[cellStyle, { width: cols.lab, textAlign: 'right' }]}>
+      <View style={[amountStyle, { width: cols.lab, textAlign: 'right' }]}>
         <Text>{isSectionHeader ? '' : row.lab}</Text>
       </View>
-      {/* Suma */}
-      <View style={[cellStyle, { width: cols.total, textAlign: 'right', fontWeight: 'bold', color: row.rowType === 'section_header' ? palette.sectionHeaderText : palette.accentPrimary }]}>
+      {/* Suma — bold, always accent or section color */}
+      <View style={[amountStyle, { width: cols.total, textAlign: 'right', fontWeight: 'bold' }]}>
         <Text>{row.total}</Text>
       </View>
     </View>
@@ -854,7 +919,7 @@ const ContentPage = ({
   palette: ThemePalette;
   isFirstContent: boolean;
 }) => {
-  const { profile, project, rows, showKnr, showRg, matOwnedByClient, blindMode } = data as PdfEngineData & { isPro?: boolean };
+  const { profile, project, rows, showKnr, showRg, matOwnedByClient, blindMode, logoBase64 } = data as PdfEngineData & { isPro?: boolean };
   const s = { ...DEFAULT_PDF_STRUCTURE, ...(data.pdfStructure ?? {}) };
   const companyName = profile?.company_name || 'ElektroSmart PRO';
   const cols = calcColWidths(showKnr, showRg, matOwnedByClient);
@@ -864,18 +929,27 @@ const ContentPage = ({
     <Page size="A4" style={base.page}>
       {/* Company header — controlled by showCompanyHeader */}
       {s.showCompanyHeader && (
-        <View style={[base.headerRow, { borderBottomWidth: 1, borderBottomColor: palette.borderColor, paddingBottom: 8, marginBottom: 8 }]}>
-          <View style={base.companyBlock}>
-            <Text style={[base.companyName, { color: palette.textPrimary }]}>{companyName}</Text>
-            <Text style={[base.companyDetail, { color: palette.textSecondary }]}>
-              {[profile?.street, [profile?.postal_code, profile?.city].filter(Boolean).join(' ')].filter(Boolean).join(', ')}
-            </Text>
+        <View style={{ marginBottom: 10 }}>
+          <View style={[base.headerRow, { paddingBottom: 10, marginBottom: 0 }]}>
+            <View style={base.companyBlock}>
+              {logoBase64 ? (
+                <Image src={logoBase64} style={{ maxWidth: 90, maxHeight: 35, marginBottom: 4, objectFit: 'contain' }} />
+              ) : null}
+              <Text style={[base.companyName, { color: palette.textPrimary }]}>{companyName}</Text>
+              <Text style={[base.companyDetail, { color: palette.textSecondary }]}>
+                {[profile?.street, [profile?.postal_code, profile?.city].filter(Boolean).join(' ')].filter(Boolean).join(', ')}
+              </Text>
+              {profile?.nip ? <Text style={[base.companyDetail, { color: palette.textSecondary }]}>NIP: {profile.nip}</Text> : null}
+              {profile?.phone ? <Text style={[base.companyDetail, { color: palette.textSecondary }]}>{profile.phone}</Text> : null}
+            </View>
+            <View style={base.docMetaBlock}>
+              <Text style={[base.docTitle, { color: palette.accentPrimary, fontSize: 12 }]}>KOSZTORYS OFERTOWY</Text>
+              <Text style={[base.docNumber, { color: palette.textSecondary }]}>{docNumber}</Text>
+              <Text style={[base.docNumber, { color: palette.textSecondary }]}>{new Date().toLocaleDateString('pl-PL')}</Text>
+            </View>
           </View>
-          <View style={base.docMetaBlock}>
-            <Text style={[base.docTitle, { color: palette.accentPrimary, fontSize: 11 }]}>KOSZTORYS OFERTOWY</Text>
-            <Text style={[base.docNumber, { color: palette.textSecondary }]}>{docNumber}</Text>
-            <Text style={[base.docNumber, { color: palette.textSecondary }]}>{new Date().toLocaleDateString('pl-PL')}</Text>
-          </View>
+          {/* Accent divider line under header */}
+          <View style={{ height: 2, backgroundColor: palette.accentPrimary, borderRadius: 1 }} />
         </View>
       )}
 

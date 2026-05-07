@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { FileText, Check, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export type PDFTemplateName = "klasyczny" | "elegancki" | "nowoczesny" | "korporacyjny" | "premium";
+export type PDFTemplateName = "klasyczny" | "elegancki" | "nowoczesny" | "korporacyjny" | "premium" | "zielony";
 
 interface PDFTemplate {
   id: PDFTemplateName;
@@ -34,6 +34,21 @@ interface PDFTemplate {
 }
 
 const PDF_TEMPLATES: PDFTemplate[] = [
+  {
+    id: "zielony",
+    name: "Zielony",
+    subtitle: "Natura / Eco",
+    primary: "#14532d",
+    primaryLight: "#f0fdf4",
+    tableHeaderBg: "#15803d",
+    divider: "#16a34a",
+    summaryBg: "#f0fdf4",
+    summaryBorder: "#86efac",
+    accentSet: "#16a34a",
+    accentSingle: "#15803d",
+    accentMat: "#166534",
+    accentLab: "#065f46",
+  },
   {
     id: "klasyczny",
     name: "Klasyczny",
@@ -192,6 +207,52 @@ function PreviewKlasyczny({ t }: { t: PDFTemplate }) {
         <MiniTableRows accentSet={t.accentSet} accentMat={t.accentMat} accentLab={t.accentLab} accentSingle={t.accentSingle} primary={t.primary} sectionBg={t.primary} />
       </div>
       {/* BRUTTO box */}
+      <div className="mx-[5%] mb-[4%] mt-auto flex items-center justify-between px-[4%] rounded-[1px]" style={{ background: t.primary, height: "8%" }}>
+        <div className="h-[2.5px] w-[25%] rounded bg-white/70" />
+        <div className="h-[3px] w-[28%] rounded bg-white" />
+      </div>
+    </div>
+  );
+}
+
+function PreviewZielony({ t }: { t: PDFTemplate }) {
+  return (
+    <div className="absolute inset-0 flex flex-col bg-white">
+      {/* Forest green banner */}
+      <div className="flex items-center px-[5%] gap-[4px]" style={{ background: t.primary, height: "13%" }}>
+        <div className="flex-1 flex flex-col gap-[1.5px]">
+          <div className="h-[3px] w-[50%] rounded bg-white/80" />
+          <div className="h-[1.5px] w-[35%] rounded bg-white/50" />
+        </div>
+        <div className="h-[3px] w-[22%] rounded bg-white/60" />
+      </div>
+      {/* Lime accent strip */}
+      <div className="h-[2px]" style={{ background: t.accentSet }} />
+      {/* Info block */}
+      <div className="flex gap-[3px] px-[5%] py-[3%]" style={{ height: "17%" }}>
+        <div className="flex-1 flex flex-col gap-[2px]">
+          {[65, 45, 50].map((w, i) => <div key={i} className="h-[2px] rounded" style={{ background: i === 0 ? t.primary + "60" : "#e2e8f0", width: `${w}%` }} />)}
+        </div>
+        <div className="w-[0.5px] self-stretch" style={{ background: t.accentSet + "40" }} />
+        <div className="flex-1 flex flex-col gap-[2px]">
+          {[50, 60, 35].map((w, i) => <div key={i} className="h-[2px] rounded bg-slate-200" style={{ width: `${w}%` }} />)}
+        </div>
+      </div>
+      {/* Green rule */}
+      <div className="mx-[5%] mb-[3%]" style={{ height: "1.5px", background: t.primary }} />
+      {/* Light green project strip */}
+      <div className="mx-[5%] mb-[2%] flex items-center rounded-[1px] px-[3%]" style={{ background: "#f0fdf4", height: "8%", borderLeft: `2px solid ${t.accentSet}` }}>
+        <div className="h-[2.5px] flex-1 rounded" style={{ background: t.primary + "50" }} />
+      </div>
+      {/* Table head — forest green */}
+      <div className="mx-[5%] flex items-center px-[2%] gap-[2px]" style={{ background: t.tableHeaderBg, height: "7%" }}>
+        {[6, 1, 8, 10].map((w, i) => <div key={i} className="h-[2.5px] rounded-[0.5px] bg-white/60" style={{ width: `${w * 2}px` }} />)}
+      </div>
+      {/* Rows */}
+      <div className="mx-[5%] flex-1 pt-[2px]">
+        <MiniTableRows accentSet={t.accentSet} accentMat={t.accentMat} accentLab={t.accentLab} accentSingle={t.accentSingle} primary={t.primary} sectionBg={t.tableHeaderBg} />
+      </div>
+      {/* BRUTTO forest box */}
       <div className="mx-[5%] mb-[4%] mt-auto flex items-center justify-between px-[4%] rounded-[1px]" style={{ background: t.primary, height: "8%" }}>
         <div className="h-[2.5px] w-[25%] rounded bg-white/70" />
         <div className="h-[3px] w-[28%] rounded bg-white" />
@@ -393,6 +454,7 @@ function A4Preview({ template, isSelected }: { template: PDFTemplate; isSelected
     nowoczesny: PreviewNowoczesny,
     korporacyjny: PreviewKorporacyjny,
     premium: PreviewPremium,
+    zielony: PreviewZielony,
   }[template.id] ?? PreviewKlasyczny;
 
   return (
@@ -489,7 +551,8 @@ export function PDFTemplateInline() {
                 {(() => {
                   const PreviewComponent = {
                     klasyczny: PreviewKlasyczny, elegancki: PreviewElegancki,
-                    nowoczesny: PreviewNowoczesny, korporacyjny: PreviewKorporacyjny, premium: PreviewPremium,
+                    nowoczesny: PreviewNowoczesny, korporacyjny: PreviewKorporacyjny,
+                    premium: PreviewPremium, zielony: PreviewZielony,
                   }[template.id] ?? PreviewKlasyczny;
                   return <PreviewComponent t={template} />;
                 })()}
@@ -584,7 +647,7 @@ export function PDFTemplateDialog({ onTemplateChange, currentTemplate }: PDFTemp
 
         {/* Templates grid */}
         <div className="px-5 py-5">
-          <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
             {PDF_TEMPLATES.map(template => (
               <button
                 key={template.id}
