@@ -304,7 +304,7 @@ export const EstimateRow = React.memo(function EstimateRow({
   } else if (isZestaw) {
     rowBgClass = "bg-gradient-to-r from-orange-50/60 via-orange-50/40 to-orange-50/60 dark:from-orange-950/20 dark:via-orange-950/15 dark:to-orange-950/20 hover:from-orange-100/70 hover:via-orange-50/50 hover:to-orange-100/70 dark:hover:from-orange-950/30 dark:hover:via-orange-950/20 dark:hover:to-orange-950/30";
   } else if (isAssemblyChild) {
-    rowBgClass = "bg-slate-50/30 dark:bg-slate-900/10 hover:bg-slate-100/40 dark:hover:bg-slate-900/20";
+    rowBgClass = "bg-pink-200 dark:bg-pink-800 hover:bg-pink-300 dark:hover:bg-pink-700";
   } else {
     rowBgClass = "bg-gradient-to-r from-blue-50/40 via-blue-50/30 to-blue-50/40 dark:from-blue-950/20 dark:via-blue-950/15 dark:to-blue-950/20 hover:from-blue-50/60 hover:via-blue-50/40 hover:to-blue-50/60 dark:hover:from-blue-950/30 dark:hover:via-blue-950/20 dark:hover:to-blue-950/30";
   }
