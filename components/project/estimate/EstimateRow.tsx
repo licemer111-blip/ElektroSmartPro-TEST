@@ -203,10 +203,7 @@ export const EstimateRow = React.memo(function EstimateRow({
   const { showHints } = useGlobalSettings();
   const { multiplier: knrMultiplier } = useKnrMultiplier();
 
-  // ── Self-filter: hide material children when "Tylko Robocizna" is ON ──
-  if (isAssemblyChild) {
-    console.error(`[FILTER] "${item.name}" | isChild=${isAssemblyChild} | matOwned=${materialsOwnedByCustomer} | isLabor=${isLaborChild(item)} | parentId=${item.parent_assembly_id}`);
-  }
+  // ── Self-filter: hide material DB-children when "Tylko Robocizna" is ON ──
   if (isAssemblyChild && materialsOwnedByCustomer && !isLaborChild(item)) {
     return null;
   }
@@ -307,7 +304,7 @@ export const EstimateRow = React.memo(function EstimateRow({
   } else if (isZestaw) {
     rowBgClass = "bg-gradient-to-r from-orange-50/60 via-orange-50/40 to-orange-50/60 dark:from-orange-950/20 dark:via-orange-950/15 dark:to-orange-950/20 hover:from-orange-100/70 hover:via-orange-50/50 hover:to-orange-100/70 dark:hover:from-orange-950/30 dark:hover:via-orange-950/20 dark:hover:to-orange-950/30";
   } else if (isAssemblyChild) {
-    rowBgClass = "bg-pink-200 dark:bg-pink-800 hover:bg-pink-300 dark:hover:bg-pink-700";
+    rowBgClass = "bg-slate-50/30 dark:bg-slate-900/10 hover:bg-slate-100/40 dark:hover:bg-slate-900/20";
   } else {
     rowBgClass = "bg-gradient-to-r from-blue-50/40 via-blue-50/30 to-blue-50/40 dark:from-blue-950/20 dark:via-blue-950/15 dark:to-blue-950/20 hover:from-blue-50/60 hover:via-blue-50/40 hover:to-blue-50/60 dark:hover:from-blue-950/30 dark:hover:via-blue-950/20 dark:hover:to-blue-950/30";
   }
@@ -621,6 +618,7 @@ export const EstimateRow = React.memo(function EstimateRow({
       const vExp = expandToAssembly(item.name, item.quantity, projectSector, projectLaborRate, knrMultiplier, item.assembly_overrides ?? undefined);
       if (!vExp.triggered) return null;
       return vExp.items.map((vRow, idx) => {
+        if (materialsOwnedByCustomer && !vRow.isLabor) return null;
         const vMat = vRow.isLabor ? 0 : roundPrice(vRow.materialTotal * adjustmentMultiplier);
         const vLab = vRow.isLabor ? roundPrice(vRow.rbhTotal * projectLaborRate * regionModifier * adjustmentMultiplier) : 0;
         const vTotal = roundPrice(vMat + vLab);
