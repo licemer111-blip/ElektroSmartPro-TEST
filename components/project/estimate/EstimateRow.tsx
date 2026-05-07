@@ -21,6 +21,7 @@ import type { ProjectSector } from "@/lib/ai/smart-mapping-engine";
 import { roundPrice, useGlobalSettings } from "@/hooks/use-global-settings";
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { ConfidenceDot, UncertainPriceWarning } from "@/components/project/estimate/ConfidenceBadge";
+import { BlurredPrice } from "@/components/ui/blurred-price";
 import { useMaterialBrainCtx } from "@/components/project/_parts/MaterialBrainContext";
 import { RowActions } from "@/components/project/estimate/_parts/RowActions";
 import { RowUnitCell, RowQuantityCell, RowMaterialCell, RowLaborCell, RowRgCell } from "@/components/project/estimate/_parts/RowInputs";
@@ -621,6 +622,7 @@ export const EstimateRow = React.memo(function EstimateRow({
         if (materialsOwnedByCustomer && !vRow.isLabor) return null;
         const vMat = vRow.isLabor ? 0 : roundPrice(vRow.materialTotal * adjustmentMultiplier);
         const vLab = vRow.isLabor ? roundPrice(vRow.rbhTotal * projectLaborRate * regionModifier * adjustmentMultiplier) : 0;
+        const vLabUnit = vRow.isLabor ? roundPrice(vRow.rbhPerUnit * projectLaborRate * regionModifier * adjustmentMultiplier) : 0;
         const vTotal = roundPrice(vMat + vLab);
         return (
           <TableRow
@@ -684,12 +686,17 @@ export const EstimateRow = React.memo(function EstimateRow({
             {showLaborColumn && (
               <TableCell className={`text-right min-w-[120px] w-[120px] ${singleCellBorderClass} bg-emerald-50/40 dark:bg-emerald-950/10`}>
                 {vLab > 0 ? (
-                  <div className="space-y-0">
-                    <div className={cn("text-[11px]", colorMode ? "text-emerald-500 dark:text-emerald-600" : "text-slate-400 dark:text-slate-500")}>
-                      {`${vRow.rbhPerUnit.toFixed(3)} rbh/jm`}
+                  <div className="space-y-0.5">
+                    <div className={cn("text-xs font-semibold", colorMode ? "text-emerald-700 dark:text-emerald-400" : "text-slate-800 dark:text-slate-100")}>
+                      {showPrices ? (
+                        <>
+                          <BlurredPrice value={vLabUnit} isPro={showPrices} />
+                          <span className="text-[9px] font-normal text-slate-400 dark:text-slate-500 ml-0.5">zł/{vRow.unit}</span>
+                        </>
+                      ) : "***"}
                     </div>
-                    <div className={cn("text-xs font-semibold", colorMode ? "text-emerald-700 dark:text-emerald-400" : "text-slate-700 dark:text-slate-200")}>
-                      {showPrices ? `${vLab.toFixed(2)} zł` : "***"}
+                    <div className={cn("text-[10px] text-right", colorMode ? "text-emerald-500 dark:text-emerald-600" : "text-slate-400 dark:text-slate-500")}>
+                      Σ {showPrices ? `${vLab.toFixed(2)} zł` : "***"}
                     </div>
                   </div>
                 ) : (
