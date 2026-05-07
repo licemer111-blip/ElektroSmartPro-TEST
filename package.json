@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "prebuild": "node -e \"const fs=require('fs'),f='public/sw.js',c=fs.readFileSync(f,'utf8');fs.writeFileSync(f,c.replace(/const CACHE_VERSION = '[^']*'/,'const CACHE_VERSION = \\''+Date.now()+'\\''))\"",
-    "build": "node -e \"const fs=require('fs');try{fs.rmSync('.next/cache',{recursive:true,force:true});console.log('Cache cleared')}catch(e){}\" && next build",
+    "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
