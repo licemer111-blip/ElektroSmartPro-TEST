@@ -12,7 +12,7 @@ import { UNIT_PRESETS } from "@/lib/validations";
 import type { ProjectItem } from "@/lib/types/database";
 import type { EditingState } from "@/components/project/estimate/EstimateRow";
 import { useGlobalSettings } from "@/hooks/use-global-settings";
-import { Search, Loader2, ShieldCheck, AlertCircle, Info, RotateCcw, Building2, X } from "lucide-react";
+import { Search, Loader2, ShieldCheck, Info, RotateCcw, Building2, X } from "lucide-react";
 import { updateProjectItem } from "@/app/dashboard/projects/[id]/_actions/project-items";
 import { resetItemNormToKnr } from "@/app/dashboard/projects/[id]/_actions/project-items-labor";
 
@@ -569,28 +569,6 @@ export function RowRgCell({
               Σ {item.labor_hours_total.toFixed(2)} rbh
             </div>
           )}
-          {(() => {
-            const sn = item.suggested_norm;
-            const ln = item.labor_norm;
-            if (!sn || !ln || sn <= 0) return null;
-            const ratio = ln / sn;
-            if (ratio >= 0.5 && ratio <= 2.0) return null;
-            return (
-              <TooltipProvider delayDuration={200}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div className="flex items-center gap-0.5 text-[9px] text-amber-600 dark:text-amber-400 cursor-help">
-                      <AlertCircle className="w-2.5 h-2.5 shrink-0" />
-                      KNR: {sn.toFixed(3)}
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent side="left" className="text-xs max-w-[180px]">
-                    Zapisana norma ({ln.toFixed(3)} rbh) różni się od aktualnej bazy KNR ({sn.toFixed(3)} rbh). Przelicz pozycję lub zresetuj normę (ikona 🛡).
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            );
-          })()}
         </div>
       ) : item.confidence_level !== "manual" && (item.labor_norm == null || item.labor_norm === 0) && Number(item.labor_price) > 0 ? (
         item.knr_code && onGlobalFallbackAction ? (
