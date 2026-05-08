@@ -243,9 +243,11 @@ export async function estimatePricesWithAI(
     keepExistingPrices?: boolean;
     /** Bypass Tryb Własny L1-exclusive lock — go straight to KNR/AI (used by Manual Global Fallback button) */
     bypassL1Exclusive?: boolean;
+    /** Optional sector override — user-selected in dialog. Overrides auto-detect from object_type slug. */
+    sectorOverride?: import("@/lib/ai/smart-mapping-engine").ProjectSector;
   }
 ): Promise<AiPriceResult> {
-  const { targetItemIds, keepExistingPrices = false, bypassL1Exclusive = false } = options ?? {};
+  const { targetItemIds, keepExistingPrices = false, bypassL1Exclusive = false, sectorOverride } = options ?? {};
   try {
     const guard = await checkGuard(AI_FUNCTION_NAMES.aiPricing);
     if ("error" in guard) return { success: false, error: guard.error };
@@ -1156,7 +1158,7 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
       await Promise.all(chunks.map(async (chunk) => {
         try {
           const objectTypeSlug = (project.object_types as { slug?: string } | null)?.slug ?? null;
-          const projectSectorL3 = detectSector(objectTypeSlug);
+          const projectSectorL3 = sectorOverride ?? detectSector(objectTypeSlug);
           const knrMultiplierL3 = 1.4; // display-time only — used for assembly RBH hints
           const itemList = buildEnrichedItemListWithAssembly(
             chunk.map((item) => ({ name: item.name, unit: item.unit, quantity: item.quantity })),

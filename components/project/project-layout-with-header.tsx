@@ -13,6 +13,7 @@ interface ProjectLayoutWithHeaderProps {
   projectStatus: string;
   vatRate: number;
   objectTypeName?: string;
+  objectTypeSlug?: string | null;
   clientName?: string | null;
   clientAddress?: string | null;
   clientNip?: string | null;
@@ -59,6 +60,7 @@ export function ProjectLayoutWithHeader({
   projectStatus,
   vatRate,
   objectTypeName,
+  objectTypeSlug,
   clientName,
   clientAddress,
   clientNip,
@@ -112,6 +114,7 @@ export function ProjectLayoutWithHeader({
         projectStatus={projectStatus}
         vatRate={vatRate}
         objectTypeName={objectTypeName}
+        objectTypeSlug={objectTypeSlug}
         clientName={clientName}
         clientAddress={clientAddress}
         clientNip={clientNip}

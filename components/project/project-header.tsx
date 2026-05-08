@@ -17,6 +17,7 @@ interface ProjectHeaderProps {
   projectStatus: string;
   vatRate: number;
   objectTypeName?: string;
+  objectTypeSlug?: string | null;
   clientName?: string | null;
   clientAddress?: string | null;
   clientNip?: string | null;
@@ -60,6 +61,7 @@ export function ProjectHeader({
   projectStatus,
   vatRate,
   objectTypeName,
+  objectTypeSlug,
   clientName,
   clientAddress,
   clientNip,
@@ -125,6 +127,7 @@ export function ProjectHeader({
         projectStatus={projectStatus}
         vatRate={vatRate}
         objectTypeName={objectTypeName}
+        objectTypeSlug={objectTypeSlug}
         clientName={clientName}
         projectItems={projectItems}
         regionModifier={regionModifier}

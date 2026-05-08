@@ -10,8 +10,11 @@ import {
   applyAiPrices,
 } from "@/app/dashboard/projects/[id]/ai-actions";
 import type { AiPriceEstimate } from "@/app/dashboard/projects/[id]/ai-actions";
+import type { ProjectSector } from "@/lib/ai/smart-mapping-engine";
+import { detectSector } from "@/lib/ai/smart-mapping-engine";
 
 export type PriceMode = "material" | "labor" | "all";
+export type { ProjectSector };
 export type EstimatorStep = "choose" | "loading" | "preview" | "done";
 
 interface UseAiPriceEstimatorProps {
@@ -20,6 +23,8 @@ interface UseAiPriceEstimatorProps {
   selectedRowIds?: Set<string>;
   externalOpen?: boolean;
   onExternalOpenChange?: (open: boolean) => void;
+  /** Object type slug from project — used to set default sector for pricing dialog. */
+  objectTypeSlug?: string | null;
 }
 
 export function useAiPriceEstimator({
@@ -28,6 +33,7 @@ export function useAiPriceEstimator({
   selectedRowIds,
   externalOpen,
   onExternalOpenChange,
+  objectTypeSlug,
 }: UseAiPriceEstimatorProps) {
   const [open, setOpen] = useState(false);
   const prevExternalOpen = { current: undefined as boolean | undefined };
@@ -54,6 +60,9 @@ export function useAiPriceEstimator({
   const [manualMatchItemId, setManualMatchItemId] = useState<string | null>(null);
   const [manualMatchSearch, setManualMatchSearch] = useState<string>("");
   const [allPhase, setAllPhase] = useState<"labor" | "material" | null>(null);
+  const [sectorOverride, setSectorOverride] = useState<ProjectSector | null>(
+    objectTypeSlug ? detectSector(objectTypeSlug) : null
+  );
   const [pendingData, setPendingData] = useState<{ estimates: AiPriceEstimate[]; initialSelectedIds: Set<string> } | null>(null);
   const [fullCatalog, setFullCatalog] = useState<Array<{ name: string; mat: number; lab: number; score: number }> | null>(null);
   const [isLoadingCatalog, setIsLoadingCatalog] = useState(false);
@@ -137,7 +146,10 @@ export function useAiPriceEstimator({
       : undefined;
 
     startEstimate(async () => {
-      const result = await estimatePricesWithAI(projectId, selectedMode, { targetItemIds });
+      const result = await estimatePricesWithAI(projectId, selectedMode, {
+        targetItemIds,
+        ...(sectorOverride ? { sectorOverride } : {}),
+      });
       if (result.success && result.estimates) {
         const ids = new Set(
           result.estimates
@@ -394,6 +406,7 @@ export function useAiPriceEstimator({
     isFinal, hasSelectedRows,
     ambiguousCount, unmatchedCount, pricedCount,
     selectedSummary,
+    sectorOverride, setSectorOverride,
     // handlers
     handleEstimate,
     handleApply,

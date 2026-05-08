@@ -37,6 +37,7 @@ interface ProjectHeaderToolbarProps {
   projectStatus: string;
   vatRate: number;
   objectTypeName?: string;
+  objectTypeSlug?: string | null;
   clientName?: string | null;
   projectItems?: ProjectItem[];
   regionModifier?: number;
@@ -91,6 +92,7 @@ export function ProjectHeaderToolbar({
   projectStatus,
   vatRate,
   objectTypeName,
+  objectTypeSlug,
   clientName,
   projectItems = [],
   regionModifier = 1.0,
@@ -289,6 +291,7 @@ export function ProjectHeaderToolbar({
                   complexityFactor={complexityFactor}
                   regionModifier={regionModifier}
                   materialsOwnedByCustomer={materialsOwnedByCustomer}
+                  objectTypeSlug={objectTypeSlug}
                 />
               </div>
 

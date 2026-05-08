@@ -163,6 +163,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               projectStatus={project.status}
               vatRate={project.vat_rate}
               objectTypeName={project.object_types?.name}
+              objectTypeSlug={(project.object_types as { slug?: string } | null)?.slug ?? null}
               clientName={project.client_name}
               clientAddress={project.client_address}
               clientNip={project.client_nip}

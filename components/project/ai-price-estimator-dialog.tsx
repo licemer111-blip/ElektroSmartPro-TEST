@@ -13,11 +13,13 @@ import { QuotaBadge, QuotaBlocker } from "@/components/ui/quota-badge";
 import Link from "next/link";
 import {
   CircleDollarSign, Loader2, Check, AlertTriangle, Banknote, Wrench,
-  CheckCircle2, Info,
+  CheckCircle2, Info, Building2, Home, Factory,
 } from "lucide-react";
 import { useAiPriceEstimator } from "@/components/project/_parts/useAiPriceEstimator";
 import { EstimateResultsTable } from "@/components/project/_parts/EstimateResultsTable";
 import type { PriceMode } from "@/components/project/_parts/useAiPriceEstimator";
+import type { ProjectSector } from "@/lib/ai/smart-mapping-engine";
+import { SECTOR_LABELS } from "@/lib/ai/smart-mapping-engine";
 import { useTabSyncOptional } from "@/components/project/tab-sync-context";
 
 interface AiPriceEstimatorDialogProps {
@@ -43,6 +45,8 @@ interface AiPriceEstimatorDialogProps {
   regionModifier?: number;
   /** Materials owned by customer flag. */
   materialsOwnedByCustomer?: boolean;
+  /** Object type slug from project — used to pre-select sector in pricing dialog. */
+  objectTypeSlug?: string | null;
 }
 
 const modeButtons: { mode: PriceMode; label: string; desc: string; icon: typeof Banknote }[] = [
@@ -64,14 +68,21 @@ export function AiPriceEstimatorDialog({
   complexityFactor = 1.0,
   regionModifier = 1.0,
   materialsOwnedByCustomer = false,
+  objectTypeSlug,
 }: AiPriceEstimatorDialogProps) {
   // Read live bruttoMode from tab sync context (set by Pult 5-w-1 toggle)
   const tabSyncCtx = useTabSyncOptional();
   const bruttoMode = tabSyncCtx?.uiState?.liveBruttoMode ?? false;
 
   const est = useAiPriceEstimator({
-    projectId, projectStatus, selectedRowIds, externalOpen, onExternalOpenChange,
+    projectId, projectStatus, selectedRowIds, externalOpen, onExternalOpenChange, objectTypeSlug,
   });
+
+  const SECTOR_OPTIONS: { value: ProjectSector; label: string; short: string; icon: typeof Home }[] = [
+    { value: "RESIDENTIAL", label: SECTOR_LABELS.RESIDENTIAL, short: "Mieszkanie", icon: Home },
+    { value: "COMMERCIAL",  label: SECTOR_LABELS.COMMERCIAL,  short: "Biuro/Usługi", icon: Building2 },
+    { value: "INDUSTRIAL",  label: SECTOR_LABELS.INDUSTRIAL,  short: "Przemysł", icon: Factory },
+  ];
 
   const aiTooltipText = est.isFinal
     ? "Projekt zablokowany. Odblokuj projekt, aby użyć ES-Engine wyceny."
@@ -203,8 +214,38 @@ export function AiPriceEstimatorDialog({
                   {est.error}
                 </div>
               )}
-              {/* v4.0 (Phase 2): single labor-only CTA — replaces the 3-button grid
-                  (Materiały / Robocizna / Wszystko). AI material estimation removed. */}
+              {/* Sector selector */}
+              <div className="space-y-1.5">
+                <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Sektor obiektu</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {SECTOR_OPTIONS.map((opt) => {
+                    const Icon = opt.icon;
+                    const isActive = est.sectorOverride === opt.value;
+                    return (
+                      <button
+                        key={opt.value}
+                        onClick={() => est.setSectorOverride(opt.value)}
+                        disabled={est.isEstimating}
+                        className={`flex flex-col items-center gap-1.5 p-2.5 rounded-xl border-2 transition-all text-center ${
+                          isActive
+                            ? "border-orange-500 bg-orange-50 dark:bg-orange-950/30 shadow-sm"
+                            : "border-slate-200 dark:border-slate-700 hover:border-orange-300 dark:hover:border-orange-700 hover:bg-orange-50/50 dark:hover:bg-orange-950/10"
+                        }`}
+                      >
+                        <Icon className={`w-5 h-5 ${isActive ? "text-orange-500" : "text-slate-400 dark:text-slate-500"}`} />
+                        <span className={`text-[10px] font-semibold leading-tight ${isActive ? "text-orange-700 dark:text-orange-300" : "text-slate-600 dark:text-slate-400"}`}>
+                          {opt.short}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="text-[10px] text-slate-400 leading-tight">
+                  Wpływa na dobór szablonów KNR i ceny montażu (podtynkowy / korytka / natynkowy IP44).
+                </p>
+              </div>
+
+              {/* single CTA */}
               <div className="flex justify-center">
                 {modeButtons.map((btn) => {
                   const Icon = btn.icon;
