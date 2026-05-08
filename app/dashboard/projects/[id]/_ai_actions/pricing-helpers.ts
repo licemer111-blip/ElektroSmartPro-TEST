@@ -77,6 +77,7 @@ const PURE_LABOR_KEYWORDS: readonly string[] = [
   "wywóz", "usuwanie", "wynajem", "transport", "dojazd",
   "wiercenie", "przebicie", "kucie", "bruzdowanie", "wykucie", "zamurowanie",
   "programowanie", "konfiguracja", "parametryzacja", "backup",
+  "montaż lamp", "montaż opraw", "montaż oprawy", "montaz lamp", "montaz opraw",
 ];
 
 /** Physical-installation items — if material=0 after KNR lookup, triggers AI L3 fallback. */
