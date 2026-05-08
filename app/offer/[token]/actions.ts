@@ -217,11 +217,14 @@ export async function getOfferByToken(token: string): Promise<{ offer?: OfferDat
   const materialsOwnedByCustomer = project?.materials_owned_by_customer || false;
   const adjMult = 1 + (project?.adjustment_percentage || 0) / 100;
   // v10.5 FIX: Apply v3.0 multipliers — must match project-summary.tsx and PDF route
-  const matMarkupMult   = 1 + (project?.mat_markup_pct || 0) / 100;
-  const labMarkupMult   = 1 + (project?.lab_markup_pct || 0) / 100;
-  const complexityFactor = 1.0;
-  const regionModifier  = project?.regions?.price_modifier ?? 1.0;
-  const knrMultiplier   = await getKnrMultiplier();
+  // v4.1 (Phase 7): complexityFactor must read project.complexity_factor (was hardcoded 1.0
+  // and not applied in formulas → offer totals diverged from table totals for Quick Estimate
+  // projects with ceiling height >3m / SSP / KNX / PA / RACS).
+  const matMarkupMult    = 1 + (project?.mat_markup_pct || 0) / 100;
+  const labMarkupMult    = 1 + (project?.lab_markup_pct || 0) / 100;
+  const complexityFactor = project?.complexity_factor || 1.0;
+  const regionModifier   = project?.regions?.price_modifier ?? 1.0;
+  const knrMultiplier    = await getKnrMultiplier();
 
   const allItems = items || [];
 
@@ -236,7 +239,7 @@ export async function getOfferByToken(token: string): Promise<{ offer?: OfferDat
       const effRegion = isManual ? 1.0 : regionModifier;
       const existing = childSums.get(i.parent_assembly_id) || { mat: 0, lab: 0 };
       existing.mat += effectiveMat * i.quantity * matMarkupMult * adjMult;
-      existing.lab += lab * i.quantity * labMarkupMult * knrMultiplier * adjMult * effRegion;
+      existing.lab += lab * i.quantity * labMarkupMult * complexityFactor * knrMultiplier * adjMult * effRegion;
       childSums.set(i.parent_assembly_id, existing);
     }
   }
@@ -252,7 +255,7 @@ export async function getOfferByToken(token: string): Promise<{ offer?: OfferDat
     // For assembly parents: show sum of children as their displayed price
     // v10.5: Material × matMarkupMult × adjMult | Labor × labMarkupMult × complexity × adjMult × region
     const displayMat = isParent ? (childSums.get(i.id)?.mat ?? 0) : effectiveMat * i.quantity * matMarkupMult * adjMult;
-    const displayLab = isParent ? (childSums.get(i.id)?.lab ?? 0) : lab * i.quantity * labMarkupMult * knrMultiplier * adjMult * effRegion;
+    const displayLab = isParent ? (childSums.get(i.id)?.lab ?? 0) : lab * i.quantity * labMarkupMult * complexityFactor * knrMultiplier * adjMult * effRegion;
     const displayTotal = displayMat + displayLab;
 
     return {

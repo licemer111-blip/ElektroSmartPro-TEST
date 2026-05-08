@@ -426,7 +426,11 @@ const ROZDZIELNICA_INDUSTRIAL: AssemblyTemplate = {
     { label: "Szyny Cu, zaciski, grzebienie (kpl)",       knrCode: "MAT-ROZD-05",      unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 600.00 },
     { label: "Materiały montażowe (kpl)",                 knrCode: "MAT-ROZD-06",      unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 1200.00 },
     { label: "Kable i przewody wewnętrzne (kpl)",         knrCode: "MAT-ROZD-07",      unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 600.00 },
-    { label: "Montaż i okablowanie rozdzielnicy przem. wolnostoj.", knrCode: "KNR 5-10 0201", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 28.00, isLabor: true, materialPricePerUnit: 0.00 },
+    // v4.0 (Phase 6): bumped 28 → 40 rbh. KNR 5-10 0201 + 0202 for free-standing IP54
+    // 600×800 enclosure with full MCCB+RCD+SPD+RCBO assembly + internal cabling +
+    // grounding + commissioning is realistically 35–45 rbh. 28 was on the low end
+    // and produced under-priced industrial rozdzielnice in test projects.
+    { label: "Montaż i okablowanie rozdzielnicy przem. wolnostoj.", knrCode: "KNR 5-10 0201", unit: "kpl", qtyMultiplier: 1.0, rbhPerUnit: 40.00, isLabor: true, materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -496,15 +500,42 @@ export function expandToAssembly(
   }
 
   // Map SCM category + subType → trigger key
+  //
+  // Zestaw Engine v2 (2026-05-04) trigger discipline — context for choices:
+  //   • BIALY_MONTAZ templates have a single child identical to the parent
+  //     (e.g. "Montaż łączników" → 1 child "Montaż urządzenia p/t" 0.68 rbh).
+  //     Wrapping the parent as a virtual zestaw produces only UI noise (yellow
+  //     highlight + child caret) and zero pricing benefit. Reject auto-expand
+  //     for BIALY_MONTAZ entirely. The category remains useful for AI prompt
+  //     hints in detectSmartContext(), but no virtual children are generated.
+  //
+  //   • TRASY auto-expand only fires for explicit composite names
+  //     ("Trasa kablowa", "Linia kablowa"). Bare "Układanie kabla YKY 3×2,5"
+  //     in 1200 mb → without this guard, the RESIDENTIAL TRASY template added
+  //     1200 mb of bruzdowanie 1:1 (~+1500 PLN) — wrong for YKY in koryto/ziemi.
+  //     Quick Estimate Wizard already produces explicit bruzda lines when
+  //     needed, so silent re-bundling is a net regression.
   let triggerKey: AssemblyTriggerKey;
   switch (ctx.category) {
     case "ZESTAW":
       triggerKey = ctx.subType === "ZESTAW_3PHASE" ? "PUNKT_3PHASE" : "PUNKT";
       break;
     case "BIALY_MONTAZ":
-      triggerKey = "BIALY_MONTAZ";
-      break;
+      // Special: plain "Wypust" inside BIALY_MONTAZ falls to WYPUST template
+      // (which has 3 ingredients — bruzda + cable + układanie — so it IS worth
+      // expanding). Everything else under BIALY_MONTAZ is rejected.
+      if (/\bwypust\b/i.test(itemName)) {
+        triggerKey = "WYPUST";
+        break;
+      }
+      return { triggered: false };
     case "TRASY":
+      // Only "Trasa kablowa" / "Linia kablowa" composites trigger TRASY bundle.
+      // Verbs (Układanie/Prowadzenie/Wciąganie/Mocowanie) are already complete
+      // line items — bundling them re-adds bruzdowanie and double-counts.
+      if (ctx.matchedKeyword !== "Trasa kablowa") {
+        return { triggered: false };
+      }
       triggerKey = "TRASY";
       break;
     case "ROZDZIELNICA":
@@ -514,12 +545,8 @@ export function expandToAssembly(
       return { triggered: false };
   }
 
-  // Special: "Wypust" without "instalacją" suffix → WYPUST trigger
+  // Special: "Wypust" with "instalacją" suffix → WYPUST trigger
   if (ctx.category === "ZESTAW" && ctx.matchedKeyword === "Wypust z instalacją") {
-    triggerKey = "WYPUST";
-  }
-  // Plain "Wypust" in BIALY_MONTAZ falls to WYPUST too
-  if (ctx.category === "BIALY_MONTAZ" && /\bwypust\b/i.test(itemName)) {
     triggerKey = "WYPUST";
   }
 
@@ -527,7 +554,12 @@ export function expandToAssembly(
   const template = TEMPLATE_INDEX[key];
   if (!template) return { triggered: false };
 
-  // Compute expanded items (apply per-item overrides if present; skip disabled)
+  // Defensive guard: template with ≤1 ingredient = virtual parent identical to source row.
+  if (template.items.length <= 1) {
+    return { triggered: false };
+  }
+
+  // Compute expanded items (apply per-item overrides; skip disabled)
   const expandedItems: ExpandedAssemblyItem[] = template.items.filter((def) => {
     return !(overrides?.[def.label]?.disabled === true);
   }).map((def) => {

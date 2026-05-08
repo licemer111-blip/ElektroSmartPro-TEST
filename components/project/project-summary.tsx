@@ -88,6 +88,10 @@ export function ProjectSummary({
     const matMarkupMult   = 1 + (project.mat_markup_pct  || 0) / 100;
     const labMarkupMult   = 1 + (project.lab_markup_pct  || 0) / 100;
     const contingencyPct  = project.contingency_pct   || 0;
+    // v4.1 (Phase 7): complexity_factor mirrors calcRowPrices in pricing-calculations.ts.
+    // Quick Estimate Wizard derives this from conditional fields (ceiling height, SSP/KNX/PA/RACS).
+    // MUST be applied to labor here so Σ(row laborTotal) === ProjectSummary.laborTotal.
+    const complexityFactor = project.complexity_factor || 1.0;
 
     // Items that have actual assembly children in DB — use child prices for those
     const parentIds = new Set(
@@ -104,18 +108,23 @@ export function ProjectSummary({
 
       rawEquipmentBase += (item.equipment_price ?? 0) * item.quantity;
 
-      // Assembly override: only for AI-priced items (stored price > 0). Zero-price
-      // items stay at 0 so "Uzupełnij" badge shows correctly — consistent with EstimateRow.
-      const hasStoredPrice = effectiveLaborPrice > 0 || effectiveMaterialPrice > 0;
-      const isSmartDisabled = (item.assembly_overrides as Record<string, { disabled?: boolean }> | null)?.__smart_disable?.disabled === true;
-      if (!isSmartDisabled && !item.is_assembly_child && !isManual && !parentIds.has(item.id) && hasStoredPrice) {
+      // v4.0 (Phase 5): Template fires only for truly unpriced rows (confidence_level == null).
+      // Zestaw Engine v2: auto-expansion runs only when opted in per-project.
+      const hasEngineSetPrice = item.confidence_level != null;
+      const autoDetectZestawy = Boolean(
+        (project as { auto_detect_zestawy?: boolean }).auto_detect_zestawy
+      );
+      const isQuickEstimateRow = Boolean(
+        (item as { is_quick_estimate?: boolean | null }).is_quick_estimate
+      );
+      if (autoDetectZestawy && !isQuickEstimateRow && !item.is_assembly_child && !hasEngineSetPrice && !parentIds.has(item.id)) {
         const scm = detectSmartContext(item.name);
         if (scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY" || scm.category === "ROZDZIELNICA") {
           const expansion = expandToAssembly(item.name, item.quantity, sector, projectLaborRate, knrMultiplier, item.assembly_overrides ?? undefined);
           if (expansion.triggered && (expansion.totalLaborPLN > 0 || expansion.totalMaterialPLN > 0)) {
             // totalLaborPLN = totalRBH × projectLaborRate (base, no region, knrMult already inside)
             rawLaborBase += expansion.totalLaborPLN;
-            baseLaborTotal += expansion.totalLaborPLN * regionModifier * labMarkupMult;
+            baseLaborTotal += expansion.totalLaborPLN * regionModifier * labMarkupMult * complexityFactor;
             if (!materialsOwnedByCustomer) {
               rawMaterialBase += expansion.totalMaterialPLN;
               baseMaterialTotal += expansion.totalMaterialPLN * matMarkupMult;
@@ -131,7 +140,7 @@ export function ProjectSummary({
         baseMaterialTotal += effectiveMaterialPrice * item.quantity * matMarkupMult;
       }
       rawLaborBase += effectiveLaborPrice * item.quantity;
-      baseLaborTotal += effectiveLaborPrice * item.quantity * effectiveRegion * labMarkupMult * knrMultiplier;
+      baseLaborTotal += effectiveLaborPrice * item.quantity * effectiveRegion * labMarkupMult * complexityFactor * knrMultiplier;
     });
 
     const sumaBazowaNetto = rawMaterialBase + rawLaborBase;

@@ -1486,6 +1486,17 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
     // For ZESTAW/BIALY_MONTAZ/TRASY/ROZDZIELNICA trigger items: replace AI-estimated prices with template-
     // derived prices. This ensures dialog preview ≡ table display ≡ summary totals.
     // Iron Rule: store BASE prices (knrMult = 1.0). Display layers apply knrMult at render time.
+    //
+    // Zestaw Engine v2 (2026-05-04): skip this override entirely when the project has
+    // auto_detect_zestawy=false. Without the project flag the user does NOT expect template
+    // prices to silently replace AI estimates — the AI result (already benchmarked against
+    // KNR norms + L0 canonical) stands as the authoritative line price.
+    const autoDetectZestawy = Boolean(
+      (project as { auto_detect_zestawy?: boolean }).auto_detect_zestawy
+    );
+    if (!autoDetectZestawy) {
+      return { success: true, estimates };
+    }
     const assemblySector = detectSector((project.object_types as { slug?: string } | null)?.slug);
     const assemblyEstimates = estimates.map((e) => {
       if (e.isAmbiguous || e.trace === "unmatched") return e;

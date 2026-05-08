@@ -78,9 +78,12 @@ export interface ProjectTabContainerProps {
   liveBruttoMode: boolean;
   liveShowLaborHours: boolean;
   liveExpertColoring: boolean;
+  /** Zestaw Engine v2 (2026-05-04): per-project toggle, drives EstimateTable + auto-expand gating. */
+  liveAutoDetectZestawy: boolean;
   onBruttoModeChange: (v: boolean) => void;
   onLaborHoursChange: (v: boolean) => void;
   onKnrChange: (v: boolean) => void;
+  onAutoDetectZestawyChange: (v: boolean) => void;
   liveVatRate: number;
   onVatRateChange: (v: number) => void;
 }
@@ -94,7 +97,8 @@ export function ProjectTabContainer({
   isRegionPending, currentRegion, useCustomRates, handleRegionChange,
   colorMode, setColorMode, compactView, setCompactView,
   summaryCollapsed, toggleSummary, onSelectedIdsChange, handleTabChange,
-  liveShowKnr, liveBruttoMode, liveShowLaborHours, liveExpertColoring, onBruttoModeChange, onLaborHoursChange, onKnrChange,
+  liveShowKnr, liveBruttoMode, liveShowLaborHours, liveExpertColoring, liveAutoDetectZestawy,
+  onBruttoModeChange, onLaborHoursChange, onKnrChange, onAutoDetectZestawyChange,
   liveVatRate, onVatRateChange,
 }: ProjectTabContainerProps) {
   const { toast } = useToast();
@@ -265,6 +269,7 @@ export function ProjectTabContainer({
         bruttoMode={liveBruttoMode}
         expertColoring={liveExpertColoring}
         showLaborHours={liveShowLaborHours}
+        autoDetectZestawy={liveAutoDetectZestawy}
         isFinal={isFinal}
         isReadOnly={isReadOnly}
         onColorModeChange={setColorMode}
@@ -272,6 +277,7 @@ export function ProjectTabContainer({
         onLaborHoursChange={onLaborHoursChange}
         onKnrChange={onKnrChange}
         onVatRateChange={onVatRateChange}
+        onAutoDetectZestawyChange={onAutoDetectZestawyChange}
       />
 
       {/* ESTIMATE TAB */}
@@ -305,6 +311,10 @@ export function ProjectTabContainer({
               rateIsSet={liveHourlyRate > 0}
               objectTypeSlug={project.object_types?.slug ?? null}
               projectLaborRate={liveHourlyRate}
+              matMarkupMult={1 + (project.mat_markup_pct || 0) / 100}
+              labMarkupMult={1 + (project.lab_markup_pct || 0) / 100}
+              complexityFactor={project.complexity_factor || 1.0}
+              autoDetectZestawy={liveAutoDetectZestawy}
             />
           </Card>
         </div>

@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import {
   Receipt, Eye, BookOpen,
-  Palette, ChevronDown, ChevronUp, Clock,
+  Palette, ChevronDown, ChevronUp, Clock, Puzzle,
 } from "lucide-react";
 import { HintTooltip } from "@/components/ui/hint-tooltip";
 import { HINTS } from "@/lib/hints/hint-content";
@@ -25,6 +25,8 @@ interface ProjectControlPanelProps {
   bruttoMode: boolean;
   expertColoring: boolean;
   showLaborHours: boolean;
+  /** Zestaw Engine v2 (2026-05-04): per-project opt-in for Smart Mapping auto-expansion. */
+  autoDetectZestawy: boolean;
   isFinal?: boolean;
   isReadOnly?: boolean;
   // live state callbacks (optimistic UI)
@@ -33,6 +35,7 @@ interface ProjectControlPanelProps {
   onLaborHoursChange?: (enabled: boolean) => void;
   onKnrChange?: (enabled: boolean) => void;
   onVatRateChange?: (rate: number) => void;
+  onAutoDetectZestawyChange?: (enabled: boolean) => void;
 }
 
 export function ProjectControlPanel({
@@ -42,6 +45,7 @@ export function ProjectControlPanel({
   bruttoMode,
   expertColoring,
   showLaborHours,
+  autoDetectZestawy,
   isFinal = false,
   isReadOnly = false,
   onColorModeChange,
@@ -49,6 +53,7 @@ export function ProjectControlPanel({
   onLaborHoursChange,
   onKnrChange,
   onVatRateChange,
+  onAutoDetectZestawyChange,
 }: ProjectControlPanelProps) {
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
@@ -62,6 +67,7 @@ export function ProjectControlPanel({
   const [localBrutto, setLocalBrutto] = useState(bruttoMode);
   const [localColoring, setLocalColoring] = useState(expertColoring);
   const [localShowRg, setLocalShowRg] = useState(showLaborHours);
+  const [localAutoZestawy, setLocalAutoZestawy] = useState(autoDetectZestawy);
 
   // Sync with external live state (observer/co-pilot mode)
   useEffect(() => { setLocalVat(vatRate); }, [vatRate]);
@@ -69,6 +75,7 @@ export function ProjectControlPanel({
   useEffect(() => { setLocalBrutto(bruttoMode); }, [bruttoMode]);
   useEffect(() => { setLocalColoring(expertColoring); }, [expertColoring]);
   useEffect(() => { setLocalShowRg(showLaborHours); }, [showLaborHours]);
+  useEffect(() => { setLocalAutoZestawy(autoDetectZestawy); }, [autoDetectZestawy]);
 
   const disabled = isFinal || isReadOnly || isPending;
 
@@ -91,7 +98,10 @@ export function ProjectControlPanel({
     });
   };
 
-  const handleDocSetting = (key: "show_knr" | "brutto_mode" | "expert_coloring" | "show_labor_hours_in_pdf", value: boolean) => {
+  const handleDocSetting = (
+    key: "show_knr" | "brutto_mode" | "expert_coloring" | "show_labor_hours_in_pdf" | "auto_detect_zestawy",
+    value: boolean
+  ) => {
     if (disabled) return;
     if (key === "show_knr") {
       setLocalShowKnr(value);
@@ -109,6 +119,10 @@ export function ProjectControlPanel({
       setLocalColoring(value);
       onColorModeChange?.(value);
     }
+    if (key === "auto_detect_zestawy") {
+      setLocalAutoZestawy(value);
+      onAutoDetectZestawyChange?.(value);
+    }
     startTransition(async () => {
       const result = await updateProjectDocSettings(projectId, { [key]: value });
       if (result.error) {
@@ -117,6 +131,7 @@ export function ProjectControlPanel({
         if (key === "brutto_mode") { setLocalBrutto(!value); onBruttoModeChange?.(!value); }
         if (key === "show_labor_hours_in_pdf") { setLocalShowRg(!value); onLaborHoursChange?.(!value); }
         if (key === "expert_coloring") { setLocalColoring(!value); onColorModeChange?.(!value); }
+        if (key === "auto_detect_zestawy") { setLocalAutoZestawy(!value); onAutoDetectZestawyChange?.(!value); }
       }
     });
   };
@@ -291,6 +306,35 @@ export function ProjectControlPanel({
             </div>
             <p className="text-[8px] text-indigo-500/70 leading-tight truncate">
               {localColoring ? "R=ziel · M=pom" : "PDF mono"}
+            </p>
+          </div>
+
+          {/* 6 — Auto-detect Zestawy (Zestaw Engine v2) */}
+          <div className="flex flex-col gap-1 p-1.5 rounded-lg bg-white/70 dark:bg-slate-900/50 border border-indigo-200 dark:border-indigo-800/40 col-span-2 sm:col-span-1">
+            <div className="flex items-center gap-1">
+              <Puzzle className="w-3 h-3 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
+              <span className="text-[9px] font-semibold text-indigo-700 dark:text-indigo-300 truncate">Auto-Zestaw</span>
+              <HintTooltip
+                content="Gdy włączone, silnik automatycznie rozwija pozycje typu 'Punkt gniazda', 'Trasa kablowa' itp. w Zestawy (rodzic + składniki: bruzda, kabel, puszka). Domyślnie wyłączone — pozycje pozostają pojedyncze, bez niespodziewanych dodatków do sumy."
+                side="top"
+                iconOnly
+              />
+            </div>
+            <div className="flex items-center justify-between mt-1">
+              <Label htmlFor={`autozestaw-toggle-${projectId}`} className="text-[8px] text-indigo-600 dark:text-indigo-400 cursor-pointer leading-tight">
+                {localAutoZestawy ? "Wł." : "Wył."}
+              </Label>
+              <Switch
+                id={`autozestaw-toggle-${projectId}`}
+                name={`autozestaw-toggle-${projectId}`}
+                checked={localAutoZestawy}
+                onCheckedChange={(v) => handleDocSetting("auto_detect_zestawy", v)}
+                disabled={disabled}
+                className="scale-[0.65] origin-right data-[state=checked]:bg-amber-600"
+              />
+            </div>
+            <p className="text-[8px] text-indigo-500/70 leading-tight truncate">
+              {localAutoZestawy ? "rozpakowuje" : "pozycje 1:1"}
             </p>
           </div>
 

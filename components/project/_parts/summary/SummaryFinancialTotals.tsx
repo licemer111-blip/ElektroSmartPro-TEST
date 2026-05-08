@@ -89,11 +89,25 @@ export function SummaryFinancialTotals({
     <div className="space-y-2">
       {/* ── Droga pieniędzy (Clean Table Architecture) ── */}
 
-      {/* 1. Suma Bazowa Netto */}
+      {/* 1. Suma Bazowa Netto — pre-multiplier baseline (no KNR, no region, no narzut, no adj) */}
       <div className="flex justify-between items-center py-1.5">
-        <span className="text-xs text-muted-foreground">
-          Suma bazowa netto
-        </span>
+        <TooltipProvider delayDuration={200}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="text-xs text-muted-foreground border-b border-dotted border-muted-foreground/40 cursor-help">
+                Suma bazowa netto
+              </span>
+            </TooltipTrigger>
+            <TooltipContent side="left" className="max-w-[260px] text-[11px] leading-snug">
+              Cena katalogowa × ilość, <strong>przed</strong> mnożnikami:
+              <br />• KNR 2026 (mnożnik admin)
+              <br />• korekta regionalna (Województwo)
+              <br />• narzut (Mat./Rob./Marża)
+              <br />• negocjacja
+              <br />Aby zobaczyć kwotę zgodną z sumą wierszy w tabeli — patrz <strong>SUMA NETTO</strong> poniżej.
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
         <span className="text-sm text-muted-foreground">
           <BlurredPrice value={totals.sumaBazowaNetto} isPro={isPro} showBadge={!isPro} />
         </span>

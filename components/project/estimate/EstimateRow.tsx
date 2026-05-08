@@ -100,6 +100,14 @@ export interface EstimateRowProps {
   materialsOwnedByCustomer: boolean;
   adjustmentMultiplier: number;
   regionModifier: number;
+  /**
+   * v4.0 (Phase 6) Project-level multipliers — must equal those used in ProjectSummary
+   * so Σ(row totals in table) === SUMA NETTO. Default 1.0 keeps prior behaviour for
+   * any caller that doesn't pass them (back-compat).
+   */
+  matMarkupMult?: number;
+  labMarkupMult?: number;
+  complexityFactor?: number;
   filterType: "all" | "materials" | "labor";
   isAssemblyParent: boolean;
   isCollapsedAssembly?: boolean;
@@ -118,6 +126,10 @@ export interface EstimateRowProps {
   projectSector?: ProjectSector;
   /** Effective labor rate PLN/rbh for RBH cost preview in SmartAssemblyPanel. */
   projectLaborRate?: number;
+  /** Zestaw Engine v2 (2026-05-04): when FALSE (default), Smart Mapping Engine does NOT
+   *  virtually expand this row into a Zestaw — even if detectSmartContext matches. User must
+   *  opt in per-project via Settings. Applies to price override + virtual children. */
+  autoDetectZestawy?: boolean;
 }
 
 const SECTION_PRESETS = [
@@ -157,6 +169,9 @@ export const EstimateRow = React.memo(function EstimateRow({
   materialsOwnedByCustomer,
   adjustmentMultiplier,
   regionModifier,
+  matMarkupMult = 1.0,
+  labMarkupMult = 1.0,
+  complexityFactor = 1.0,
   filterType,
   isAssemblyParent,
   isCollapsedAssembly = false,
@@ -170,6 +185,7 @@ export const EstimateRow = React.memo(function EstimateRow({
   fallbackLoadingIds,
   projectSector = "RESIDENTIAL",
   projectLaborRate = 100,
+  autoDetectZestawy = false,
 }: EstimateRowProps) {
   // Blur strictly controlled by is_pro from Supabase — no client-side override
   const showPrices = isPro;
@@ -250,9 +266,9 @@ export const EstimateRow = React.memo(function EstimateRow({
     materialsOwnedByCustomer,
     filterType,
     regionModifier,
-    1.0, // matMarkupMult
-    1.0, // labMarkupMult
-    1.0, // complexityFactor
+    matMarkupMult,
+    labMarkupMult,
+    complexityFactor,
     knrMultiplier,
   );
 
@@ -261,6 +277,16 @@ export const EstimateRow = React.memo(function EstimateRow({
   // the row matches the SmartAssemblyPanel tooltip. project-summary.tsx applies
   // the same logic, so table rows ≡ summary ≡ tooltip.
   const isManualPrice = displayItem.confidence_level === "manual";
+  // v4.0 (Phase 5): CRITICAL preview=apply parity fix.
+  // Any engine/AI-set price is ALSO protected from template override.
+  // Root cause: after "Wyceń", AI writes final_labor_price + confidence_level
+  // ("verified" / "analog" / "estimated" / "uncertain"). Template override was
+  // then replacing the AI price with `totalRBH × laborRate` computed FROM A
+  // DIFFERENT FORMULA, causing preview (33 zł/mb) vs kosztorys (147 zł/mb)
+  // divergence for every cable/zestaw item. Now template only fires when
+  // confidence_level is null (truly unpriced row) — exactly the flow for
+  // which smart assemblies were designed in the first place.
+  const hasEngineSetPrice = displayItem.confidence_level != null;
   let materialUnit = calcMaterialUnit;
   let laborUnit    = calcLaborUnit;
   let materialTotal = calcMaterialTotal;
@@ -269,19 +295,26 @@ export const EstimateRow = React.memo(function EstimateRow({
   let assemblyRBHPerUnit: number | null = null;
 
   // Detect assembly-driven items once; used both in price override and in edit panel render.
-  const _scmCheck = !isManualPrice && !isAssemblyChild ? detectSmartContext(item.name) : null;
+  const _scmCheck = !hasEngineSetPrice && !isAssemblyChild ? detectSmartContext(item.name) : null;
   // Name-based detection without price/manual guards — used to simplify edit panel for ALL smart rows
   const isSmartItem = !isAssemblyChild && detectSmartContext(item.name).category !== "NONE";
   const _rawItemTotal = (displayItem.final_material_price ?? displayItem.material_price ?? 0)
     + (displayItem.final_labor_price ?? displayItem.labor_price ?? 0);
+  // Zestaw Engine v2 (2026-05-04): auto-expansion now gated by project flag and per-row
+  // is_quick_estimate. Manual SmartAssemblyPanel invocation remains available regardless.
+  const isQuickEstimateRow = Boolean(
+    (item as { is_quick_estimate?: boolean | null }).is_quick_estimate
+  );
   const isAssemblyOverride =
+    autoDetectZestawy &&
+    !isQuickEstimateRow &&
     !!_scmCheck &&
     !isSmartDisabled &&
     _rawItemTotal > 0 &&
     (_scmCheck.category === "ZESTAW" || _scmCheck.category === "BIALY_MONTAZ" ||
      _scmCheck.category === "TRASY"  || _scmCheck.category === "ROZDZIELNICA");
 
-  // Guard: only override items that have already been AI-priced (calcRowTotal > 0).
+  // Guard: only override items that have no engine/manual price (confidence_level == null).
   // Note: isEditing is intentionally NOT in this guard — display prices must not jump when the
   // edit panel opens. The edit panel inputs use a separate editedItem state (unaffected).
   if (isAssemblyOverride) {

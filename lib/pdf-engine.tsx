@@ -328,6 +328,8 @@ export interface PdfEngineData {
    */
   showDemoWatermark?: boolean;
   showColors?: boolean;
+  /** Zestaw Engine v2: when TRUE, assembly rows (set_parent/child_mat/child_lab) render monochrome. */
+  monochrome?: boolean;
 }
 
 // ─── Column Width Calculator ───────────────────────────────────────────────────
@@ -655,6 +657,7 @@ const TableDataRow = ({
   showRg,
   matOwned,
   showColors = true,
+  monochrome = false,
 }: {
   row: PdfRow;
   rowIndex: number;
@@ -664,6 +667,7 @@ const TableDataRow = ({
   showRg: boolean;
   matOwned: boolean;
   showColors?: boolean;
+  monochrome?: boolean;
 }) => {
   let rowBg = rowIndex % 2 === 0 ? palette.rowEven : palette.rowOdd;
   let textColor = palette.textPrimary;
@@ -683,26 +687,29 @@ const TableDataRow = ({
       break;
 
     case 'set_parent':
-      // Assembly parent — left accent border + tinted bg
-      rowBg = showColors ? palette.setParentBg : '#f1f5f9';
-      textColor = palette.textPrimary;
-      amountColor = showColors ? palette.accentPrimary : palette.textPrimary;
+      // Zestaw Engine v2: monochrome mode drops yellow tint; showColors controls palette.
+      rowBg = monochrome ? rowBg : palette.setParentBg;
+      textColor = monochrome ? palette.textPrimary : '#78350f';
       fontWeight = 'bold';
-      borderLeftWidth = 4;
-      borderLeftColor = showColors ? palette.setParentBorder : '#475569';
+      borderLeftWidth = monochrome ? 0 : 4;
+      borderLeftColor = monochrome ? 'transparent' : palette.setParentBorder;
       break;
 
     case 'child_mat':
-    case 'child_lab': {
-      // Child row — subtle bg with thin left border as tree indicator
-      const childBg = row.rowType === 'child_mat' ? palette.childMatBg : palette.childLabBg;
-      rowBg = showColors ? childBg : (rowIndex % 2 === 0 ? '#ffffff' : '#f5f7f9');
-      textColor = palette.textSecondary;
-      amountColor = palette.textPrimary; // amounts always readable!
-      borderLeftWidth = 2;
-      borderLeftColor = showColors ? palette.childBorder : '#cbd5e1';
+      rowBg = monochrome ? rowBg : palette.childMatBg;
+      textColor = monochrome ? palette.textSecondary : '#92400e';
+      fontStyle = 'italic';
+      borderLeftWidth = monochrome ? 0 : 3;
+      borderLeftColor = monochrome ? 'transparent' : '#f59e0b';
       break;
-    }
+
+    case 'child_lab':
+      rowBg = monochrome ? rowBg : palette.childLabBg;
+      textColor = monochrome ? palette.textSecondary : '#166534';
+      fontStyle = 'italic';
+      borderLeftWidth = monochrome ? 0 : 3;
+      borderLeftColor = monochrome ? 'transparent' : '#22c55e';
+      break;
 
     case 'section_subtotal':
       rowBg = showColors ? palette.subtotalBg : '#e2e8f0';
@@ -996,6 +1003,7 @@ const ContentPage = ({
           showRg={showRg}
           matOwned={matOwnedByClient}
           showColors={data.showColors !== false}
+          monochrome={Boolean(data.monochrome)}
         />
       ))}
 
