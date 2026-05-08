@@ -499,7 +499,11 @@ export function enforceExpertGuards(
   // B. Hard surface formula floor — using stored laborNorm (reliable for L0/L2; skip if null)
   // v2.4: M-Factor REMOVED. Formula: surfaceFloor = laborNorm × surfaceTier × baseRate × globalMod
   // Uses a separate surface-tier matrix (silka 1.75x is not in classifyIntent — material property, not intent).
-  if (est.laborNorm != null && est.laborNorm > 0) {
+  // SKIP for wall-chasing / hole-cutting ops: their KNR norms are already substrate-aware
+  // (bruzdowanie w betonie=2.00 vs cegła=0.85 — the substrate is encoded in the norm itself).
+  // Applying hardTier again would double-count the concrete difficulty.
+  const isSubstrateAwareOp = /\bbruzd|\bkuci|\bwykuc|\bfrezow|\bsztrobow/i.test(name);
+  if (!isSubstrateAwareOp && est.laborNorm != null && est.laborNorm > 0) {
     const hardTier = isZelbet(name) ? 2.25
       : /silk[aąei]|silce/i.test(name) ? 1.75
       : /\bbeton/i.test(name) ? 1.50
