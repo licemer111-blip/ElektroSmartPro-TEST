@@ -64,6 +64,11 @@ export interface CanonicalL0Match extends CanonicalL0Entry {
 export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   // ── KABLE I PRZEWODY (układanie p/t — KNR 5-08, KNR 5-10, KNR 5-12) ──
 
+  // YDYp 2×1.5 — dzwonek, sygnalizacja, 2-przewodowe obwody
+  { pattern: /\bydyp?\s*2\s*[x×*]\s*1[,.]5\b/i,
+    knrCode: "KNR 5-08 0200", laborNorm: 0.11, unit: "mb",
+    description: "Przewód YDYp 2×1.5 mm² układany p/t", materialPrice: 3.50 },
+
   // YDYp 3×1.5 — najczęściej używany do oświetlenia
   { pattern: /\bydyp?\s*3\s*[x×*]\s*1[,.]5\b/i,
     knrCode: "KNR 5-08 0201", laborNorm: 0.13, unit: "mb",
@@ -117,6 +122,28 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /\byky(?:zo)?\s*[45]\s*[x×*]\s*50\b/i,
     knrCode: "KNR 5-10 0304", laborNorm: 0.55, unit: "mb",
     description: "Kabel YKY 4×50 / 5×50 mm² układany p/t" },
+  // YKY duże przekroje — MUST precede generic fallback (0.22 rbh/mb would undercharge ×6+ vs 240mm²)
+  { pattern: /\byky(?:zo)?\s*[45]\s*[x×*]\s*70\b/i,
+    knrCode: "KNR 5-10 0305", laborNorm: 0.70, unit: "mb",
+    description: "Kabel YKY 4×70 / 5×70 mm² układany p/t", materialPrice: 38.00 },
+  { pattern: /\byky(?:zo)?\s*[45]\s*[x×*]\s*95\b/i,
+    knrCode: "KNR 5-10 0306", laborNorm: 0.85, unit: "mb",
+    description: "Kabel YKY 4×95 / 5×95 mm² układany p/t", materialPrice: 55.00 },
+  { pattern: /\byky(?:zo)?\s*[45]\s*[x×*]\s*120\b/i,
+    knrCode: "KNR 5-10 0307", laborNorm: 1.00, unit: "mb",
+    description: "Kabel YKY 4×120 / 5×120 mm² układany p/t", materialPrice: 72.00 },
+  { pattern: /\byky(?:zo)?\s*[45]\s*[x×*]\s*150\b/i,
+    knrCode: "KNR 5-10 0308", laborNorm: 1.15, unit: "mb",
+    description: "Kabel YKY 4×150 / 5×150 mm² układany p/t", materialPrice: 95.00 },
+  { pattern: /\byky(?:zo)?\s*[45]\s*[x×*]\s*185\b/i,
+    knrCode: "KNR 5-10 0309", laborNorm: 1.25, unit: "mb",
+    description: "Kabel YKY 4×185 / 5×185 mm² układany p/t", materialPrice: 120.00 },
+  { pattern: /\byky(?:zo)?\s*[45]\s*[x×*]\s*240\b/i,
+    knrCode: "KNR 5-10 0310", laborNorm: 1.40, unit: "mb",
+    description: "Kabel YKY 4×240 / 5×240 mm² układany p/t", materialPrice: 158.00 },
+  { pattern: /\byky(?:zo)?\s*[45]\s*[x×*]\s*(?:300|400)\b/i,
+    knrCode: "KNR 5-10 0311", laborNorm: 1.70, unit: "mb",
+    description: "Kabel YKY 5×300 / 5×400 mm² układany p/t", materialPrice: 210.00 },
   // YKY generic fallback
   { pattern: /\byky(?:zo)?\b/i,
     knrCode: "KNR 5-10 0301", laborNorm: 0.22, unit: "mb",
@@ -745,6 +772,70 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /\belektrozaczep\b|\b(?:rygiel|zamek)\s+elektryczn/i,
     knrCode: "ES-NAP-020", laborNorm: 0.65, unit: "szt",
     description: "Elektrozaczep / rygiel elektryczny", materialPrice: 95.00 },
+
+  // ── KABLE ALUMINIOWE (ASXSN / YAKY / ALmYn) — hale, WLZ zewnętrzne ──
+  // ASXSN = aluminium + żyła stalowa koncentryczna (outdoor/underground)
+  { pattern: /\b(?:asxsn|ymaly|yaky|almyn|alxsn|alfyn)\b.*\b(?:4|5)\s*[x×*]\s*(?:16|25)\b/i,
+    knrCode: "KNR 5-10 0401", laborNorm: 0.22, unit: "mb",
+    description: "Kabel Al 4×16 / 4×25 mm² układany", materialPrice: 14.00 },
+  { pattern: /\b(?:asxsn|ymaly|yaky|almyn|alxsn|alfyn)\b.*\b(?:4|5)\s*[x×*]\s*(?:35|50)\b/i,
+    knrCode: "KNR 5-10 0402", laborNorm: 0.30, unit: "mb",
+    description: "Kabel Al 4×35 / 4×50 mm² układany", materialPrice: 25.00 },
+  { pattern: /\b(?:asxsn|ymaly|yaky|almyn|alxsn|alfyn)\b.*\b(?:4|5)\s*[x×*]\s*(?:70|95)\b/i,
+    knrCode: "KNR 5-10 0403", laborNorm: 0.45, unit: "mb",
+    description: "Kabel Al 4×70 / 4×95 mm² układany", materialPrice: 40.00 },
+  { pattern: /\b(?:asxsn|ymaly|yaky|almyn|alxsn|alfyn)\b.*\b(?:4|5)\s*[x×*]\s*(?:120|150|185)\b/i,
+    knrCode: "KNR 5-10 0404", laborNorm: 0.60, unit: "mb",
+    description: "Kabel Al 4×120–185 mm² układany", materialPrice: 60.00 },
+  { pattern: /\b(?:asxsn|ymaly|yaky|almyn|alxsn|alfyn)\b.*\b(?:4|5)\s*[x×*]\s*(?:240|300)\b/i,
+    knrCode: "KNR 5-10 0405", laborNorm: 0.80, unit: "mb",
+    description: "Kabel Al 4×240 / 4×300 mm² układany", materialPrice: 85.00 },
+  { pattern: /\b(?:asxsn|ymaly|yaky|almyn|alxsn|alfyn)\b/i,
+    knrCode: "KNR 5-10 0401", laborNorm: 0.22, unit: "mb",
+    description: "Kabel aluminiowy (generic)" },
+
+  // ── SZYNOPRZEWÓD / BUSDUCT — hale przemysłowe (ES-IND-xxx) ──
+  { pattern: /\bszynoprzew[oó]d\b.*\b(?:100|160|250)\s*a\b/i,
+    knrCode: "ES-IND-001", laborNorm: 0.60, unit: "mb",
+    description: "Szynoprzewód do 250A", materialPrice: 0 },
+  { pattern: /\bszynoprzew[oó]d\b.*\b(?:400|630)\s*a\b/i,
+    knrCode: "ES-IND-002", laborNorm: 0.90, unit: "mb",
+    description: "Szynoprzewód 400–630A", materialPrice: 0 },
+  { pattern: /\bszynoprzew[oó]d\b.*\b(?:800|1000|1250|1600)\s*a\b/i,
+    knrCode: "ES-IND-003", laborNorm: 1.30, unit: "mb",
+    description: "Szynoprzewód 800–1600A (wielkoprzemysłowy)", materialPrice: 0 },
+  { pattern: /\bszynoprzew[oó]d\b/i,
+    knrCode: "ES-IND-001", laborNorm: 0.75, unit: "mb",
+    description: "Szynoprzewód (generic)", materialPrice: 0 },
+
+  // ── RURY INSTALACYJNE STALOWE (KNR 5-08 0511..0513) ──
+  { pattern: /\brur[ak]\s+(?:stalo|rst\b|psl\b)|\brst\s+(?:m?g?\d|instal)/i,
+    knrCode: "KNR 5-08 0511", laborNorm: 0.30, unit: "mb",
+    description: "Rura stalowa RST / instalacyjna", materialPrice: 18.00 },
+  { pattern: /\brur[ak]\s+(?:hdpe|pvc\s+kabel|dvk\b|rde\b|ekd\b)/i,
+    knrCode: "KNR 5-08 0512", laborNorm: 0.15, unit: "mb",
+    description: "Rura PVC kablowa / HDPE", materialPrice: 8.00 },
+
+  // ── POMPA CIEPŁA — podłączenie elektryczne (ES-HVAC-xxx) ──
+  { pattern: /\b(?:pod[lł][aą]cz|zasilanie|obw[oó]d)\s+(?:pompy?|pc)\s+ciep[lł]|pompa\s+ciep[lł].*pod[lł][aą]cz/i,
+    knrCode: "ES-HVAC-001", laborNorm: 4.50, unit: "kpl",
+    description: "Podłączenie elektryczne pompy ciepła (kpl)", materialPrice: 0 },
+  { pattern: /\bpompa\s+ciep[lł]/i,
+    knrCode: "ES-HVAC-001", laborNorm: 4.50, unit: "kpl",
+    description: "Pompa ciepła — elektryka (kpl)", materialPrice: 0 },
+
+  // ── KABEL DOZIEMNY / ZBROJONY (YKXs / YAKXS) — układanie w ziemi ──
+  { pattern: /\b(?:ykxs|yakxs|xruhakxs|kabel\s+doziem|kabel\s+ziemn)/i,
+    knrCode: "ES-IND-010", laborNorm: 0.25, unit: "mb",
+    description: "Kabel doziemny / ziemny (bez wykopów)", materialPrice: 0 },
+
+  // ── AGREGAT PRĄDOTWÓRCZY (ES-AGR-xxx) ──
+  { pattern: /\bagregat\s+(?:pr[aą]dotw[oó]rczy|pr[aą]dotw|generator|dieslowy|benzynowy)/i,
+    knrCode: "ES-AGR-001", laborNorm: 6.00, unit: "szt",
+    description: "Agregat prądotwórczy — montaż + podłączenie", materialPrice: 0 },
+  { pattern: /\bats\b|\b(?:automatyczny?|auto)\s+przełącznik\s+(?:zasilani|rezerw)|\bszafa\s+(?:ats|szs)\b/i,
+    knrCode: "ES-AGR-002", laborNorm: 2.50, unit: "szt",
+    description: "Szafa ATS / automatyczny przełącznik zasilania", materialPrice: 0 },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════
