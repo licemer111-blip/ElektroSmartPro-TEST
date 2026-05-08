@@ -137,18 +137,7 @@ export function useAiPriceEstimator({
       : undefined;
 
     startEstimate(async () => {
-      // v4.0 (Phase 2): labor-only pipeline — single pass, no "all" two-phase mode.
-      // AI material estimation removed (too many hallucinations on brand/model/volume).
-      // Materials come from: (a) user catalog (L1 match), (b) manual input.
-      // Always use "labor" mode regardless of selectedMode — legacy "material"/"all"
-      // callers get a labor-only result (backward compatible; they'll re-price material manually).
-      //
-      // v4.0 (Phase 3): MIN_SINGLE_MS=10500 artificial delay REMOVED.
-      // Real labor wycena takes 2-4 sec; padding to 10.5 sec was a fake "ES-Engine
-      // is thinking hard" theatre that made users wait 3-5× longer than necessary.
-      // The phase animation in AiPriceEstimatorDialog now drains remaining steps
-      // at 700ms each after data arrives — feels fast and honest.
-      const result = await estimatePricesWithAI(projectId, "labor", { targetItemIds });
+      const result = await estimatePricesWithAI(projectId, selectedMode, { targetItemIds });
       if (result.success && result.estimates) {
         const ids = new Set(
           result.estimates
