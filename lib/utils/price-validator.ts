@@ -97,8 +97,8 @@ export const LABOR_PRICE_CEILING: Array<{
   { keywords: ["montaż", "gniazda"], unit: "szt", max: 60, marketPrice: 28.0 },
   { keywords: ["montaż", "łącznika"], unit: "szt", max: 55, marketPrice: 25.0 },
   { keywords: ["montaż", "osprzętu"], unit: "szt", max: 60, marketPrice: 28.0 },
-  { keywords: ["kucie", "bruzd"], unit: "mb", max: 30, marketPrice: 20.0 },
-  { keywords: ["bruzdowanie"], unit: "mb", max: 30, marketPrice: 20.0 },
+  { keywords: ["kucie", "bruzd"], unit: "mb", max: 400, marketPrice: 80.0 },
+  { keywords: ["bruzdowanie"], unit: "mb", max: 400, marketPrice: 80.0 },
   // Heavy WLZ cables — MUST precede generic "układanie kabel/przewod" entries.
   // Prevents thin-wire ceiling (max=15 PLN/mb) from clamping WLZ labor down.
   { keywords: ["wlz"],            unit: "mb", max: 130, marketPrice: 55.0 },
@@ -242,8 +242,8 @@ export const LABOR_NORM_CEILING: Array<{
   maxNorm: number;
   typicalNorm: number;
 }> = [
-  { keywords: ["kucie", "bruzd"], unit: "mb", maxNorm: 0.20, typicalNorm: 0.08 },
-  { keywords: ["bruzdowanie"], unit: "mb", maxNorm: 0.20, typicalNorm: 0.08 },
+  { keywords: ["kucie", "bruzd"], unit: "mb", maxNorm: 3.0, typicalNorm: 0.85 },
+  { keywords: ["bruzdowanie"], unit: "mb", maxNorm: 3.0, typicalNorm: 0.85 },
   // Heavy WLZ cables — MUST precede generic "układanie kabel/przewod" entries.
   // Real KNR norms for WLZ ≥10mm²: 0.60–1.20 rbh/mb (KNR 5-04 0101-02..05).
   // Without these entries, clampLaborNorm would cap them at thin-wire 0.032 rbh/mb.

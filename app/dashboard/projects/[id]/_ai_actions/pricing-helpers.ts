@@ -482,7 +482,12 @@ export function enforceExpertGuards(
 
   // A. Connection/commissioning formula floor — rate-dependent (contrast: securityAuditLayer is hardcoded)
   // v2.4: M-Factor REMOVED — KNR 2026 baseNorm already accounts for modern tooling.
-  if (profile.intent === "HEAVY_CONNECTION" || profile.intent === "STANDARD_ACTION" || profile.intent === "DISTRIBUTION_BOARD") {
+  // SKIP for verified canonical KNR items (confidence=high + explicit laborNorm):
+  // those norms are pre-calibrated — applying CONNECTION_MIN_NORM (0.50 rbh) on top of
+  // e.g. Łącznik canonical (0.25 rbh) would double the price.
+  // AI/fuzzy items (confidence≠high or no norm) still benefit from this floor.
+  const hasVerifiedKnrNorm = est.confidence === "high" && est.laborNorm != null && est.laborNorm > 0 && est.knrSource !== "catalog-l1";
+  if (!hasVerifiedKnrNorm && (profile.intent === "HEAVY_CONNECTION" || profile.intent === "STANDARD_ACTION" || profile.intent === "DISTRIBUTION_BOARD")) {
     const priceFloor = Math.round(profile.baseNorm * baseRate * globalMod * 100) / 100;
     if ((est.suggestedLabor ?? 0) < priceFloor) {
       return {
