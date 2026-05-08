@@ -340,11 +340,13 @@ export async function estimatePricesWithAI(
       if (keepExistingPrices) {
         if (mode === "material") return effectiveMat(item) === 0;
         if (mode === "labor") return effectiveLab(item) === 0;
-        return isBlank(item);
+        // mode="all": reprice if EITHER component is missing (not just when both are 0)
+        return effectiveMat(item) === 0 || effectiveLab(item) === 0;
       }
       if (mode === "material") return effectiveMat(item) === 0;
       if (mode === "labor") return effectiveLab(item) === 0;
-      return isBlank(item);
+      // mode="all": reprice if EITHER component is missing
+      return effectiveMat(item) === 0 || effectiveLab(item) === 0;
     });
 
     if (itemsToPrice.length === 0) {
