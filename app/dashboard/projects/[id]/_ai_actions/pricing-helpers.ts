@@ -168,40 +168,80 @@ const PURE_LABOR_KEYWORDS: readonly string[] = [
 
 /** Physical-installation items — if material=0 after KNR lookup, triggers AI L3 fallback. */
 const MATERIAL_MANDATORY_KEYWORDS: readonly string[] = [
-  // Cables & conductors
-  "kabel", "przewod", "wlz", "ydy", "yky", "asxsn", "omty",
-  "utp", "ftp", "h07", "linka", "drut", "bednarka", "tasma stalowa",
-  // Conduits & trays
-  "rura", "peszel", "korytko", "drabinka", "kanal", "listwa",
-  // Enclosures & panels
-  "rozdzielnica", "szafa", "obudowa", "skrzynka", "zlacze",
-  "tablica", "panel",
-  // Power electronics
+  // ── Kable instalacyjne (YDY, YDYp, YDYżo) ─────────────────────────
+  "kabel", "przewod", "przewód", "wlz", "ydy", "ydyp", "ydyzo", "ydyżo",
+  "yky", "ykyzo", "ykyżo", "yaky", "asxsn", "omty", "h07", "h07rn",
+  "nhxh", "nhxmh", "n2xh", "n2xch", "lsoh", "lgy", "nyy",
+  "utp", "ftp", "sftp", "ytdy", "yntks", "ytksy",
+  "linka", "drut", "bednarka", "tasma stalowa", "tasma miedziana",
+  "kabel solarny", "kabel grzejn",
+  // ── Trasy kablowe ────────────────────────────────────────────────
+  "rura", "peszel", "korytko", "drabinka", "kanal", "listwa naścienna",
+  "rura instalacyjna", "rura hdpe", "rura rl", "rura dvr",
+  "uchwyt kablowy", "uchwyt dystansowy",
+  // ── Rozdzielnice i obudowy ───────────────────────────────────────
+  "rozdzielnica", "szafa elektryczna", "obudowa", "skrzynka", "zlacze",
+  "tablica", "skrzynka rozdzielcza", "rp ", "rt ",
+  // ── Aparatura modułowa ──────────────────────────────────────────
+  "wylacznik", "wyłącznik", "bezpiecznik", "wkładka bezpiecznikow",
+  "podstawa bezpiecznikow",
+  "rcd", "rcbo", "roznicowka", "rozróżnicowka",
+  "stycznik", "przekaznik", "przekaźnik", "ogranicznik",
+  "rozlacznik", "rozłącznik", "aparat", "szyna th35",
+  "spd", "ochronnik", "ogranicznik przepiec",
+  // ── Osprzęt elektroinstalacyjny ─────────────────────────────────
+  "gniazd", "gniazdko", "gniazdo",
+  "lacznik", "łącznik", "wlacznik",
+  "przycisk", "ramka", "puszka",
+  "zlaczka", "wago", "uchwyt", "kolek", "sruba",
+  "sciemniacz", "ściemniacz", "dimmer", "regulator oswietlenia",
+  "gniazdo usb", "gniazdo rj45", "gniazdo hdmi",
+  // ── Oprawy oświetleniowe (produkty) ─────────────────────────────
+  "oprawa", "lampa", "naswietlacz", "naświetlacz", "reflektor", "halogen",
+  "zarowka", "żarówka", "zasilacz led", "driver led",
+  "downlight", "plafon", "kinkiet", "zyrandol", "żyrandol",
+  "panel led", "listwa led", "tasma led", "taśma led",
+  "oprawa awaryjna", "oprawa ewakuacyjna",
+  // ── Automatyka i sterowanie ──────────────────────────────────────
+  "czujnik", "czujka", "detektor", "sensor",
+  "czujnik ruchu", "czujnik zmierzch", "czujnik pir",
+  "czujka dymu", "czujka ciepla", "czujka co",
+  "sterownik", "sterownik plc", "regulator",
+  "zegar", "timer", "programator",
+  "termostat", "regulator temperatury",
+  // ── Smart home / BMS ─────────────────────────────────────────────
+  "knx", "dali", "zigbee", "z-wave", "modbus", "bacnet",
+  "aktor knx", "zasilacz knx", "magistrala knx",
+  "modul dali", "driver dali",
+  // ── Systemy alarmowe i CCTV ──────────────────────────────────────
+  "sygnalizator", "centrala alarmow", "centrala", "kamera",
+  "rejestrator", "dvr", "nvr", "pir", "syrena",
+  "klawiatura alarmow", "modul gsm",
+  // ── Energetyka i zasilanie ───────────────────────────────────────
   "falownik", "inwerter", "magazyn energii",
-  "stacja ladowania", "wallbox", "ups", "akumulator",
-  // PV / Fotowoltaika (v3.0)
-  "fotowoltaika", "modul pv", "panel solarny", "panel pv", "mc4", "optymalizator",
-  "konstrukcja pv", "microinwerter",
-  // EV Charging (v3.0)
-  "stacja ladowania ev", "ladowarka ev", "kabel ev", "typ2",
-  // HVAC / Heat pump (v3.0)
+  "ups", "akumulator", "bateria ups", "agregat",
+  "transformator", "licznik energii", "przekladnik",
+  // ── PV / Fotowoltaika ────────────────────────────────────────────
+  "fotowoltaika", "modul pv", "panel solarny", "panel pv", "mc4",
+  "optymalizator", "konstrukcja pv", "microinwerter",
+  // ── EV Charging ──────────────────────────────────────────────────
+  "stacja ladowania", "wallbox", "ladowarka ev", "typ2",
+  // ── HVAC / Ogrzewanie ────────────────────────────────────────────
   "pompa ciepla", "rekuperator", "rekuperacja", "klimatyzator", "klimatyzacja",
   "wentylacja mechaniczna", "czerpnia",
-  // Additional switchboard items (v3.0)
+  "mata grzejna", "kabel grzewczy", "ogrzewanie podlogowe",
+  // ── Materiały montażowe ──────────────────────────────────────────
+  "dawnica", "dławnica", "koncowtka", "końcówka tulejkowa",
+  "mufa", "głowica kablowa", "grzebien laczeniowy",
+  "szyna zbiorcza", "listwa n ", "listwa pe ",
   "szyna laczeniowa", "listwa zaciskowa", "zlaczka szynowa",
-  // Protection & switching
-  "wylacznik", "bezpiecznik", "stycznik", "przekaznik", "ogranicznik",
-  "roznicowka", "rcd", "rcbo", "aparat", "modul", "szyna",
-  // Outlets & accessories ("gniazd" covers gniazdo + gniazdko)
-  "gniazd", "wlacznik", "lacznik", "przycisk", "ramka",
-  "puszka", "zlaczka", "wago", "uchwyt", "kolek", "sruba",
-  // Lighting
-  "oprawa", "lampa", "naswietlacz", "reflektor", "halogen",
-  "zarowka", "zasilacz led",
-  // Security & automation
-  "czujka", "detektor", "sygnalizator", "centrala", "kamera", "rejestrator",
-  // Power supply lines (imply cables)
-  "zasilanie", "linia",
+  // ── Uziemienie i odgromówka ──────────────────────────────────────
+  "uziom", "iglica", "zwod", "zwód", "bednarka",
+  "uchwyt bednark", "zlacze kontrolne",
+  // ── Zasilanie (imply cables/gear) ───────────────────────────────
+  "zasilanie", "linia zasilajaca", "wlz",
+  // ── Przepusty ppoż ──────────────────────────────────────────────
+  "przepust", "masa ogniochronna", "kolnierz ogniochronny",
 ];
 
 // ─── Name normalisation ───────────────────────────────────────────

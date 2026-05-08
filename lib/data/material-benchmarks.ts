@@ -416,6 +416,71 @@ export const MATERIAL_BENCHMARKS: MaterialBenchmark[] = [
   { category: "trasy_kablowe", keywords: ["korytko", "siatkow", "300"], unit: "mb", min: 28.00, avg: 45.00, max: 70.00 },
   { category: "trasy_kablowe", keywords: ["rura", "ochronna", "dvr"], unit: "mb", min: 2.50, avg: 5.00, max: 8.50 },
   { category: "trasy_kablowe", keywords: ["rura", "osłonowa", "arot"], unit: "mb", min: 4.00, avg: 7.50, max: 12.00 },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // KABLE YDYżo (okrągłe — większe przekroje)
+  // ═══════════════════════════════════════════════════════════════════
+  { category: "kable_instalacyjne", keywords: ["ydyzo", "3x4"],   unit: "mb", min: 11.00, avg: 15.00, max: 20.00 },
+  { category: "kable_instalacyjne", keywords: ["ydyżo", "3x4"],   unit: "mb", min: 11.00, avg: 15.00, max: 20.00 },
+  { category: "kable_instalacyjne", keywords: ["ydyzo", "5x4"],   unit: "mb", min: 18.00, avg: 24.00, max: 32.00 },
+  { category: "kable_instalacyjne", keywords: ["ydyżo", "5x4"],   unit: "mb", min: 18.00, avg: 24.00, max: 32.00 },
+  { category: "kable_instalacyjne", keywords: ["ydyzo", "5x6"],   unit: "mb", min: 26.00, avg: 34.00, max: 46.00 },
+  { category: "kable_instalacyjne", keywords: ["ydyżo", "5x6"],   unit: "mb", min: 26.00, avg: 34.00, max: 46.00 },
+  { category: "kable_instalacyjne", keywords: ["ydyzo", "5x10"],  unit: "mb", min: 44.00, avg: 56.00, max: 72.00 },
+  { category: "kable_instalacyjne", keywords: ["ydyżo", "5x10"],  unit: "mb", min: 44.00, avg: 56.00, max: 72.00 },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // KABLE NHXMH / N2XH (bezhalogenowe, p.poż)
+  // ═══════════════════════════════════════════════════════════════════
+  { category: "kable_specjalne", keywords: ["nhxmh", "3x1,5"],  unit: "mb", min: 8.00,  avg: 12.00, max: 18.00 },
+  { category: "kable_specjalne", keywords: ["nhxmh", "3x2,5"],  unit: "mb", min: 12.00, avg: 17.00, max: 25.00 },
+  { category: "kable_specjalne", keywords: ["nhxmh", "5x2,5"],  unit: "mb", min: 18.00, avg: 25.00, max: 36.00 },
+  { category: "kable_specjalne", keywords: ["nhxmh", "5x4"],    unit: "mb", min: 26.00, avg: 36.00, max: 50.00 },
+  { category: "kable_specjalne", keywords: ["n2xh", "3x1,5"],   unit: "mb", min: 9.00,  avg: 14.00, max: 20.00 },
+  { category: "kable_specjalne", keywords: ["n2xh", "3x2,5"],   unit: "mb", min: 14.00, avg: 20.00, max: 28.00 },
+  { category: "kable_specjalne", keywords: ["n2xh", "5x2,5"],   unit: "mb", min: 20.00, avg: 28.00, max: 40.00 },
+  { category: "kable_specjalne", keywords: ["lsoh", "3x2,5"],   unit: "mb", min: 10.00, avg: 15.00, max: 22.00 },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // OSPRZĘT — ŚCIEMNIACZE / DIMMER / REGULATOR
+  // ═══════════════════════════════════════════════════════════════════
+  { category: "osprzet_elektroinstalacyjny", keywords: ["ściemniacz", "podtynkow"],  unit: "szt", min: 45.00, avg: 90.00, max: 180.00 },
+  { category: "osprzet_elektroinstalacyjny", keywords: ["dimmer", "podtynkow"],      unit: "szt", min: 45.00, avg: 90.00, max: 180.00 },
+  { category: "osprzet_elektroinstalacyjny", keywords: ["sciemniacz", "podtynkow"],  unit: "szt", min: 45.00, avg: 90.00, max: 180.00 },
+  { category: "osprzet_elektroinstalacyjny", keywords: ["regulator", "wentylatora"], unit: "szt", min: 35.00, avg: 65.00, max: 120.00 },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // AUTOMATYKA — czujniki, sensory (produkty)
+  // ═══════════════════════════════════════════════════════════════════
+  { category: "automatyka", keywords: ["czujnik", "pir", "podtynkow"],  unit: "szt", min: 30.00, avg: 55.00, max: 95.00 },
+  { category: "automatyka", keywords: ["czujnik", "pir", "natynkow"],   unit: "szt", min: 20.00, avg: 40.00, max: 75.00 },
+  { category: "automatyka", keywords: ["czujka", "dymu"],               unit: "szt", min: 25.00, avg: 45.00, max: 85.00 },
+  { category: "automatyka", keywords: ["czujka", "ciepła"],             unit: "szt", min: 30.00, avg: 55.00, max: 100.00 },
+  { category: "automatyka", keywords: ["czujka", "co"],                 unit: "szt", min: 50.00, avg: 90.00, max: 160.00 },
+  { category: "automatyka", keywords: ["centrala", "alarmow"],          unit: "szt", min: 200.00, avg: 400.00, max: 800.00 },
+  { category: "automatyka", keywords: ["sygnalizator", "optyczno"],     unit: "szt", min: 40.00, avg: 70.00, max: 130.00 },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // OPRAWY — żarówki i źródła światła
+  // ═══════════════════════════════════════════════════════════════════
+  { category: "oprawy_oswietleniowe", keywords: ["żarówka", "led", "e27"],    unit: "szt", min: 5.00,  avg: 12.00, max: 25.00 },
+  { category: "oprawy_oswietleniowe", keywords: ["zarowka", "led", "e27"],    unit: "szt", min: 5.00,  avg: 12.00, max: 25.00 },
+  { category: "oprawy_oswietleniowe", keywords: ["żarówka", "led", "gu10"],   unit: "szt", min: 6.00,  avg: 14.00, max: 28.00 },
+  { category: "oprawy_oswietleniowe", keywords: ["zarowka", "led", "gu10"],   unit: "szt", min: 6.00,  avg: 14.00, max: 28.00 },
+  { category: "oprawy_oswietleniowe", keywords: ["kinkiet", "led"],           unit: "szt", min: 60.00, avg: 130.00, max: 280.00 },
+  { category: "oprawy_oswietleniowe", keywords: ["żyrandol", "led"],          unit: "szt", min: 80.00, avg: 200.00, max: 500.00 },
+  { category: "oprawy_oswietleniowe", keywords: ["zyrandol", "led"],          unit: "szt", min: 80.00, avg: 200.00, max: 500.00 },
+  { category: "oprawy_oswietleniowe", keywords: ["oprawa", "zewnetrzn", "led"],unit: "szt", min: 50.00, avg: 120.00, max: 300.00 },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // SMART HOME — dodatkowe
+  // ═══════════════════════════════════════════════════════════════════
+  { category: "smart_home", keywords: ["sterownik", "knx"],   unit: "szt", min: 300.00, avg: 550.00, max: 900.00 },
+  { category: "smart_home", keywords: ["interfejs", "knx"],   unit: "szt", min: 250.00, avg: 420.00, max: 700.00 },
+  { category: "smart_home", keywords: ["panel", "dotykow", "knx"], unit: "szt", min: 400.00, avg: 750.00, max: 1400.00 },
+  { category: "smart_home", keywords: ["sterownik", "dali"],  unit: "szt", min: 200.00, avg: 350.00, max: 600.00 },
+  { category: "smart_home", keywords: ["gateway", "zigbee"],  unit: "szt", min: 80.00, avg: 160.00, max: 300.00 },
+  { category: "smart_home", keywords: ["czujnik", "knx"],     unit: "szt", min: 120.00, avg: 220.00, max: 400.00 },
 ];
 
 // ─── Lookup Functions ───────────────────────────────────────────────────────────
