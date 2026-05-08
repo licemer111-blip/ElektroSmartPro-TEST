@@ -65,43 +65,43 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   // ── KABLE I PRZEWODY (układanie p/t — KNR 5-08, KNR 5-10, KNR 5-12) ──
 
   // YDYp 2×1.5 — dzwonek, sygnalizacja, 2-przewodowe obwody
-  { pattern: /\bydyp?\s*2\s*[x×*]\s*1[,.]5\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*2\s*[x×*]\s*1[,.]5\b/i,
     knrCode: "KNR 5-08 0200", laborNorm: 0.11, unit: "mb",
     description: "Przewód YDYp 2×1.5 mm² układany p/t", materialPrice: 3.50 },
 
   // YDYp 3×1.5 — najczęściej używany do oświetlenia
-  { pattern: /\bydyp?\s*3\s*[x×*]\s*1[,.]5\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*3\s*[x×*]\s*1[,.]5\b/i,
     knrCode: "KNR 5-08 0201", laborNorm: 0.13, unit: "mb",
     description: "Przewód YDYp 3×1.5 mm² układany p/t", materialPrice: 5.20 },
   // YDYp 3×2.5 — gniazda 16A
-  { pattern: /\bydyp?\s*3\s*[x×*]\s*2[,.]5\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*3\s*[x×*]\s*2[,.]5\b/i,
     knrCode: "KNR 5-08 0202", laborNorm: 0.16, unit: "mb",
     description: "Przewód YDYp 3×2.5 mm² układany p/t", materialPrice: 6.94 },
   // YDYp 4×1.5
-  { pattern: /\bydyp?\s*4\s*[x×*]\s*1[,.]5\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*4\s*[x×*]\s*1[,.]5\b/i,
     knrCode: "KNR 5-08 0203", laborNorm: 0.14, unit: "mb",
     description: "Przewód YDYp 4×1.5 mm² układany p/t", materialPrice: 6.50 },
   // YDYp 4×2.5
-  { pattern: /\bydyp?\s*4\s*[x×*]\s*2[,.]5\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*4\s*[x×*]\s*2[,.]5\b/i,
     knrCode: "KNR 5-08 0204", laborNorm: 0.17, unit: "mb",
     description: "Przewód YDYp 4×2.5 mm² układany p/t", materialPrice: 8.80 },
   // YDYp 5×1.5
-  { pattern: /\bydyp?\s*5\s*[x×*]\s*1[,.]5\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*5\s*[x×*]\s*1[,.]5\b/i,
     knrCode: "KNR 5-08 0205", laborNorm: 0.15, unit: "mb",
     description: "Przewód YDYp 5×1.5 mm² układany p/t", materialPrice: 7.80 },
   // YDYp 5×2.5
-  { pattern: /\bydyp?\s*5\s*[x×*]\s*2[,.]5\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*5\s*[x×*]\s*2[,.]5\b/i,
     knrCode: "KNR 5-08 0206", laborNorm: 0.18, unit: "mb",
     description: "Przewód YDYp 5×2.5 mm² układany p/t", materialPrice: 11.20 },
   // YDYp 5×4 / 5×6 — zasilanie kuchenek, indukcji
-  { pattern: /\bydyp?\s*5\s*[x×*]\s*4\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*5\s*[x×*]\s*4\b/i,
     knrCode: "KNR 5-08 0207", laborNorm: 0.21, unit: "mb",
     description: "Przewód YDYp 5×4 mm² układany p/t", materialPrice: 17.50 },
-  { pattern: /\bydyp?\s*5\s*[x×*]\s*6\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*5\s*[x×*]\s*6\b/i,
     knrCode: "KNR 5-08 0208", laborNorm: 0.23, unit: "mb",
     description: "Przewód YDYp 5×6 mm² układany p/t", materialPrice: 26.00 },
   // YDYp generic fallback (3-5 żył, dowolny przekrój ≤ 6)
-  { pattern: /\bydyp?\s*[3-5]\s*[x×*]\s*\d+(?:[,.]\d+)?\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*[3-5]\s*[x×*]\s*\d+(?:[,.]\d+)?\b/i,
     knrCode: "KNR 5-08 0202", laborNorm: 0.16, unit: "mb",
     description: "Przewód YDYp (generic fallback) układany p/t",
     notes: "Used when specific cross-section pattern doesn't match exactly" },
@@ -195,7 +195,7 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
     description: "Gniazdo 230V n/t hermetyczne", materialPrice: 28.00 },
   // Gniazdo generic 230V (no surface qualifier — fallback)
   // CRITICAL: must NOT match LAN/teleinformatic gniazda (RJ45 / TV / HDMI — łapane przez patterns niżej).
-  { pattern: /\bgniazd[ao]\s+(?:230v|elektr|sieciow)/i,
+  { pattern: /\bgniazd[ao]\s+(?:\d+\s*[x×]\s*)?(?:230v?|elektr|sieciow)/i,
     knrCode: "KNR 5-04 0501-01", laborNorm: 0.35, unit: "szt",
     description: "Gniazdo 230V (generic) p/t", materialPrice: 22.00 },
 
@@ -243,7 +243,7 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /(?:^|\W)(?:łącznik|lacznik)\s+(?:kart|hotelo)/i,
     knrCode: "KNR 5-04 0501-09", laborNorm: 0.50, unit: "szt",
     description: "Łącznik kartowy hotelowy", materialPrice: 65.00 },
-  { pattern: /(?:^|\W)(?:łącznik|lacznik)(?=\s|$|\W)/i,
+  { pattern: /(?:^|\W)(?:łącznik|lacznik)i?(?=\s|$|\W)/i,
     knrCode: "KNR 5-04 0501-04", laborNorm: 0.25, unit: "szt",
     description: "Łącznik (generic) p/t", materialPrice: 14.00 },
 

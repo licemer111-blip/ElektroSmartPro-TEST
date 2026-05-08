@@ -28,7 +28,7 @@ import {
   type MatchResult,
 } from "@/lib/services/matching-engine";
 import { buildLocalKnrContext, lookupKnrByName } from "@/lib/knr-local-context";
-import { validateAgainstCanonicalL0 } from "@/lib/services/canonical-knr-l0";
+import { validateAgainstCanonicalL0, findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
 import { findCanonicalL0WithOverrides } from "@/lib/services/canonical-l0-overrides";
 import { scaleLaborNorm, getUnitBaseSize } from "@/lib/labor-time";
 import { getPricingCacheName, CACHE_MODEL_ID } from "@/lib/services/ai/gemini-context-cache";
@@ -507,9 +507,15 @@ export async function estimatePricesWithAI(
             quantity: item.quantity,
             currentMaterial: item.material_price || 0,
             currentLabor: item.labor_price || 0,
-            suggestedMaterial: mode === "labor"
-              ? (item.material_price || 0)
-              : (isPureLaborByKeyword(item.name) ? 0 : (matL0Map.get(code) ?? 0)),
+            suggestedMaterial: (() => {
+              if (mode === "labor") return item.material_price || 0;
+              if (isPureLaborByKeyword(item.name)) return 0;
+              const matFromMap = matL0Map.get(code) ?? 0;
+              if (matFromMap > 0) return matFromMap;
+              // STEP 0 fallback: es_dict has no material_unit_price for installation KNR codes
+              // (e.g. KNR 5-08 = cable laying). Canonical L0 has indicative materialPrice.
+              return findCanonicalL0(item.name, item.unit)?.materialPrice ?? 0;
+            })(),
             suggestedLabor: mode === "material" ? (item.labor_price || 0) : sugLab,
             laborHoursTotal: laborHoursTotalL0,
             confidence: "high" as const,
@@ -905,7 +911,13 @@ export async function estimatePricesWithAI(
           ? Math.round(sugLab / baseRateForCalc * (item.quantity ?? 1) * 1000) / 1000
           : null;
         const matFromDict = matL2Map.get(esRow.knr_code ?? "") ?? 0;
-        const sugMat = mode === "labor" ? (item.material_price || 0) : matFromDict;
+        // L2 fallback: if es_dict has no material price for this KNR code,
+        // try canonical L0 materialPrice (covers cables, gniazda, etc.)
+        const matFromCanonical = (matFromDict === 0 && mode !== "labor")
+          ? (findCanonicalL0(item.name, item.unit)?.materialPrice ?? 0)
+          : 0;
+        const effectiveMatL2 = matFromDict || matFromCanonical;
+        const sugMat = mode === "labor" ? (item.material_price || 0) : effectiveMatL2;
         const isPureLaborItem = isPureLaborByKeyword(item.name);
         const effectiveSugMat = isPureLaborItem ? 0 : sugMat;
         const matNote = !isPureLaborItem && effectiveSugMat === 0 && mode !== "labor"
