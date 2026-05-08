@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import {
   Receipt, Eye, BookOpen,
-  Palette, ChevronDown, ChevronUp, Clock, Puzzle,
+  Palette, ChevronDown, ChevronUp, Clock,
 } from "lucide-react";
 import { HintTooltip } from "@/components/ui/hint-tooltip";
 import { HINTS } from "@/lib/hints/hint-content";
@@ -309,34 +309,7 @@ export function ProjectControlPanel({
             </p>
           </div>
 
-          {/* 6 — Auto-detect Zestawy (Zestaw Engine v2) */}
-          <div className="flex flex-col gap-1 p-1.5 rounded-lg bg-white/70 dark:bg-slate-900/50 border border-indigo-200 dark:border-indigo-800/40 col-span-2 sm:col-span-1">
-            <div className="flex items-center gap-1">
-              <Puzzle className="w-3 h-3 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
-              <span className="text-[9px] font-semibold text-indigo-700 dark:text-indigo-300 truncate">Auto-Zestaw</span>
-              <HintTooltip
-                content="Gdy włączone, silnik automatycznie rozwija pozycje typu 'Punkt gniazda', 'Trasa kablowa' itp. w Zestawy (rodzic + składniki: bruzda, kabel, puszka). Domyślnie wyłączone — pozycje pozostają pojedyncze, bez niespodziewanych dodatków do sumy."
-                side="top"
-                iconOnly
-              />
-            </div>
-            <div className="flex items-center justify-between mt-1">
-              <Label htmlFor={`autozestaw-toggle-${projectId}`} className="text-[8px] text-indigo-600 dark:text-indigo-400 cursor-pointer leading-tight">
-                {localAutoZestawy ? "Wł." : "Wył."}
-              </Label>
-              <Switch
-                id={`autozestaw-toggle-${projectId}`}
-                name={`autozestaw-toggle-${projectId}`}
-                checked={localAutoZestawy}
-                onCheckedChange={(v) => handleDocSetting("auto_detect_zestawy", v)}
-                disabled={disabled}
-                className="scale-[0.65] origin-right data-[state=checked]:bg-amber-600"
-              />
-            </div>
-            <p className="text-[8px] text-indigo-500/70 leading-tight truncate">
-              {localAutoZestawy ? "rozpakowuje" : "pozycje 1:1"}
-            </p>
-          </div>
+          {/* 6 — Auto-detect Zestawy (Zestaw Engine v2) — hidden: non-functional for AI-priced projects */}
 
         </div>
       </div>
