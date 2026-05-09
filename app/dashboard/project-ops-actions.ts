@@ -597,10 +597,9 @@ export async function createDemoProject(): Promise<{ success?: boolean; error?: 
     projectId = newProject.id;
   }
 
-  // Insert demo items — use minimal safe fields only to avoid schema mismatch
+  // Insert demo items — project_items has no user_id column; project_id is the FK
   const itemsToInsert = DEMO_PROJECT.items.map((item, idx) => ({
     project_id: projectId,
-    user_id: user.id,
     name: item.name,
     unit: item.unit,
     quantity: item.quantity,
