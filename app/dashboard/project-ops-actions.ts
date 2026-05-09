@@ -156,18 +156,18 @@ export async function createProject(formData: FormData) {
     profile = newProfile;
   }
 
-  // v2.0: free tier ma praktycznie nielimitowane projekty (FREE_TIER_MAX_PROJECTS=999).
-  // Admin może w DB ustawić konkretny limit per-user — getEffectiveMaxProjects to honoruje.
+  // v2.2: FREE tier = max 1 własny projekt (demo is_demo_project=true nie liczy się).
   const maxAllowed = getEffectiveMaxProjects(profile as { is_pro?: boolean; max_projects?: number } | null);
   if (profile && !profile.is_pro && maxAllowed < 100) {
-    // Enforce tylko kiedy admin jawnie ustawił niski limit dla tego konta.
+    // Count only non-demo projects toward the limit
     const { count } = await supabase
       .from("projects")
       .select("*", { count: "exact", head: true })
-      .eq("user_id", user.id);
+      .eq("user_id", user.id)
+      .or("is_demo_project.is.null,is_demo_project.eq.false");
     if (count !== null && count >= maxAllowed) {
       return {
-        error: `Dla Twojego konta obowiązuje limit ${maxAllowed} projektów. Usuń istniejący projekt lub przejdź na PRO.`,
+        error: `Osiągnąłeś limit ${maxAllowed} projektu. Usuń istniejący projekt lub aktywuj trial PRO.`,
         requiresUpgrade: true,
       };
     }
@@ -231,7 +231,7 @@ export async function duplicateProject(projectId: string) {
   const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
-  // v2.0: patrz createProject — limit tylko gdy admin explicit ustawił <100.
+  // v2.2: count only non-demo projects toward the free tier limit.
   const { data: profile } = await supabase
     .from("profiles")
     .select("is_pro, max_projects")
@@ -243,10 +243,11 @@ export async function duplicateProject(projectId: string) {
       const { count } = await supabase
         .from("projects")
         .select("*", { count: "exact", head: true })
-        .eq("user_id", user.id);
+        .eq("user_id", user.id)
+        .or("is_demo_project.is.null,is_demo_project.eq.false");
       if (count !== null && count >= maxAllowed) {
         return {
-          error: `Dla Twojego konta obowiązuje limit ${maxAllowed} projektów. Usuń istniejący projekt lub przejdź na PRO.`,
+          error: `Osiągnąłeś limit ${maxAllowed} projektu. Usuń istniejący projekt lub aktywuj trial PRO.`,
           requiresUpgrade: true,
         };
       }
@@ -531,22 +532,7 @@ export async function createDemoProject(): Promise<{ success?: boolean; error?: 
   const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { error: "Musisz być zalogowany" };
 
-  // Free-tier limit check
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("is_pro, max_projects")
-    .eq("id", user.id)
-    .single();
-  const maxAllowed = (profile as { is_pro: boolean; max_projects?: number } | null)?.max_projects ?? 3;
-  if (profile && !profile.is_pro) {
-    const { count } = await supabase
-      .from("projects")
-      .select("*", { count: "exact", head: true })
-      .eq("user_id", user.id);
-    if (count !== null && count >= maxAllowed) {
-      return { error: "Osiągnięto limit projektów. Usuń istniejący projekt lub przejdź na PRO.", };
-    }
-  }
+  // Demo project does NOT count toward free-tier limit — skip the check entirely.
 
   // Resolve region + object_type dynamically (IDs differ between envs)
   const [{ data: regionData }, { data: objTypeData }] = await Promise.all([
