@@ -26,7 +26,7 @@ export const TOUR_STEPS: TourStep[] = [
   // ── KROK 2: Tworzenie projektu ────────────────────────────────────
   {
     id: "new-project",
-    title: "Krok 1 — Utwórz projekt",
+    title: "Utwórz projekt",
     description:
       "Kliknij \"+ Nowy projekt\", podaj nazwę (np. \"Mieszkanie Kowalski\"), wybierz województwo i typ obiektu. " +
       "System automatycznie ustawi stawkę VAT (8% mieszkania / 23% biuro) i regionalny współczynnik robocizny. " +
@@ -40,7 +40,7 @@ export const TOUR_STEPS: TourStep[] = [
   // ── KROK 3: Dodawanie pozycji ─────────────────────────────────────
   {
     id: "add-items",
-    title: "Krok 2 — Dodaj pozycje kosztorysowe",
+    title: "Dodaj pozycje kosztorysowe",
     description:
       "W projekcie masz 3 sposoby dodawania pozycji:\n" +
       "① \"+ Szybka pozycja\" — wpisujesz nazwę i cenę ręcznie\n" +
@@ -54,7 +54,7 @@ export const TOUR_STEPS: TourStep[] = [
   // ── KROK 4: Zestawy (Smart Assembly) ─────────────────────────────
   {
     id: "zestawy",
-    title: "Krok 3 — Zestawy 360° (kluczowa funkcja!)",
+    title: "Zestawy 360° — kluczowa funkcja!",
     description:
       "Wpisz \"Punkt gniazdkowy\" lub \"Punkt oświetleniowy\" — ElektroSmart AUTOMATYCZNIE rozbija to na składniki: " +
       "bruzda + kabel YDYp (4mb) + puszka p/t + gniazdo + robocizna montażu. " +
@@ -68,7 +68,7 @@ export const TOUR_STEPS: TourStep[] = [
   // ── KROK 5: Katalog i import ──────────────────────────────────────
   {
     id: "catalog",
-    title: "Krok 4 — Katalog KNR i import AI",
+    title: "Katalog KNR i import AI",
     description:
       "Katalog → 5000+ norm KNR 5-08 z opisem, jednostką i czasem r-g. Znajdź po nazwie lub kodzie KNR. " +
       "AI Import (zakładka \"Do wyceny\"): wklej specyfikację z Worda, foto z telefonu lub e-mail od klienta — " +
@@ -82,7 +82,7 @@ export const TOUR_STEPS: TourStep[] = [
   // ── KROK 6: ES-Engine Wycena ──────────────────────────────────────
   {
     id: "es-engine",
-    title: "Krok 5 — ES-Engine: automatyczna wycena KNR",
+    title: "ES-Engine: automatyczna wycena KNR",
     description:
       "Masz listę pozycji bez cen? Wejdź do projektu → kliknij pomarańczowy przycisk \"Tryb: Expert Engine\". " +
       "System przeliczy każdą pozycję wg norm KNR 2026 × Twoja stawka r-g × współczynnik regionu. " +
@@ -95,7 +95,7 @@ export const TOUR_STEPS: TourStep[] = [
   // ── KROK 7: Podsumowanie i negocjacje ────────────────────────────
   {
     id: "summary",
-    title: "Krok 6 — Podsumowanie z ceną końcową",
+    title: "Podsumowanie z ceną końcową",
     description:
       "Prawy panel projektu to centrum sterowania: " +
       "Suma Netto (Robocizna + Materiały) → Narzuty (Kp/Z/Kz) → VAT → KWOTA KOŃCOWA. " +
@@ -109,7 +109,7 @@ export const TOUR_STEPS: TourStep[] = [
   // ── KROK 8: Eksport PDF ───────────────────────────────────────────
   {
     id: "pdf-export",
-    title: "Krok 7 — Eksport PDF dla klienta",
+    title: "Eksport PDF dla klienta",
     description:
       "Zakładka \"Ustawienia PDF\" w projekcie → wybierz temat kolorystyczny, dodaj swoje logo i dane firmy. " +
       "Kliknij \"Pobierz PDF\" — otrzymasz profesjonalny dokument z kosztorysem. " +
@@ -123,9 +123,9 @@ export const TOUR_STEPS: TourStep[] = [
   // ── KROK 9: Stawka i ustawienia ───────────────────────────────────
   {
     id: "settings",
-    title: "Krok 8 — Twoja stawka i ustawienia",
+    title: "Twoja stawka i ustawienia",
     description:
-      "W Ustawieniach → Kalkulator KNR ustaw stawkę roboczogodziny (PLN/r-g) i wybierz województwo. " +
+      "W Ustawieniach → Finanse ustaw stawkę roboczogodziny (PLN/r-g) i wybierz województwo. " +
       "To wpływa na WSZYSTKIE kosztorysy. " +
       "Możesz też aktywować 1-dniowy trial PRO za darmo — odblokuje AI bez limitu, czysty PDF i Portal Klienta.",
     targetSelector: 'a[href="/dashboard/settings"]',
@@ -133,6 +133,6 @@ export const TOUR_STEPS: TourStep[] = [
     emoji: "⚙️",
     color: "violet",
     ctaLabel: "Ustaw stawkę r-g →",
-    ctaHref: "/dashboard/settings/knr-calculator",
+    ctaHref: "/dashboard/settings?tab=knr",
   },
 ];
