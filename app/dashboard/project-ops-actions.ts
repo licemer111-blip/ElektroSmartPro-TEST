@@ -8,6 +8,8 @@ import { projectSettingsSchema, validate } from "@/lib/validations";
 import type { Region, ObjectType, ProjectWithRelations } from "@/lib/types/database";
 import { logger } from "@/lib/logger";
 import { getEffectiveMaxProjects } from "@/lib/config/tier-limits";
+import { supabaseAdmin } from "@/lib/supabase-admin";
+import { DEMO_PROJECT } from "@/lib/config/demo-project";
 
 export async function getProjects(): Promise<ProjectWithRelations[]> {
   const { user, supabase } = await tryAuth();
@@ -579,29 +581,8 @@ export async function createDemoProject(): Promise<{ success?: boolean; error?: 
     return { error: "Błąd podczas tworzenia projektu demonstracyjnego" };
   }
 
-  // Seed demo items — realistic residential installation
-  const demoItems = [
-    { name: "Punkt elektryczny gniazdo 230V", unit: "pkt", quantity: 32, material_price: 28, labor_price: 38, section: "Instalacja gniazd" },
-    { name: "Punkt elektryczny oświetlenie", unit: "pkt", quantity: 24, material_price: 18, labor_price: 32, section: "Instalacja oświetlenia" },
-    { name: "Przewód YDYp 3x2.5mm²", unit: "mb", quantity: 180, material_price: 4.80, labor_price: 2.20, section: "Okablowanie" },
-    { name: "Przewód YDYp 3x1.5mm²", unit: "mb", quantity: 120, material_price: 3.20, labor_price: 1.80, section: "Okablowanie" },
-    { name: "Przewód YDYp 5x2.5mm²", unit: "mb", quantity: 40, material_price: 7.50, labor_price: 2.80, section: "Okablowanie" },
-    { name: "Rozdzielnica natynkowa 24-modułowa", unit: "szt", quantity: 1, material_price: 180, labor_price: 240, section: "Rozdzielnica" },
-    { name: "Wyłącznik nadprądowy B16A 1P", unit: "szt", quantity: 8, material_price: 18, labor_price: 12, section: "Rozdzielnica" },
-    { name: "Wyłącznik nadprądowy B10A 1P", unit: "szt", quantity: 6, material_price: 16, labor_price: 12, section: "Rozdzielnica" },
-    { name: "Wyłącznik różnicowoprądowy 40A/30mA 4P", unit: "szt", quantity: 1, material_price: 280, labor_price: 60, section: "Rozdzielnica" },
-    { name: "Puszka instalacyjna podtynkowa 60mm", unit: "szt", quantity: 56, material_price: 2.50, labor_price: 4.50, section: "Puszki i osprzęt" },
-    { name: "Gniazdo podwójne 230V z uziemieniem", unit: "szt", quantity: 32, material_price: 14, labor_price: 0, section: "Puszki i osprzęt" },
-    { name: "Łącznik jednobiegunowy", unit: "szt", quantity: 12, material_price: 12, labor_price: 0, section: "Puszki i osprzęt" },
-    { name: "Oprawa LED sufitowa podtynkowa", unit: "szt", quantity: 24, material_price: 45, labor_price: 22, section: "Instalacja oświetlenia" },
-    { name: "Bruzda w ścianie ceglanej", unit: "mb", quantity: 180, material_price: 0, labor_price: 8.50, section: "Roboty budowlane" },
-    { name: "Przebicie przez ścianę/strop", unit: "szt", quantity: 14, material_price: 0, labor_price: 35, section: "Roboty budowlane" },
-    { name: "Uziom otokowy poziomy", unit: "mb", quantity: 40, material_price: 12, labor_price: 15, section: "Uziemienie" },
-    { name: "Tablica licznikowa z licznikiem 3-fazowym", unit: "kpl", quantity: 1, material_price: 420, labor_price: 180, section: "Przyłącze" },
-    { name: "Pomiary i odbiór instalacji elektrycznej", unit: "kpl", quantity: 1, material_price: 0, labor_price: 450, section: "Pomiary" },
-  ];
-
-  const itemsToInsert = demoItems.map((item, idx) => ({
+  // Seed demo items from canonical DEMO_PROJECT dataset (lib/config/demo-project.ts)
+  const itemsToInsert = DEMO_PROJECT.items.map((item, idx) => ({
     project_id: project.id,
     user_id: user.id,
     name: item.name,
@@ -611,13 +592,15 @@ export async function createDemoProject(): Promise<{ success?: boolean; error?: 
     labor_price: item.labor_price,
     section: item.section,
     sort_order: idx,
-    confidence_level: "manual" as const,
+    confidence_level: "verified" as const,
+    knr_code: item.knr_code ?? null,
+    labor_norm: item.labor_norm ?? null,
   }));
 
-  const { error: itemsError } = await supabase.from("project_items").insert(itemsToInsert);
+  // Use supabaseAdmin to bypass RLS — demo insert is a trusted server-side operation
+  const { error: itemsError } = await supabaseAdmin.from("project_items").insert(itemsToInsert);
   if (itemsError) {
     logger.error("Demo project items insert failed", {}, itemsError);
-    // Project created but items failed — still redirect, user can add manually
   }
 
   revalidatePath("/dashboard");

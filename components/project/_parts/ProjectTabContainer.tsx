@@ -234,19 +234,6 @@ export function ProjectTabContainer({
 
   return (
     <>
-      {/* Demo project banner */}
-      {project.is_demo_project && (
-        <div className="mb-3 flex items-center gap-2 px-4 py-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700 text-amber-800 dark:text-amber-300 text-sm font-medium select-none">
-          <Sparkles className="w-4 h-4 flex-shrink-0 text-amber-500" />
-          <span className="flex-1">
-            <span className="font-bold">To jest projekt demonstracyjny.</span>{" "}
-            Możesz go przeglądać i edytować — to dobry sposób żeby poznać system.
-            Gdy będziesz gotowy, utwórz własny projekt klikając{" "}
-            <span className="font-semibold">„+ Nowy projekt"</span> na dashboardzie.
-          </span>
-        </div>
-      )}
-
       {/* Read-only banner */}
       {isReadOnly && (
         <div className="mb-3 flex items-center gap-2 px-4 py-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 text-sm font-medium select-none">

@@ -22,6 +22,7 @@ export default async function DashboardLayout({
   const userId = user?.id;
   const profile = userId ? await getUserProfile() : null;
   const hasCompanyName = !!(profile?.company_name);
+  const hasRate = userId ? (profile?.hourly_rate != null && profile.hourly_rate > 0) : false;
   const rateNotSet = userId ? (profile?.hourly_rate == null) : false;
 
   const content = (
@@ -38,7 +39,7 @@ export default async function DashboardLayout({
       <WhatsNewDialog />
       <AiHelperWidget />
       {userId && (
-        <WelcomeWizard userId={userId} hasCompanyName={hasCompanyName} />
+        <WelcomeWizard userId={userId} hasCompanyName={hasCompanyName} hasRate={hasRate} />
       )}
     </div>
   );

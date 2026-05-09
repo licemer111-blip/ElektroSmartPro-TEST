@@ -10,6 +10,8 @@ import { OnboardingTour } from "@/components/onboarding/onboarding-tour";
 import { OnboardingWizard } from "@/components/onboarding/onboarding-wizard";
 import { ClientActivityWidget } from "@/components/dashboard/client-activity-widget";
 import { FREE_TIER_MAX_PROJECTS } from "@/lib/config/tier-limits";
+import { StartTrialButton } from "@/components/billing/start-trial-button";
+import { getEffectiveIsPro, hasUsedTrial } from "@/lib/auth/entitlements";
 
 export const dynamic = 'force-dynamic';
 
@@ -51,11 +53,15 @@ export default async function DashboardPage({
           <OnboardingWizard
             regions={regions}
             userName={profile?.full_name ?? profile?.company_name ?? null}
+            userId={user?.id}
           />
         </PageContainer>
       </div>
     );
   }
+
+  const effectivelyPro = getEffectiveIsPro(profile);
+  const trialUsed = hasUsedTrial(profile);
 
   // Calculate stats
   const draftCount = projects.filter((p) => p.status === "draft").length;
@@ -90,7 +96,22 @@ export default async function DashboardPage({
             </div>
           </div>
 
-          {/* Quick Start Guide - Compact 3-step */}
+          {/* Trial CTA — shown to free users who haven't used their trial yet */}
+          {!effectivelyPro && !trialUsed && (
+            <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-3 px-5 py-4 rounded-2xl bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30 border border-indigo-200/70 dark:border-indigo-800/50 shadow-sm">
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-indigo-900 dark:text-indigo-100">
+                  🚀 Wypróbuj PRO przez 1 dzień — za darmo, bez karty!
+                </p>
+                <p className="text-xs text-indigo-600 dark:text-indigo-400 mt-0.5">
+                  Odblokuj: AI bez limitów, czysty PDF do klienta, Portal Klienta, pełna baza KNR 2026
+                </p>
+              </div>
+              <StartTrialButton variant="compact" />
+            </div>
+          )}
+
+        {/* Quick Start Guide - Compact 3-step */}
           {projects.length > 0 && projects.length <= 3 && (
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">

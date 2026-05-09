@@ -106,8 +106,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     const isDemoProject = project.is_demo_project === true;
     // Only external 'viewer' role (Client Portal) gets read-only lockdown.
     // All team members (editor, elektryk, kierownik, admin, owner) have full access.
-    // Demo projects are always read-only — showcase mode.
-    const isReadOnly = userRole === "viewer" || isDemoProject;
+    // Demo projects are editable by owner so they can explore all features freely.
+    const isReadOnly = userRole === "viewer";
     // v2.1: showPrices flag feeds downstream `isPro` prop. Effective PRO =
     // paid subscription OR active 7-day trial. Demo projects bypass as before.
     const showPrices = getEffectiveIsPro(profile) || isDemoProject;

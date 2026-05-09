@@ -14,9 +14,10 @@ const STORAGE_KEY = "es_onboarding_done";
 interface WelcomeWizardProps {
   userId: string;
   hasCompanyName: boolean;
+  hasRate?: boolean;
 }
 
-export function WelcomeWizard({ userId, hasCompanyName }: WelcomeWizardProps) {
+export function WelcomeWizard({ userId, hasCompanyName, hasRate }: WelcomeWizardProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<"form" | "success">("form");
@@ -28,14 +29,15 @@ export function WelcomeWizard({ userId, hasCompanyName }: WelcomeWizardProps) {
   useEffect(() => {
     try {
       const done = localStorage.getItem(`${STORAGE_KEY}_${userId}`);
-      if (!done && !hasCompanyName) {
+      // Don't show if user already has a rate (went through OnboardingWizard)
+      if (!done && !hasCompanyName && !hasRate) {
         const t = setTimeout(() => setOpen(true), 800);
         return () => clearTimeout(t);
       }
     } catch {
       // ignore
     }
-  }, [userId, hasCompanyName]);
+  }, [userId, hasCompanyName, hasRate]);
 
   const markDone = () => {
     try {
