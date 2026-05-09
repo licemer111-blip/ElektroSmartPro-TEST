@@ -558,32 +558,62 @@ export async function createDemoProject(): Promise<{ success?: boolean; error?: 
   const objectTypeId = (objTypeData as { id: string } | null)?.id;
   if (!regionId || !objectTypeId) return { error: "Błąd konfiguracji bazy — brak regionów lub typów obiektów" };
 
-  // Create project
-  const { data: project, error: projError } = await supabase
+  // Check if demo project already exists for this user
+  const { data: existingDemo } = await supabase
     .from("projects")
-    .insert({
-      user_id: user.id,
-      name: "DEMO — Instalacja Elektryczna Dom 150m²",
-      region_id: regionId,
-      object_type_id: objectTypeId,
-      vat_rate: 8,
-      client_name: "Jan Kowalski",
-      client_address: "ul. Przykładowa 12, 00-001 Warszawa",
-      status: "draft",
-      default_hourly_rate: 0,
-      is_demo_project: true,
-    })
     .select("id")
-    .single();
+    .eq("user_id", user.id)
+    .eq("is_demo_project", true)
+    .limit(1)
+    .maybeSingle();
 
-  if (projError || !project) {
-    logger.error("Demo project creation failed", {}, projError);
-    return { error: "Błąd podczas tworzenia projektu demonstracyjnego" };
+  let projectId: string;
+
+  if (existingDemo?.id) {
+    // Demo exists — check if it has items; if empty, repopulate
+    const { count } = await supabaseAdmin
+      .from("project_items")
+      .select("id", { count: "exact", head: true })
+      .eq("project_id", existingDemo.id);
+
+    if (count && count > 0) {
+      // Already has items — return as-is
+      revalidatePath("/dashboard");
+      revalidatePath("/dashboard/projects");
+      return { success: true, projectId: existingDemo.id };
+    }
+
+    // Empty demo — repopulate
+    projectId = existingDemo.id;
+  } else {
+    // Create new demo project
+    const { data: newProject, error: projError } = await supabase
+      .from("projects")
+      .insert({
+        user_id: user.id,
+        name: "DEMO — Instalacja Elektryczna Dom 150m²",
+        region_id: regionId,
+        object_type_id: objectTypeId,
+        vat_rate: 8,
+        client_name: "Jan Kowalski",
+        client_address: "ul. Przykładowa 12, 00-001 Warszawa",
+        status: "draft",
+        default_hourly_rate: 0,
+        is_demo_project: true,
+      })
+      .select("id")
+      .single();
+
+    if (projError || !newProject) {
+      logger.error("Demo project creation failed", {}, projError);
+      return { error: "Błąd podczas tworzenia projektu demonstracyjnego" };
+    }
+    projectId = newProject.id;
   }
 
-  // Seed demo items from canonical DEMO_PROJECT dataset (lib/config/demo-project.ts)
+  // Insert demo items — use minimal safe fields only to avoid schema mismatch
   const itemsToInsert = DEMO_PROJECT.items.map((item, idx) => ({
-    project_id: project.id,
+    project_id: projectId,
     user_id: user.id,
     name: item.name,
     unit: item.unit,
@@ -592,9 +622,6 @@ export async function createDemoProject(): Promise<{ success?: boolean; error?: 
     labor_price: item.labor_price,
     section: item.section,
     sort_order: idx,
-    confidence_level: "verified" as const,
-    knr_code: item.knr_code ?? null,
-    labor_norm: item.labor_norm ?? null,
   }));
 
   // Use supabaseAdmin to bypass RLS — demo insert is a trusted server-side operation
@@ -605,5 +632,5 @@ export async function createDemoProject(): Promise<{ success?: boolean; error?: 
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/projects");
-  return { success: true, projectId: project.id };
+  return { success: true, projectId };
 }

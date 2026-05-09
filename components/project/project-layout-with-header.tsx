@@ -128,6 +128,7 @@ export function ProjectLayoutWithHeader({
         userId={userId}
         photos={photos}
         isReadOnly={isReadOnly}
+        isDemoProject={isDemoProject}
         adjustmentMult={adjustmentMult}
         matMarkupMult={matMarkupMult}
         labMarkupMult={labMarkupMult}

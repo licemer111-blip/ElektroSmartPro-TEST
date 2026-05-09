@@ -595,7 +595,9 @@ export async function POST(req: Request) {
       totalGross,
       pdfNarzuty: pdfNarzuty as PdfNarzutyDisplay | undefined,
       priceDisplay: priceDisplay as string,
-      notes: notes as string,
+      notes: isDemoProject
+        ? `[DOKUMENT DEMONSTRACYJNY — CENY PRZYKŁADOWE — NIE DO UŻYTKU KOMERCYJNEGO]\n${notes as string}`
+        : notes as string,
       showDemoWatermark,
       showColors: Boolean(showColors),
       monochrome: Boolean(monochrome),
@@ -626,9 +628,11 @@ export async function POST(req: Request) {
     }
 
     const safeName = (project.name as string).replace(/[^a-zA-Z0-9\-_]/g, '_');
-    const filePrefix = showDemoWatermark
+    const filePrefix = isDemoProject
       ? 'DEMO_Kosztorys'
-      : (blindMode && isPro ? 'Kosztorys_Slepy' : 'Kosztorys');
+      : showDemoWatermark
+        ? 'DEMO_Kosztorys'
+        : (blindMode && isPro ? 'Kosztorys_Slepy' : 'Kosztorys');
     const filename = `${filePrefix}_${safeName}.pdf`;
 
     return new NextResponse(new Uint8Array(pdfBuffer), {

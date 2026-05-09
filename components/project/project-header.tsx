@@ -46,6 +46,7 @@ interface ProjectHeaderProps {
   userId?: string;
   photos?: import("@/lib/types/database").ProjectPhoto[];
   isReadOnly?: boolean;
+  isDemoProject?: boolean;
   selectedRowIds?: Set<string>;
   // v4.0: Preview=Apply parity — forwarded to AiPriceEstimatorDialog via toolbar
   adjustmentMult?: number;
@@ -76,6 +77,7 @@ export function ProjectHeader({
   projectColor,
   userId,
   isReadOnly = false,
+  isDemoProject = false,
   isPro = false,
   selectedRowIds,
   adjustmentMult = 1.0,
@@ -135,6 +137,7 @@ export function ProjectHeader({
         isOwner={isOwner}
         projectColor={projectColor}
         isReadOnly={isReadOnly}
+        isDemoProject={isDemoProject}
         projectTotal={projectTotal}
         localSelectedRowIds={localSelectedRowIds}
         projectLaborRate={projectLaborRate}

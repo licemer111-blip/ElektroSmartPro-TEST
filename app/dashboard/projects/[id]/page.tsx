@@ -111,6 +111,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     // v2.1: showPrices flag feeds downstream `isPro` prop. Effective PRO =
     // paid subscription OR active 7-day trial. Demo projects bypass as before.
     const showPrices = getEffectiveIsPro(profile) || isDemoProject;
+    // Catalog sidebar always uses real PRO status — never unlocked by demo project.
+    // This ensures free users see blurred catalog prices even when on the demo project page.
+    const showCatalogPrices = getEffectiveIsPro(profile);
 
     // ⚡ OPTIMIZATION: Don't fetch all catalog items initially (lazy load in sidebar)
     // This prevents huge payload size and net::ERR_ABORTED errors
@@ -202,7 +205,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   projectId={id}
                   categories={categories}
                   catalogItemsByCategory={catalogItemsByCategory}
-                  isPro={showPrices}
+                  isPro={showCatalogPrices}
                   userTeam={userTeam}
                   projectStatus={project.status}
                 />

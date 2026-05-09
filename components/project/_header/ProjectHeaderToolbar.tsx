@@ -45,6 +45,7 @@ interface ProjectHeaderToolbarProps {
   isOwner?: boolean;
   projectColor?: string | null;
   isReadOnly?: boolean;
+  isDemoProject?: boolean;
   projectTotal?: number;
   localSelectedRowIds: Set<string>;
   projectLaborRate?: number;
@@ -100,6 +101,7 @@ export function ProjectHeaderToolbar({
   isOwner = false,
   projectColor,
   isReadOnly = false,
+  isDemoProject = false,
   projectTotal = 0,
   localSelectedRowIds,
   projectLaborRate,
@@ -165,13 +167,15 @@ export function ProjectHeaderToolbar({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
-                <DropdownMenuItem
-                  onClick={() => dispatch({ type: "SET_RENAME", open: true })}
-                  disabled={isDuplicating}
-                >
-                  <Edit className="mr-2 h-4 w-4" />
-                  Zmień nazwę
-                </DropdownMenuItem>
+                {!isDemoProject && (
+                  <DropdownMenuItem
+                    onClick={() => dispatch({ type: "SET_RENAME", open: true })}
+                    disabled={isDuplicating}
+                  >
+                    <Edit className="mr-2 h-4 w-4" />
+                    Zmień nazwę
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem
                   onClick={() => dispatch({ type: "SET_CLIENT", open: true })}
                   disabled={isDuplicating}
