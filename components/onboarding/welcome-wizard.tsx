@@ -29,8 +29,9 @@ export function WelcomeWizard({ userId, hasCompanyName, hasRate }: WelcomeWizard
   useEffect(() => {
     try {
       const done = localStorage.getItem(`${STORAGE_KEY}_${userId}`);
-      // Don't show if user already has a rate (went through OnboardingWizard)
-      if (!done && !hasCompanyName && !hasRate) {
+      // Only show if user already has a rate (completed OnboardingWizard) but hasn't set company name yet.
+      // Brand-new users (hasRate=false) go through OnboardingWizard — don't overlap.
+      if (!done && !hasCompanyName && hasRate) {
         const t = setTimeout(() => setOpen(true), 800);
         return () => clearTimeout(t);
       }

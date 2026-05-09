@@ -26,10 +26,11 @@ export async function completeOnboardingSetup(params: {
     }
 
     // Build profile update payload
-    // NOTE: onboarding_completed is NOT set here — it is set by OnboardingTour on dismiss.
-    // This allows the tour to fire after the wizard for new users.
+    // onboarding_completed is set here so OnboardingTour does NOT fire after wizard.
+    // The wizard redirects directly to the demo project, which is a better first experience.
     const profileUpdate: Record<string, unknown> = {
       hourly_rate: hourlyRate,
+      onboarding_completed: true,
       updated_at: new Date().toISOString(),
     };
 
