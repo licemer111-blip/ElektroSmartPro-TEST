@@ -556,14 +556,43 @@ export async function createDemoProject(): Promise<{ success?: boolean; error?: 
   let projectId: string;
 
   if (existingDemo?.id) {
-    // Demo exists — check if it has items; if empty, repopulate
-    const { count } = await supabaseAdmin
+    // Demo exists — check if it has PRICED items (final_material_price > 0)
+    const { count: totalCount } = await supabaseAdmin
       .from("project_items")
       .select("id", { count: "exact", head: true })
       .eq("project_id", existingDemo.id);
 
-    if (count && count > 0) {
-      // Already has items — return as-is
+    const { count: pricedCount } = await supabaseAdmin
+      .from("project_items")
+      .select("id", { count: "exact", head: true })
+      .eq("project_id", existingDemo.id)
+      .gt("final_material_price", 0);
+
+    if (totalCount && totalCount > 0 && pricedCount && pricedCount > 0) {
+      // Has items with real prices — return as-is
+      revalidatePath("/dashboard");
+      revalidatePath("/dashboard/projects");
+      return { success: true, projectId: existingDemo.id };
+    }
+
+    if (totalCount && totalCount > 0) {
+      // Items exist but final prices are 0 (legacy insert bug) — fetch and re-save each row.
+      // supabaseAdmin update with .eq() filter; use raw prices as the source of truth.
+      const { data: zeroItems } = await supabaseAdmin
+        .from("project_items")
+        .select("id, material_price, labor_price")
+        .eq("project_id", existingDemo.id)
+        .eq("final_material_price", 0);
+      if (zeroItems && zeroItems.length > 0) {
+        await Promise.all(
+          zeroItems.map((row: { id: string; material_price: number; labor_price: number }) =>
+            supabaseAdmin
+              .from("project_items")
+              .update({ final_material_price: row.material_price, final_labor_price: row.labor_price })
+              .eq("id", row.id)
+          )
+        );
+      }
       revalidatePath("/dashboard");
       revalidatePath("/dashboard/projects");
       return { success: true, projectId: existingDemo.id };
@@ -597,7 +626,8 @@ export async function createDemoProject(): Promise<{ success?: boolean; error?: 
     projectId = newProject.id;
   }
 
-  // Insert demo items — project_items has no user_id column; project_id is the FK
+  // Insert demo items — project_items has no user_id column; project_id is the FK.
+  // final_material_price / final_labor_price are the display columns — must mirror raw prices.
   const itemsToInsert = DEMO_PROJECT.items.map((item, idx) => ({
     project_id: projectId,
     name: item.name,
@@ -605,6 +635,8 @@ export async function createDemoProject(): Promise<{ success?: boolean; error?: 
     quantity: item.quantity,
     material_price: item.material_price,
     labor_price: item.labor_price,
+    final_material_price: item.material_price,
+    final_labor_price: item.labor_price,
     section: item.section,
     sort_order: idx,
   }));

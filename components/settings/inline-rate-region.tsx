@@ -159,7 +159,7 @@ export function InlineRateRegion({ initialRate, initialRegionId, regions }: Inli
       </Card>
 
       {/* Link to full KNR page */}
-      <Link href="/dashboard/settings/knr-calculator" className="block">
+      <Link href="/dashboard/settings/knr-calculator?tab=centrum" className="block">
         <div className="flex items-center justify-between p-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 bg-white dark:bg-slate-900 transition-colors group">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-violet-100 dark:bg-violet-900/40 flex items-center justify-center">

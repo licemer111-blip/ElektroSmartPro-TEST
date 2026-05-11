@@ -192,7 +192,7 @@ export function AiPriceEstimatorDialog({
                   <div className="text-[11px] text-amber-800 dark:text-amber-300 leading-relaxed">
                     <strong>Brak stawki robocizny.</strong>{" "}
                     Wycena robocizny wymaga zapisanej stawki R-G.{" "}
-                    <Link href="/dashboard/settings/knr-calculator" className="underline font-semibold hover:text-amber-900 dark:hover:text-amber-200">
+                    <Link href="/dashboard/settings/knr-calculator?tab=centrum" className="underline font-semibold hover:text-amber-900 dark:hover:text-amber-200">
                       Ustaw stawkę w Ustawieniach →
                     </Link>
                   </div>

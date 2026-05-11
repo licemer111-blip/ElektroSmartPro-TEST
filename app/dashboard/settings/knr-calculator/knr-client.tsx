@@ -7,9 +7,11 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { useEngineCalibration } from "@/hooks/use-engine-calibration";
 import { useSearchMode } from "@/hooks/use-search-mode";
-import { FolderOpen, SlidersHorizontal, Banknote, BrainCog, MapPin, ChevronDown, Settings2 } from "lucide-react";
+import { FolderOpen, SlidersHorizontal, Banknote, BrainCog, MapPin, ChevronDown, Settings2, ArrowLeft } from "lucide-react";
 import { KnrImportForm } from "./_parts/KnrImportForm";
 import { KnrEngineCalibration } from "./_parts/KnrEngineCalibration";
 import { KnrInvestmentContext } from "./_parts/KnrInvestmentContext";
@@ -58,7 +60,9 @@ function SectionDivider({ icon: Icon, title, subtitle }: { icon: React.ElementTy
 }
 
 export function KnrClient({ initialRate, initialMaterialMultiplier = 1.08, initialMaterialMargin = 15, isPro, initialUseCustomRates = false, initialCustomLaborRate = null, initialRegionUuid = null, dbRegions = [], initialInvestmentContext = "" }: KnrClientProps) {
-  const [pageTab, setPageTab] = useState<PageTab>("baza");
+  const searchParams = useSearchParams();
+  const initialTab = searchParams.get("tab") === "centrum" ? "centrum" : "baza";
+  const [pageTab, setPageTab] = useState<PageTab>(initialTab);
   const effectiveInitialRate = initialRate > 0 ? initialRate : 0;
 
   const [hourlyRate, setHourlyRate] = useState(effectiveInitialRate);
@@ -88,6 +92,15 @@ export function KnrClient({ initialRate, initialMaterialMultiplier = 1.08, initi
 
   return (
     <div className="max-w-5xl mx-auto space-y-4 pb-16">
+
+      {/* Back link to main settings Finanse tab */}
+      <Link
+        href="/dashboard/settings?tab=knr"
+        className="inline-flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+      >
+        <ArrowLeft className="w-3.5 h-3.5" />
+        Wróć do Ustawień — Finanse
+      </Link>
 
       {/* Tab switcher */}
       <div className="flex items-center gap-3 flex-wrap">

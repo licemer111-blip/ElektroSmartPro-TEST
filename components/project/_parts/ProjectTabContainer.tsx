@@ -276,7 +276,7 @@ export function ProjectTabContainer({
               projectId={project.id}
               items={items}
               materialsOwnedByCustomer={project.materials_owned_by_customer}
-              isPro={profile?.is_pro || false}
+              isPro={isPro}
               colorMode={colorMode}
               onColorModeChange={setColorMode}
               adjustmentPercentage={project.adjustment_percentage || 0}
