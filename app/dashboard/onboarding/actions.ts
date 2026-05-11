@@ -93,8 +93,6 @@ export async function createDemoProject(): Promise<{ projectId?: string; error?:
     quantity: item.quantity,
     material_price: item.material_price,
     labor_price: item.labor_price,
-    final_material_price: item.material_price,
-    final_labor_price: item.labor_price,
     section: item.section,
     sort_order: idx,
   }));
