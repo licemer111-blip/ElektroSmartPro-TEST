@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { BlurredPrice } from "@/components/ui/blurred-price";
+import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 import { PriceAdjuster } from "@/components/project/price-adjuster";
 import {
   Sheet,
@@ -57,7 +58,7 @@ export function MobileSummaryBar({
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
-  const isPro = profile?.is_pro || false;
+  const isPro = getEffectiveIsPro(profile) || project.is_demo_project === true;
   const { multiplier: knrMultiplier } = useKnrMultiplier();
   const isFinal = project.status === "final";
   const vatRate = project.vat_rate;

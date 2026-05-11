@@ -18,6 +18,7 @@ import { Calculator, CheckCircle, AlertTriangle, Sparkles, TrendingUp, Percent, 
 import { HintTooltip } from "@/components/ui/hint-tooltip";
 import { HINTS } from "@/lib/hints/hint-content";
 import { cn } from "@/lib/utils";
+import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 import type { ProjectItem, ProjectWithRelations, Profile } from "@/lib/types/database";
 import { calcNarzuty } from "@/lib/pricing-calculations";
 import { detectSmartContext } from "@/lib/ai/smart-context-mapper";
@@ -72,7 +73,7 @@ export function ProjectSummary({
   const liveRegionData = regions?.find(r => r.id === effectiveRegionId);
   const regionModifier = liveRegionData?.price_modifier ?? project.regions?.price_modifier ?? 1.0;
   const regionName = liveRegionData?.name ?? project.regions?.name ?? "Brak regionu";
-  const isPro = profile?.is_pro || project.is_demo_project === true;
+  const isPro = getEffectiveIsPro(profile) || project.is_demo_project === true;
   const isFinal = projectStatus === "final";
 
   const { multiplier: knrMultiplier } = useKnrMultiplier();
