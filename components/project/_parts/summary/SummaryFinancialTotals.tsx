@@ -134,14 +134,14 @@ export function SummaryFinancialTotals({
         <div className="flex justify-between items-center py-1.5 pl-2.5 border-l-2 border-amber-200 dark:border-amber-800">
           <span className="text-xs text-muted-foreground">M — Materiały</span>
           <span className="text-sm text-muted-foreground">
-            <BlurredPrice value={totals.materialTotal} isPro={isPro} />
+            <BlurredPrice value={totals.materialTotal} isPro={isPro} showBadge={!isPro} />
           </span>
         </div>
       )}
       <div className="flex justify-between items-center py-1.5 pl-2.5 border-l-2 border-emerald-200 dark:border-emerald-800">
         <span className="text-xs text-muted-foreground">R — Robocizna</span>
         <span className="text-sm text-muted-foreground">
-          <BlurredPrice value={totals.laborTotal} isPro={isPro} />
+          <BlurredPrice value={totals.laborTotal} isPro={isPro} showBadge={!isPro} />
         </span>
       </div>
       {equipmentTotal > 0 && (
@@ -151,7 +151,7 @@ export function SummaryFinancialTotals({
             S — Sprzęt
           </span>
           <span className="text-sm text-violet-600 dark:text-violet-400">
-            <BlurredPrice value={equipmentTotal} isPro={isPro} />
+            <BlurredPrice value={equipmentTotal} isPro={isPro} showBadge={!isPro} />
           </span>
         </div>
       )}
@@ -164,7 +164,7 @@ export function SummaryFinancialTotals({
             Narzuty (Kp+Z+Kz)
           </span>
           <span className="text-xs font-semibold">
-            +<BlurredPrice value={totals.totalNarzuty} isPro={isPro} />
+            +<BlurredPrice value={totals.totalNarzuty} isPro={isPro} showBadge={!isPro} />
           </span>
         </div>
       )}
@@ -177,7 +177,7 @@ export function SummaryFinancialTotals({
             Rezerwa budżetowa
           </span>
           <span className="text-xs font-semibold">
-            +<BlurredPrice value={totals.contingencyAmount!} isPro={isPro} />
+            +<BlurredPrice value={totals.contingencyAmount!} isPro={isPro} showBadge={!isPro} />
           </span>
         </div>
       )}
@@ -223,7 +223,7 @@ export function SummaryFinancialTotals({
                     {sec.name} <span className="text-purple-400 dark:text-purple-500">({sec.count})</span>
                   </span>
                   <span className="text-[11px] font-medium text-purple-800 dark:text-purple-200">
-                    <BlurredPrice value={sec.total} isPro={isPro} />
+                    <BlurredPrice value={sec.total} isPro={isPro} showBadge={!isPro} />
                   </span>
                 </div>
               ))}
@@ -243,7 +243,7 @@ export function SummaryFinancialTotals({
                     VAT mat. ({effectiveVatMat}%)
                   </span>
                   <span className="text-sm font-semibold text-amber-600 dark:text-amber-400">
-                    <BlurredPrice value={vatOnMat} isPro={isPro} />
+                    <BlurredPrice value={vatOnMat} isPro={isPro} showBadge={!isPro} />
                   </span>
                 </div>
               )}
@@ -252,7 +252,7 @@ export function SummaryFinancialTotals({
                   VAT rob. ({effectiveVatLab}%)
                 </span>
                 <span className="text-sm font-semibold text-amber-600 dark:text-amber-400">
-                  <BlurredPrice value={vatOnLab} isPro={isPro} />
+                  <BlurredPrice value={vatOnLab} isPro={isPro} showBadge={!isPro} />
                 </span>
               </div>
             </>
@@ -260,7 +260,7 @@ export function SummaryFinancialTotals({
             <div className="flex justify-between items-center py-1.5">
               <span className="text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide">VAT ({vatRate}%)</span>
               <span className="text-sm font-semibold text-amber-600 dark:text-amber-400">
-                <BlurredPrice value={totalVat} isPro={isPro} />
+                <BlurredPrice value={totalVat} isPro={isPro} showBadge={!isPro} />
               </span>
             </div>
           )}
@@ -281,7 +281,7 @@ export function SummaryFinancialTotals({
               <div className="flex justify-between items-center cursor-help py-1.5">
                 <span className="text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide">VAT ({vatRate}%)</span>
                 <span className="text-sm font-semibold text-amber-600 dark:text-amber-400">
-                  <BlurredPrice value={totalVat} isPro={isPro} />
+                  <BlurredPrice value={totalVat} isPro={isPro} showBadge={!isPro} />
                 </span>
               </div>
             </TooltipTrigger>
