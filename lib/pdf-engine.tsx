@@ -1056,14 +1056,16 @@ const watermarkStyles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    pointerEvents: 'none',
+  },
+  rotateWrapper: {
+    transform: 'rotate(-32deg)',
+    alignItems: 'center',
   },
   textBig: {
     fontSize: 78,
     fontWeight: 'bold',
     color: '#DC2626',
     opacity: 0.14,
-    transform: 'rotate(-32deg)',
     letterSpacing: 4,
     textAlign: 'center',
   },
@@ -1071,7 +1073,6 @@ const watermarkStyles = StyleSheet.create({
     fontSize: 14,
     color: '#DC2626',
     opacity: 0.18,
-    transform: 'rotate(-32deg)',
     marginTop: 6,
     textAlign: 'center',
   },
@@ -1106,8 +1107,10 @@ const watermarkStyles = StyleSheet.create({
 const DemoWatermark = () => (
   <>
     <View style={watermarkStyles.container} fixed>
-      <Text style={watermarkStyles.textBig}>DEMO</Text>
-      <Text style={watermarkStyles.textSmall}>ElektroSmart PRO — wersja demonstracyjna</Text>
+      <View style={watermarkStyles.rotateWrapper}>
+        <Text style={watermarkStyles.textBig}>DEMO</Text>
+        <Text style={watermarkStyles.textSmall}>ElektroSmart PRO — wersja demonstracyjna</Text>
+      </View>
     </View>
     <View style={watermarkStyles.ctaBar} fixed>
       <Text style={watermarkStyles.ctaText}>

@@ -642,7 +642,12 @@ export async function POST(req: Request) {
       },
     });
   } catch (e) {
-    logger.error("PDF Generation Error:", {}, e);
-    return new NextResponse("Error", { status: 500 });
+    const msg = e instanceof Error ? e.message : String(e);
+    const stack = e instanceof Error ? e.stack?.slice(0, 500) : undefined;
+    logger.error("PDF Generation Error:", { msg, stack }, e);
+    return new NextResponse(
+      JSON.stringify({ error: msg }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
   }
 }

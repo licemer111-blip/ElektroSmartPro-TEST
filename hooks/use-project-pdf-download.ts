@@ -53,7 +53,9 @@ export function useProjectPdfDownload({
       });
 
       if (!response.ok) {
-        throw new Error("Błąd generowania PDF");
+        let errMsg = "Błąd generowania PDF";
+        try { const j = await response.json(); if (j?.error) errMsg = j.error; } catch { /* ignore */ }
+        throw new Error(errMsg);
       }
 
       const blob = await response.blob();
@@ -61,8 +63,9 @@ export function useProjectPdfDownload({
       const fileName = `Kosztorys_${projectName}_${new Date().getTime()}.pdf`;
       setPdfPreviewUrl(url);
       setPdfPreviewName(fileName);
-    } catch {
-      toast({ title: "Błąd", description: "Nie udało się pobrać PDF", variant: "destructive" });
+    } catch (err) {
+      const desc = err instanceof Error ? err.message : "Nie udało się pobrać PDF";
+      toast({ title: "Błąd", description: desc, variant: "destructive" });
     } finally {
       setIsDownloading(false);
     }
