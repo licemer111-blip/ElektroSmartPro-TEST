@@ -305,7 +305,12 @@ export function ProjectHeaderToolbar({
                 <div className="flex items-center gap-0.5">
                 <div className="relative">
                   {isDemoProject && !isFinal && (
-                    <div className="absolute inset-0 rounded-md bg-orange-500/35 blur-md animate-pulse pointer-events-none" />
+                    <>
+                      <div className="absolute -inset-2 rounded-xl bg-yellow-400/40 blur-xl animate-pulse pointer-events-none" />
+                      <div className="absolute -top-5 left-1/2 -translate-x-1/2 pointer-events-none z-10">
+                        <ChevronDown className="w-4 h-4 text-yellow-300 animate-bounce drop-shadow-[0_0_4px_rgba(253,224,71,0.9)]" />
+                      </div>
+                    </>
                   )}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
