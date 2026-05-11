@@ -394,7 +394,7 @@ export function EstimateResultsTable({
                       <TableCell className="text-right">
                         {isRefreshing ? <Loader2 className="w-3 h-3 animate-spin text-orange-400 ml-auto" />
                         : needsIntervention ? <span className="text-xs text-slate-400">—</span>
-                        : materialChanged ? (
+                        : materialChanged && est.currentMaterial > 0 ? (
                           <div className="flex flex-col items-end gap-0">
                             <span className="text-[9px] text-slate-400 line-through">{formatPrice(Math.round(est.currentMaterial * vatMult * 100) / 100)}</span>
                             <span className="text-xs font-semibold text-emerald-600">{formatPrice(matDisplay)}</span>
@@ -417,7 +417,7 @@ export function EstimateResultsTable({
                       <TableCell className="text-right">
                         {isRefreshing ? <Loader2 className="w-3 h-3 animate-spin text-orange-400 ml-auto" />
                         : needsIntervention ? <span className="text-xs text-slate-400">—</span>
-                        : laborChanged ? (
+                        : laborChanged && est.currentLabor > 0 ? (
                           <div>
                             <span className="text-[9px] text-slate-400 line-through block">{formatPrice(est.currentLabor)}</span>
                             <span className="text-xs font-semibold text-blue-600">{formatPrice(laborWithRegion)}</span>
