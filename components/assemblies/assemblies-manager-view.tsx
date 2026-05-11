@@ -174,7 +174,6 @@ export function AssembliesManagerView({
               <AIAssemblyGeneratorDialog
                 isPro={isPro}
                 userTeam={userTeam}
-                triggerClassName="h-8"
               />
             </div>
             <span className="text-xs text-slate-500 dark:text-slate-400 hidden md:block">

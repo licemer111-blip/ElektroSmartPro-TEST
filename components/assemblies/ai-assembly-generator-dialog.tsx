@@ -104,8 +104,9 @@ export function AIAssemblyGeneratorDialog({ isPro = false, userTeam, triggerClas
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <button
-          className={triggerClassName ?? "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white border-0 shadow-sm h-9 text-xs font-semibold gap-1.5 px-4 rounded-md inline-flex items-center justify-center"}
+          className={triggerClassName ?? "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white border-0 shadow-sm shadow-orange-500/30 h-9 text-xs font-semibold gap-1.5 px-4 rounded-md inline-flex items-center justify-center transition-all hover:shadow-orange-500/50"}
         >
+          <Sparkles className="w-3.5 h-3.5" />
           ES Generator
         </button>
       </DialogTrigger>
