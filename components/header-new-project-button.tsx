@@ -7,6 +7,8 @@ import { useEffect, useState, useCallback } from "react";
 import { getRegions, getObjectTypes, getUserProfile, getProjects } from "@/app/dashboard/actions";
 import type { Region, ObjectType } from "@/lib/types/database";
 import { useRouter } from "next/navigation";
+import { getEffectiveIsPro } from "@/lib/auth/entitlements";
+import { getEffectiveMaxProjects } from "@/lib/config/tier-limits";
 
 export function HeaderNewProjectButton() {
   const { onOpen } = useModalStore();
@@ -34,9 +36,9 @@ export function HeaderNewProjectButton() {
       setData({
         regions,
         objectTypes,
-        currentProjectCount: projects.length,
-        isPro: profile?.is_pro || false,
-        maxProjects: profile?.max_projects || 999,
+        currentProjectCount: projects.filter(p => !p.is_demo_project).length,
+        isPro: getEffectiveIsPro(profile),
+        maxProjects: getEffectiveMaxProjects(profile),
         defaultRegionId: profile?.default_region_id ?? null,
       });
     } catch (error: unknown) {
