@@ -305,7 +305,7 @@ export function ProjectHeaderToolbar({
                 <div className="flex items-center gap-0.5">
                 <div className="relative">
                   {isDemoProject && !isFinal && (
-                    <span className="absolute -inset-1.5 rounded-xl bg-orange-400/25 animate-ping pointer-events-none" />
+                    <div className="absolute inset-0 rounded-md bg-orange-500/35 blur-md animate-pulse pointer-events-none" />
                   )}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
