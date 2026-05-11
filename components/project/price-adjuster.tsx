@@ -147,7 +147,7 @@ export function PriceAdjuster({ projectId, basePrice, initialAdjustment, isPro =
       <div className="flex justify-between items-center">
         <span className="text-xs text-slate-500 dark:text-slate-500">Cena bazowa:</span>
         <span className={`text-sm ${!isNeutral ? 'line-through text-slate-400 dark:text-slate-600' : 'text-slate-600 dark:text-slate-400'}`}>
-          <BlurredPrice value={safeBasePrice} isPro={isPro} />
+          <BlurredPrice value={safeBasePrice} isPro={isPro} showBadge={!isPro} />
         </span>
       </div>
 
@@ -257,7 +257,7 @@ export function PriceAdjuster({ projectId, basePrice, initialAdjustment, isPro =
             } ${disabled ? 'opacity-50' : ''}`}
               style={{ fontSize: '1.575rem', fontWeight: 900, lineHeight: 1 }}
             >
-              <BlurredPrice value={targetPrice} isPro={isPro} />
+              <BlurredPrice value={targetPrice} isPro={isPro} showBadge={!isPro} />
               <span className={`text-sm font-semibold transition-colors duration-300 ${
                 isDiscount ? 'text-red-400' : isMarkup ? 'text-emerald-400' : 'text-blue-400'
               }`}>zł</span>
@@ -276,7 +276,7 @@ export function PriceAdjuster({ projectId, basePrice, initialAdjustment, isPro =
       }`}>
         <span>{isDiscount ? "Rabat:" : "Marża:"}</span>
         <span className="font-bold">
-          {isDiscount ? "-" : "+"}{Math.abs(targetPrice - safeBasePrice).toFixed(2)} zł
+          {isPro ? `${isDiscount ? "-" : "+"}${Math.abs(targetPrice - safeBasePrice).toFixed(2)} zł` : "***"}
         </span>
       </div>
     </div>

@@ -255,7 +255,7 @@ export function RowMaterialCell({
             )}
             <PriceEditHint adjustmentMultiplier={adjustmentMultiplier} editingState={editingState} />
             <div className={cn("text-xs font-medium", colorMode ? "text-amber-700 dark:text-amber-400" : "text-slate-700 dark:text-slate-400")}>
-              <BlurredPrice value={dp(materialTotal)} isPro={showPrices} />
+              <BlurredPrice value={dp(materialTotal)} isPro={showPrices} showBadge={!showPrices} />
             </div>
           </div>
         )
@@ -294,10 +294,10 @@ export function RowMaterialCell({
             ) : (
               <div className="flex flex-col items-end leading-tight">
                 <span className="text-[10px] text-muted-foreground">
-                  <BlurredPrice value={matUnitDisp} isPro={showPrices} /> /
+                  <BlurredPrice value={matUnitDisp} isPro={showPrices} showBadge={!showPrices} /> /
                 </span>
                 <span className="text-xs font-semibold">
-                  <BlurredPrice value={matTotalDisp} isPro={showPrices} />
+                  <BlurredPrice value={matTotalDisp} isPro={showPrices} showBadge={!showPrices} />
                 </span>
               </div>
             )}
@@ -331,7 +331,7 @@ export function RowMaterialCell({
                     className="mt-px"
                   />
                 )}
-                <BlurredPrice value={matUnitDisp} isPro={showPrices} /> /
+                <BlurredPrice value={matUnitDisp} isPro={showPrices} showBadge={!showPrices} /> /
               </div>
               {/* Base price indicator when negocjacje are active */}
               {materialUnitBase !== undefined && Math.abs(materialUnit - materialUnitBase) >= 0.01 && (
@@ -341,7 +341,7 @@ export function RowMaterialCell({
               )}
               {/* suma — bold large */}
               <div className={cn("text-sm font-semibold", colorMode ? "text-amber-700 dark:text-amber-400" : "text-slate-800 dark:text-slate-100")}>
-                <BlurredPrice value={matTotalDisp} isPro={showPrices} />
+                <BlurredPrice value={matTotalDisp} isPro={showPrices} showBadge={!showPrices} />
               </div>
               {bruttoMode && showPrices && (
                 <div className="text-[9px] text-slate-400 dark:text-slate-500 text-right">
@@ -417,10 +417,10 @@ export function RowLaborCell({
           )}
           <div className="flex flex-col items-end leading-tight">
             <span className="text-[10px] text-muted-foreground">
-              <BlurredPrice value={labUnitDisp} isPro={showPrices} /> /
+              <BlurredPrice value={labUnitDisp} isPro={showPrices} showBadge={!showPrices} /> /
             </span>
             <span className="text-xs font-semibold">
-              <BlurredPrice value={labTotalDisp} isPro={showPrices} />
+              <BlurredPrice value={labTotalDisp} isPro={showPrices} showBadge={!showPrices} />
             </span>
           </div>
         </div>
@@ -438,13 +438,13 @@ export function RowLaborCell({
               />
             )}
             <span className="text-xs font-semibold">
-              <BlurredPrice value={labUnitDisp} isPro={showPrices} />
+              <BlurredPrice value={labUnitDisp} isPro={showPrices} showBadge={!showPrices} />
               <span className="text-[9px] font-normal text-slate-400 dark:text-slate-500 ml-0.5">zł/{item.unit ?? "szt"}</span>
             </span>
           </div>
           {/* Total — smaller */}
           <div className={cn("text-[10px] text-right", colorMode ? "text-emerald-500 dark:text-emerald-600" : "text-slate-400 dark:text-slate-500")}>
-            Σ <BlurredPrice value={labTotalDisp} isPro={showPrices} />
+            Σ <BlurredPrice value={labTotalDisp} isPro={showPrices} showBadge={!showPrices} />
           </div>
         </div>
       ) : (
@@ -460,7 +460,7 @@ export function RowLaborCell({
                 className="mt-px"
               />
             )}
-            <BlurredPrice value={labUnitDisp} isPro={showPrices} /> /
+            <BlurredPrice value={labUnitDisp} isPro={showPrices} showBadge={!showPrices} /> /
           </div>
           {/* Base price indicator when negocjacje are active */}
           {laborUnitBase !== undefined && Math.abs(laborUnit - laborUnitBase) >= 0.01 && (
@@ -470,7 +470,7 @@ export function RowLaborCell({
           )}
           {/* suma — bold large */}
           <div className={cn("text-sm font-semibold", colorMode ? "text-emerald-700 dark:text-emerald-400" : "text-slate-800 dark:text-slate-100")}>
-            <BlurredPrice value={labTotalDisp} isPro={showPrices} />
+            <BlurredPrice value={labTotalDisp} isPro={showPrices} showBadge={!showPrices} />
           </div>
           {bruttoMode && showPrices && (
             <div className="text-[9px] text-slate-400 dark:text-slate-500 text-right">

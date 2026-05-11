@@ -75,7 +75,7 @@ export function RowTotalCell({
           "text-[11px] text-right",
           colorMode ? "text-blue-400 dark:text-blue-600" : "text-slate-400 dark:text-slate-500",
         )}>
-          <BlurredPrice value={displayUnit} isPro={isPro} /> /
+          <BlurredPrice value={displayUnit} isPro={isPro} showBadge={!isPro} /> /
         </div>
       )}
       <div className={cn(
@@ -90,7 +90,7 @@ export function RowTotalCell({
         {isAnomalyHigh && (
           <span title="⚠️ Anomalia cenowa! Suma > 100 000 zł — sprawdź cenę jednostkową" className="text-red-500 text-base">⚠️</span>
         )}
-        <BlurredPrice value={displayTotal} isPro={isPro} />
+        <BlurredPrice value={displayTotal} isPro={isPro} showBadge={!isPro} />
       </div>
       {isAnomalyHigh && isPro && (
         <div className="text-[9px] text-red-500 dark:text-red-400 font-medium">Sprawdź ceny!</div>
