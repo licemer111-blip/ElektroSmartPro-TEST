@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { BlurredPrice } from "@/components/ui/blurred-price";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -229,9 +230,9 @@ export function AssemblyItemsList({
                         </Badge>
                       </div>
                       <div className="text-sm text-slate-600 dark:text-slate-400">
-                        {item.quantity} {item.unit} × {isPro ? `${item.price.toFixed(2)} zł` : "*** zł"} ={" "}
+                        {item.quantity} {item.unit} × <BlurredPrice value={item.price} isPro={isPro} showBadge={!isPro} className="inline" /> ={" "}
                         <span className="font-medium text-slate-900 dark:text-slate-100">
-                          {isPro ? `${(item.quantity * item.price).toFixed(2)} zł` : "*** zł"}
+                          <BlurredPrice value={item.quantity * item.price} isPro={isPro} showBadge={!isPro} className="font-medium" />
                         </span>
                       </div>
                     </div>

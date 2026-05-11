@@ -1,6 +1,7 @@
 "use client";
 
 import { Package, Wrench, Boxes } from "lucide-react";
+import { BlurredPrice } from "@/components/ui/blurred-price";
 import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
@@ -66,7 +67,7 @@ export function AssemblyPreviewDialog({ assembly, isPro, onClose }: AssemblyPrev
                   </div>
                   <div className="text-right flex-shrink-0 flex flex-col items-end">
                     <span className="text-xs font-semibold text-slate-900 dark:text-slate-100 whitespace-nowrap">
-                      {isPro ? `${(item.quantity * item.price).toFixed(2)} zł` : "*** zł"}
+                      <BlurredPrice value={item.quantity * item.price} isPro={isPro} showBadge={!isPro} className="text-xs font-semibold" />
                     </span>
                     <span className="text-[10px] text-slate-400 whitespace-nowrap">
                       {item.quantity} {item.unit}
@@ -87,7 +88,7 @@ export function AssemblyPreviewDialog({ assembly, isPro, onClose }: AssemblyPrev
                             .filter((i) => i.type === "material")
                             .reduce((s, i) => s + i.price * i.quantity, 0)
                             .toFixed(2)} zł`
-                        : "*** zł"}
+                        : <BlurredPrice value={assembly.user_assembly_items.filter((i) => i.type === "material").reduce((s, i) => s + i.price * i.quantity, 0)} isPro={false} showBadge={true} className="text-xs font-medium" />}
                     </span>
                   </div>
                   <div className="flex justify-between text-xs text-slate-600 dark:text-slate-400">
@@ -100,7 +101,7 @@ export function AssemblyPreviewDialog({ assembly, isPro, onClose }: AssemblyPrev
                             .filter((i) => i.type === "labor")
                             .reduce((s, i) => s + i.price * i.quantity, 0)
                             .toFixed(2)} zł`
-                        : "*** zł"}
+                        : <BlurredPrice value={assembly.user_assembly_items.filter((i) => i.type === "labor").reduce((s, i) => s + i.price * i.quantity, 0)} isPro={false} showBadge={true} className="text-xs font-medium" />}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm font-bold pt-2 border-t">
@@ -110,7 +111,7 @@ export function AssemblyPreviewDialog({ assembly, isPro, onClose }: AssemblyPrev
                         ? `${assembly.user_assembly_items
                             .reduce((s, i) => s + i.price * i.quantity, 0)
                             .toFixed(2)} zł`
-                        : "*** zł"}
+                        : <BlurredPrice value={assembly.user_assembly_items.reduce((s, i) => s + i.price * i.quantity, 0)} isPro={false} showBadge={true} className="text-sm font-bold" />}
                     </span>
                   </div>
                 </div>

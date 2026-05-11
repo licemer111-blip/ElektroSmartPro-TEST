@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { MoreVertical, Edit, Trash2, FolderInput, Users, Sparkles, Copy, Share2, UserMinus } from "lucide-react";
+import { BlurredPrice } from "@/components/ui/blurred-price";
 import { AssemblyModal } from "./assembly-modal";
 import { DeleteAssemblyButton } from "./delete-assembly-button";
 import { moveAssemblyToCategory } from "@/app/dashboard/actions";
@@ -170,7 +171,7 @@ export function AssemblyListView({
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right font-mono font-semibold text-slate-900 dark:text-slate-100">
-                      {isPro ? `${totalPrice.toFixed(2)} zł` : '*** zł'}
+                      <BlurredPrice value={totalPrice} isPro={isPro} showBadge={!isPro} className="font-mono font-semibold" />
                     </TableCell>
                     <TableCell>
                       {category ? (

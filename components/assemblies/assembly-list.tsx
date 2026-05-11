@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Package, Trash2, Loader2, CheckCircle2, Users, User, Globe, Search, MoreVertical, Edit, Copy } from "lucide-react";
+import { BlurredPrice } from "@/components/ui/blurred-price";
 import { getUserAssemblies, deleteUserAssembly, duplicateUserAssembly } from "@/app/dashboard/assemblies/actions";
 import type { UserAssemblyWithItems } from "@/lib/types/database";
 import {
@@ -350,7 +351,7 @@ export function AssemblyList({ onSelect, selectedAssemblyId, refreshTrigger = 0,
                           • {item.name} ({item.quantity} {item.unit})
                         </span>
                         <span className="text-blue-500 dark:text-blue-400 shrink-0 whitespace-nowrap">
-                          {isPro ? `${item.price.toFixed(2)} zł` : '*** zł'}
+                          <BlurredPrice value={item.price} isPro={isPro} showBadge={!isPro} className="text-xs" />
                         </span>
                       </div>
                     ))}
@@ -363,7 +364,7 @@ export function AssemblyList({ onSelect, selectedAssemblyId, refreshTrigger = 0,
                   <div className="flex items-center justify-between pt-2 border-t border-border text-sm">
                     <span className="font-medium">Wartość:</span>
                     <span className="font-bold text-blue-600 dark:text-blue-400">
-                      {isPro ? `${total.toFixed(2)} zł` : '*** zł'}
+                      <BlurredPrice value={total} isPro={isPro} showBadge={!isPro} className="font-bold" />
                     </span>
                   </div>
                 </div>

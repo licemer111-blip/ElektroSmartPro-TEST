@@ -42,7 +42,7 @@ export function AssembliesWithTabs({ assemblies, isPro, currentCount, categories
 function AssemblyGrid({
   assemblies,
   emptyMessage = "Brak zestawów w tej kategorii",
-  isPro = true,
+  isPro = false,
   currentCount = 0,
   categories = [],
   userTeam,

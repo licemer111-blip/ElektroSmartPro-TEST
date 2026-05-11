@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { BlurredPrice } from "@/components/ui/blurred-price";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus, Package, Pencil, Trash2, Wrench } from "lucide-react";
@@ -76,9 +77,7 @@ export function AssemblyModuleList({
               </div>
               <div className="flex items-center gap-2 flex-shrink-0 ml-2">
                 <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 w-20 text-right">
-                  {isPro
-                    ? `${(item.price * item.quantity).toFixed(2)} zł`
-                    : "*** zł"}
+                  <BlurredPrice value={item.price * item.quantity} isPro={isPro} showBadge={!isPro} className="text-sm font-semibold" />
                 </span>
                 <button
                   type="button"
@@ -109,19 +108,19 @@ export function AssemblyModuleList({
               <div className="flex justify-between text-muted-foreground">
                 <span>Materiały:</span>
                 <span className="font-medium">
-                  {isPro ? `${totalMaterial.toFixed(2)} zł` : "*** zł"}
+                  <BlurredPrice value={totalMaterial} isPro={isPro} showBadge={!isPro} className="font-medium" />
                 </span>
               </div>
               <div className="flex justify-between text-muted-foreground">
                 <span>Robocizna:</span>
                 <span className="font-medium">
-                  {isPro ? `${totalLabor.toFixed(2)} zł` : "*** zł"}
+                  <BlurredPrice value={totalLabor} isPro={isPro} showBadge={!isPro} className="font-medium" />
                 </span>
               </div>
               <div className="flex justify-between pt-1.5 border-t font-bold text-base">
                 <span>Razem:</span>
                 <span className="text-blue-600 dark:text-blue-400">
-                  {isPro ? `${total.toFixed(2)} zł` : "*** zł"}
+                  <BlurredPrice value={total} isPro={isPro} showBadge={!isPro} className="text-base font-bold" />
                 </span>
               </div>
             </div>
