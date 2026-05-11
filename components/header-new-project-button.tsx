@@ -23,7 +23,7 @@ export function HeaderNewProjectButton() {
   } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Fetch data function
+  // Fetch data function — returns fresh data directly to avoid stale state
   const fetchData = useCallback(async () => {
     try {
       const [regions, objectTypes, profile, projects] = await Promise.all([
@@ -33,28 +33,19 @@ export function HeaderNewProjectButton() {
         getProjects(),
       ]);
 
-      setData({
+      const fresh = {
         regions,
         objectTypes,
         currentProjectCount: projects.filter(p => !p.is_demo_project).length,
         isPro: getEffectiveIsPro(profile),
         maxProjects: getEffectiveMaxProjects(profile),
         defaultRegionId: profile?.default_region_id ?? null,
-      });
+      };
+      setData(fresh);
+      return fresh;
     } catch (error: unknown) {
       console.error("❌ [HeaderNewProjectButton] Failed to fetch data:", error);
-      
-      // Check for Server Action ID mismatch error
-      const errorMessage = error instanceof Error ? error.message : "";
-      if (errorMessage.includes("Server Action") && errorMessage.includes("not found")) {
-        console.error("[HeaderNewProjectButton] Server Action mismatch detected.");
-        // Use window.location.reload() if available, otherwise just warn
-        if (typeof window !== "undefined") {
-           // We could reload, but let's just show a toast or alert if possible
-           // or silently fail and let the user reload. 
-           // Better to let the user know.
-        }
-      }
+      return null;
     }
   }, []);
 
@@ -66,19 +57,18 @@ export function HeaderNewProjectButton() {
   const handleClick = async () => {
     if (isLoading) return;
 
-    // Refresh data before opening modal to ensure accuracy
+    // Refresh data before opening modal — use RETURNED value to avoid stale state
     setIsLoading(true);
-    await fetchData();
+    const fresh = await fetchData();
     setIsLoading(false);
 
-    if (data) {
-      // ⚠️ DEMO MODE CHECK - Show ProModal if at limit
-      const isAtLimit = !data.isPro && data.currentProjectCount >= data.maxProjects;
-      
+    const current = fresh ?? data;
+    if (current) {
+      const isAtLimit = !current.isPro && current.currentProjectCount >= current.maxProjects;
       if (isAtLimit) {
         onOpen('proModal');
       } else {
-        onOpen('createProject', data);
+        onOpen('createProject', current);
       }
     }
   };

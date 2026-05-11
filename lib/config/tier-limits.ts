@@ -65,12 +65,17 @@ export function getEffectiveMaxProjects(
   profile: (EntitlementProfile & { max_projects?: number | null }) | null | undefined,
 ): number {
   if (profile == null) return FREE_TIER_MAX_PROJECTS;
-  // Admin-set override in DB wins (e.g. admin może nadal wymusić inny limit dla konkretnego user-a)
-  if (typeof profile.max_projects === "number" && profile.max_projects > 0) {
+  // v2.3: effective PRO = paid subscription OR active trial
+  const isPro = getEffectiveIsPro(profile);
+  if (!isPro) {
+    // FREE users always get FREE_TIER_MAX_PROJECTS (0) regardless of DB max_projects
+    return FREE_TIER_MAX_PROJECTS;
+  }
+  // Admin-set override in DB wins for PRO users only
+  if (typeof profile.max_projects === "number" && profile.max_projects > 0 && profile.max_projects < PRO_TIER_MAX_PROJECTS) {
     return profile.max_projects;
   }
-  // v2.1: effective PRO = paid subscription OR active 7-day trial
-  return getEffectiveIsPro(profile) ? PRO_TIER_MAX_PROJECTS : FREE_TIER_MAX_PROJECTS;
+  return PRO_TIER_MAX_PROJECTS;
 }
 
 /**

@@ -8,6 +8,7 @@ import { projectSettingsSchema, validate } from "@/lib/validations";
 import type { Region, ObjectType, ProjectWithRelations } from "@/lib/types/database";
 import { logger } from "@/lib/logger";
 import { getEffectiveMaxProjects } from "@/lib/config/tier-limits";
+import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { DEMO_PROJECT } from "@/lib/config/demo-project";
 
@@ -133,7 +134,7 @@ export async function createProject(formData: FormData) {
 
   let { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("is_pro, max_projects, hourly_rate, default_region_id")
+    .select("is_pro, max_projects, hourly_rate, default_region_id, trial_started_at, trial_ends_at")
     .eq("id", user.id)
     .single();
 
@@ -150,15 +151,16 @@ export async function createProject(formData: FormData) {
     }
     const { data: newProfile } = await supabase
       .from("profiles")
-      .select("is_pro, max_projects, hourly_rate, default_region_id")
+      .select("is_pro, max_projects, hourly_rate, default_region_id, trial_started_at, trial_ends_at")
       .eq("id", user.id)
       .single();
     profile = newProfile;
   }
 
-  // v2.2: FREE tier = max 1 własny projekt (demo is_demo_project=true nie liczy się).
-  const maxAllowed = getEffectiveMaxProjects(profile as { is_pro?: boolean; max_projects?: number } | null);
-  if (profile && !profile.is_pro && maxAllowed < 100) {
+  // v2.3: FREE tier = 0 własnych projektów — tylko DEMO (ceny zamazane do trialu).
+  const effectiveIsPro = getEffectiveIsPro(profile as Parameters<typeof getEffectiveIsPro>[0]);
+  const maxAllowed = getEffectiveMaxProjects(profile as Parameters<typeof getEffectiveMaxProjects>[0]);
+  if (!effectiveIsPro) {
     // Count only non-demo projects toward the limit
     const { count } = await supabase
       .from("projects")
@@ -167,7 +169,7 @@ export async function createProject(formData: FormData) {
       .or("is_demo_project.is.null,is_demo_project.eq.false");
     if (count !== null && count >= maxAllowed) {
       return {
-        error: `Osiągnąłeś limit ${maxAllowed} projektu. Usuń istniejący projekt lub aktywuj trial PRO.`,
+        error: "Twoje konto nie ma aktywnej subskrypcji. Aktywuj 1-dniowy trial lub kup PRO, aby tworzyć własne projekty.",
         requiresUpgrade: true,
       };
     }
