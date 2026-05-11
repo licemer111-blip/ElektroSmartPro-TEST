@@ -1,6 +1,7 @@
 "use client";
 
 import { Package, Wrench, MoreVertical, Edit, Copy, Trash2, FolderInput, Sparkles, Users, Share2, UserMinus } from "lucide-react";
+import { BlurredPrice } from "@/components/ui/blurred-price";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -222,7 +223,7 @@ export function AssemblyCard({
                     <span className="text-[10px] text-slate-400">({items.filter(i => i.type === "material").length})</span>
                   </div>
                   <span className={`font-semibold ${hasNoPrices ? "text-slate-400" : "text-amber-700 dark:text-amber-300"}`}>
-                    {isPro ? (hasNoPrices ? "—" : `${totalMat.toFixed(2)} zł`) : "*** zł"}
+                    {hasNoPrices ? "—" : <BlurredPrice value={totalMat} isPro={isPro} showBadge={!isPro} className="text-xs font-semibold" />}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
@@ -232,13 +233,13 @@ export function AssemblyCard({
                     <span className="text-[10px] text-slate-400">({items.filter(i => i.type === "labor").length})</span>
                   </div>
                   <span className={`font-semibold ${hasNoPrices ? "text-slate-400" : "text-emerald-700 dark:text-emerald-300"}`}>
-                    {isPro ? (hasNoPrices ? "—" : `${totalLab.toFixed(2)} zł`) : "*** zł"}
+                    {hasNoPrices ? "—" : <BlurredPrice value={totalLab} isPro={isPro} showBadge={!isPro} className="text-xs font-semibold" />}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-xs pt-1.5 mt-0.5 border-t border-slate-100 dark:border-slate-800">
                   <span className="font-bold text-slate-700 dark:text-slate-300">Razem</span>
                   <span className={`font-bold text-sm ${hasNoPrices ? "text-slate-400" : "text-blue-600 dark:text-blue-400"}`}>
-                    {isPro ? (hasNoPrices ? "Uzupełnij ceny" : `${total.toFixed(2)} zł`) : "*** zł"}
+                    {hasNoPrices ? "Uzupełnij ceny" : <BlurredPrice value={total} isPro={isPro} showBadge={!isPro} className="text-sm font-bold" />}
                   </span>
                 </div>
               </>
