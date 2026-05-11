@@ -303,12 +303,16 @@ export function ProjectHeaderToolbar({
               <div className="flex items-center gap-1 overflow-x-auto flex-nowrap no-scrollbar">
                 {/* ✨ ES-Engine unified dropdown */}
                 <div className="flex items-center gap-0.5">
+                <div className="relative">
+                  {isDemoProject && !isFinal && (
+                    <span className="absolute -inset-1.5 rounded-xl bg-orange-400/25 animate-ping pointer-events-none" />
+                  )}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
                       size="sm"
                       disabled={isFinal}
-                      className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white flex-shrink-0 rounded-md shadow-[0_0_14px_rgba(249,115,22,0.55)] hover:shadow-[0_0_20px_rgba(249,115,22,0.75)] ring-1 ring-orange-400/40 transition-shadow duration-200 ${isFinal ? "opacity-50 cursor-not-allowed shadow-none ring-0" : ""}`}
+                      className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white flex-shrink-0 rounded-md shadow-[0_0_14px_rgba(249,115,22,0.55)] hover:shadow-[0_0_20px_rgba(249,115,22,0.75)] transition-shadow duration-200 ${isDemoProject && !isFinal ? "ring-2 ring-orange-300 ring-offset-1" : "ring-1 ring-orange-400/40"} ${isFinal ? "opacity-50 cursor-not-allowed shadow-none !ring-0" : ""}`}
                     >
                       <Sparkles className="h-3.5 w-3.5 drop-shadow-sm" />
                       <span className="font-semibold">ES-Engine</span>
@@ -350,15 +354,22 @@ export function ProjectHeaderToolbar({
                         onBroadcastDialog("headerAiPricerOpen", true);
                       }}
                       disabled={projectItems.length === 0}
+                      className={isDemoProject ? "bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800/40 my-0.5 mx-1 rounded-md focus:bg-orange-100 dark:focus:bg-orange-950/40" : ""}
                     >
-                      <CircleDollarSign className="mr-2 h-4 w-4 text-orange-500" />
-                      <div className="flex flex-col">
-                        <span className="text-xs font-medium">ES Wycena (L1+L2+L3)</span>
+                      <CircleDollarSign className={`mr-2 h-4 w-4 ${isDemoProject ? "text-orange-600 dark:text-orange-400" : "text-orange-500"}`} />
+                      <div className="flex flex-col flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="text-xs font-medium">ES Wycena (L1+L2+L3)</span>
+                          {isDemoProject && (
+                            <span className="text-[9px] bg-orange-500 text-white px-1.5 py-0.5 rounded-full font-bold flex-shrink-0 leading-none">← Zacznij tu</span>
+                          )}
+                        </div>
                         <span className="text-[10px] text-slate-400">Wyceń {projectItems.length} poz. — KNR + AI + benchmarki</span>
                       </div>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
+                </div>
                 <HintTooltip content={HINTS.aiPricing} side="bottom" iconOnly iconClassName="!bg-amber-100 dark:!bg-amber-900/60 !text-amber-600 dark:!text-amber-400 !ring-amber-300 dark:!ring-amber-700 hover:!bg-amber-200 hover:!shadow-[0_0_8px_rgba(245,158,11,0.55)]" />
                 </div>
 
