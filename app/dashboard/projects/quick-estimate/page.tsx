@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { PageContainer } from "@/components/layout/page-container";
 import { getRegions, getObjectTypes } from "@/app/dashboard/actions";
 import { QuickEstimateWizard } from "@/components/projects/quick-estimate-wizard";
+import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 
 export const metadata: Metadata = {
   title: "Szybka Wycena — Kosztorys w 5 Minut",
@@ -21,14 +22,14 @@ export default async function QuickEstimatePage() {
     redirect("/login");
   }
 
-  // Check PRO status
+  // Check PRO status (trial-aware)
   const { data: profile } = await supabase
     .from("profiles")
-    .select("is_pro")
+    .select("is_pro, trial_started_at, trial_ends_at")
     .eq("id", user.id)
     .single();
 
-  const isPro = profile?.is_pro === true;
+  const isPro = getEffectiveIsPro(profile);
 
   const [regions, objectTypes] = await Promise.all([
     getRegions(),
