@@ -31,11 +31,11 @@ export function RateNotSetBanner({ rateNotSet }: RateNotSetBannerProps) {
       <div className="max-w-7xl mx-auto flex items-center gap-3">
         <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0" />
         <p className="flex-1 text-xs text-amber-800 dark:text-amber-200">
-          <span className="font-semibold">Używasz domyślnej stawki 120 PLN/rbh.</span>{" "}
-          Ustaw swoją stawkę R-G, aby wyceny były dopasowane do Twojego cennika.
+          <span className="font-semibold">Stawka R-G nie jest ustawiona.</span>{" "}
+          Ustaw swoją stawkę roboczogodzinową, aby wyceny były dopasowane do Twojego cennika.
         </p>
         <Link
-          href="/dashboard/settings/knr-calculator?tab=centrum"
+          href="/dashboard/settings?tab=knr"
           className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold transition-colors flex-shrink-0"
           onClick={handleDismiss}
         >
