@@ -9,7 +9,7 @@ import { createClient } from "@/utils/supabase/server";
 import { OnboardingTour } from "@/components/onboarding/onboarding-tour";
 import { OnboardingWizard } from "@/components/onboarding/onboarding-wizard";
 import { ClientActivityWidget } from "@/components/dashboard/client-activity-widget";
-import { FREE_TIER_MAX_PROJECTS } from "@/lib/config/tier-limits";
+import { getEffectiveMaxProjects } from "@/lib/config/tier-limits";
 import { StartTrialButton } from "@/components/billing/start-trial-button";
 import { getEffectiveIsPro, hasUsedTrial } from "@/lib/auth/entitlements";
 
@@ -87,9 +87,9 @@ export default async function DashboardPage({
               <NewProjectButton
                 regions={regions}
                 objectTypes={objectTypes}
-                currentProjectCount={projects.length}
-                isPro={profile?.is_pro || false}
-                maxProjects={profile?.max_projects || FREE_TIER_MAX_PROJECTS}
+                currentProjectCount={projects.filter(p => !p.is_demo_project).length}
+                isPro={effectivelyPro}
+                maxProjects={getEffectiveMaxProjects(profile)}
                 defaultRegionId={profile?.default_region_id ?? null}
                 hourlyRate={profile?.hourly_rate ?? 0}
               />
@@ -145,8 +145,8 @@ export default async function DashboardPage({
           <EmptyProjectsState
             regions={regions}
             objectTypes={objectTypes}
-            isPro={profile?.is_pro || false}
-            maxProjects={profile?.max_projects || FREE_TIER_MAX_PROJECTS}
+            isPro={effectivelyPro}
+            maxProjects={getEffectiveMaxProjects(profile)}
           />
         ) : (
           <>

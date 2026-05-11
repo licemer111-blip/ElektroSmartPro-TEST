@@ -73,7 +73,7 @@ export function ProjectSummary({
   const liveRegionData = regions?.find(r => r.id === effectiveRegionId);
   const regionModifier = liveRegionData?.price_modifier ?? project.regions?.price_modifier ?? 1.0;
   const regionName = liveRegionData?.name ?? project.regions?.name ?? "Brak regionu";
-  const isPro = getEffectiveIsPro(profile) || project.is_demo_project === true;
+  const isPro = getEffectiveIsPro(profile);
   const isFinal = projectStatus === "final";
 
   const { multiplier: knrMultiplier } = useKnrMultiplier();

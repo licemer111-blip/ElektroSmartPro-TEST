@@ -58,7 +58,7 @@ export function MobileSummaryBar({
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
-  const isPro = getEffectiveIsPro(profile) || project.is_demo_project === true;
+  const isPro = getEffectiveIsPro(profile);
   const { multiplier: knrMultiplier } = useKnrMultiplier();
   const isFinal = project.status === "final";
   const vatRate = project.vat_rate;

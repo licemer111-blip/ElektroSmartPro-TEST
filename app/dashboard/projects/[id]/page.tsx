@@ -108,9 +108,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     // All team members (editor, elektryk, kierownik, admin, owner) have full access.
     // Demo projects are editable by owner so they can explore all features freely.
     const isReadOnly = userRole === "viewer";
-    // v2.1: showPrices flag feeds downstream `isPro` prop. Effective PRO =
-    // paid subscription OR active 7-day trial. Demo projects bypass as before.
-    const showPrices = getEffectiveIsPro(profile) || isDemoProject;
+    // v2.3: showPrices = paid PRO OR active trial only.
+    // Demo projects no longer bypass — prices blurred until trial is activated.
+    const showPrices = getEffectiveIsPro(profile);
     // Catalog sidebar always uses real PRO status — never unlocked by demo project.
     // This ensures free users see blurred catalog prices even when on the demo project page.
     const showCatalogPrices = getEffectiveIsPro(profile);

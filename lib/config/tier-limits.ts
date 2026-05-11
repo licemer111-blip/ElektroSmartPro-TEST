@@ -8,7 +8,7 @@
  *   FREE (forever, no card)
  *     ✓ Manual catalog & basic calculations (VAT, narzut KP/Z/KZ, contingency)
  *     ✓ Pełna widoczność cen (materiał / robocizna / VAT / brutto)
- *     ✓ Max 1 własny aktywny projekt + 1 projekt DEMO (archived nie liczą się w limit)
+ *     ✓ Dostęp tylko do projektu DEMO (ceny zamazane — aktywuj trial aby zobaczyć)
  *     ✓ AI = 5 requests/month (shared across Szybka Wycena, Blueprint, Chat,
  *       KNR auto-pricing, Smart Assemblies expansion, Vision OCR)
  *     ✓ PDF/Excel export WITH "DEMO" watermark (still sendable for own use)
@@ -45,11 +45,12 @@ import { getEffectiveIsPro, type EntitlementProfile } from "@/lib/auth/entitleme
 
 /**
  * Maksymalna liczba WŁASNYCH aktywnych projektów dla FREE tier.
- * v2.2: 1 — użytkownik może testować aplikację na demie + 1 własnym projekcie.
+ * v2.3: 0 — użytkownik FREE może używać TYLKO projektu DEMO (ceny zamazane do trialu).
+ * Po aktywacji 1-dniowego trialu → PRO_TIER_MAX_PROJECTS (nielimitowane).
  * Projekt DEMO (is_demo_project=true) NIE liczy się w tę liczbę.
  * Archiwizacja projektów NIE liczy się w limit.
  */
-export const FREE_TIER_MAX_PROJECTS = 1;
+export const FREE_TIER_MAX_PROJECTS = 0;
 
 /** Maksymalna liczba AKTYWNYCH projektów dla PRO/TRIAL — zawsze nielimitowane. */
 export const PRO_TIER_MAX_PROJECTS = 999_999;
