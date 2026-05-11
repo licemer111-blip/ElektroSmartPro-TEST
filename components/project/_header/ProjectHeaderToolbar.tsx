@@ -304,7 +304,7 @@ export function ProjectHeaderToolbar({
                 {/* ✨ ES-Engine unified dropdown */}
                 <div className="flex items-center gap-0.5">
                 {/* outline is NOT clipped by overflow-x-auto — unlike box-shadow/ring/absolute */}
-                <div className={isDemoProject && !isFinal ? "outline outline-[2.5px] outline-yellow-300/85 outline-offset-[3px] animate-pulse rounded-md" : ""}>
+                <div className={isDemoProject && !isFinal ? "outline outline-[2.5px] outline-yellow-300/85 outline-offset-[1px] animate-pulse rounded-md" : ""}>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
