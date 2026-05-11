@@ -12,33 +12,34 @@ interface DemoItem {
   quantity: number;
   mat: number;
   lab: number;
+  rg?: number; // labor norm in rbh per unit (optional)
 }
 
 const DEMO_ITEMS: DemoItem[] = [
-  { name: "Gniazdo podtynkowe 2P+Z Schuko",             unit: "szt", quantity: 12,  mat: 28,    lab: 35    },
-  { name: "Gniazdo podwójne 2P+Z podtynkowe",           unit: "szt", quantity: 8,   mat: 38,    lab: 38    },
-  { name: "Gniazdo IP44 łazienka",                       unit: "szt", quantity: 3,   mat: 42,    lab: 40    },
-  { name: "Łącznik jednobiegunowy",                      unit: "szt", quantity: 8,   mat: 18,    lab: 28    },
-  { name: "Łącznik schodowy",                            unit: "szt", quantity: 4,   mat: 22,    lab: 32    },
-  { name: "Oprawa LED downlight 10W",                    unit: "szt", quantity: 16,  mat: 65,    lab: 45    },
-  { name: "Oprawa LED natynkowa IP65 9W",                unit: "szt", quantity: 3,   mat: 75,    lab: 50    },
-  { name: "Taśma LED 12V z zasilaczem",                  unit: "mb",  quantity: 6,   mat: 35,    lab: 20    },
-  { name: "Przewód YDYp 3x1,5mm² instalacja",           unit: "mb",  quantity: 120, mat: 3.80,  lab: 2.20  },
-  { name: "Przewód YDYp 3x2,5mm² obwody gniazd",       unit: "mb",  quantity: 180, mat: 5.50,  lab: 2.50  },
-  { name: "Puszka podtynkowa ø60mm",                    unit: "szt", quantity: 28,  mat: 2.50,  lab: 8     },
-  { name: "Bruzda w tynku gipsowym",                     unit: "mb",  quantity: 85,  mat: 0,     lab: 6.50  },
-  { name: "Rozdzielnica mieszkaniowa 2x12 modułów",     unit: "szt", quantity: 1,   mat: 420,   lab: 280   },
-  { name: "Wyłącznik nadprądowy B10A 1P",                unit: "szt", quantity: 6,   mat: 28,    lab: 18    },
-  { name: "Wyłącznik nadprądowy B16A 1P",                unit: "szt", quantity: 8,   mat: 30,    lab: 18    },
-  { name: "Wyłącznik różnicowoprądowy 25A/30mA",        unit: "szt", quantity: 2,   mat: 185,   lab: 45    },
-  { name: "Ochronnik przepięć T2 4P",                    unit: "szt", quantity: 1,   mat: 320,   lab: 60    },
-  { name: "Obwód kuchenka elektryczna 3x4mm²",          unit: "szt", quantity: 1,   mat: 85,    lab: 120   },
-  { name: "Obwód zmywarka 3x2,5mm²",                    unit: "szt", quantity: 1,   mat: 55,    lab: 80    },
-  { name: "Wentylator łazienkowy z czujnikiem wilg.",    unit: "szt", quantity: 1,   mat: 145,   lab: 85    },
-  { name: "Kabel HDMI natynkowy + gniazdo",              unit: "szt", quantity: 2,   mat: 55,    lab: 40    },
-  { name: "Gniazdo RJ45 Cat6 podtynkowe",               unit: "szt", quantity: 4,   mat: 38,    lab: 35    },
-  { name: "Montaż rozdzielnicy — robocizna",             unit: "kpl", quantity: 1,   mat: 0,     lab: 450   },
-  { name: "Próby i pomiary instalacji",                  unit: "kpl", quantity: 1,   mat: 0,     lab: 380   },
+  { name: "Gniazdo podtynkowe 2P+Z Schuko",             unit: "szt", quantity: 12,  mat: 28,    lab: 35,    rg: 0.42 },
+  { name: "Gniazdo podwójne 2P+Z podtynkowe",           unit: "szt", quantity: 8,   mat: 38,    lab: 38,    rg: 0.45 },
+  { name: "Gniazdo IP44 łazienka",                       unit: "szt", quantity: 3,   mat: 42,    lab: 40,    rg: 0.50 },
+  { name: "Łącznik jednobiegunowy",                      unit: "szt", quantity: 8,   mat: 18,    lab: 28,    rg: 0.35 },
+  { name: "Łącznik schodowy",                            unit: "szt", quantity: 4,   mat: 22,    lab: 32,    rg: 0.40 },
+  { name: "Oprawa LED downlight 10W",                    unit: "szt", quantity: 16,  mat: 65,    lab: 45,    rg: 0.55 },
+  { name: "Oprawa LED natynkowa IP65 9W",                unit: "szt", quantity: 3,   mat: 75,    lab: 50,    rg: 0.60 },
+  { name: "Taśma LED 12V z zasilaczem",                  unit: "mb",  quantity: 6,   mat: 35,    lab: 20,    rg: 0.25 },
+  { name: "Przewód YDYp 3x1,5mm² instalacja",           unit: "mb",  quantity: 120, mat: 3.80,  lab: 2.20,  rg: 0.028 },
+  { name: "Przewód YDYp 3x2,5mm² obwody gniazd",       unit: "mb",  quantity: 180, mat: 5.50,  lab: 2.50,  rg: 0.032 },
+  { name: "Puszka podtynkowa ø60mm",                    unit: "szt", quantity: 28,  mat: 2.50,  lab: 8,     rg: 0.10 },
+  { name: "Bruzda w tynku gipsowym",                     unit: "mb",  quantity: 85,  mat: 0,     lab: 6.50,  rg: 0.082 },
+  { name: "Rozdzielnica mieszkaniowa 2x12 modułów",     unit: "szt", quantity: 1,   mat: 420,   lab: 280,   rg: 3.50 },
+  { name: "Wyłącznik nadprądowy B10A 1P",                unit: "szt", quantity: 6,   mat: 28,    lab: 18,    rg: 0.22 },
+  { name: "Wyłącznik nadprądowy B16A 1P",                unit: "szt", quantity: 8,   mat: 30,    lab: 18,    rg: 0.22 },
+  { name: "Wyłącznik różnicowoprądowy 25A/30mA",        unit: "szt", quantity: 2,   mat: 185,   lab: 45,    rg: 0.55 },
+  { name: "Ochronnik przepięć T2 4P",                    unit: "szt", quantity: 1,   mat: 320,   lab: 60,    rg: 0.75 },
+  { name: "Obwód kuchenka elektryczna 3x4mm²",          unit: "szt", quantity: 1,   mat: 85,    lab: 120,   rg: 1.50 },
+  { name: "Obwód zmywarka 3x2,5mm²",                    unit: "szt", quantity: 1,   mat: 55,    lab: 80,    rg: 1.00 },
+  { name: "Wentylator łazienkowy z czujnikiem wilg.",    unit: "szt", quantity: 1,   mat: 145,   lab: 85,    rg: 1.05 },
+  { name: "Kabel HDMI natynkowy + gniazdo",              unit: "szt", quantity: 2,   mat: 55,    lab: 40,    rg: 0.50 },
+  { name: "Gniazdo RJ45 Cat6 podtynkowe",               unit: "szt", quantity: 4,   mat: 38,    lab: 35,    rg: 0.42 },
+  { name: "Montaż rozdzielnicy — robocizna",             unit: "kpl", quantity: 1,   mat: 0,     lab: 450,   rg: 5.60 },
+  { name: "Próby i pomiary instalacji",                  unit: "kpl", quantity: 1,   mat: 0,     lab: 380,   rg: 4.80 },
 ];
 
 // ─── Semantic section IDs (mirrors /api/pdf/route.ts logic) ──────────────────
@@ -71,7 +72,7 @@ function classifySection(name: string): PdfSectionId {
 }
 
 function fMoney(v: number): string {
-  return v.toFixed(2).replace(".", ",") + " zl";
+  return v.toFixed(2).replace(".", ",") + " zł";
 }
 
 // ─── Main handler (public — no auth required) ─────────────────────────────────
@@ -114,19 +115,21 @@ export async function POST(req: Request) {
 
     // Build flat rows per item (no assembly children in demo)
     const rawRows = new Map<string, PdfRow>();
-    calcItems.forEach(item => {
+    calcItems.forEach((item, idx) => {
       const matVal = item.finalMat * item.quantity;
       const labVal = item.finalLab * item.quantity;
       const totalVal = matVal + labVal;
       totalMatSum += item.finalMat * item.quantity;
       totalLabSum += item.finalLab * item.quantity;
 
+      const demItem = DEMO_ITEMS[idx];
+      const rgTotal = demItem?.rg ? (demItem.rg * item.quantity).toFixed(3) + " rbh" : "";
       const rowType = totalVal === 0 ? "warning" : "single";
       rawRows.set(item.id, {
         index: String(globalIndex++),
         name: item.finalMat === 0 && item.finalLab === 0 ? `${item.name} (BRAK CENY!)` : item.name,
         knrCode: "", unit: item.unit, qty: item.quantity,
-        rg: "",
+        rg: rgTotal,
         mat: fMoney(item.finalMat),
         lab: fMoney(item.finalLab),
         combined: fMoney(item.finalMat + item.finalLab),
@@ -172,14 +175,21 @@ export async function POST(req: Request) {
 
     // ─── Assemble engine data ─────────────────────────────────────────────────
     const engineData: PdfEngineData = {
-      theme: "nowoczesny",
+      theme: "klasyczny",
       profile: {
-        company_name: companyName,
+        company_name: companyName || "Twoja Firma Elektryczna Sp. z o.o.",
+        nip: "123-456-78-90",
+        regon: "123456789",
+        street: "ul. Instalatorska 12",
+        city: "Warszawa",
+        postal_code: "00-001",
+        phone: "+48 123 456 789",
+        email: "biuro@elektrykpro.pl",
       },
       project: {
         id: "demo",
         name: "Mieszkanie 3-pokojowe 65m² (Demo)",
-        client_name: clientName,
+        client_name: clientName || "Jan Kowalski",
         client_address: "ul. Przykładowa 1, 00-001 Warszawa",
         client_nip: null,
         vat_rate: VAT_RATE,
@@ -190,19 +200,27 @@ export async function POST(req: Request) {
       logoBase64: null,
       maskPrices: false,
       blindMode: false,
-      showRg: false,
+      showRg: true,
       showKnr: false,
       matOwnedByClient: false,
       totalMatSum,
       totalLabSum,
-      totalLaborHours: 0,
+      totalLaborHours: DEMO_ITEMS.reduce((sum, it) => sum + (it.rg ?? 0) * it.quantity, 0),
       totalNet,
       vatRate: VAT_RATE,
       vatAmount,
       totalGross,
       pdfNarzuty: undefined,
       priceDisplay: "netto",
-      notes: "⭐ PROJEKT POKAZOWY — ElektroSmart PRO. Pełny kosztorys z rzeczywistymi cenami dla instalacji elektrycznej domu jednorodzinnego 150m².",
+      notes: "⭐ PROJEKT POKAZOWY — ElektroSmart PRO. Pełny kosztorys z rzeczywistymi cenami dla instalacji elektrycznej mieszkania 65m². Wygenerowano przez ElektroSmart PRO — system kosztorysowania dla elektrykw.",
+      pdfStructure: {
+        showCoverPage: false,
+        showCompanyHeader: true,
+        showProjectMeta: true,
+        showSectionGroups: true,
+        showSummaryBlock: true,
+        showLegend: true,
+      },
     };
 
     const pdfBuffer = await renderToBuffer(
