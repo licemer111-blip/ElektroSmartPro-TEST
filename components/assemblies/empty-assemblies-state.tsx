@@ -3,6 +3,7 @@
 import { Layers, Plus } from "lucide-react";
 import { useState } from "react";
 import { AssemblyModal } from "./assembly-modal";
+import { AIAssemblyGeneratorDialog } from "./ai-assembly-generator-dialog";
 import { useModalStore } from "@/hooks/use-modal-store";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -10,9 +11,10 @@ import { cn } from "@/lib/utils";
 interface EmptyAssembliesStateProps {
   isPro: boolean;
   currentCount: number;
+  userTeam?: import("@/lib/types/database").Team | null;
 }
 
-export function EmptyAssembliesState({ isPro, currentCount }: EmptyAssembliesStateProps) {
+export function EmptyAssembliesState({ isPro, currentCount, userTeam }: EmptyAssembliesStateProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { onOpen } = useModalStore();
 
@@ -70,6 +72,10 @@ export function EmptyAssembliesState({ isPro, currentCount }: EmptyAssembliesSta
             <Plus className="w-4 h-4 mr-2" />
             Dodaj pierwszy Zestaw
           </Button>
+          <AIAssemblyGeneratorDialog
+            isPro={isPro}
+            userTeam={userTeam}
+          />
         </div>
       </div>
 

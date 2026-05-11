@@ -11,6 +11,7 @@ import { EmptyAssembliesState } from "@/components/assemblies/empty-assemblies-s
 import { AssembliesManagerView } from "@/components/assemblies/assemblies-manager-view";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 
 export const dynamic = 'force-dynamic';
 
@@ -45,6 +46,7 @@ export default async function AssembliesPage({
   ]);
 
   const categories = categoriesData.data || [];
+  const isPro = getEffectiveIsPro(profile as Parameters<typeof getEffectiveIsPro>[0]);
 
   return (
     <div className="min-h-screen py-6 md:py-8">
@@ -134,15 +136,16 @@ export default async function AssembliesPage({
         {assemblies.length === 0 ? (
           /* Empty State */
           <EmptyAssembliesState 
-            isPro={profile?.is_pro || false}
+            isPro={isPro}
             currentCount={assemblies.length}
+            userTeam={userTeam}
           />
         ) : (
           /* Assemblies Manager with Sidebar and View Toggle */
           <AssembliesManagerView 
             assemblies={assemblies}
             categories={categories}
-            isPro={profile?.is_pro || false}
+            isPro={isPro}
             currentCount={assemblies.length}
             selectedCategoryId={params.category || null}
             userTeam={userTeam}

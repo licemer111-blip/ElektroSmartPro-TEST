@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { LayoutGrid, List, Plus, Search, Filter } from "lucide-react";
+import { AIAssemblyGeneratorDialog } from "./ai-assembly-generator-dialog";
 import { AssemblyCategorySidebar } from "./assembly-category-sidebar";
 import { AssemblyListView } from "./assembly-list-view";
 import { AssembliesWithTabs } from "./assemblies-with-tabs";
@@ -160,8 +161,25 @@ export function AssembliesManagerView({
       <div className="flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm flex flex-col overflow-hidden">
         {/* Toolbar Header */}
         <div className="p-3 md:p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 shrink-0">
-          <div className="flex flex-col gap-2">
-
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={() => setIsCreateModalOpen(true)}
+                size="sm"
+                className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+              >
+                <Plus className="w-3.5 h-3.5 mr-1.5" />
+                Dodaj Zestaw
+              </Button>
+              <AIAssemblyGeneratorDialog
+                isPro={isPro}
+                userTeam={userTeam}
+                triggerClassName="h-8"
+              />
+            </div>
+            <span className="text-xs text-slate-500 dark:text-slate-400 hidden md:block">
+              {assemblies.length} zestawów
+            </span>
           </div>
         </div>
 
