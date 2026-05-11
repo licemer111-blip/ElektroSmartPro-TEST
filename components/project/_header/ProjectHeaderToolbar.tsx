@@ -303,23 +303,16 @@ export function ProjectHeaderToolbar({
               <div className="flex items-center gap-1 overflow-x-auto flex-nowrap no-scrollbar">
                 {/* ✨ ES-Engine unified dropdown */}
                 <div className="flex items-center gap-0.5">
-                <div className="relative">
-                  {isDemoProject && !isFinal && (
-                    <>
-                      <div className="absolute -inset-2 rounded-xl bg-yellow-400/40 blur-xl animate-pulse pointer-events-none" />
-                      <div className="absolute -top-5 left-1/2 -translate-x-1/2 pointer-events-none z-10">
-                        <ChevronDown className="w-4 h-4 text-yellow-300 animate-bounce drop-shadow-[0_0_4px_rgba(253,224,71,0.9)]" />
-                      </div>
-                    </>
-                  )}
+                {/* outline is NOT clipped by overflow-x-auto — unlike box-shadow/ring/absolute */}
+                <div className={isDemoProject && !isFinal ? "outline outline-[2.5px] outline-yellow-300/85 outline-offset-[3px] animate-pulse rounded-md" : ""}>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
                       size="sm"
                       disabled={isFinal}
-                      className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white flex-shrink-0 rounded-md shadow-[0_0_14px_rgba(249,115,22,0.55)] hover:shadow-[0_0_20px_rgba(249,115,22,0.75)] transition-shadow duration-200 ${isDemoProject && !isFinal ? "ring-2 ring-orange-300 ring-offset-1" : "ring-1 ring-orange-400/40"} ${isFinal ? "opacity-50 cursor-not-allowed shadow-none !ring-0" : ""}`}
+                      className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white flex-shrink-0 rounded-md shadow-[0_0_14px_rgba(249,115,22,0.55)] hover:shadow-[0_0_20px_rgba(249,115,22,0.75)] transition-shadow duration-200 ring-1 ring-orange-400/40 ${isFinal ? "opacity-50 cursor-not-allowed shadow-none !ring-0" : ""}`}
                     >
-                      <Sparkles className="h-3.5 w-3.5 drop-shadow-sm" />
+                      <Sparkles className={`h-3.5 w-3.5 drop-shadow-sm ${isDemoProject && !isFinal ? "animate-spin [animation-duration:3s]" : ""}`} />
                       <span className="font-semibold">ES-Engine</span>
                       <ChevronDown className="h-3 w-3 opacity-70" />
                     </Button>
