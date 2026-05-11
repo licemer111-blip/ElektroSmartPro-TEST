@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Package, Loader2, Plus, Sparkles, Cable } from "lucide-react";
 import { addUserAssemblyToProject } from "@/app/dashboard/projects/[id]/actions";
+import { BlurredPrice } from "@/components/ui/blurred-price";
 import { AssemblyList } from "@/components/assemblies/assembly-list";
 import { AssemblyModal } from "@/components/assemblies/assembly-modal";
 
@@ -275,6 +276,7 @@ export function AddUserAssemblyDialog({ projectId, isPro = false, currentAssembl
                 refreshTrigger={listRefreshTrigger}
                 onEdit={handleEditAssembly}
                 onDuplicate={handleDuplicateAssembly}
+                isPro={isPro}
               />
 
               {/* Selected Assembly Details & Quantity */}
@@ -367,7 +369,7 @@ export function AddUserAssemblyDialog({ projectId, isPro = false, currentAssembl
                                 </Badge>
                               </span>
                               <span className="font-medium">
-                                {isPro ? `${(item.price * finalQty).toFixed(2)} zł` : '*** zł'}
+                                <BlurredPrice value={item.price * finalQty} isPro={isPro} showBadge={!isPro} className="font-medium" />
                               </span>
                             </div>
                           );
@@ -379,7 +381,7 @@ export function AddUserAssemblyDialog({ projectId, isPro = false, currentAssembl
                     <div className="flex justify-between items-center pt-4 border-t">
                       <span className="font-semibold">Wartość zestawu:</span>
                       <span className="text-xl font-bold text-blue-600">
-                        {isPro ? `${calculateAssemblyTotal(selectedAssembly, quantity, cableLength).toFixed(2)} zł` : '*** zł'}
+                        <BlurredPrice value={calculateAssemblyTotal(selectedAssembly, quantity, cableLength)} isPro={isPro} showBadge={!isPro} className="text-xl font-bold" />
                       </span>
                     </div>
 

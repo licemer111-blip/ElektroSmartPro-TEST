@@ -24,7 +24,7 @@ interface AssemblyModalProps {
 }
 
 
-export function AssemblyModal({ isOpen, onClose, mode, assembly, categories = [], userTeam, isPro = true }: AssemblyModalProps) {
+export function AssemblyModal({ isOpen, onClose, mode, assembly, categories = [], userTeam, isPro = false }: AssemblyModalProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);

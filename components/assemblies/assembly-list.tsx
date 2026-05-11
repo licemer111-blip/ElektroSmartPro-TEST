@@ -37,7 +37,7 @@ interface AssemblyListProps {
   isPro?: boolean;
 }
 
-export function AssemblyList({ onSelect, selectedAssemblyId, refreshTrigger = 0, onEdit, onDuplicate, isPro = true }: AssemblyListProps) {
+export function AssemblyList({ onSelect, selectedAssemblyId, refreshTrigger = 0, onEdit, onDuplicate, isPro = false }: AssemblyListProps) {
   const [assemblies, setAssemblies] = useState<UserAssemblyWithItems[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);

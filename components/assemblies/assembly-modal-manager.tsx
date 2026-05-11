@@ -16,7 +16,7 @@ interface AssemblyModalManagerProps {
   categories?: Array<{ id: string; name: string }>;
 }
 
-export function AssemblyModalManager({ mode, assembly, trigger, isPro = true, currentCount = 0, categories = [] }: AssemblyModalManagerProps) {
+export function AssemblyModalManager({ mode, assembly, trigger, isPro = false, currentCount = 0, categories = [] }: AssemblyModalManagerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { onOpen } = useModalStore();
 
