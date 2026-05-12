@@ -19,6 +19,7 @@ import {
   Sparkles, CircleDollarSign, ChevronDown,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import type { ProjectItem } from "@/lib/types/database";
 import { AIAssistantDialog } from "@/components/project/ai-assistant-dialog";
 import { AiPriceEstimatorDialog } from "@/components/project/ai-price-estimator-dialog";
@@ -303,16 +304,23 @@ export function ProjectHeaderToolbar({
               <div className="flex items-center gap-1 overflow-x-auto flex-nowrap no-scrollbar">
                 {/* ✨ ES-Engine unified dropdown */}
                 <div className="flex items-center gap-0.5">
-                {/* outline is NOT clipped by overflow-x-auto — unlike box-shadow/ring/absolute */}
-                <div className={isDemoProject && !isFinal ? "ring-[2px] ring-yellow-300/80 ring-offset-0 animate-pulse rounded-md" : ""}>
+                <TooltipProvider delayDuration={300}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
                       size="sm"
                       disabled={isFinal}
-                      className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white flex-shrink-0 rounded-md shadow-[0_0_14px_rgba(249,115,22,0.55)] hover:shadow-[0_0_20px_rgba(249,115,22,0.75)] transition-shadow duration-200 ring-1 ring-orange-400/40 ${isFinal ? "opacity-50 cursor-not-allowed shadow-none !ring-0" : ""}`}
+                      className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white flex-shrink-0 rounded-md transition-all duration-200 ${
+                        isFinal
+                          ? "opacity-50 cursor-not-allowed shadow-none"
+                          : isDemoProject
+                          ? "animate-es-glow"
+                          : "shadow-[0_0_14px_rgba(249,115,22,0.5)] hover:shadow-[0_0_22px_rgba(249,115,22,0.8)]"
+                      }`}
                     >
-                      <Sparkles className={`h-3.5 w-3.5 drop-shadow-sm ${isDemoProject && !isFinal ? "animate-spin [animation-duration:3s]" : ""}`} />
+                      <Sparkles className="h-3.5 w-3.5 drop-shadow-sm" />
                       <span className="font-semibold">ES-Engine</span>
                       <ChevronDown className="h-3 w-3 opacity-70" />
                     </Button>
@@ -367,7 +375,17 @@ export function ProjectHeaderToolbar({
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                </div>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="bottom"
+                      className={isDemoProject && !isFinal ? "bg-amber-500 text-white border-amber-600 font-semibold text-xs" : ""}
+                    >
+                      {isDemoProject && !isFinal
+                        ? "Zacznij tutaj — wycena AI z KNR + benchmarkami"
+                        : "ES-Engine — inteligentna wycena AI"}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 <HintTooltip content={HINTS.aiPricing} side="bottom" iconOnly iconClassName="!bg-amber-100 dark:!bg-amber-900/60 !text-amber-600 dark:!text-amber-400 !ring-amber-300 dark:!ring-amber-700 hover:!bg-amber-200 hover:!shadow-[0_0_8px_rgba(245,158,11,0.55)]" />
                 </div>
 
