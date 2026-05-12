@@ -3,6 +3,8 @@ import { getProjects, getRegions, getObjectTypes } from "@/app/dashboard/actions
 import { getProfile } from "@/app/dashboard/settings/actions";
 import { getTemplates } from "@/app/dashboard/templates/actions";
 import { ProjectsWithTemplatesClient } from "@/components/project/projects-with-templates-client";
+import { getEffectiveIsPro } from "@/lib/auth/entitlements";
+import { getEffectiveMaxProjects } from "@/lib/config/tier-limits";
 
 export const metadata: Metadata = {
   title: "Projekty — Kosztorysy Elektryczne",
@@ -33,15 +35,19 @@ export default async function ProjectsPage() {
     object_types: p.object_types,
   }));
 
+  const effectiveIsPro = getEffectiveIsPro(profile as Parameters<typeof getEffectiveIsPro>[0]);
+  const effectiveMaxProjects = getEffectiveMaxProjects(profile as Parameters<typeof getEffectiveMaxProjects>[0]);
+  const nonDemoCount = projects.filter(p => !('is_demo_project' in p) || !p.is_demo_project).length;
+
   return (
     <ProjectsWithTemplatesClient
       projects={projectsList}
       templates={templates}
       regions={regions}
       objectTypes={objectTypes}
-      isPro={profile?.is_pro || false}
-      maxProjects={profile?.max_projects || 999}
-      currentProjectCount={projects.length}
+      isPro={effectiveIsPro}
+      maxProjects={effectiveMaxProjects}
+      currentProjectCount={nonDemoCount}
       defaultRegionId={profile?.default_region_id ?? null}
     />
   );
