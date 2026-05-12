@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getUserProfile } from "../actions";
 import { AiLabClient } from "./ai-lab-client";
+import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 
 export const metadata: Metadata = {
   title: "ES Import — Analiza Dokumentów",
@@ -14,7 +15,7 @@ export const maxDuration = 60;
 
 export default async function AiLabPage() {
   const profile = await getUserProfile();
-  const isPro = profile?.is_pro || false;
+  const isPro = getEffectiveIsPro(profile as Parameters<typeof getEffectiveIsPro>[0]);
 
   return <AiLabClient isPro={isPro} />;
 }

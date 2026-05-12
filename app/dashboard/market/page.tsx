@@ -8,6 +8,7 @@ import { getCurrentWeek } from "@/lib/data/market-data";
 import { getMarketPageTrends, getVoivodeshipWeeklyDelta } from "@/lib/utils/market-trends";
 import { MarketTable } from "@/components/market/market-table";
 import { getMarketData, getMarketCategories, getTotalCatalogCount } from "./actions";
+import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 
 // Force dynamic rendering to always get fresh is_pro status
 export const dynamic = 'force-dynamic';
@@ -54,7 +55,7 @@ export default async function MarketAnalysisPage({
     getTotalCatalogCount(),
   ]);
 
-  const isPro = profile?.is_pro || false;
+  const isPro = getEffectiveIsPro(profile as Parameters<typeof getEffectiveIsPro>[0]);
   const currentWeek = getCurrentWeek();
   const trends = getMarketPageTrends();
 

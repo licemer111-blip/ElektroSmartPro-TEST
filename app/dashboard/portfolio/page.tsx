@@ -3,6 +3,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { getPortfolioItems } from "./actions";
 import { PortfolioView } from "./portfolio-view";
+import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 
 export const metadata: Metadata = {
   title: "Portfolio — Zrealizowane Projekty",
@@ -16,7 +17,7 @@ export default async function PortfolioPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("is_pro, portfolio_visible, portfolio_limit")
+    .select("is_pro, trial_started_at, trial_ends_at, portfolio_visible, portfolio_limit")
     .eq("id", user.id)
     .single();
 
@@ -25,7 +26,7 @@ export default async function PortfolioPage() {
   return (
     <PortfolioView
       items={items}
-      isPro={profile?.is_pro || false}
+      isPro={getEffectiveIsPro(profile as Parameters<typeof getEffectiveIsPro>[0])}
       portfolioVisible={profile?.portfolio_visible ?? true}
       portfolioLimit={profile?.portfolio_limit ?? 5}
       error={error}

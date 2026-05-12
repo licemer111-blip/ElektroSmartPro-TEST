@@ -11,6 +11,7 @@ import { PageContainer } from "@/components/layout/page-container";
 import { PageHeader } from "@/components/layout/page-header";
 import { getUserProfile } from "../actions";
 import { getUserTeam } from "../team/actions";
+import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 
 // Force dynamic rendering to always get fresh data
 export const dynamic = "force-dynamic";
@@ -53,7 +54,7 @@ export default async function CatalogPage({
     getUserCategoriesCount().catch(() => 0),
   ]);
 
-  const isPro = profile?.is_pro || false;
+  const isPro = getEffectiveIsPro(profile as Parameters<typeof getEffectiveIsPro>[0]);
 
   // Calculate statistics
   const totalItems = totalCount;
