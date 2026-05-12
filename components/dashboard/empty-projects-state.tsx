@@ -27,6 +27,10 @@ export function EmptyProjectsState({
   const [demoError, setDemoError] = useState<string | null>(null);
 
   const handleCreateProject = () => {
+    if (!isPro) {
+      onOpen("proModal");
+      return;
+    }
     onOpen("createProject", {
       regions,
       objectTypes,
