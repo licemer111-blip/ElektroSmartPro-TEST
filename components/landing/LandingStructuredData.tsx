@@ -4,7 +4,7 @@ interface LandingStructuredDataProps {
 }
 
 export function LandingStructuredData({ catalogCount, dinCount = 295 }: LandingStructuredDataProps) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const baseUrl = "https://elektrosmart.pro";
 
   const structuredData = {
     "@context": "https://schema.org",

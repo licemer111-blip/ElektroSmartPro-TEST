@@ -74,7 +74,7 @@ export const metadata: Metadata = {
       "Kosztorys elektryczny z KNR, podziałem Robocizna/Materiał, Zestawami 360°, cenami 16 województw, eksportem PDF. ES-Engine. Demo bezpłatne.",
     images: ["/opengraph-image"],
   },
-  alternates: { canonical: "/" },
+  alternates: { canonical: "https://elektrosmart.pro" },
 };
 
 export default async function Home() {

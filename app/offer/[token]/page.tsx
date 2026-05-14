@@ -1,7 +1,12 @@
+import type { Metadata } from "next";
 import { getOfferByToken } from "./actions";
 import { ClientPortalView } from "./client-portal-view";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default async function OfferPage({
   params,

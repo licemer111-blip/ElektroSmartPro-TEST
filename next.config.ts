@@ -106,6 +106,18 @@ const nextConfig: NextConfig = {
     ];
   },
 
+  // www → non-www canonical redirect (SEO: prevents duplicate indexing)
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.elektrosmart.pro" }],
+        destination: "https://elektrosmart.pro/:path*",
+        permanent: true, // 308 redirect — preserves link equity
+      },
+    ];
+  },
+
   // Generate a unique version ID at build time for auto-update detection
   env: {
     NEXT_PUBLIC_APP_VERSION: new Date().getTime().toString(),
