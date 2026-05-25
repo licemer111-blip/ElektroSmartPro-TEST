@@ -12,7 +12,7 @@ import {
   DollarSign, Activity, Brain, BarChart3,
   Wrench, FlaskConical, Loader2, CheckCircle, AlertCircle, Trash2,
   RefreshCw, ArrowUpRight, ChevronRight, Zap, SlidersHorizontal,
-  LayoutGrid,
+  LayoutGrid, Rocket, Timer,
 } from "lucide-react";
 import { resetStats } from "@/app/admin/actions";
 import type { AdminKpiData, VoivodeshipStat, PopularAssemblyStat } from "@/app/admin/actions";
@@ -179,9 +179,9 @@ export function AdminDashboardClient({ kpi, voivodeships, assemblies, errors }: 
                 icon={Crown} iconBg="bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400"
               />
               <KpiCard label="Free" value={kpi.freeUsers}
-                sub="Nieaktywowane"
+                sub="Do konwersji"
                 icon={Users} iconBg="bg-slate-100 dark:bg-slate-800 text-slate-500"
-                trend={{ label: "Do konwersji", positive: false }}
+                trend={{ label: `${kpi.trialNeverUsedCount} bez triala`, positive: false }}
               />
               <KpiCard label="Konwersja" value={`${kpi.conversionRate}%`}
                 sub={`${kpi.proUsers} PRO / ${kpi.totalUsers} razem`}
@@ -194,6 +194,34 @@ export function AdminDashboardClient({ kpi, voivodeships, assemblies, errors }: 
               <KpiCard label="Projekty" value={kpi.totalProjects}
                 sub="Wszystkie projekty"
                 icon={FolderKanban} iconBg="bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400"
+              />
+            </div>
+          </section>
+
+          {/* ── Trial & AI Stats ── */}
+          <section>
+            <SectionLabel>Trial & AI Engine</SectionLabel>
+            <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-3">
+              <KpiCard label="Trial aktywny" value={kpi.trialActiveCount}
+                sub="Obecnie w 7-dniowym trialu"
+                icon={Rocket} iconBg="bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400"
+              />
+              <KpiCard label="Trial wykorzystany" value={kpi.trialUsedCount}
+                sub={`${kpi.totalUsers > 0 ? Math.round(kpi.trialUsedCount / kpi.totalUsers * 100) : 0}% użytkowników`}
+                icon={Timer} iconBg="bg-slate-100 dark:bg-slate-800 text-slate-500"
+              />
+              <KpiCard label="Nigdy trial" value={kpi.trialNeverUsedCount}
+                sub="Potencjał do aktywacji"
+                icon={Users} iconBg="bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400"
+                trend={{ label: "Cel: aktywować", positive: false }}
+              />
+              <KpiCard label="AI requests" value={kpi.totalAiRequests}
+                sub="Łączne zapytania AI"
+                icon={Brain} iconBg="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400"
+              />
+              <KpiCard label="Śr. AI/user" value={kpi.avgAiPerUser}
+                sub="Zapytań na aktywnego usera"
+                icon={Activity} iconBg="bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400"
               />
             </div>
           </section>

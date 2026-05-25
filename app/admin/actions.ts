@@ -23,6 +23,15 @@ export interface AdminUser {
   stripe_customer_id: string | null;
   subscription_id: string | null;
   current_period_end: string | null;
+  // Trial
+  trial_started_at: string | null;
+  trial_ends_at: string | null;
+  // AI
+  ai_usage_count: number;
+  // Profile
+  hourly_rate: number | null;
+  default_region_id: string | null;
+  onboarding_completed: boolean;
 }
 
 export interface AdminKpiData {
@@ -37,6 +46,13 @@ export interface AdminKpiData {
   blurConversionRate: number;
   newUsersLast30d: number;
   newProLast30d: number;
+  // Trial stats
+  trialActiveCount: number;
+  trialUsedCount: number;
+  trialNeverUsedCount: number;
+  // AI stats
+  totalAiRequests: number;
+  avgAiPerUser: number;
 }
 
 export interface VoivodeshipStat {
@@ -71,6 +87,8 @@ export async function getAdminKpi(): Promise<{ data: AdminKpiData | null; error?
       { count: upgradeClicks },
       { count: newUsers },
       { count: newPro },
+      { count: trialUsed },
+      { data: aiUsageData },
     ] = await Promise.all([
       supabase.from("profiles").select("*", { count: "exact", head: true }),
       supabase.from("profiles").select("*", { count: "exact", head: true }).eq("is_pro", true),
@@ -80,7 +98,25 @@ export async function getAdminKpi(): Promise<{ data: AdminKpiData | null; error?
       supabase.from("analytics_events").select("*", { count: "exact", head: true }).eq("event_type", "upgrade_click"),
       supabase.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", thirtyDaysAgo),
       supabase.from("profiles").select("*", { count: "exact", head: true }).eq("is_pro", true).gte("created_at", thirtyDaysAgo),
+      supabase.from("profiles").select("*", { count: "exact", head: true }).not("trial_started_at", "is", null),
+      supabase.from("profiles").select("ai_usage_count"),
     ]);
+
+    // Trial stats
+    const trialUsedTotal = trialUsed ?? 0;
+    const trialNeverUsed = (totalUsers ?? 0) - trialUsedTotal;
+    // Active trials: trial_ends_at > now AND is_pro = false
+    const { count: trialActive } = await supabase
+      .from("profiles")
+      .select("*", { count: "exact", head: true })
+      .not("trial_ends_at", "is", null)
+      .gte("trial_ends_at", now.toISOString())
+      .eq("is_pro", false);
+
+    // AI usage aggregate
+    const totalAiReqs = (aiUsageData ?? []).reduce((sum, p) => sum + (p.ai_usage_count ?? 0), 0);
+    const usersWithAi = (aiUsageData ?? []).filter(p => (p.ai_usage_count ?? 0) > 0).length;
+    const avgAi = usersWithAi > 0 ? Math.round(totalAiReqs / usersWithAi) : 0;
 
     const total = totalUsers ?? 0;
     const pro = proUsers ?? 0;
@@ -106,6 +142,11 @@ export async function getAdminKpi(): Promise<{ data: AdminKpiData | null; error?
         blurConversionRate,
         newUsersLast30d: newUsers ?? 0,
         newProLast30d: newPro ?? 0,
+        trialActiveCount: trialActive ?? 0,
+        trialUsedCount: trialUsedTotal,
+        trialNeverUsedCount: trialNeverUsed,
+        totalAiRequests: totalAiReqs,
+        avgAiPerUser: avgAi,
       },
     };
   } catch (error: unknown) {
@@ -211,7 +252,7 @@ export async function getAdminUsers(page = 0, pageSize = 50): Promise<{
     const { data: profiles, count, error } = await supabase
       .from("profiles")
       .select(
-        "id, email, full_name, company_name, is_pro, role, max_projects, created_at, stripe_customer_id, subscription_id, current_period_end",
+        "id, email, full_name, company_name, is_pro, role, max_projects, created_at, stripe_customer_id, subscription_id, current_period_end, trial_started_at, trial_ends_at, ai_usage_count, hourly_rate, default_region_id, onboarding_completed",
         { count: "exact" }
       )
       .order("created_at", { ascending: false })
@@ -255,6 +296,12 @@ export async function getAdminUsers(page = 0, pageSize = 50): Promise<{
       stripe_customer_id: p.stripe_customer_id ?? null,
       subscription_id: p.subscription_id ?? null,
       current_period_end: p.current_period_end ?? null,
+      trial_started_at: p.trial_started_at ?? null,
+      trial_ends_at: p.trial_ends_at ?? null,
+      ai_usage_count: p.ai_usage_count ?? 0,
+      hourly_rate: p.hourly_rate ?? null,
+      default_region_id: p.default_region_id ?? null,
+      onboarding_completed: p.onboarding_completed ?? false,
     }));
 
     return { users, total: count ?? 0 };
@@ -450,6 +497,62 @@ export async function updateGlobalBenchmarks(
   } catch (error: unknown) {
     logger.error("updateGlobalBenchmarks failed", { benchmarks }, error);
     return { success: false, error: error instanceof Error ? error.message : "Błąd" };
+  }
+}
+
+// ─── Admin Grant/Reset Trial ─────────────────────────────────────────────────
+
+export async function adminGrantTrial(
+  targetUserId: string,
+  durationDays = 7
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const admin = await isAdmin();
+    if (!admin) return { success: false, error: "Unauthorized" };
+
+    const now = new Date();
+    const endsAt = new Date(now.getTime() + durationDays * 24 * 60 * 60 * 1000);
+
+    const { error } = await supabaseAdmin
+      .from("profiles")
+      .update({
+        trial_started_at: now.toISOString(),
+        trial_ends_at: endsAt.toISOString(),
+      })
+      .eq("id", targetUserId);
+
+    if (error) return { success: false, error: error.message };
+
+    revalidatePath("/admin/users");
+    return { success: true };
+  } catch (error: unknown) {
+    logger.error("adminGrantTrial failed", { targetUserId }, error);
+    return { success: false, error: error instanceof Error ? error.message : "Błąd" };
+  }
+}
+
+export async function adminResetTrial(
+  targetUserId: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const admin = await isAdmin();
+    if (!admin) return { success: false, error: "Unauthorized" };
+
+    const { error } = await supabaseAdmin
+      .from("profiles")
+      .update({
+        trial_started_at: null,
+        trial_ends_at: null,
+      })
+      .eq("id", targetUserId);
+
+    if (error) return { success: false, error: error.message };
+
+    revalidatePath("/admin/users");
+    return { success: true };
+  } catch (error: unknown) {
+    logger.error("adminResetTrial failed", { targetUserId }, error);
+    return { success: false, error: error instanceof Error ? error.message : "Błąд" };
   }
 }
 
