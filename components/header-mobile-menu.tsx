@@ -59,14 +59,14 @@ export function HeaderMobileMenu({ isAuthenticated, isPro }: HeaderMobileMenuPro
                 <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-3 mb-1.5">
                   Kosztorysy
                 </p>
+                <HeaderMobileNavItem href="/dashboard/projects" icon="PenTool" variant="glow-blue" desc="Kosztorys elektryczny — ostatni edytowany projekt">
+                  Kreator
+                </HeaderMobileNavItem>
                 <SheetClose asChild>
                   <div className="px-0">
                     <SzybkaWycenaNavLink className="w-full justify-start" />
                   </div>
                 </SheetClose>
-                <HeaderMobileNavItem href="/dashboard/projects" icon="FileText" variant="glow-blue" desc="Kosztorys elektryczny — ostatni edytowany projekt">
-                  Kreator
-                </HeaderMobileNavItem>
                 <HeaderMobileNavItem href="/dashboard" icon="FolderKanban">
                   Projekty
                 </HeaderMobileNavItem>

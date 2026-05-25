@@ -18,10 +18,10 @@ export function SzybkaWycenaNavLink({ className }: SzybkaWycenaNavLinkProps) {
       href="/dashboard/projects/quick-estimate"
       title="Szybka Wycena — kreator kosztorysu w 5 minut: obiekt, pozycje, PDF"
       className={cn(
-        "flex items-center gap-1.5 px-3 py-2 rounded-md transition-all duration-200 text-sm font-semibold whitespace-nowrap",
+        "flex items-center gap-1.5 px-3 py-2 rounded-md transition-all duration-200 text-sm font-medium whitespace-nowrap",
         isActive
-          ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 shadow-sm"
-          : "text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 hover:bg-orange-50 dark:hover:bg-orange-900/20",
+          ? "bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm font-semibold"
+          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800/50",
         className
       )}
     >

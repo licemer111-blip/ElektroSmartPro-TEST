@@ -40,10 +40,10 @@ export function KreatorNavLink() {
       href={kreatorHref}
       title="Kreator kosztorysu — otwiera ostatnio edytowany projekt (lub listę projektów)"
       className={cn(
-        "flex items-center gap-1.5 px-3 py-2 rounded-md transition-all duration-200",
+        "flex items-center gap-1.5 px-3 py-2 rounded-md transition-all duration-200 text-sm font-semibold whitespace-nowrap",
         isActive
-          ? "bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm font-semibold"
-          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800/50"
+          ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 shadow-sm"
+          : "text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20"
       )}
     >
       <PenTool className="w-4 h-4" />
