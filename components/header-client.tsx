@@ -65,8 +65,6 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                             {/* Kreator — primary action, first position */}
                             <KreatorNavLink />
 
-                            <SzybkaWycenaNavLink />
-
                             <NavLink href="/dashboard" icon="FolderKanban" title="Lista wszystkich kosztorysów i wycen">
                                 Projekty
                             </NavLink>
@@ -78,6 +76,8 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                             <NavLink href="/dashboard/assemblies" icon="Boxes" title="Zestawy montażowe — jeden klik dodaje: urządzenie + puszka + kabel + bruzda + robocizna">
                                 Zestawy
                             </NavLink>
+
+                            <SzybkaWycenaNavLink />
 
                             <NavLink href="/dashboard/tools" icon="Wrench" title="12 kalkulatorów inżynierskich: kable, zabezpieczenia, spadek napięcia, PV, oświetlenie...">
                                 Kalkulatory
