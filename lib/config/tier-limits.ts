@@ -6,19 +6,20 @@
  * BUSINESS MODEL (v2.1 — "Smart Calculator FREE + AI PRO + 7-day Trial"):
  *
  *   FREE (forever, no card)
- *     ✓ Manual catalog & basic calculations (VAT, narzut KP/Z/KZ, contingency)
- *     ✓ Pełna widoczność cen (materiał / robocizna / VAT / brutto)
- *     ✓ Dostęp tylko do projektu DEMO (ceny zamazane — aktywuj trial aby zobaczyć)
+ *     ✓ 1 własny projekt + Demo project
+ *     ✓ Pełna widoczność cen pozycji (materiał / robocizna per item)
+ *     ✓ BLURRED: sumy netto, brutto, VAT (aby uniemożliwić darmową wycenę)
  *     ✓ AI = 5 requests/month (shared across Szybka Wycena, Blueprint, Chat,
  *       KNR auto-pricing, Smart Assemblies expansion, Vision OCR)
  *     ✓ PDF/Excel export WITH "DEMO" watermark (still sendable for own use)
  *     ✓ Pay-per-Export (29 zł) → one-shot clean PDF for a specific project
- *     ✓ Demo project (seeded) — showcase, read-only, exports WITHOUT watermark
+ *     ✓ Demo project (seeded) — showcase, exports WITH watermark
  *     ✗ AI beyond 5/mo, clean PDF, Portal Klienta, branding → PRO
  *
  *   7-DAY FREE TRIAL (no card, one-shot per account)
  *     = Full PRO for 7 days; after expiry → silent downgrade to FREE.
- *     = Solves "wow-effect without paywall" — user sees full value day 1.
+ *     = User sees ALL totals, clean PDF, full AI — wow-effect without paywall.
+ *     = Anti-abuse: one-shot per email. Creating new account = re-enter all data.
  *     = Activated via POST /api/billing/start-trial.
  *     = See lib/auth/entitlements.ts → getEffectiveIsPro().
  *
@@ -45,12 +46,15 @@ import { getEffectiveIsPro, type EntitlementProfile } from "@/lib/auth/entitleme
 
 /**
  * Maksymalna liczba WŁASNYCH aktywnych projektów dla FREE tier.
- * v2.3: 0 — użytkownik FREE może używać TYLKO projektu DEMO (ceny zamazane do trialu).
- * Po aktywacji 1-dniowego trialu → PRO_TIER_MAX_PROJECTS (nielimitowane).
+ * v2.4: 1 — użytkownik FREE może stworzyć 1 własny projekt.
+ *   Ceny pozycji widoczne (aby ocenić jakość systemu), ale SUMY BLURRED.
+ *   PDF z watermarkiem DEMO. Brak Portalu Klienta / czystego PDF.
+ *   Anti-abuse: bez sum użytkownik NIE MA gotowej wyceny → musi aktywować trial/PRO.
+ * Po aktywacji 7-dniowego trialu → PRO_TIER_MAX_PROJECTS (nielimitowane).
  * Projekt DEMO (is_demo_project=true) NIE liczy się w tę liczbę.
  * Archiwizacja projektów NIE liczy się w limit.
  */
-export const FREE_TIER_MAX_PROJECTS = 0;
+export const FREE_TIER_MAX_PROJECTS = 1;
 
 /** Maksymalna liczba AKTYWNYCH projektów dla PRO/TRIAL — zawsze nielimitowane. */
 export const PRO_TIER_MAX_PROJECTS = 999_999;

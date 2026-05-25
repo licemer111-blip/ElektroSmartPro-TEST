@@ -127,7 +127,7 @@ export const TOUR_STEPS: TourStep[] = [
     description:
       "W Ustawieniach → Finanse ustaw stawkę roboczogodziny (PLN/r-g) i wybierz województwo. " +
       "To wpływa na WSZYSTKIE kosztorysy. " +
-      "Możesz też aktywować 1-dniowy trial PRO za darmo — odblokuje AI bez limitu, czysty PDF i Portal Klienta.",
+      "Możesz też aktywować 7-dniowy trial PRO za darmo — odblokuje AI bez limitu, czysty PDF i Portal Klienta.",
     targetSelector: 'a[href="/dashboard/settings"]',
     position: "bottom",
     emoji: "⚙️",

@@ -181,7 +181,7 @@ function LoginPageContent() {
             </div>
             <div className="text-left">
               <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400 bg-clip-text text-transparent">ElektroSmart PRO</span>
-              <span className="block text-xs text-slate-500 dark:text-slate-400 font-medium">v1.0 | Powered by ES-Engine</span>
+              <span className="block text-xs text-slate-500 dark:text-slate-400 font-medium">Powered by ES-Engine</span>
             </div>
           </Link>
           <p className="text-slate-600 dark:text-slate-400 mt-3 text-sm">

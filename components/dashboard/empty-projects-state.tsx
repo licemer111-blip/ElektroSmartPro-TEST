@@ -27,7 +27,9 @@ export function EmptyProjectsState({
   const [demoError, setDemoError] = useState<string | null>(null);
 
   const handleCreateProject = () => {
-    if (!isPro) {
+    // v2.4: Free users can create up to maxProjects (1). Only block when at limit.
+    const isAtLimit = !isPro && 0 >= maxProjects;
+    if (isAtLimit) {
       onOpen("proModal");
       return;
     }

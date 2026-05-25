@@ -47,7 +47,7 @@ export function TrialStatusBadge({
                     ? "bg-red-50 text-red-700 border border-red-200 dark:bg-red-950/30 dark:text-red-300 dark:border-red-800"
                     : "bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-950/30 dark:text-indigo-300 dark:border-indigo-800"
                   } ${className}`}
-      title="Trial 1-dniowy — pełny dostęp PRO"
+      title="Trial 7-dniowy — pełny dostęp PRO"
     >
       {urgent ? <Clock className="w-3 h-3" /> : <Sparkles className="w-3 h-3" />}
       <span>Trial: {remaining}</span>

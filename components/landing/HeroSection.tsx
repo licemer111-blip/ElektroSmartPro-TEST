@@ -23,7 +23,7 @@ export function HeroSection({ normsCount = 8011, categoriesCount = 63 }: HeroSec
           {/* Version badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 badge-blue rounded-full text-sm font-medium hover:scale-105 transition-transform duration-300 shadow-sm">
             <Sparkles className="w-4 h-4 animate-pulse" />
-            <span>v4.0 — Certyfikowany System Kosztorysowy | Normy KNR | PN-HD 60364</span>
+            <span>Profesjonalny System Kosztorysowy | Normy KNR | PN-HD 60364</span>
           </div>
 
           {/* Engine badge */}

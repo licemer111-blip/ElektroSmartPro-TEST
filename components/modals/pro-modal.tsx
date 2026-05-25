@@ -16,10 +16,10 @@ import { VATSelector, type VATRate } from "@/components/subscription/vat-selecto
 import { Badge } from "@/components/ui/badge";
 
 const FEATURES = [
-  "Nielimitowana liczba projektów",
-  "Pełny dostęp do cen i kalkulacji",
-  "Eksport PDF z logo firmy",
-  "ES Import + Baza KNR",
+  "Nielimitowane projekty",
+  "Widoczne sumy i kwoty końcowe",
+  "Czysty PDF bez watermarku",
+  "500 zapytań AI / miesiąc",
 ];
 
 export function ProModal() {
@@ -77,7 +77,7 @@ export function ProModal() {
                   Przejdź na PRO
                 </DialogTitle>
                 <DialogDescription className="text-orange-100 text-xs mt-0.5">
-                  Osiągnięto limit wersji Demo
+                  Odblokuj pełen potencjał systemu
                 </DialogDescription>
               </div>
             </div>

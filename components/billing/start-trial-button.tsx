@@ -112,7 +112,7 @@ export function StartTrialButton({
         ) : (
           <Rocket className="w-3 h-3" />
         )}
-        <span>{loading ? "Aktywuję..." : `Trial ${TRIAL_DURATION_DAYS} ${TRIAL_DURATION_DAYS === 1 ? 'dzień' : 'dni'}`}</span>
+        <span>{loading ? "Aktywuję..." : `Trial ${TRIAL_DURATION_DAYS} dni`}</span>
       </button>
     );
   }

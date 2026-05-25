@@ -169,7 +169,7 @@ export async function createProject(formData: FormData) {
       .or("is_demo_project.is.null,is_demo_project.eq.false");
     if (count !== null && count >= maxAllowed) {
       return {
-        error: "Twoje konto nie ma aktywnej subskrypcji. Aktywuj 1-dniowy trial lub kup PRO, aby tworzyć własne projekty.",
+        error: "Osiągnięto limit projektów dla darmowego konta. Aktywuj 7-dniowy trial PRO lub kup subskrypcję, aby tworzyć więcej projektów.",
         requiresUpgrade: true,
       };
     }

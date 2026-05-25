@@ -101,7 +101,7 @@ export default async function DashboardPage({
             <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-3 px-5 py-4 rounded-2xl bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30 border border-indigo-200/70 dark:border-indigo-800/50 shadow-sm">
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold text-indigo-900 dark:text-indigo-100">
-                  🚀 Wypróbuj PRO przez 1 dzień — za darmo, bez karty!
+                  🚀 Wypróbuj PRO przez 7 dni — za darmo, bez karty!
                 </p>
                 <p className="text-xs text-indigo-600 dark:text-indigo-400 mt-0.5">
                   Odblokuj: AI bez limitów, czysty PDF do klienta, Portal Klienta, pełna baza KNR 2026
