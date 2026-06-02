@@ -5,9 +5,10 @@ Disallow: /dashboard
 Disallow: /admin
 Disallow: /api
 Disallow: /auth
+Disallow: /offer
 
 # Host
-Host: https://www.elektrosmart.pro
+Host: https://elektrosmart.pro
 
 # Sitemaps
-Sitemap: https://www.elektrosmart.pro/sitemap.xml
+Sitemap: https://elektrosmart.pro/sitemap.xml

@@ -9,7 +9,6 @@
     "dev": "next dev",
     "prebuild": "node -e \"const fs=require('fs'),f='public/sw.js',c=fs.readFileSync(f,'utf8');fs.writeFileSync(f,c.replace(/const CACHE_VERSION = '[^']*'/,'const CACHE_VERSION = \\''+Date.now()+'\\''))\"",
     "build": "next build",
-    "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
     "analyze": "ANALYZE=true next build",
