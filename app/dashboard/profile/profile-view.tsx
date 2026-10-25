@@ -15,6 +15,7 @@ import {
   Building2,
   Phone,
   Mail,
+  Clock,
   Shield,
   CalendarDays,
   UserCircle,
