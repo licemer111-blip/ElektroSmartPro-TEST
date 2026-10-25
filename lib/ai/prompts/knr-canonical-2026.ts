@@ -11,9 +11,8 @@
  * Source: Real 2026 KNR norms from our DB (public.knr_norms) +
  * JSON seeds (data/knr/fixed_norms/*.json) — validated by L2 lookup engine.
  *
- * ⛔ DO NOT add KNR 5-04 codes here. Series 5-04 (2015) is DEPRECATED.
- * ✅ Use KNR 5-08 (2026) for elektryka, KNR 5-09 for teletechnika,
- *    KNR 5-10 for przemysł, KNR 5-11 for PV, KNR 4-03 for demontaż/pomiary.
+ * Codes below are ElektroSmart norms. They are not ORGBUD table numbers.
+ * The same code must describe one job. Do not invent a second number for it.
  *
  * Last calibration: Apr 2026 (scaca-project regression fix).
  */
@@ -24,9 +23,9 @@ export const KNR_CANONICAL_2026_ELEKTRYKA = `KNR 5-08 (INSTALACJE ELEKTRYCZNE NI
 UKŁADANIE KABLI I PRZEWODÓW (p/t w bruździe lub rurce):
 • Przewód YDYp 3×1,5 mm²         KNR 5-08 0201   0,130 rbh/m
 • Przewód YDYp 3×2,5 mm²         KNR 5-08 0202   0,160 rbh/m
-• Przewód YDYp 5×2,5 mm²         KNR 5-08 0203   0,180 rbh/m
-• Przewód YDYp 5×4 mm²           KNR 5-08 0204   0,200 rbh/m
-• Przewód YDYp 5×6 mm²           KNR 5-08 0205c  0,240 rbh/m
+• Przewód YDYp 5×2,5 mm²         KNR 5-08 0203   0,200 rbh/m
+• Przewód YDYp 5×4 mm²           KNR 5-08 0204   0,240 rbh/m
+• Przewód YDYp 5×6 mm²           KNR 5-08 0205   0,280 rbh/m
 • Kabel YKXs 5×10 mm²            KNR 5-08 0206   0,320 rbh/m
 • Kabel YKXs 5×16 mm²            KNR 5-08 0207   0,380 rbh/m
 • Kabel YKXs 5×25 mm²            KNR 5-08 0208   0,460 rbh/m
@@ -35,13 +34,14 @@ UKŁADANIE KABLI I PRZEWODÓW (p/t w bruździe lub rurce):
 • Kabel HDGs 2×1,0 mm² (p.poż.)  KNR 5-08 0605   0,080 rbh/m
 • Kabel YAKY alu 4×35 mm²        KNR AT-26 0501  0,200 rbh/m
 
-BRUZDY I PRACE MUROWE:
-• Bruzdowanie w cegle/silikat    KNR 5-08 0101   0,850 rbh/m
-• Bruzdowanie w betonie          KNR 5-08 0101b  1,200 rbh/m  (z surface modifier 1.5×)
-• Bruzdowanie w żelbet/monolit   KNR 5-08 0101z  1,900 rbh/m  (z surface modifier 2.25×)
-• Bruzdowanie w gazobet/ytong    KNR 5-08 0101g  0,650 rbh/m
-• Bruzdowanie w g-k/karton-gips  KNR 5-08 0101k  0,450 rbh/m
-• Zamurowanie bruzdy             KNR 4-03 0105   0,250 rbh/m
+BRUZDY I PRACE MUROWE (godziny już zawierają podłoże, nie mnożyć drugi raz):
+• Bruzdowanie w cegle            KNR 5-08 0101   0,850 rbh/m
+• Bruzdowanie w silikacie        KNR 5-08 0111   1,100 rbh/m
+• Bruzdowanie w betonie          KNR 5-08 0103   2,000 rbh/m
+• Bruzdowanie w żelbecie         KNR 5-08 0110   2,500 rbh/m
+• Bruzdowanie w gazobetonie      KNR 5-08 0112   0,550 rbh/m
+• Bruzdowanie w G-K             KNR 5-08 0104   0,180 rbh/m
+• Zatynkowanie bruzdy            KNR 5-08 0107   0,120 rbh/m
 
 RURY I TRASY (n/t lub w wylewce):
 • Rura karbowana (peszla) fi 20  KNR 5-08 0801   0,080 rbh/m
@@ -61,37 +61,33 @@ GNIAZDA / WYŁĄCZNIKI / OPRAWY:
 • Gniazdo 230V/16A pojedyncze Schuko p/t    KNR 5-08 0401   0,680 rbh/szt
 • Gniazdo 230V/16A podwójne Schuko p/t      KNR 5-08 0402   0,820 rbh/szt
 • Gniazdo 230V/16A potrójne p/t             KNR 5-08 0403   0,950 rbh/szt
-• Gniazdo 230V/16A n/t (natynkowe)          KNR 5-08 0404   0,550 rbh/szt
-• Gniazdo 230V IP44 bryzgoszczelne          KNR 5-08 0405   0,980 rbh/szt
-• Gniazdo 230V IP55/IP67 zewnętrzne         KNR 5-08 0406   1,100 rbh/szt
-• Gniazdo z USB A+C               KNR 5-08 0408   0,780 rbh/szt
-• Floorbox podłogowy              KNR 5-08 0409   1,800 rbh/szt
-• Wyłącznik 1-klaw. p/t           KNR 5-08 0501   0,450 rbh/szt
-• Wyłącznik 2-klaw. p/t           KNR 5-08 0503   0,600 rbh/szt
-• Wyłącznik schodowy (1 z 2)      KNR 5-08 0504   0,500 rbh/szt
-• Wyłącznik krzyżowy              KNR 5-08 0505   0,550 rbh/szt
-• Wyłącznik z ramką rolet/żaluzji KNR 5-08 0506   0,700 rbh/szt
-• Oprawa LED panel sufitowy 60×60 KNR 5-08 0501o  0,680 rbh/szt
-• Oprawa LED downlight p/t        KNR 5-08 0502   0,310 rbh/szt  (+1.25× sufit wysoki)
-• Oprawa LED natynkowa / kinkiet  KNR 5-08 0503o  0,500 rbh/szt
-• Oprawa zewnętrzna IP65 LED      KNR 5-08 0701   0,600 rbh/szt
-• Naświetlacz LED ≤100W           KNR 5-08 0702o  0,800 rbh/szt
-• Naświetlacz LED >100W           KNR 5-08 0703o  1,200 rbh/szt
-• Oprawa awaryjna LED 3h          KNR 5-08 0801o  0,550 rbh/szt
-• Oprawa ewakuacyjna EXIT         KNR 5-08 0802o  0,450 rbh/szt
-• Wypust oświetleniowy (puszka suf.) KNR 5-08 0701w 0,200 rbh/szt
+• Gniazdo 230V z USB                        KNR 5-08 0404   0,720 rbh/szt
+• Gniazdo 230V IP44                         KNR 5-08 0405   0,980 rbh/szt
+• Gniazdo 230V natynkowe                    KNR 5-08 0406   0,540 rbh/szt
+• Gniazdo CEE 16A 5P 400V                   KNR 5-08 0408   1,180 rbh/szt
+• Gniazdo CEE 32A 5P 400V                   KNR 5-08 0409   1,450 rbh/szt
+• Gniazdo CEE 63A 5P                        KNR 5-08 0419   1,800 rbh/szt
+• Łącznik 1-klaw. p/t                       KNR 5-08 0501   0,450 rbh/szt
+• Łącznik 2-klaw. p/t                       KNR 5-08 0502   0,540 rbh/szt
+• Łącznik schodowy                          KNR 5-08 0503   0,540 rbh/szt
+• Łącznik krzyżowy                          KNR 5-08 0504   0,600 rbh/szt
+• Plafon / oprawa sufitowa                  KNR 5-08 1401   0,680 rbh/szt
+• Downlight / oczko                         KNR 5-08 1402   0,310 rbh/szt
+• Kinkiet                                   KNR 5-08 1405   0,650 rbh/szt
+• Panel LED 60×60                           KNR 5-08 1404   0,720 rbh/szt
+• Oprawa zewnętrzna IP65                    KNR 5-08 1431   0,600 rbh/szt
+• Oprawa awaryjna                           KNR 5-08 1409   0,600 rbh/szt
+• Wypust oświetleniowy                      KNR 5-08 0701   0,200 rbh/szt
 
 APARATURA MODUŁOWA NA SZYNIE TH35 (rozdzielnica):
-• MCB 1P nadprądowy B/C          KNR 5-08 0201a  0,150 rbh/szt
-• MCB 2P nadprądowy              KNR 5-08 0202a  0,200 rbh/szt
-• MCB 3P nadprądowy              KNR 5-08 0203a  0,250 rbh/szt
-• RCD 2P różnicowoprądowy        KNR 5-08 0211   0,250 rbh/szt
-• RCD 4P różnicowoprądowy        KNR 5-08 0212   0,300 rbh/szt
+• MCB 1P nadprądowy B/C          KNR 5-08 1501   0,200 rbh/szt
+• MCB 3P nadprądowy              KNR 5-08 1503   0,300 rbh/szt
+• RCD 4P różnicowoprądowy        KNR 5-08 1502   0,300 rbh/szt
 • RCBO 1P+N (MCB+RCD)            KNR 5-08 0221   0,200 rbh/szt
 • SPD T1/T2 ogranicznik przepięć KNR 5-08 0231   0,400 rbh/szt
 • SPD T1 klasa I                 KNR 5-11 0113   0,600 rbh/szt
 • SPD T1+T2 kombinowany          KNR 5-11 0114   0,800 rbh/szt
-• Wyłącznik główny / rozłącznik izolacyjny  KNR 5-08 0205   0,350 rbh/szt
+• Wyłącznik główny / rozłącznik izolacyjny  KNR 5-08 1506   0,350 rbh/szt
 • Rozłącznik sieć-agregat        KNR 5-08 0241   0,350 rbh/szt
 • Złączka szynowa ZUG L/N        KNR 5-08 0301sz 0,100 rbh/szt
 • Złączka szynowa PE żółto-ziel. KNR 5-08 0310   0,100 rbh/szt

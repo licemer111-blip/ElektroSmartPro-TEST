@@ -33,9 +33,10 @@ describe("L0 Canonical KNR Reference — pattern matching", () => {
       expect(m?.laborNorm).toBe(0.16);
     });
 
-    it("YDYp 5×6 → 0.23 rbh/mb (kuchnia / indukcja)", () => {
+    it("YDYp 5×6 → 0.28 rbh/mb (kuchnia / indukcja)", () => {
       const m = findCanonicalL0("YDYp 5×6 mm² zasilanie kuchni", "mb");
-      expect(m?.laborNorm).toBe(0.23);
+      expect(m?.knrCode).toBe("KNR 5-08 0205");
+      expect(m?.laborNorm).toBe(0.28);
     });
 
     it("YKY 5×16 → KNR 5-10 0301, 0.22 rbh/mb", () => {
@@ -67,26 +68,26 @@ describe("L0 Canonical KNR Reference — pattern matching", () => {
   });
 
   describe("Sockets (Gniazda 230V / siłowe / RJ45 / TV)", () => {
-    it("Gniazdo 230V pojedyncze p/t → 0.35 rbh/szt", () => {
+    it("Gniazdo 230V pojedyncze p/t → 0.68 rbh/szt", () => {
       const m = findCanonicalL0("Gniazdo 230V p/t pojedyncze z ramką", "szt");
-      expect(m?.knrCode).toBe("KNR 5-04 0501-01");
-      expect(m?.laborNorm).toBe(0.35);
+      expect(m?.knrCode).toBe("KNR 5-08 0401");
+      expect(m?.laborNorm).toBe(0.68);
     });
 
-    it("Gniazdo 230V podwójne p/t → 0.45 rbh/szt", () => {
+    it("Gniazdo 230V podwójne p/t → 0.82 rbh/szt", () => {
       const m = findCanonicalL0("Gniazdo 230V p/t podwójne", "szt");
-      expect(m?.laborNorm).toBe(0.45);
+      expect(m?.laborNorm).toBe(0.82);
     });
 
-    it("Gniazdo CEE 16A 5P → 0.60 rbh/szt", () => {
+    it("Gniazdo CEE 16A 5P → 1.18 rbh/szt", () => {
       const m = findCanonicalL0("Gniazdo siłowe 16A 5P (CEE) p/t", "szt");
-      expect(m?.knrCode).toBe("KNR 5-04 0302-01");
-      expect(m?.laborNorm).toBe(0.60);
+      expect(m?.knrCode).toBe("KNR 5-08 0408");
+      expect(m?.laborNorm).toBe(1.18);
     });
 
-    it("Gniazdo CEE 32A → 0.85 rbh/szt", () => {
+    it("Gniazdo CEE 32A → 1.45 rbh/szt", () => {
       const m = findCanonicalL0("Gniazdo CEE 32A 5P", "szt");
-      expect(m?.laborNorm).toBe(0.85);
+      expect(m?.laborNorm).toBe(1.45);
     });
 
     it("Gniazdo RJ45 cat 6 → KNR 5-09 0106, 0.50 rbh/szt", () => {
@@ -102,24 +103,24 @@ describe("L0 Canonical KNR Reference — pattern matching", () => {
   });
 
   describe("Switches (Łączniki)", () => {
-    it("Łącznik pojedynczy → 0.25 rbh/szt", () => {
+    it("Łącznik pojedynczy → 0.45 rbh/szt", () => {
       const m = findCanonicalL0("Łącznik pojedynczy p/t", "szt");
-      expect(m?.laborNorm).toBe(0.25);
+      expect(m?.laborNorm).toBe(0.45);
     });
 
-    it("Łącznik świecznikowy → 0.30 rbh/szt", () => {
+    it("Łącznik świecznikowy → 0.54 rbh/szt", () => {
       const m = findCanonicalL0("Łącznik świecznikowy p/t", "szt");
-      expect(m?.laborNorm).toBe(0.30);
+      expect(m?.laborNorm).toBe(0.54);
     });
 
-    it("Łącznik schodowy → 0.30 rbh/szt", () => {
+    it("Łącznik schodowy → 0.54 rbh/szt", () => {
       const m = findCanonicalL0("Łącznik schodowy", "szt");
-      expect(m?.laborNorm).toBe(0.30);
+      expect(m?.laborNorm).toBe(0.54);
     });
 
-    it("Łącznik krzyżowy → 0.35 rbh/szt (droższy montaż)", () => {
+    it("Łącznik krzyżowy → 0.60 rbh/szt (droższy montaż)", () => {
       const m = findCanonicalL0("Łącznik krzyżowy schodowy", "szt");
-      expect(m?.laborNorm).toBe(0.35);
+      expect(m?.laborNorm).toBe(0.60);
     });
   });
 
@@ -137,20 +138,22 @@ describe("L0 Canonical KNR Reference — pattern matching", () => {
   });
 
   describe("Light fixtures (Oprawy)", () => {
-    it("Oprawa LED downlight → 0.40 rbh/szt", () => {
+    it("Oprawa LED downlight → 0.31 rbh/szt", () => {
       const m = findCanonicalL0("Oprawa LED downlight 12W", "szt");
-      expect(m?.laborNorm).toBe(0.40);
+      expect(m?.knrCode).toBe("KNR 5-08 1402");
+      expect(m?.laborNorm).toBe(0.31);
     });
 
-    it("Oprawa LED panel 60×60 → 0.50 rbh/szt", () => {
+    it("Oprawa LED panel 60×60 → 0.72 rbh/szt", () => {
       const m = findCanonicalL0("Oprawa LED panel 60x60 36W", "szt");
-      expect(m?.laborNorm).toBe(0.50);
+      expect(m?.knrCode).toBe("KNR 5-08 1404");
+      expect(m?.laborNorm).toBe(0.72);
     });
 
-    it("Oprawa awaryjna ewakuacyjna LED 3h → KNR 5-09 0707-01, 0.50 rbh/szt", () => {
+    it("Oprawa awaryjna ewakuacyjna LED 3h → KNR 5-08 1409, 0.60 rbh/szt", () => {
       const m = findCanonicalL0("Oprawa awaryjna ewakuacyjna LED 3h", "szt");
-      expect(m?.knrCode).toBe("KNR 5-09 0707-01");
-      expect(m?.laborNorm).toBe(0.50);
+      expect(m?.knrCode).toBe("KNR 5-08 1409");
+      expect(m?.laborNorm).toBe(0.60);
     });
 
     it("Punkt świetlny → 0.35 rbh/szt", () => {
@@ -177,9 +180,10 @@ describe("L0 Canonical KNR Reference — pattern matching", () => {
       expect(m?.laborNorm).toBe(2.50);
     });
 
-    it("Bruzdowanie w gazobetonie / Ytong → 1.30 rbh/mb", () => {
+    it("Bruzdowanie w gazobetonie / Ytong → 0.55 rbh/mb", () => {
       const m = findCanonicalL0("Bruzdowanie w ytongu", "mb");
-      expect(m?.laborNorm).toBe(1.30);
+      expect(m?.knrCode).toBe("KNR 5-08 0112");
+      expect(m?.laborNorm).toBe(0.55);
     });
 
     it("Bruzdowanie generic (no substrate) → cegła default 0.85 rbh/mb", () => {
@@ -218,7 +222,7 @@ describe("L0 Canonical KNR Reference — pattern matching", () => {
   describe("Breakers / RCD / Measurements", () => {
     it("Wyłącznik różnicowoprądowy 4P → KNR 5-08 0212, 0.30 rbh/szt", () => {
       const m = findCanonicalL0("Wyłącznik różnicowoprądowy AC 25A/30mA 4P", "szt");
-      expect(m?.knrCode).toBe("KNR 5-08 0212");
+      expect(m?.knrCode).toBe("KNR 5-08 1502");
       expect(m?.laborNorm).toBe(0.30);
     });
 
@@ -340,26 +344,26 @@ describe("validateAgainstCanonicalL0 — AI hallucination detection", () => {
 describe("L0 v2.7.0 — Łącznik specialized (PIR / kartowy)", () => {
   it("Łącznik z czujnikiem ruchu PIR → 0.81 rbh/szt (NOT generic 0.25)", () => {
     const m = findCanonicalL0("Łącznik z czujnikiem ruchu PIR", "szt");
-    expect(m?.knrCode).toBe("KNR 5-04 0501-08");
+    expect(m?.knrCode).toBe("KNR 5-08 0702");
     expect(m?.laborNorm).toBe(0.81);
   });
 
   it("Łącznik kartowy hotelowy → 0.50 rbh/szt", () => {
     const m = findCanonicalL0("Łącznik kartowy hotelowy 230V", "szt");
-    expect(m?.knrCode).toBe("KNR 5-04 0501-09");
+    expect(m?.knrCode).toBe("ES-OSZ-001");
     expect(m?.laborNorm).toBe(0.50);
   });
 
   it("Generic łącznik fallback still works (precedence preserved)", () => {
     const m = findCanonicalL0("Łącznik 1-biegunowy biały", "szt");
-    expect(m?.laborNorm).toBe(0.25);
+    expect(m?.laborNorm).toBe(0.45);
   });
 });
 
 describe("L0 v2.7.0 — Oprawy specialized (plafon / kinkiet / ogrodowa / reflektor / listwa LED)", () => {
   it("Plafon LED sufitowy → 0.68 rbh/szt (NOT generic 0.40)", () => {
     const m = findCanonicalL0("Plafon LED sufitowy 24W", "szt");
-    expect(m?.knrCode).toBe("KNR 5-04 0303-11");
+    expect(m?.knrCode).toBe("KNR 5-08 1401");
     expect(m?.laborNorm).toBe(0.68);
   });
 
@@ -394,11 +398,10 @@ describe("L0 v2.7.0 — Oprawy specialized (plafon / kinkiet / ogrodowa / reflek
     expect(m?.laborNorm).toBe(1.22);
   });
 
-  it("Generic oprawa fallback still works → 0.40 rbh/szt", () => {
-    // Use a name that matches none of the specialized oprawa patterns
-    // (no biurow/zwieszan/nablat/plafon/kinkiet/parkow/ogrodow/reflektor/listwa).
+  it("Generic oprawa fallback still works → 0.55 rbh/szt", () => {
     const m = findCanonicalL0("Oprawa zwykła sufitowa", "szt");
-    expect(m?.laborNorm).toBe(0.40);
+    expect(m?.knrCode).toBe("ES-OPR-010");
+    expect(m?.laborNorm).toBe(0.55);
   });
 });
 
@@ -517,7 +520,7 @@ describe("L0 v2.7.0 — Domofony", () => {
 describe("L0 v2.7.0 — Korytka / drabinki / kanały", () => {
   it("Drabinka kablowa → 0.55 rbh/mb", () => {
     const m = findCanonicalL0("Drabinka kablowa 200mm ocynk", "mb");
-    expect(m?.knrCode).toBe("KNR 5-08 0502");
+    expect(m?.knrCode).toBe("KNR 5-08 1302");
     expect(m?.laborNorm).toBe(0.55);
   });
 
@@ -659,7 +662,7 @@ describe("L0 v2.7.0 — Precedence regression (no clobbering)", () => {
 
   it("Existing Wyłącznik różnicowoprądowy still wins (no łącznik fallback)", () => {
     const m = findCanonicalL0("Wyłącznik różnicowoprądowy 4P 40A/30mA", "szt");
-    expect(m?.knrCode).toBe("KNR 5-08 0212");
+    expect(m?.knrCode).toBe("KNR 5-08 1502");
     expect(m?.laborNorm).toBe(0.30);
   });
 
@@ -672,7 +675,7 @@ describe("L0 v2.7.0 — Precedence regression (no clobbering)", () => {
     const m1 = findCanonicalL0("Plafon LED 24W", "szt");
     const m2 = findCanonicalL0("Oprawa standardowa", "szt");
     expect(m1?.laborNorm).toBe(0.68);
-    expect(m2?.laborNorm).toBe(0.40);
+    expect(m2?.laborNorm).toBe(0.55);
     expect(m1?.laborNorm).not.toBe(m2?.laborNorm);
   });
 });
@@ -743,7 +746,7 @@ describe("L0 v2.8.0 — Fotowoltaika / PV", () => {
     const pv = findCanonicalL0("Panel fotowoltaiczny 450W", "szt");
     const led = findCanonicalL0("Oprawa LED panel 60×60", "szt");
     expect(pv?.knrCode).toBe("ES-PV-001");
-    expect(led?.knrCode).toBe("KNR 5-04 0302-01");
+    expect(led?.knrCode).toBe("KNR 5-08 1404");
   });
 
   it("Konstrukcja PV rail → 0.40 rbh/mb", () => {
@@ -1075,7 +1078,7 @@ describe("L0 v2.8.0 — Stycznik mocy / falownik / silnik", () => {
 
   it("Existing 'Stycznik modułowy' STILL wins for explicit modulow", () => {
     const m = findCanonicalL0("Stycznik modułowy 3-pol 25A", "szt");
-    expect(m?.knrCode).toBe("KNR 5-08 0220");
+    expect(m?.knrCode).toBe("KNR 5-08 1504");
     expect(m?.laborNorm).toBe(0.35);
   });
 

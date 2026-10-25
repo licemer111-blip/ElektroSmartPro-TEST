@@ -65,7 +65,16 @@ function toEntries(source: unknown): KnrEntry[] {
 
 let _allEntries: KnrEntry[] | null = null;
 function getAllEntries(): KnrEntry[] {
-  if (!_allEntries) _allEntries = CORE_KNR_SOURCES.flatMap(toEntries);
+  if (!_allEntries) {
+    const seen = new Set<string>();
+    _allEntries = [];
+    for (const entry of CORE_KNR_SOURCES.flatMap(toEntries)) {
+      const code = entry.catalog_code?.trim();
+      if (!code || seen.has(code)) continue;
+      seen.add(code);
+      _allEntries.push(entry);
+    }
+  }
   return _allEntries;
 }
 

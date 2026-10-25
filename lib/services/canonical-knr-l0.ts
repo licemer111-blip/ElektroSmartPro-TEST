@@ -21,10 +21,10 @@
  *
  * NORM SOURCES
  * ────────────
- * All norms below are verified against KNR 2026 / ES-KNR 2026 reference
- * tables. Where multiple official KNR codes exist for the same physical
- * work (e.g. YDYp układanie has both KNR 5-08 and KNR 4-03 series),
- * the residential / new-installation series is preferred.
+ * Hours and codes for everyday residential work match
+ * data/knr/fixed_norms/es_knr_instalacja_podstawowa.json.
+ * These are ElektroSmart norms (norma ES), not an ORGBUD table number.
+ * The same code must never mean two different jobs.
  *
  * UNIT CONVENTION
  * ───────────────
@@ -77,28 +77,28 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /\bydy(?:p|[żz]o?)?\s*3\s*[x×*]\s*2[,.]5\b/i,
     knrCode: "KNR 5-08 0202", laborNorm: 0.16, unit: "mb",
     description: "Przewód YDYp 3×2.5 mm² układany p/t", materialPrice: 6.94 },
-  // YDYp 4×1.5
+  // YDYp 4×1.5 — własny kod, 0203 w słowniku to już 5×2.5
   { pattern: /\bydy(?:p|[żz]o?)?\s*4\s*[x×*]\s*1[,.]5\b/i,
-    knrCode: "KNR 5-08 0203", laborNorm: 0.14, unit: "mb",
+    knrCode: "KNR 5-08 0216", laborNorm: 0.15, unit: "mb",
     description: "Przewód YDYp 4×1.5 mm² układany p/t", materialPrice: 6.50 },
   // YDYp 4×2.5
   { pattern: /\bydy(?:p|[żz]o?)?\s*4\s*[x×*]\s*2[,.]5\b/i,
-    knrCode: "KNR 5-08 0204", laborNorm: 0.17, unit: "mb",
+    knrCode: "KNR 5-08 0217", laborNorm: 0.18, unit: "mb",
     description: "Przewód YDYp 4×2.5 mm² układany p/t", materialPrice: 8.80 },
   // YDYp 5×1.5
   { pattern: /\bydy(?:p|[żz]o?)?\s*5\s*[x×*]\s*1[,.]5\b/i,
-    knrCode: "KNR 5-08 0205", laborNorm: 0.15, unit: "mb",
+    knrCode: "KNR 5-08 0218", laborNorm: 0.16, unit: "mb",
     description: "Przewód YDYp 5×1.5 mm² układany p/t", materialPrice: 7.80 },
-  // YDYp 5×2.5
+  // YDYp 5×2.5 — ten sam kod i rbh co es_knr_instalacja_podstawowa
   { pattern: /\bydy(?:p|[żz]o?)?\s*5\s*[x×*]\s*2[,.]5\b/i,
-    knrCode: "KNR 5-08 0206", laborNorm: 0.18, unit: "mb",
+    knrCode: "KNR 5-08 0203", laborNorm: 0.20, unit: "mb",
     description: "Przewód YDYp 5×2.5 mm² układany p/t", materialPrice: 11.20 },
   // YDYp 5×4 / 5×6 — zasilanie kuchenek, indukcji
   { pattern: /\bydy(?:p|[żz]o?)?\s*5\s*[x×*]\s*4\b/i,
-    knrCode: "KNR 5-08 0207", laborNorm: 0.21, unit: "mb",
+    knrCode: "KNR 5-08 0204", laborNorm: 0.24, unit: "mb",
     description: "Przewód YDYp 5×4 mm² układany p/t", materialPrice: 17.50 },
   { pattern: /\bydy(?:p|[żz]o?)?\s*5\s*[x×*]\s*6\b/i,
-    knrCode: "KNR 5-08 0208", laborNorm: 0.23, unit: "mb",
+    knrCode: "KNR 5-08 0205", laborNorm: 0.28, unit: "mb",
     description: "Przewód YDYp 5×6 mm² układany p/t", materialPrice: 26.00 },
   // YDYp generic fallback (3-5 żył, dowolny przekrój ≤ 6)
   { pattern: /\bydy(?:p|[żz]o?)?\s*[3-5]\s*[x×*]\s*\d+(?:[,.]\d+)?\b/i,
@@ -169,55 +169,50 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
     knrCode: "KNR 5-12 0301", laborNorm: 0.10, unit: "mb",
     description: "Kabel koncentryczny RG-6 układany p/t" },
 
-  // ── OSPRZĘT — GNIAZDA 230V (KNR 5-04 0501) ──
+  // ── OSPRZĘT — GNIAZDA 230V (norma ES = instalacja podstawowa) ──
   // Order matters — most specific patterns FIRST, generic fallback LAST.
   // CEE 32A MUST precede 16A (otherwise "32A" matches CEE 16A optional suffix).
   { pattern: /\bgniazd[ao]\s+(?:cee|siłow[eyao])\s*32\s*a\b/i,
-    knrCode: "KNR 5-04 0302-02", laborNorm: 0.85, unit: "szt",
-    description: "Gniazdo siłowe CEE 32A 5P p/t", materialPrice: 65.00 },
+    knrCode: "KNR 5-08 0409", laborNorm: 1.45, unit: "szt",
+    description: "Gniazdo siłowe CEE 32A 5P", materialPrice: 65.00 },
   { pattern: /\bgniazd[ao]\s+(?:siłow[eyao]|cee|3[\s-]?fazow[eyao]?|400v)\s*(?:16\s*a|3p|5p)?\b/i,
-    knrCode: "KNR 5-04 0302-01", laborNorm: 0.60, unit: "szt",
-    description: "Gniazdo siłowe CEE 16A 5P p/t", materialPrice: 35.00 },
-  // Gniazdo 230V — specific variants (podwójne / pojedyncze) BEFORE the catch-all p/t,
-  // and pojedyncze pattern REQUIRES the "pojedyn" word (not optional) so it cannot
-  // swallow "Gniazdo 230V p/t podwójne".
+    knrCode: "KNR 5-08 0408", laborNorm: 1.18, unit: "szt",
+    description: "Gniazdo siłowe CEE 16A 5P", materialPrice: 35.00 },
   { pattern: /\bgniazd[ao]\s+(?:230v\s+)?(?:p\/t|podtynkow[eyao]?)\s+(?:podwójn[eyao]?|podwoj|2x)/i,
-    knrCode: "KNR 5-04 0501-02", laborNorm: 0.45, unit: "szt",
+    knrCode: "KNR 5-08 0402", laborNorm: 0.82, unit: "szt",
     description: "Gniazdo 230V p/t podwójne", materialPrice: 32.00 },
   { pattern: /\bgniazd[ao]\s+(?:230v\s+)?(?:p\/t|podtynkow[eyao]?|p\.t\.)\s+(?:pojedyncz[eyao]?|pojed)/i,
-    knrCode: "KNR 5-04 0501-01", laborNorm: 0.35, unit: "szt",
+    knrCode: "KNR 5-08 0401", laborNorm: 0.68, unit: "szt",
     description: "Gniazdo 230V p/t pojedyncze", materialPrice: 22.00 },
   { pattern: /\bgniazd[ao].*ip\s*44\b/i,
-    knrCode: "KNR 5-04 0501-04", laborNorm: 0.40, unit: "szt",
+    knrCode: "KNR 5-08 0405", laborNorm: 0.98, unit: "szt",
     description: "Gniazdo 230V IP44 (bryzgoszczelne)", materialPrice: 28.00 },
   { pattern: /\bgniazd[ao]\s+(?:hermetyc|n\/t|n\.t\.|natynkow)/i,
-    knrCode: "KNR 5-04 0501-05", laborNorm: 0.40, unit: "szt",
-    description: "Gniazdo 230V n/t hermetyczne", materialPrice: 28.00 },
-  // Gniazdo generic 230V (no surface qualifier — fallback)
-  // CRITICAL: must NOT match LAN/teleinformatic gniazda (RJ45 / TV / HDMI — łapane przez patterns niżej).
+    knrCode: "KNR 5-08 0406", laborNorm: 0.54, unit: "szt",
+    description: "Gniazdo 230V natynkowe", materialPrice: 28.00 },
   { pattern: /\bgniazd[ao]\s+(?:\d+\s*[x×]\s*)?(?:230v?|elektr|sieciow)/i,
-    knrCode: "KNR 5-04 0501-01", laborNorm: 0.35, unit: "szt",
+    knrCode: "KNR 5-08 0401", laborNorm: 0.68, unit: "szt",
     description: "Gniazdo 230V (generic) p/t", materialPrice: 22.00 },
 
   // ── ROZDZIELNICE I APARATURA — BEFORE łącznik patterns to avoid "Wyłącznik…"
   //    being captured by generic łącznik fallback. Polish-letter words use
   //    (?:^|\W) instead of \b because \b doesn't anchor before ł/ś/ż/ó (non-\w chars).
   { pattern: /(?:^|\W)(?:wyłącznik|wylacznik)\s+(?:różnicow|roznicow|rcd|fi)/i,
-    knrCode: "KNR 5-08 0212", laborNorm: 0.30, unit: "szt",
+    knrCode: "KNR 5-08 1502", laborNorm: 0.30, unit: "szt",
     description: "Wyłącznik różnicowoprądowy AC 25-40A 4P", materialPrice: 160.00 },
   { pattern: /(?:^|\W)(?:wyłącznik|wylacznik)\s+(?:silnikow|3p|trójbiegun|trojbiegun)/i,
-    knrCode: "KNR 5-08 0213", laborNorm: 0.30, unit: "szt",
+    knrCode: "KNR 5-08 1503", laborNorm: 0.30, unit: "szt",
     description: "Wyłącznik nadprądowy 3P (B/C 16-63A)", materialPrice: 75.00 },
   { pattern: /(?:^|\W)(?:wyłącznik|wylacznik)\s+(?:nadprądow|nadpradow|s30[1-3]|mcb|b\d{1,2}|c\d{1,2})/i,
-    knrCode: "KNR 5-08 0211", laborNorm: 0.20, unit: "szt",
+    knrCode: "KNR 5-08 1501", laborNorm: 0.20, unit: "szt",
     description: "Wyłącznik nadprądowy 1P (B/C 6-32A)", materialPrice: 25.00 },
   // Stycznik modułowy — use .* + Polish letter class so 'modułowy' (ł) and
   // non-adjacent keywords like 'Stycznik modułowy 3-pol 25A' both match.
   { pattern: /\bstycznik\b.*\b(?:modu[lł]ow|3[\s-]?pol|4[\s-]?pol|szynow)/i,
-    knrCode: "KNR 5-08 0220", laborNorm: 0.35, unit: "szt",
+    knrCode: "KNR 5-08 1504", laborNorm: 0.35, unit: "szt",
     description: "Stycznik modułowy 3P/4P", materialPrice: 90.00 },
   { pattern: /\bogranicznik\s+(?:przep[ie]ci|spd|t1|t2|t3|b\+c|c\+d)/i,
-    knrCode: "KNR 5-08 0225", laborNorm: 0.45, unit: "szt",
+    knrCode: "KNR 5-08 1505", laborNorm: 0.45, unit: "szt",
     description: "Ogranicznik przepięć T1+T2 / T2", materialPrice: 220.00 },
 
   // ── OSPRZĘT — ŁĄCZNIKI (KNR 5-04 0501-03..06) ──
@@ -225,26 +220,26 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   //   breaker patterns above, NOT the łącznik fallback. Polish-letter words use
   //   (?:^|\W) instead of \b for proper boundary anchoring.
   { pattern: /(?:^|\W)(?:łącznik|lacznik)\s+(?:krzyżow[eyao]|krzyz)/i,
-    knrCode: "KNR 5-04 0501-06", laborNorm: 0.35, unit: "szt",
+    knrCode: "KNR 5-08 0504", laborNorm: 0.60, unit: "szt",
     description: "Łącznik krzyżowy p/t", materialPrice: 28.00 },
   { pattern: /(?:^|\W)(?:łącznik|lacznik)\s+(?:schodow[eyao])/i,
-    knrCode: "KNR 5-04 0501-05", laborNorm: 0.30, unit: "szt",
+    knrCode: "KNR 5-08 0503", laborNorm: 0.54, unit: "szt",
     description: "Łącznik schodowy p/t", materialPrice: 22.00 },
   { pattern: /(?:^|\W)(?:łącznik|lacznik)\s+(?:świeczni|swieczn|podwójn[eyao]|podwoj)/i,
-    knrCode: "KNR 5-04 0501-03", laborNorm: 0.30, unit: "szt",
+    knrCode: "KNR 5-08 0502", laborNorm: 0.54, unit: "szt",
     description: "Łącznik świecznikowy / podwójny p/t", materialPrice: 18.00 },
   { pattern: /(?:^|\W)(?:łącznik|lacznik)\s+(?:pojedyn|jednobiegun)/i,
-    knrCode: "KNR 5-04 0501-04", laborNorm: 0.25, unit: "szt",
+    knrCode: "KNR 5-08 0501", laborNorm: 0.45, unit: "szt",
     description: "Łącznik pojedynczy p/t", materialPrice: 14.00 },
   // Łącznik specialized — must precede generic fallback (each matches łącznik\W)
   { pattern: /(?:^|\W)(?:łącznik|lacznik)\s+(?:z\s+)?(?:pir|czujnikiem\s+ruchu|ruchu|ruchem)/i,
-    knrCode: "KNR 5-04 0501-08", laborNorm: 0.81, unit: "szt",
+    knrCode: "KNR 5-08 0702", laborNorm: 0.81, unit: "szt",
     description: "Łącznik z czujnikiem ruchu PIR", materialPrice: 95.00 },
   { pattern: /(?:^|\W)(?:łącznik|lacznik)\s+(?:kart|hotelo)/i,
-    knrCode: "KNR 5-04 0501-09", laborNorm: 0.50, unit: "szt",
+    knrCode: "ES-OSZ-001", laborNorm: 0.50, unit: "szt",
     description: "Łącznik kartowy hotelowy", materialPrice: 65.00 },
   { pattern: /(?:^|\W)(?:łącznik|lacznik)i?(?=\s|$|\W)/i,
-    knrCode: "KNR 5-04 0501-04", laborNorm: 0.25, unit: "szt",
+    knrCode: "KNR 5-08 0501", laborNorm: 0.45, unit: "szt",
     description: "Łącznik (generic) p/t", materialPrice: 14.00 },
 
   // ── OSPRZĘT — GNIAZDA TELEINFORMATYCZNE ──
@@ -271,13 +266,13 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
 
   // ── OPRAWY OŚWIETLENIOWE (KNR 5-04 0303, KNR 5-09 0707) ──
   { pattern: /\bopraw[ay]\s+(?:awaryjn[eyao]|ewakuacyjn|exit)/i,
-    knrCode: "KNR 5-09 0707-01", laborNorm: 0.50, unit: "szt",
+    knrCode: "KNR 5-08 1409", laborNorm: 0.60, unit: "szt",
     description: "Oprawa awaryjna ewakuacyjna LED 3h", materialPrice: 180.00 },
   { pattern: /\bopraw[ay]\s+(?:led\s+)?(?:downlight|wpust)/i,
-    knrCode: "KNR 5-04 0303-10", laborNorm: 0.40, unit: "szt",
+    knrCode: "KNR 5-08 1402", laborNorm: 0.31, unit: "szt",
     description: "Oprawa LED downlight wpuszczana", materialPrice: 45.00 },
   { pattern: /\bopraw[ay]\s+(?:led\s+)?(?:panel|panelow)\s*(?:60\s*[x×]\s*60|30\s*[x×]\s*120)?/i,
-    knrCode: "KNR 5-04 0302-01", laborNorm: 0.50, unit: "szt",
+    knrCode: "KNR 5-08 1404", laborNorm: 0.72, unit: "szt",
     description: "Oprawa LED panel 60×60 / 30×120", materialPrice: 85.00 },
   { pattern: /\bopraw[ay]\s+(?:hermetyczn|ip\s*65|liniowa)/i,
     knrCode: "KNR 5-04 0303-15", laborNorm: 0.45, unit: "szt",
@@ -287,10 +282,10 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
     description: "Punkt świetlny p/t (montaż oprawy)", materialPrice: 0 },
   // Oprawy specialized — must precede generic (lampa|oprawa|kinkiet|plafon) fallback
   { pattern: /\bplafon\b/i,
-    knrCode: "KNR 5-04 0303-11", laborNorm: 0.68, unit: "szt",
+    knrCode: "KNR 5-08 1401", laborNorm: 0.68, unit: "szt",
     description: "Plafon LED sufitowy", materialPrice: 90.00 },
   { pattern: /\bkinkiet\b/i,
-    knrCode: "KNR 5-04 0303-12", laborNorm: 0.65, unit: "szt",
+    knrCode: "KNR 5-08 1405", laborNorm: 0.65, unit: "szt",
     description: "Kinkiet ścienny LED", materialPrice: 75.00 },
   // 'park' removed — 'Lampa parkowa' (4-5m uliczna) ma osobny wpis 2.50 rbh.
   { pattern: /\b(?:lampa|opraw[ay])\s+(?:ogrodow|s[lł]upkow)|\bs[lł]upek\s+ogrodow/i,
@@ -316,23 +311,29 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /\blampa\s+(?:parkow|uliczn|drogow|sodow)/i,
     knrCode: "KNR 5-04 0303-25", laborNorm: 2.50, unit: "szt",
     description: "Lampa parkowa / uliczna 4-5m", materialPrice: 850.00 },
-  { pattern: /\b(?:lampa|opraw[ay]|kinkiet|plafon)\b/i,
-    knrCode: "KNR 5-04 0303-10", laborNorm: 0.40, unit: "szt",
-    description: "Oprawa oświetleniowa (generic)", materialPrice: 60.00 },
+  { pattern: /\b(?:downlight|oczko\s+sufit|opraw[ay]\s+wpuszcz)/i,
+    knrCode: "KNR 5-08 1402", laborNorm: 0.31, unit: "szt",
+    description: "Oprawa wpuszczana downlight", materialPrice: 35.00 },
+  { pattern: /\b(?:lampa|opraw[ay])\b/i,
+    knrCode: "ES-OPR-010", laborNorm: 0.55, unit: "szt",
+    description: "Oprawa oświetleniowa", materialPrice: 60.00 },
 
   // ── ROBOTY POMOCNICZE — BRUZDOWANIE (KNR 5-08 0101..0103) ──
   // CRITICAL: substrate-aware. Test specific (zelbet/beton) BEFORE general (cegla)
   { pattern: /\bbruzdo?w[ay].*(?:żelbe|zelbe|zbrojon|monolit)/i,
-    knrCode: "KNR 5-08 0104", laborNorm: 2.50, unit: "mb",
+    knrCode: "KNR 5-08 0110", laborNorm: 2.50, unit: "mb",
     description: "Bruzdowanie w żelbecie (1 przewód)" },
   { pattern: /\bbruzdo?w[ay].*\bbeton/i,
     knrCode: "KNR 5-08 0103", laborNorm: 2.00, unit: "mb",
     description: "Bruzdowanie w betonie (1 przewód)" },
+  { pattern: /\bbruzdo?w[ay].*(?:g-k|gk\b|karton|płyt[ay]\s+gips)/i,
+    knrCode: "KNR 5-08 0104", laborNorm: 0.18, unit: "mb",
+    description: "Bruzdowanie w ścianie G-K" },
   { pattern: /\bbruzdo?w[ay].*(?:silk[aoie]|silikat|silce)/i,
-    knrCode: "KNR 5-08 0102", laborNorm: 1.20, unit: "mb",
+    knrCode: "KNR 5-08 0111", laborNorm: 1.10, unit: "mb",
     description: "Bruzdowanie w silikacie (1 przewód)" },
   { pattern: /\bbruzdo?w[ay].*\b(?:gazobet|ytong|siporex)/i,
-    knrCode: "KNR 5-08 0102", laborNorm: 1.30, unit: "mb",
+    knrCode: "KNR 5-08 0112", laborNorm: 0.55, unit: "mb",
     description: "Bruzdowanie w gazobetonie (1 przewód)" },
   { pattern: /\bbruzdo?w[ay]/i,
     knrCode: "KNR 5-08 0101", laborNorm: 0.85, unit: "mb",
@@ -443,13 +444,13 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
 
   // ── KORYTKA / DRABINKI / KANAŁY (KNR 5-08 05xx) ──
   { pattern: /\bdrabinka\s+kablow|\bdrabinka\b/i,
-    knrCode: "KNR 5-08 0502", laborNorm: 0.55, unit: "mb",
+    knrCode: "KNR 5-08 1302", laborNorm: 0.55, unit: "mb",
     description: "Drabinka kablowa metalowa", materialPrice: 65.00 },
   { pattern: /\bkorytko\s+(?:kablow|metalow|siatkow|drucian)|\bkorytk[ao]\b/i,
-    knrCode: "KNR 5-08 0501", laborNorm: 0.40, unit: "mb",
+    knrCode: "KNR 5-08 1301", laborNorm: 0.40, unit: "mb",
     description: "Korytko kablowe metalowe / siatkowe", materialPrice: 35.00 },
   { pattern: /\b(?:listwa\s+(?:pcv|elektroin|instalacyjn|kablowa)|kana[lł]\s+kablow|peszel)/i,
-    knrCode: "KNR 5-08 0503", laborNorm: 0.20, unit: "mb",
+    knrCode: "KNR 5-08 1303", laborNorm: 0.20, unit: "mb",
     description: "Listwa PCV / kanał kablowy / peszel", materialPrice: 12.00 },
 
   // ── POMIARY ROZSZERZONE (ES-POM 005..099) ──
@@ -743,7 +744,7 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
 
   // ── ROBOTY POMOCNICZE II (rurki / taśmy) ──
   { pattern: /\b(?:rurka|rura)\s+(?:karbowan|ognioodporn|rvs|rvks)|\bpeszel\s+(?:karbowan|ognioodporn)/i,
-    knrCode: "KNR 5-08 0510", laborNorm: 0.18, unit: "mb",
+    knrCode: "KNR 5-08 1310", laborNorm: 0.18, unit: "mb",
     description: "Rurka karbowana / peszel ognioodporny", materialPrice: 8.00 },
   { pattern: /\btaśma\s+(?:ostrzegawcz|sygnaliz|kablow\s+ostrzeg)/i,
     knrCode: "KNR 5-08 0520", laborNorm: 0.05, unit: "mb",
@@ -810,10 +811,10 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
 
   // ── RURY INSTALACYJNE STALOWE (KNR 5-08 0511..0513) ──
   { pattern: /\brur[ak]\s+(?:stalo|rst\b|psl\b)|\brst\s+(?:m?g?\d|instal)/i,
-    knrCode: "KNR 5-08 0511", laborNorm: 0.30, unit: "mb",
+    knrCode: "KNR 5-08 1311", laborNorm: 0.30, unit: "mb",
     description: "Rura stalowa RST / instalacyjna", materialPrice: 18.00 },
   { pattern: /\brur[ak]\s+(?:hdpe|pvc\s+kabel|dvk\b|rde\b|ekd\b)/i,
-    knrCode: "KNR 5-08 0512", laborNorm: 0.15, unit: "mb",
+    knrCode: "KNR 5-08 1312", laborNorm: 0.15, unit: "mb",
     description: "Rura PVC kablowa / HDPE", materialPrice: 8.00 },
 
   // ── POMPA CIEPŁA — podłączenie elektryczne (ES-HVAC-xxx) ──

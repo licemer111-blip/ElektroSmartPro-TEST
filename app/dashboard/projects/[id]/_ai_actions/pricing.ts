@@ -601,7 +601,7 @@ export async function estimatePricesWithAI(
         laborHoursTotal: laborHoursTotalC0,
         regionModifier: regionMod,
         confidence: "high" as const,
-        note: `L0 Canonical KNR 2026: ${canonical.knrCode} (${canonical.description}) | ${traceC0}`,
+        note: `Norma ES: ${canonical.knrCode} (${canonical.description}) | ${traceC0}`,
         knrCode: canonical.knrCode,
         knrSource: "official" as const,
         laborNorm: canonical.laborNorm,
