@@ -41,7 +41,6 @@ interface ProjectPageClientProps {
   allRegions: Array<{ id: string; name: string }>;
   commentCount?: number;
   lastChange?: string;
-  onCoPilotClick?: () => void;
 }
 
 export function ProjectPageClient({
@@ -55,7 +54,6 @@ export function ProjectPageClient({
   categories,
   catalogItemsByCategory,
   allRegions,
-  onCoPilotClick,
 }: ProjectPageClientProps) {
   return (
     <ProjectHeader
@@ -86,7 +84,6 @@ export function ProjectPageClient({
       assignedTo={project.assigned_to}
       isOwner={project.user_id === profile?.id}
       projectColor={project.color}
-      onCoPilotClick={onCoPilotClick}
     />
   );
 }

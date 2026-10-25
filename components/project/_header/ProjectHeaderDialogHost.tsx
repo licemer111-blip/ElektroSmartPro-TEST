@@ -12,8 +12,6 @@ import { ProfitMarginDialog } from "@/components/project/profit-margin-dialog";
 import { AssignProjectDialog } from "@/components/project/assign-project-dialog";
 import { ClientDataDialog } from "@/components/project/ClientDataDialog";
 import { AIProjectImportDialog } from "@/components/project/ai-project-import-dialog";
-import { CoPilotSession } from "@/components/project/copilot-session";
-import { ProjectLiveChat } from "@/components/project/project-live-chat";
 
 export interface DialogHostState {
   isRenameOpen: boolean;
@@ -199,25 +197,6 @@ export function ProjectHeaderDialogHost({
         }}
       />
 
-      <CoPilotSession
-        projectId={projectId}
-        isOpen={state.isCoPilotActive}
-        onClose={() => dispatch({ type: "SET_COPILOT", open: false })}
-      />
-
-      {userId && (
-        <ProjectLiveChat
-          projectId={projectId}
-          userId={userId}
-          userName={
-            userProfile?.full_name ||
-            userProfile?.company_name ||
-            userProfile?.email
-          }
-          isOpen={state.isChatOpen}
-          onClose={() => dispatch({ type: "SET_CHAT", open: false })}
-        />
-      )}
     </>
   );
 }

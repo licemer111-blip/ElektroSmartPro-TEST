@@ -15,10 +15,8 @@ import {
   Building2,
   Phone,
   Mail,
-  Clock,
   Shield,
   CalendarDays,
-  Send,
   UserCircle,
   BarChart3,
   ChevronRight,
@@ -27,7 +25,6 @@ import {
   Zap,
   Wrench,
   TrendingUp,
-  LayoutGrid,
   Calculator,
   Copy,
   Sparkles,
@@ -121,7 +118,6 @@ export function ProfileView({ data }: ProfileViewProps) {
       <div className="flex flex-wrap gap-2 pb-0.5">
         <QuickAction href="/dashboard?new=true" icon={<Plus className="w-3.5 h-3.5" />} label="Nowy projekt" color="blue" />
         <QuickAction href="/dashboard/projects/quick-estimate" icon={<Zap className="w-3.5 h-3.5" />} label="Szybka wycena" color="orange" />
-        <QuickAction href="/dashboard/panel-configurator" icon={<LayoutGrid className="w-3.5 h-3.5" />} label="Rozdzielnica" color="indigo" />
         <QuickAction href="/dashboard/settings/knr-calculator" icon={<Calculator className="w-3.5 h-3.5" />} label="KNR" color="amber" />
         <QuickAction href="/dashboard/tools" icon={<Wrench className="w-3.5 h-3.5" />} label="Kalkulatory" color="emerald" />
         <QuickAction href="/dashboard/market" icon={<TrendingUp className="w-3.5 h-3.5" />} label="Rynek" color="sky" />
@@ -140,7 +136,6 @@ export function ProfileView({ data }: ProfileViewProps) {
       {/* ───── NAV SECTIONS — Three columns ───── */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Section title="Narzędzia ES">
-          <Row href="/dashboard/panel-configurator" icon={<LayoutGrid className="w-4 h-4 text-blue-500" />} label="Rozdzielnica" desc="Konfigurator tablic DIN, schemat" />
           <Row href="/dashboard/settings/knr-calculator" icon={<Calculator className="w-4 h-4 text-amber-500" />} label="Centrum KNR" desc="Kalkulator + normy KNR" />
           <Row href="/dashboard/tools" icon={<Wrench className="w-4 h-4 text-emerald-500" />} label="Kalkulatory" desc="12 kalkulatorów inżynierskich" />
         </Section>
@@ -151,7 +146,6 @@ export function ProfileView({ data }: ProfileViewProps) {
           <Row href="/dashboard/assemblies" icon={<Sparkles className="w-4 h-4 text-orange-500" />} label="Zestawy" desc="Gotowe zestawy montażowe" />
           <Row href="/dashboard/templates" icon={<Copy className="w-4 h-4 text-indigo-500" />} label="Szablony" desc="Szablony projektów" />
           <Row href="/dashboard/market" icon={<TrendingUp className="w-4 h-4 text-sky-500" />} label="Rynek" desc="Trendy cen materiałów" />
-          <Row href="/dashboard/sent-offers" icon={<Send className="w-4 h-4 text-slate-500" />} label="Wysłane oferty" desc="Portal klienta i negocjacje" />
         </Section>
 
         <Section title="Konto i pomoc">
@@ -159,7 +153,6 @@ export function ProfileView({ data }: ProfileViewProps) {
           <Row href="/dashboard/settings?tab=subscription" icon={<Crown className="w-4 h-4 text-amber-500" />} label="Subskrypcja" desc={profile.isPro ? "Plan PRO aktywny" : "Przejdź na PRO"} />
           <Row href="/dashboard/clients" icon={<UserCircle className="w-4 h-4 text-violet-500" />} label="Klienci" desc="Baza klientów CRM" />
           <Row href="/dashboard/analytics" icon={<BarChart3 className="w-4 h-4 text-blue-500" />} label="Analityka" desc="Statystyki i trendy" />
-          <Row href="/dashboard/time" icon={<Clock className="w-4 h-4 text-indigo-500" />} label="Czas pracy" desc="Śledzenie czasu" />
           <Row href="/dashboard/feedback" icon={<Mail className="w-4 h-4 text-orange-500" />} label="Opinie" desc="Zgłoś błąd lub sugestie" />
         </Section>
       </div>

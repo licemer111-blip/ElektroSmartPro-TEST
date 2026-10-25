@@ -255,56 +255,6 @@ export function GuideAccordion({ catalogCount = 1400, dinCount = 295 }: GuideAcc
         </AccordionContent>
       </AccordionItem>
 
-      {/* Item 8: Konfigurator */}
-      <AccordionItem value="item-8" className="border-slate-200 dark:border-slate-800">
-        <AccordionTrigger className="hover:no-underline">
-          <div className="flex items-center gap-3 text-left">
-            <Sparkles className="w-5 h-5 text-violet-600 dark:text-violet-400 flex-shrink-0" />
-            <span className="font-semibold text-slate-900 dark:text-slate-100">🏗️ Konfigurator Rozdzielnic i Schemat Wieloliniowy</span>
-          </div>
-        </AccordionTrigger>
-        <AccordionContent className="text-slate-700 dark:text-slate-300 leading-relaxed pt-4">
-          <p><strong className="text-violet-600 dark:text-violet-400">Konfigurator Rozdzielnic</strong> — profesjonalne narzędzie do projektowania tablic elektrycznych zgodnie z PN-EN 61439.</p>
-          <p className="mt-3"><strong>🔌 {dinCount}+ modułów DIN w 15 kategoriach:</strong></p>
-          <ul className="mt-2 ml-6 space-y-1 list-disc text-sm">
-            <li><strong>Wyłączniki MCB</strong> — B/C/D, 1P/2P/3P/4P, 6–125A (Legrand, ABB, Schneider)</li>
-            <li><strong>RCD/RCBO</strong> — 30mA/300mA, typ AC/A/F/B, 2P/4P</li>
-            <li><strong>SPD</strong> — ochronniki przepięć Typ 1/2/3</li>
-            <li><strong>Złączki i zaciski</strong> — WAGO 221, szyny Cu, końcówki tulejkowe</li>
-          </ul>
-          <p className="mt-3"><strong>📊 Schemat Wieloliniowy (L1/L2/L3/N/PE):</strong></p>
-          <ul className="mt-2 ml-6 space-y-1 list-disc text-sm">
-            <li>Automatyczny schemat 5-przewodowy z kolorowymi liniami fazowymi</li>
-            <li>Eksport SVG/PDF + zapis w dokumentach projektu</li>
-          </ul>
-          <p className="mt-3 text-sm text-violet-600 dark:text-violet-400">
-            🔌 <em>Eksportuj BOM bezpośrednio do kosztorysu!</em>
-          </p>
-        </AccordionContent>
-      </AccordionItem>
-
-      {/* Item 9: Portal Klienta */}
-      <AccordionItem value="item-9" className="border-slate-200 dark:border-slate-800">
-        <AccordionTrigger className="hover:no-underline">
-          <div className="flex items-center gap-3 text-left">
-            <FileText className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
-            <span className="font-semibold text-slate-900 dark:text-slate-100">🌐 Portal Klienta — Oferty i Negocjacje</span>
-          </div>
-        </AccordionTrigger>
-        <AccordionContent className="text-slate-700 dark:text-slate-300 leading-relaxed pt-4">
-          <p><strong className="text-amber-600 dark:text-amber-400">Portal Klienta</strong> pozwala wysłać klientowi interaktywny link do przeglądania kosztorysu.</p>
-          <p className="mt-3"><strong>🚀 Jak wysłać ofertę klientowi?</strong></p>
-          <ul className="mt-2 ml-6 space-y-1 list-disc text-sm">
-            <li>Otwórz projekt → kliknij <strong>&quot;Wyślij ofertę&quot;</strong> w pasku narzędzi</li>
-            <li>Klient może <strong>zaakceptować</strong>, <strong>odrzucić</strong> lub <strong>zaproponować zmiany</strong></li>
-            <li>Po akceptacji klient składa <strong>e-podpis</strong> bezpośrednio w przeglądarce</li>
-          </ul>
-          <p className="mt-3 text-sm text-amber-600 dark:text-amber-400">
-            🔒 <em>Link jest jednorazowy i bezpieczny.</em>
-          </p>
-        </AccordionContent>
-      </AccordionItem>
-
       {/* Item 10: Kalkulatory */}
       <AccordionItem value="item-10" className="border-slate-200 dark:border-slate-800">
         <AccordionTrigger className="hover:no-underline">

@@ -24,8 +24,6 @@ import type { ProjectItem } from "@/lib/types/database";
 import { AIAssistantDialog } from "@/components/project/ai-assistant-dialog";
 import { AiPriceEstimatorDialog } from "@/components/project/ai-price-estimator-dialog";
 import { ProjectMembersDialog } from "@/components/project/project-members-dialog";
-import { PanelConfigurator } from "@/components/project/panel-configurator";
-import { ShareOfferDialog } from "@/components/project/share-offer-dialog";
 import { ProjectTagsManager } from "@/components/project/project-tags-manager";
 import { ProjectColorPicker } from "@/components/project/project-color-picker";
 import type { DialogHostAction } from "./ProjectHeaderDialogHost";
@@ -79,12 +77,7 @@ interface ProjectHeaderToolbarProps {
   externalAiAssistantOpen?: boolean;
   externalAiPricerOpen?: boolean;
   externalMembersOpen?: boolean;
-  externalDocsOpen?: boolean;
-  externalPanelOpen?: boolean;
   onBroadcastDialog: (key: string, open: boolean) => void;
-  // CoPilot / Chat triggers
-  onCoPilotClick: () => void;
-  onChatClick: () => void;
   onAIImportClick: () => void;
 }
 
@@ -123,11 +116,7 @@ export function ProjectHeaderToolbar({
   externalAiAssistantOpen,
   externalAiPricerOpen,
   externalMembersOpen,
-  externalDocsOpen,
-  externalPanelOpen,
   onBroadcastDialog,
-  onCoPilotClick,
-  onChatClick,
   onAIImportClick,
 }: ProjectHeaderToolbarProps) {
   const { toast } = useToast();
@@ -392,8 +381,6 @@ export function ProjectHeaderToolbar({
                 <ProjectMembersDialog
                   projectId={projectId}
                   isOwner
-                  onCoPilotClick={onCoPilotClick}
-                  onLiveChatClick={onChatClick}
                   projectStatus={projectStatus}
                   externalOpen={isExternalSync ? (externalMembersOpen ?? false) : undefined}
                   onExternalOpenChange={(v) => onBroadcastDialog("headerMembersOpen", v)}
@@ -402,21 +389,8 @@ export function ProjectHeaderToolbar({
 
               <div className="hidden lg:block w-px h-5 bg-slate-200 dark:bg-slate-700 mx-0.5 flex-shrink-0 self-center" />
 
-              {/* Group 2: Panel / Dok / Share / Zapisz */}
+              {/* Group 2: Zapisz */}
               <div className="flex items-center gap-1 overflow-x-auto flex-nowrap no-scrollbar flex-wrap sm:flex-nowrap">
-                <PanelConfigurator
-                  projectId={projectId}
-                  isPro={isPro}
-                  projectStatus={projectStatus}
-                  regionModifier={regionModifier}
-                  userProfile={userProfile}
-                  isReadOnly={isReadOnly}
-                  externalOpen={isExternalSync ? (externalPanelOpen ?? false) : undefined}
-                  onExternalOpenChange={(v) => onBroadcastDialog("headerPanelOpen", v)}
-                />
-                {/* DocumentationDialog moved to SummaryExportPanel (Podsumowanie column) */}
-                {/* ShareOfferDialog moved to SummaryExportPanel — hidden here to avoid duplication */}
-                <div className="w-px h-5 bg-slate-200 dark:bg-slate-700 mx-0.5 flex-shrink-0" />
                 <HintTooltip content={HINTS.projectFinal} side="bottom" iconOnly />
                 <Button
                   onClick={onToggleStatus}

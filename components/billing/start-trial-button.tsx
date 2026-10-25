@@ -75,7 +75,7 @@ export function StartTrialButton({
         toast({
           title: `🚀 Trial aktywny przez ${TRIAL_DURATION_DAYS} dni`,
           description:
-            "Wszystkie funkcje PRO są odblokowane: AI bez limitów, czysty PDF, Portal Klienta, pełna baza KNR 2026.",
+            "Funkcje PRO są odblokowane: więcej zapytań AI, czysty PDF, pełna baza KNR.",
         });
       } else if (data?.active) {
         toast({

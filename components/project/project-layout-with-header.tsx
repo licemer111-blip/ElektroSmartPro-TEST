@@ -38,7 +38,6 @@ interface ProjectLayoutWithHeaderProps {
   assignedTo?: string | null;
   isOwner?: boolean;
   projectColor?: string | null;
-  onCoPilotClick?: () => void;
   userId?: string;
   photos?: ProjectPhoto[];
   isReadOnly?: boolean;
@@ -77,7 +76,6 @@ export function ProjectLayoutWithHeader({
   assignedTo,
   isOwner,
   projectColor,
-  onCoPilotClick,
   userId,
   photos,
   isReadOnly,
@@ -124,7 +122,6 @@ export function ProjectLayoutWithHeader({
         assignedTo={assignedTo}
         isOwner={isOwner}
         projectColor={projectColor}
-        onCoPilotClick={onCoPilotClick}
         userId={userId}
         photos={photos}
         isReadOnly={isReadOnly}

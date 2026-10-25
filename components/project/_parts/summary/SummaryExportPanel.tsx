@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Download, FileSpreadsheet, Save, Check, Lock } from "lucide-react";
-import { ShareOfferDialog } from "@/components/project/share-offer-dialog";
 import { DocumentationDialog } from "@/components/project/project-documentation-tab";
 import { UnlockPdfButton } from "@/components/billing/unlock-pdf-button";
 import { StartTrialButton } from "@/components/billing/start-trial-button";
@@ -129,35 +128,6 @@ export function SummaryExportPanel({
               <><Save className="h-3.5 w-3.5" /><span>Zapisz</span></>
             )}
           </Button>
-        </div>
-      </div>
-
-      {/* Portal klienta */}
-      <div className="flex items-center justify-between mb-0.5">
-        <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Portal &amp; Dokumenty</span>
-        <HintTooltip content={HINTS.portalKlienta} side="left" iconOnly />
-      </div>
-      <div
-        className={`relative w-full transition-all duration-150 ${!isFinal ? "opacity-50 cursor-pointer active:scale-95 active:opacity-40" : "hover:brightness-110 hover:scale-[1.01]"}`}
-        onClick={!isFinal ? () => toast({ title: "📋 Najpierw zapisz projekt", description: "Kliknij 'Zapisz', aby odblokować Portal klienta", variant: "destructive" }) : undefined}
-      >
-        {isFinal && (
-          <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 rounded-xl opacity-60 blur-sm animate-pulse" />
-        )}
-        <div className={`relative [&>button]:w-full [&>button]:h-10 [&>button]:text-sm ${!isFinal ? "pointer-events-none" : ""}`}>
-          <ShareOfferDialog
-            projectId={project.id}
-            projectName={project.name}
-            clientName={project.client_name}
-            disabled={!isFinal}
-            projectTotal={grandTotal}
-            userProfile={profile ? {
-              full_name: profile.full_name || undefined,
-              company_name: profile.company_name || undefined,
-              phone: profile.phone || undefined,
-              email: profile.email || undefined,
-            } : undefined}
-          />
         </div>
       </div>
 

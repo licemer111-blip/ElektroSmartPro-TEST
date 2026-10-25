@@ -24,7 +24,6 @@ import {
   FileSpreadsheet,
   ChevronUp,
   ChevronDown,
-  Lock,
   LayoutGrid,
 } from "lucide-react";
 import { toggleMaterialsOwnedByCustomer } from "@/app/dashboard/projects/[id]/actions";
@@ -34,7 +33,6 @@ import { notifyDataChanged } from "@/hooks/use-synced-action";
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import type { ProjectItem, ProjectWithRelations, Profile } from "@/lib/types/database";
 import { ProfitabilityReportDialog } from "@/components/project/profitability-report-dialog";
-import { ShareOfferDialog } from "@/components/project/share-offer-dialog";
 
 interface MobileSummaryBarProps {
   project: ProjectWithRelations;
@@ -251,13 +249,6 @@ export function MobileSummaryBar({
             <Separator />
 
             {/* Price breakdown */}
-            {!isPro && (
-              <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-300 dark:border-amber-800 rounded-lg p-3 flex items-center gap-2">
-                <Lock className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                <p className="text-xs text-amber-800 dark:text-amber-200">Tryb Demo — upgrade do PRO aby zobaczyć ceny</p>
-              </div>
-            )}
-
             <div className="space-y-2">
               {!materialsOwnedByCustomer && (
                 <div className="flex justify-between text-sm">
@@ -322,22 +313,6 @@ export function MobileSummaryBar({
                 className="min-h-[60px] text-sm"
                 disabled={isDownloading}
               />
-            </div>
-
-            {/* Portal klienta */}
-            <div className={isFinal ? "relative pb-1" : "pb-1"}>
-              {isFinal && (
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 rounded-xl opacity-60 blur-sm animate-pulse" />
-              )}
-              <div className="relative [&_button]:w-full [&_button]:h-10 [&_button]:text-sm">
-                <ShareOfferDialog
-                  projectId={project.id}
-                  projectName={project.name}
-                  clientName={project.client_name}
-                  disabled={!isFinal}
-                  projectTotal={grandTotal}
-                />
-              </div>
             </div>
 
             {/* Profitability */}

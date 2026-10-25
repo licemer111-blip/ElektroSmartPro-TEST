@@ -42,7 +42,6 @@ interface ProjectHeaderProps {
   assignedTo?: string | null;
   isOwner?: boolean;
   projectColor?: string | null;
-  onCoPilotClick?: () => void;
   userId?: string;
   photos?: import("@/lib/types/database").ProjectPhoto[];
   isReadOnly?: boolean;
@@ -158,11 +157,7 @@ export function ProjectHeader({
         externalAiAssistantOpen={tabSyncCtx?.uiState.headerAiAssistantOpen}
         externalAiPricerOpen={tabSyncCtx?.uiState.headerAiPricerOpen}
         externalMembersOpen={tabSyncCtx?.uiState.headerMembersOpen}
-        externalDocsOpen={tabSyncCtx?.uiState.headerDocsOpen}
-        externalPanelOpen={tabSyncCtx?.uiState.headerPanelOpen}
         onBroadcastDialog={broadcastHeaderDialog}
-        onCoPilotClick={() => dispatch({ type: "SET_COPILOT", open: true })}
-        onChatClick={() => dispatch({ type: "SET_CHAT", open: true })}
         onAIImportClick={() => {
           dispatch({ type: "SET_AI_IMPORT", open: true });
           broadcastHeaderDialog("headerAiImportOpen", true);

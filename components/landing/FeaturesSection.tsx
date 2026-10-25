@@ -1,8 +1,8 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Layers, MapPin, BookOpen, CheckCircle, SplitSquareHorizontal,
-  ReceiptText, Users, Cpu,
+  Layers, BookOpen, CheckCircle, SplitSquareHorizontal,
+  ReceiptText, Cpu, Sparkles,
 } from "lucide-react";
 
 const PILLARS = [
@@ -92,15 +92,15 @@ function FeaturesSectionInner({ dinCount = 295, normsCount = 0 }: FeaturesProps)
     },
     {
       gradient: "from-slate-500 to-slate-700",
-      icon: MapPin,
-      title: "Konfigurator Rozdzielnic",
-      desc: `${dinCount}+ modułów DIN w 15 kategoriach (MCB, RCD, RCBO, SPD, złączki, terminale, materiały). Balans faz, schemat jednokreskowy ES-Engine, eksport PDF/SVG.`,
+      icon: Sparkles,
+      title: "Kreator i szybka wycena",
+      desc: "Opisz zakres zwykłym językiem — system rozbija go na pozycje z katalogu, nakładami KNR i podziałem materiał / robocizna.",
     },
     {
       gradient: "from-blue-600 to-blue-800",
-      icon: Users,
-      title: "Portal Klienta + Negocjacje",
-      desc: "Bezpieczny link do kosztorysu online. Klient przegląda, proponuje zmiany i akceptuje — portal negocjacyjny bez maili.",
+      icon: CheckCircle,
+      title: "Widoczne ceny od pierwszego dnia",
+      desc: "Na FREE widzisz pełne sumy. PDF z watermarkiem DEMO. PRO = nielimitowane projekty i czysty PDF do klienta.",
     },
     {
       gradient: "from-slate-500 to-slate-700",

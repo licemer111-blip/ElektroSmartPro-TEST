@@ -1,7 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen, Sparkles } from "lucide-react";
 import { GuideAccordion } from "./_parts/GuideAccordion";
-import { DIN_MODULES } from "@/lib/data/din-modules-catalog";
 
 interface GuideSectionProps {
   catalogCount?: number;
@@ -9,7 +8,6 @@ interface GuideSectionProps {
 
 export function GuideSection({ catalogCount: catalogCountProp }: GuideSectionProps = {}) {
   const catalogCount = catalogCountProp || 1400;
-  const dinCount = DIN_MODULES.length;
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -23,7 +21,7 @@ export function GuideSection({ catalogCount: catalogCountProp }: GuideSectionPro
             <div className="min-w-0">
               <CardTitle className="text-base sm:text-lg">Przewodnik ElektroSmart PRO</CardTitle>
               <CardDescription className="text-xs sm:text-sm">
-                System kosztorysowy dla elektryków: wyceny AI (8500+ norm KNR), konfigurator rozdzielnic, zestawy, kalkulatory, portal klienta i więcej.
+                System kosztorysowy dla elektryków: wyceny AI, bazy KNR, zestawy, kalkulatory i eksport PDF.
               </CardDescription>
             </div>
           </div>
@@ -33,7 +31,7 @@ export function GuideSection({ catalogCount: catalogCountProp }: GuideSectionPro
       {/* Guide Accordion */}
       <Card className="bg-white dark:bg-slate-900/50 border-slate-200 dark:border-slate-800">
         <CardContent className="pt-4 sm:pt-6 px-4 sm:px-6">
-          <GuideAccordion catalogCount={catalogCount} dinCount={dinCount} />
+          <GuideAccordion catalogCount={catalogCount} />
         </CardContent>
       </Card>
 
@@ -55,13 +53,12 @@ export function GuideSection({ catalogCount: catalogCountProp }: GuideSectionPro
                 <li><strong>4.</strong> Kliknij <strong>ES Wycena</strong> — system przeliczy ceny na podstawie 8500+ norm KNR</li>
                 <li><strong>5.</strong> Wgraj własne cenniki do <strong>Moje Dane</strong> — Twoje ceny będą miały priorytet P1</li>
                 <li><strong>6.</strong> Stwórz <strong>Zestawy</strong> (np. „Punkt gniazda”) — dodawaj gotowe komplety jednym klikiem</li>
-                <li><strong>7.</strong> Skonfiguruj <strong>Rozdzielnicę</strong> — {dinCount}+ modułów DIN, bilans faz, schemat PDF</li>
-                <li><strong>8.</strong> Eksportuj <strong>PDF z logo</strong> i wyślij klientowi lub użyj <strong>Portalu Klienta</strong></li>
-                <li><strong>9.</strong> <strong>Zainstaluj aplikację</strong> (PWA) — działa też na telefonie i offline</li>
+                <li><strong>7.</strong> Eksportuj <strong>PDF z logo</strong> i wyślij klientowi (FREE: watermark DEMO)</li>
+                <li><strong>8.</strong> <strong>Zainstaluj aplikację</strong> (PWA) — działa też na telefonie i offline</li>
               </ol>
               <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-indigo-200 dark:border-indigo-800">
                 <p className="text-[10px] sm:text-xs text-indigo-700 dark:text-indigo-300">
-                  <strong>W skrócie:</strong> 8500+ norm KNR · Konfigurator rozdzielnic ({dinCount}+ DIN) · Wyceny AI · Zestawy · Portal Klienta · PDF z logo · Sekcje wg pomieszczeń · Współpraca zespołowa
+                  <strong>W skrócie:</strong> normy KNR · Wyceny AI · Zestawy · Kalkulatory · PDF z logo · Sekcje wg pomieszczeń
                 </p>
               </div>
             </div>

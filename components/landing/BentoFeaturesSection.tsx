@@ -48,9 +48,9 @@ const BENTO_FEATURES = [
   {
     gradient: "from-slate-600 to-slate-800",
     icon: GitBranch,
-    titleFn: () => "Współpraca Zespołowa",
+    titleFn: () => "Import KNR z Excel/CSV",
     descFn: () =>
-      "<strong>Real-time edycja kosztorysu</strong> z zespołem i Importer KNR z Excel/CSV — 130+ rozpoznawanych nagłówków.",
+      "<strong>Importer KNR</strong> z Excel/CSV — 130+ rozpoznawanych nagłówków. Wgrywasz plik, dostajesz pozycje w koszcie.",
   },
 ] as const;
 
@@ -64,7 +64,7 @@ function BentoFeaturesSectionInner({ catalogCount }: BentoFeaturesSectionProps) 
             <span className="gradient-text-pro">jednym narzędziu</span>
           </h2>
           <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-            KNR, rozdzielnice, Portal Klienta, kalkulatory inżynierskie, CRM — zamiast pięciu osobnych programów.
+            KNR, zestawy, kalkulatory inżynierskie, CRM — zamiast kilku osobnych programów.
           </p>
         </div>
 

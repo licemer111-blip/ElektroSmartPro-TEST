@@ -60,13 +60,13 @@ export function PricingSection({ catalogCount = 1400, dinCount = 295 }: PricingS
                 {[
                   { text: "1 projekt + projekt demonstracyjny", included: true },
                   { text: `Katalog ${catalogCount}+ pozycji KNR`, included: true },
-                  { text: "Ceny pozycji widoczne (sumy ukryte)", included: true },
+                  { text: "Pełne ceny i sumy widoczne", included: true },
                   { text: "12 kalkulatorów inżynierskich", included: true },
                   { text: "Zestawy materiałów", included: true },
                   { text: "5 zapytań ES-Engine / miesiąc", included: true },
-                  { text: `Konfigurator rozdzielnic ${dinCount}+ DIN`, included: true },
+                  { text: "Kreator wyceny z KNR", included: true },
                   { text: "PDF/Excel z watermarkiem DEMO", included: true },
-                  { text: "Portal Klienta", included: false },
+                  { text: "Nielimitowane projekty", included: false },
                   { text: "Czysty PDF bez watermarku", included: false },
                 ].map((feature, idx) => (
                   <li key={idx} className="flex items-center gap-3">
@@ -137,10 +137,10 @@ export function PricingSection({ catalogCount = 1400, dinCount = 295 }: PricingS
                   { text: "Wszystkie ceny i sumy widoczne", included: true },
                   { text: "12 kalkulatorów inżynierskich", included: true },
                   { text: "Zestawy materiałów", included: true },
-                  { text: "500 zapytań ES-Engine / miesiąc", included: true },
-                  { text: `Konfigurator rozdzielnic ${dinCount}+ DIN`, included: true },
+                  { text: "80 zapytań ES-Engine / miesiąc", included: true },
+                  { text: "Kreator wyceny z KNR", included: true },
                   { text: "Czysty PDF/Excel (bez watermarku)", included: true },
-                  { text: "Portal Klienta z negocjacjami", included: true },
+                  { text: "Szablony i własne zestawy", included: true },
                   { text: "CRM klientów + Analityka biznesowa", included: true },
                 ].map((feature, idx) => (
                   <li key={idx} className="flex items-center gap-3">

@@ -8,7 +8,6 @@ import { useTabSyncOptional } from "./tab-sync-context";
 import { PanelRightClose, Calculator, FileText, Download, X as XIcon, ExternalLink } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { CoPilotSession } from "./copilot-session";
 import { MobileSummaryBar } from "./mobile-summary-bar";
 import type { ProjectItem, ProjectWithRelations, Profile, CatalogCategory, CatalogItem } from "@/lib/types/database";
 import { useProjectPricing } from "@/hooks/use-project-pricing";
@@ -373,12 +372,6 @@ export function ProjectViewClient({
             </div>
           </div>
         )}
-
-        <CoPilotSession
-          projectId={projectId}
-          isOpen={isCoPilotActive}
-          onClose={() => setIsCoPilotActive(false)}
-        />
 
         <MobileSummaryBar
           project={project}

@@ -21,7 +21,7 @@ export function LandingStructuredData({ catalogCount, dinCount = 295 }: LandingS
       url: `${baseUrl}/dashboard/subscription`,
     },
     description:
-      `Profesjonalny program dla elektryków: automatyczny kosztorys elektryczny z ES-Engine, wycena z podziałem materiał/robocizna, normy KNR 5-04/5-08/5-09, Zestawy 360°, konfigurator rozdzielnic ${dinCount}+ modułów DIN wg PN-EN 61439. Ceny regionalne 16 województw, VAT 8%/23%, eksport PDF/Excel. Zgodność z PN-HD 60364.`,
+      `Profesjonalny program dla elektryków: automatyczny kosztorys elektryczny z ES-Engine, wycena z podziałem materiał/robocizna, normy KNR 5-04/5-08/5-09, Zestawy 360°. Ceny regionalne 16 województw, VAT 8%/23%, eksport PDF/Excel. Zgodność z PN-HD 60364.`,
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: "4.8",
@@ -31,10 +31,7 @@ export function LandingStructuredData({ catalogCount, dinCount = 295 }: LandingS
     featureList: [
       "Wyceny i kosztorysy instalacji elektrycznych",
       `Baza ${catalogCount}+ pozycji katalogowych`,
-      `Konfigurator rozdzielnic — ${dinCount}+ modułów DIN w 15 kategoriach (zabezpieczenia, RCD, SPD, złączki, materiały)`,
       "Sekcje kosztorysu — grupowanie wg pomieszczeń z subtotalami",
-      "Portal klienta 2.0 — galeria portfolio, dokumenty do pobrania, e-podpis",
-      "Powiadomienia w czasie rzeczywistym (akceptacja oferty)",
       "CRM - baza klientów z historią projektów i logiem interakcji",
       "Protokoły pomiarowe zgodne z PN-HD 60364-6",
       "ElektroSmart Core — generowanie BOM z opisu tekstowego",
@@ -46,12 +43,9 @@ export function LandingStructuredData({ catalogCount, dinCount = 295 }: LandingS
       "Inteligentne zestawy materiałów",
       "Ceny regionalne dla 16 województw",
       "VAT 8% i 23% automatycznie",
-      "Współpraca zespołowa - role, zaproszenia, wspólne edytowanie",
-      "Live Chat — komunikacja tekstowa w czasie rzeczywistym",
       "Keyboard Shortcuts (Ctrl+K Command Palette)",
       "Eksport profesjonalnych ofert PDF z logo",
       "Eksport do Excel z sekcjami i podziałem materiał/robocizna",
-      "Dark/Light mode w portalu klienta",
     ],
     inLanguage: "pl-PL",
     author: { "@type": "Organization", name: "ElektroSmart PRO", url: baseUrl },
@@ -65,7 +59,7 @@ export function LandingStructuredData({ catalogCount, dinCount = 295 }: LandingS
     url: baseUrl,
     logo: `${baseUrl}/icon.png`,
     description:
-      "Profesjonalny program dla elektryków w Polsce: kosztorys elektryczny online, wycena instalacji z podziałem materiał/robocizna, konfigurator rozdzielnic, ceny regionalne 16 województw. Zgodność z PN-HD 60364.",
+      "Profesjonalny program dla elektryków w Polsce: kosztorys elektryczny online, wycena instalacji z podziałem materiał/robocizna, ceny regionalne 16 województw. Zgodność z PN-HD 60364.",
     contactPoint: {
       "@type": "ContactPoint",
       email: "elektrosmartpro@gmail.com",
@@ -117,7 +111,7 @@ export function LandingStructuredData({ catalogCount, dinCount = 295 }: LandingS
         name: "Ile kosztuje program do wycen i kosztorysów dla elektryków?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: `ElektroSmart PRO kosztuje 159 zł/miesiąc netto: nielimitowane wyceny i kosztorysy, ES-Engine, import KNR Excel/CSV, ${catalogCount}+ pozycji katalogowych, Zestawy 360°, konfigurator rozdzielnic ${dinCount}+ modułów DIN, 12 kalkulatorów, eksport PDF/Excel, Portal Klienta, ceny regionalne 16 województw, VAT 8/23%. Wersja DEMO BEZPŁATNA.`,
+          text: `ElektroSmart PRO kosztuje 159 zł/miesiąc netto: nielimitowane wyceny i kosztorysy, ES-Engine, import KNR Excel/CSV, ${catalogCount}+ pozycji katalogowych, Zestawy 360°, 12 kalkulatorów, eksport PDF/Excel, ceny regionalne 16 województw, VAT 8/23%. Wersja DEMO BEZPŁATNA.`,
         },
       },
     ],

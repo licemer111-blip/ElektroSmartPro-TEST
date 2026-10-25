@@ -85,9 +85,9 @@ function FaqSectionInner({ catalogCount = 1400, dinCount = 295 }: FaqProps) {
             <li>✅ Nielimitowane projekty, kosztorysy i eksporty PDF</li>
             <li>✅ Baza KNR {catalogCount}+ pozycji + własny katalog</li>
             <li>✅ ES-Engine + Vision Mode (analiza rzutów) + 12 kalkulatorów</li>
-            <li>✅ Konfigurator rozdzielnic {dinCount}+ modułów DIN w 15 kategoriach</li>
-            <li>✅ Portal Klienta z negocjacjami online</li>
-            <li>✅ Eksport PDF/Excel + integracja InFakt</li>
+            <li>✅ Kreator wyceny, zestawy i 12 kalkulatorów</li>
+            <li>✅ Czysty PDF/Excel bez watermarku</li>
+            <li>✅ Integracja InFakt</li>
             <li>✅ Ceny regionalne 16 województw + aktualizacje co 2–6 miesięcy</li>
           </ul>
         </div>

@@ -129,14 +129,6 @@ Klikasz ES-Engine → rozwijane menu:
 - Szablon: gotowe szablony (np. "Mieszkanie 2-pokojowe")
 - Po utworzeniu: dodajesz pozycje przez Katalog, Zestawy, Generator AI lub Import
 
-### ⚡ ROZDZIELNICA (Panel Configurator)
-- 120+ modułów DIN: MCB (B/C/D, 1P/3P, 6–630A), RCD (30/300mA, AC/A/F, 2P/4P), RCBO, SPD (T1+T2), MCCB do 630A, ACB do 1600A
-- **15 kategorii**: zabezpieczenia, RCD, RCBO, rozłączniki, SPD, styczniki, sterowanie, monitoring, automatyka, kompensacja, złączki, obudowy, okablowanie, materiały montażowe, robocizna
-- Schemat wieloliniowy: AI generuje automatycznie
-- Balans faz L1/L2/L3: automatyczne wykrywanie
-- BOM → "Kopiuj do kosztorysu" = pozycje do projektu z KNR 5-08
-- Nawigacja: zakładka **"Rozdzielnica"** w projekcie LUB menu **"Rozdzielnica"**
-
 ### 🧩 ZESTAWY (Smart Assemblies)
 - Jeden klik = kompletny montaż elektryczny
 - Przykład "Gniazdko podtynkowe": automatycznie → Gniazdo 230V + Puszka Ø60 + Przewód YDYp 3×2,5mm² (mb) + Bruzda/Kucie (mb)
@@ -193,12 +185,6 @@ Klikasz ES-Engine → rozwijane menu:
 - Kosztorys z logo firmy, danymi klienta, podziałem Robocizna/Materiał/Sprzęt, VAT
 - Wersja uproszczona (dla klienta) i szczegółowa (z KNR dla inwestora)
 - Nawigacja: projekt → **"Ustawienia PDF"** LUB przycisk eksportu w Podsumowaniu
-
-### � WSPÓŁPRACA I PORTAL KLIENTA
-- Role: owner, editor, elektryk, kierownik, admin, viewer (klient — tylko podgląd)
-- Live sync: Supabase Realtime — zmiany widoczne u wszystkich natychmiast
-- Portal klienta: unikalny link, bez logowania, e-podpis, akceptacja/odrzucenie oferty
-- Nawigacja: **"Uczestnicy"** w projekcie → Zaproś
 
 ---
 

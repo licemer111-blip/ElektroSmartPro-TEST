@@ -199,11 +199,11 @@ export default function RegulaminPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <AlertCircle className="w-4 h-4 text-orange-600 dark:text-orange-400 flex-shrink-0 mt-0.5" />
-                    <span><strong>BRAK dostępu do cen końcowych</strong> – ceny są ukryte (blur mode).</span>
+                    <span>Ceny i sumy są widoczne. Eksport PDF ma znak wodny DEMO.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <AlertCircle className="w-4 h-4 text-orange-600 dark:text-orange-400 flex-shrink-0 mt-0.5" />
-                    <span><strong>BRAK eksportu do PDF.</strong></span>
+                    <span>Eksport PDF z watermarkiem DEMO (wersja PRO — bez watermarku).</span>
                   </li>
                 </ul>
               </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Settings, Zap, FileText, Crown, LayoutGrid, Wrench } from "lucide-react";
+import { Settings, Zap, FileText, Crown, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HeaderNewProjectButton } from "@/components/header-new-project-button";
 import { NavLink } from "@/components/nav-link";
@@ -15,7 +15,6 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { HeaderMobileMenu } from "@/components/header-mobile-menu";
-import { PendingInvitationsDropdown } from "@/components/project/pending-invitations-dropdown";
 import { ModeToggle } from "@/components/mode-toggle";
 import { UserNav } from "@/components/user-nav";
 
@@ -98,12 +97,6 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/panel-configurator" className="flex items-center gap-2 cursor-pointer">
-                                            <LayoutGrid className="w-4 h-4" />
-                                            Rozdzielnica
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
                                         <Link href="/dashboard/templates" className="flex items-center gap-2 cursor-pointer">
                                             <FileText className="w-4 h-4" />
                                             Szablony
@@ -153,7 +146,6 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                             </button>
                         </Link>
                     )}
-                    {user && <PendingInvitationsDropdown />}
                     <ModeToggle />
                     <UserNav user={user} isPro={isPro} />
                 </div>

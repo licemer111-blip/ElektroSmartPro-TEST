@@ -98,9 +98,9 @@ export function SubscriptionPanel({ profile }: SubscriptionPanelProps) {
 
             {[
               { icon: FileText, title: "Czysty PDF bez znaku wodnego", desc: "Gotowy do wysłania klientowi — profesjonalny, z Twoim logo i NIP" },
-              { icon: Sparkles, title: "Portal Klienta z e-podpisem", desc: "Klient akceptuje wycenę online — bez maila, bez drukarki" },
+              { icon: Sparkles, title: "Więcej projektów i zapytań AI", desc: "Bez limitu 1 projektu — i wyższy miesięczny limit ES-Engine" },
               { icon: Crown, title: "Własne branding firmy w PDF", desc: "Logo, dane firmy, kolory dokumentów — wyglądasz jak wielka firma" },
-              { icon: Zap, title: "Tryb zespołowy (multi-user)", desc: "Zapraszaj pracowników do projektów, role i uprawnienia" },
+              { icon: Zap, title: "Szablony i własne zestawy", desc: "Powtarzalne wyceny w kilka minut zamiast od zera" },
               { icon: Shield, title: "Tryb offline + sync PWA", desc: "Pracuj bez internetu na placu budowy — synchronizacja po powrocie" },
               { icon: Headphones, title: "Wsparcie priorytetowe", desc: "Odpowiadamy w ciągu 2h w dni robocze" },
             ].map(({ icon: Icon, title, desc }) => (
