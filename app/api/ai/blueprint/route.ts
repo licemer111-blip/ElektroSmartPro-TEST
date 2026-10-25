@@ -16,7 +16,7 @@ import {
   type LegendItem,
 } from "@/lib/ai/prompts/blueprint";
 
-export const maxDuration = 120;
+export const maxDuration = 45;
 
 // POST HANDLER - Supports 3 modes: "legend", "tile", "full"
 export async function POST(request: NextRequest) {

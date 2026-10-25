@@ -11,7 +11,7 @@ import { google } from "@ai-sdk/google";
 import { generateObject, generateText } from "ai";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
-import { fetchKbContext, listKbFileNames } from "@/lib/kb-storage";
+import { loadKbContextOptional } from "@/lib/kb-storage";
 import { buildDynamicSystemPrompt, injectKbContext } from "@/lib/ai-master-brain";
 import { AI_FUNCTION_NAMES } from "@/lib/ai-quota-config";
 import {
@@ -396,20 +396,7 @@ export async function generateProjectItemsWithAI(
       })
       .join("\n");
 
-    let kbContext: string | null = null;
-    try {
-      const fileNames = await Promise.race([
-        listKbFileNames(),
-        new Promise<string[]>((resolve) => setTimeout(() => resolve([]), 8000)),
-      ]);
-      if (fileNames && fileNames.length > 0) {
-        const ctx = await Promise.race([
-          fetchKbContext(fileNames, "knr_knowledge_base"),
-          new Promise<string>((resolve) => setTimeout(() => resolve(""), 8000)),
-        ]);
-        kbContext = ctx && ctx.length > 30 ? ctx : null;
-      }
-    } catch { /* optional RAG */ }
+    const kbContext = await loadKbContextOptional(description.slice(0, 400));
 
     const basePrompt = await buildDynamicSystemPrompt("generator");
     const masterSystemPrompt = injectKbContext(basePrompt, kbContext);

@@ -11,27 +11,14 @@ import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
 import { z } from "zod";
 import { buildDynamicSystemPrompt, injectKbContext, GEMINI_RAG_MODEL } from "@/lib/ai-master-brain";
-import { fetchKbContext, listKbFileNames } from "@/lib/kb-storage";
+import { loadKbContextOptional } from "@/lib/kb-storage";
 import { buildLocalKnrContext, lookupKnrByName } from "@/lib/knr-local-context";
 import { clampPrice, clampQuantity, clampLaborNorm, lookupKnrForLabor, LABOR_UNIT_FALLBACK } from "@/lib/utils/price-validator";
 import { clampToBenchmark, buildBenchmarkPromptContext } from "@/lib/data/material-benchmarks";
 
 // ─── RAG KB loader (with timeout) ────────────────────────────────────────────
 async function fetchAssembliesKbContext(): Promise<string | null> {
-  try {
-    const fileNames = await Promise.race([
-      listKbFileNames(),
-      new Promise<string[]>((resolve) => setTimeout(() => resolve([]), 3000)),
-    ]);
-    if (!fileNames || fileNames.length === 0) return null;
-    const ctx = await Promise.race([
-      fetchKbContext(fileNames, "knr_knowledge_base"),
-      new Promise<string>((resolve) => setTimeout(() => resolve(""), 3000)),
-    ]);
-    return ctx && ctx.length > 30 ? ctx : null;
-  } catch {
-    return null;
-  }
+  return loadKbContextOptional("zestawy gniazdo puszka kabel bruzda knr");
 }
 
 /** Fallback rate used only when the user has no rate configured in their profile. */

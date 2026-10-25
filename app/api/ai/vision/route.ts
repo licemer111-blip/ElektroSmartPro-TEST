@@ -7,24 +7,11 @@ import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
 import { z } from "zod";
 import { buildDynamicSystemPrompt, injectKbContext } from "@/lib/ai-master-brain";
-import { fetchKbContext, listKbFileNames } from "@/lib/kb-storage";
-export const maxDuration = 120;
+import { loadKbContextOptional } from "@/lib/kb-storage";
+export const maxDuration = 45;
 
 async function fetchVisionKbContext(): Promise<string | null> {
-  try {
-    const fileNames = await Promise.race([
-      listKbFileNames(),
-      new Promise<string[]>((resolve) => setTimeout(() => resolve([]), 3000)),
-    ]);
-    if (!fileNames || fileNames.length === 0) return null;
-    const ctx = await Promise.race([
-      fetchKbContext(fileNames, "knr_knowledge_base"),
-      new Promise<string>((resolve) => setTimeout(() => resolve(""), 3000)),
-    ]);
-    return ctx && ctx.length > 30 ? ctx : null;
-  } catch {
-    return null;
-  }
+  return loadKbContextOptional("rzut ocr gniazda oswietlenie przedmiar");
 }
 
 // ─── OUTPUT SCHEMA — OCR only (no pricing) ───

@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Musisz być zalogowany" }, { status: 401 });
     }
 
-    // AI usage limit: DEMO=5/mies., PRO=200/mies. (centralized quota)
+    // AI usage limit: DEMO=5/mies., PRO=80/mies. (global quota)
     const aiCheck = await checkAndIncrementAiUsage(user.id, AI_FUNCTION_NAMES.chatbot);
     if (!aiCheck.allowed) {
       return NextResponse.json({ error: aiCheck.error || "Limit AI wyczerpany" }, { status: 403 });
@@ -35,9 +35,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Ostatnia wiadomość musi być od użytkownika" }, { status: 400 });
     }
 
-    const history = allMessages.slice(0, -1).map((m) => ({
+    const history = allMessages.slice(0, -1).slice(-6).map((m) => ({
       role: m.role as "user" | "assistant",
-      content: m.content,
+      content: String(m.content ?? "").slice(0, 1500),
     }));
 
     // v2.1: effective PRO = paid subscription OR active 7-day trial.

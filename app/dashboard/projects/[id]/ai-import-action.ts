@@ -9,7 +9,7 @@ import { z } from "zod";
 import { buildDynamicSystemPrompt, buildLightSystemPrompt, injectKbContext, GEMINI_RAG_MODEL } from "@/lib/ai-master-brain";
 import { verifyAiUnit } from "@/lib/unit-guard";
 import { scaleLaborNorm } from "@/lib/labor-time";
-import { fetchKbContext, listKbFileNames } from "@/lib/kb-storage";
+import { loadKbContextOptional } from "@/lib/kb-storage";
 import {
   resolveImportedRows,
   type MatchResult,
@@ -145,20 +145,7 @@ export async function aiAnalyzeProjectImport(
       : [];
 
     // Build system prompt via Master Brain + RAG
-    let kbContext: string | null = null;
-    try {
-      const fileNames = await Promise.race([
-        listKbFileNames(),
-        new Promise<string[]>((resolve) => setTimeout(() => resolve([]), 3000)),
-      ]);
-      if (fileNames && fileNames.length > 0) {
-        const ctx = await Promise.race([
-          fetchKbContext(fileNames, "knr_knowledge_base"),
-          new Promise<string>((resolve) => setTimeout(() => resolve(""), 3000)),
-        ]);
-        kbContext = ctx && ctx.length > 30 ? ctx : null;
-      }
-    } catch { /* optional RAG */ }
+    const kbContext = await loadKbContextOptional("import przedmiar knr materialy robocizna");
 
     // ── ES-Engine pre-resolution (Phase 1-3, before LLM) ─────────────────────
     // Detects item name column, runs 4-phase matching, injects results into prompt.
@@ -389,20 +376,7 @@ export async function aiPriceVisionItems(
     }
 
     // Build RAG context (same as aiAnalyzeProjectImport)
-    let kbContext: string | null = null;
-    try {
-      const fileNames = await Promise.race([
-        listKbFileNames(),
-        new Promise<string[]>((resolve) => setTimeout(() => resolve([]), 3000)),
-      ]);
-      if (fileNames && fileNames.length > 0) {
-        const ctx = await Promise.race([
-          fetchKbContext(fileNames, "knr_knowledge_base"),
-          new Promise<string>((resolve) => setTimeout(() => resolve(""), 3000)),
-        ]);
-        kbContext = ctx && ctx.length > 30 ? ctx : null;
-      }
-    } catch { /* optional RAG */ }
+    const kbContext = await loadKbContextOptional("import przedmiar knr materialy robocizna");
 
     // NOTE: buildLightSystemPrompt used intentionally (not "importer") —
     // IMPORTER_PROMPT has "use prices from document if present" which confuses pricing pass

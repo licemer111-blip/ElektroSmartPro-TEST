@@ -5,11 +5,12 @@
  *   - FREE tier: 5 AI requests / month — enough to evaluate the product,
  *     insufficient for routine use (drives trial activation / PRO upgrade).
  *   - 7-DAY TRIAL: gets PRO_AI_LIMIT (unlimited in practice).
- *   - PRO tier: 500 AI requests / month (500 = effectively unlimited for
- *     working electricians, hard ceiling against abuse).
+ *   - PRO tier: 80 AI requests / month — enough for real import work,
+ *     not enough to dump a knowledge base into Gemini 500 times.
+ *   Limits are GLOBAL (shared across all AI features), not per-function.
  */
 export const DEMO_AI_LIMIT = 5;
-export const PRO_AI_LIMIT = 500;
+export const PRO_AI_LIMIT = 80;
 
 /**
  * Per-function overrides (if not set, falls back to DEMO/PRO_AI_LIMIT).

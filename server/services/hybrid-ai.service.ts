@@ -13,7 +13,6 @@
 
 import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
-import { fetchKbContext, listKbFileNames } from "@/lib/kb-storage";
 import { queryCatalogCache } from "./catalog-context.service";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -38,7 +37,7 @@ export interface ExpertResponseOptions {
 
 const KB_TIMEOUT_MS = 3000;
 const CATALOG_TIMEOUT_MS = 2000;
-const MAX_HISTORY_MESSAGES = 100; // Gemini 2.5 Flash — 1M token context, send full history
+const MAX_HISTORY_MESSAGES = 6; // Cost guard: never replay a long chat + KB dump
 
 // ─── System Prompts ───────────────────────────────────────────────────────────
 
@@ -213,7 +212,7 @@ Klikasz ES-Engine → rozwijane menu:
 7. Jeśli użytkownik robi błąd techniczny — powiedz mu wprost ale bez szykan.
 8. Maksymalnie 200 słów, chyba że pytanie wymaga tabeli lub listy kroków — wtedy tyle ile trzeba.`;
 
-const MAX_OUTPUT_TOKENS = 1800;
+const MAX_OUTPUT_TOKENS = 600;
 
 const PRIORITY_RULES = `
 ŚCISŁE ZASADY PRIORYTETU ŹRÓDEŁ (przestrzegaj bezwzględnie):
@@ -288,24 +287,10 @@ async function retrieveTier1(_query: string, _userId: string): Promise<string | 
 }
 
 async function retrieveTier2(query: string): Promise<string | null> {
-  try {
-    const fileNames = await withTimeout(
-      listKbFileNames(),
-      KB_TIMEOUT_MS,
-      [] as string[]
-    );
-    if (!fileNames || fileNames.length === 0) return null;
-    const context = await withTimeout(
-      fetchKbContext(fileNames, "knr_knowledge_base"),
-      KB_TIMEOUT_MS,
-      ""
-    );
-    // Use query for relevance hint in the label, but return full KB context
-    void query;
-    return context && context.length >= 20 ? context : null;
-  } catch {
-    return null;
-  }
+  // Chat must NOT inject the whole knowledge bucket — that is the main token leak.
+  // Catalog cache (tier 3) is enough for in-product Q&A.
+  void query;
+  return null;
 }
 
 async function retrieveTier3(query: string): Promise<string | null> {
@@ -356,12 +341,15 @@ export async function generateExpertResponse(
   // Sliding window history (cost guard)
   const recentHistory = chatHistory
     .slice(-MAX_HISTORY_MESSAGES)
-    .map((m) => ({ role: m.role as "user" | "assistant", content: m.content }));
+    .map((m) => ({
+      role: m.role as "user" | "assistant",
+      content: m.content.slice(0, 1500),
+    }));
 
   const messages = [
     { role: "system" as const, content: systemPrompt },
     ...recentHistory,
-    { role: "user" as const, content: userMessage },
+    { role: "user" as const, content: userMessage.slice(0, 2000) },
   ];
 
   let text: string | undefined;
@@ -369,18 +357,17 @@ export async function generateExpertResponse(
 
   try {
     const result = await generateText({
-      model: google("gemini-2.5-flash-preview-04-17"),
+      model: google("gemini-2.0-flash"),
       messages,
       maxOutputTokens: MAX_OUTPUT_TOKENS,
       temperature: 0.4,
     });
     text = result.text;
   } catch {
-    // Fallback to stable tier-2 model if preview is unavailable
     try {
       const result = await generateText({
         model: google("gemini-2.0-flash"),
-        messages,
+        messages: [{ role: "user", content: userMessage.slice(0, 1500) }],
         maxOutputTokens: MAX_OUTPUT_TOKENS,
         temperature: 0.4,
       });

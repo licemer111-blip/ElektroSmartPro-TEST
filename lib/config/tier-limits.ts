@@ -25,7 +25,7 @@
  *
  *   PRO (159 zł/miesiąc)
  *     ✓ Unlimited projects
- *     ✓ AI = 500/mo (effectively unlimited)
+ *     ✓ AI = 80/mo (shared across all AI features)
  *     ✓ Clean PDF (no watermark) + own branding
  *     ✓ Portal Klienta z e-podpisami
  *     ✓ Team collaboration + Offline mode

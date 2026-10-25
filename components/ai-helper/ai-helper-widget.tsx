@@ -32,7 +32,7 @@ const QUICK_QUESTIONS = [
 
 const STORAGE_KEY_HIDDEN = "ai-helper-hidden";
 const STORAGE_KEY_MESSAGES = "ai-helper-messages";
-const MAX_STORED_MESSAGES = 200;
+const MAX_STORED_MESSAGES = 12;
 const DRAG_THRESHOLD = 6;
 
 export function AiHelperWidget() {

@@ -25,7 +25,7 @@
     "app/dashboard/projects/quick-estimate/**": {
       "maxDuration": 60
     },
-    "app/dashboard/assemblies/**": {
+    "app/dashboard/assemblies/ai-actions*": {
       "maxDuration": 60
     },
     "app/dashboard/catalog/ai-*": {

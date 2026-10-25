@@ -33,7 +33,7 @@ import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 // This ensures shared projects always show fresh data
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-export const maxDuration = 300;
+export const maxDuration = 30;
 
 interface ProjectPageProps {
   params: Promise<{
@@ -43,12 +43,10 @@ interface ProjectPageProps {
 
 // Generate metadata for dynamic routes
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
-  const { id } = await params;
-  const project = await getProjectDetails(id);
-
+  await params;
   return {
-    title: project ? `${project.name} | ElektroSmart PRO` : "Projekt | ElektroSmart PRO",
-    description: project ? `Kosztorys dla projektu: ${project.name}` : "Zarządzanie projektem",
+    title: "Projekt | ElektroSmart PRO",
+    description: "Zarządzanie projektem",
   };
 }
 

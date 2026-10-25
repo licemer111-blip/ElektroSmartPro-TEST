@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Settings, Zap, TrendingUp, FileText, Crown, LayoutGrid, BarChart2, Clock, Users, Briefcase } from "lucide-react";
-import { SzybkaWycenaNavLink } from "@/components/szybka-wycena-nav-link";
+import { Settings, Zap, TrendingUp, FileText, Crown, LayoutGrid, BarChart2, Clock, Users, Briefcase, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HeaderNewProjectButton } from "@/components/header-new-project-button";
 import { NavLink } from "@/components/nav-link";
@@ -77,12 +76,6 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                                 Zestawy
                             </NavLink>
 
-                            <SzybkaWycenaNavLink />
-
-                            <NavLink href="/dashboard/tools" icon="Wrench" title="12 kalkulatorów inżynierskich: kable, zabezpieczenia, spadek napięcia, PV, oświetlenie...">
-                                Kalkulatory
-                            </NavLink>
-
                             {/* Więcej — compact secondary items */}
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
@@ -92,6 +85,18 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="start" className="w-52">
+                                    <DropdownMenuItem asChild>
+                                        <Link href="/dashboard/projects/quick-estimate" className="flex items-center gap-2 cursor-pointer">
+                                            <Zap className="w-4 h-4" />
+                                            Szybka Wycena
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
+                                        <Link href="/dashboard/tools" className="flex items-center gap-2 cursor-pointer">
+                                            <Wrench className="w-4 h-4" />
+                                            Kalkulatory
+                                        </Link>
+                                    </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
                                         <Link href="/dashboard/panel-configurator" className="flex items-center gap-2 cursor-pointer">
                                             <LayoutGrid className="w-4 h-4" />

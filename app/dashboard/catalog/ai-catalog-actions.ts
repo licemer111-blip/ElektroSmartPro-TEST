@@ -9,7 +9,7 @@ import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
 import { z } from "zod";
 import { buildDynamicSystemPrompt, injectKbContext, GEMINI_RAG_MODEL } from "@/lib/ai-master-brain";
-import { fetchKbContext, listKbFileNames } from "@/lib/kb-storage";
+import { loadKbContextOptional } from "@/lib/kb-storage";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { lookupKnrByName, buildLocalKnrContext } from "@/lib/knr-local-context";
 import { applyPriceGuard } from "@/lib/utils/price-validator";
@@ -17,20 +17,7 @@ import { clampToBenchmark, buildBenchmarkPromptContext } from "@/lib/data/materi
 
 // ─── RAG KB loader (with timeout) ────────────────────────────────────────────
 async function fetchCatalogKbContext(): Promise<string | null> {
-  try {
-    const fileNames = await Promise.race([
-      listKbFileNames(),
-      new Promise<string[]>((resolve) => setTimeout(() => resolve([]), 3000)),
-    ]);
-    if (!fileNames || fileNames.length === 0) return null;
-    const ctx = await Promise.race([
-      fetchKbContext(fileNames, "knr_knowledge_base"),
-      new Promise<string>((resolve) => setTimeout(() => resolve(""), 3000)),
-    ]);
-    return ctx && ctx.length > 30 ? ctx : null;
-  } catch {
-    return null;
-  }
+  return loadKbContextOptional("katalog materialow elektrycznych knr");
 }
 
 // v10.5: Catalog items reference now sourced from material-benchmarks.ts (single source of truth)

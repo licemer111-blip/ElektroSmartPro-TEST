@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { ProjectRealtimeWrapper } from "@/components/project/project-realtime-wrapper";
 
-export const maxDuration = 300;
+export const maxDuration = 20;
 
 /**
  * V4.0: Project Layout with Realtime Features

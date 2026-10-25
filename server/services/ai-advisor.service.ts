@@ -255,7 +255,7 @@ async function fetchGlobalKBContext(query: string): Promise<string | null> {
     ]);
     if (!fileNames || fileNames.length === 0) return null;
 
-    const relevantFiles = selectRelevantKbFiles(fileNames, query);
+    const relevantFiles = selectRelevantKbFiles(fileNames, query).slice(0, 2);
 
     const context = await Promise.race([
       fetchKbContext(relevantFiles, "knr_knowledge_base"),

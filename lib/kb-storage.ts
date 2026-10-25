@@ -18,6 +18,10 @@ import path from "path";
 const BUCKET = "ai-knowledge-base";
 const LOCAL_FALLBACK_DIR = path.join(process.cwd(), "data", "knr");
 
+/** Hard cap: injecting the whole bucket into Gemini is what burned API spend. */
+export const MAX_KB_CONTEXT_CHARS = 8_000;
+export const MAX_KB_FILES_PER_REQUEST = 2;
+
 // In-memory cache: fileName → { content, fetchedAt }
 // Avoids re-fetching on every request within the same server process lifetime.
 const memCache = new Map<string, { content: string; fetchedAt: number }>();
@@ -130,9 +134,13 @@ export async function fetchKbContext(
   fileNames: string[],
   label = "knr_knowledge_base"
 ): Promise<string> {
-  const results = await Promise.all(fileNames.map(fetchFileContent));
-  const combined = results.filter(Boolean).join("\n\n");
+  const limitedNames = fileNames.slice(0, MAX_KB_FILES_PER_REQUEST);
+  const results = await Promise.all(limitedNames.map(fetchFileContent));
+  let combined = results.filter(Boolean).join("\n\n");
   if (!combined) return "";
+  if (combined.length > MAX_KB_CONTEXT_CHARS) {
+    combined = `${combined.slice(0, MAX_KB_CONTEXT_CHARS)}\n\n[KB obcięte — limit ${MAX_KB_CONTEXT_CHARS} znaków]`;
+  }
 
   return `<${label}>
 Poniżej znajduje się baza wiedzy eksperckiej ElektroSmart PRO.
@@ -198,9 +206,12 @@ export async function fetchUserKbContext(userId: string): Promise<string | null>
     ]);
     if (!fileNames || fileNames.length === 0) return null;
 
-    const results = await Promise.all(fileNames.map(fetchFileContent));
-    const combined = results.filter(Boolean).join("\n\n");
+    const results = await Promise.all(fileNames.slice(0, MAX_KB_FILES_PER_REQUEST).map(fetchFileContent));
+    let combined = results.filter(Boolean).join("\n\n");
     if (!combined) return null;
+    if (combined.length > MAX_KB_CONTEXT_CHARS) {
+      combined = `${combined.slice(0, MAX_KB_CONTEXT_CHARS)}\n\n[KB użytkownika obcięte]`;
+    }
 
     return `<user_knowledge_base>
 PRYWATNA BAZA WIEDZY UŻYTKOWNIKA — NAJWYŻSZY PRIORYTET:
@@ -229,11 +240,58 @@ export async function listKbFileNames(): Promise<string[]> {
       sortBy: { column: "name", order: "asc" },
     });
     if (error || !data) return [];
-    const SUPPORTED_EXTS = [".json", ".csv", ".txt", ".xlsx", ".xls", ".pdf"];
+    // Binary placeholders (xlsx/pdf) only waste tokens — never inject them.
+    const SUPPORTED_EXTS = [".json", ".csv", ".txt"];
     return data
       .filter((f) => f.name !== ".emptyFolderPlaceholder" && SUPPORTED_EXTS.some((ext) => f.name.toLowerCase().endsWith(ext)))
       .map((f) => f.name);
   } catch {
     return [];
+  }
+}
+
+/**
+ * Pick 1–2 KB files that look related to the query instead of dumping the bucket.
+ */
+export async function fetchRelevantKbContext(
+  query: string,
+  label = "knr_knowledge_base",
+): Promise<string> {
+  const names = await listKbFileNames();
+  if (names.length === 0) return "";
+
+  const tokens = query
+    .toLowerCase()
+    .split(/[^a-z0-9ąćęłńóśźż]+/i)
+    .filter((t) => t.length > 2);
+
+  const ranked = names
+    .map((n) => {
+      const ln = n.toLowerCase();
+      let score = ln.endsWith(".json") ? 1 : 0;
+      for (const t of tokens) {
+        if (ln.includes(t)) score += 2;
+      }
+      return { n, score };
+    })
+    .sort((a, b) => b.score - a.score);
+
+  const matched = ranked.filter((r) => r.score > 1).slice(0, MAX_KB_FILES_PER_REQUEST);
+  const picked = (matched.length > 0 ? matched : ranked.slice(0, 1)).map((r) => r.n);
+  return fetchKbContext(picked, label);
+}
+
+export async function loadKbContextOptional(
+  query: string,
+  timeoutMs = 2500,
+): Promise<string | null> {
+  try {
+    const ctx = await Promise.race([
+      fetchRelevantKbContext(query),
+      new Promise<string>((resolve) => setTimeout(() => resolve(""), timeoutMs)),
+    ]);
+    return ctx && ctx.length > 30 ? ctx : null;
+  } catch {
+    return null;
   }
 }

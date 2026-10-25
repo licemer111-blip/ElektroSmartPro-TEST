@@ -1095,10 +1095,11 @@ export async function estimatePricesWithAI(
       })
     );
 
-    const L3_CHUNK_SIZE = 50;
-    const l2MissItems = clearItems.filter(item =>
-      l2Estimates.find(e => e.itemId === item.id)?.trace === "unmatched"
-    );
+    const L3_CHUNK_SIZE = 10;
+    const L3_MAX_ITEMS = 20;
+    const l2MissItems = clearItems
+      .filter(item => l2Estimates.find(e => e.itemId === item.id)?.trace === "unmatched")
+      .slice(0, L3_MAX_ITEMS);
 
     if (l2MissItems.length > 0) {
       const rateSourceL3: RateSource = "manual";
@@ -1155,7 +1156,7 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
       const kbCtxForCache = buildLocalKnrContext(baseRateForCalc);
       const cacheName = await getPricingCacheName(PRICING_STATIC_SYSTEM_PROMPT, kbCtxForCache, baseRateForCalc);
 
-      await Promise.all(chunks.map(async (chunk) => {
+      for (const chunk of chunks) {
         try {
           const objectTypeSlug = (project.object_types as { slug?: string } | null)?.slug ?? null;
           const projectSectorL3 = sectorOverride ?? detectSector(objectTypeSlug);
@@ -1210,7 +1211,7 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
           logger.error("[L3-AI] Chunk estimation failed", { chunkSize: chunk.length, items: chunk.map(i => i.name) }, l3Err);
           // chunk failed — items stay as 0 (manual review)
         }
-      }));
+      }
 
       // ── Intra-project price consistency: propagate L3 results to same-named items ────────
       // If "Gniazdo 230V IP44" appears 3 times and AI priced only instance 1,
