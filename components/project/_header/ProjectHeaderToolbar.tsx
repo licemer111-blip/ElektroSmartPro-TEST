@@ -23,7 +23,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import type { ProjectItem } from "@/lib/types/database";
 import { AIAssistantDialog } from "@/components/project/ai-assistant-dialog";
 import { AiPriceEstimatorDialog } from "@/components/project/ai-price-estimator-dialog";
-import { ProjectMembersDialog } from "@/components/project/project-members-dialog";
 import { ProjectTagsManager } from "@/components/project/project-tags-manager";
 import { ProjectColorPicker } from "@/components/project/project-color-picker";
 import type { DialogHostAction } from "./ProjectHeaderDialogHost";
@@ -115,7 +114,6 @@ export function ProjectHeaderToolbar({
   isExternalSync,
   externalAiAssistantOpen,
   externalAiPricerOpen,
-  externalMembersOpen,
   onBroadcastDialog,
   onAIImportClick,
 }: ProjectHeaderToolbarProps) {
@@ -310,7 +308,7 @@ export function ProjectHeaderToolbar({
                       }`}
                     >
                       <Sparkles className="h-3.5 w-3.5 drop-shadow-sm" />
-                      <span className="font-semibold">ES-Engine</span>
+                      <span className="font-semibold">Wycena</span>
                       <ChevronDown className="h-3 w-3 opacity-70" />
                     </Button>
                   </DropdownMenuTrigger>
@@ -325,8 +323,8 @@ export function ProjectHeaderToolbar({
                     >
                       <Sparkles className="mr-2 h-4 w-4 text-amber-500" />
                       <div className="flex flex-col">
-                        <span className="text-xs font-medium">ES Asystent</span>
-                        <span className="text-[10px] text-slate-400">Pytaj AI o normy, materiały, rozwiązania</span>
+                        <span className="text-xs font-medium">Asystent</span>
+                        <span className="text-[10px] text-slate-400">Norma, materiał, jak to policzyć</span>
                       </div>
                     </DropdownMenuItem>
                     <DropdownMenuItem
@@ -337,8 +335,8 @@ export function ProjectHeaderToolbar({
                     >
                       <FileSpreadsheet className="mr-2 h-4 w-4 text-amber-500" />
                       <div className="flex flex-col">
-                        <span className="text-xs font-medium">ES Import</span>
-                        <span className="text-[10px] text-slate-400">Wczytaj pozycje z PDF, Excel lub tekstu</span>
+                        <span className="text-xs font-medium">Import PDF / Excel</span>
+                        <span className="text-[10px] text-slate-400">Wczytaj pozycje z pliku lub tekstu</span>
                       </div>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
@@ -354,12 +352,12 @@ export function ProjectHeaderToolbar({
                       <CircleDollarSign className={`mr-2 h-4 w-4 ${isDemoProject ? "text-orange-600 dark:text-orange-400" : "text-orange-500"}`} />
                       <div className="flex flex-col flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-1">
-                          <span className="text-xs font-medium">ES Wycena (L1+L2+L3)</span>
+                          <span className="text-xs font-medium">Wyceń pozycje</span>
                           {isDemoProject && (
                             <span className="text-[9px] bg-orange-500 text-white px-1.5 py-0.5 rounded-full font-bold flex-shrink-0 leading-none">← Zacznij tu</span>
                           )}
                         </div>
-                        <span className="text-[10px] text-slate-400">Wyceń {projectItems.length} poz. — KNR + AI + benchmarki</span>
+                        <span className="text-[10px] text-slate-400">Policz {projectItems.length} poz. z katalogu i norm</span>
                       </div>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -371,20 +369,13 @@ export function ProjectHeaderToolbar({
                     >
                       {isDemoProject && !isFinal
                         ? "Zacznij tutaj — wycena AI z KNR + benchmarkami"
-                        : "ES-Engine — inteligentna wycena AI"}
+                        : "Wyceń pozycje albo wczytaj kosztorys z pliku"}
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
                 <HintTooltip content={HINTS.aiPricing} side="bottom" iconOnly iconClassName="!bg-amber-100 dark:!bg-amber-900/60 !text-amber-600 dark:!text-amber-400 !ring-amber-300 dark:!ring-amber-700 hover:!bg-amber-200 hover:!shadow-[0_0_8px_rgba(245,158,11,0.55)]" />
                 </div>
 
-                <ProjectMembersDialog
-                  projectId={projectId}
-                  isOwner
-                  projectStatus={projectStatus}
-                  externalOpen={isExternalSync ? (externalMembersOpen ?? false) : undefined}
-                  onExternalOpenChange={(v) => onBroadcastDialog("headerMembersOpen", v)}
-                />
               </div>
 
               <div className="hidden lg:block w-px h-5 bg-slate-200 dark:bg-slate-700 mx-0.5 flex-shrink-0 self-center" />

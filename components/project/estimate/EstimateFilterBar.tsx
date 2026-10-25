@@ -54,7 +54,7 @@ export function EstimateFilterBar({
   isFinal, isSearchOpen, searchQuery, searchMatchIds, currentMatchIndex,
   filterType, sortBy, sortOrder, categoryFilter, sectionFilter,
   uniqueCategories, uniqueSections, groupBySection, collapsedSections,
-  colorMode, compactView, showColorToggle, showKnrCol, filterBarExtra, isAnalyzing, localItems,
+  colorMode, compactView, showColorToggle, filterBarExtra, isAnalyzing, localItems,
   onSearchOpen, onSearchClose, onSearchChange, onGoToMatch,
   onFilterType, onSortBy, onSortOrder, onCategoryFilter, onSectionFilter,
   onGroupBySection, onCollapsedSections, onColorMode, onCompactView, onToast,
@@ -188,24 +188,6 @@ export function EstimateFilterBar({
         {filterBarExtra && <div className="flex flex-1 items-center justify-end">{filterBarExtra}</div>}
       </div>
 
-      {/* Color legend — only when colorMode active */}
-      {colorMode && (
-        <div className="flex flex-wrap items-center gap-1.5 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-[11px] text-slate-500 dark:text-slate-400">
-          <span className="font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap hidden sm:inline">Legenda:</span>
-          <span className="flex items-center gap-1 whitespace-nowrap"><span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-r from-orange-400 to-orange-500 inline-block" /> Zestawy</span>
-          <span className="flex items-center gap-1 whitespace-nowrap"><span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-r from-blue-400 to-blue-500 inline-block" /> Pozycje</span>
-          <span className="flex items-center gap-1 whitespace-nowrap"><span className="w-2.5 h-2.5 rounded-sm bg-amber-300 inline-block" /> Materiał</span>
-          <span className="flex items-center gap-1 whitespace-nowrap"><span className="w-2.5 h-2.5 rounded-sm bg-emerald-300 inline-block" /> Robocizna</span>
-          <span className="flex items-center gap-1 whitespace-nowrap"><span className="w-2.5 h-2.5 rounded-sm bg-blue-600 inline-block" /> Suma</span>
-          <span className="flex items-center gap-1 whitespace-nowrap"><span className="w-2.5 h-2.5 rounded-sm bg-cyan-500 inline-block" /> rbh</span>
-          {showKnrCol && (
-            <span className="flex items-center gap-1 whitespace-nowrap">
-              <span className="w-2.5 h-2.5 rounded-sm bg-violet-700 inline-block" />
-              <span>KNR</span>
-            </span>
-          )}
-        </div>
-      )}
     </div>
   );
 }

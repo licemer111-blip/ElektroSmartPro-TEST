@@ -3,7 +3,6 @@
 import { useState, useTransition, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import {
   Receipt, Eye, BookOpen,
   Palette, ChevronDown, ChevronUp, Clock,
@@ -57,7 +56,7 @@ export function ProjectControlPanel({
 }: ProjectControlPanelProps) {
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const brainCtx = useMaterialBrainCtx();
 
   // ─── Local optimistic state ───────────────────────────────────────────────
@@ -148,11 +147,14 @@ export function ProjectControlPanel({
             <Receipt className="w-3 h-3" />
           </div>
           <span className="text-[11px] font-semibold text-indigo-800 dark:text-indigo-200 tracking-wide uppercase">
-            Konfiguracja Projektu i Dokumentacji
+            Wydruk i VAT
           </span>
-          <Badge variant="outline" className="text-[9px] px-1.5 py-0 h-4 border-indigo-300 text-indigo-600 dark:border-indigo-700 dark:text-indigo-400 hidden sm:flex">
-            Pult 5-w-1
-          </Badge>
+          {collapsed && (
+            <span className="text-[10px] font-medium text-indigo-600/80 dark:text-indigo-300/80 normal-case tracking-normal">
+              VAT {localVat}% · {localBrutto ? "brutto" : "netto"}
+              {localShowKnr ? " · kody KNR" : ""}
+            </span>
+          )}
           {isPending && <span className="text-[9px] text-indigo-500 animate-pulse">zapisuję...</span>}
         </div>
         {collapsed
