@@ -176,6 +176,12 @@ export function ProjectHeader({
         assignedTo={assignedTo}
         isOwner={isOwner}
         isPro={isPro}
+        regionModifier={regionModifier}
+        adjustmentMult={adjustmentMult}
+        matMarkupMult={matMarkupMult}
+        labMarkupMult={labMarkupMult}
+        complexityFactor={complexityFactor}
+        materialsOwnedByCustomer={materialsOwnedByCustomer}
         userId={userId}
         userProfile={userProfile}
         isExternalSync={tabSyncCtx?.isExternalSync}

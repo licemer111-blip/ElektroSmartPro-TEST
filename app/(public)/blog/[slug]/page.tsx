@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { SYSTEM_STATS_FALLBACK } from "@/constants/system";
+import { UNPUBLISHED_BLOG_SLUGS } from "@/lib/blog-posts";
 
 // Blog posts data
 const blogPosts = {
@@ -577,11 +577,7 @@ W tym artykule analizujemy **trendy rynkowe 2026** i pokazujemy, jak dostosować
 - Inflacja globalna
 
 **Jak to wpływa na Twoje wyceny?**
-- Kabel 3×2.5 mm² YDYp: **4.20 PLN/m** (2025) → **4.95 PLN/m** (2026) (+18%)
-- Kabel 5×2.5 mm² YDYp: **7.80 PLN/m** (2025) → **9.20 PLN/m** (2026) (+18%)
-- Przewód H07V-K 2.5 mm²: **2.10 PLN/m** (2025) → **2.48 PLN/m** (2026) (+18%)
-
-**Wniosek:** Musisz **zaktualizować ceny materiałów** w swoich kosztorysach. Stare ceny z 2024-2025 już nie są aktualne.
+Cena kabla to cena z Twojej hurtowni, nie z giełdy. W kosztorysie materiał stoi osobno od robocizny. Jak hurtownia podniesie cennik, podnosisz pozycję w katalogu — województwo tej kwoty nie mnoży.
 
 ---
 
@@ -605,7 +601,7 @@ To oznacza, że **koszty pracy elektryków** wzrosły o około **7-10%** (w zale
 
 **Stare ceny z 2024-2025 nie są już aktualne.** Musisz zaktualizować swoją bazę cenową.
 
-**ElektroSmart PRO ma wbudowaną bazę cenową 2026**, która uwzględnia aktualne ceny rynkowe.
+W ElektroSmart wpisujesz **swoją stawkę rbh** i **swoje ceny materiałów**. Program nie zaciąga notowań giełdowych.
 
 ---
 
@@ -613,16 +609,16 @@ To oznacza, że **koszty pracy elektryków** wzrosły o około **7-10%** (w zale
 
 Polska to 16 województw, a każde ma **różny poziom cen**.
 
-**Współczynniki regionalne (względem średniej krajowej = 1.0):**
-- **Mazowieckie (Warszawa):** 1.15 (+15%)
-- **Małopolskie (Kraków):** 1.10 (+10%)
-- **Dolnośląskie (Wrocław):** 1.08 (+8%)
-- **Pomorskie (Gdańsk):** 1.05 (+5%)
-- **Śląskie (Katowice):** 1.00 (średnia)
-- **Podkarpackie (Rzeszów):** 0.90 (-10%)
-- **Warmińsko-Mazurskie (Olsztyn):** 0.88 (-12%)
+**Współczynnik dotyczy tylko robocizny** (średnia krajowa = 1.00, wzorzec Łódzkie):
+- **Mazowieckie:** 1.20
+- **Dolnośląskie:** 1.12
+- **Małopolskie i Pomorskie:** 1.10
+- **Śląskie:** 1.08
+- **Wielkopolskie:** 1.06
+- **Warmińsko-Mazurskie i Lubelskie:** 0.92
+- **Podkarpackie i Podlaskie:** 0.88
 
-**ElektroSmart PRO automatycznie uwzględnia współczynniki regionalne** na podstawie lokalizacji projektu.
+Te same liczby są w kosztorysie i w Monitorze rynku. Materiał zostaje w cenie z katalogu.
 
 ---
 
@@ -830,7 +826,7 @@ function getCategoryBadgeClass(color: string) {
 // Generate metadata
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const post = blogPosts[slug as keyof typeof blogPosts];
+  const post = UNPUBLISHED_BLOG_SLUGS.has(slug) ? undefined : blogPosts[slug as keyof typeof blogPosts];
   
   if (!post) {
     return {
@@ -840,20 +836,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   return {
     title: `${post.title} — ElektroSmart PRO`,
-    description: `${post.excerpt} Baza ${SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR 2026 z AI-Grounding.`,
+    description: `${post.excerpt} Normy ES, robocizna i materiał osobno.`,
   };
 }
 
 // Generate static params for all blog posts
 export async function generateStaticParams() {
-  return Object.keys(blogPosts).map((slug) => ({
-    slug,
-  }));
+  return Object.keys(blogPosts)
+    .filter((slug) => !UNPUBLISHED_BLOG_SLUGS.has(slug))
+    .map((slug) => ({ slug }));
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = blogPosts[slug as keyof typeof blogPosts];
+  const post = UNPUBLISHED_BLOG_SLUGS.has(slug) ? undefined : blogPosts[slug as keyof typeof blogPosts];
 
   // If post doesn't exist, return 404
   if (!post) {

@@ -21,13 +21,9 @@ export const revalidate = 86400; // Revalidate sitemap every 24 hours
 
 // Blog slugs are hardcoded (no blog_posts table in DB)
 const BLOG_SLUGS: { slug: string; date: string }[] = [
-  { slug: "jak-wycenic-instalacje-2026",          date: "2026-01-08" },
-  { slug: "vat-8-czy-23-przewodnik",               date: "2026-01-10" },
-  { slug: "wspolpraca-zespolowa-real-time",        date: "2026-01-20" },
-  { slug: "co-pilot-audio-sterowanie-glosem",      date: "2026-01-28" },
-  { slug: "automatyczne-faktury-infakt",           date: "2026-02-03" },
-  { slug: "import-knr-excel-ai-lab",               date: "2026-02-05" },
-  { slug: "profesjonalny-kosztorys-pdf",           date: "2026-01-05" },
+  { slug: "jak-wycenic-instalacje-2026", date: "2026-01-08" },
+  { slug: "vat-8-czy-23-przewodnik",      date: "2026-01-10" },
+  { slug: "profesjonalny-kosztorys-pdf",  date: "2026-01-05" },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -38,7 +34,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     { url: baseUrl,                           lastModified: now, changeFrequency: "weekly",  priority: 1.0 },
     { url: `${baseUrl}/login`,                lastModified: now, changeFrequency: "monthly", priority: 0.6 },
-    { url: `${baseUrl}/register`,             lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${baseUrl}/o-nas`,                lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/kontakt`,              lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/blog`,                 lastModified: now, changeFrequency: "weekly",  priority: 0.8 },

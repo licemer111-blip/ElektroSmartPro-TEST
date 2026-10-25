@@ -139,7 +139,7 @@ export function CopyFromProjectDialog({ open, onOpenChange, targetProjectId, isP
   };
 
   const formatPrice = (material: number, labor: number, qty: number) => {
-    if (!isPro) return '*** zł';
+    void isPro;
     const total = (material + labor) * qty;
     return total.toFixed(2) + " zł";
   };

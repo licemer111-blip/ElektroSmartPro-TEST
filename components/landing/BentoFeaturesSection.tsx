@@ -15,7 +15,7 @@ const BENTO_FEATURES = [
     icon: Database,
     titleFn: (n: number) => `Katalog ${n}+ pozycji KNR`,
     descFn: (n: number) =>
-      `<strong>${n}+ pozycji</strong> z kodami KNR 5-04/5-08/5-09, jednostkami i nakładami r-g. Własny katalog bez limitu.`,
+      `<strong>${n}+ pozycji</strong> z kodami norm ES, jednostkami i nakładami rbh. Własny katalog bez limitu.`,
   },
   {
     gradient: "from-slate-600 to-slate-800",

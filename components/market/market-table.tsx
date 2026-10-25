@@ -9,11 +9,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Search, Filter, MapPin, ChevronLeft, ChevronRight, TrendingUp, TrendingDown, Minus, Lock, Hammer, Package, Grid3x3, List, ArrowUpDown, Hash } from "lucide-react";
+import { Search, Filter, MapPin, ChevronLeft, ChevronRight, Hammer, Package, Grid3x3, List, ArrowUpDown, Hash } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { MarketDataResult } from "@/app/dashboard/market/actions";
 import { REGIONAL_MODIFIERS, getRegionalPrice, formatPrice } from "@/lib/data/market-data";
-import { getWeeklyTrend, formatTrendValue } from "@/lib/utils/market-trends";
 
 interface MarketTableProps {
   initialData: MarketDataResult;
@@ -22,7 +21,7 @@ interface MarketTableProps {
   initialSearch: string;
   initialCategory: string;
   initialPriceType: "labor" | "material";
-  isSubscribed: boolean;
+  isSubscribed?: boolean;
   totalCatalogCount: number;
 }
 
@@ -33,7 +32,6 @@ export function MarketTable({
   initialSearch,
   initialCategory,
   initialPriceType,
-  isSubscribed,
   totalCatalogCount,
 }: MarketTableProps) {
   const router = useRouter();
@@ -46,7 +44,6 @@ export function MarketTable({
   const [priceView, setPriceView] = useState<"labor" | "material">(initialPriceType);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortBy, setSortBy] = useState<"price-asc" | "price-desc" | "name-asc" | "name-desc">("name-asc");
-  const [trendFilter, setTrendFilter] = useState<"all" | "up" | "down" | "stable">("all");
 
   const handleSearch = (value: string) => {
     setSearch(value);
@@ -92,15 +89,7 @@ export function MarketTable({
 
   // Sort and filter items
   const sortedItems = useMemo(() => {
-    let items = [...initialData.items];
-
-    // Filter by trend first
-    if (trendFilter !== "all") {
-      items = items.filter(item => {
-        const trend = getWeeklyTrend(item.id);
-        return trend.direction === trendFilter;
-      });
-    }
+    const items = [...initialData.items];
 
     return items.sort((a, b) => {
       if (sortBy === "name-asc") {
@@ -109,17 +98,17 @@ export function MarketTable({
         return b.name.localeCompare(a.name);
       } else if (sortBy === "price-asc" || sortBy === "price-desc") {
         const priceA = priceView === "labor"
-          ? getRegionalPrice(a.base_labor_price, selectedRegion)
-          : getRegionalPrice(a.base_material_price, selectedRegion);
+          ? getRegionalPrice(a.base_labor_price, selectedRegion, "labor")
+          : getRegionalPrice(a.base_material_price, selectedRegion, "material");
         const priceB = priceView === "labor"
-          ? getRegionalPrice(b.base_labor_price, selectedRegion)
-          : getRegionalPrice(b.base_material_price, selectedRegion);
+          ? getRegionalPrice(b.base_labor_price, selectedRegion, "labor")
+          : getRegionalPrice(b.base_material_price, selectedRegion, "material");
 
         return sortBy === "price-asc" ? priceA - priceB : priceB - priceA;
       }
       return 0;
     });
-  }, [initialData.items, sortBy, priceView, selectedRegion, trendFilter]);
+  }, [initialData.items, sortBy, priceView, selectedRegion]);
 
   return (
     <>
@@ -241,65 +230,15 @@ export function MarketTable({
               </Button>
             </div>
 
-            {/* Trend Filter */}
-            <div className="flex items-center gap-0.5 p-0.5 bg-slate-100 dark:bg-slate-800 rounded-lg">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setTrendFilter(trendFilter === "up" ? "all" : "up")}
-                className={cn(
-                  "h-8 w-8 p-0 transition-all",
-                  trendFilter === "up"
-                    ? "bg-blue-600 shadow-sm hover:bg-blue-700"
-                    : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
-                )}
-                title="Rosnące"
-              >
-                <TrendingUp className={cn("w-4 h-4", trendFilter === "up" ? "text-white" : "text-green-600")} />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setTrendFilter(trendFilter === "down" ? "all" : "down")}
-                className={cn(
-                  "h-8 w-8 p-0 transition-all",
-                  trendFilter === "down"
-                    ? "bg-blue-600 shadow-sm hover:bg-blue-700"
-                    : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
-                )}
-                title="Spadające"
-              >
-                <TrendingDown className="w-4 h-4 text-red-600" />
-              </Button>
-            </div>
           </div>
         </CardContent>
       </Card>
-
-      {/* PRO Notice */}
-      {!isSubscribed && (
-        <Card className="mb-4 border-amber-200 dark:border-amber-800 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <Lock className="w-5 h-5 text-amber-600" />
-              <div>
-                <h4 className="font-semibold text-sm text-amber-900 dark:text-amber-100 mb-1">
-                  Ceny dostępne w wersji PRO
-                </h4>
-                <p className="text-xs text-amber-700 dark:text-amber-300">
-                  Przejdź na plan PRO aby zobaczyć szczegółowe ceny i trendy rynkowe
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
       {/* Content */}
       <div className="mb-4">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-            {search || category || trendFilter !== "all"
+            {search || category
               ? `Znaleziono ${sortedItems.length}`
               : `${totalCatalogCount} pozycji`}
           </h3>
@@ -315,10 +254,9 @@ export function MarketTable({
           /* Grid View */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {sortedItems.map((item) => {
-              const regionalMaterial = getRegionalPrice(item.base_material_price, selectedRegion);
-              const regionalLabor = getRegionalPrice(item.base_labor_price, selectedRegion);
+              const regionalMaterial = getRegionalPrice(item.base_material_price, selectedRegion, "material");
+              const regionalLabor = getRegionalPrice(item.base_labor_price, selectedRegion, "labor");
               const displayPrice = priceView === "labor" ? regionalLabor : regionalMaterial;
-              const trend = getWeeklyTrend(item.id);
 
               return (
                 <Card
@@ -350,32 +288,6 @@ export function MarketTable({
                         </div>
                       </div>
 
-                      {isSubscribed && (
-                        <div className={cn(
-                          "p-1.5 rounded-lg flex items-center gap-1",
-                          trend.direction === "up" && "bg-green-100 dark:bg-green-900/30",
-                          trend.direction === "down" && "bg-red-100 dark:bg-red-900/30",
-                          trend.direction === "stable" && "bg-slate-100 dark:bg-slate-800"
-                        )}>
-                          {trend.direction === "up" && <TrendingUp className="w-3 h-3 text-green-600" />}
-                          {trend.direction === "down" && <TrendingDown className="w-3 h-3 text-red-600" />}
-                          {trend.direction === "stable" && <Minus className="w-3 h-3 text-slate-400" />}
-                          <span className={cn(
-                            "text-xs font-mono font-bold",
-                            trend.direction === "up" && "text-green-600",
-                            trend.direction === "down" && "text-red-600",
-                            trend.direction === "stable" && "text-slate-500"
-                          )}>
-                            {formatTrendValue(trend.value)}
-                          </span>
-                        </div>
-                      )}
-
-                      {!isSubscribed && (
-                        <div className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800">
-                          <Lock className="w-3 h-3 text-slate-400" />
-                        </div>
-                      )}
                     </div>
 
                     <div className={cn(
@@ -389,19 +301,12 @@ export function MarketTable({
                           <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">
                             {priceView === "labor" ? "Robocizna" : "Materiał"}
                           </p>
-                          {isSubscribed ? (
-                            <p className={cn(
-                              "text-2xl font-bold",
-                              priceView === "labor" ? "text-green-600 dark:text-green-400" : "text-orange-600 dark:text-orange-400"
-                            )}>
-                              {formatPrice(displayPrice)}
-                            </p>
-                          ) : (
-                            <div className="flex items-center gap-2">
-                              <Lock className="w-4 h-4 text-slate-400" />
-                              <span className="text-xl font-bold text-slate-400">****</span>
-                            </div>
-                          )}
+                          <p className={cn(
+                            "text-2xl font-bold",
+                            priceView === "labor" ? "text-green-600 dark:text-green-400" : "text-orange-600 dark:text-orange-400"
+                          )}>
+                            {formatPrice(displayPrice)}
+                          </p>
                         </div>
 
                         <div className={cn(
@@ -418,7 +323,7 @@ export function MarketTable({
                         </div>
                       </div>
 
-                      {isSubscribed && regionalModifier !== 1.0 && (
+                      {priceView === "labor" && regionalModifier !== 1.0 && (
                         <div className="mt-2 pt-2 border-t border-slate-200 dark:border-slate-700">
                           <div className="flex items-center justify-between text-xs">
                             <span className="text-slate-600 dark:text-slate-400">Cena bazowa:</span>
@@ -445,15 +350,13 @@ export function MarketTable({
                     <TableHead>Kategoria</TableHead>
                     <TableHead className="text-center">Jedn.</TableHead>
                     <TableHead className="text-center">{priceView === "labor" ? "Robocizna" : "Materiał"}</TableHead>
-                    <TableHead className="text-center">Trend t/t</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {sortedItems.map((item) => {
-                    const regionalMaterial = getRegionalPrice(item.base_material_price, selectedRegion);
-                    const regionalLabor = getRegionalPrice(item.base_labor_price, selectedRegion);
+                    const regionalMaterial = getRegionalPrice(item.base_material_price, selectedRegion, "material");
+                    const regionalLabor = getRegionalPrice(item.base_labor_price, selectedRegion, "labor");
                     const displayPrice = priceView === "labor" ? regionalLabor : regionalMaterial;
-                    const trend = getWeeklyTrend(item.id);
 
                     return (
                       <TableRow
@@ -476,36 +379,12 @@ export function MarketTable({
                         </TableCell>
                         <TableCell className="text-center text-sm">{item.unit}</TableCell>
                         <TableCell className="text-center">
-                          {isSubscribed ? (
-                            <span className={cn(
-                              "font-bold",
-                              priceView === "labor" ? "text-green-600" : "text-orange-600"
-                            )}>
-                              {formatPrice(displayPrice)}
-                            </span>
-                          ) : (
-                            <div className="flex items-center justify-center gap-1">
-                              <Lock className="w-3 h-3 text-slate-400" />
-                              <span className="text-slate-400">****</span>
-                            </div>
-                          )}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {isSubscribed ? (
-                            <Badge variant="outline" className={cn(
-                              "text-xs font-mono",
-                              trend.direction === "up" && "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
-                              trend.direction === "down" && "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300",
-                              trend.direction === "stable" && "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"
-                            )}>
-                              {trend.direction === "up" && <TrendingUp className="w-3 h-3 inline mr-1" />}
-                              {trend.direction === "down" && <TrendingDown className="w-3 h-3 inline mr-1" />}
-                              {trend.direction === "stable" && <Minus className="w-3 h-3 inline mr-1" />}
-                              {formatTrendValue(trend.value)}
-                            </Badge>
-                          ) : (
-                            <Lock className="w-3 h-3 text-slate-400 mx-auto" />
-                          )}
+                          <span className={cn(
+                            "font-bold",
+                            priceView === "labor" ? "text-green-600" : "text-orange-600"
+                          )}>
+                            {formatPrice(displayPrice)}
+                          </span>
                         </TableCell>
                       </TableRow>
                     );

@@ -60,7 +60,7 @@ export function ClientPortalView({ offer, token }: ClientPortalViewProps) {
           <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl p-4 text-center">
             <p className="text-sm font-semibold text-amber-800 dark:text-amber-200">WERSJA DEMO</p>
             <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">
-              Ceny w tej ofercie sa ukryte. Wykonawca korzysta z wersji demonstracyjnej.
+              Ceny są widoczne. PDF z konta DEMO ma znak wodny.
             </p>
           </div>
         )}

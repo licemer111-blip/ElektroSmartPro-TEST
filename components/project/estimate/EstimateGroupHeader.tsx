@@ -13,6 +13,10 @@ interface EstimateGroupHeaderProps {
   childrenMap: Map<string, ProjectItem[]>;
   adjustmentMultiplier: number;
   materialsOwnedByCustomer: boolean;
+  regionModifier?: number;
+  matMarkupMult?: number;
+  labMarkupMult?: number;
+  complexityFactor?: number;
   isPro: boolean;
   isCollapsed: boolean;
   onToggle: () => void;
@@ -25,13 +29,27 @@ export function EstimateGroupHeader({
   childrenMap,
   adjustmentMultiplier,
   materialsOwnedByCustomer,
-  isPro,
+  regionModifier = 1,
+  matMarkupMult = 1,
+  labMarkupMult = 1,
+  complexityFactor = 1,
+  isPro: _isPro,
   isCollapsed,
   onToggle,
 }: EstimateGroupHeaderProps) {
+  void _isPro;
   const subtotal = React.useMemo(
-    () => calcSectionSubtotal(sectionTopItems, childrenMap, adjustmentMultiplier, materialsOwnedByCustomer),
-    [sectionTopItems, childrenMap, adjustmentMultiplier, materialsOwnedByCustomer],
+    () => calcSectionSubtotal(
+      sectionTopItems,
+      childrenMap,
+      adjustmentMultiplier,
+      materialsOwnedByCustomer,
+      regionModifier,
+      matMarkupMult,
+      labMarkupMult,
+      complexityFactor,
+    ),
+    [sectionTopItems, childrenMap, adjustmentMultiplier, materialsOwnedByCustomer, regionModifier, matMarkupMult, labMarkupMult, complexityFactor],
   );
 
   return (
@@ -55,13 +73,9 @@ export function EstimateGroupHeader({
               ({itemCount} poz.)
             </span>
           </div>
-          {isPro ? (
-            <span className="text-[11px] font-bold text-purple-700 dark:text-purple-300">
-              {subtotal.toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} zł
-            </span>
-          ) : (
-            <span className="text-[11px] font-medium text-purple-400 dark:text-purple-500">*** zł</span>
-          )}
+          <span className="text-[11px] font-bold text-purple-700 dark:text-purple-300">
+            {subtotal.toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} zł
+          </span>
         </div>
       </TableCell>
     </TableRow>

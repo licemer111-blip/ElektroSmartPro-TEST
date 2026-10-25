@@ -21,7 +21,7 @@ export function LandingStructuredData({ catalogCount, dinCount = 295 }: LandingS
       url: `${baseUrl}/dashboard/subscription`,
     },
     description:
-      `Profesjonalny program dla elektryków: automatyczny kosztorys elektryczny z ES-Engine, wycena z podziałem materiał/robocizna, normy KNR 5-04/5-08/5-09, Zestawy 360°. Ceny regionalne 16 województw, VAT 8%/23%, eksport PDF/Excel. Zgodność z PN-HD 60364.`,
+      `Profesjonalny program dla elektryków: kosztorys z podziałem materiał/robocizna, normy ES w rbh, zestawy. Ceny regionalne 16 województw (współczynnik robocizny), VAT 8%/23%, eksport PDF/Excel.`,
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: "4.8",

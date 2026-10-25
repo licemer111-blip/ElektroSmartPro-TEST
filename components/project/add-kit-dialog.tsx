@@ -32,6 +32,7 @@ interface AddKitDialogProps {
 }
 
 export function AddKitDialog({ projectId, kitsByCategory, isPro = true }: AddKitDialogProps) {
+  void isPro;
   const [open, setOpen] = useState(false);
   const [selectedKit, setSelectedKit] = useState<KitWithItems | null>(null);
   const [quantity, setQuantity] = useState(1);
@@ -232,7 +233,7 @@ export function AddKitDialog({ projectId, kitsByCategory, isPro = true }: AddKit
                           • {item.item_name} ({item.quantity_multiplier * quantity} {item.item_unit})
                         </span>
                         <span className="font-medium">
-                          {isPro ? `${((item.labor_price + item.material_price) * item.quantity_multiplier * quantity).toFixed(2)} zł` : '*** zł'}
+                          {`${((item.labor_price + item.material_price) * item.quantity_multiplier * quantity).toFixed(2)} zł`}
                         </span>
                       </div>
                     ))}
@@ -243,7 +244,7 @@ export function AddKitDialog({ projectId, kitsByCategory, isPro = true }: AddKit
                 <div className="flex justify-between items-center pt-4 border-t">
                   <span className="font-semibold">Wartość zestawu:</span>
                   <span className="text-xl font-bold text-blue-600">
-                    {isPro ? `${calculateKitTotal(selectedKit, quantity).toFixed(2)} zł` : '*** zł'}
+                    {`${calculateKitTotal(selectedKit, quantity).toFixed(2)} zł`}
                   </span>
                 </div>
 

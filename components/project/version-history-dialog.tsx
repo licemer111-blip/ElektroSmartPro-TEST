@@ -60,7 +60,8 @@ interface DiffResult {
   unchanged: number;
 }
 
-function computeDiff(older: SnapshotItem[], newer: SnapshotItem[], isPro = true): DiffResult {
+function computeDiff(older: SnapshotItem[], newer: SnapshotItem[], _isPro = true): DiffResult {
+  void _isPro;
   const olderMap = new Map(older.map(i => [i.id, i]));
   const newerMap = new Map(newer.map(i => [i.id, i]));
 
@@ -80,10 +81,10 @@ function computeDiff(older: SnapshotItem[], newer: SnapshotItem[], isPro = true)
       if (old.quantity !== item.quantity) changes.push(`Ilość: ${old.quantity} → ${item.quantity}`);
       const oldMat = old.final_material_price ?? old.material_price ?? 0;
       const newMat = item.final_material_price ?? item.material_price ?? 0;
-      if (oldMat !== newMat) changes.push(isPro ? `Materiał: ${oldMat.toFixed(2)} → ${newMat.toFixed(2)} zł` : 'Materiał: *** → *** zł');
+      if (oldMat !== newMat) changes.push(`Materiał: ${oldMat.toFixed(2)} → ${newMat.toFixed(2)} zł`);
       const oldLab = old.final_labor_price ?? old.labor_price ?? 0;
       const newLab = item.final_labor_price ?? item.labor_price ?? 0;
-      if (oldLab !== newLab) changes.push(isPro ? `Robocizna: ${oldLab.toFixed(2)} → ${newLab.toFixed(2)} zł` : 'Robocizna: *** → *** zł');
+      if (oldLab !== newLab) changes.push(`Robocizna: ${oldLab.toFixed(2)} → ${newLab.toFixed(2)} zł`);
 
       if (changes.length > 0) {
         changed.push({ before: old, after: item, changes });

@@ -20,8 +20,7 @@ interface RentownoscTabProps {
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
-function fmt(v: number, isPro: boolean) {
-  if (!isPro) return "*** zł";
+function fmt(v: number, _isPro: boolean) {
   return new Intl.NumberFormat("pl-PL", { style: "currency", currency: "PLN" }).format(v);
 }
 

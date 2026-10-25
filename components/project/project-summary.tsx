@@ -102,12 +102,11 @@ export function ProjectSummary({
     const projectLaborRate = project.default_hourly_rate ?? 100;
 
     items.forEach((item) => {
-      const effectiveMaterialPrice = item.final_material_price ?? item.material_price ?? 0;
-      const effectiveLaborPrice = item.final_labor_price ?? item.labor_price ?? 0;
-      const isManual = item.confidence_level === "manual";
-      const effectiveRegion = isManual ? 1.0 : regionModifier;
+      if (item.is_assembly_child) return;
 
-      rawEquipmentBase += (item.equipment_price ?? 0) * item.quantity;
+      const pricedRows = parentIds.has(item.id)
+        ? items.filter((child) => child.parent_assembly_id === item.id)
+        : [item];
 
       // v4.0 (Phase 5): Template fires only for truly unpriced rows (confidence_level == null).
       // Zestaw Engine v2: auto-expansion runs only when opted in per-project.
@@ -118,7 +117,7 @@ export function ProjectSummary({
       const isQuickEstimateRow = Boolean(
         (item as { is_quick_estimate?: boolean | null }).is_quick_estimate
       );
-      if (autoDetectZestawy && !isQuickEstimateRow && !item.is_assembly_child && !hasEngineSetPrice && !parentIds.has(item.id)) {
+      if (!parentIds.has(item.id) && autoDetectZestawy && !isQuickEstimateRow && !hasEngineSetPrice) {
         const scm = detectSmartContext(item.name);
         if (scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY" || scm.category === "ROZDZIELNICA") {
           const expansion = expandToAssembly(item.name, item.quantity, sector, projectLaborRate, knrMultiplier, item.assembly_overrides ?? undefined);
@@ -130,18 +129,27 @@ export function ProjectSummary({
               rawMaterialBase += expansion.totalMaterialPLN;
               baseMaterialTotal += expansion.totalMaterialPLN * matMarkupMult;
             }
-            return; // skip default pricing below
+            return;
           }
         }
       }
 
-      // Default: stored DB prices
-      if (!materialsOwnedByCustomer) {
-        rawMaterialBase += effectiveMaterialPrice * item.quantity;
-        baseMaterialTotal += effectiveMaterialPrice * item.quantity * matMarkupMult;
+      for (const row of pricedRows) {
+        const qty = row.is_lump_sum ? 1 : row.quantity;
+        const isManual = row.confidence_level === "manual";
+        const effectiveRegion = isManual ? 1.0 : regionModifier;
+        const matPrice = row.final_material_price ?? row.material_price ?? 0;
+        const labPrice = row.final_labor_price ?? row.labor_price ?? 0;
+        const suppressMaterial = materialsOwnedByCustomer || row.is_investor_material === true;
+
+        rawEquipmentBase += (row.equipment_price ?? 0) * qty;
+        if (!suppressMaterial) {
+          rawMaterialBase += matPrice * qty;
+          baseMaterialTotal += matPrice * qty * matMarkupMult;
+        }
+        rawLaborBase += labPrice * qty;
+        baseLaborTotal += labPrice * qty * effectiveRegion * labMarkupMult * complexityFactor;
       }
-      rawLaborBase += effectiveLaborPrice * item.quantity;
-      baseLaborTotal += effectiveLaborPrice * item.quantity * effectiveRegion * labMarkupMult * complexityFactor;
     });
 
     const sumaBazowaNetto = rawMaterialBase + rawLaborBase;
@@ -198,25 +206,20 @@ export function ProjectSummary({
       if (item.is_assembly_child) return;
       const sec = item.section || "Inne pozycje";
       const prev = sections.get(sec) || { mat: 0, lab: 0, count: 0 };
+      const rows = parentIds.has(item.id)
+        ? items.filter(c => c.parent_assembly_id === item.id)
+        : [item];
 
-      if (parentIds.has(item.id)) {
-        const children = items.filter(c => c.parent_assembly_id === item.id);
-        children.forEach(c => {
-          const isChildManual = c.confidence_level === "manual";
-          const effRegion = isChildManual ? 1.0 : regionModifier;
-          const cMat = materialsOwnedByCustomer ? 0 : (c.final_material_price ?? c.material_price ?? 0) * c.quantity * adjustmentMultiplier * matMarkupMult;
-          const cLab = (c.final_labor_price ?? c.labor_price ?? 0) * c.quantity * adjustmentMultiplier * effRegion * labMarkupMult * complexityFactor;
-          prev.mat += cMat;
-          prev.lab += cLab;
-        });
-      } else {
-        const isManual = item.confidence_level === "manual";
+      rows.forEach(c => {
+        const qty = c.is_lump_sum ? 1 : c.quantity;
+        const isManual = c.confidence_level === "manual";
         const effRegion = isManual ? 1.0 : regionModifier;
-        const mat = materialsOwnedByCustomer ? 0 : (item.final_material_price ?? item.material_price ?? 0) * item.quantity * adjustmentMultiplier * matMarkupMult;
-        const lab = (item.final_labor_price ?? item.labor_price ?? 0) * item.quantity * adjustmentMultiplier * effRegion * labMarkupMult * complexityFactor;
-        prev.mat += mat;
-        prev.lab += lab;
-      }
+        const suppressMaterial = materialsOwnedByCustomer || c.is_investor_material === true;
+        const cMat = suppressMaterial ? 0 : (c.final_material_price ?? c.material_price ?? 0) * qty * adjustmentMultiplier * matMarkupMult;
+        const cLab = (c.final_labor_price ?? c.labor_price ?? 0) * qty * adjustmentMultiplier * effRegion * labMarkupMult * complexityFactor;
+        prev.mat += cMat;
+        prev.lab += cLab;
+      });
       prev.count++;
       sections.set(sec, prev);
     });

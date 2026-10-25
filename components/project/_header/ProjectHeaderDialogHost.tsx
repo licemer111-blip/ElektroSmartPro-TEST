@@ -78,6 +78,12 @@ interface ProjectHeaderDialogHostProps {
   isOwner?: boolean;
   userId?: string;
   isPro?: boolean;
+  regionModifier?: number;
+  adjustmentMult?: number;
+  matMarkupMult?: number;
+  labMarkupMult?: number;
+  complexityFactor?: number;
+  materialsOwnedByCustomer?: boolean;
   userProfile?: {
     full_name?: string;
     company_name?: string;
@@ -103,6 +109,12 @@ export function ProjectHeaderDialogHost({
   assignedTo,
   isOwner = false,
   isPro = false,
+  regionModifier = 1,
+  adjustmentMult = 1,
+  matMarkupMult = 1,
+  labMarkupMult = 1,
+  complexityFactor = 1,
+  materialsOwnedByCustomer = false,
   userId,
   userProfile,
   isExternalSync,
@@ -139,13 +151,13 @@ export function ProjectHeaderDialogHost({
         onOpenChange={(open) => dispatch({ type: "SET_VARIANT", open })}
         projectName={projectName}
         isPro={isPro}
-        projectItems={(projectItems).map((item) => ({
-          name: item.name,
-          unit: item.unit,
-          quantity: item.quantity,
-          final_material_price: item.final_material_price ?? 0,
-          final_labor_price: item.final_labor_price ?? 0,
-        }))}
+        projectItems={projectItems}
+        regionModifier={regionModifier}
+        adjustmentMult={adjustmentMult}
+        matMarkupMult={matMarkupMult}
+        labMarkupMult={labMarkupMult}
+        complexityFactor={complexityFactor}
+        materialsOwnedByCustomer={materialsOwnedByCustomer}
         vatRate={vatRate}
         clientName={clientName}
       />

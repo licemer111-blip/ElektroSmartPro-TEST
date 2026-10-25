@@ -20,7 +20,7 @@ const PILLARS = [
       },
       {
         label: "Regionalna dokładność — 16 województw",
-        text: "Stawki r-g Mazowieckie vs Podkarpackie różnią się o 30%. System stosuje właściwy współczynnik automatycznie.",
+        text: "Mazowieckie +20%, Podkarpackie i Podlaskie −12%. Współczynnik mnoży tylko robociznę.",
       },
       {
         label: "Smart VAT — 8% lub 23%",
@@ -34,15 +34,15 @@ const PILLARS = [
     icon: BookOpen,
     title: "Baza Norm KNR i Własne Katalogi",
     intro:
-      "Normy, które elektrycy znają — teraz w systemie, który nimi zarządza.",
+      "Godziny rbh na gniazdo, kabel i bruzdę. To normy ES, nie tablica ORGBUD.",
     points: [
       {
         label: "NORMS_LABEL_PLACEHOLDER",
-        text: "Baza KNR z kodami, jednostkami i nakładami robocizny. Kategoria A (zweryfikowane) + kategoria B (analogi ES-Engine). Gotowa do użycia.",
+        text: "Każda pozycja ma kod ES, jednostkę i nakład rbh. Szacunek AI jest podpisany osobno i nie udaje urzędowego KNR.",
       },
       {
-        label: "Dokładność co do minuty",
-        text: "Przeliczono wszystko — od czasu ułożenia kabla YDYp 3×2,5 po sztrobowanie w betonie zbrojonym.",
+        label: "Złotówki ze stawki, nie z ukrytego mnożnika",
+        text: "Kabel YDYp 3×2,5, gniazdo i bruzda w betonie mają osobne godziny. Kwota = rbh × Twoja stawka × województwo.",
       },
       {
         label: "Twoje własne normy KNR",
@@ -81,14 +81,14 @@ interface FeaturesProps {
 
 function FeaturesSectionInner({ dinCount = 295, normsCount = 0 }: FeaturesProps) {
   const normsLabel = normsCount > 0
-    ? `Ponad ${(Math.floor(normsCount / 100) * 100).toLocaleString("pl-PL")} norm KNR (5-04/5-08/5-09)`
-    : "Baza norm KNR (5-04/5-08/5-09)";
+    ? `Ponad ${(Math.floor(normsCount / 100) * 100).toLocaleString("pl-PL")} norm ES`
+    : "Baza norm ES";
   const TOOLS = [
     {
       gradient: "from-blue-500 to-blue-700",
       icon: Cpu,
       title: "ES-Engine — Silnik Kosztorysowy",
-      desc: "Twoja prywatna baza KNR → normy KNR 5-08/5-09 → ES-Słownik 600+ → ekspertowy fallback. Wyniki w hierarchii, nie z powietrza.",
+      desc: "Najpierw Twój katalog, potem norma ES, na końcu szacunek AI. Godziny widać w rbh, złotówki liczy stawka.",
     },
     {
       gradient: "from-slate-500 to-slate-700",

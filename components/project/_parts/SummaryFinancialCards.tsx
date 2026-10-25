@@ -120,7 +120,7 @@ export function SummaryFinancialCards({
         <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-950/30 dark:to-blue-950/30 border-2 border-emerald-300 dark:border-emerald-700">
           <div className="w-9 h-9 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center flex-shrink-0"><Zap className="w-5 h-5 text-emerald-600" /></div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-bold text-emerald-800 dark:text-emerald-300">Wycena Ekspercka Gotowa — {isPro ? `${pricingResult.grandTotal.toFixed(0)} zł netto` : "*** zł netto"}</p>
+            <p className="text-sm font-bold text-emerald-800 dark:text-emerald-300">Wycena gotowa — {`${pricingResult.grandTotal.toFixed(0)} zł netto`}</p>
             <p className="text-[11px] text-slate-500 dark:text-slate-400">ES-KNR 2026 · Pewność: {pricingResult.confidence === "high" ? "wysoka" : pricingResult.confidence === "medium" ? "średnia" : "niska"} · {allModules.length} urządzeń</p>
           </div>
           <Button size="sm" variant="outline" className="gap-1 text-xs h-7 border-emerald-400 text-emerald-700 dark:text-emerald-400 flex-shrink-0"
@@ -295,7 +295,7 @@ export function SummaryFinancialCards({
             <div className="grid grid-cols-3 gap-3 text-center">
               <div><p className="text-[10px] text-slate-500 uppercase">Materiał</p><p className="text-sm font-bold">{isPro ? grandTotalMaterial.toFixed(0) + " zł" : "***"}</p></div>
               <div><p className="text-[10px] text-slate-500 uppercase">Robocizna</p><p className="text-sm font-bold">{isPro ? grandTotalLabor.toFixed(0) + " zł" : "***"}</p></div>
-              <div><p className="text-[10px] text-blue-600 uppercase font-bold">Razem netto</p><p className="text-lg font-bold text-blue-600">{isPro ? (grandTotalMaterial + grandTotalLabor).toFixed(0) + " zł" : "*** zł"}</p></div>
+              <div><p className="text-[10px] text-blue-600 uppercase font-bold">Razem netto</p><p className="text-lg font-bold text-blue-600">{(grandTotalMaterial + grandTotalLabor).toFixed(0) + " zł"}</p></div>
             </div>
           </CardContent>
         </Card>

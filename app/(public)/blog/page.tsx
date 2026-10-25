@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Header from "@/components/header";
-import { BLOG_POSTS } from "@/lib/blog-posts";
+import { BLOG_POSTS, UNPUBLISHED_BLOG_SLUGS } from "@/lib/blog-posts";
 import { ArrowRight, Clock, Tag, BookOpen } from "lucide-react";
 
 export const revalidate = 86400;
@@ -37,7 +37,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export default function BlogPage() {
-  const sorted = [...BLOG_POSTS].sort(
+  const sorted = BLOG_POSTS.filter((post) => !UNPUBLISHED_BLOG_SLUGS.has(post.slug)).sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 

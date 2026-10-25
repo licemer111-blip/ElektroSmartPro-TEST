@@ -216,9 +216,7 @@ export function OfferItemsTable({
                         {showMaterialColumn && (
                           <td className="px-1 sm:px-2 py-1.5 sm:py-2 text-right text-[11px] sm:text-xs">
                             {/* Demo blur */}
-                            {offer.isDemo ? (
-                              <span className="blur-sm select-none text-amber-700">*** zł</span>
-                            ) : isEditable ? (
+                            {isEditable ? (
                               <Input
                                 id={`offer-mat-${item.id}`}
                                 name={`offer-mat-${item.id}`}
@@ -246,9 +244,7 @@ export function OfferItemsTable({
 
                         {/* Labor price */}
                         <td className="px-1 sm:px-2 py-1.5 sm:py-2 text-right text-[11px] sm:text-xs">
-                          {offer.isDemo ? (
-                            <span className="blur-sm select-none text-blue-700">*** zł</span>
-                          ) : isEditable ? (
+                          {isEditable ? (
                             <Input
                               id={`offer-lab-${item.id}`}
                               name={`offer-lab-${item.id}`}
@@ -281,9 +277,7 @@ export function OfferItemsTable({
                               : "font-semibold text-slate-800 dark:text-slate-100"
                           }`}
                         >
-                          {offer.isDemo ? (
-                            <span className="blur-sm select-none">*** zł</span>
-                          ) : hasItemEdits ? (
+                          {hasItemEdits ? (
                             <div>
                               <span className="line-through text-slate-400 text-[10px] mr-1">{formatPrice(item.totalPrice)}</span>
                               <span className="text-orange-600 dark:text-orange-400">{formatPrice(displayTotal)}</span>

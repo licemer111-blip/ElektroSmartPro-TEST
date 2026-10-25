@@ -107,6 +107,8 @@ function buildKosztorysSheet(
   knrMultiplier: number = 1.0,
 ): BuildResult {
   void knrMultiplier;
+  const isDemoExport = !isPro;
+  isPro = true;
   // Flatten so every child item appears immediately after its parent
   const flatItems = flattenProjectItems(items);
 
@@ -172,8 +174,8 @@ function buildKosztorysSheet(
 
   // ── Row 1: DEMO warning or empty ──
   const demoRow: XlsxCell[] = Array(colCount).fill(null).map(() => ec());
-  if (!isPro) {
-    demoRow[0] = sc('WERSJA DEMO — ceny ukryte. Przejdź na PRO, aby zobaczyć pełne ceny.', {
+  if (isDemoExport) {
+    demoRow[0] = sc('WERSJA DEMO — ceny są widoczne. Czysty PDF bez znaku wodnego jest w PRO.', {
       font: font({ bold: true, color: { rgb: 'DC2626' }, sz: 10 }),
     });
   }

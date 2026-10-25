@@ -177,11 +177,11 @@ export async function sendProjectEmail(input: SendProjectEmailInput) {
     // Get user profile for sender info (including logo and PRO status)
     const { data: profile } = await supabase
       .from("profiles")
-      .select("company_name, phone, email, logo_url, address, nip, is_pro")
+      .select("company_name, phone, email, logo_url, address, nip")
       .eq("id", user.id)
       .single();
 
-    const isPro = profile?.is_pro || false;
+    const isPro = true;
     const regionModifier = (project.regions as { price_modifier: number } | null)?.price_modifier ?? 1.0;
 
     // Prepare email content with variables filled

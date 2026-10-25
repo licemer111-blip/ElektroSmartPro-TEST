@@ -399,6 +399,10 @@ export function EstimateTable({
                             childrenMap={childrenMap}
                             adjustmentMultiplier={adjustmentMultiplier}
                             materialsOwnedByCustomer={materialsOwnedByCustomer}
+                            regionModifier={regionModifier}
+                            matMarkupMult={matMarkupMult}
+                            labMarkupMult={labMarkupMult}
+                            complexityFactor={complexityFactor}
                             isPro={isPro} isCollapsed={isCollapsed}
                             onToggle={() => toggleSectionCollapse(sectionKey)}
                           />

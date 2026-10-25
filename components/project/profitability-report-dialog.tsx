@@ -35,7 +35,8 @@ interface ProfitabilityReportDialogProps {
   disabled?: boolean;
 }
 
-export function ProfitabilityReportDialog({ projectId, projectName, isPro, disabled }: ProfitabilityReportDialogProps) {
+export function ProfitabilityReportDialog({ projectId, projectName, isPro: _isPro, disabled }: ProfitabilityReportDialogProps) {
+  void _isPro;
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<ProfitabilityData | null>(null);
@@ -51,7 +52,7 @@ export function ProfitabilityReportDialog({ projectId, projectName, isPro, disab
   }, [open, projectId]);
 
   const formatPrice = (v: number) =>
-    isPro ? new Intl.NumberFormat("pl-PL", { style: "currency", currency: "PLN" }).format(v) : "*** zł";
+    new Intl.NumberFormat("pl-PL", { style: "currency", currency: "PLN" }).format(v);
 
   const formatHours = (minutes: number) => {
     const h = Math.floor(minutes / 60);

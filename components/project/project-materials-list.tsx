@@ -22,9 +22,10 @@ interface MaterialGroup {
 
 export function ProjectMaterialsList({ 
   items, 
-  isPro, 
+  isPro: _isPro, 
   materialsOwnedByCustomer = false 
 }: ProjectMaterialsListProps) {
+  void _isPro;
   // Group items by name and aggregate quantities
   const materialGroups = useMemo(() => {
     const groups: Record<string, MaterialGroup> = {};
@@ -114,17 +115,12 @@ export function ProjectMaterialsList({
                     <p className="text-lg font-bold text-muted-foreground">Materiały klienta</p>
                     <p className="text-xs text-muted-foreground">Ceny ukryte</p>
                   </>
-                ) : isPro ? (
+                ) : (
                   <>
                     <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
                       {formatPrice(totalMaterialCost)} zł
                     </p>
                     <p className="text-xs text-muted-foreground">Łączny koszt materiałów</p>
-                  </>
-                ) : (
-                  <>
-                    <p className="text-lg font-bold text-muted-foreground">*** zł</p>
-                    <p className="text-xs text-muted-foreground">PRO: zobacz ceny</p>
                   </>
                 )}
               </div>
@@ -181,12 +177,10 @@ export function ProjectMaterialsList({
                   <div className="col-span-3 text-right">
                     {materialsOwnedByCustomer ? (
                       <span className="text-muted-foreground">—</span>
-                    ) : isPro ? (
+                    ) : (
                       <span className="font-semibold text-emerald-600 dark:text-emerald-400">
                         {formatPrice(group.totalMaterialCost)} zł
                       </span>
-                    ) : (
-                      <span className="text-muted-foreground blur-sm">***</span>
                     )}
                   </div>
                 </div>
@@ -197,7 +191,7 @@ export function ProjectMaterialsList({
       </Card>
 
       {/* Top 5 Most Expensive */}
-      {!materialsOwnedByCustomer && isPro && materialGroups.length > 0 && (
+      {!materialsOwnedByCustomer && materialGroups.length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">

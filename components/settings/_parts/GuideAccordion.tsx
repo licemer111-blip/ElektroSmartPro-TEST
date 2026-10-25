@@ -134,14 +134,8 @@ export function GuideAccordion({ catalogCount = 1400, dinCount = 295 }: GuideAcc
           </div>
         </AccordionTrigger>
         <AccordionContent className="text-slate-700 dark:text-slate-300 leading-relaxed pt-4">
-          <p>Monitorujemy ceny w <strong>16 województwach</strong>. W zakładce <strong className="text-green-600 dark:text-green-400">&quot;Rynek&quot;</strong> możesz sprawdzić średnie stawki dla Twojego regionu.</p>
-          <p className="mt-3">Jeśli masz wersję <strong>DEMO</strong>, ceny są ukryte (gwiazdki <code className="text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">**** zł</code>).</p>
-          <p className="mt-3">Wersja <strong className="text-indigo-600 dark:text-indigo-400">PRO</strong> odblokowuje:</p>
-          <ul className="mt-2 ml-6 space-y-1 list-disc text-sm">
-            <li>Pełny wgląd w stawki regionalne</li>
-            <li>Trendy tygodniowe (zmiana cen t/t)</li>
-            <li>Porównanie z średnią krajową</li>
-          </ul>
+          <p>Współczynnik województwa mnoży tylko robociznę. W zakładce <strong className="text-green-600 dark:text-green-400">&quot;Rynek&quot;</strong> widać te same współczynniki, co w kosztorysie. Materiały zostają w cenie katalogowej.</p>
+          <p className="mt-3">Ceny widać też na koncie DEMO. PRO zdejmuje znak wodny z PDF i limit jednego projektu.</p>
         </AccordionContent>
       </AccordionItem>
 

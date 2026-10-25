@@ -14,21 +14,23 @@ import {
   GitCompareArrows, TrendingUp, Wallet, Wrench, Download,
   Star, Award, Crown,
 } from "lucide-react";
+import { calcRowPrices } from "@/lib/pricing-calculations";
+import type { ProjectItem } from "@/lib/types/database";
 
 interface VariantComparisonDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   projectName: string;
   isPro?: boolean;
-  projectItems: {
-    name: string;
-    unit: string;
-    quantity: number;
-    final_material_price: number;
-    final_labor_price: number;
-  }[];
+  projectItems: ProjectItem[];
   vatRate: number;
   clientName?: string | null;
+  regionModifier?: number;
+  adjustmentMult?: number;
+  matMarkupMult?: number;
+  labMarkupMult?: number;
+  complexityFactor?: number;
+  materialsOwnedByCustomer?: boolean;
 }
 
 interface VariantConfig {
@@ -95,18 +97,41 @@ export function VariantComparisonDialog({
   projectItems,
   vatRate,
   clientName,
+  regionModifier = 1,
+  adjustmentMult = 1,
+  matMarkupMult = 1,
+  labMarkupMult = 1,
+  complexityFactor = 1,
+  materialsOwnedByCustomer = false,
 }: VariantComparisonDialogProps) {
-  const blurPrice = (v: number) => isPro ? formatCurrency(v) : "*** zł";
+  void isPro;
   const printRef = useRef<HTMLDivElement>(null);
+
+  const billableItems = useMemo(() => {
+    const parentIds = new Set(
+      projectItems.filter((item) => item.is_assembly_child).map((item) => item.parent_assembly_id).filter(Boolean)
+    );
+    return projectItems.filter((item) => !parentIds.has(item.id));
+  }, [projectItems]);
 
   const variantTotals = useMemo(() => {
     return VARIANTS.map((variant) => {
       let materialTotal = 0;
       let laborTotal = 0;
 
-      for (const item of projectItems) {
-        materialTotal += (item.final_material_price || 0) * (item.quantity || 1) * variant.materialMult;
-        laborTotal += (item.final_labor_price || 0) * (item.quantity || 1) * variant.laborMult;
+      for (const item of billableItems) {
+        const prices = calcRowPrices(
+          item,
+          adjustmentMult,
+          materialsOwnedByCustomer,
+          "all",
+          regionModifier,
+          matMarkupMult,
+          labMarkupMult,
+          complexityFactor,
+        );
+        materialTotal += prices.materialTotal * variant.materialMult;
+        laborTotal += prices.laborTotal * variant.laborMult;
       }
 
       const net = materialTotal + laborTotal;
@@ -122,7 +147,7 @@ export function VariantComparisonDialog({
         gross,
       };
     });
-  }, [projectItems, vatRate]);
+  }, [billableItems, vatRate, adjustmentMult, materialsOwnedByCustomer, regionModifier, matMarkupMult, labMarkupMult, complexityFactor]);
 
   const handlePrint = () => {
     const printContent = printRef.current;
@@ -188,7 +213,7 @@ export function VariantComparisonDialog({
           </tbody>
         </table>
         <p class="footer">
-          Wygenerowano w ElektroSmart PRO · ${new Date().toLocaleDateString("pl-PL")} · ${projectItems.length} pozycji
+          Wygenerowano w ElektroSmart PRO · ${new Date().toLocaleDateString("pl-PL")} · ${billableItems.length} pozycji
         </p>
       </body>
       </html>
@@ -223,8 +248,8 @@ export function VariantComparisonDialog({
             Warianty wyceny
           </DialogTitle>
           <DialogDescription>
-            Porównanie 3 wariantów cenowych dla &quot;{projectName}&quot;
-            {clientName && ` · Klient: ${clientName}`}
+            Porównanie 3 wariantów dla &quot;{projectName}&quot;
+            {clientName && ` · Klient: ${clientName}`}. Suma pozycji z województwem i narzutem, przed Kp, Z, Kz i rezerwą.
           </DialogDescription>
         </DialogHeader>
 
@@ -246,8 +271,8 @@ export function VariantComparisonDialog({
                   <span className="text-sm font-bold">{variant.label}</span>
                 </div>
                 <p className="text-[10px] text-muted-foreground mb-2">{variant.description}</p>
-                <p className={`text-lg font-bold ${variant.color} ${!isPro ? "blur-sm select-none" : ""}`}>
-                  {blurPrice(variant.gross)}
+                <p className={`text-lg font-bold ${variant.color}`}>
+                  {formatCurrency(variant.gross)}
                 </p>
                 <p className="text-[10px] text-muted-foreground">brutto (z VAT {vatRate}%)</p>
               </div>
@@ -271,32 +296,32 @@ export function VariantComparisonDialog({
                 <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
                   <td className="px-3 py-2 text-xs font-medium">Materiały</td>
                   {variantTotals.map((v) => (
-                    <td key={v.key} className={`px-3 py-2 text-xs text-right font-medium ${!isPro ? "blur-sm select-none" : ""}`}>{blurPrice(v.materialTotal)}</td>
+                    <td key={v.key} className={`px-3 py-2 text-xs text-right font-medium`}>{formatCurrency(v.materialTotal)}</td>
                   ))}
                 </tr>
                 <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
                   <td className="px-3 py-2 text-xs font-medium">Robocizna</td>
                   {variantTotals.map((v) => (
-                    <td key={v.key} className={`px-3 py-2 text-xs text-right font-medium ${!isPro ? "blur-sm select-none" : ""}`}>{blurPrice(v.laborTotal)}</td>
+                    <td key={v.key} className={`px-3 py-2 text-xs text-right font-medium`}>{formatCurrency(v.laborTotal)}</td>
                   ))}
                 </tr>
                 <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
                   <td className="px-3 py-2 text-xs font-medium">Netto</td>
                   {variantTotals.map((v) => (
-                    <td key={v.key} className={`px-3 py-2 text-xs text-right font-semibold ${!isPro ? "blur-sm select-none" : ""}`}>{blurPrice(v.net)}</td>
+                    <td key={v.key} className={`px-3 py-2 text-xs text-right font-semibold`}>{formatCurrency(v.net)}</td>
                   ))}
                 </tr>
                 <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
                   <td className="px-3 py-2 text-xs font-medium">VAT {vatRate}%</td>
                   {variantTotals.map((v) => (
-                    <td key={v.key} className={`px-3 py-2 text-xs text-right text-muted-foreground ${!isPro ? "blur-sm select-none" : ""}`}>{blurPrice(v.vatAmount)}</td>
+                    <td key={v.key} className={`px-3 py-2 text-xs text-right text-muted-foreground`}>{formatCurrency(v.vatAmount)}</td>
                   ))}
                 </tr>
                 <tr className="bg-slate-50 dark:bg-slate-800/50 font-bold">
                   <td className="px-3 py-2.5 text-xs font-bold">BRUTTO</td>
                   {variantTotals.map((v) => (
-                    <td key={v.key} className={`px-3 py-2.5 text-sm text-right font-bold ${v.color} ${!isPro ? "blur-sm select-none" : ""}`}>
-                      {blurPrice(v.gross)}
+                    <td key={v.key} className={`px-3 py-2.5 text-sm text-right font-bold ${v.color}`}>
+                      {formatCurrency(v.gross)}
                     </td>
                   ))}
                 </tr>
@@ -308,8 +333,8 @@ export function VariantComparisonDialog({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 p-3">
               <p className="text-[10px] text-muted-foreground uppercase font-medium mb-0.5">Oszczędność (Ekonomiczny vs Standard)</p>
-              <p className={`text-sm font-bold text-emerald-700 dark:text-emerald-300 ${!isPro ? "blur-sm select-none" : ""}`}>
-                {blurPrice(variantTotals[1].gross - variantTotals[0].gross)}
+              <p className={`text-sm font-bold text-emerald-700 dark:text-emerald-300`}>
+                {formatCurrency(variantTotals[1].gross - variantTotals[0].gross)}
               </p>
               <p className="text-[10px] text-muted-foreground">
                 ({((1 - variantTotals[0].gross / variantTotals[1].gross) * 100).toFixed(1)}% taniej)
@@ -317,8 +342,8 @@ export function VariantComparisonDialog({
             </div>
             <div className="rounded-lg bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 p-3">
               <p className="text-[10px] text-muted-foreground uppercase font-medium mb-0.5">Dopłata (Premium vs Standard)</p>
-              <p className={`text-sm font-bold text-amber-700 dark:text-amber-300 ${!isPro ? "blur-sm select-none" : ""}`}>
-                {isPro ? "+" : ""}{blurPrice(variantTotals[2].gross - variantTotals[1].gross)}
+              <p className={`text-sm font-bold text-amber-700 dark:text-amber-300`}>
+                +{formatCurrency(variantTotals[2].gross - variantTotals[1].gross)}
               </p>
               <p className="text-[10px] text-muted-foreground">
                 (+{((variantTotals[2].gross / variantTotals[1].gross - 1) * 100).toFixed(1)}% drożej)
@@ -329,7 +354,7 @@ export function VariantComparisonDialog({
           {/* Item count */}
           <div className="text-center">
             <Badge variant="outline" className="text-[10px]">
-              Kalkulacja na podstawie {projectItems.length} pozycji kosztorysu
+              Kalkulacja na podstawie {billableItems.length} pozycji kosztorysu
             </Badge>
           </div>
         </div>

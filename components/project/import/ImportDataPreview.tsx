@@ -96,7 +96,7 @@ const ImportItemRow = memo(function ImportItemRow({
                 <span className="text-[10px] text-muted-foreground/40">|</span>
                 <span className="text-[10px] text-muted-foreground">Rob: {isPro ? `${item.labor_price.toFixed(2)} zł` : "***"}</span>
                 <span className="text-[10px] text-muted-foreground/40">|</span>
-                <span className="text-[10px] font-semibold text-orange-600 dark:text-orange-400">= {isPro ? `${total.toFixed(2)} zł` : "*** zł"}</span>
+                <span className="text-[10px] font-semibold text-orange-600 dark:text-orange-400">= {`${total.toFixed(2)} zł`}</span>
                 {item.knr_code && item.knr_source !== "es_synthetic" && (
                   <span
                     className="text-[9px] font-mono px-1 rounded bg-violet-100 text-violet-700 dark:bg-violet-950/40 dark:text-violet-300"

@@ -5,6 +5,7 @@
  */
 
 import rawData from "./json/market-data.json";
+import { POLISH_REGIONS } from "@/lib/config/regions";
 
 export interface MarketItem {
   id: string;
@@ -16,11 +17,18 @@ export interface MarketItem {
   trendPercent: number;
 }
 
-export const REGIONAL_MODIFIERS: Record<string, number> = rawData.REGIONAL_MODIFIERS as Record<string, number>;
+export const REGIONAL_MODIFIERS: Record<string, number> = Object.fromEntries(
+  POLISH_REGIONS.map((region) => [region.id, region.multiplier])
+);
 
 export const MARKET_DATA: MarketItem[] = rawData.MARKET_DATA as MarketItem[];
 
-export function getRegionalPrice(basePrice: number, region: string): number {
+export function getRegionalPrice(
+  basePrice: number,
+  region: string,
+  kind: "labor" | "material" = "labor",
+): number {
+  if (kind !== "labor") return basePrice;
   const modifier = REGIONAL_MODIFIERS[region] || 1.0;
   return basePrice * modifier;
 }

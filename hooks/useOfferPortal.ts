@@ -105,9 +105,7 @@ export function useOfferPortal(offer: OfferData, token: string): UseOfferPortalR
   // ── Price formatter ───────────────────────────────────────────
 
   const formatPrice = (v: number) =>
-    offer.isDemo
-      ? "*** zł"
-      : new Intl.NumberFormat("pl-PL", { style: "currency", currency: "PLN" }).format(v);
+    new Intl.NumberFormat("pl-PL", { style: "currency", currency: "PLN" }).format(v);
 
   // ── Item value resolver (merges proposed edits) ──────────────
 

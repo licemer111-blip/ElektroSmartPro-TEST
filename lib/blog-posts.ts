@@ -15,6 +15,14 @@ export interface BlogSection {
   items?: string[];
 }
 
+/** Posts about modules that are not in the live product. */
+export const UNPUBLISHED_BLOG_SLUGS = new Set([
+  "wspolpraca-zespolowa-real-time",
+  "co-pilot-audio-sterowanie-glosem",
+  "automatyczne-faktury-infakt",
+  "import-knr-excel-ai-lab",
+]);
+
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: "jak-wycenic-instalacje-2026",
@@ -37,8 +45,8 @@ export const BLOG_POSTS: BlogPost[] = [
         "Oszacuj czas na prace demontażowe przy modernizacji",
       ]},
       { type: "heading", text: "2. Normy KNR — fundament wyceny robocizny" },
-      { type: "paragraph", text: "Katalogi Norm i Robocizny (KNR) to oficjalne dokumenty określające nakłady pracy (rbh — roboczogodziny) dla poszczególnych czynności. Kluczowe dla elektryki to KNR 5-04 (instalacje elektryczne), KNR 5-08 (instalacje teletechniczne) oraz KNR 5-09 (rozdzielnice i aparatura)." },
-      { type: "callout", text: "💡 ElektroSmart PRO zawiera ponad 2 000 norm KNR dla 63 kategorii robót elektrycznych. System automatycznie dobiera normę do nazwy pozycji — wystarczy wpisać np. \"Punkt gniazdka 230V\" a system przypisze właściwy KNR i obliczy rbh." },
+      { type: "paragraph", text: "Nakład pracy zapisuje się w rbh (roboczogodzinach). W ElektroSmart to normy ES: gniazdo, kabel i bruzda mają osobne godziny. To nie jest urzędowa tablica ORGBUD i nie wolno podpisywać jej jako oficjalnego KNR na ofercie." },
+      { type: "callout", text: "💡 System dobiera normę ES do nazwy pozycji. Godziny widać w kolumnie rbh, a złotówki to rbh × Twoja stawka × województwo." },
       { type: "heading", text: "3. Stawka robocizny — różnice regionalne w 2026" },
       { type: "paragraph", text: "Stawka robocizny elektrycznej różni się istotnie w zależności od województwa. W 2026 roku rozpiętość między regionami sięga 40%. Mazowieckie i śląskie to najdroższe rynki, podkarpackie i świętokrzyskie — najtańsze." },
       { type: "list", items: [
@@ -123,7 +131,7 @@ export const BLOG_POSTS: BlogPost[] = [
         "Krok 4: Przenieś historyczne projekty — nawet skrócone wersje, by mieć punkt odniesienia",
         "Krok 5: Zintegruj z fakturami — żeby nie przeklejać danych z kosztorysu do faktury",
       ]},
-      { type: "tip", text: "🚀 ElektroSmart PRO obsługuje pracę zespołową — członkowie zespołu mają dostęp do wspólnego katalogu cen i projektów. Zmiany stawki regionalnej aktualizują wszystkie otwarte kosztorysy natychmiast." },
+      { type: "tip", text: "🚀 W ElektroSmart jeden projekt ma jedną stawkę i jedno województwo. Zmiana stawki przelicza otwarty kosztorys od razu." },
     ],
   },
   {
@@ -271,9 +279,10 @@ export const BLOG_POSTS: BlogPost[] = [
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
+  if (UNPUBLISHED_BLOG_SLUGS.has(slug)) return undefined;
   return BLOG_POSTS.find((p) => p.slug === slug);
 }
 
 export function getAllBlogSlugs(): string[] {
-  return BLOG_POSTS.map((p) => p.slug);
+  return BLOG_POSTS.filter((p) => !UNPUBLISHED_BLOG_SLUGS.has(p.slug)).map((p) => p.slug);
 }

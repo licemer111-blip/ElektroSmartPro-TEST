@@ -88,7 +88,7 @@ function FaqSectionInner({ catalogCount = 1400, dinCount = 295 }: FaqProps) {
             <li>✅ Kreator wyceny, zestawy i 12 kalkulatorów</li>
             <li>✅ Czysty PDF/Excel bez watermarku</li>
             <li>✅ Integracja InFakt</li>
-            <li>✅ Ceny regionalne 16 województw + aktualizacje co 2–6 miesięcy</li>
+            <li>✅ Ceny regionalne 16 województw — współczynnik tylko na robociznę</li>
           </ul>
         </div>
         <p className="mt-3 sm:mt-4 font-medium text-sm sm:text-base text-blue-600 dark:text-blue-400">
