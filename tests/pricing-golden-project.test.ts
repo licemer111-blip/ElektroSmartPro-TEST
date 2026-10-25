@@ -309,9 +309,8 @@ describe("Golden project — with markups + negocjacja", () => {
       1.0,
       1.241,         // KNR 2026
     );
-    // 338415 × 1.12 × 1.20 × 1.241 = ~564 267.52
-    expect(totals.totalLaborNet).toBeGreaterThan(560000);
-    expect(totals.totalLaborNet).toBeLessThan(570000);
+    // 338415 × 1.12 × 1.20. KNR coefficient is not money.
+    expect(totals.totalLaborNet).toBeCloseTo(454829.76, 1);
   });
 });
 

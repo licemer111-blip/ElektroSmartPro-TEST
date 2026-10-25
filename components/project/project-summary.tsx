@@ -123,7 +123,7 @@ export function ProjectSummary({
         if (scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY" || scm.category === "ROZDZIELNICA") {
           const expansion = expandToAssembly(item.name, item.quantity, sector, projectLaborRate, knrMultiplier, item.assembly_overrides ?? undefined);
           if (expansion.triggered && (expansion.totalLaborPLN > 0 || expansion.totalMaterialPLN > 0)) {
-            // totalLaborPLN = totalRBH × projectLaborRate (base, no region, knrMult already inside)
+            // totalLaborPLN = totalRBH × stawka. Region, narzut and complexity apply once here.
             rawLaborBase += expansion.totalLaborPLN;
             baseLaborTotal += expansion.totalLaborPLN * regionModifier * labMarkupMult * complexityFactor;
             if (!materialsOwnedByCustomer) {
@@ -141,7 +141,7 @@ export function ProjectSummary({
         baseMaterialTotal += effectiveMaterialPrice * item.quantity * matMarkupMult;
       }
       rawLaborBase += effectiveLaborPrice * item.quantity;
-      baseLaborTotal += effectiveLaborPrice * item.quantity * effectiveRegion * labMarkupMult * complexityFactor * knrMultiplier;
+      baseLaborTotal += effectiveLaborPrice * item.quantity * effectiveRegion * labMarkupMult * complexityFactor;
     });
 
     const sumaBazowaNetto = rawMaterialBase + rawLaborBase;
@@ -190,6 +190,9 @@ export function ProjectSummary({
     const sections = new Map<string, { mat: number; lab: number; count: number }>();
     const parentIds = new Set(items.filter(i => i.is_assembly_child).map(i => i.parent_assembly_id).filter(Boolean));
     const adjustmentMultiplier = 1 + (project.adjustment_percentage || 0) / 100;
+    const matMarkupMult = 1 + (project.mat_markup_pct || 0) / 100;
+    const labMarkupMult = 1 + (project.lab_markup_pct || 0) / 100;
+    const complexityFactor = project.complexity_factor || 1.0;
 
     items.forEach(item => {
       if (item.is_assembly_child) return;
@@ -201,16 +204,16 @@ export function ProjectSummary({
         children.forEach(c => {
           const isChildManual = c.confidence_level === "manual";
           const effRegion = isChildManual ? 1.0 : regionModifier;
-          const cMat = materialsOwnedByCustomer ? 0 : (c.final_material_price ?? c.material_price ?? 0) * c.quantity * adjustmentMultiplier;
-          const cLab = (c.final_labor_price ?? c.labor_price ?? 0) * c.quantity * adjustmentMultiplier * effRegion * knrMultiplier;
+          const cMat = materialsOwnedByCustomer ? 0 : (c.final_material_price ?? c.material_price ?? 0) * c.quantity * adjustmentMultiplier * matMarkupMult;
+          const cLab = (c.final_labor_price ?? c.labor_price ?? 0) * c.quantity * adjustmentMultiplier * effRegion * labMarkupMult * complexityFactor;
           prev.mat += cMat;
           prev.lab += cLab;
         });
       } else {
         const isManual = item.confidence_level === "manual";
         const effRegion = isManual ? 1.0 : regionModifier;
-        const mat = materialsOwnedByCustomer ? 0 : (item.final_material_price ?? item.material_price ?? 0) * item.quantity * adjustmentMultiplier;
-        const lab = (item.final_labor_price ?? item.labor_price ?? 0) * item.quantity * adjustmentMultiplier * effRegion * knrMultiplier;
+        const mat = materialsOwnedByCustomer ? 0 : (item.final_material_price ?? item.material_price ?? 0) * item.quantity * adjustmentMultiplier * matMarkupMult;
+        const lab = (item.final_labor_price ?? item.labor_price ?? 0) * item.quantity * adjustmentMultiplier * effRegion * labMarkupMult * complexityFactor;
         prev.mat += mat;
         prev.lab += lab;
       }

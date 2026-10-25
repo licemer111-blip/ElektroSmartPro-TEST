@@ -84,15 +84,15 @@ describe("calcRowPrices — typical residential items", () => {
     );
     expect(r).toMatchInlineSnapshot(`
       {
-        "laborTotal": 930.75,
+        "laborTotal": 750,
         "laborTotalBase": 750,
-        "laborUnit": 93.075,
+        "laborUnit": 75,
         "laborUnitBase": 75,
         "materialTotal": 120,
         "materialTotalBase": 120,
         "materialUnit": 12,
         "materialUnitBase": 12,
-        "rowTotal": 1050.75,
+        "rowTotal": 870,
       }
     `);
   });
@@ -118,15 +118,15 @@ describe("calcRowPrices — typical residential items", () => {
     );
     expect(r).toMatchInlineSnapshot(`
       {
-        "laborTotal": 372.3,
+        "laborTotal": 300,
         "laborTotalBase": 300,
-        "laborUnit": 3.1025,
+        "laborUnit": 2.5,
         "laborUnitBase": 2.5,
         "materialTotal": 576,
         "materialTotalBase": 576,
         "materialUnit": 4.8,
         "materialUnitBase": 4.8,
-        "rowTotal": 948.3,
+        "rowTotal": 876,
       }
     `);
   });
@@ -152,15 +152,15 @@ describe("calcRowPrices — typical residential items", () => {
     );
     expect(r).toMatchInlineSnapshot(`
       {
-        "laborTotal": 1131.79,
+        "laborTotal": 912,
         "laborTotalBase": 912,
-        "laborUnit": 47.158,
+        "laborUnit": 38,
         "laborUnitBase": 38,
         "materialTotal": 1560,
         "materialTotalBase": 1560,
         "materialUnit": 65,
         "materialUnitBase": 65,
-        "rowTotal": 2691.79,
+        "rowTotal": 2472,
       }
     `);
   });
@@ -181,15 +181,15 @@ describe("calcRowPrices — regional multipliers (Mazowieckie vs Lubelskie)", ()
     const r = calcRowPrices(baseItem, 1, false, "all", 1.12, 1, 1, 1, DEFAULTS.knrMultiplier);
     expect(r).toMatchInlineSnapshot(`
       {
-        "laborTotal": 555.97,
+        "laborTotal": 448,
         "laborTotalBase": 400,
-        "laborUnit": 69.49600000000001,
+        "laborUnit": 56.00000000000001,
         "laborUnitBase": 50,
         "materialTotal": 80,
         "materialTotalBase": 80,
         "materialUnit": 10,
         "materialUnitBase": 10,
-        "rowTotal": 635.97,
+        "rowTotal": 528,
       }
     `);
   });
@@ -198,15 +198,15 @@ describe("calcRowPrices — regional multipliers (Mazowieckie vs Lubelskie)", ()
     const r = calcRowPrices(baseItem, 1, false, "all", 0.88, 1, 1, 1, DEFAULTS.knrMultiplier);
     expect(r).toMatchInlineSnapshot(`
       {
-        "laborTotal": 436.83,
+        "laborTotal": 352,
         "laborTotalBase": 400,
-        "laborUnit": 54.604000000000006,
+        "laborUnit": 44,
         "laborUnitBase": 50,
         "materialTotal": 80,
         "materialTotalBase": 80,
         "materialUnit": 10,
         "materialUnitBase": 10,
-        "rowTotal": 516.83,
+        "rowTotal": 432,
       }
     `);
   });
@@ -227,15 +227,15 @@ describe("calcRowPrices — manual prices are sovereign (skip region)", () => {
     const r = calcRowPrices(item, 1.1, false, "all", 1.12, 1, 1, 1, DEFAULTS.knrMultiplier);
     expect(r).toMatchInlineSnapshot(`
       {
-        "laborTotal": 1092.08,
+        "laborTotal": 880,
         "laborTotalBase": 800,
-        "laborUnit": 1092.0800000000002,
+        "laborUnit": 880.0000000000001,
         "laborUnitBase": 800,
         "materialTotal": 220,
         "materialTotalBase": 200,
         "materialUnit": 220.00000000000003,
         "materialUnitBase": 200,
-        "rowTotal": 1312.08,
+        "rowTotal": 1100,
       }
     `);
   });
@@ -256,15 +256,15 @@ describe("calcRowPrices — lump-sum (is_lump_sum) ignores quantity in totals", 
     const r = calcRowPrices(item, 1, false, "all", 1, 1, 1, 1, DEFAULTS.knrMultiplier);
     expect(r).toMatchInlineSnapshot(`
       {
-        "laborTotal": 4343.5,
+        "laborTotal": 3500,
         "laborTotalBase": 3500,
-        "laborUnit": 4343.5,
+        "laborUnit": 3500,
         "laborUnitBase": 3500,
         "materialTotal": 1200,
         "materialTotalBase": 1200,
         "materialUnit": 1200,
         "materialUnitBase": 1200,
-        "rowTotal": 5543.5,
+        "rowTotal": 4700,
       }
     `);
   });
@@ -285,15 +285,15 @@ describe("calcRowPrices — materials supplied by investor", () => {
     const r = calcRowPrices(item, 1, false, "all", 1, 1, 1, 1, DEFAULTS.knrMultiplier);
     expect(r).toMatchInlineSnapshot(`
       {
-        "laborTotal": 595.68,
+        "laborTotal": 480,
         "laborTotalBase": 480,
-        "laborUnit": 49.64,
+        "laborUnit": 40,
         "laborUnitBase": 40,
         "materialTotal": 0,
         "materialTotalBase": 0,
         "materialUnit": 0,
         "materialUnitBase": 0,
-        "rowTotal": 595.68,
+        "rowTotal": 480,
       }
     `);
   });
@@ -309,15 +309,15 @@ describe("calcRowPrices — materials supplied by investor", () => {
     const r = calcRowPrices(item, 1, /*materialsOwnedByCustomer*/ true, "all", 1, 1, 1, 1, DEFAULTS.knrMultiplier);
     expect(r).toMatchInlineSnapshot(`
       {
-        "laborTotal": 1787.04,
+        "laborTotal": 1440,
         "laborTotalBase": 1440,
-        "laborUnit": 89.352,
+        "laborUnit": 72,
         "laborUnitBase": 72,
         "materialTotal": 0,
         "materialTotalBase": 0,
         "materialUnit": 0,
         "materialUnitBase": 0,
-        "rowTotal": 1787.04,
+        "rowTotal": 1440,
       }
     `);
   });
@@ -347,15 +347,15 @@ describe("calcRowPrices — v3.0 markups chain", () => {
     );
     expect(r).toMatchInlineSnapshot(`
       {
-        "laborTotal": 4336.55,
+        "laborTotal": 3494.4,
         "laborTotalBase": 2000,
-        "laborUnit": 4336.550400000001,
+        "laborUnit": 3494.4000000000005,
         "laborUnitBase": 2000,
         "materialTotal": 920,
         "materialTotalBase": 800,
         "materialUnit": 919.9999999999999,
         "materialUnitBase": 800,
-        "rowTotal": 5256.55,
+        "rowTotal": 4414.4,
       }
     `);
   });
@@ -381,15 +381,15 @@ describe("calcRowPrices — v3.0 markups chain", () => {
     );
     expect(r).toMatchInlineSnapshot(`
       {
-        "laborTotal": 430.01,
+        "laborTotal": 346.5,
         "laborTotalBase": 350,
-        "laborUnit": 8.600130000000002,
+        "laborUnit": 6.9300000000000015,
         "laborUnitBase": 7,
         "materialTotal": 891,
         "materialTotalBase": 900,
         "materialUnit": 17.82,
         "materialUnitBase": 18,
-        "rowTotal": 1321.01,
+        "rowTotal": 1237.5,
       }
     `);
   });
@@ -563,13 +563,13 @@ describe("calcProjectTotals — residential mieszkanie 60 m² fixture", () => {
         "contingencyAmount": 0,
         "marginAmount": 0,
         "marginPercent": 0,
-        "totalGross": 6168.8196,
-        "totalLaborNet": 3877.87,
+        "totalGross": 5355.504,
+        "totalLaborNet": 3124.8,
         "totalMaterialNet": 1834,
-        "totalNet": 5711.87,
-        "totalNetWithContingency": 5711.87,
-        "totalVat": 456.94960000000003,
-        "vatLabor": 310.2296,
+        "totalNet": 4958.8,
+        "totalNetWithContingency": 4958.8,
+        "totalVat": 396.704,
+        "vatLabor": 249.984,
         "vatMaterial": 146.72,
       }
     `);
@@ -588,17 +588,17 @@ describe("calcProjectTotals — residential mieszkanie 60 m² fixture", () => {
     // contingency = 10% * totalNet; gross grows accordingly.
     expect(totals).toMatchInlineSnapshot(`
       {
-        "contingencyAmount": 571.19,
+        "contingencyAmount": 495.88,
         "marginAmount": 0,
         "marginPercent": 0,
-        "totalGross": 6785.7047999999995,
-        "totalLaborNet": 3877.87,
+        "totalGross": 5891.0544,
+        "totalLaborNet": 3124.8,
         "totalMaterialNet": 1834,
-        "totalNet": 5711.87,
-        "totalNetWithContingency": 6283.0599999999995,
-        "totalVat": 502.6447999999999,
-        "vatLabor": 341.2527229394226,
-        "vatMaterial": 161.39207706057735,
+        "totalNet": 4958.8,
+        "totalNetWithContingency": 5454.68,
+        "totalVat": 436.37440000000004,
+        "vatLabor": 274.98240000000004,
+        "vatMaterial": 161.392,
       }
     `);
   });

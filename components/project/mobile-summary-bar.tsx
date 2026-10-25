@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { BlurredPrice } from "@/components/ui/blurred-price";
 import { getEffectiveIsPro } from "@/lib/auth/entitlements";
+import { calcNarzuty } from "@/lib/pricing-calculations";
 import { PriceAdjuster } from "@/components/project/price-adjuster";
 import {
   Sheet,
@@ -63,20 +64,31 @@ export function MobileSummaryBar({
   const materialsOwnedByCustomer = project.materials_owned_by_customer;
   const regionName = project.regions?.name || "Brak";
   const regionModifier = project.regions?.price_modifier || 1.0;
+  const matMarkupMult = 1 + (project.mat_markup_pct || 0) / 100;
+  const labMarkupMult = 1 + (project.lab_markup_pct || 0) / 100;
+  const complexityFactor = project.complexity_factor || 1.0;
 
-  // Calculate totals
+  // Same factors as Podsumowanie: stawka is already in the stored labor, region once.
   let baseMaterialTotal = 0;
   let baseLaborTotal = 0;
   items.forEach((item) => {
     const matPrice = item.final_material_price ?? item.material_price ?? 0;
     const labPrice = item.final_labor_price ?? item.labor_price ?? 0;
-    if (!materialsOwnedByCustomer) baseMaterialTotal += matPrice * item.quantity;
-    baseLaborTotal += labPrice * item.quantity;
+    const effectiveRegion = item.confidence_level === "manual" ? 1 : regionModifier;
+    if (!materialsOwnedByCustomer) baseMaterialTotal += matPrice * item.quantity * matMarkupMult;
+    baseLaborTotal += labPrice * item.quantity * effectiveRegion * labMarkupMult * complexityFactor;
   });
   const adj = 1 + (project.adjustment_percentage || 0) / 100;
   const materialTotal = baseMaterialTotal * adj;
-  const laborTotal = baseLaborTotal * knrMultiplier * adj;
-  const subtotal = materialTotal + laborTotal;
+  const laborTotal = baseLaborTotal * adj;
+  const { totalNarzuty } = calcNarzuty(laborTotal, materialTotal, {
+    kpPercent: project.kp_percent || 0,
+    zPercent: project.z_percent || 0,
+    kzPercent: project.kz_percent || 0,
+  });
+  const subtotalWithNarzuty = materialTotal + laborTotal + totalNarzuty;
+  const contingencyAmount = subtotalWithNarzuty * (project.contingency_pct || 0) / 100;
+  const subtotal = subtotalWithNarzuty + contingencyAmount;
   const vatAmount = (subtotal * vatRate) / 100;
   const grandTotal = subtotal + vatAmount;
 
@@ -135,13 +147,13 @@ export function MobileSummaryBar({
         const children = items.filter(c => c.parent_assembly_id === item.id);
         const childSum = children.reduce((acc, c) => {
           const cMat = materialsOwnedByCustomer ? 0 : (c.final_material_price ?? c.material_price ?? 0) * c.quantity;
-          const cLab = (c.final_labor_price ?? c.labor_price ?? 0) * c.quantity * knrMultiplier;
+          const cLab = (c.final_labor_price ?? c.labor_price ?? 0) * c.quantity * (c.confidence_level === "manual" ? 1 : regionModifier);
           return acc + (cMat + cLab);
         }, 0);
         sections.set(sec, prev + childSum * adj);
       } else {
         const mat = materialsOwnedByCustomer ? 0 : (item.final_material_price ?? item.material_price ?? 0) * item.quantity;
-        const lab = (item.final_labor_price ?? item.labor_price ?? 0) * item.quantity * knrMultiplier;
+        const lab = (item.final_labor_price ?? item.labor_price ?? 0) * item.quantity * (item.confidence_level === "manual" ? 1 : regionModifier);
         sections.set(sec, prev + (mat + lab) * adj);
       }
     });

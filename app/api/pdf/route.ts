@@ -269,7 +269,7 @@ export async function POST(req: Request) {
         ...item,
         // matOwnedByClient or isInvestorMat: zero out material prices
         finalMat: (matOwnedByClient || isInvestorMat) ? 0 : getPrice(item, "mat") * matMarkupMult * adjustmentOnly * vatMultiplier,
-        finalLab: getPrice(item, "lab") * labMarkupMult * complexityFactor * knrMultiplier * adjustmentOnly * effectiveRegion * vatMultiplier,
+        finalLab: getPrice(item, "lab") * labMarkupMult * complexityFactor * adjustmentOnly * effectiveRegion * vatMultiplier,
         laborNorm: Number((item as Record<string, unknown>).labor_norm ?? 0),
         isInvestorMat,
       };

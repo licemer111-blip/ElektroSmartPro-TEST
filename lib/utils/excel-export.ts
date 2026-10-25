@@ -106,6 +106,7 @@ function buildKosztorysSheet(
   showKnr: boolean = false,
   knrMultiplier: number = 1.0,
 ): BuildResult {
+  void knrMultiplier;
   // Flatten so every child item appears immediately after its parent
   const flatItems = flattenProjectItems(items);
 
@@ -114,7 +115,7 @@ function buildKosztorysSheet(
     return sum + ((item.final_material_price ?? item.material_price ?? 0) * item.quantity);
   }, 0);
   const laborTotal = flatItems.reduce((sum, item) => {
-    return sum + ((item.final_labor_price ?? item.labor_price ?? 0) * item.quantity * knrMultiplier);
+    return sum + ((item.final_labor_price ?? item.labor_price ?? 0) * item.quantity);
   }, 0);
   const subtotal = materialTotal + laborTotal;
   const adjMult = 1 + (project.adjustment_percentage || 0) / 100;
@@ -316,7 +317,7 @@ function buildKosztorysSheet(
     }
 
     const matPrice = item.final_material_price ?? item.material_price ?? 0;
-    const labPrice = (item.final_labor_price ?? item.labor_price ?? 0) * knrMultiplier;
+    const labPrice = (item.final_labor_price ?? item.labor_price ?? 0);
     const isChild   = item.is_assembly_child === true;
     const isZestaw  = assemblyParentIds.has(item.id);
 
@@ -324,7 +325,7 @@ function buildKosztorysSheet(
     const ownTotal = (matPrice + labPrice) * item.quantity;
     const totalPrice = isZestaw
       ? flatItems.filter(c => c.parent_assembly_id === item.id).reduce(
-          (acc, c) => acc + ((c.final_material_price ?? c.material_price ?? 0) + (c.final_labor_price ?? c.labor_price ?? 0) * knrMultiplier) * c.quantity, 0
+          (acc, c) => acc + ((c.final_material_price ?? c.material_price ?? 0) + (c.final_labor_price ?? c.labor_price ?? 0)) * c.quantity, 0
         )
       : ownTotal;
 

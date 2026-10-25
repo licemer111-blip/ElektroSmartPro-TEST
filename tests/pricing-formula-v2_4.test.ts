@@ -32,13 +32,6 @@ function calculateLaborPriceV2_4(
   return Math.round(laborNorm * localMod * baseRate * globalLaborMod * 100) / 100;
 }
 
-/**
- * Display-time formula: storage price × KNR multiplier (project complexity).
- */
-function calculateDisplayPrice(storedLaborPrice: number, knrMultiplier: number): number {
-  return Math.round(storedLaborPrice * knrMultiplier * 100) / 100;
-}
-
 describe("Pricing Formula v2.4 — clean storage (no M-Factor double-discount)", () => {
   describe("STORAGE FORMULA: labor_price = labor_norm × localMod × baseRate", () => {
     it("YDYp 3×1.5 (norm 0.13) at 150 PLN/h → 19.50 zł stored", () => {
@@ -72,21 +65,19 @@ describe("Pricing Formula v2.4 — clean storage (no M-Factor double-discount)",
     });
   });
 
-  describe("DISPLAY FORMULA: storage × KNR multiplier", () => {
-    it("Bruzd cegła effective rate = 150 × 1.5 = 225 PLN/h", () => {
+  describe("DISPLAY FORMULA: stored labor is already rbh × stawka", () => {
+    it("Bruzd cegła shows 0.85 × 150, not 0.85 × 225", () => {
       const stored = calculateLaborPriceV2_4(0.85, 1.0, 150);
-      const displayed = calculateDisplayPrice(stored, 1.5);
-      expect(displayed).toBe(191.25);
-      // Effective rbh × rate = 0.85 × 225 = 191.25 ✓
-      expect(0.85 * 225).toBe(191.25);
+      expect(stored).toBe(127.50);
+      expect(0.85 * 150).toBe(127.50);
     });
 
     it("Bruzd beton displayed should EXCEED Bruzd cegła displayed", () => {
-      const cegla = calculateDisplayPrice(calculateLaborPriceV2_4(0.85, 1.0, 150), 1.5);
-      const beton = calculateDisplayPrice(calculateLaborPriceV2_4(2.0, 1.0, 150), 1.5);
+      const cegla = calculateLaborPriceV2_4(0.85, 1.0, 150);
+      const beton = calculateLaborPriceV2_4(2.0, 1.0, 150);
       expect(beton).toBeGreaterThan(cegla);
-      expect(beton).toBe(450.00);
-      expect(cegla).toBe(191.25);
+      expect(beton).toBe(300.00);
+      expect(cegla).toBe(127.50);
     });
   });
 
@@ -104,12 +95,6 @@ describe("Pricing Formula v2.4 — clean storage (no M-Factor double-discount)",
       expect(v2_4_stored / v2_3_stored).toBeCloseTo(1.538, 2);
     });
 
-    it("Effective hourly rate for user with 150 PLN/h + KNR 1.5 ≈ 225 PLN/h (v2.4)", () => {
-      // v2.3 effective: 150 × 0.65 × 1.5 = 146.25 ≈ "150 zł/h" (close to user expectation)
-      // v2.4 effective: 150 × 1.5 = 225 zł/h (proper Polish electrician premium rate)
-      const v2_4_effective = 150 * 1.5;
-      expect(v2_4_effective).toBe(225);
-    });
   });
 
   describe("Local modifiers still applied (cable/surface/ceiling/height)", () => {

@@ -2,8 +2,6 @@
 
 import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
-import { getKnrMultiplier } from "@/lib/global-benchmarks";
-
 export interface ProfitabilityData {
   // Revenue
   totalRevenue: number;
@@ -103,9 +101,8 @@ export async function getProjectProfitability(projectId: string): Promise<Profit
   // Step 2: Adjustment
   const adjustmentPercent = project.adjustment_percentage || 0;
   const adjustmentMultiplier = 1 + adjustmentPercent / 100;
-  const knrMultiplier = await getKnrMultiplier();
   const materialTotal = baseMaterialTotal * adjustmentMultiplier;
-  const laborTotal = baseLaborTotal * knrMultiplier * adjustmentMultiplier;
+  const laborTotal = baseLaborTotal * adjustmentMultiplier;
 
   // Step 3: Narzuty (Kp, Z, Kz)
   const kpPercent = project.kp_percent || 0;

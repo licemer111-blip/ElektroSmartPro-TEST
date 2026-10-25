@@ -4,26 +4,13 @@
 // All functions are pure (no side effects) and unit-testable.
 // Used by EstimateRow, EstimateFooter, and estimate-table.tsx.
 //
-// KNR 2026 MULTIPLIER ARCHITECTURE (Display-Time Application):
+// LABOR FORMULA (one step, no hidden coefficient):
 // ─────────────────────────────────────────────────────────────
-// The KNR multiplier adjusts outdated KNR labor norms to 2026 market reality.
-//
-// How it works:
-//   1. Database stores BASE prices (without multiplier)
-//   2. calcRowPrices() receives knrMultiplier from useKnrMultiplier() hook
-//   3. Multiplier is applied to labor at RENDER TIME
-//   4. Admin changes multiplier → BroadcastChannel → all tabs re-render
-//
-// Benefits:
-//   ✓ No database migration needed when multiplier changes
-//   ✓ Instant effect across all projects
-//   ✓ Easy to adjust based on market conditions
-//
-// Files involved:
-//   - hooks/useKnrMultiplier.ts — fetches multiplier from admin_settings
-//   - lib/global-benchmarks.ts — server-side getKnrMultiplier()
-//   - app/admin/settings/ — admin UI to change multiplier
-//   - This file — applies multiplier in calcRowPrices()
+// Stored labor_price is already: norma rbh × stawka elektryka.
+// Display: labor_price × województwo × narzuty × złożoność × negocjacja.
+// The old admin "KNR 2026" coefficient (×1.4 / ×1.5) is NOT applied to money.
+// It made the rbh column lie: 0.50 rbh × 120 zł/h showed up as 90 zł.
+// Callers may still pass knrMultiplier; calcRowPrices ignores it.
 // ============================================================
 
 import type { ProjectItem } from "@/lib/types/database";
@@ -106,9 +93,11 @@ export function calcRowPrices(
 
   // ── Smart Total — with adjustment + region modifier + v3 markups ─────────────
   // roundPrice() applied ONLY to final totals — not to unit prices.
-  // v3 order: base × matMarkup × adjMult (negocjacje) × knrMultiplier
+  // Order: base × markup × złożoność × negocjacja × województwo.
+  // knrMultiplier is accepted so old callers compile; it must not change złotówki.
+  void knrMultiplier;
   const materialUnit = suppressMaterial ? 0 : rawMat * matMarkupMult * effectiveAdjMult;
-  const laborUnit = rawLab * labMarkupMult * complexityFactor * knrMultiplier * effectiveAdjMult * effectiveRegionModifier;
+  const laborUnit = rawLab * labMarkupMult * complexityFactor * effectiveAdjMult * effectiveRegionModifier;
   const materialTotal = roundPrice(materialUnit * effectiveQty);
   const laborTotal = roundPrice(laborUnit * effectiveQty);
 

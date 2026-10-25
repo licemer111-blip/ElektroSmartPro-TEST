@@ -414,7 +414,7 @@ export function SmartAssemblyPanel({
         ) : (
           <div className="pt-1 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
             <p className="text-[9px] text-slate-400 dark:text-slate-500 leading-tight flex-1">
-              Formuła: Σ(RBH × KNR×{knrMultiplier.toFixed(2)} × ilość). Stawka: {laborRate} PLN/rbh.
+              Formuła: Σ(rbh × ilość) × stawka. Stawka: {laborRate} PLN/rbh.
             </p>
             <div className="flex items-center gap-1 flex-shrink-0">
               {canEdit && onToggleSmartDisabled && (

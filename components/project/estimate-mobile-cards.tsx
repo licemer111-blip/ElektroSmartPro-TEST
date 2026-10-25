@@ -38,8 +38,8 @@ interface SwipeState { id: string; x: number; committed: boolean }
 function calcItemMat(item: ProjectItem) {
   return (item.final_material_price ?? item.material_price ?? 0);
 }
-function calcItemLab(item: ProjectItem, knrMult: number = 1.0) {
-  return (item.final_labor_price ?? item.labor_price ?? 0) * knrMult;
+function calcItemLab(item: ProjectItem, _knrMult: number = 1.0) {
+  return (item.final_labor_price ?? item.labor_price ?? 0);
 }
 function calcTotal(item: ProjectItem, adj: number, knrMult: number = 1.0): number {
   const base = (calcItemMat(item) + calcItemLab(item, knrMult)) * item.quantity;

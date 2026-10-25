@@ -321,8 +321,8 @@ export const EstimateRow = React.memo(function EstimateRow({
     const expansion = expandToAssembly(item.name, item.quantity, projectSector, projectLaborRate, knrMultiplier, item.assembly_overrides ?? undefined);
     if (expansion.triggered) {
       const qty = item.quantity || 1;
-      const effLab = expansion.totalLaborPLN * regionModifier * adjustmentMultiplier;
-      const effMat = materialsOwnedByCustomer ? 0 : expansion.totalMaterialPLN * adjustmentMultiplier;
+      const effLab = expansion.totalLaborPLN * regionModifier * labMarkupMult * complexityFactor * adjustmentMultiplier;
+      const effMat = materialsOwnedByCustomer ? 0 : expansion.totalMaterialPLN * matMarkupMult * adjustmentMultiplier;
       // B2: If all items were manually disabled, expansion gives 0. Fall back to DB prices.
       if (effLab + effMat > 0) {
         laborTotal         = roundPrice(effLab);

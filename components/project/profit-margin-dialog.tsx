@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -64,7 +63,6 @@ export function ProfitMarginDialog({
   items,
   vatRate,
 }: ProfitMarginDialogProps) {
-  const { multiplier: knrMultiplier } = useKnrMultiplier();
   // v2.0: prices are always visible — margin analysis is internal data that
   // doesn't drive conversion when hidden. Conversion is driven by PDF export / portal klienta.
   const blurPrice = (v: number) => formatCurrency(v);
@@ -101,7 +99,7 @@ export function ProfitMarginDialog({
     for (const item of items) {
       const qty = item.quantity || 1;
       quotedMaterial += (item.final_material_price || 0) * qty;
-      quotedLabor += (item.final_labor_price || 0) * qty * knrMultiplier;
+      quotedLabor += (item.final_labor_price || 0) * qty;
 
       const actual = actualCosts[item.id];
       if (actual && (actual.material > 0 || actual.labor > 0)) {
@@ -111,7 +109,7 @@ export function ProfitMarginDialog({
       } else {
         // Default: assume actual = quoted (with knrMultiplier applied)
         actualMaterialTotal += (item.final_material_price || 0) * qty;
-        actualLaborTotal += (item.final_labor_price || 0) * qty * knrMultiplier;
+        actualLaborTotal += (item.final_labor_price || 0) * qty;
       }
     }
 

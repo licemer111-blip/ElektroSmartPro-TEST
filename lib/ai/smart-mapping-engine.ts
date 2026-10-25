@@ -568,7 +568,8 @@ export function expandToAssembly(
     const effRbhUnit  = ov?.rbhPerUnit            ?? def.rbhPerUnit;
     const effMatUnit  = ov?.materialPricePerUnit  ?? def.materialPricePerUnit;
     const quantity    = effQtyMult * parentQty;
-    const rbhTotal    = effRbhUnit * quantity * knrMultiplier;
+    const rbhTotal    = effRbhUnit * quantity;
+    void knrMultiplier;
     const materialTotal = def.isLabor ? 0 : effMatUnit * quantity;
     return {
       label: def.label,

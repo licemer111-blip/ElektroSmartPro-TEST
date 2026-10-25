@@ -110,8 +110,8 @@ describe("Preview=Apply parity — labor only", () => {
     const preview = previewCalc(params);
     const display = displayCalc(params);
     expect(preview.laborTotal).toBe(display.laborTotal);
-    // Sanity: 75 × 10 × 1.2 × 1.241 = 1116.9
-    expect(preview.laborTotal).toBeCloseTo(1116.9, 1);
+    // 75 × 10 × narzut 1.2. KNR coefficient is not money.
+    expect(preview.laborTotal).toBeCloseTo(900, 1);
   });
 
   it("negocjacja -20% (adjustmentMult=0.8) → preview shows discounted labor", () => {

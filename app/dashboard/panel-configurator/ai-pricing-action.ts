@@ -14,7 +14,7 @@ import { logger } from "@/lib/logger";
 import { askExpertWithAudit } from "@/server/services/ai-advisor.service";
 import { listKbFileNames } from "@/lib/kb-storage";
 import { VOIVODESHIP_MODIFIERS } from "@/lib/ai-master-brain";
-import { getEffectiveRate, getKnrMultiplier } from "@/lib/global-benchmarks";
+import { getEffectiveRate } from "@/lib/global-benchmarks";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { z } from "zod";
 
@@ -286,7 +286,6 @@ export async function pricePanelWithAI(
   }
   const materialMultiplier = effectiveRate.matMultiplier;
   const laborRatePLN = effectiveRate.laborRate;
-  const knrMultiplier = await getKnrMultiplier();
 
   const totalModules = sections.reduce(
     (s, sec) => s + sec.modules.length + sec.accessories.length,
@@ -411,7 +410,7 @@ Zwróć kompletny obiekt JSON ze wszystkimi sekcjami, modułami i sumami.`;
 
       if (knrEntry) {
         // L0: KNR-verified — deterministic labor, no AI guessing
-        const unitLabor = Math.round(knrEntry.laborNorm * knrMultiplier * laborRatePLN * 100) / 100;
+        const unitLabor = Math.round(knrEntry.laborNorm * laborRatePLN * 100) / 100;
         const modStr = "";
         const voivStr = request.voivodeshipName
           ? ` | ${request.voivodeshipName} ×${voivodeshipModifier.toFixed(2)}`
@@ -455,7 +454,7 @@ Zwróć kompletny obiekt JSON ze wszystkimi sekcjami, modułami i sumami.`;
       const inputSec = sections.find(s => s.sectionName === sec.sectionName);
       const enclosureKnr = resolveEnclosureKnr(inputSec?.enclosureModules ?? 36);
       const enclosureLabor = Math.round(
-        enclosureKnr.laborNorm * knrMultiplier * laborRatePLN * 100
+        enclosureKnr.laborNorm * laborRatePLN * 100
       ) / 100;
       // Apply manufacturerCoeff to enclosure material price
       const enclosureMaterialWithCoeff = Math.round((sec.enclosureMaterial ?? 0) * manufacturerCoeff * 100) / 100;

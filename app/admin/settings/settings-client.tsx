@@ -143,7 +143,7 @@ export function SettingsClient({ initialKnrMultiplier }: Props) {
             Współczynnik KNR 2026
           </CardTitle>
           <CardDescription className="text-xs">
-            Globalny mnożnik norm robocizny KNR · wpływa na WSZYSTKIE nowe wyceny
+            Zapisana wartość nie zmienia złotówek. Robocizna = rbh × stawka × województwo.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -160,8 +160,8 @@ export function SettingsClient({ initialKnrMultiplier }: Props) {
               className="w-28"
             />
             <div className="text-xs text-slate-500 space-y-0.5">
-              <p>Obecna wartość: <strong className="text-emerald-600">{knrMultiplier}×</strong> ({Math.round((knrMultiplier - 1) * 100)}% powyżej bazy KNR)</p>
-              <p className="text-slate-400">Rekomendacja: 1.4–1.6 dla rynku polskiego 2026</p>
+              <p>Zapisane: <strong className="text-emerald-600">{knrMultiplier}×</strong></p>
+              <p className="text-slate-400">Normy 2026 są już w rbh. Stawka elektryka jest stawką.</p>
             </div>
           </div>
 

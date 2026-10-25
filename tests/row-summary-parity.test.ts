@@ -47,7 +47,7 @@ function makeItem(partial: Partial<ProjectItem>): ProjectItem {
  *
  * v4.1 (Phase 7): mirrors calcRowPrices labor formula. Order of multipliers
  * MUST match exactly otherwise floating-point order would break parity:
- *   rawLab × qty × region × labMarkupMult × complexityFactor × knrMultiplier × adjMult
+ *   rawLab × qty × region × labMarkupMult × complexityFactor × adjMult
  */
 function summaryLaborContribution(
   item: ProjectItem,
@@ -61,7 +61,8 @@ function summaryLaborContribution(
   const isManual = item.confidence_level === "manual";
   const effectiveRegion = isManual ? 1.0 : regionModifier;
   // baseLaborTotal accumulator in project-summary.tsx
-  const baseLaborTotal = effectiveLaborPrice * item.quantity * effectiveRegion * labMarkupMult * complexityFactor * knrMultiplier;
+  const baseLaborTotal = effectiveLaborPrice * item.quantity * effectiveRegion * labMarkupMult * complexityFactor;
+  void knrMultiplier;
   // Final laborTotal = baseLaborTotal × adjustmentMult
   return baseLaborTotal * adjustmentMult;
 }
