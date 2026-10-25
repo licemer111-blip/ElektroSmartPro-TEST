@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { completeOnboardingSetup } from "@/app/dashboard/onboarding-actions";
-import { createDemoProject } from "@/app/dashboard/actions";
 
 interface Region {
   id: string;
@@ -51,7 +50,6 @@ export function OnboardingWizard({ regions, userName, userId }: OnboardingWizard
   const [selectedRegionId, setSelectedRegionId] = useState<string | null>(null);
   const [companyName, setCompanyName] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [creatingDemo, setCreatingDemo] = useState(false);
 
   const totalSteps = 3;
   const selectedRegion = regions.find((r) => r.id === selectedRegionId);
@@ -92,14 +90,8 @@ export function OnboardingWizard({ regions, userName, userId }: OnboardingWizard
         if (userId) {
           try { localStorage.setItem(`es_onboarding_done_${userId}`, "true"); } catch {}
         }
-        // Auto-create demo project and redirect user directly to it
-        setCreatingDemo(true);
-        const demo = await createDemoProject();
-        if (demo.projectId) {
-          router.push(`/dashboard/projects/${demo.projectId}`);
-        } else {
-          router.refresh();
-        }
+        router.push("/dashboard");
+        router.refresh();
       } else {
         setError(result.error ?? "Wystąpił błąd");
       }
@@ -370,7 +362,7 @@ export function OnboardingWizard({ regions, userName, userId }: OnboardingWizard
                   {isPending ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      {creatingDemo ? "Tworzę projekt demo..." : "Zapisuję..."}
+                      Zapisuję...
                     </>
                   ) : (
                     <>

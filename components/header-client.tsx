@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Settings, Zap, TrendingUp, FileText, Crown, LayoutGrid, BarChart2, Clock, Users, Briefcase, Wrench } from "lucide-react";
+import { Settings, Zap, FileText, Crown, LayoutGrid, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HeaderNewProjectButton } from "@/components/header-new-project-button";
 import { NavLink } from "@/components/nav-link";
@@ -107,36 +107,6 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                                         <Link href="/dashboard/templates" className="flex items-center gap-2 cursor-pointer">
                                             <FileText className="w-4 h-4" />
                                             Szablony
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/market" className="flex items-center gap-2 cursor-pointer">
-                                            <TrendingUp className="w-4 h-4" />
-                                            Rynek
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/analytics" className="flex items-center gap-2 cursor-pointer">
-                                            <BarChart2 className="w-4 h-4" />
-                                            Analityka
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/time" className="flex items-center gap-2 cursor-pointer">
-                                            <Clock className="w-4 h-4" />
-                                            Czas pracy
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/team" className="flex items-center gap-2 cursor-pointer">
-                                            <Users className="w-4 h-4" />
-                                            Zespół
-                                        </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/portfolio" className="flex items-center gap-2 cursor-pointer">
-                                            <Briefcase className="w-4 h-4" />
-                                            Portfolio
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator />

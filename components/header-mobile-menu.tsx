@@ -75,7 +75,7 @@ export function HeaderMobileMenu({ isAuthenticated, isPro }: HeaderMobileMenuPro
               {/* Baza i Narzędzia */}
               <div className="space-y-0.5 border-t border-slate-200 dark:border-slate-700/50 pt-3">
                 <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-3 mb-1.5">
-                  Baza i Narzędzia
+                  Baza
                 </p>
                 <HeaderMobileNavItem href="/dashboard/catalog" icon="PackageSearch">
                   Katalog
@@ -86,23 +86,8 @@ export function HeaderMobileMenu({ isAuthenticated, isPro }: HeaderMobileMenuPro
                 <HeaderMobileNavItem href="/dashboard/tools" icon="Wrench">
                   Kalkulatory
                 </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/dashboard/panel-configurator" icon="LayoutGrid" desc="Konfigurator tablic DIN — moduły, balans faz">
-                  Rozdzielnica
-                </HeaderMobileNavItem>
                 <HeaderMobileNavItem href="/dashboard/templates" icon="Copy">
                   Szablony
-                </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/dashboard/analytics" icon="BarChart2">
-                  Analityka
-                </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/dashboard/time" icon="Clock">
-                  Czas pracy
-                </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/dashboard/team" icon="Users">
-                  Zespół
-                </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/dashboard/portfolio" icon="Briefcase">
-                  Portfolio
                 </HeaderMobileNavItem>
               </div>
 
@@ -113,9 +98,6 @@ export function HeaderMobileMenu({ isAuthenticated, isPro }: HeaderMobileMenuPro
                 </p>
                 <HeaderMobileNavItem href="/dashboard/settings" icon="Settings">
                   Ustawienia
-                </HeaderMobileNavItem>
-                <HeaderMobileNavItem href="/dashboard/market" icon="TrendingUp">
-                  Rynek
                 </HeaderMobileNavItem>
               </div>
 

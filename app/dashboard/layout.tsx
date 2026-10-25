@@ -5,12 +5,10 @@ import { MobileBottomNavPadding } from "@/components/layout/mobile-bottom-nav";
 import { OfflineIndicator } from "@/components/ui/offline-indicator";
 import { SurveyWidget } from "@/components/feedback/survey-widget";
 import { WhatsNewDialog } from "@/components/changelog/whats-new-dialog";
-import { AiHelperWidget } from "@/components/ai-helper/ai-helper-widget";
 import { FieldModeProvider } from "@/components/project/field-mode-toggle";
 import { NotificationProvider } from "@/components/notifications/notification-system";
 import { getUser } from "@/app/auth/actions";
 import { getUserProfile } from "@/app/dashboard/actions";
-import { WelcomeWizard } from "@/components/onboarding/welcome-wizard";
 import { RateNotSetBanner } from "@/components/knr/RateNotSetBanner";
 
 export default async function DashboardLayout({
@@ -21,8 +19,6 @@ export default async function DashboardLayout({
   const user = await getUser();
   const userId = user?.id;
   const profile = userId ? await getUserProfile() : null;
-  const hasCompanyName = !!(profile?.company_name);
-  const hasRate = userId ? (profile?.hourly_rate != null && profile.hourly_rate > 0) : false;
   const rateNotSet = userId ? (profile?.hourly_rate == null) : false;
 
   const content = (
@@ -37,10 +33,6 @@ export default async function DashboardLayout({
       <OfflineIndicator />
       <SurveyWidget />
       <WhatsNewDialog />
-      <AiHelperWidget />
-      {userId && (
-        <WelcomeWizard userId={userId} hasCompanyName={hasCompanyName} hasRate={hasRate} />
-      )}
     </div>
   );
 

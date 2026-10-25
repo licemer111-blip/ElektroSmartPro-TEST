@@ -73,13 +73,13 @@ export function RowKnrCell({ item, compactView }: RowKnrCellProps) {
         </div>
       ) : isAnalog ? (
         <div className="flex flex-col items-center gap-0.5">
-          <span className="inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[8px] font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
-            ≈ KNR kat. B
+          <span className="inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[8px] font-medium bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+            ≈ Szacunek ES
           </span>
           {cleanCode && (
             <span
-              className={cn("font-mono leading-tight text-emerald-600 dark:text-emerald-400", compactView ? "text-[9px]" : "text-[10px]")}
-              title="Norma analogowa KNR kat. B — dopasowanie przybliżone"
+              className={cn("font-mono leading-tight text-amber-700 dark:text-amber-400", compactView ? "text-[9px]" : "text-[10px]")}
+              title="Kod orientacyjny — to nie jest oficjalna pozycja KNR. Zweryfikuj przed ofertą."
             >
               {cleanCode}
             </span>
@@ -98,7 +98,7 @@ export function RowKnrCell({ item, compactView }: RowKnrCellProps) {
         <div className="flex flex-col items-center gap-0.5">
           <span className="inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[8px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
             <ShieldCheck className="w-2.5 h-2.5" />
-            KNR kat. A
+            Z bazy ES
           </span>
           {cleanCode && (
             <span className={cn("font-mono leading-tight text-emerald-700 dark:text-emerald-400", compactView ? "text-[9px]" : "text-[10px]")}>

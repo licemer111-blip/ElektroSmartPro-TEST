@@ -6,7 +6,6 @@ import { PageContainer } from "@/components/layout/page-container";
 import { EmptyProjectsState } from "@/components/dashboard/empty-projects-state";
 import { ProjectsManagerView } from "@/components/dashboard/projects-manager-view";
 import { createClient } from "@/utils/supabase/server";
-import { OnboardingTour } from "@/components/onboarding/onboarding-tour";
 import { OnboardingWizard } from "@/components/onboarding/onboarding-wizard";
 import { ClientActivityWidget } from "@/components/dashboard/client-activity-widget";
 import { getEffectiveMaxProjects } from "@/lib/config/tier-limits";
@@ -80,7 +79,7 @@ export default async function DashboardPage({
               </div>
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">Dashboard</h1>
-                <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 mt-1">Ekspertowy System Kosztorysowy | KNR | Nakłady r-g | ES-Engine</p>
+                <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 mt-1">Twoje kosztorysy elektryczne</p>
               </div>
             </div>
             <div className="w-full md:w-auto">
@@ -104,7 +103,7 @@ export default async function DashboardPage({
                   🚀 Wypróbuj PRO przez 7 dni — za darmo, bez karty!
                 </p>
                 <p className="text-xs text-indigo-600 dark:text-indigo-400 mt-0.5">
-                  Odblokuj: AI bez limitów, czysty PDF do klienta, Portal Klienta, pełna baza KNR 2026
+                  Czysty PDF dla klienta, więcej niż 1 projekt, bez znaku wodnego DEMO.
                 </p>
               </div>
               <StartTrialButton variant="compact" />
@@ -202,7 +201,6 @@ export default async function DashboardPage({
           </>
         )}
       </PageContainer>
-      <OnboardingTour onboardingCompleted={profile?.onboarding_completed ?? false} />
     </div>
   );
 }

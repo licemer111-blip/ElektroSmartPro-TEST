@@ -71,15 +71,15 @@ const CONFIG: Record<ConfidenceLevel, ConfidenceConfig> = {
   verified: {
     dot: "bg-emerald-500",
     bar: "bg-emerald-500",
-    label: "L2 · KNR kat. A",
-    tooltip: "L2 · KNR kat. A — norma zweryfikowana (Exact Match ES-KNR 2026)",
+    label: "Norma z bazy",
+    tooltip: "Pozycja z katalogu / słownika ES — to nie zastępuje oficjalnego tomiku KNR.",
   },
   // L2 KNR kat. B — analog/fuzzy match (green, same color as A)
   analog: {
-    dot: "bg-emerald-400",
-    bar: "bg-emerald-400",
-    label: "L2 · KNR kat. B",
-    tooltip: "L2 · KNR kat. B — dopasowanie analogowe (podobna norma KNR)",
+    dot: "bg-amber-400",
+    bar: "bg-amber-400",
+    label: "Szacunek ES",
+    tooltip: "Szacunek ElektroSmart — podobna pozycja z bazy, nie oficjalny KNR. Zweryfikuj przed ofertą.",
   },
   // L3 — AI estimated, no KNR found (amber/yellow)
   estimated: {
@@ -115,7 +115,7 @@ const KNR_SOURCE_TOOLTIP: Partial<Record<NonNullable<KnrSource>, string>> = {
   user_knr:      "L1 · Twój Katalog — dopasowanie z katalogu prywatnego elektryka",
   catalog:       "L2 · KNR kat. A — dane ze słownika ES-Dictionary",
   ai_estimation: "L3 · Szacunek — brak dokładnej normy KNR (ES-Engine oszacował)",
-  es_synthetic:  "L2 · KNR kat. B — dopasowanie analogowe (podobna pozycja w bazie KNR)",
+  es_synthetic:  "Szacunek ES — podobna pozycja, nie oficjalny KNR",
 };
 
 interface ConfidenceDotProps {

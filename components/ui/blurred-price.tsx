@@ -3,15 +3,9 @@
 /**
  * BlurredPrice / BlurredSection — v2.1 (Iron Rule enforcement)
  *
- * Iron Rule #1: Free users MUST see BLURRED prices in summaries.
- * CTA: "Zupgraduj, aby zobaczyć ceny"
- *
- * BLUR logic:
- *   - `showBadge=true` → marks a KEY summary number (SUMA NETTO, KWOTA KOŃCOWA).
- *     Free users see blur + lock icon on these.
- *   - `showBadge=false` (default) → line-item prices stay visible for all users
- *     so they can evaluate the calculator before upgrading.
- *   - `isPro=true` or `hardGate=false` → always shows the price.
+ * v2.5 conversion: FREE users see real totals on their one project.
+ * Paywall is the 2nd project + clean PDF (DEMO watermark), not a blurred sum.
+ * `showBadge` is kept for API compatibility; it no longer hides the number.
  */
 
 import { cn } from "@/lib/utils";
@@ -45,16 +39,8 @@ export function BlurredPrice({
   unit = "zł",
   showBadge = false,
 }: BlurredPriceProps) {
-  if (!isPro && showBadge) {
-    return (
-      <span className={cn("inline-flex items-center gap-1.5", className)}>
-        <span className="filter blur-sm select-none pointer-events-none text-slate-400 dark:text-slate-500 font-bold">
-          {value.toFixed(2).replace(".", ",")} {unit}
-        </span>
-        <Lock className="w-3 h-3 text-slate-400 dark:text-slate-500 flex-shrink-0" />
-      </span>
-    );
-  }
+  void isPro;
+  void showBadge;
   return (
     <span className={className}>
       {value.toFixed(2).replace(".", ",")} {unit}
