@@ -18,7 +18,6 @@ import {
   Sparkles, CircleDollarSign,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import type { ProjectItem } from "@/lib/types/database";
 import { AIAssistantDialog } from "@/components/project/ai-assistant-dialog";
 import { AiPriceEstimatorDialog } from "@/components/project/ai-price-estimator-dialog";
@@ -290,9 +289,6 @@ export function ProjectHeaderToolbar({
               <div className="flex items-center gap-1 overflow-x-auto flex-nowrap no-scrollbar">
                 {/* ✨ ES-Engine unified dropdown */}
                 <div className="flex items-center gap-0.5">
-                <TooltipProvider delayDuration={300}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
                 <Button
                   size="sm"
                   disabled={isFinal || projectItems.length === 0}
@@ -336,15 +332,6 @@ export function ProjectHeaderToolbar({
                   <Sparkles className="h-3.5 w-3.5" />
                   Asystent
                 </Button>
-                    </TooltipTrigger>
-                    <TooltipContent
-                      side="bottom"
-                      className={isDemoProject && !isFinal ? "bg-amber-500 text-white border-amber-600 font-semibold text-xs" : ""}
-                    >
-                      Wyceń liczy godziny normy ES razy Twoją stawkę. Import wczytuje plik. Asystent odpowiada na pytanie.
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
                 <HintTooltip content={HINTS.aiPricing} side="bottom" iconOnly iconClassName="!bg-amber-100 dark:!bg-amber-900/60 !text-amber-600 dark:!text-amber-400 !ring-amber-300 dark:!ring-amber-700 hover:!bg-amber-200 hover:!shadow-[0_0_8px_rgba(245,158,11,0.55)]" />
                 </div>
 
