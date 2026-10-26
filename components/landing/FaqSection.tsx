@@ -5,7 +5,8 @@ interface FaqProps {
   dinCount?: number;
 }
 
-function FaqSectionInner({ catalogCount = 1400, dinCount = 295 }: FaqProps) {
+function FaqSectionInner(_props: FaqProps) {
+  void _props;
   const FAQ_ITEMS = [
   {
     q: "Jak szybko zrobić profesjonalny kosztorys instalacji elektrycznej?",
@@ -14,11 +15,11 @@ function FaqSectionInner({ catalogCount = 1400, dinCount = 295 }: FaqProps) {
         <p className="font-medium text-slate-900 dark:text-white">Z ElektroSmart PRO — 3 kroki, mniej niż 10 minut:</p>
         <ol className="list-decimal list-inside mt-2 sm:mt-3 space-y-1.5 sm:space-y-2">
           <li><strong>Województwo + rodzaj obiektu</strong> — system ustawia stawki r-g i VAT (8%/23%) automatycznie</li>
-          <li><strong>Dodaj pozycje</strong> — z katalogu {catalogCount}+ pozycji KNR, importuj Excel/CSV lub opisz zakres językiem naturalnym</li>
-          <li><strong>Eksportuj PDF</strong> z Twoim logo i NIP — profesjonalna oferta gotowa w 10 sekund</li>
+          <li><strong>Dodaj pozycje</strong> — z katalogu, z zestawu albo z szybkiej wyceny po metrażu</li>
+          <li><strong>Eksportuj PDF</strong> z logo i NIP. W DEMO jest znak wodny</li>
         </ol>
         <p className="mt-2 sm:mt-3 font-medium text-blue-600 dark:text-blue-400">
-          💡 Bonus: ES-Engine analizuje rzuty budowlane i liczy symbole elektryczne wg IEC 60617 — bez ręcznego zliczania.
+          Robocizna = godziny normy ES × Twoja stawka × województwo. Materiał zostaje bez tej korekty.
         </p>
       </>
     ),
@@ -27,15 +28,7 @@ function FaqSectionInner({ catalogCount = 1400, dinCount = 295 }: FaqProps) {
     q: "Ile kosztuje punkt elektryczny w Polsce w 2026 roku?",
     a: (
       <>
-        <p>Cena punktu elektrycznego w 2026 roku zależy od województwa i rodzaju instalacji:</p>
-        <ul className="list-disc list-inside mt-2 sm:mt-3 space-y-1.5 sm:space-y-2">
-          <li><strong>Warszawa/Mazowieckie:</strong> 180-220 zł/punkt (z materiałem)</li>
-          <li><strong>Kraków/Małopolskie:</strong> 170-210 zł/punkt</li>
-          <li><strong>Wrocław/Dolnośląskie:</strong> 165-200 zł/punkt</li>
-        </ul>
-        <p className="mt-2 sm:mt-3 font-medium text-blue-600 dark:text-blue-400">
-          💡 ElektroSmart PRO automatycznie przelicza ceny wg Twojego województwa i typu obiektu. Nie musisz pamiętać tabel stawek.
-        </p>
+        <p>Program nie podaje jednej ceny „punktu” z ulicy. Punkt gniazda to gniazdo, puszka, kabel i bruzda. Robocizna wychodzi z godzin normy ES i Twojej stawki. Mazowieckie dodaje 20% tylko do robocizny, Podkarpackie odejmuje 12%. Materiał zostaje w cenie z katalogu.</p>
       </>
     ),
   },
@@ -58,19 +51,10 @@ function FaqSectionInner({ catalogCount = 1400, dinCount = 295 }: FaqProps) {
     ),
   },
   {
-    q: "Czy mogę użyć ES-Engine do liczenia gniazdek z rzutu budowlanego?",
+    q: "Czy program sam policzy gniazdka z rzutu budowlanego?",
     a: (
       <>
-        <p>Tak! ES-Engine oferuje Vision Mode — analizę rzutów budowlanych:</p>
-        <ul className="list-disc list-inside mt-2 sm:mt-3 space-y-1.5 sm:space-y-2">
-          <li><strong>Wgraj PDF</strong> z rzutem budowlanym (do 10MB)</li>
-          <li><strong>Rozpoznawanie symboli</strong> wg IEC 60617 — gniazdka, wyłączniki, oprawy</li>
-          <li><strong>Metoda Grid Search</strong> — podział strony na sektory i zliczanie</li>
-          <li><strong>Weryfikacja i akceptacja</strong> — sprawdzasz wyniki przed dodaniem</li>
-        </ul>
-        <p className="mt-2 sm:mt-3 font-medium text-blue-600 dark:text-blue-400">
-          ⚡ Silnik inżynieryjny przyspiesza pracę, ale to Ty podejmujesz ostateczną decyzję!
-        </p>
+        <p>Nie. Rysunku nie czyta. Gniazdka liczysz sam albo podajesz metraż i liczbę pomieszczeń w szybkiej wycenie. Lista i suma powstają z tych liczb, nie ze skanu ściany.</p>
       </>
     ),
   },
@@ -80,19 +64,17 @@ function FaqSectionInner({ catalogCount = 1400, dinCount = 295 }: FaqProps) {
       <>
         <div className="bg-gradient-to-r from-blue-50 to-slate-50 dark:from-blue-950/50 dark:to-slate-950/50 border border-blue-200 dark:border-blue-800 rounded-lg p-4 sm:p-5">
           <div className="text-xl sm:text-2xl font-bold gradient-text mb-2">159 zł netto / miesiąc</div>
-          <p className="text-slate-900 dark:text-white font-semibold mb-2 sm:mb-3 text-sm sm:text-base">ElektroSmart PRO — Pełen dostęp bez ograniczeń</p>
+          <p className="text-slate-900 dark:text-white font-semibold mb-2 sm:mb-3 text-sm sm:text-base">PRO: więcej niż jeden projekt i PDF bez znaku wodnego</p>
           <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
-            <li>✅ Nielimitowane projekty, kosztorysy i eksporty PDF</li>
-            <li>✅ Baza KNR {catalogCount}+ pozycji + własny katalog</li>
-            <li>✅ ES-Engine + Vision Mode (analiza rzutów) + 12 kalkulatorów</li>
-            <li>✅ Kreator wyceny, zestawy i 12 kalkulatorów</li>
-            <li>✅ Czysty PDF/Excel bez watermarku</li>
-            <li>✅ Integracja InFakt</li>
-            <li>✅ Ceny regionalne 16 województw — współczynnik tylko na robociznę</li>
+            <li>✅ DEMO za darmo: ceny widać, własny projekt jest jeden, na PDF jest znak DEMO</li>
+            <li>✅ PRO: czysty PDF, więcej projektów, wyższy limit zapytań</li>
+            <li>✅ Katalog pozycji i własne ceny. Materiał i robocizna osobno</li>
+            <li>✅ Zestawy punktów i 12 kalkulatorów. Dwa z nich wstawiają pozycję do kosztorysu</li>
+            <li>✅ 16 województw — współczynnik tylko na robociznę</li>
           </ul>
         </div>
         <p className="mt-3 sm:mt-4 font-medium text-sm sm:text-base text-blue-600 dark:text-blue-400">
-          💡 Wersja DEMO bezpłatna — przetestuj wszystkie funkcje bez podawania karty płatniczej.
+          Karty na starcie nie trzeba. DEMO wystarczy, żeby policzyć pierwszą wycenę.
         </p>
       </>
     ),

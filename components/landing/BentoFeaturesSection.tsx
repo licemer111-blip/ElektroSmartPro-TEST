@@ -1,8 +1,7 @@
 import React from "react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Database, TrendingUp, Layers, Shield, DollarSign,
-  FileText, Zap, Users, GitBranch,
+  Database, Shield, DollarSign, Zap, Users, GitBranch,
 } from "lucide-react";
 
 interface BentoFeaturesSectionProps {
@@ -13,9 +12,9 @@ const BENTO_FEATURES = [
   {
     gradient: "from-blue-500 to-blue-700",
     icon: Database,
-    titleFn: (n: number) => `Katalog ${n}+ pozycji KNR`,
-    descFn: (n: number) =>
-      `<strong>${n}+ pozycji</strong> z kodami norm ES, jednostkami i nakładami rbh. Własny katalog bez limitu.`,
+    titleFn: (n: number) => `Katalog ${n > 0 ? `${n} pozycji` : "pozycji"}`,
+    descFn: () =>
+      "Materiał i robocizna w osobnych kolumnach. Godziny z normy ES, złotówki z Twojej stawki. Własne pozycje zostają Twoje.",
   },
   {
     gradient: "from-slate-600 to-slate-800",
@@ -36,21 +35,21 @@ const BENTO_FEATURES = [
     icon: Zap,
     titleFn: () => "12 Kalkulatorów Inżynierskich",
     descFn: () =>
-      "Ik3/Ik1, przekrój kabla, spadek napięcia, <strong>PV, oświetlenie PN-EN 12464, silnik, cosφ</strong> — wyniki wg norm PN-HD 60364.",
+      "Przekrój, spadek napięcia, zwarcie, PV, silnik, cos φ. To szacunek do wyceny, nie projekt instalacji.",
   },
   {
     gradient: "from-blue-500 to-blue-700",
     icon: Users,
-    titleFn: () => "CRM + Analityka",
+    titleFn: () => "Zestawy punktów",
     descFn: () =>
-      "<strong>Baza klientów</strong> z historią projektów i tagami. Wykresy przychodów i marż — decydujesz na podstawie liczb.",
+      "Punkt gniazda rozkłada się na gniazdo, puszkę, kabel YDYp 3×2,5 i bruzdę. Godziny są z normy ES.",
   },
   {
     gradient: "from-slate-600 to-slate-800",
     icon: GitBranch,
-    titleFn: () => "Import KNR z Excel/CSV",
+    titleFn: () => "Własne ceny",
     descFn: () =>
-      "<strong>Importer KNR</strong> z Excel/CSV — 130+ rozpoznawanych nagłówków. Wgrywasz plik, dostajesz pozycje w koszcie.",
+      "Dopisujesz pozycję z własną ceną materiału i robocizny. Baza ES zostaje obok, nie zamiast Twojego cennika.",
   },
 ] as const;
 
@@ -64,7 +63,7 @@ function BentoFeaturesSectionInner({ catalogCount }: BentoFeaturesSectionProps) 
             <span className="gradient-text-pro">jednym narzędziu</span>
           </h2>
           <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-            KNR, zestawy, kalkulatory inżynierskie, CRM — zamiast kilku osobnych programów.
+            Stawka, katalog, zestawy, kalkulatory i PDF. Jedna suma w wycenie i w projekcie.
           </p>
         </div>
 

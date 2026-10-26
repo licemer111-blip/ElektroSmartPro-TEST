@@ -6,9 +6,8 @@ interface GuideSectionProps {
   catalogCount?: number;
 }
 
-export function GuideSection({ catalogCount: catalogCountProp }: GuideSectionProps = {}) {
-  const catalogCount = catalogCountProp || 1400;
-
+export function GuideSection(_props: GuideSectionProps = {}) {
+  void _props;
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Header Card */}
@@ -31,7 +30,7 @@ export function GuideSection({ catalogCount: catalogCountProp }: GuideSectionPro
       {/* Guide Accordion */}
       <Card className="bg-white dark:bg-slate-900/50 border-slate-200 dark:border-slate-800">
         <CardContent className="pt-4 sm:pt-6 px-4 sm:px-6">
-          <GuideAccordion catalogCount={catalogCount} />
+          <GuideAccordion />
         </CardContent>
       </Card>
 
@@ -47,18 +46,15 @@ export function GuideSection({ catalogCount: catalogCountProp }: GuideSectionPro
                 Szybki Start — ElektroSmart PRO
               </h3>
               <ol className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-indigo-800 dark:text-indigo-200">
-                <li><strong>1.</strong> Uzupełnij <strong>Profil Firmy</strong> (NIP, logo, dane) — pojawią się na PDF-ach</li>
-                <li><strong>2.</strong> Ustaw <strong>województwo</strong> i <strong>stawkę R-G</strong> w Ustawienia → Finanse</li>
-                <li><strong>3.</strong> Utwórz pierwszy <strong>projekt</strong> i dodaj pozycje ręcznie lub przez <strong>ES Import</strong></li>
-                <li><strong>4.</strong> Kliknij <strong>ES Wycena</strong> — system wpisze rbh z normy ES i Twoją stawkę</li>
-                <li><strong>5.</strong> Wgraj własne cenniki do <strong>Moje Dane</strong> — Twoje ceny będą miały priorytet P1</li>
-                <li><strong>6.</strong> Stwórz <strong>Zestawy</strong> (np. „Punkt gniazda”) — dodawaj gotowe komplety jednym klikiem</li>
-                <li><strong>7.</strong> Eksportuj <strong>PDF z logo</strong> i wyślij klientowi (FREE: watermark DEMO)</li>
-                <li><strong>8.</strong> <strong>Zainstaluj aplikację</strong> (PWA) — działa też na telefonie i offline</li>
+                <li><strong>1.</strong> Uzupełnij <strong>Profil firmy</strong> (NIP, logo) — pojawią się na PDF</li>
+                <li><strong>2.</strong> Ustaw <strong>stawkę rbh</strong> i <strong>województwo</strong> w Finansach</li>
+                <li><strong>3.</strong> Zrób <strong>szybką wycenę</strong> albo nowy projekt i dodaj pozycje z katalogu</li>
+                <li><strong>4.</strong> Zestaw „punkt gniazda” wstawia gniazdo, puszkę, kabel i bruzdę</li>
+                <li><strong>5.</strong> PDF: w DEMO jest znak wodny, czysty wydruk jest w PRO</li>
               </ol>
               <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-indigo-200 dark:border-indigo-800">
                 <p className="text-[10px] sm:text-xs text-indigo-700 dark:text-indigo-300">
-                  <strong>W skrócie:</strong> norma ES · Wyceny AI · Zestawy · Kalkulatory · PDF z logo · Sekcje wg pomieszczeń
+                  <strong>W skrócie:</strong> rbh × stawka × województwo · materiał osobno · VAT 8% albo 23% · PDF
                 </p>
               </div>
             </div>

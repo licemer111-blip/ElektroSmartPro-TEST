@@ -273,7 +273,7 @@ export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems
                     <p>Statystyki konta, aktywność i informacje o użytkowniku.</p>
                   )}
                   {activeTab === "admin" && (
-                    <p>Panel administracyjny: Market, Analytics i zarządzanie finansami.</p>
+                    <p>Użytkownicy, ceny katalogu i normy ES. Osobny ekran, nie ta karta.</p>
                   )}
                 </div>
               </CardContent>
@@ -297,7 +297,7 @@ export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems
                       <div>
                         <CardTitle className="text-lg sm:text-xl">Zainstaluj Aplikację</CardTitle>
                         <CardDescription className="mt-0.5 sm:mt-1 text-xs sm:text-sm">
-                          Pracuj offline, otrzymuj powiadomienia i korzystaj z aplikacji jak z natywnej
+                          Ikona na ekranie telefonu. Kosztorys otwiera się bez paska przeglądarki.
                         </CardDescription>
                       </div>
                     </div>

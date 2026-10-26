@@ -141,7 +141,7 @@ export function KnrClient({ initialRate, initialMaterialMultiplier = 1.08, initi
           <SectionDivider
             icon={MapPin}
             title="Lokalizacja"
-            subtitle="Województwo wpływa na stawkę R-G — system mnoży ją przez współczynnik regionalny"
+            subtitle="Województwo mnoży tylko robociznę. Materiał zostaje bez tej korekty."
           />
           <KnrRegionSelector
             initialRegionUuid={initialRegionUuid}
@@ -154,7 +154,7 @@ export function KnrClient({ initialRate, initialMaterialMultiplier = 1.08, initi
           <SectionDivider
             icon={Banknote}
             title="Finanse"
-            subtitle="Stawka R-G, tryb wycen (L1/L2/L3), marża materiałowa — podstawa każdego kosztorysu"
+            subtitle="Jedna stawka rbh na katalog i projekty. Marża materiału jest osobno."
           />
           <KnrRateCalculator
             initialRate={effectiveInitialRate}

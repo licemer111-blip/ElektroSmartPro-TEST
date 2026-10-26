@@ -121,7 +121,7 @@ export function PWAInstallButton() {
           </p>
           <p className="text-sm text-slate-700 dark:text-slate-300">
             ElektroSmart PRO jest już zainstalowana jako aplikacja na Twoim urządzeniu. 
-            Możesz korzystać z niej offline i otrzymywać powiadomienia!
+            Masz ikonę na ekranie i otwierasz kosztorys bez paska przeglądarki.
           </p>
         </AlertDescription>
       </Alert>
@@ -141,11 +141,8 @@ export function PWAInstallButton() {
             Zainstaluj ElektroSmart PRO jako aplikację na swoim urządzeniu. Korzyści:
           </p>
           <ul className="text-xs text-slate-600 dark:text-slate-400 space-y-1 mb-3">
-            <li>✓ Pracuj offline - wszystkie dane dostępne bez internetu</li>
-            <li>✓ Szybszy dostęp - własna ikona na ekranie głównym</li>
-            <li>✓ Powiadomienia push - otrzymuj alerty o nowych funkcjach</li>
-            <li>✓ Natywne doświadczenie - wygląda jak prawdziwa aplikacja</li>
-            <li>✓ Aparat - rób zdjęcia bezpośrednio w projektach</li>
+            <li>✓ Ikona na ekranie telefonu albo komputera</li>
+            <li>✓ Otwiera się jak aplikacja, bez paska adresu</li>
           </ul>
         </AlertDescription>
       </Alert>

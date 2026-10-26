@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     default: "Program do kosztorysowania robót elektrycznych online - ElektroSmart PRO",
     template: "%s | ElektroSmart PRO — Program dla Elektryków",
   },
-  description: "Automatyczne kosztorysy elektryczne z silnikiem ES-Engine, normami KNR i cenami regionalnymi 16 województw. Konfigurator rozdzielnic 120+ modułów DIN, zestawy 360°, VAT 8%/23%, eksport PDF. Zgodność z PN-HD 60364.",
+  description: "Kosztorys elektryczny: robocizna i materiał osobno. Godziny normy ES × stawka × województwo, VAT 8% albo 23%, zestawy punktów, PDF. DEMO: jeden projekt i znak wodny.",
   keywords: [
     // ===== PRIMARY KEYWORDS (Highest Search Volume) =====
     "kosztorys elektryczny",

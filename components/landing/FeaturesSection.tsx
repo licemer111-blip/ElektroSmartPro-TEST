@@ -32,7 +32,7 @@ const PILLARS = [
     num: "II",
     gradient: "from-slate-600 to-slate-800",
     icon: BookOpen,
-    title: "Baza Norm KNR i Własne Katalogi",
+    title: "Godziny normy ES i własne ceny",
     intro:
       "Godziny rbh na gniazdo, kabel i bruzdę. To normy ES, nie tablica ORGBUD.",
     points: [
@@ -45,8 +45,8 @@ const PILLARS = [
         text: "Kabel YDYp 3×2,5, gniazdo i bruzda w betonie mają osobne godziny. Kwota = rbh × Twoja stawka × województwo.",
       },
       {
-        label: "Twoje własne normy KNR",
-        text: "Budujesz prywatną bazę według swoich stawek. System traktuje ją jako priorytet nad bazą globalną.",
+        label: "Twoje ceny obok bazy ES",
+        text: "Własna pozycja ma Twoją cenę materiału i robocizny. Baza ES nie nadpisuje jej po cichu.",
       },
     ],
   },
@@ -60,11 +60,11 @@ const PILLARS = [
     points: [
       {
         label: "Jeden klik = kompletny BOM",
-        text: "\"Gniazdo podtynkowe\" → system dodaje automatycznie: Puszka + Kabel YDYp + Bruzda + Robocizna wg KNR.",
+        text: "Punkt gniazda 230 V dokłada gniazdo, puszkę, YDYp 3×2,5 i bruzdę w cegle. Godziny są z normy ES.",
       },
       {
         label: "Żadnej ręcznej roboty",
-        text: "Zapomnij o ręcznym wpisywaniu każdego metra kabla. Zestaw liczy metry od rozdzielnicy na podstawie normatywów.",
+        text: "Długość kabla w gotowym zestawie jest wpisana w przepis (dla gniazda 3,5 m). Sam jej z rysunku nie mierzy.",
       },
       {
         label: "Szablony wielokrotnego użycia",
@@ -79,7 +79,7 @@ interface FeaturesProps {
   normsCount?: number;
 }
 
-function FeaturesSectionInner({ dinCount = 295, normsCount = 0 }: FeaturesProps) {
+function FeaturesSectionInner({ normsCount = 0 }: FeaturesProps) {
   const normsLabel = normsCount > 0
     ? `Ponad ${(Math.floor(normsCount / 100) * 100).toLocaleString("pl-PL")} norm ES`
     : "Baza norm ES";
@@ -94,7 +94,7 @@ function FeaturesSectionInner({ dinCount = 295, normsCount = 0 }: FeaturesProps)
       gradient: "from-slate-500 to-slate-700",
       icon: Sparkles,
       title: "Kreator i szybka wycena",
-      desc: "Opisz zakres zwykłym językiem — system rozbija go na pozycje z katalogu, nakładami KNR i podziałem materiał / robocizna.",
+      desc: "Szybka wycena bierze metraż i liczbę pomieszczeń. Suma na ekranie jest tą samą sumą w projekcie.",
     },
     {
       gradient: "from-blue-600 to-blue-800",
@@ -105,8 +105,8 @@ function FeaturesSectionInner({ dinCount = 295, normsCount = 0 }: FeaturesProps)
     {
       gradient: "from-slate-500 to-slate-700",
       icon: ReceiptText,
-      title: "PDF • Excel • ES-Engine • InFakt",
-      desc: "Kosztorys z logo i NIP w 10s. Wgraj PDF/Excel — ES-Engine wyciągnie pozycje kosztorysowe automatycznie. Excel z podziałem Materiał/Robocizna i KNR.",
+      title: "PDF z logo i NIP",
+      desc: "Wydruk dzieli materiał i robociznę. W DEMO jest znak wodny. Czysty plik dla klienta jest w PRO.",
     },
   ];
   return (
@@ -120,7 +120,7 @@ function FeaturesSectionInner({ dinCount = 295, normsCount = 0 }: FeaturesProps)
             <span className="gradient-text-pro">profesjonalnej wyceny</span>
           </h2>
           <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-            Architektura ceny, normy KNR i inteligentne zestawy — to, czego brakuje każdemu innemu programowi.
+            Cena, godziny normy ES i zestawy punktów. Bez obietnic, których program nie liczy.
           </p>
         </div>
 

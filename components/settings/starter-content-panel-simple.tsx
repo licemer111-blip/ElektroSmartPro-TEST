@@ -23,10 +23,10 @@ export function StarterContentPanelSimple({ isPro = false, catalogStats }: Start
         <Database className="h-5 w-5 text-purple-600 dark:text-purple-400" />
         <AlertDescription className="text-slate-900 dark:text-slate-100">
           <p className="font-semibold text-lg mb-2">
-            ⚡ Baza Norm KNR i ES-Engine
+            Katalog: baza ES i Twoje pozycje
           </p>
           <p className="text-sm mb-3">
-            System opiera się na wbudowanych normach roboczogodzin (KNR 5-08, 4-03) oraz inteligentnym silniku ES-Engine.
+            Robocizna to godziny normy ES razy Twoja stawka. Województwo mnoży tylko złotówki robocizny, nie same godziny.
             {stats.userCount > 0 ? (
               <> Dodatkowo posiadasz <span className="font-bold text-purple-600 dark:text-purple-400">{stats.userCount}</span> Twoich własnych pozycji w prywatnym katalogu.</>
             ) : (
@@ -72,7 +72,7 @@ export function StarterContentPanelSimple({ isPro = false, catalogStats }: Start
           </li>
           <li className="flex items-start gap-2">
             <span className="text-amber-600 dark:text-amber-400 font-bold">⚡</span>
-            <span><strong>ES-Engine:</strong> Automatyczne przeliczanie norm czasowych w oparciu o wybrane województwo.</span>
+            <span><strong>Województwo:</strong> Mnoży tylko robociznę. Materiał zostaje w cenie z katalogu.</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-blue-600 dark:text-blue-400 font-bold">�️</span>

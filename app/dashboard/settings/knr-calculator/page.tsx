@@ -8,8 +8,8 @@ import { KnrClient } from "./knr-client";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Centrum Kalkulacji i Norm KNR — Stawka R-G i ES-Engine",
-  description: "Konfiguruj domyślną stawkę robocizny (PLN/rbh), współczynniki regionalne 16 województw, mnożnik materiałów i kontekst inwestycji. Import norm KNR, kalibracja silnika ES-Engine.",
+  title: "Stawka i województwo",
+  description: "Stawka rbh, województwo tylko na robociznę, marża materiału i własne pozycje.",
 };
 
 export default async function KnrCalculatorPage() {

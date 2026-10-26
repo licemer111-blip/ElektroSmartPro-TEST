@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: "Ustawienia — Profil, Firma i Integracje",
-  description: "Dane firmy, logo, NIP/VAT, stawka r-g, stawka ES-Engine, klucz InFakt, szablony PDF, portfolio i personalizacja — dostosuj ElektroSmart PRO do swojej działalności elektrycznej",
+  description: "Stawka rbh, województwo, dane firmy na PDF, katalog i subskrypcja PRO.",
 };
 
 export default async function SettingsPage({

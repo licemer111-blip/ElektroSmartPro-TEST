@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "ElektroSmart PRO — Kosztorys Elektryczny z ES-Engine",
     description:
-      "Kosztorys elektryczny z KNR, podziałem Robocizna/Materiał, Zestawami 360°, cenami 16 województw, eksportem PDF. ES-Engine. Demo bezpłatne.",
+      "Kosztorys elektryczny: robocizna osobno od materiału, norma ES, 16 województw, VAT 8/23%, PDF. Demo: jeden projekt i znak wodny.",
     images: ["/opengraph-image"],
   },
   alternates: { canonical: "https://elektrosmart.pro" },

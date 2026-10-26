@@ -3,7 +3,7 @@ interface LandingStructuredDataProps {
   dinCount?: number;
 }
 
-export function LandingStructuredData({ catalogCount, dinCount = 295 }: LandingStructuredDataProps) {
+export function LandingStructuredData({ catalogCount }: LandingStructuredDataProps) {
   const baseUrl = "https://elektrosmart.pro";
 
   const structuredData = {
@@ -22,30 +22,15 @@ export function LandingStructuredData({ catalogCount, dinCount = 295 }: LandingS
     },
     description:
       `Profesjonalny program dla elektryków: kosztorys z podziałem materiał/robocizna, normy ES w rbh, zestawy. Ceny regionalne 16 województw (współczynnik robocizny), VAT 8%/23%, eksport PDF/Excel.`,
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.8",
-      ratingCount: "127",
-      bestRating: "5",
-    },
     featureList: [
-      "Wyceny i kosztorysy instalacji elektrycznych",
-      `Baza ${catalogCount}+ pozycji katalogowych`,
-      "Sekcje kosztorysu — grupowanie wg pomieszczeń z subtotalami",
-      "CRM - baza klientów z historią projektów i logiem interakcji",
-      "Protokoły pomiarowe zgodne z PN-HD 60364-6",
-      "ElektroSmart Core — generowanie BOM z opisu tekstowego",
-      "ES-Engine — analiza PDF/Excel i Vision Mode dla rzutów budowlanych wg IEC 60617",
-      "Detektor duplikatów — inteligentna normalizacja pozycji",
-      "Generator zestawów — kompletacja materiałowa z opisu obiektu",
-      "12 Kalkulatorów Inżynierskich (prąd zwarcia Ik3/Ik1, przekroje kabli, spadek napięcia, PV, oświetlenie, silnik, cosφ)",
-      "5 szablonów wizualnych PDF + 5 szablonów emaila",
-      "Inteligentne zestawy materiałów",
-      "Ceny regionalne dla 16 województw",
-      "VAT 8% i 23% automatycznie",
-      "Keyboard Shortcuts (Ctrl+K Command Palette)",
-      "Eksport profesjonalnych ofert PDF z logo",
-      "Eksport do Excel z sekcjami i podziałem materiał/robocizna",
+      "Kosztorys: materiał i robocizna osobno",
+      `Katalog ${catalogCount > 0 ? catalogCount : "pozycji"} z godzinami normy ES`,
+      "Robocizna = rbh × stawka × województwo",
+      "Zestaw punktu: gniazdo, puszka, kabel, bruzda",
+      "12 kalkulatorów jako szacunek, nie projekt instalacji",
+      "VAT 8% dla mieszkania i 23% dla obiektu komercyjnego",
+      "PDF z logo. W DEMO jest znak wodny",
+      "DEMO: jeden własny projekt. PRO: 159 zł netto miesięcznie",
     ],
     inLanguage: "pl-PL",
     author: { "@type": "Organization", name: "ElektroSmart PRO", url: baseUrl },
@@ -79,7 +64,7 @@ export function LandingStructuredData({ catalogCount, dinCount = 295 }: LandingS
         name: "Jak zrobić wycenę i kosztorys instalacji elektrycznej online?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: `Z ElektroSmart PRO stworzysz profesjonalną wycenę i kosztorys w 3 krokach: 1) Wybierz województwo i rodzaj obiektu (VAT 8% lub 23%), 2) Dodaj materiały z katalogu ${catalogCount}+ pozycji ręcznie, zaimportuj KNR Excel/CSV lub użyj silnika inżynieryjnego, 3) Pobierz PDF z logo firmy. Obsługa KNR 5-08/5-09, wyceny punktowe i kosztorysy ślepe.`,
+          text: "Trzy kroki: województwo i typ obiektu (VAT 8% albo 23%), pozycje z katalogu lub szybka wycena z metrażu, PDF z logo. Robocizna to godziny normy ES razy stawka razy województwo. Materiał bez tej korekty. W DEMO na PDF jest znak wodny.",
         },
       },
       {
@@ -87,7 +72,7 @@ export function LandingStructuredData({ catalogCount, dinCount = 295 }: LandingS
         name: "Ile kosztuje punkt elektryczny w 2026 roku?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Cena punktu elektrycznego w 2026 roku zależy od województwa: Warszawa/Mazowieckie 180-220 zł/punkt, Kraków/Małopolskie 170-210 zł/punkt, Wrocław/Dolnośląskie 165-200 zł/punkt (z materiałem). ElektroSmart PRO automatycznie dostosowuje ceny do Twojego województwa i typu obiektu.",
+          text: "Program nie podaje jednej ceny punktu z ulicy. Punkt gniazda to gniazdo, puszka, kabel i bruzda. Robocizna = godziny normy ES × stawka × województwo. Mazowieckie +20% tylko na robociznę, Podkarpackie −12%. Materiał zostaje w cenie katalogu.",
         },
       },
       {
@@ -100,10 +85,10 @@ export function LandingStructuredData({ catalogCount, dinCount = 295 }: LandingS
       },
       {
         "@type": "Question",
-        name: "Czy mogę użyć ES-Engine do liczenia gniazdek z rzutu budowlanego?",
+        name: "Czy program sam policzy gniazdka z rzutu budowlanego?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Tak! ES-Engine oferuje Vision Mode: wgraj PDF z kosztorysem lub dokumentem technicznym (do 20MB), system odczytuje pozycje, ilości i ceny, automatycznie dopasowuje do katalogu i dodaje do kosztorysu jednym kliknięciem. Oszczędza to 80% czasu przy imporcie dokumentacji.",
+          text: "Nie. Rysunku nie czyta. Gniazdka liczysz sam albo podajesz metraż i liczbę pomieszczeń w szybkiej wycenie.",
         },
       },
       {
@@ -111,7 +96,7 @@ export function LandingStructuredData({ catalogCount, dinCount = 295 }: LandingS
         name: "Ile kosztuje program do wycen i kosztorysów dla elektryków?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: `ElektroSmart PRO kosztuje 159 zł/miesiąc netto: nielimitowane wyceny i kosztorysy, ES-Engine, import KNR Excel/CSV, ${catalogCount}+ pozycji katalogowych, Zestawy 360°, 12 kalkulatorów, eksport PDF/Excel, ceny regionalne 16 województw, VAT 8/23%. Wersja DEMO BEZPŁATNA.`,
+          text: "PRO kosztuje 159 zł netto miesięcznie: więcej niż jeden projekt i PDF bez znaku wodnego. DEMO jest bezpłatne: ceny widać, własny projekt jest jeden, na PDF jest znak DEMO.",
         },
       },
     ],

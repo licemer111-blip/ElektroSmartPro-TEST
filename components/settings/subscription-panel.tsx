@@ -47,16 +47,16 @@ export function SubscriptionPanel({ profile }: SubscriptionPanelProps) {
               <CardTitle className="text-base sm:text-lg">Masz pełny dostęp do narzędzia</CardTitle>
             </div>
             <CardDescription className="text-xs sm:text-sm">
-              Licz, wyceniaj, planuj bez ograniczeń. Płacisz dopiero kiedy chcesz wysłać <strong>czysty PDF</strong> klientowi.
+              Ceny widać od razu. Własny projekt jest jeden. Czysty PDF bez znaku wodnego jest w PRO.
             </CardDescription>
           </CardHeader>
 
           <CardContent className="space-y-2 px-4 sm:px-6">
             {[
-              { icon: Infinity, title: "Nielimitowane projekty i pozycje", desc: "Buduj kosztorysy dla 1 mieszkania lub 100 obiektów" },
-              { icon: DollarSign, title: "Pełna widoczność wszystkich cen", desc: "Materiał / Robocizna / VAT / Brutto — bez zamazywania" },
-              { icon: Zap, title: "ES-Engine + KNR 2026 + AI", desc: "Silnik kalkulacji, zestawy 360°, rozpoznawanie importu PDF/Excel" },
-              { icon: FileText, title: "Eksport PDF ze znakiem wodnym DEMO", desc: "Do Twojej pracy wewnętrznej — do klienta potrzebujesz PRO lub Pay-per-Export" },
+              { icon: Infinity, title: "1 własny projekt", desc: "Projekt DEMO i archiwum się nie liczą. Drugi projekt jest w PRO." },
+              { icon: DollarSign, title: "Ceny widać", desc: "Materiał, robocizna, VAT i brutto bez zamazywania" },
+              { icon: Zap, title: "Norma ES i zestawy", desc: "Robocizna = rbh × stawka × województwo. Materiał osobno." },
+              { icon: FileText, title: "PDF ze znakiem wodnym DEMO", desc: "Do pracy u siebie. Czysty wydruk dla klienta jest w PRO." },
             ].map(({ icon: Icon, title, desc }) => (
               <div key={title} className="flex items-start gap-2.5 p-2.5 rounded-lg bg-white/70 dark:bg-slate-900/40 border border-green-200/60 dark:border-green-800/30">
                 <Check className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
@@ -99,11 +99,9 @@ export function SubscriptionPanel({ profile }: SubscriptionPanelProps) {
 
             {[
               { icon: FileText, title: "Czysty PDF bez znaku wodnego", desc: "Gotowy do wysłania klientowi — profesjonalny, z Twoim logo i NIP" },
-              { icon: Sparkles, title: "Więcej projektów i zapytań AI", desc: "Bez limitu 1 projektu — i wyższy miesięczny limit ES-Engine" },
-              { icon: Crown, title: "Własne branding firmy w PDF", desc: "Logo, dane firmy, kolory dokumentów — wyglądasz jak wielka firma" },
-              { icon: Zap, title: "Szablony i własne zestawy", desc: "Powtarzalne wyceny w kilka minut zamiast od zera" },
-              { icon: Shield, title: "Tryb offline + sync PWA", desc: "Pracuj bez internetu na placu budowy — synchronizacja po powrocie" },
-              { icon: Headphones, title: "Wsparcie priorytetowe", desc: "Odpowiadamy w ciągu 2h w dni robocze" },
+              { icon: Sparkles, title: "Więcej niż 1 projekt", desc: "I wyższy miesięczny limit zapytań do wyceny" },
+              { icon: Crown, title: "Logo i dane firmy na PDF", desc: "Te same dane, co w profilu firmy, bez znaku wodnego" },
+              { icon: Headphones, title: "Wsparcie", desc: "Pytania o wycenę i konto" },
             ].map(({ icon: Icon, title, desc }) => (
               <div key={title} className="flex items-start gap-2.5 p-2.5 bg-white/70 dark:bg-slate-900/40 rounded-lg border border-amber-200/50 dark:border-amber-800/30">
                 <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
@@ -123,8 +121,7 @@ export function SubscriptionPanel({ profile }: SubscriptionPanelProps) {
                     PRO zwraca się po 1 kliencie
                   </p>
                   <p className="text-[10px] sm:text-xs text-emerald-800 dark:text-emerald-300 mt-0.5">
-                    Jedna profesjonalna wycena z własnym logo i Portalem Klienta buduje zaufanie
-                    warte znacznie więcej niż 159 zł/m-c. Średni elektryk oszczędza <strong>8–12 h/m-c</strong> dzięki automatyzacji KNR.
+                    Czysty PDF z logo i NIP idzie do klienta. 159 zł netto miesięcznie.
                   </p>
                 </div>
               </div>
