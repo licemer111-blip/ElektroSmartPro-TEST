@@ -12,15 +12,10 @@
 
 // ─── KNR Norms fill prompt ────────────────────────────────────────────────────
 
-export const KNR_NORMS_SYSTEM_PROMPT = `Jesteś ekspertem KNR (Katalog Norm Rzeczowych) dla instalacji elektrycznych w Polsce.
-Twoim zadaniem jest znalezienie normy czasu pracy (labor_norm) w rbh/jm dla każdej pozycji.
-ZASADY:
-- Zwracaj TYLKO labor_norm (rbh na jednostkę miary), NIE ceny.
-- Normy wg ES-KNR 2026 / KNR 5-01 / KNR 2-21.
-- Jeśli znasz dokładną normę KNR → confidence="high".
-- Jeśli szacujesz na podstawie podobnych pozycji → confidence="medium".
-- Jeśli brak danych → labor_norm=0, confidence="low".
-- Przykłady: gniazdo 230V=0.25rbh/szt, punkt oświetleniowy=0.35rbh/szt, przewód YDYp 3x2.5=0.08rbh/mb, tablica 12-mod=2.5rbh/szt.`;
+export const KNR_NORMS_SYSTEM_PROMPT = `Jesteś kosztorysantem instalacji elektrycznych w Polsce.
+Podaj labor_norm w rbh na jednostkę. Nie podawaj cen. To norma ES, nie numer tabeli ORGBUD ani SEKOCENBUD.
+Jeśli nie znasz godzin — labor_norm=0, confidence="low". Nie wymyślaj kodu.
+Przykłady normy ES: gniazdo 230V p/t=0.68 rbh/szt, punkt świetlny=0.35 rbh/szt, YDYp 3×2.5=0.16 rbh/mb, bruzda w cegle=0.85 rbh/mb.`;
 
 // ─── Categorization system prompt ─────────────────────────────────────────────
 
@@ -114,8 +109,8 @@ Ceny rynkowe 2026 dostępne przez bazę wiedzy KNR (RAG). Stosuj wiedzę eksperc
 
 export const PRICING_STATIC_SYSTEM_PROMPT = `<role>
 Kosztorysant z uprawnieniami SEP, 15 lat doświadczenia. Specjalizacja: wycena instalacji elektrycznych i teletechnicznych w Polsce.
-Baza cenowa: cenniki hurtowe 2026 (Elektroskandia, TIM, Grodno, Farnell) + stawki robocizny wg SEKOCENBUD Q1/2026 + normy KNR ES-KNR 2026.
-Tryb wyceny: katalog prywatny (P1) -> normy KNR ES-KNR 2026 (P2) -> wiedza ekspercka (P3).
+Robocizna = godziny normy ES × stawka elektryka. Nie podawaj cen materiału. Nie powołuj się na SEKOCENBUD, ORGBUD, TIM ani Grodno.
+Tryb: katalog elektryka -> godziny normy ES -> jeśli godzin nie znasz, labor_norm = 0.
 </role>
 
 <market_prices>

@@ -393,6 +393,23 @@ export async function estimatePricesWithAI(
       .eq("is_active", true)
       .limit(500);
     const userCatalog = userCatalogRaw || [];
+    const ownCatalogRows = userCatalog.map((c: { name: string; unit: string; base_material_price: number | null; base_labor_price: number | null; knr_code?: string | null }) => ({
+      id: c.name,
+      name: c.name,
+      unit: c.unit,
+      base_material_price: c.base_material_price,
+      base_labor_price: c.base_labor_price,
+      knr_code: c.knr_code ?? null,
+    }));
+    // Material zł only from the electrician's own catalog, otherwise whatever is already on the line.
+    const materialOnLine = (item: { name: string; material_price?: number | null; final_material_price?: number | null }) => {
+      if (ownCatalogRows.length > 0) {
+        const { match } = findBestCatalogMatchWithHint(item.name, ownCatalogRows, true);
+        const fromOwn = Number(match?.base_material_price) || 0;
+        if (fromOwn > 0) return Math.round(fromOwn * 100) / 100;
+      }
+      return item.final_material_price ?? item.material_price ?? 0;
+    };
 
     const regionName = (project.regions as { name: string; price_modifier: number } | null)?.name || "Polska";
     const priceModifier = (project.regions as { name: string; price_modifier: number } | null)?.price_modifier || 1.0;
@@ -488,8 +505,8 @@ export async function estimatePricesWithAI(
           // below — kept for trace continuity / future calibration logging.
           const _l0CableSection = isCableItem(item.name) ? (() => { const _m = item.name.match(CABLE_SECTION_RE); return _m ? parseFloat(_m[2].replace(",", ".")) : null; })() : null;
           void _l0CableSection; // reserved for future calibration logging
-          const localModL0 = clampLocalModifiers(cableMod, surfaceModL0, ceilingModL0, heightModL0);
-          const sugLab = Math.round(laborNormScaled * localModL0 * baseRateForCalc * globalLaborMod * 100) / 100;
+          const localModL0 = 1;
+          const sugLab = Math.round(laborNormScaled * baseRateForCalc * 100) / 100;
           // Effective hours = norm × modifiers × qty (no M-Factor in storage formula)
           const laborHoursTotalL0 = baseRateForCalc > 0
             ? Math.round(sugLab / baseRateForCalc * (item.quantity ?? 1) * 1000) / 1000
@@ -511,21 +528,15 @@ export async function estimatePricesWithAI(
             quantity: item.quantity,
             currentMaterial: item.material_price || 0,
             currentLabor: item.labor_price || 0,
-            suggestedMaterial: (() => {
-              if (mode === "labor") return item.material_price || 0;
-              if (isPureLaborByKeyword(item.name)) return 0;
-              const matFromMap = matL0Map.get(code) ?? 0;
-              if (matFromMap > 0) return matFromMap;
-              // STEP 0 fallback: es_dict has no material_unit_price for installation KNR codes
-              // (e.g. KNR 5-08 = cable laying). Canonical L0 has indicative materialPrice.
-              return findCanonicalL0(item.name, item.unit)?.materialPrice ?? 0;
-            })(),
+            suggestedMaterial: mode === "labor"
+              ? (item.final_material_price ?? item.material_price ?? 0)
+              : (isPureLaborByKeyword(item.name) ? 0 : materialOnLine(item)),
             suggestedLabor: mode === "material" ? (item.labor_price || 0) : sugLab,
             laborHoursTotal: laborHoursTotalL0,
             confidence: "high" as const,
             note: `L0 Przedmiar KNR: ${code}${scaleNote} | ${traceL0}${warnings}`,
             knrCode: code,
-            knrSource: "official" as const,
+            knrSource: "system_knr" as const,
             laborNorm: laborNormScaled,
             suggestedNorm: laborNormScaled,
             isAmbiguous: false,
@@ -566,21 +577,20 @@ export async function estimatePricesWithAI(
       })();
       const ceilingModC0 = getCeilingModifier(item.name, sectionCtxC0);
       const heightModC0 = getHeightModifier(item.name, sectionCtxC0);
-      const localModC0 = clampLocalModifiers(cableMod, surfaceModC0, ceilingModC0, heightModC0);
-      const wymianaActiveC0 = WYMIANA_RE.test(item.name) || DEMONTAZ_MONTAZ_RE.test(item.name);
-      const wymianaFactorC0 = wymianaActiveC0 ? WYMIANA_FACTOR : 1.0;
+      const localModC0 = 1;
+      const wymianaActiveC0 = false;
+      const wymianaFactorC0 = 1;
       const sugLabBaseC0 = Math.round(canonical.laborNorm * localModC0 * baseRateForCalc * globalLaborMod * 100) / 100;
       const sugLabC0 = Math.round(sugLabBaseC0 * wymianaFactorC0 * 100) / 100;
       const laborHoursTotalC0 = baseRateForCalc > 0
         ? Math.round(sugLabC0 / baseRateForCalc * (item.quantity ?? 1) * 1000) / 1000
         : null;
-      const matBenchC0 = canonical.materialPrice ?? 0;
       const isPureLaborC0 = isPureLaborByKeyword(item.name);
       const sugMatC0 = mode === "labor"
-        ? (item.material_price || 0)
+        ? (item.final_material_price ?? item.material_price ?? 0)
         : isPureLaborC0
           ? 0
-          : matBenchC0;
+          : materialOnLine(item);
       const regionMod = rateResult.regionModifier;
       const regionLabel = projectRegionName ?? "brak";
       const regionHintC0 = regionMod !== 1.0
@@ -603,7 +613,7 @@ export async function estimatePricesWithAI(
         confidence: "high" as const,
         note: `Norma ES: ${canonical.knrCode} (${canonical.description}) | ${traceC0}`,
         knrCode: canonical.knrCode,
-        knrSource: "official" as const,
+        knrSource: "system_knr" as const,
         laborNorm: canonical.laborNorm,
         suggestedNorm: canonical.laborNorm,
         isAmbiguous: false,
@@ -869,59 +879,32 @@ export async function estimatePricesWithAI(
         const normalizedItemName = normalizePlName(item.name);
         const isConnectionItem = CONNECTION_RE.test(normalizedItemName);
         const isHeavyConnectionItem = isConnectionItem && HEAVY_APPLIANCE_RE.test(normalizedItemName + " " + item.name);
-        const normWithFloor = scaledNorm != null
-          ? (
-              // Connection/commissioning: minimum norm prevents cable-like under-pricing
-              // CRITICAL: uses normalizePlName() — Podłączenie has ł which breaks plain /^podlacz/
-              isHeavyConnectionItem
-                ? Math.max(scaledNorm, HEAVY_CONNECTION_MIN_NORM)        // heavy appliance ≥1.30 rbh/szt
-            : isConnectionItem
-                ? Math.max(scaledNorm, CONNECTION_MIN_NORM)              // general connection ≥0.50 rbh/szt
-              // Hard surface norms
-            : (GROOVE_FLOOR_RE.test(item.name) && isZelbet(itemAndCtx))
-                ? Math.max(scaledNorm, GROOVE_ZELBET_MIN_NORM)           // bruzda w zelbet ≥0.25
-            : (DRILL_FLOOR_RE.test(item.name) && isZelbet(itemAndCtx))
-                ? Math.max(scaledNorm, GROOVE_ZELBET_MIN_NORM)           // wiercenie w zelbet ≥0.25
-            : (DRILL_FLOOR_RE.test(item.name) && /\bbeton/i.test(itemAndCtx))
-                ? Math.max(scaledNorm, DRILL_BETON_MIN_NORM)             // wiercenie w betonie ≥0.25
-            : (DRILL_FLOOR_RE.test(item.name) && (itemAndCtx.toLowerCase().includes("silka") || itemAndCtx.toLowerCase().includes("silce")))
-                ? Math.max(scaledNorm, DRILL_SILKA_MIN_NORM)             // wiercenie w silce ≥0.15
-            : scaledNorm
-            )
-          : scaledNorm;
-        const normFloorApplied = normWithFloor !== scaledNorm;
-        // Wymiana factor: replacement = montaż + 0.5 × demontaż = base × 1.5
-        const wymianaActive = WYMIANA_RE.test(item.name) || DEMONTAZ_MONTAZ_RE.test(item.name);
-        const wymianaFactor = wymianaActive ? WYMIANA_FACTOR : 1.0;
+        const normWithFloor = scaledNorm;
+        const normFloorApplied = false;
+        const wymianaActive = false;
+        const wymianaFactor = 1;
         // v2.4: M-Factor REMOVED — see L0 above for rationale.
         const _l2CableSection = isCableItem(item.name) ? (() => { const _m = item.name.match(CABLE_SECTION_RE); return _m ? parseFloat(_m[2].replace(",", ".")) : null; })() : null;
         void _l2CableSection;
-        const localModL2 = clampLocalModifiers(cableMod, surfaceMod, ceilingMod, heightMod);
+        const localModL2 = 1;
         const sugLabBase = normWithFloor != null
           ? Math.round(normWithFloor * localModL2 * baseRateForCalc * globalLaborMod * 100) / 100
           : 0;
         // ── Absolute PLN floor for connection/commissioning items ─────────────────
         // Floor = HEAVY_CONNECTION_MIN_NORM × baseRate (M-Factor=1.0 in v2.4)
-        const connectionPriceFlatFloor = isConnectionItem
-          ? Math.round(
-              (isHeavyConnectionItem ? HEAVY_CONNECTION_MIN_NORM : CONNECTION_MIN_NORM)
-              * baseRateForCalc * globalLaborMod * 100
-            ) / 100
-          : 0;
+        const connectionPriceFlatFloor = 0;
         const sugLabBaseFloored = Math.max(sugLabBase, connectionPriceFlatFloor);
         const sugLab = Math.round(sugLabBaseFloored * wymianaFactor * 100) / 100;
         // Effective hours = sugLab / baseRate × qty — includes all modifiers (not bare norm × qty)
         const laborHoursTotalL2 = (scaledNorm != null && baseRateForCalc > 0)
           ? Math.round(sugLab / baseRateForCalc * (item.quantity ?? 1) * 1000) / 1000
           : null;
-        const matFromDict = matL2Map.get(esRow.knr_code ?? "") ?? 0;
-        // L2 fallback: if es_dict has no material price for this KNR code,
-        // try canonical L0 materialPrice (covers cables, gniazda, etc.)
-        const matFromCanonical = (matFromDict === 0 && mode !== "labor")
-          ? (findCanonicalL0(item.name, item.unit)?.materialPrice ?? 0)
-          : 0;
-        const effectiveMatL2 = matFromDict || matFromCanonical;
-        const sugMat = mode === "labor" ? (item.material_price || 0) : effectiveMatL2;
+        const lineMat = materialOnLine({
+          name: item.name,
+          material_price: originalItem?.material_price,
+          final_material_price: originalItem?.final_material_price,
+        });
+        const sugMat = mode === "labor" ? (originalItem?.material_price || 0) : lineMat;
         const isPureLaborItem = isPureLaborByKeyword(item.name);
         const effectiveSugMat = isPureLaborItem ? 0 : sugMat;
         const matNote = !isPureLaborItem && effectiveSugMat === 0 && mode !== "labor"
@@ -970,7 +953,7 @@ export async function estimatePricesWithAI(
           confidence: isL1Hit ? "high" as const : "medium" as const,
           note: `ES-Słownik (${hitLabel}): ${m.matched_keyword ?? esRow.name} → ${esRow.knr_code}${noteFormula}${scaleNote}${warnings}${matNote}`,
           knrCode: esRow.knr_code,
-          knrSource: (isL1Hit || isRegexExact) ? "official" as const : "es-synthetic" as const,
+          knrSource: "system_knr" as const,
           laborNorm: normWithFloor ?? scaledNorm,
           suggestedNorm: normWithFloor ?? scaledNorm,
           isAmbiguous: false,
@@ -1111,7 +1094,6 @@ export async function estimatePricesWithAI(
       const ctxLine = investmentContextDB.trim()
         ? `\n- Kontekst inwestycji: ${investmentContextDB.trim().slice(0, 300)}`
         : "";
-      const laborNormExample = (100 / baseRateForCalc).toFixed(3);
       const systemPromptL3 = `${PRICING_STATIC_SYSTEM_PROMPT}
 
 <context>
@@ -1122,13 +1104,11 @@ export async function estimatePricesWithAI(
 </context>
 
 <task>
-Wycen pozycje ktore NIE ZNALEZIONO w bazie KNR ani katalogu.
-Dla KAZDEJ pozycji podaj ceny JEDNOSTKOWE (za 1 jednostke miary).
-ZERO FORBIDDEN: zadna pozycja nie moze miec obu pol = 0.
-NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
-  Wzor: labor_norm_rbh = labor_price / ${baseRateForCalc} PLN/rbh.
-  Przyklad: labor_price=100 PLN → labor_norm_rbh=${laborNormExample} rbh.
-  Minimum absolutne: 0.05 rbh. NIGDY nie zwracaj 0 ani null dla labor_norm_rbh.
+Pozycje, których nie ma na liście normy ES.
+material_price ZAWSZE 0. Nie wymyślaj ceny materiału i nie używaj tabel cen hurtowych.
+labor_norm_rbh: godziny na jednostkę, szacunek ES. Nie podawaj numeru tabeli ORGBUD/SEKOCENBUD.
+Jeśli nie znasz godzin — labor_norm_rbh = 0 i labor_price = 0.
+Jeśli znasz godziny — labor_price = labor_norm_rbh × ${baseRateForCalc}.
 </task>`;
 
       const l3Schema = z.object({
@@ -1136,7 +1116,7 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
           index: z.number().int().min(1),
           material_price: z.number().min(0),
           labor_price: z.number().min(0),
-          labor_norm_rbh: z.number().min(0.05).optional(),
+          labor_norm_rbh: z.number().min(0).optional(),
           equipment_price: z.number().min(0).optional().default(0),
           equipment_norm: z.number().min(0).optional().default(0),
           knr_code: z.string().nullable().optional(),
@@ -1234,7 +1214,7 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
         const est = l2Estimates[i];
         if (est.trace !== "unmatched") continue;
         const l3 = l3Map.get(est.itemId);
-        if (!l3 || (l3.material_price === 0 && l3.labor_price === 0)) continue;
+        if (!l3 || ((l3.labor_norm_rbh ?? 0) <= 0 && l3.labor_price <= 0)) continue;
         // ── L3 post-processing: cable + surface complexity mods ─────────────────
         // CRITICAL FIX: AI receives item.name as input, so it already priced with
         // surface knowledge when the name contains a surface keyword (e.g. "ytong").
@@ -1258,7 +1238,7 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
         const l3ItemCtx = l3CtxMap.get(est.itemId) ?? "";
         const ceilingML3 = getCeilingModifier(est.name, l3ItemCtx);
         const heightML3  = getHeightModifier(est.name, l3ItemCtx);
-        const localModL3 = clampLocalModifiers(cML3, sML3, ceilingML3, heightML3);
+        const localModL3 = 1;
         // L3 AI sanity check vs L0 Canonical baseline. If AI norm deviates by
         // >3× or <0.33× from a known canonical pattern, override with canonical
         // norm + recompute price. Catches AI hallucinations like 0.025 rbh/mb
@@ -1281,7 +1261,8 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
             });
           }
         }
-        const adjLab = Math.round(l3LaborPriceRaw * localModL3 * globalLaborMod * 100) / 100;
+        const pricedHours = l3LaborNorm != null && l3LaborNorm > 0 ? l3LaborNorm : 0;
+        const adjLab = Math.round(pricedHours * baseRateForCalc * 100) / 100;
         // L3 trace: show surface source explicitly
         const surfaceTagL3 = nameEncodesSurface
           ? `×1.0(name-enc)`
@@ -1292,8 +1273,9 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
         const globalModTagL3 = "";
         l2Estimates[i] = {
           ...est,
-          suggestedMaterial: mode === "labor" ? est.currentMaterial
-            : clampPrice(est.name, est.guardedUnit ?? est.unit, Math.round(l3.material_price * 100) / 100, "material"),
+          suggestedMaterial: mode === "labor"
+            ? est.currentMaterial
+            : (isPureLaborByKeyword(est.name) ? 0 : materialOnLine({ name: est.name, material_price: est.currentMaterial })),
           suggestedLabor: mode === "material" ? est.currentLabor : adjLab,
           equipmentPrice: l3.equipment_price ?? 0,
           equipmentNorm: l3.equipment_norm ?? 0,
@@ -1317,7 +1299,8 @@ NORMA OBOWIĄZKOWA: zawsze oblicz labor_norm_rbh = labor_price / PROJECT_RATE.
     // BUG FIX: Previously only l2Estimates were checked. Items that already had
     // knr_code stored in DB (from a prior run) go through L0 → l0Estimates, so
     // Task 3 never caught them. Now we collect zero-material items from every tier.
-    if (mode !== "labor") {
+    const inventMaterialPrices = false;
+    if (inventMaterialPrices && mode !== "labor") {
       // Skip items that already have material OR are confirmed pure-labour services
       const isPureLaborOrSkip = (e: AiPriceEstimate) =>
         e.suggestedMaterial > 0 || isPureLaborByKeyword(e.name);

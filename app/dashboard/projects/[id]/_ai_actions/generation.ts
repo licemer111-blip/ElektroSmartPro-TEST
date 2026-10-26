@@ -409,7 +409,7 @@ export async function generateProjectItemsWithAI(
 Dopasuj nazwy DOKLADNIE do katalogu jesli pasuje:
 ${catalogContext || "(brak katalogu — generuj standardowe nazwy elektryczne)"}
 </user_catalog>
-INSTRUKCJA: Generuj TYLKO pozycje, jednostki i ilosci — BEZ cen. Ceny wylicza silnik KNR 2026 automatycznie. Podaj kod KNR jesli znasz (pole knr_code).`;
+INSTRUKCJA: Generuj TYLKO pozycje, jednostki i ilosci. Nie podawaj cen i nie wymyslaj kodu tabeli. Robocizne liczy program z normy ES i stawki.`;
 
     const itemSchema = z.object({
       items: z.array(z.object({

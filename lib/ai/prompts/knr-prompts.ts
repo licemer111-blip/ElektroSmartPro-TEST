@@ -26,8 +26,8 @@ ZADANIE: Generowanie PROFESJONALNEGO kosztorysu z opisu projektu elektrycznego.
 3. Dopasuj do katalogu użytkownika jeśli dostępny.
 4. Grupuj wg sekcji (Kuchnia, Łazienka, Salon, Garaż itp.) dla obiektów mieszkalnych.
 5. KAŻDA robocizna → kod KNR obowiązkowy. Brak pewności → null + isEstimate=true (silnik znajdzie po nazwie).
-6. ZAWSZE końcowa pozycja: "Pomiary i odbiory — protokół komplet" (KNR 5-08 9999).
-7. Ceny NETTO PLN 2026 wg SEKOCENBUD Q1/2026 / Elektroskandia / TIM SA / Grodno.
+6. Na końcu dodaj pozycję "Pomiar rezystancji izolacji obwodu", bez wymyślonego numeru tabeli.
+7. Nie podawaj cen. Robociznę liczy program: godziny normy ES × stawka elektryka. Materiał zostaje pusty.
 
 ${KNR_CANONICAL_2026_FULL}
 

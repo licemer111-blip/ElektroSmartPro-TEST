@@ -16,6 +16,8 @@ import {
   type EngineSettings,
   DEFAULT_ENGINE_SETTINGS,
 } from "@/lib/services/matching-engine";
+import { findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
+import { laborFromHours } from "@/lib/catalog/catalog-work";
 
 interface ParsedRow {
   [key: string]: string;
@@ -95,6 +97,40 @@ function buildPreResolutionContext(results: Array<{ name: string; _match: MatchR
   });
 
   return `\n\nPRE-ANALIZA ES-DICTIONARY (wygenerowane algorytmicznie — ZACHOWAJ te kody KNR):\n${lines.join("\n")}\nDla pozycji oznaczonych ✅ użyj dokładnie tych kodów KNR i norm rbh.`;
+}
+
+function parseMoney(raw: string | undefined): number | null {
+  if (!raw) return null;
+  const cleaned = raw.replace(/\s/g, "").replace(",", ".").replace(/[^\d.]/g, "");
+  if (!cleaned) return null;
+  const n = Number(cleaned);
+  return Number.isFinite(n) ? n : null;
+}
+
+function materialHeader(headers: string[]): string | undefined {
+  const n = (h: string) => h.toLowerCase();
+  const explicit = headers.find((h) => /materia/.test(n(h)));
+  if (explicit) return explicit;
+  return headers.find((h) => /cena|price/.test(n(h)) && !/roboc|suma|warto|brutto/.test(n(h)));
+}
+
+function stampWorkPrice(
+  item: AIProjectItem,
+  hourlyRate: number,
+  fileMaterial: number | null,
+): AIProjectItem {
+  const l0 = findCanonicalL0(item.name, item.unit);
+  const dictHours = item.knr_source === "system_knr" && item.labor_norm ? item.labor_norm : 0;
+  const hours = l0?.laborNorm ?? dictHours;
+  const code = l0?.knrCode ?? (item.knr_source === "system_knr" ? item.knr_code ?? null : null);
+  return {
+    ...item,
+    material_price: fileMaterial != null && fileMaterial > 0 ? fileMaterial : 0,
+    labor_price: laborFromHours(hours, hourlyRate),
+    labor_norm: hours > 0 ? hours : null,
+    knr_code: code,
+    knr_source: code ? "system_knr" : null,
+  };
 }
 
 interface AIProjectItem {
@@ -204,10 +240,10 @@ DEVICE_KW_SHIELD — Te typy pozycji są ZAWSZE w szt/kpl, nawet z parametrami d
 Detektor, Czujka, Czujnik, Sygnalizator, Oprawa, Lampa, Gniazdo, Klawisz, Wyłącznik,
 Sterownik, Kontroler, Moduł, Centrala, Kamera, Rejestrator, Głowica, Zawór, Siłownik
 
-ZASADY WYCENY ES-ENGINE 2 (KRYTYCZNE — NIGDY nie ignoruj):
-1. SPLIT PRICING — material_price i labor_price ZAWSZE osobno. Nigdy ich nie sumuj.
-2. ZERO jest ZABRONIONE: NIGDY nie zwracaj 0.00 dla obu pól jednocześnie.
-   Jeśli cena nie jest w pliku → OSZACUJ rynkową cenę netto PLN 2026 na podstawie nazwy.
+ZASADY ODCZYTU (KRYTYCZNE):
+1. SPLIT — material_price i labor_price osobno. Nie sumuj.
+2. Cena TYLKO z pliku. Jeśli w wierszu nie ma ceny materiału — material_price = 0. Nie szacuj rynku.
+   labor_price ZAWSZE 0. Godziny liczy program: norma ES × stawka elektryka.
 3. SEMANTYCZNY MAPPING — rozumiej znaczenie, nie tylko tekst dosłowny:
    - "Przewód U/UTP", "Kabel UTP", "Linia LAN", "kabel sieciowy kat.6", "patch cord" → to samo: kabel UTP kat.6
    - "Szafa rack", "szafa krosowa", "rack 19\"", "szafa 42U" → szafa serwerowa rack
@@ -216,72 +252,8 @@ ZASADY WYCENY ES-ENGINE 2 (KRYTYCZNE — NIGDY nie ignoruj):
    - "Wyłącznik nadprądowy", "MCB", "bezpiecznik automatyczny" → MCB
    - "WLZ", "wewnętrzna linia zasilająca" → linia kablowa
 4. Jeśli nazwa zawiera skrót jednostki (kpl, szt, mb, m) — NIE włączaj go do name. Tylko wstaw do unit.
-5. Przykładowe ceny rynkowe netto Polska 2026 (unit = podana jednostka):
-   - Kabel UTP kat.6 /mb: mat=3.50zł, rob=4.30zł (KNR 5-06, rbh=0.045)
-   - Gniazdo RJ45 /szt: mat=22zł, rob=30zł
-   - Patchpanel 24p /szt: mat=180zł, rob=45zł
-   - Szafa rack 42U /szt: mat=1800zł, rob=180zł
-   - Szafa rack 12U /szt: mat=650zł, rob=90zł
-   - Gniazdo 230V podtynkowe /szt: mat=22zł, rob=33zł (rbh=0.35)
-   - Wyłącznik nadprądowy B16 1P /szt: mat=22zł, rob=24zł (rbh=0.25)
-   - Wyłącznik różnicowoprądowy 40A/2P /szt: mat=100zł, rob=38zł (rbh=0.40)
-   - Oprawa LED downlight /szt: mat=45zł, rob=24zł (rbh=0.25)
-   - Przewód YDYp 3x1.5 /mb: mat=5.20zł, rob=6.65zł (rbh=0.07)
-   - Przewód YDYp 3x2.5 /mb: mat=7.20zł, rob=7.60zł (rbh=0.08)
-   - Montaż gniazda LAN /szt: mat=0zł, rob=28zł
-   - Bruzda w cegle (cegła/silikat) /mb: mat=0zł, rob=80.75zł (rbh=0.85)
-   - Bruzda w G-K /mb: mat=0zł, rob=17.10zł (rbh=0.18)
-   - Rura ochronna DVR 20mm /mb: mat=1.80zł, rob=5.04zł (rbh=0.053)
-6. Pozycja czysto materiałowa (kabel, osprzęt) → labor_price MOŻE być 0, ale material_price > 0.
-7. Pozycja robocizny (montaż, układanie) → material_price MOŻE być 0, ale labor_price > 0.
-8. KNR → polska techniczna nazwa (bez numeru KNR w nazwie).
-9. Jednostka: "mb" lub "m" dla kabli/przewodów, "szt" dla sprzętu, "kpl" dla kompletu.
-10. KNR CODES — dla każdej pozycji podaj knr_code i labor_norm (rbh/szt):
-    ZASADA: NIGDY nie zwracaj null dla knr_code. Zawsze podaj kod (syntetyczny jeśli brak dokładnego).
-    Kody pewne (confidence high):
-    - Gniazdo 230V podtynkowe → "KNR 5-08 0401", rbh=0.35
-    - Gniazdo 230V natynkowe → "KNR 5-08 0404", rbh=0.30
-    - Gniazdo 3-fazowe CEE 16A 5P → "KNR 5-08 0407", rbh=0.60
-    - Wyłącznik 1-biegunowy (S1) → "KNR 5-08 0411", rbh=0.25
-    - Wyłącznik schodowy (S6/S7) → "KNR 5-08 0412", rbh=0.30
-    - Oprawa LED downlight → "KNR 5-08 0502", rbh=0.25
-    - Oprawa sufitowa LED panel → "KNR 5-08 0501", rbh=0.35
-    - Przewód YDYp 3x1.5 /mb → "KNR 5-08 0201", rbh=0.07
-    - Przewód YDYp 3x2.5 /mb → "KNR 5-08 0202", rbh=0.08
-    - Przewód YDYp 5x2.5 /mb → "KNR 5-08 0203", rbh=0.11
-    - Przewód YDYp 5x6 /mb → "KNR 5-08 0205", rbh=0.15
-    - Wyłącznik nadprądowy 1P → "KNR 5-08 0601", rbh=0.25
-    - Wyłącznik różnicowoprądowy 2P → "KNR 5-08 0701", rbh=0.40
-    - Rozdzielnica podtynkowa → "KNR 5-08 0901", rbh=2.63
-    - Ogranicznik przepięć SPD T2 → "KNR 5-08 1201", rbh=0.60
-    - Bruzda w cegle/silikatu /mb → "KNR 5-08 0101", rbh=0.85
-    - Bruzda w betonie/żelbecie /mb → "KNR 5-08 0103", rbh=2.00
-    - Bruzda w G-K/gipsie /mb → "KNR 5-08 0104", rbh=0.18
-    - Zasypanie bruzdy /mb → "KNR 5-08 0107", rbh=0.12
-    - Rura ochronna DVR 20mm /mb → "KNR 5-08 0801", rbh=0.053
-    Kody syntetyczne LAN/IT (confidence low → knr_source="es_synthetic"):
-    - Kabel UTP/U-UTP kat.5e/6/6a /mb → "KNR 5-06+ES", rbh=0.04
-    - Gniazdo RJ45 / punkt LAN → "KNR 5-06+ES", rbh=0.25
-    - Patchpanel → "KNR 5-06+ES", rbh=0.45
-    - Szafa rack → "KNR 5-06+ES", rbh=2.50
-    - Linia LAN zakończona wkładkami RJ45 (kpl) → "KNR 5-06+ES", rbh=1.50
-    Kody syntetyczne CCTV/alarm:
-    - Kamera IP/CCTV → "KNR 5-09+ES", rbh=1.00
-    - NVR/DVR → "KNR 5-09+ES", rbh=1.50
-    - Czujka alarm/PIR → "KNR 5-10+ES", rbh=0.50
-    Kody syntetyczne pozostałe:
-    - PV/fotowoltaika → "KNR AT-26+ES"
-    - Wszystkie inne nieznane → "KNR-ES"
-
-ZASADA #11 — ZESTAWY (Assemblies) — BARDZO WAŻNE:
-Jeśli pozycja zawiera prefix "Zestaw:", "Zestaw ", "Punkt " lub opisuje kompletny punkt instalacyjny
-(np. "Punkt gniazda 230V", "Punkt oświetleniowy", "Komplet gniazda"), importuj ją jako JEDEN item:
-- Usuń prefix "Zestaw:" lub "Zestaw " z nazwy — zostaw tylko część opisową
-- unit = "kpl"
-- Wyceniaj jako kompletny punkt: materiał + robocizna łącznie
-- Przykład: "Zestaw: Punkt gniazda 230V kompletny" → name="Punkt gniazda 230V", unit="kpl"
-- Punkt gniazda 230V /kpl: mat=35zł (gniazdo+puszka+materiały), rob=190zł (montaż+bruzda+układanie)
-- Punkt oświetleniowy /kpl: mat=15zł (puszka+materiały), rob=220zł (montaż+bruzda+układanie)
+5. knr_code i labor_norm zostaw null. Program sam dopasuje normę ES. Nie wymyślaj kodu.
+6. Zestaw zostaw jedną pozycją, bez doliczania własnych złotych. unit z pliku.
 </import_context>`;
 
     const fullSystemPrompt = systemPrompt + "\n" + importContext + engineContextBlock + preResolutionContext;
@@ -340,7 +312,13 @@ Jeśli pozycja zawiera prefix "Zestaw:", "Zestaw ", "Punkt " lub opisuje komplet
       }
     });
 
-    return { success: true, items: validItems };
+    const { data: profile } = await supabase.from("profiles").select("hourly_rate").eq("id", user.id).single();
+    const rate = Number(profile?.hourly_rate) || 0;
+    const matCol = materialHeader(columnHeaders);
+    const fileMats = matCol ? sampleRows.map((row) => parseMoney(row[matCol])) : [];
+    const stamped = validItems.map((item, idx) => stampWorkPrice(item, rate, fileMats[idx] ?? null));
+
+    return { success: true, items: stamped };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "";
     if (errorMessage.includes("PRO") || errorMessage.includes("subscription")) {
@@ -389,54 +367,10 @@ export async function aiPriceVisionItems(
 Źródło: OCR (skan/zdjęcie dokumentu)
 Zadanie: WYCENA pozycji rozpoznanych przez ES-Engine 2 Vision.
 
-ZASADY WYCENY ES-ENGINE 2 (KRYTYCZNE — NIGDY nie ignoruj):
-1. SPLIT PRICING — material_price i labor_price ZAWSZE osobno. Nigdy ich nie sumuj.
-2. ZERO jest ZABRONIONE: NIGDY nie zwracaj 0.00 dla obu pól jednocześnie.
-   Jeśli cena nie jest podana → OSZACUJ rynkową cenę netto PLN 2026 na podstawie nazwy.
-3. SEMANTYCZNY MAPPING — rozumiej znaczenie:
-   - "Przewód U/UTP", "Kabel UTP", "Linia LAN", "kabel sieciowy kat.6" → kabel UTP kat.6
-   - "Szafa rack", "szafa krosowa", "rack 19\"", "szafa 42U" → szafa serwerowa rack
-   - "Patchpanel", "panel krosowy", "patch panel 24p" → panel krosowy RJ45
-   - "Gniazdo RJ45", "gniazdo LAN", "punkt LAN" → gniazdo sieciowe
-   - "Wklad/keystone/wkladka RJ45/insert" → wkladka keystonowa RJ45
-   - "Wyłącznik nadprądowy", "MCB", "bezpiecznik automatyczny" → MCB
-   - "WLZ", "wewnętrzna linia zasilająca" → linia kablowa
-4. Ceny za 1 JEDNOSTKĘ miary — NIE mnóż przez ilość!
-5. Przykładowe ceny rynkowe netto Polska 2026:
-   - Kabel UTP kat.6 /mb: mat=2.80zł, rob=2.00zł
-   - Wkladka RJ45 kat.6 (keystone/wklad) /szt: mat=8zł, rob=5zł
-   - Gniazdo RJ45 /szt: mat=18zł, rob=20zł
-   - Patchpanel 24p /szt: mat=180zł, rob=45zł
-   - Patchpanel 48p /szt: mat=320zł, rob=75zł
-   - Szafa rack 12U /szt: mat=650zł, rob=90zł
-   - Szafa rack 18U /szt: mat=950zł, rob=150zł
-   - Szafa rack 42U /szt: mat=1800zł, rob=250zł
-   - Panel krosujacy do szafy RACK /szt: mat=280zł, rob=75zł
-   - Gniazdo 230V /szt: mat=25zł, rob=18zł
-   - Wyłącznik nadprądowy 1P /szt: mat=35zł, rob=12zł
-   - Oprawa LED /szt: mat=120zł, rob=35zł
-   - Przewód YDYp 3x2.5 /mb: mat=4.50zł, rob=3.00zł
-   - Bruzda w tynku /mb: mat=0zł, rob=6.00zł
-   - Kamera IP kopulkowa 4Mpx /szt: mat=350zł, rob=120zł
-   - Rejestrator NVR 8-kanal /szt: mat=600zł, rob=150zł
-6. Pozycja czysto materiałowa → labor_price MOŻE być 0, ale material_price > 0.
-7. Pozycja robocizny → material_price MOŻE być 0, ale labor_price > 0.
-8. KNR CODES — dla każdej pozycji podaj knr_code i labor_norm:
-   ZASADA: NIGDY nie zwracaj null dla knr_code.
-   - Gniazdo 230V → "KNR 5-01 0401-01", rbh=0.25
-   - Punkt oświetleniowy / oprawa LED → "KNR 5-01 0301-01", rbh=0.30
-   - Przewód YDYp 3x2.5 /mb → "KNR 5-04 0101-02", rbh=0.05
-   - Wyłącznik nadprądowy 1P → "KNR 5-08 0201-01", rbh=0.15
-   - Rozdzielnia/rozdzielnica → "KNR 5-08 0101-01", rbh=2.00
-   - Bruzda w tynku /mb → "KNR 2-02 0401-01", rbh=0.12
-   - Kabel UTP/U-UTP kat.6 /mb → "KNR 5-06+ES", rbh=0.04
-   - Gniazdo RJ45 / punkt LAN → "KNR 5-06+ES", rbh=0.25
-   - Wkladka RJ45 (keystone) /szt → "KNR 5-06+ES", rbh=0.10
-   - Patchpanel → "KNR 5-06+ES", rbh=0.45
-   - Szafa rack → "KNR 5-06+ES", rbh=2.50
-   - Kamera IP/CCTV → "KNR 5-09+ES", rbh=1.00
-   - NVR/DVR → "KNR 5-09+ES", rbh=1.50
-   - Wszystkie inne nieznane → "KNR-ES"
+ZASADY:
+1. material_price = 0 i labor_price = 0. Nie szacuj cen.
+2. knr_code i labor_norm = null. Program liczy godziny normy ES × stawka.
+3. Zachowaj nazwę i nie mnóż niczego przez ilość.
 </import_context>`;
 
     // ── ES-Engine pre-resolution for vision items ────────────────────────────
@@ -507,7 +441,11 @@ ZASADY WYCENY ES-ENGINE 2 (KRYTYCZNE — NIGDY nie ignoruj):
       };
     });
 
-    return { success: true, items: pricedItems };
+    const { data: visionProfile } = await supabase.from("profiles").select("hourly_rate").eq("id", user.id).single();
+    const visionRate = Number(visionProfile?.hourly_rate) || 0;
+    const visionStamped = pricedItems.map((item) => stampWorkPrice(item, visionRate, null));
+
+    return { success: true, items: visionStamped };
   } catch (error: unknown) {
     logger.error("[ai-price-vision] error:", {}, error);
     return { success: false, error: "Wystąpił błąd podczas wyceny pozycji OCR" };
