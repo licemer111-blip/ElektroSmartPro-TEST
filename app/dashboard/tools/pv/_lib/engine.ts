@@ -72,8 +72,9 @@ export function calculatePv(p: PvParams): PvResult {
   const irradiation = IRRADIATION_BY_REGION[p.region]?.annual ?? 1050;
   const orientFactor = ORIENTATION_FACTORS[p.orientation];
   const tiltFactor = TILT_FACTORS[p.tilt] ?? 1.0;
-  const moduleEff = MODULE_TYPES[p.moduleType].efficiency;
-  const tempLoss = 0.05;
+  // kWp already includes module efficiency. Temperature loss scales with |γ|:
+  // 5% at 0.40 %/°C (poly). Mono and thin-film lose less.
+  const tempLoss = 0.05 * (Math.abs(MODULE_TYPES[p.moduleType].tempCoeff) / 0.004);
 
   const annualProduction =
     peakPowerKwp * irradiation * orientFactor * tiltFactor * (1 - systemLoss) * (1 - tempLoss);

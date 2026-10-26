@@ -193,7 +193,7 @@ export default function EarthResistancePage() {
             Kalkulator uziemienia
           </h1>
           <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 truncate">
-            Oblicz opór uziemienia zgodnie z PN-IEC 61936-1
+            Szacunek oporu uziomu: pręt, taśma albo płyta
           </p>
         </div>
       </div>
@@ -380,7 +380,7 @@ export default function EarthResistancePage() {
               hasResult={!!result}
               pdfInputs={getPdfInputs()}
               pdfResults={getPdfResults()}
-              standard="PN-IEC 61936-1"
+              standard="PN-HD 60364-5-54"
               notes="Wyniki orientacyjne. Rzeczywisty opór uziemienia zależy od warunków gruntowych i powinien być zweryfikowany pomiarami."
               currentInputs={currentInputs}
               currentLabel={`${numberOfElectrodes}× ${electrodeType === "rod" ? "pręt" : electrodeType === "plate" ? "płyta" : "taśma"} ${electrodeLength}m, ${SOIL_RESISTIVITY[soilType]?.description || "własna ρ"}`}
@@ -585,7 +585,7 @@ export default function EarthResistancePage() {
               <li><strong>Sezonowość:</strong> opór rośnie zimą (zmarznięty grunt) i latem (suchy grunt)</li>
             </ul>
             <p className="mt-2 font-medium">
-              Normy: <strong>PN-IEC 61936-1, PN-HD 60364-5-54, IEEE 80</strong>
+              Norma: <strong>PN-HD 60364-5-54</strong>. Wynik to szacunek — opór sprawdza się pomiarem.
             </p>
           </div>
         </AlertDescription>

@@ -112,9 +112,9 @@ export function StepReview({
             <Zap className="w-3.5 h-3.5 text-white" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300">Ceny KNR zostaną wyliczone automatycznie</p>
+            <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300">Ceny zostaną wyliczone z normy ES</p>
             <p className="text-[11px] text-emerald-700/80 dark:text-emerald-400/70 mt-0.5">
-              Silnik ES-Engine zastosuje normy KNR 2026, Twoje stawki r-g i współczynnik regionalny zaraz po kliknięciu „Utwórz projekt”.
+              Po „Utwórz projekt” silnik wpisze rbh z normy ES, Twoją stawkę i województwo. Województwo mnoży tylko robociznę.
               Każda pozycja otrzyma etykietę „Dlaczego taka cena?” z pełnym rozpisaniem.
             </p>
           </div>
@@ -125,7 +125,7 @@ export function StepReview({
       {/* v2.0: Free-tier info banner — prices visible, PDF export requires PRO */}
       {!isPro && (
         <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-300 dark:border-blue-700 text-xs text-blue-700 dark:text-blue-400">
-          <span className="font-semibold">Tryb Demo:</span> Wszystkie ceny widoczne. Eksport PDF bez znaku wodnego — tylko w PRO (159 zł/m-c) lub pojedynczy PDF za 29 zł.
+          <span className="font-semibold">Tryb Demo:</span> Wszystkie ceny widoczne. PDF ma znak wodny DEMO. Czysty wydruk jest w PRO (159 zł/m-c).
         </div>
       )}
 
@@ -139,7 +139,7 @@ export function StepReview({
           ].map(({ label, color }) => (
             <div key={label} className={`rounded-xl p-3 text-center border bg-slate-50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-700`}>
               <p className="text-[10px] text-muted-foreground uppercase font-medium">{label}</p>
-              <p className={`text-xs font-semibold text-${color}-600 dark:text-${color}-400 mt-0.5`}>Wycena KNR</p>
+              <p className={`text-xs font-semibold text-${color}-600 dark:text-${color}-400 mt-0.5`}>Wycena ES</p>
             </div>
           ))}
         </div>

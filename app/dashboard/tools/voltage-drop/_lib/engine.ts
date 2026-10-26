@@ -68,7 +68,8 @@ export function calculateVoltageDrop(p: VoltageDropParams): VoltageDropResult {
 
   const dropPercent  = (drop / V) * 100;
   const voltageAtEnd = V - drop;
-  const powerLoss    = (p.phases === "3" ? 3 * I * I * R : I * I * R) / 1000;
+  // R is one conductor. 1-phase loss is on the go and the return.
+  const powerLoss    = (p.phases === "3" ? 3 * I * I * R : 2 * I * I * R) / 1000;
 
   return {
     voltageDrop: drop, voltageDropPercent: dropPercent,

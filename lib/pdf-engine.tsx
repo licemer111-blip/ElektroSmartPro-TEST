@@ -1117,7 +1117,7 @@ const DemoWatermark = () => (
         Ten dokument jest wygenerowany w trybie DEMO i nie nadaje się do przekazania klientowi.
       </Text>
       <Text style={watermarkStyles.ctaSubText}>
-        Aktywuj ElektroSmart PRO (159 zł/m-c) lub kup pojedynczy czysty PDF (29 zł) → elektrosmart.pro/pro
+        Aktywuj ElektroSmart PRO (159 zł/m-c), żeby zdjąć znak wodny → elektrosmart.pro/pro
       </Text>
     </View>
   </>

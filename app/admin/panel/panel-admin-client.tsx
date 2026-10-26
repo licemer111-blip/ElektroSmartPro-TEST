@@ -222,7 +222,7 @@ export function PanelAdminClient({ data }: { data: PanelAdminData }) {
             </div>
             <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
               <p className="text-[10px] font-bold text-slate-500 uppercase mb-1">Regiony PL</p>
-              <p className="text-xs font-mono text-slate-700 dark:text-slate-300">×0.88 — ×1.12</p>
+              <p className="text-xs font-mono text-slate-700 dark:text-slate-300">×0.88 — ×1.20</p>
               <p className="text-[9px] text-slate-400 mt-0.5">16 województw — robocizna</p>
             </div>
           </div>

@@ -277,7 +277,8 @@ export function PvCalculatorShell() {
             <ul className="list-disc list-inside space-y-1 ml-2 text-xs md:text-sm">
               <li>Optymalne nachylenie dla Polski: <strong>30-40°</strong></li>
               <li>Zacienienie redukuje produkcję — uwzględnij drzewa i budynki</li>
-              <li>Temperatura modułów wpływa na sprawność: wysoka temp. = mniejsza produkcja</li>
+              <li>Strata temperaturowa: 5% przy polikrysztale, mniej przy mono i cienkiej warstwie</li>
+              <li>Oszczędność = cała produkcja × cena kWh. Nie ma podziału na zużycie własne i oddanie do sieci.</li>
               <li>Norma: <strong>PN-EN 62446</strong> (dokumentacja i odbiór instalacji PV)</li>
             </ul>
           </AlertDescription>

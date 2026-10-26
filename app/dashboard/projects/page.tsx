@@ -37,7 +37,7 @@ export default async function ProjectsPage() {
 
   const effectiveIsPro = getEffectiveIsPro(profile as Parameters<typeof getEffectiveIsPro>[0]);
   const effectiveMaxProjects = getEffectiveMaxProjects(profile as Parameters<typeof getEffectiveMaxProjects>[0]);
-  const nonDemoCount = projects.filter(p => !('is_demo_project' in p) || !p.is_demo_project).length;
+  const nonDemoCount = projects.filter(p => (!('is_demo_project' in p) || !p.is_demo_project) && p.status !== "archived").length;
 
   return (
     <ProjectsWithTemplatesClient

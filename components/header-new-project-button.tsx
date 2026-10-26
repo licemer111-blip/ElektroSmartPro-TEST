@@ -36,7 +36,7 @@ export function HeaderNewProjectButton() {
       const fresh = {
         regions,
         objectTypes,
-        currentProjectCount: projects.filter(p => !p.is_demo_project).length,
+        currentProjectCount: projects.filter(p => !p.is_demo_project && p.status !== "archived").length,
         isPro: getEffectiveIsPro(profile),
         maxProjects: getEffectiveMaxProjects(profile),
         defaultRegionId: profile?.default_region_id ?? null,

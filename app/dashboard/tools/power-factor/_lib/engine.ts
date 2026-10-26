@@ -28,8 +28,9 @@ export interface PowerFactorResult {
 
 export function calculatePowerFactor(p: PowerFactorParams): PowerFactorResult {
   const P      = parseFloat(p.activePower);
-  const pf1    = parseFloat(p.currentPF);
-  const pf2    = parseFloat(p.targetPF);
+  const clampPf = (value: number) => Math.min(0.999, Math.max(0.1, value));
+  const pf1    = clampPf(parseFloat(p.currentPF));
+  const pf2    = clampPf(parseFloat(p.targetPF));
   const V      = parseFloat(p.voltage);
   const tariff = parseFloat(p.tariff);
   const penalty = parseFloat(p.penaltyRate);
@@ -40,9 +41,12 @@ export function calculatePowerFactor(p: PowerFactorParams): PowerFactorResult {
   const Q2   = P * Math.tan(phi2);
   const Qc   = Q1 - Q2;
 
-  let recommendedCapacitor = STANDARD_CAPACITORS[0];
-  for (const cap of STANDARD_CAPACITORS) {
-    if (cap >= Qc) { recommendedCapacitor = cap; break; }
+  let recommendedCapacitor = 0;
+  if (Qc > 0) {
+    recommendedCapacitor = STANDARD_CAPACITORS[STANDARD_CAPACITORS.length - 1];
+    for (const cap of STANDARD_CAPACITORS) {
+      if (cap >= Qc) { recommendedCapacitor = cap; break; }
+    }
   }
 
   const S1 = P / pf1;

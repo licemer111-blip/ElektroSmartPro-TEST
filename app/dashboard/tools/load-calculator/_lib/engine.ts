@@ -9,22 +9,26 @@ export interface Load {
 export type ConductorType = "copper" | "aluminum";
 export type InstallMethod = "B1" | "C";
 
-// PN-HD 60364-5-52 Table B.52-3 — Method B1, Cu
+// Same Cu/PVC columns as the cable calculator (PN-HD 60364-5-52, 2 loaded conductors).
+// B1 = pipes in a wall. C = clipped to a wall. Al ≈ 0.78 × Cu, same factor as the cable tool.
 export const CABLE_CAPACITY_CU_B1: Record<number, number> = {
+  1.5: 15.5, 2.5: 21, 4: 28, 6: 36, 10: 50, 16: 68, 25: 89, 35: 110,
+  50: 134, 70: 171, 95: 207, 120: 239, 150: 272, 185: 311, 240: 365, 300: 419,
+};
+
+export const CABLE_CAPACITY_AL_B1: Record<number, number> = {
+  1.5: 12, 2.5: 16, 4: 22, 6: 28, 10: 39, 16: 53, 25: 69, 35: 86,
+  50: 105, 70: 133, 95: 161, 120: 186, 150: 212, 185: 243, 240: 285, 300: 327,
+};
+
+export const CABLE_CAPACITY_CU_C: Record<number, number> = {
   1.5: 17.5, 2.5: 24, 4: 32, 6: 41, 10: 57, 16: 76, 25: 101, 35: 125,
   50: 151, 70: 192, 95: 232, 120: 269, 150: 309, 185: 353, 240: 415, 300: 472,
 };
 
-// Al (approx 0.62× Cu)
-export const CABLE_CAPACITY_AL_B1: Record<number, number> = {
-  1.5: 11, 2.5: 15, 4: 20, 6: 25, 10: 35, 16: 47, 25: 62, 35: 77,
-  50: 94, 70: 119, 95: 144, 120: 167, 150: 192, 185: 219, 240: 257, 300: 293,
-};
-
-// Method C — Cu
-export const CABLE_CAPACITY_CU_C: Record<number, number> = {
-  1.5: 20, 2.5: 28, 4: 37, 6: 48, 10: 66, 16: 88, 25: 118, 35: 147,
-  50: 179, 70: 229, 95: 278, 120: 322, 150: 371, 185: 424, 240: 499, 300: 569,
+export const CABLE_CAPACITY_AL_C: Record<number, number> = {
+  1.5: 14, 2.5: 19, 4: 25, 6: 32, 10: 44, 16: 59, 25: 79, 35: 98,
+  50: 118, 70: 150, 95: 181, 120: 210, 150: 241, 185: 275, 240: 324, 300: 368,
 };
 
 // PN-HD 60364-5-52 Table B.52-14 — Temperature correction
@@ -84,7 +88,7 @@ export function getCapacityTable(
   if (conductor === "copper") {
     return installMethod === "B1" ? CABLE_CAPACITY_CU_B1 : CABLE_CAPACITY_CU_C;
   }
-  return CABLE_CAPACITY_AL_B1;
+  return installMethod === "B1" ? CABLE_CAPACITY_AL_B1 : CABLE_CAPACITY_AL_C;
 }
 
 export function getCableSection(current: number, table: Record<number, number>): number {

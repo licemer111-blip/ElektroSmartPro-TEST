@@ -123,7 +123,8 @@ export function calculateCable(p: CableParams): CableResult {
   const I      = parseFloat(p.current);
   const V      = parseFloat(p.voltage);
   const L      = parseFloat(p.length);
-  const pf     = parseFloat(p.powerFactor);
+  const pfRaw  = parseFloat(p.powerFactor);
+  const pf     = Number.isFinite(pfRaw) ? Math.min(1, Math.max(0.1, pfRaw)) : 1;
   const tempF  = TEMP_CORRECTION[p.temperature]?.[p.insulation] ?? 1.0;
   const groupF = GROUPING_CORRECTION[p.grouping] ?? 1.0;
   const corrF  = tempF * groupF;
@@ -134,11 +135,11 @@ export function calculateCable(p: CableParams): CableResult {
   const section  = selectSection(corrected, table, methIdx);
   const capacity = (table[section] ?? [])[methIdx] ?? 0;
 
-  // Voltage drop: simplified ΔU = 2ILρ/S (1ph) or √3ILρ/S (3ph)
+  // Resistive drop with cos φ. Go-and-return on 1-phase, one conductor on 3-phase.
   const rho   = RESISTIVITY[p.conductor];
   const drop  = p.phases === "1"
-    ? (2 * I * L * rho) / section
-    : (Math.sqrt(3) * I * L * rho) / section;
+    ? (2 * I * L * rho * pf) / section
+    : (Math.sqrt(3) * I * L * rho * pf) / section;
   const dropPct   = (drop / V) * 100;
   const isVdOk    = dropPct <= 5;
   const breaker   = getBreaker(I);

@@ -86,7 +86,7 @@ export default async function DashboardPage({
               <NewProjectButton
                 regions={regions}
                 objectTypes={objectTypes}
-                currentProjectCount={projects.filter(p => !p.is_demo_project).length}
+                currentProjectCount={projects.filter(p => !p.is_demo_project && p.status !== "archived").length}
                 isPro={effectivelyPro}
                 maxProjects={getEffectiveMaxProjects(profile)}
                 defaultRegionId={profile?.default_region_id ?? null}

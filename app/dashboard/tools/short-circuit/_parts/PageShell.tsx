@@ -61,16 +61,16 @@ export function ShortCircuitCalculatorShell() {
               Kalkulator prądu zwarcia
             </h1>
             <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 truncate">
-              Oblicz Ik3 i Ik1 zgodnie z PN-EN 60909
+              Szacunek Ik3 i Ik1: uk = 4%, plus impedancja kabla
             </p>
           </div>
         </div>
 
         <Alert className="p-3 md:p-4 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/30 dark:to-orange-950/30 border-red-200 dark:border-red-800">
           <Lightbulb className="h-4 w-4 md:h-5 md:w-5 text-red-600 dark:text-red-400" />
-          <AlertTitle className="text-sm md:text-base text-red-900 dark:text-red-100 font-semibold">PN-EN 60909 — Metoda impedancji</AlertTitle>
+          <AlertTitle className="text-sm md:text-base text-red-900 dark:text-red-100 font-semibold">Szacunek Ik, nie pełne obliczenie 60909</AlertTitle>
           <AlertDescription className="text-red-800 dark:text-red-300 mt-1 text-xs md:text-sm">
-            Uwzględnia impedancję transformatora i kabla. Ik3 = c·Un / (√3·Z)
+            Ik3 = c·Un / (√3·Z). Zt po stronie nN przy uk = 4%. Ik1 w TN to około połowy Ik3, w TT tylko górna granica.
           </AlertDescription>
         </Alert>
 
@@ -94,16 +94,10 @@ export function ShortCircuitCalculatorShell() {
                   </Select>
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="sc-transformer-voltage" className="text-[10px]">Napięcie pierwotne (kV)</Label>
-                  <Select name="sc-transformer-voltage" value={p.transformerVoltage} onValueChange={(v) => set("transformerVoltage", v)}>
-                    <SelectTrigger id="sc-transformer-voltage" className="h-8 text-xs"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="6" className="text-xs">6 kV</SelectItem>
-                      <SelectItem value="10" className="text-xs">10 kV</SelectItem>
-                      <SelectItem value="15" className="text-xs">15 kV</SelectItem>
-                      <SelectItem value="20" className="text-xs">20 kV</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label className="text-[10px]">uk transformatora</Label>
+                  <div className="h-8 flex items-center text-xs font-medium text-slate-700 dark:text-slate-200">
+                    4% stałe, Zt po stronie nN
+                  </div>
                 </div>
               </div>
 
@@ -179,7 +173,7 @@ export function ShortCircuitCalculatorShell() {
                 hasResult={!!result}
                 pdfInputs={pdfInputs}
                 pdfResults={pdfResults}
-                standard="PN-EN 60909"
+                standard="Szacunek Ik"
                 notes="Obliczenia uproszczone. Wymagana weryfikacja przez uprawnionego projektanta."
                 currentInputs={p as unknown as Record<string, string>}
                 currentLabel={`${p.cableLength}m, ${p.cableSection}mm², ${p.transformerPower}kVA`}
@@ -246,11 +240,12 @@ export function ShortCircuitCalculatorShell() {
 
         <Alert className="mt-4 md:mt-6 p-3 md:p-4 bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800">
           <Info className="h-4 w-4 md:h-5 md:w-5 text-amber-600 dark:text-amber-400" />
-          <AlertTitle className="text-sm md:text-base text-amber-900 dark:text-amber-100 font-semibold">Zasady obliczeń zwarciowych (PN-EN 60909)</AlertTitle>
+          <AlertTitle className="text-sm md:text-base text-amber-900 dark:text-amber-100 font-semibold">Co wchodzi do tego wzoru</AlertTitle>
           <AlertDescription className="text-amber-800 dark:text-amber-300 mt-2 text-xs md:text-sm">
             <ul className="list-disc list-inside space-y-1 ml-2">
-              <li>Czynnik napięciowy c = 1,1 (400V) / 1,05 (230V)</li>
-              <li>uk% transformatora: typowo 4-6% dla SN/nN</li>
+              <li>Czynnik napięciowy c = 1,1 (400 V) / 1,05 (230 V)</li>
+              <li>uk = 4% na sztywno. Napięcie SN nie zmienia Zt.</li>
+              <li>Ik1: TN ≈ 0,5 × Ik3. TT ≈ 0,15 × Ik3 i to tylko sufit — ogranicza uziemienie.</li>
               <li>Wyłącznik: Icn ≥ Ik3 z zapasem 20%</li>
             </ul>
           </AlertDescription>

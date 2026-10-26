@@ -11,8 +11,9 @@ import {
   Settings, Calculator, CheckCircle, AlertCircle, Loader2,
   Crown, Users, Rocket, Brain, Shield, DollarSign, Lock, FileText,
 } from "lucide-react";
-import { FREE_TIER_MAX_PROJECTS, PRO_TIER_MAX_PROJECTS } from "@/lib/config/tier-limits";
+import { FREE_TIER_MAX_PROJECTS, PAY_PER_EXPORT_ENABLED } from "@/lib/config/tier-limits";
 import { TRIAL_DURATION_DAYS } from "@/lib/auth/entitlements";
+import { DEMO_AI_LIMIT, PRO_AI_LIMIT } from "@/lib/ai-quota-config";
 
 const KNR_MULTIPLIER_CHANNEL = "knr-multiplier-updates";
 
@@ -79,10 +80,10 @@ export function SettingsClient({ initialKnrMultiplier }: Props) {
               </div>
               <div className="space-y-1 text-[11px] text-slate-500">
                 <div className="flex justify-between"><span>Max projektów:</span><span className="font-mono font-bold text-slate-700 dark:text-slate-300">{FREE_TIER_MAX_PROJECTS}</span></div>
-                <div className="flex justify-between"><span>AI requests/mies.:</span><span className="font-mono font-bold text-slate-700 dark:text-slate-300">5</span></div>
-                <div className="flex justify-between"><span>Sumy widoczne:</span><span className="font-bold text-red-500">NIE</span></div>
+                <div className="flex justify-between"><span>AI requests/mies.:</span><span className="font-mono font-bold text-slate-700 dark:text-slate-300">{DEMO_AI_LIMIT}</span></div>
+                <div className="flex justify-between"><span>Sumy widoczne:</span><span className="font-bold text-green-600">TAK</span></div>
                 <div className="flex justify-between"><span>PDF watermark:</span><span className="font-bold text-orange-500">DEMO</span></div>
-                <div className="flex justify-between"><span>Portal Klienta:</span><span className="font-bold text-red-500">NIE</span></div>
+                <div className="flex justify-between"><span>Czysty PDF:</span><span className="font-bold text-red-500">NIE</span></div>
               </div>
             </div>
 
@@ -95,7 +96,7 @@ export function SettingsClient({ initialKnrMultiplier }: Props) {
               </div>
               <div className="space-y-1 text-[11px] text-slate-500">
                 <div className="flex justify-between"><span>Max projektów:</span><span className="font-mono font-bold text-slate-700 dark:text-slate-300">∞</span></div>
-                <div className="flex justify-between"><span>AI requests/mies.:</span><span className="font-mono font-bold text-slate-700 dark:text-slate-300">500</span></div>
+                <div className="flex justify-between"><span>AI requests/mies.:</span><span className="font-mono font-bold text-slate-700 dark:text-slate-300">{PRO_AI_LIMIT}</span></div>
                 <div className="flex justify-between"><span>Sumy widoczne:</span><span className="font-bold text-green-600">TAK</span></div>
                 <div className="flex justify-between"><span>PDF watermark:</span><span className="font-bold text-green-600">BRAK</span></div>
                 <div className="flex justify-between"><span>One-shot:</span><span className="font-bold text-orange-500">1× / email</span></div>
@@ -111,10 +112,10 @@ export function SettingsClient({ initialKnrMultiplier }: Props) {
               </div>
               <div className="space-y-1 text-[11px] text-slate-500">
                 <div className="flex justify-between"><span>Max projektów:</span><span className="font-mono font-bold text-slate-700 dark:text-slate-300">∞</span></div>
-                <div className="flex justify-between"><span>AI requests/mies.:</span><span className="font-mono font-bold text-slate-700 dark:text-slate-300">500</span></div>
+                <div className="flex justify-between"><span>AI requests/mies.:</span><span className="font-mono font-bold text-slate-700 dark:text-slate-300">{PRO_AI_LIMIT}</span></div>
                 <div className="flex justify-between"><span>Sumy widoczne:</span><span className="font-bold text-green-600">TAK</span></div>
                 <div className="flex justify-between"><span>PDF watermark:</span><span className="font-bold text-green-600">BRAK</span></div>
-                <div className="flex justify-between"><span>Portal Klienta:</span><span className="font-bold text-green-600">TAK</span></div>
+                <div className="flex justify-between"><span>Czysty PDF:</span><span className="font-bold text-green-600">TAK</span></div>
               </div>
             </div>
           </div>
@@ -126,10 +127,10 @@ export function SettingsClient({ initialKnrMultiplier }: Props) {
               Anti-abuse mechanizmy
             </p>
             <ul className="text-[11px] text-slate-500 space-y-0.5 ml-5 list-disc">
-              <li>Sumy (NETTO, BRUTTO, VAT) → <strong>BLURRED</strong> dla FREE tier</li>
-              <li>PDF z watermarkiem DEMO → nie da się wysłać klientowi</li>
+              <li>FREE widzi sumy. PDF ma znak wodny DEMO.</li>
+              <li>Drugi własny projekt jest zablokowany. Projekt DEMO i archiwum się nie liczą.</li>
               <li>Trial = one-shot per email (nie per account re-creation)</li>
-              <li>Pay-per-Export: 29 PLN za czysty PDF jednego projektu</li>
+              <li>Pojedynczy czysty PDF za 29 zł: {PAY_PER_EXPORT_ENABLED ? "włączony" : "wyłączony w kasie"}</li>
             </ul>
           </div>
         </CardContent>
@@ -203,7 +204,7 @@ export function SettingsClient({ initialKnrMultiplier }: Props) {
             </div>
             <div className="rounded-lg bg-slate-50 dark:bg-slate-800/50 p-2.5 text-center">
               <p className="text-slate-400 mb-0.5">Pay-per-Export</p>
-              <p className="font-bold text-slate-700 dark:text-slate-300">29 PLN</p>
+              <p className="font-bold text-slate-700 dark:text-slate-300">{PAY_PER_EXPORT_ENABLED ? "29 PLN" : "wył."}</p>
             </div>
           </div>
         </CardContent>

@@ -42,7 +42,7 @@ export function KbSettingsPanel({
             value={directives}
             onChange={(e) => onDirectivesChange(e.target.value)}
             className="font-mono text-xs h-28 resize-none"
-            placeholder={`Przykład:\nZawsze priorytetyzuj normy KNR 5-04 dla mieszkań.\nStawka rbh domyślna: {rbh_rate} PLN/h.`}
+            placeholder={`Przykład:\nDla mieszkań bierz normę ES z katalogu, nie zgaduj kodu.\nStawka rbh domyślna: {rbh_rate} PLN/h.`}
             spellCheck={false}
             maxLength={5000}
           />

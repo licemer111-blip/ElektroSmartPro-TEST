@@ -317,7 +317,9 @@ export async function createQuickEstimateProject(params: {
       const { count } = await supabase
         .from("projects")
         .select("*", { count: "exact", head: true })
-        .eq("user_id", user.id);
+        .eq("user_id", user.id)
+        .neq("status", "archived")
+        .or("is_demo_project.is.null,is_demo_project.eq.false");
       if (count !== null && count >= maxAllowed) {
         return {
           error: `Dla Twojego konta obowiązuje limit ${maxAllowed} projektów. Przejdź na PRO, aby tworzyć nielimitowane projekty.`,

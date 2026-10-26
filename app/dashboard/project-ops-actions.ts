@@ -166,6 +166,7 @@ export async function createProject(formData: FormData) {
       .from("projects")
       .select("*", { count: "exact", head: true })
       .eq("user_id", user.id)
+      .neq("status", "archived")
       .or("is_demo_project.is.null,is_demo_project.eq.false");
     if (count !== null && count >= maxAllowed) {
       return {
@@ -246,6 +247,7 @@ export async function duplicateProject(projectId: string) {
         .from("projects")
         .select("*", { count: "exact", head: true })
         .eq("user_id", user.id)
+        .neq("status", "archived")
         .or("is_demo_project.is.null,is_demo_project.eq.false");
       if (count !== null && count >= maxAllowed) {
         return {

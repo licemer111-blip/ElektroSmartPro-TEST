@@ -6,6 +6,7 @@ import { CheckCircle, Crown, CreditCard, Zap, Infinity, DollarSign, FileText, He
 import { UpgradeProButton } from "@/components/dashboard/upgrade-pro-button";
 import { ManageBillingButton } from "@/components/subscription/manage-billing-button";
 import type { Profile } from "@/lib/types/database";
+import { PAY_PER_EXPORT_ENABLED } from "@/lib/config/tier-limits";
 
 interface SubscriptionPanelProps {
   profile: Profile | null;
@@ -136,7 +137,7 @@ export function SubscriptionPanel({ profile }: SubscriptionPanelProps) {
               fullWidth
             />
 
-            {/* Pay-per-export alternative */}
+            {PAY_PER_EXPORT_ENABLED && (
             <div className="mt-2 rounded-lg p-2.5 bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-700">
               <div className="flex items-start gap-2">
                 <DollarSign className="w-4 h-4 text-slate-500 dark:text-slate-400 flex-shrink-0 mt-0.5" />
@@ -151,6 +152,7 @@ export function SubscriptionPanel({ profile }: SubscriptionPanelProps) {
                 </div>
               </div>
             </div>
+            )}
           </CardContent>
         </Card>
 

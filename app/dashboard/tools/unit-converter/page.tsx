@@ -29,29 +29,31 @@ export default function UnitConverterPage() {
   const [voltage, setVoltage] = useState("400");
 
   const convertMmToAwg = (mm: number): string => {
-    const awgTable: Record<number, number> = {
-      0.75: 18,
-      1: 17,
-      1.5: 16,
-      2.5: 14,
-      4: 12,
-      6: 10,
-      10: 8,
-      16: 6,
-      25: 4,
-      35: 2,
-      50: 1,
-      70: 1/0,
-      95: 2/0,
-      120: 3/0,
-      150: 4/0,
+    // Nearest standard gauge. Keys are mm², values are AWG or kcmil labels.
+    const awgTable: Record<string, string> = {
+      "0.75": "18",
+      "1": "17",
+      "1.5": "15",
+      "2.5": "13",
+      "4": "11",
+      "6": "9",
+      "10": "7",
+      "16": "5",
+      "25": "3",
+      "35": "2",
+      "50": "1/0",
+      "70": "2/0",
+      "95": "3/0",
+      "120": "4/0",
+      "150": "300 kcmil",
     };
-    
-    const closest = Object.keys(awgTable).reduce((prev, curr) => 
+
+    const closest = Object.keys(awgTable).reduce((prev, curr) =>
       Math.abs(parseFloat(curr) - mm) < Math.abs(parseFloat(prev) - mm) ? curr : prev
     );
-    
-    return `AWG ${awgTable[parseFloat(closest)]}`;
+
+    const label = awgTable[closest];
+    return label.includes("kcmil") ? label : `AWG ${label}`;
   };
 
   const handleMmChange = (value: string) => {
@@ -332,7 +334,13 @@ export default function UnitConverterPage() {
                   name="uc-voltage"
                   type="number"
                   value={voltage}
-                  onChange={(e) => setVoltage(e.target.value)}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    setVoltage(next);
+                    const volts = parseFloat(next);
+                    const a = parseFloat(amperes);
+                    if (a && volts) setKva(((a * volts * Math.sqrt(3)) / 1000).toFixed(2));
+                  }}
                   placeholder="np. 400"
                   className="text-lg py-6 border-2"
                 />

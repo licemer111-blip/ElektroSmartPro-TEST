@@ -44,6 +44,7 @@ export interface MotorResult {
   torque: number;
   cableSection: number;
   cableCapacity: number;
+  thermalCurrent: number;
   circuitBreaker: number;
   thermalRelay: { min: number; max: number };
   contactor: number;
@@ -59,8 +60,8 @@ function getCableSection(current: number): number {
   return 120;
 }
 
-function getBreaker(startCurrent: number): number {
-  for (const b of STANDARD_BREAKERS_MOTOR) { if (b >= startCurrent * 1.1) return b; }
+function getBreaker(ratedCurrent: number): number {
+  for (const b of STANDARD_BREAKERS_MOTOR) { if (b >= ratedCurrent * 1.1) return b; }
   return 250;
 }
 
@@ -74,35 +75,39 @@ export function calculateMotor(p: MotorParams): MotorResult {
   const V    = parseFloat(p.voltage);
   const eta  = parseFloat(p.efficiency) / 100;
   const pf   = parseFloat(p.powerFactor);
-  const duty = parseFloat(p.dutyCycle) / 100;
-
   const inputPower    = Pn / eta;
   const apparentPower = inputPower / pf;
 
-  const ratedCurrent = p.phases === "3"
+  // The voltage list labels 230 V as single-phase and 400/690 V as three-phase.
+  const phases: "1" | "3" = p.voltage === "230" ? "1" : "3";
+  const ratedCurrent = phases === "3"
     ? (apparentPower) / (Math.sqrt(3) * V)
     : apparentPower / V;
 
   const startInfo     = STARTING_METHODS[p.startingMethod];
-  const startingCurrent = ratedCurrent * startInfo.startCurrentFactor * duty;
+  const startingCurrent = ratedCurrent * startInfo.startCurrentFactor;
   const startingTorque  = startInfo.startTorqueFactor;
 
   // Rated torque: T = P / ω (assuming 1450 rpm = ~151.8 rad/s)
   const omega = 1450 * 2 * Math.PI / 60;
   const torque = Pn / omega;
 
-  const effCls    = EFFICIENCY_CLASSES[p.efficiencyClass];
-  const cableSection = getCableSection(ratedCurrent);
+  // S3 duty heats the cable, it does not change In, the breaker, or the start current.
+  const dutyRaw = parseFloat(p.dutyCycle);
+  const duty = Number.isFinite(dutyRaw) ? Math.min(1, Math.max(0.1, dutyRaw / 100)) : 1;
+  const thermalCurrent = ratedCurrent * Math.sqrt(duty);
+  const cableSection = getCableSection(thermalCurrent);
   const cableCapacity = CABLE_CAPACITY_MOTOR[cableSection] ?? 0;
-  const circuitBreaker = getBreaker(startingCurrent);
+  const circuitBreaker = getBreaker(ratedCurrent);
   const contactor = getContactor(ratedCurrent);
 
   return {
     ratedCurrent, startingCurrent, apparentPower: apparentPower / 1000,
     inputPower: inputPower / 1000, torque, cableSection, cableCapacity,
+    thermalCurrent,
     circuitBreaker,
     thermalRelay: { min: ratedCurrent * 0.9, max: ratedCurrent * 1.1 },
     contactor, startingTorque,
-    efficiencyPct: effCls.efficiency * 100,
+    efficiencyPct: eta * 100,
   };
 }

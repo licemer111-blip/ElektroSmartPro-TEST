@@ -37,6 +37,7 @@ export function MotorCalculatorShell() {
     { label: "cos φ", value: p.powerFactor },
     { label: "Rozruch", value: STARTING_METHODS[p.startingMethod].name },
     { label: "Klasa sprawności", value: p.efficiencyClass },
+    { label: "Cykl pracy", value: `${p.dutyCycle}%` },
   ];
   const pdfResults = result ? [
     { label: "Prąd znamionowy", value: result.ratedCurrent.toFixed(1), unit: "A", highlight: true },
@@ -97,7 +98,7 @@ export function MotorCalculatorShell() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
                   <Label htmlFor="motor-voltage">Napięcie (V)</Label>
-                  <Select name="motor-voltage" value={p.voltage} onValueChange={(v) => set("voltage", v)}>
+                  <Select name="motor-voltage" value={p.voltage} onValueChange={(v) => setP((prev) => ({ ...prev, voltage: v, phases: v === "230" ? "1" : "3" }))}>
                     <SelectTrigger id="motor-voltage" className="h-9 text-xs"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="230">230 V (1-faza)</SelectItem>
@@ -108,7 +109,11 @@ export function MotorCalculatorShell() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="motor-efficiency-class">Klasa sprawności</Label>
-                  <Select name="motor-efficiency-class" value={p.efficiencyClass} onValueChange={(v) => set("efficiencyClass", v as EfficiencyClass)}>
+                  <Select name="motor-efficiency-class" value={p.efficiencyClass} onValueChange={(v) => setP((prev) => ({
+                    ...prev,
+                    efficiencyClass: v as EfficiencyClass,
+                    efficiency: String(Math.round(EFFICIENCY_CLASSES[v as EfficiencyClass].efficiency * 100)),
+                  }))}>
                     <SelectTrigger id="motor-efficiency-class" className="h-9 text-xs"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {Object.entries(EFFICIENCY_CLASSES).map(([key, cls]) => (
@@ -218,6 +223,9 @@ export function MotorCalculatorShell() {
                       <div>
                         <p className="text-2xl md:text-3xl font-bold text-indigo-600 dark:text-indigo-400">{result.cableSection} mm²</p>
                         <p className="text-[10px] md:text-xs text-slate-500 mt-0.5">Obciążalność: {result.cableCapacity.toFixed(0)} A</p>
+                        {parseFloat(p.dutyCycle) < 100 && (
+                          <p className="text-[10px] md:text-xs text-slate-500">Prąd cieplny: {result.thermalCurrent.toFixed(1)} A (√ cyklu)</p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -251,9 +259,9 @@ export function MotorCalculatorShell() {
           <AlertTitle className="text-sm md:text-base text-amber-900 dark:text-amber-100 font-semibold">Zasady doboru zabezpieczeń silnika</AlertTitle>
           <AlertDescription className="text-amber-800 dark:text-amber-300 mt-2">
             <ul className="list-disc list-inside space-y-1 ml-2 text-xs md:text-sm">
-              <li>Wyłącznik silnikowy: nastawiony na <strong>Ir = In × czynnik rozruchowy</strong></li>
-              <li>Przekaźnik termiczny: nastawiany w zakresie <strong>0.9–1.1 × In</strong></li>
-              <li>Kabel: dobierany z zapasem <strong>25%</strong> powyżej In</li>
+              <li>Wyłącznik: najbliższy standard ≥ <strong>In × 1,1</strong>. Prąd rozruchu nie dobiera wyłącznika.</li>
+              <li>Przekaźnik termiczny: nastawiany w zakresie <strong>0,9–1,1 × In</strong></li>
+              <li>Kabel: Iz ≥ <strong>1,25 × In × √(cykl)</strong>. Przy S1 cykl = 100%.</li>
               <li>Dla Y-Δ: kontaktor główny + 2 kontaktory pomocnicze</li>
               <li>Normy: <strong>PN-EN 60034</strong>, <strong>PN-EN 60947-4</strong></li>
             </ul>

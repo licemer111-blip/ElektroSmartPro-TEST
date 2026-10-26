@@ -139,7 +139,7 @@ export const PDF_DEMO_WATERMARK = {
   /** Kolor w formacie HEX — czerwono-pomarańczowy, dobrze widoczny na białym */
   color: "#DC2626",
   /** CTA który pojawi się w stopce każdej strony */
-  footerCTA: "Aktywuj ElektroSmart PRO (159 zł/m-c) lub kup pojedynczy eksport (29 zł) → elektrosmart.pro/pro",
+  footerCTA: "Aktywuj ElektroSmart PRO (159 zł/m-c), żeby zdjąć znak wodny → elektrosmart.pro/pro",
 } as const;
 
 // ─── Pay-per-export pricing ────────────────────────────────────────────────

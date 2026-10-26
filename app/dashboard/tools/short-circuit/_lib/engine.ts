@@ -43,8 +43,9 @@ export function calculateShortCircuit(p: ShortCircuitParams): ShortCircuitResult
   const StKVA = parseFloat(p.transformerPower);
 
   const ukPercent = 4;
-  const St = StKVA * 1000;
-  const Zt = (ukPercent / 100) * (V * V) / (St / 1000);
+  const StVA = StKVA * 1000;
+  // Zt [Ω] on the low-voltage side: (uk/100) × U_ll² / S_VA.
+  const Zt = (ukPercent / 100) * (V * V) / StVA;
 
   const rho    = RESISTIVITY[p.conductor];
   const Rcable = (rho * L) / S;
@@ -56,7 +57,10 @@ export function calculateShortCircuit(p: ShortCircuitParams): ShortCircuitResult
 
   const c   = V === 400 ? 1.1 : 1.05;
   const ik3_A = (c * V) / (Math.sqrt(3) * Ztotal);
-  const ik1_A = ik3_A * 0.5;
+  // TN: phase-to-neutral is roughly half of Ik3 when PE/N matches the phase conductor.
+  // TT: the earth electrode, not the cable, limits Ik1 — this figure is only an upper bound.
+  const ik1Factor = p.systemType === "TT" ? 0.15 : 0.5;
+  const ik1_A = ik3_A * ik1Factor;
   const ik3   = ik3_A / 1000;
   const ik1   = ik1_A / 1000;
 
@@ -68,6 +72,10 @@ export function calculateShortCircuit(p: ShortCircuitParams): ShortCircuitResult
   else if (ik3 > 15) { breakingCapacity = 25; recommendation = "Wyłącznik o zwiększonej zdolności łączeniowej 25 kA"; details = "Dla dużych obiektów komercyjnych i średniej wielkości przemysłu"; }
   else if (ik3 > 10) { breakingCapacity = 15; recommendation = "Wyłącznik o zdolności łączeniowej 15 kA"; details = "Dla średnich obiektów komercyjnych"; }
   else if (ik3 > 6)  { breakingCapacity = 10; recommendation = "Wyłącznik o zdolności łączeniowej 10 kA"; details = "Dla małych obiektów komercyjnych"; }
+
+  if (p.systemType === "TT") {
+    details = "Układ TT: Ik1 ogranicza uziemienie, nie sam kabel. Podana wartość to tylko górna granica z impedancji przewodu.";
+  }
 
   return {
     ik3, ik1,

@@ -36,12 +36,12 @@ import { CalculatorActionBar } from "@/components/tools/calculator-action-bar";
 
 // ── Catalog prices (matching DIN_MODULES defaultPrice/defaultLaborPrice) ──────
 const CATALOG: Record<string, { namePl: string; unitMat: number; unitLab: number; unit: string; knrCode: string; icon: string }> = {
-  "terminal-zug-1p":      { namePl: "Zestaw złączek ZUG 1-faz (L+N+PE)",        unitMat: 13.5,  unitLab: 6.0,  unit: "szt.", knrCode: "KNR 5-08 0401-01", icon: "cpu" },
-  "terminal-zug-3p":      { namePl: "Zestaw złączek ZUG 3-faz (L1+L2+L3+N+PE)", unitMat: 22.5,  unitLab: 10.0, unit: "szt.", knrCode: "KNR 5-08 0401-02", icon: "cpu" },
-  "terminal-end-bracket": { namePl: "Trzymacz końcowy złączek (stoper)",          unitMat: 4.5,   unitLab: 2.0,  unit: "szt.", knrCode: "KNR 5-08 0401-05", icon: "circle" },
-  "signal-terminal":      { namePl: "Złączki sygnałowe/piętrowe (opak. 10szt)",  unitMat: 35.0,  unitLab: 15.0, unit: "opak.", knrCode: "KNR 5-08 0902-01", icon: "activity" },
-  "bus-cable-wiring":     { namePl: "Okablowanie magistralowe BMS/KNX (kpl)",     unitMat: 0,     unitLab: 85.0, unit: "kpl",  knrCode: "KNR 5-08 0102-01", icon: "activity" },
-  "dali-controller":      { namePl: "Montaż sterownika DALI/BMS (kpl)",           unitMat: 0,     unitLab: 65.0, unit: "kpl",  knrCode: "KNR 5-08 0801-05", icon: "cpu" },
+  "terminal-zug-1p":      { namePl: "Zestaw złączek ZUG 1-faz (L+N+PE)",        unitMat: 13.5,  unitLab: 6.0,  unit: "szt.", knrCode: "ES-BMS-ZUG-1P", icon: "cpu" },
+  "terminal-zug-3p":      { namePl: "Zestaw złączek ZUG 3-faz (L1+L2+L3+N+PE)", unitMat: 22.5,  unitLab: 10.0, unit: "szt.", knrCode: "ES-BMS-ZUG-3P", icon: "cpu" },
+  "terminal-end-bracket": { namePl: "Trzymacz końcowy złączek (stoper)",          unitMat: 4.5,   unitLab: 2.0,  unit: "szt.", knrCode: "ES-BMS-STP", icon: "circle" },
+  "signal-terminal":      { namePl: "Złączki sygnałowe/piętrowe (opak. 10szt)",  unitMat: 35.0,  unitLab: 15.0, unit: "opak.", knrCode: "ES-BMS-SYG", icon: "activity" },
+  "bus-cable-wiring":     { namePl: "Okablowanie magistralowe BMS/KNX (kpl)",     unitMat: 0,     unitLab: 85.0, unit: "kpl",  knrCode: "ES-BMS-MAG", icon: "activity" },
+  "dali-controller":      { namePl: "Montaż sterownika DALI/BMS (kpl)",           unitMat: 0,     unitLab: 65.0, unit: "kpl",  knrCode: "ES-BMS-DALI", icon: "cpu" },
 };
 
 interface ResultItem {
@@ -153,13 +153,13 @@ export default function AutomationBmsCalculatorPage() {
           <div>
             <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Kalkulator Automatyki BMS</h1>
             <p className="text-slate-500 dark:text-slate-400 mt-0.5 text-sm">
-              Złączki ZUG, sygnałowe i okablowanie magistralowe wg KNR 5-08 0401–0801
+              Złączki ZUG, sygnałowe i okablowanie magistralowe. Kod ES-BMS, nie kod gniazda.
             </p>
             <div className="flex items-center gap-2 mt-1.5">
               <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 border border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300">
                 ES-KNR 2026 (Automation Module)
               </span>
-              <span className="text-[10px] text-slate-400">KNR 5-08 0401 / 0801 / 0102</span>
+              <span className="text-[10px] text-slate-400">ES-BMS</span>
             </div>
           </div>
         </div>
@@ -336,34 +336,29 @@ export default function AutomationBmsCalculatorPage() {
                       Podsumowanie
                     </span>
                     <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 border border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300">
-                      ES-KNR 2026 (Automation Module)
+                      Nakład ES-BMS
                     </span>
                   </div>
                   <div className="grid grid-cols-3 gap-3 text-center">
                     <div className="rounded-lg bg-white dark:bg-slate-800 p-2.5 border border-slate-200 dark:border-slate-700">
                       <p className="text-[10px] text-slate-500 mb-0.5">Materiał</p>
-                      <p className={`text-base font-bold text-slate-800 dark:text-slate-200 ${!isPro ? "blur-sm select-none" : ""}`}>
-                        {isPro ? `${totalMat.toFixed(2)} zł` : "●●● zł"}
+                      <p className="text-base font-bold text-slate-800 dark:text-slate-200">
+                        {`${totalMat.toFixed(2)} zł`}
                       </p>
                     </div>
                     <div className="rounded-lg bg-white dark:bg-slate-800 p-2.5 border border-slate-200 dark:border-slate-700">
                       <p className="text-[10px] text-slate-500 mb-0.5">Robocizna</p>
-                      <p className={`text-base font-bold text-slate-800 dark:text-slate-200 ${!isPro ? "blur-sm select-none" : ""}`}>
-                        {isPro ? `${totalLab.toFixed(2)} zł` : "●●● zł"}
+                      <p className="text-base font-bold text-slate-800 dark:text-slate-200">
+                        {`${totalLab.toFixed(2)} zł`}
                       </p>
                     </div>
                     <div className="rounded-lg bg-emerald-600 p-2.5">
                       <p className="text-[10px] text-emerald-100 mb-0.5">Razem</p>
-                      <p className={`text-base font-bold text-white ${!isPro ? "blur-sm select-none" : ""}`}>
-                        {isPro ? `${grandTotal.toFixed(2)} zł` : "●●● zł"}
+                      <p className="text-base font-bold text-white">
+                        {`${grandTotal.toFixed(2)} zł`}
                       </p>
                     </div>
                   </div>
-                  {!isPro && (
-                    <p className="text-[10px] text-amber-600 text-center mt-2">
-                      Zupgraduj do PRO, aby zobaczyć ceny
-                    </p>
-                  )}
                 </CardContent>
               </Card>
             )}
@@ -406,8 +401,8 @@ export default function AutomationBmsCalculatorPage() {
                           </div>
                         </div>
                         <div className="text-right shrink-0">
-                          <p className={`text-xs font-semibold text-slate-700 dark:text-slate-200 ${!isPro ? "blur-sm select-none" : ""}`}>
-                            {isPro ? `${item.totalMat.toFixed(0)} / ${item.totalLab.toFixed(0)} zł` : "●●● zł"}
+                          <p className="text-xs font-semibold text-slate-700 dark:text-slate-200">
+                            {`${item.totalMat.toFixed(0)} / ${item.totalLab.toFixed(0)} zł`}
                           </p>
                           <p className="text-[10px] text-slate-400">mat. / rob.</p>
                         </div>
@@ -451,7 +446,7 @@ export default function AutomationBmsCalculatorPage() {
             { label: "Robocizna netto", value: `${totalLab.toFixed(2)} zł`, highlight: false },
             { label: "Razem netto", value: `${grandTotal.toFixed(2)} zł`, highlight: true },
           ]}
-          standard="KNR 5-08 0401 / 0801 / 0102"
+          standard="ES-BMS"
           notes="Źródło: ES-KNR 2026 (Automation Module). Ceny NETTO PLN 2026."
           currentInputs={{ circuits1p, circuits3p, bmsPoints, bmsSensors, encModules, automationSystem, wymaganeZugi, hasPpoz }}
           currentLabel={`${c1p + c3p} obw. | ${bms} pkt. | ${automationSystem}`}
