@@ -305,21 +305,19 @@ export function ProjectHeaderToolbar({
                 </Button>
                 <Button
                   size="sm"
-                  variant="outline"
                   disabled={isFinal}
                   title="Wczytaj pozycje z PDF lub Excela"
                   onClick={() => {
                     if (isFinal) { toast({ title: "Projekt zablokowany", description: "Odblokuj projekt, aby importować", variant: "destructive" }); return; }
                     onAIImportClick();
                   }}
-                  className="h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 flex-shrink-0"
+                  className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white flex-shrink-0 ${isFinal ? "opacity-50" : ""}`}
                 >
                   <FileSpreadsheet className="h-3.5 w-3.5" />
                   Import
                 </Button>
                 <Button
                   size="sm"
-                  variant="outline"
                   disabled={isFinal}
                   title="Pytanie o normę, materiał albo sposób liczenia"
                   onClick={() => {
@@ -327,7 +325,7 @@ export function ProjectHeaderToolbar({
                     setEsAssistOpen(true);
                     onBroadcastDialog("headerAiAssistantOpen", true);
                   }}
-                  className="h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 flex-shrink-0"
+                  className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 bg-orange-500 hover:bg-orange-600 text-white flex-shrink-0 ${isFinal ? "opacity-50" : ""}`}
                 >
                   <Sparkles className="h-3.5 w-3.5" />
                   Asystent
