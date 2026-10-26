@@ -26,10 +26,10 @@ export function GuideCard() {
             <p className="font-semibold text-slate-900 dark:text-slate-100 mb-2">Jak to działa krok po kroku:</p>
             <ol className="space-y-1.5 list-none">
               {([
-                [1, <>Wgrywasz plik (PDF, XLSX, CSV lub TXT) — cennik hurtowni, normy własne, stawki</>],
-                [2, <>System automatycznie rozpoznaje typ: arkusze → indeksuje jako Twoje Normy, PDF → dodaje do kontekstu AI</>],
-                [3, <>Przy każdej wycenie system szuka w kolejności: <strong>L1</strong> Twoje dane → <strong>L2</strong> baza ES → <strong>L3</strong> ES-Engine AI</>],
-                [4, <>Twoje ceny materiałów i robocizny nadpisują globalne — masz pełną kontrolę nad kosztorysem</>],
+                [1, <>Wgrywasz cennik hurtowni: PDF, Excel, CSV albo TXT</>],
+                [2, <>Tabela daje nazwy i ceny materiału. PDF musi mieć tekst, skan się nie czyta.</>],
+                [3, <>W katalogu najpierw widać Twoje pozycje, obok bazę ES.</>],
+                [4, <>Robocizna i tak jest rbh × Twoja stawka. Plik nie przepisuje pozycji, które już są w projekcie.</>],
               ] as [number, React.ReactNode][]).map(([num, text]) => (
                 <li key={num} className="flex items-start gap-2.5">
                   <span className="flex-shrink-0 w-5 h-5 rounded-full bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center mt-0.5">{num}</span>
@@ -45,7 +45,7 @@ export function GuideCard() {
               {([
                 { fmt: "PDF", color: "text-red-500", desc: "Cenniki, oferty hurtowni, katalogi. Musi zawierać tekst (nie skan). Trafia do kontekstu AI." },
                 { fmt: "TXT", color: "text-blue-500", desc: "Prosta tabela tekstowa z pozycjami i cenami — najszybsze indeksowanie." },
-                { fmt: "XLSX / XLS", color: "text-emerald-500", desc: "Arkusz Excel z cenami. Automatycznie indeksowany jako Twoje Normy + kontekst AI." },
+                { fmt: "XLSX / XLS", color: "text-emerald-500", desc: "Arkusz z nazwą i ceną materiału. Godzin robocizny z niego nie bierzemy." },
                 { fmt: "CSV", color: "text-emerald-500", desc: "Eksport z hurtowni lub programu kosztorysowego. Indeksowany jak XLSX." },
               ] as { fmt: string; color: string; desc: string }[]).map((item) => (
                 <div key={item.fmt} className="rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-2.5 flex gap-2">

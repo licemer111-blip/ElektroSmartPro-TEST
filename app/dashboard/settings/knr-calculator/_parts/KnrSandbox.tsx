@@ -93,10 +93,10 @@ export function KnrSandbox({ hourlyRate, hourlyInput, totalCoeff = 1, isPro, coe
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
                 <Search className="w-4 h-4 text-white" />
               </div>
-              Sandbox — Testuj Wyszukiwanie Norm
+              Sprawdź godzinę normy
             </CardTitle>
             <CardDescription className="text-xs mt-1">
-              Wpisz nazwę pozycji — system przeszuka KNR i katalog, pokaże nakłady rzeczowe, jednostkę miary i roboczogodziny
+              Wpisz nazwę. Dostaniesz godziny normy ES i złotówki ze swojej stawki. To podgląd, nie zapis do kosztorysu.
             </CardDescription>
             </div>
           <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">

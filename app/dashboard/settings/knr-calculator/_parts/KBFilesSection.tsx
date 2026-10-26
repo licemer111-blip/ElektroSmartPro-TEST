@@ -201,9 +201,9 @@ export function KBFilesSection({ onStatsChange }: KBFilesSectionProps) {
           <Zap className="w-3.5 h-3.5 text-white" />
         </div>
         <div>
-          <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300">Twoje dane — najwyższy priorytet wyceny (L1)</p>
+          <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300">Twój cennik obok bazy ES</p>
           <p className="text-[10px] text-emerald-700 dark:text-emerald-400 mt-0.5 leading-relaxed">
-            Hierarchia wycen: <strong>L1</strong> Twój katalog → <strong>L2</strong> baza ES → <strong>L3</strong> ES-Engine AI. Wgrane cenniki idą przed bazą ES.
+            Plik z hurtowni podpowiada ceny materiału. Godzin robocizny nie zmienia: zł = rbh × Twoja stawka. Zapisanych pozycji w projekcie sam nie przepisuje.
           </p>
         </div>
       </div>
@@ -284,14 +284,14 @@ export function KBFilesSection({ onStatsChange }: KBFilesSectionProps) {
               <FileSpreadsheet className="w-3.5 h-3.5 text-violet-600 flex-shrink-0 mt-0.5" />
               <div>
                 <p className="text-[10px] font-bold text-violet-800 dark:text-violet-300">XLSX / CSV / TXT</p>
-                <p className="text-[9px] text-violet-600 dark:text-violet-400 leading-tight">Indeksowane jako Moje Normy — błyskawiczne dopasowanie przy wycenie</p>
+                <p className="text-[9px] text-violet-600 dark:text-violet-400 leading-tight">Tabela z nazwą i ceną materiału. Godzin z niej nie bierzemy.</p>
               </div>
             </div>
             <div className="flex items-start gap-2 p-2 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/50">
               <FileText className="w-3.5 h-3.5 text-blue-600 flex-shrink-0 mt-0.5" />
               <div>
                 <p className="text-[10px] font-bold text-blue-800 dark:text-blue-300">PDF</p>
-                <p className="text-[9px] text-blue-600 dark:text-blue-400 leading-tight">Dodane do kontekstu ES-Engine — czytane przy wycenie na żądanie</p>
+                <p className="text-[9px] text-blue-600 dark:text-blue-400 leading-tight">Tekst cennika dla podpowiedzi. Skan bez tekstu się nie czyta.</p>
               </div>
             </div>
           </div>
@@ -314,7 +314,7 @@ export function KBFilesSection({ onStatsChange }: KBFilesSectionProps) {
           <div>
             <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">Brak wgranych cenników</p>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto leading-relaxed">
-              Wgraj cenniki z hurtowni (PDF/Excel) lub normy własne — system automatycznie użyje Twoich cen zamiast szacować.
+              Wgraj cennik hurtowni, jeśli chcesz swoje ceny materiału. Robocizna i tak liczy się ze stawki.
             </p>
           </div>
           <div className="pt-2">
@@ -330,7 +330,7 @@ export function KBFilesSection({ onStatsChange }: KBFilesSectionProps) {
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-200 dark:border-emerald-800/50 bg-emerald-50 dark:bg-emerald-950/20">
                 <Table2 className="w-3.5 h-3.5 text-emerald-500" />
                 <span className="text-[11px] font-medium text-emerald-700 dark:text-emerald-400">Tabela Excel</span>
-                <span className="text-[9px] text-emerald-500 dark:text-emerald-500">(normy, stawki)</span>
+                <span className="text-[9px] text-emerald-500 dark:text-emerald-500">(nazwa, cena)</span>
               </div>
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-200 dark:border-blue-800/50 bg-blue-50 dark:bg-blue-950/20">
                 <NotebookText className="w-3.5 h-3.5 text-blue-500" />

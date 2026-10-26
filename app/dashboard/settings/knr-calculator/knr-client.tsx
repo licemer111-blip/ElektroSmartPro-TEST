@@ -7,20 +7,16 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useEngineCalibration } from "@/hooks/use-engine-calibration";
 import { useSearchMode } from "@/hooks/use-search-mode";
-import { FolderOpen, SlidersHorizontal, Banknote, BrainCog, MapPin, ChevronDown, Settings2, ArrowLeft } from "lucide-react";
+import { SearchModeSelector } from "@/components/catalog/SearchModeSelector";
+import { BrainCog, ChevronDown, Settings2, ArrowLeft } from "lucide-react";
 import { KnrImportForm } from "./_parts/KnrImportForm";
 import { KnrEngineCalibration } from "./_parts/KnrEngineCalibration";
 import { KnrInvestmentContext } from "./_parts/KnrInvestmentContext";
-import { KnrRateCalculator } from "./_parts/KnrRateCalculator";
 import { KnrSandbox } from "./_parts/KnrSandbox";
-import { KnrRegionSelector } from "./_parts/KnrRegionSelector";
 import { getRegionById, type PolishRegion } from "@/lib/config/regions";
-
-type PageTab = "baza" | "centrum";
 
 interface DbRegion {
   id: string;
@@ -60,32 +56,23 @@ function SectionDivider({ icon: Icon, title, subtitle }: { icon: React.ElementTy
 }
 
 export function KnrClient({ initialRate, initialMaterialMultiplier = 1.08, initialMaterialMargin = 15, isPro, initialUseCustomRates = false, initialCustomLaborRate = null, initialRegionUuid = null, dbRegions = [], initialInvestmentContext = "" }: KnrClientProps) {
-  const searchParams = useSearchParams();
-  const initialTab = searchParams.get("tab") === "centrum" ? "centrum" : "baza";
-  const [pageTab, setPageTab] = useState<PageTab>(initialTab);
-  const effectiveInitialRate = initialRate > 0 ? initialRate : 0;
+  const hourlyRate = initialRate > 0 ? initialRate : 0;
+  const hourlyInput = initialRate > 0 ? String(initialRate) : "";
+  const useCustomRates = initialUseCustomRates;
+  const customLaborRate = initialCustomLaborRate;
+  void initialMaterialMultiplier;
+  void initialMaterialMargin;
 
-  const [hourlyRate, setHourlyRate] = useState(effectiveInitialRate);
-  const [hourlyInput, setHourlyInput] = useState(initialRate > 0 ? String(initialRate) : "");
-  const [rateSaved, setRateSaved] = useState(initialRate > 0);
-
-  const [useCustomRates, setUseCustomRates] = useState(initialUseCustomRates);
-  const [customLaborRate, setCustomLaborRate] = useState<number | null>(initialCustomLaborRate);
-  const [materialMultiplier, setMaterialMultiplier] = useState(initialMaterialMultiplier);
-  const [materialMargin, setMaterialMargin] = useState(initialMaterialMargin);
-
-  // Effective base rate for regional preview:
-  // L1: custom/profile rate | L2: profiles.hourly_rate
   const effectiveBaseRate = useCustomRates
     ? (customLaborRate ?? hourlyRate)
     : hourlyRate;
 
+  const { mode: searchMode, setMode: setSearchMode } = useSearchMode();
   const { calibration, setCalibration } = useEngineCalibration();
-  const { mode: searchMode } = useSearchMode();
   const [investmentContext, setInvestmentContext] = useState(initialInvestmentContext);
-  const [showAdvanced, setShowAdvanced] = useState(true);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const initialSlug = dbRegions.find(r => r.id === (initialRegionUuid ?? ""))?.slug;
-  const [currentRegion, setCurrentRegion] = useState<PolishRegion | undefined>(
+  const [currentRegion] = useState<PolishRegion | undefined>(
     getRegionById(initialSlug)
   );
   const regionMultiplier = currentRegion?.multiplier ?? 1.0;
@@ -99,82 +86,20 @@ export function KnrClient({ initialRate, initialMaterialMultiplier = 1.08, initi
         className="inline-flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
       >
         <ArrowLeft className="w-3.5 h-3.5" />
-        Wróć do Ustawień — Finanse
+        Wróć do stawek
       </Link>
 
-      {/* Tab switcher */}
-      <div className="flex items-center gap-3 flex-wrap">
-        <div className="flex gap-0.5 p-0.5 bg-slate-100 dark:bg-slate-800 rounded-xl">
-          <button
-            onClick={() => setPageTab("baza")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-              pageTab === "baza"
-                ? "bg-blue-600 text-white shadow-sm"
-                : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
-            }`}
-          >
-            <FolderOpen className="w-4 h-4" />
-            Moje Dane
-          </button>
-          <button
-            onClick={() => setPageTab("centrum")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-              pageTab === "centrum"
-                ? "bg-blue-600 text-white shadow-sm"
-                : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
-            }`}
-          >
-            <SlidersHorizontal className="w-4 h-4" />
-            Ustawienia
-          </button>
-        </div>
+      <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 space-y-2">
+        <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">Co widać w kreatorze i katalogu</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400">
+          Ten sam przełącznik, co w bocznym panelu kosztorysu. Moje — tylko Twoje pozycje. Baza — tylko baza ES. Razem — obie listy, Twoje na górze.
+        </p>
+        <SearchModeSelector mode={searchMode} onChange={setSearchMode} className="w-full max-w-md" />
       </div>
 
-      {/* Tab: Moja Baza KNR */}
-      {pageTab === "baza" && <KnrImportForm />}
+      <KnrImportForm />
 
-      {/* Tab: Centrum Kalkulacji — 3 sections */}
-      {pageTab === "centrum" && (
-        <div className="space-y-4">
-
-          {/* ══ SEKCJA 0: LOKALIZACJA ════════════════════════════════════════════════════ */}
-          <SectionDivider
-            icon={MapPin}
-            title="Lokalizacja"
-            subtitle="Województwo mnoży tylko robociznę. Materiał zostaje bez tej korekty."
-          />
-          <KnrRegionSelector
-            initialRegionUuid={initialRegionUuid}
-            dbRegions={dbRegions}
-            baseHourlyRate={effectiveBaseRate}
-            onRegionChange={setCurrentRegion}
-          />
-
-          {/* ══ SEKCJA 1: FINANSE ════════════════════════════════════════════════════════ */}
-          <SectionDivider
-            icon={Banknote}
-            title="Finanse"
-            subtitle="Jedna stawka rbh na katalog i projekty. Marża materiału jest osobno."
-          />
-          <KnrRateCalculator
-            initialRate={effectiveInitialRate}
-            hourlyRate={hourlyRate}
-            setHourlyRate={setHourlyRate}
-            hourlyInput={hourlyInput}
-            setHourlyInput={setHourlyInput}
-            rateSaved={rateSaved}
-            setRateSaved={setRateSaved}
-            useCustomRates={useCustomRates}
-            setUseCustomRates={setUseCustomRates}
-            customLaborRate={customLaborRate}
-            setCustomLaborRate={setCustomLaborRate}
-            materialMultiplier={materialMultiplier}
-            setMaterialMultiplier={setMaterialMultiplier}
-            materialMargin={materialMargin}
-            setMaterialMargin={setMaterialMargin}
-          />
-
-          {/* ══ ZAAWANSOWANE USTAWIENIA (accordion) ═════════════════ */}
+      <div className="space-y-4">
           <button
             onClick={() => setShowAdvanced((v) => !v)}
             className="flex items-center gap-2.5 w-full px-4 py-2.5 rounded-xl border border-dashed border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 bg-white dark:bg-slate-900 transition-colors group"
@@ -182,8 +107,8 @@ export function KnrClient({ initialRate, initialMaterialMultiplier = 1.08, initi
             <div className="w-6 h-6 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center flex-shrink-0">
               <Settings2 className="w-3.5 h-3.5 text-slate-500" />
             </div>
-            <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Zaawansowane ustawienia silnika</span>
-            <span className="text-[10px] text-slate-400 dark:text-slate-500 hidden sm:inline">Sandbox testów · Kalibracja AI · Kontekst obiektu</span>
+            <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Sprawdź normę i opis obiektu</span>
+            <span className="text-[10px] text-slate-400 dark:text-slate-500 hidden sm:inline">Wyszukiwanie godzin · montaż · opis dla AI</span>
             <ChevronDown className={`w-4 h-4 text-slate-400 ml-auto flex-shrink-0 transition-transform duration-200 ${showAdvanced ? "rotate-180" : ""}`} />
           </button>
 
@@ -204,7 +129,7 @@ export function KnrClient({ initialRate, initialMaterialMultiplier = 1.08, initi
               <SectionDivider
                 icon={BrainCog}
                 title="Inteligencja ES-Engine"
-                subtitle="Dopasowanie silnika AI: montaż, pamięć, czułość wyszukiwania + opis obiektu"
+                subtitle="Sposób montażu i opis obiektu. Nie zmieniają stawki ani województwa."
               />
               <KnrEngineCalibration
                 calibration={calibration}
@@ -216,9 +141,7 @@ export function KnrClient({ initialRate, initialMaterialMultiplier = 1.08, initi
               />
             </div>
           )}
-
-        </div>
-      )}
+      </div>
 
     </div>
   );

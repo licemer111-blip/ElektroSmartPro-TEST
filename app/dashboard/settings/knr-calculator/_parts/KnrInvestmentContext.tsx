@@ -179,7 +179,7 @@ export function KnrInvestmentContext({ value, onChange }: KnrInvestmentContextPr
             <div>
               <CardTitle className="text-base leading-tight">Kontekst Inwestycji</CardTitle>
               <CardDescription className="text-xs mt-0.5">
-                Opisz typ obiektu (np. biurowiec, dom, hala) — AI lepiej dobierze normy KNR i materiały
+                Opis obiektu dla podpowiedzi AI. Nie zmienia stawek, które już są w projekcie.
               </CardDescription>
             </div>
           </div>
@@ -313,7 +313,7 @@ export function KnrInvestmentContext({ value, onChange }: KnrInvestmentContextPr
         <div className="flex items-start gap-2 px-3 py-2.5 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/40">
           <Lightbulb className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400 flex-shrink-0 mt-0.5" />
           <p className="text-[11px] text-blue-700 dark:text-blue-300 leading-relaxed">
-            <span className="font-semibold">Wskazówka:</span> Kontekst pomaga AI rozróżniać np. teletechnikę od elektryki, instalacje p.poż. od standardowych, czy KNX/DALI od zwykłej automatyki. Efekt: trafniejsze normy i ceny.
+            <span className="font-semibold">Wskazówka:</span> Opis pomaga odróżnić teletechnikę od elektryki i instalację ppoż. od zwykłej. Zapisanych cen w projekcie sam nie zmienia.
           </p>
         </div>
       </CardContent>

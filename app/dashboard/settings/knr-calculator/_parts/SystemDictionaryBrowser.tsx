@@ -154,11 +154,11 @@ export function SystemDictionaryBrowser() {
       <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2">
           <Database className="h-4 w-4 text-orange-500" />
-          Globalna Baza ES-KNR (L2)
-          <Badge className="ml-1 text-[10px] px-1.5 py-0 bg-orange-500 text-white">ZAWSZE AKTYWNA</Badge>
+          Baza ES
+          <Badge className="ml-1 text-[10px] px-1.5 py-0 bg-orange-500 text-white">godziny ES</Badge>
         </CardTitle>
         <CardDescription className="text-xs">
-          Sprawdź, co jest już dostępne w globalnym słowniku — nie musisz tego wgrywać do swojej bazy
+          Godziny normy ES. To szacunek ElektroSmart, nie urzędowa tabela. Swoich cen materiału tu nie ma.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -169,15 +169,15 @@ export function SystemDictionaryBrowser() {
               <div className="text-xl font-black text-orange-700 dark:text-orange-400">
                 {stats.totalEntries.toLocaleString("pl-PL")}+
               </div>
-              <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">norm KNR</div>
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">pozycji ES</div>
             </div>
             <div className="rounded-lg bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-800 p-3 text-center">
               <div className="text-xl font-black text-orange-700 dark:text-orange-400">{stats.categoryCount}</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">kategorii</div>
             </div>
             <div className="rounded-lg bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-800 p-3 text-center">
-              <div className="text-xl font-black text-orange-700 dark:text-orange-400">KNR</div>
-              <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">5-08 / 5-09</div>
+              <div className="text-xl font-black text-orange-700 dark:text-orange-400">rbh</div>
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">× Twoja stawka</div>
             </div>
           </div>
         ) : (
@@ -250,7 +250,7 @@ export function SystemDictionaryBrowser() {
                 <AlertCircle className="h-5 w-5 mx-auto text-amber-400" />
                 <div>
                   <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                    Nie znaleziono w bazie L2
+                    Nie znaleziono w bazie ES
                   </p>
                   <p className="text-[11px] text-slate-400 mt-0.5">
                     Spróbuj innej pisowni lub zapytaj ES-Engine — zna synonimy branżowe i odmiany

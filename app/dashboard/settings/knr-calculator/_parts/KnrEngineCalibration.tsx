@@ -101,7 +101,7 @@ export function KnrEngineCalibration({ calibration, onChange }: KnrEngineCalibra
           <div>
             <CardTitle className="text-base leading-tight">Kalibracja Silnika ES-Engine</CardTitle>
             <CardDescription className="text-xs mt-0.5">
-              Jak dokładnie AI dopasowuje normy KNR do Twoich pozycji — sposób montażu, pamięć i czułość
+              Sposób montażu i czułość dopasowania nazwy. Godzin w zapisanej pozycji to nie przelicza.
             </CardDescription>
           </div>
         </div>
