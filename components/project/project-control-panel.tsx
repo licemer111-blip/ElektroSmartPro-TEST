@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useTransition, useEffect } from "react";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import {
   updateProjectVatRate,
@@ -164,40 +162,35 @@ export function ProjectControlPanel({
         </div>
       </div>
 
-      <div className="flex items-center gap-1.5">
-        <Switch
-          id={`knr-toggle-${projectId}`}
-          checked={localShowKnr}
-          onCheckedChange={(v) => handleDocSetting("show_knr", v)}
+      <div className="flex flex-wrap items-center gap-1.5">
+        <span className="text-xs text-slate-500 dark:text-slate-400">Pokaż</span>
+        <button
+          type="button"
           disabled={disabled}
-        />
-        <Label htmlFor={`knr-toggle-${projectId}`} className="text-xs font-medium cursor-pointer" title="Kolumna normy w tabeli i na PDF">
+          onClick={() => handleDocSetting("show_knr", !localShowKnr)}
+          title="Kolumna z kodem normy w tabeli i na PDF"
+          className={seg(localShowKnr)}
+        >
           Norma
-        </Label>
-      </div>
-
-      <div className="flex items-center gap-1.5">
-        <Switch
-          id={`rg-toggle-${projectId}`}
-          checked={localShowRg}
-          onCheckedChange={(v) => handleDocSetting("show_labor_hours_in_pdf", v)}
+        </button>
+        <button
+          type="button"
           disabled={disabled}
-        />
-        <Label htmlFor={`rg-toggle-${projectId}`} className="text-xs font-medium cursor-pointer" title="Kolumna godzin w tabeli i na PDF">
+          onClick={() => handleDocSetting("show_labor_hours_in_pdf", !localShowRg)}
+          title="Kolumna z godzinami w tabeli i na PDF"
+          className={seg(localShowRg)}
+        >
           rbh
-        </Label>
-      </div>
-
-      <div className="flex items-center gap-1.5">
-        <Switch
-          id={`coloring-toggle-${projectId}`}
-          checked={localColoring}
-          onCheckedChange={(v) => handleDocSetting("expert_coloring", v)}
+        </button>
+        <button
+          type="button"
           disabled={disabled}
-        />
-        <Label htmlFor={`coloring-toggle-${projectId}`} className="text-xs font-medium cursor-pointer" title="Zielony to robocizna, pomarańczowy to materiał">
+          onClick={() => handleDocSetting("expert_coloring", !localColoring)}
+          title="Zielony to robocizna, pomarańczowy to materiał"
+          className={seg(localColoring)}
+        >
           Kolory
-        </Label>
+        </button>
       </div>
 
       {isPending && <span className="text-xs text-slate-400">zapisuję...</span>}

@@ -3,7 +3,7 @@
 import React from "react";
 import {
   Search, X, LayoutGrid,
-  ChevronUp, ChevronDown, Palette, List, Maximize2, Loader2,
+  ChevronUp, ChevronDown, List, Maximize2, Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -54,10 +54,10 @@ export function EstimateFilterBar({
   isFinal, isSearchOpen, searchQuery, searchMatchIds, currentMatchIndex,
   filterType, sortBy, sortOrder, categoryFilter, sectionFilter,
   uniqueCategories, uniqueSections, groupBySection, collapsedSections,
-  colorMode, compactView, showColorToggle, filterBarExtra, isAnalyzing, localItems,
+  compactView, filterBarExtra, isAnalyzing, localItems,
   onSearchOpen, onSearchClose, onSearchChange, onGoToMatch,
   onFilterType, onSortBy, onSortOrder, onCategoryFilter, onSectionFilter,
-  onGroupBySection, onCollapsedSections, onColorMode, onCompactView, onToast,
+  onGroupBySection, onCollapsedSections, onCompactView, onToast,
 }: EstimateFilterBarProps) {
   return (
     <div className="mb-3 flex flex-col gap-1 p-1.5 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700/50 flex-shrink-0">
@@ -163,19 +163,6 @@ export function EstimateFilterBar({
           {compactView ? <Maximize2 className="w-3.5 h-3.5" /> : <List className="w-3.5 h-3.5" />}
           <span className="hidden sm:inline">{compactView ? "Normalny" : "Kompakt"}</span>
         </button>
-
-
-        {/* Color toggle */}
-        {showColorToggle && (
-          <button onClick={() => { if (isFinal) return; onColorMode(); }}
-            title={colorMode ? "Wyłącz kolory" : "Włącz kolory"}
-            className={cn("h-7 w-7 sm:h-8 sm:w-8 flex items-center justify-center rounded text-[11px] transition-all flex-shrink-0",
-              isFinal ? "opacity-40 cursor-not-allowed text-slate-400"
-                : colorMode ? "bg-blue-600 text-white shadow-sm"
-                : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200")}>
-            <Palette className="w-3.5 h-3.5" />
-          </button>
-        )}
 
         {/* AI analyzing indicator */}
         {isAnalyzing && (
