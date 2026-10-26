@@ -50,7 +50,7 @@ interface AiPriceEstimatorDialogProps {
 }
 
 const modeButtons: { mode: PriceMode; label: string; desc: string; icon: typeof Banknote }[] = [
-  { mode: "all", label: "Wyceń", desc: "Robocizna KNR 2026 + materiały katalogowe", icon: Wrench },
+  { mode: "all", label: "Wyceń", desc: "Robocizna: rbh normy ES × Twoja stawka × województwo. Materiał z katalogu.", icon: Wrench },
 ];
 
 export function AiPriceEstimatorDialog({

@@ -30,10 +30,10 @@ const ProjectNotes = dynamic(
 
 // Static — defined outside component to avoid new array reference on every render
 const TAB_CONFIG = [
-  { id: "estimate", label: "Kosztorysy", shortLabel: "Koszt.", icon: FileText, lockedWhenFinal: false },
-  { id: "materials", label: "Do wyceny", shortLabel: "Wycena", icon: Package, lockedWhenFinal: true },
+  { id: "estimate", label: "Kosztorys", shortLabel: "Koszt.", icon: FileText, lockedWhenFinal: false },
+  { id: "materials", label: "Materiały", shortLabel: "Mat.", icon: Package, lockedWhenFinal: true },
   { id: "notes", label: "Notatki", shortLabel: "Notat.", icon: Mic, lockedWhenFinal: true },
-  { id: "settings", label: "Ustawienia PDF", shortLabel: "PDF", icon: Settings2, lockedWhenFinal: true },
+  { id: "settings", label: "PDF", shortLabel: "PDF", icon: Settings2, lockedWhenFinal: true },
 ] as const;
 
 interface Region {

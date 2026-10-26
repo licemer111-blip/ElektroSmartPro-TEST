@@ -108,7 +108,7 @@ export function EstimateTableHeader({
             <div className="flex flex-col items-center gap-0.5">
               <span>📋</span>
               <div className="flex items-center gap-1">
-                <span className="font-semibold">Kod KNR</span>
+                <span className="font-semibold">Norma</span>
                 <HintTooltip content={HINTS.columnKnr} side="bottom" iconOnly />
               </div>
               <span className="text-[10px] font-normal opacity-70">(Robocizna)</span>
@@ -121,10 +121,10 @@ export function EstimateTableHeader({
             <div className="flex flex-col items-center gap-0.5">
               <span>⏱</span>
               <div className="flex items-center gap-1">
-                <span className="font-semibold">Czas pracy</span>
+                <span className="font-semibold">rbh</span>
                 <HintTooltip content={HINTS.columnTime} side="bottom" iconOnly />
               </div>
-              <span className="text-[10px] font-normal opacity-70">(rbh/jedn. × ilość)</span>
+              <span className="text-[10px] font-normal opacity-70">(na jednostkę)</span>
             </div>
           </TableHead>
         )}

@@ -10,13 +10,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
-  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import {
   ArrowLeft, Save, MoreVertical, Edit, Loader2, CheckCircle,
   User, Copy, FileBox, Archive, ArchiveRestore, UserCog,
   GitCompareArrows, PiggyBank, FileSpreadsheet, Info,
-  Sparkles, CircleDollarSign, ChevronDown,
+  Sparkles, CircleDollarSign,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -294,82 +293,55 @@ export function ProjectHeaderToolbar({
                 <TooltipProvider delayDuration={300}>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      size="sm"
-                      disabled={isFinal}
-                      className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white flex-shrink-0 rounded-md transition-all duration-200 ${
-                        isFinal
-                          ? "opacity-50 cursor-not-allowed shadow-none"
-                          : isDemoProject
-                          ? "animate-es-glow"
-                          : "shadow-[0_0_14px_rgba(249,115,22,0.5)] hover:shadow-[0_0_22px_rgba(249,115,22,0.8)]"
-                      }`}
-                    >
-                      <Sparkles className="h-3.5 w-3.5 drop-shadow-sm" />
-                      <span className="font-semibold">Wycena</span>
-                      <ChevronDown className="h-3 w-3 opacity-70" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start" className="w-56">
-                    <DropdownMenuLabel className="text-[10px] text-slate-400 font-normal uppercase tracking-wide">Inteligentna wycena</DropdownMenuLabel>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        if (isFinal) { toast({ title: "🔒 Projekt zablokowany", description: "Odblokuj projekt, aby używać ES-Engine", variant: "destructive" }); return; }
-                        setEsAssistOpen(true);
-                        onBroadcastDialog("headerAiAssistantOpen", true);
-                      }}
-                    >
-                      <Sparkles className="mr-2 h-4 w-4 text-amber-500" />
-                      <div className="flex flex-col">
-                        <span className="text-xs font-medium">Asystent</span>
-                        <span className="text-[10px] text-slate-400">Norma, materiał, jak to policzyć</span>
-                      </div>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        if (isFinal) { toast({ title: "🔒 Projekt zablokowany", description: "Odblokuj projekt, aby importować pozycje", variant: "destructive" }); return; }
-                        onAIImportClick();
-                      }}
-                    >
-                      <FileSpreadsheet className="mr-2 h-4 w-4 text-amber-500" />
-                      <div className="flex flex-col">
-                        <span className="text-xs font-medium">Import PDF / Excel</span>
-                        <span className="text-[10px] text-slate-400">Wczytaj pozycje z pliku lub tekstu</span>
-                      </div>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onClick={() => {
-                        if (isFinal) { toast({ title: "🔒 Projekt zablokowany", description: "Odblokuj projekt, aby wyceniać", variant: "destructive" }); return; }
-                        setEsWycenaOpen(true);
-                        onBroadcastDialog("headerAiPricerOpen", true);
-                      }}
-                      disabled={projectItems.length === 0}
-                      className={isDemoProject ? "bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800/40 my-0.5 mx-1 rounded-md focus:bg-orange-100 dark:focus:bg-orange-950/40" : ""}
-                    >
-                      <CircleDollarSign className={`mr-2 h-4 w-4 ${isDemoProject ? "text-orange-600 dark:text-orange-400" : "text-orange-500"}`} />
-                      <div className="flex flex-col flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-1">
-                          <span className="text-xs font-medium">Wyceń pozycje</span>
-                          {isDemoProject && (
-                            <span className="text-[9px] bg-orange-500 text-white px-1.5 py-0.5 rounded-full font-bold flex-shrink-0 leading-none">← Zacznij tu</span>
-                          )}
-                        </div>
-                        <span className="text-[10px] text-slate-400">Policz {projectItems.length} poz. z katalogu i norm</span>
-                      </div>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <Button
+                  size="sm"
+                  disabled={isFinal || projectItems.length === 0}
+                  title="Policz robociznę z normy ES i Twojej stawki"
+                  onClick={() => {
+                    if (isFinal) { toast({ title: "Projekt zablokowany", description: "Odblokuj projekt, aby wyceniać", variant: "destructive" }); return; }
+                    setEsWycenaOpen(true);
+                    onBroadcastDialog("headerAiPricerOpen", true);
+                  }}
+                  className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 bg-orange-500 hover:bg-orange-600 text-white flex-shrink-0 ${isFinal ? "opacity-50" : ""}`}
+                >
+                  <CircleDollarSign className="h-3.5 w-3.5" />
+                  <span className="font-semibold">Wyceń</span>
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={isFinal}
+                  title="Wczytaj pozycje z PDF lub Excela"
+                  onClick={() => {
+                    if (isFinal) { toast({ title: "Projekt zablokowany", description: "Odblokuj projekt, aby importować", variant: "destructive" }); return; }
+                    onAIImportClick();
+                  }}
+                  className="h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 flex-shrink-0"
+                >
+                  <FileSpreadsheet className="h-3.5 w-3.5" />
+                  Import
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={isFinal}
+                  title="Pytanie o normę, materiał albo sposób liczenia"
+                  onClick={() => {
+                    if (isFinal) { toast({ title: "Projekt zablokowany", description: "Odblokuj projekt", variant: "destructive" }); return; }
+                    setEsAssistOpen(true);
+                    onBroadcastDialog("headerAiAssistantOpen", true);
+                  }}
+                  className="h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 flex-shrink-0"
+                >
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Asystent
+                </Button>
                     </TooltipTrigger>
                     <TooltipContent
                       side="bottom"
                       className={isDemoProject && !isFinal ? "bg-amber-500 text-white border-amber-600 font-semibold text-xs" : ""}
                     >
-                      {isDemoProject && !isFinal
-                        ? "Zacznij tutaj — wycena AI z KNR + benchmarkami"
-                        : "Wyceń pozycje albo wczytaj kosztorys z pliku"}
+                      Wyceń liczy godziny normy ES razy Twoją stawkę. Import wczytuje plik. Asystent odpowiada na pytanie.
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>

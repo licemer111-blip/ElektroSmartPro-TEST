@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { BlurredPrice } from "@/components/ui/blurred-price";
-import { LayoutGrid, ChevronDown, ChevronUp, HardHat, Wrench, Home, Zap, Truck } from "lucide-react";
+import { LayoutGrid, ChevronDown, ChevronUp, HardHat, Wrench, Home, Zap } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
@@ -191,18 +191,6 @@ export function SummaryFinancialTotals({
           <BlurredPrice value={effectiveNettoBase} isPro={isPro} showBadge={!isPro} />
         </span>
       </div>
-
-      {/* Expert Tip: small project logistics alert */}
-      {effectiveNettoBase > 0 && effectiveNettoBase < 500 && (
-        <div className="mt-2 mb-1 flex items-start gap-2 rounded-lg border border-violet-200 dark:border-violet-800 bg-violet-50/60 dark:bg-violet-950/20 px-3 py-2">
-          <Truck className="w-3.5 h-3.5 text-violet-500 dark:text-violet-400 mt-0.5 flex-shrink-0" />
-          <p className="text-[11px] text-violet-700 dark:text-violet-300 leading-snug">
-            <span className="font-semibold">Mały projekt?</span>{" "}
-            Rozważ doliczenie opłaty za dojazd{" "}
-            <span className="font-medium">(Dojazd i logistyka)</span>.
-          </p>
-        </div>
-      )}
 
       {/* Section breakdown */}
       {hasSections && (

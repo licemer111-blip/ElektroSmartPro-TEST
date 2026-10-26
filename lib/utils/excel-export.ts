@@ -1,6 +1,7 @@
 import XLSXStyle from 'xlsx-js-style';
 import type { ProjectItem, ProjectWithRelations } from '@/lib/types/database';
 import { flattenProjectItems } from '@/lib/utils/flatten-project-items';
+import { calcRowPrices } from '@/lib/pricing-calculations';
 
 // ─── Style helpers ─────────────────────────────────────────────────────────────
 
@@ -112,18 +113,41 @@ function buildKosztorysSheet(
   // Flatten so every child item appears immediately after its parent
   const flatItems = flattenProjectItems(items);
 
-  // ── Totals ──
-  const materialTotal = flatItems.reduce((sum, item) => {
-    return sum + ((item.final_material_price ?? item.material_price ?? 0) * item.quantity);
-  }, 0);
-  const laborTotal = flatItems.reduce((sum, item) => {
-    return sum + ((item.final_labor_price ?? item.labor_price ?? 0) * item.quantity);
-  }, 0);
+  // Same zł as the estimate screen: region and markups on labor, material without region.
+  const regionModifier = project.regions?.price_modifier ?? 1;
+  const adjustmentMult = 1 + (project.adjustment_percentage || 0) / 100;
+  const matMarkupMult = 1 + (Number(project.mat_markup_pct) || 0) / 100;
+  const labMarkupMult = 1 + (Number(project.lab_markup_pct) || 0) / 100;
+  const complexityFactor = Number(project.complexity_factor) || 1;
+  const priceOf = (item: ProjectItem) => calcRowPrices(
+    item,
+    adjustmentMult,
+    matOwnedByClient,
+    "all",
+    regionModifier,
+    matMarkupMult,
+    labMarkupMult,
+    complexityFactor,
+    1,
+  );
+
+  const parentIds = new Set(
+    flatItems.filter(i => i.is_assembly_child).map(i => i.parent_assembly_id).filter(Boolean)
+  );
+
+  // ── Totals: parents with children are not added again ──
+  let materialTotal = 0;
+  let laborTotal = 0;
+  for (const item of flatItems) {
+    if (parentIds.has(item.id)) continue;
+    const priced = priceOf(item);
+    materialTotal += priced.materialTotal;
+    laborTotal += priced.laborTotal;
+  }
   const subtotal = materialTotal + laborTotal;
-  const adjMult = 1 + (project.adjustment_percentage || 0) / 100;
-  const adjustedSubtotal = subtotal * adjMult;
-  const adjMat = materialTotal * adjMult;
-  const adjLab = laborTotal * adjMult;
+  const adjustedSubtotal = subtotal;
+  const adjMat = materialTotal;
+  const adjLab = laborTotal;
   const kpPct = Number((project as unknown as Record<string, unknown>).kp_percent ?? 0);
   const zPct  = Number((project as unknown as Record<string, unknown>).z_percent  ?? 0);
   const kzPct = Number((project as unknown as Record<string, unknown>).kz_percent ?? 0);
@@ -272,14 +296,10 @@ function buildKosztorysSheet(
       const prev = sectionTotals.get(sec) || 0;
       if (parentIds.has(item.id)) {
         const children = flatItems.filter(c => c.parent_assembly_id === item.id);
-        const childSum = children.reduce((acc, c) => {
-          return acc + ((c.final_material_price ?? c.material_price ?? 0) + (c.final_labor_price ?? c.labor_price ?? 0)) * c.quantity;
-        }, 0);
+        const childSum = children.reduce((acc, c) => acc + priceOf(c).rowTotal, 0);
         sectionTotals.set(sec, prev + childSum);
       } else {
-        const mat = item.final_material_price ?? item.material_price ?? 0;
-        const lab = item.final_labor_price ?? item.labor_price ?? 0;
-        sectionTotals.set(sec, prev + (mat + lab) * item.quantity);
+        sectionTotals.set(sec, prev + priceOf(item).rowTotal);
       }
     });
   }
@@ -318,18 +338,15 @@ function buildKosztorysSheet(
       }
     }
 
-    const matPrice = item.final_material_price ?? item.material_price ?? 0;
-    const labPrice = (item.final_labor_price ?? item.labor_price ?? 0);
+    const priced = priceOf(item);
+    const matPrice = priced.materialUnit;
+    const labPrice = priced.laborUnit;
     const isChild   = item.is_assembly_child === true;
     const isZestaw  = assemblyParentIds.has(item.id);
 
-    // For Zestaw parents compute total from children (own price is usually 0)
-    const ownTotal = (matPrice + labPrice) * item.quantity;
     const totalPrice = isZestaw
-      ? flatItems.filter(c => c.parent_assembly_id === item.id).reduce(
-          (acc, c) => acc + ((c.final_material_price ?? c.material_price ?? 0) + (c.final_labor_price ?? c.labor_price ?? 0)) * c.quantity, 0
-        )
-      : ownTotal;
+      ? flatItems.filter(c => c.parent_assembly_id === item.id).reduce((acc, c) => acc + priceOf(c).rowTotal, 0)
+      : priced.rowTotal;
 
     // Row style selection
     const rowBg     = isZestaw ? C_ZESTAW_BG : (isChild ? C_CHILD_BG : 'FFFFFF');
