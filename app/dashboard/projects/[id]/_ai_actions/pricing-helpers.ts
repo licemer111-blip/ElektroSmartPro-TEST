@@ -693,6 +693,10 @@ export function securityAuditLayer(est: AiPriceEstimate): AiPriceEstimate {
 
   const profile = classifyIntent(effectiveName);
 
+  // A stored ES hour already priced this row as hours × rate. Do not replace it with a zł floor.
+  const hasEsNorm = est.confidence === "high" && est.laborNorm != null && est.laborNorm > 0 && est.knrSource !== "catalog-l1";
+  if (hasEsNorm) return est;
+
   // No category floor — pass through, but still generate calculationLog for transparency
   if (profile.intent === "GENERAL") return est;
 

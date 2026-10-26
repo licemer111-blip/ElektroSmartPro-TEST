@@ -13,13 +13,11 @@ import { QuotaBadge, QuotaBlocker } from "@/components/ui/quota-badge";
 import Link from "next/link";
 import {
   CircleDollarSign, Loader2, Check, AlertTriangle, Banknote, Wrench,
-  CheckCircle2, Info, Building2, Home, Factory,
+  CheckCircle2, Info,
 } from "lucide-react";
 import { useAiPriceEstimator } from "@/components/project/_parts/useAiPriceEstimator";
 import { EstimateResultsTable } from "@/components/project/_parts/EstimateResultsTable";
 import type { PriceMode } from "@/components/project/_parts/useAiPriceEstimator";
-import type { ProjectSector } from "@/lib/ai/smart-mapping-engine";
-import { SECTOR_LABELS } from "@/lib/ai/smart-mapping-engine";
 import { useTabSyncOptional } from "@/components/project/tab-sync-context";
 
 interface AiPriceEstimatorDialogProps {
@@ -78,30 +76,22 @@ export function AiPriceEstimatorDialog({
     projectId, projectStatus, selectedRowIds, externalOpen, onExternalOpenChange, objectTypeSlug,
   });
 
-  const SECTOR_OPTIONS: { value: ProjectSector; label: string; short: string; icon: typeof Home }[] = [
-    { value: "RESIDENTIAL", label: SECTOR_LABELS.RESIDENTIAL, short: "Mieszkanie", icon: Home },
-    { value: "COMMERCIAL",  label: SECTOR_LABELS.COMMERCIAL,  short: "Biuro/Usługi", icon: Building2 },
-    { value: "INDUSTRIAL",  label: SECTOR_LABELS.INDUSTRIAL,  short: "Przemysł", icon: Factory },
-  ];
-
   const aiTooltipText = est.isFinal
-    ? "Projekt zablokowany. Odblokuj projekt, aby użyć ES-Engine wyceny."
+    ? "Projekt zablokowany. Odblokuj projekt, aby wycenić."
     : est.hasSelectedRows
-    ? `ES-Engine wyceń zaznaczone ${selectedRowIds!.size} pozycje.`
-    : "Expert Engine — katalog prywatny + normy KNR ES-KNR 2026 + ES-Engine na żądanie (L3)";
+    ? `Policz robociznę dla zaznaczonych pozycji: ${selectedRowIds!.size}.`
+    : "Robocizna: godziny normy ES × Twoja stawka. Materiał z Twojego cennika.";
 
   const [phaseIdx, setPhaseIdx] = useState(0);
   const phaseIdxRef = useRef(0);
   useEffect(() => { phaseIdxRef.current = phaseIdx; }, [phaseIdx]);
 
   const PHASES_LABOR = [
-    { label: "Wczytywanie pozycji kosztorysu...", pct: 8 },
-    { label: "L0: Bezpośrednie kody KNR — wyliczenie norm...", pct: 22 },
-    { label: "L1: Sprawdzam katalog prywatny...", pct: 40 },
-    { label: "L2: Wyliczam robociznę i materiały z ES-KNR 2026...", pct: 62 },
-    { label: "L3: ES-Engine — dopasowywanie brakujących pozycji...", pct: 80 },
-    { label: "Canonical L0: weryfikacja cen materiałów...", pct: 92 },
-    { label: "Finalizowanie wyceny...", pct: 97 },
+    { label: "Czytam pozycje kosztorysu...", pct: 15 },
+    { label: "Szukam godzin normy ES...", pct: 40 },
+    { label: "Sprawdzam Twój cennik...", pct: 65 },
+    { label: "Liczę robociznę: rbh × stawka...", pct: 85 },
+    { label: "Kończę...", pct: 97 },
   ];
   // Each step shows for exactly PHASE_STEP_MS so every phase always completes fully
   const PHASE_STEP_MS = 1600;
@@ -156,7 +146,7 @@ export function AiPriceEstimatorDialog({
           className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 flex-shrink-0 rounded-md bg-orange-500 hover:bg-orange-600 text-white ${est.isFinal ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           <CircleDollarSign className="h-3.5 w-3.5" />
-          <span>ES Wycena</span>
+          <span>Wyceń</span>
           {est.hasSelectedRows && (
             <span className="ml-0.5 bg-white/30 text-white text-[9px] font-bold px-1 py-0.5 rounded-full leading-none">
               {selectedRowIds!.size}
@@ -172,11 +162,11 @@ export function AiPriceEstimatorDialog({
           <DialogHeader className="flex-shrink-0">
             <DialogTitle className="flex items-center gap-2">
               <CircleDollarSign className="w-5 h-5 text-orange-500" />
-              Expert Engine — automatyczna wycena pozycji
+              Wycena pozycji
               <QuotaBadge info={est.quotaInfo} className="ml-auto" />
             </DialogTitle>
             <DialogDescription className="text-xs">
-              P1 Katalog · L2 ES-Słownik · normy KNR 2026 · 16 województw
+              Robocizna z normy ES i Twojej stawki. Województwo dolicza ekran kosztorysu.
             </DialogDescription>
           </DialogHeader>
 
@@ -184,7 +174,7 @@ export function AiPriceEstimatorDialog({
           {est.step === "choose" && (
             <div className="space-y-4 py-2">
               {est.quotaInfo?.isExhausted && (
-                <QuotaBlocker info={est.quotaInfo} featureName="ES-Engine Wyceny" />
+                <QuotaBlocker info={est.quotaInfo} featureName="wyceny" />
               )}
               {rateIsDefault && (
                 <div className="flex items-start gap-2.5 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700">
@@ -198,53 +188,12 @@ export function AiPriceEstimatorDialog({
                   </div>
                 </div>
               )}
-              {(
-                <div className="flex items-start gap-2.5 p-3 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border border-amber-200 dark:border-amber-800">
-                  <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
-                  <div className="text-[11px] text-amber-800 dark:text-amber-300 leading-relaxed">
-                    <strong>Expert Engine — robocizna + materiały.</strong>{" "}
-                    Hierarchia: <strong>L0 kody KNR</strong> → <strong>L1 Twój katalog</strong> → <strong>L2 ES-Słownik</strong> → <strong>L3 ES-Engine</strong>.
-                    Stawka regionalna × norma 2026. Ceny materiałów z katalogu KNR 2026 (wskaźnikowe).
-                  </div>
-                </div>
-              )}
               {est.error && (
                 <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs">
                   <AlertTriangle className="w-4 h-4 flex-shrink-0" />
                   {est.error}
                 </div>
               )}
-              {/* Sector selector */}
-              <div className="space-y-1.5">
-                <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Sektor obiektu</p>
-                <div className="grid grid-cols-3 gap-2">
-                  {SECTOR_OPTIONS.map((opt) => {
-                    const Icon = opt.icon;
-                    const isActive = est.sectorOverride === opt.value;
-                    return (
-                      <button
-                        key={opt.value}
-                        onClick={() => est.setSectorOverride(opt.value)}
-                        disabled={est.isEstimating}
-                        className={`flex flex-col items-center gap-1.5 p-2.5 rounded-xl border-2 transition-all text-center ${
-                          isActive
-                            ? "border-orange-500 bg-orange-50 dark:bg-orange-950/30 shadow-sm"
-                            : "border-slate-200 dark:border-slate-700 hover:border-orange-300 dark:hover:border-orange-700 hover:bg-orange-50/50 dark:hover:bg-orange-950/10"
-                        }`}
-                      >
-                        <Icon className={`w-5 h-5 ${isActive ? "text-orange-500" : "text-slate-400 dark:text-slate-500"}`} />
-                        <span className={`text-[10px] font-semibold leading-tight ${isActive ? "text-orange-700 dark:text-orange-300" : "text-slate-600 dark:text-slate-400"}`}>
-                          {opt.short}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-                <p className="text-[10px] text-slate-400 leading-tight">
-                  Wpływa na dobór szablonów KNR i ceny montażu (podtynkowy / korytka / natynkowy IP44).
-                </p>
-              </div>
-
               {/* single CTA */}
               <div className="flex justify-center">
                 {modeButtons.map((btn) => {
@@ -281,7 +230,7 @@ export function AiPriceEstimatorDialog({
               </div>
               <div className="flex items-center gap-2 text-[11px] text-slate-400">
                 <Info className="w-3.5 h-3.5 flex-shrink-0" />
-                ES-Engine wyceni pozycje z brakiem robocizny lub materiału. Istniejące ceny &gt; 0 nie zostaną nadpisane.
+                Liczy wiersze bez robocizny. Zaznaczone wiersze liczy od nowa. Materiał bierze z Twojego cennika, a jak go nie ma — zostawia kwotę z wiersza.
               </div>
             </div>
           )}
@@ -290,14 +239,14 @@ export function AiPriceEstimatorDialog({
           {est.step === "loading" && (
             <div className="flex flex-col items-center justify-center py-8 space-y-5">
               <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-semibold bg-orange-50 dark:bg-orange-950/20 border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-300">
-                <Wrench className="w-3.5 h-3.5" /> Wycena robocizny + materiałów (ES-Engine)
+                <Wrench className="w-3.5 h-3.5" /> Liczę robociznę
               </div>
 
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 flex items-center justify-center">
                 <Loader2 className="w-8 h-8 text-orange-500 animate-spin" />
               </div>
               <div className="text-center space-y-1">
-                <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">ES Expert Engine wycenia robociznę i materiały...</p>
+                <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">Liczę robociznę ze stawki...</p>
                 <p className="text-xs text-orange-600 dark:text-orange-400 font-medium min-h-[1.25rem] transition-all">
                   {currentPhase.label}
                 </p>
@@ -310,7 +259,7 @@ export function AiPriceEstimatorDialog({
                   />
                 </div>
                 <p className="text-[10px] text-slate-400 text-center">
-                  Wycena robocizny + materiałów · Nie zamykaj okna
+                  Nie zamykaj okna
                 </p>
               </div>
               <div className="flex flex-col gap-1.5 w-full max-w-xs">
