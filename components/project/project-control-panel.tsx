@@ -3,12 +3,6 @@
 import { useState, useTransition, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import {
-  Receipt, Eye, BookOpen,
-  Palette, ChevronDown, ChevronUp, Clock,
-} from "lucide-react";
-import { HintTooltip } from "@/components/ui/hint-tooltip";
-import { HINTS } from "@/lib/hints/hint-content";
 import { useToast } from "@/hooks/use-toast";
 import {
   updateProjectVatRate,
@@ -56,7 +50,6 @@ export function ProjectControlPanel({
 }: ProjectControlPanelProps) {
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
-  const [collapsed, setCollapsed] = useState(true);
   const brainCtx = useMaterialBrainCtx();
 
   // ─── Local optimistic state ───────────────────────────────────────────────
@@ -135,187 +128,79 @@ export function ProjectControlPanel({
     });
   };
 
+  const seg = (active: boolean) =>
+    `h-7 px-2.5 text-xs font-semibold rounded-md transition-colors disabled:opacity-50 ${
+      active
+        ? "bg-blue-600 text-white"
+        : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+    }`;
+
   return (
-    <div className="rounded-xl border border-indigo-200 dark:border-indigo-800/50 bg-gradient-to-br from-indigo-50/80 to-violet-50/60 dark:from-indigo-950/30 dark:to-violet-950/20 shadow-sm overflow-hidden">
-      {/* Header */}
-      <button
-        onClick={() => setCollapsed((v) => !v)}
-        className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-indigo-100/40 dark:hover:bg-indigo-900/20 transition-colors"
-      >
-        <div className="flex items-center gap-2">
-          <div className="flex items-center justify-center w-5 h-5 rounded bg-indigo-600 text-white flex-shrink-0">
-            <Receipt className="w-3 h-3" />
-          </div>
-          <span className="text-[11px] font-semibold text-indigo-800 dark:text-indigo-200 tracking-wide uppercase">
-            Wydruk i VAT
-          </span>
-          {collapsed && (
-            <span className="text-[10px] font-medium text-indigo-600/80 dark:text-indigo-300/80 normal-case tracking-normal">
-              VAT {localVat}% · {localBrutto ? "brutto" : "netto"}
-              {localShowKnr ? " · kody KNR" : ""}
-            </span>
-          )}
-          {isPending && <span className="text-[9px] text-indigo-500 animate-pulse">zapisuję...</span>}
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2">
+      <div className="flex items-center gap-2">
+        <span className="text-xs font-medium text-slate-500 dark:text-slate-400">VAT</span>
+        <div className="inline-flex items-center gap-0.5 rounded-md border border-slate-200 dark:border-slate-700 p-0.5">
+          <button type="button" onClick={() => handleVatToggle(8)} disabled={disabled} className={seg(localVat === 8)} title="8% — mieszkanie">
+            8%
+          </button>
+          <button type="button" onClick={() => handleVatToggle(23)} disabled={disabled} className={seg(localVat === 23)} title="23% — firma, biuro, lokal">
+            23%
+          </button>
         </div>
-        {collapsed
-          ? <ChevronDown className="w-3.5 h-3.5 text-indigo-500" />
-          : <ChevronUp className="w-3.5 h-3.5 text-indigo-500" />}
-      </button>
+        <span className="text-xs text-slate-500 dark:text-slate-400">
+          {localVat === 8 ? "mieszkanie" : "firma"}
+        </span>
+      </div>
 
-      {!collapsed && (
-        <div className="border-t border-indigo-200/60 dark:border-indigo-800/40">
-        <div className="px-2 pb-2 grid grid-cols-2 sm:grid-cols-5 gap-1.5 pt-2">
-
-          {/* 1 — VAT */}
-          <div className="flex flex-col gap-1 p-1.5 rounded-lg bg-white/70 dark:bg-slate-900/50 border border-blue-200 dark:border-blue-800/40">
-            <div className="flex items-center gap-1">
-              <Receipt className="w-3 h-3 text-blue-600 dark:text-blue-400 flex-shrink-0" />
-              <span className="text-[9px] font-semibold text-blue-700 dark:text-blue-300 truncate">VAT</span>
-              <HintTooltip content={HINTS.vatSelector} side="top" iconOnly iconClassName="!w-4 !h-4" />
-            </div>
-            <div className="grid grid-cols-2 gap-0.5 mt-0.5">
-              <button
-                onClick={() => handleVatToggle(8)}
-                disabled={disabled}
-                className={`text-[10px] py-0.5 rounded font-semibold transition-colors ${
-                  localVat === 8
-                    ? "bg-blue-600 text-white shadow-sm"
-                    : "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200"
-                } disabled:opacity-50`}
-              >
-                8%
-              </button>
-              <button
-                onClick={() => handleVatToggle(23)}
-                disabled={disabled}
-                className={`text-[10px] py-0.5 rounded font-semibold transition-colors ${
-                  localVat === 23
-                    ? "bg-blue-600 text-white shadow-sm"
-                    : "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200"
-                } disabled:opacity-50`}
-              >
-                23%
-              </button>
-            </div>
-            <p className="text-[8px] text-blue-600/70 leading-tight truncate">
-              {localVat === 8 ? "Mieszkaniowy" : "Komercyjny"}
-            </p>
-          </div>
-
-          {/* 2 — Netto / Brutto */}
-          <div className="flex flex-col gap-1 p-1.5 rounded-lg bg-white/70 dark:bg-slate-900/50 border border-blue-200 dark:border-blue-800/40">
-            <div className="flex items-center gap-1">
-              <Eye className="w-3 h-3 text-blue-600 dark:text-blue-400 flex-shrink-0" />
-              <span className="text-[9px] font-semibold text-blue-700 dark:text-blue-300 truncate">Tryb Cen</span>
-            </div>
-            <div className="grid grid-cols-2 gap-0.5 mt-0.5">
-              <button
-                onClick={() => handleDocSetting("brutto_mode", false)}
-                disabled={disabled}
-                className={`text-[10px] py-0.5 rounded font-semibold transition-colors ${
-                  !localBrutto
-                    ? "bg-blue-600 text-white shadow-sm"
-                    : "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200"
-                } disabled:opacity-50`}
-              >
-                Netto
-              </button>
-              <button
-                onClick={() => handleDocSetting("brutto_mode", true)}
-                disabled={disabled}
-                className={`text-[10px] py-0.5 rounded font-semibold transition-colors ${
-                  localBrutto
-                    ? "bg-blue-600 text-white shadow-sm"
-                    : "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200"
-                } disabled:opacity-50`}
-              >
-                Brutto
-              </button>
-            </div>
-            <p className="text-[8px] text-blue-600/70 leading-tight truncate">
-              Tabela / PDF
-            </p>
-          </div>
-
-          {/* 3 — Kody KNR */}
-          <div className="flex flex-col gap-1 p-1.5 rounded-lg bg-white/70 dark:bg-slate-900/50 border border-violet-200 dark:border-violet-800/40">
-            <div className="flex items-center gap-1">
-              <BookOpen className="w-3 h-3 text-violet-600 dark:text-violet-400 flex-shrink-0" />
-              <span className="text-[9px] font-semibold text-violet-700 dark:text-violet-300 truncate">Kody KNR</span>
-              <HintTooltip content={HINTS.columnKnr} side="top" iconOnly iconClassName="!w-4 !h-4" />
-            </div>
-            <div className="flex items-center justify-between mt-1">
-              <Label htmlFor={`knr-toggle-${projectId}`} className="text-[8px] text-violet-600 dark:text-violet-400 cursor-pointer leading-tight">
-                {localShowKnr ? "Widoczna" : "Ukryta"}
-              </Label>
-              <Switch
-                id={`knr-toggle-${projectId}`}
-                name={`knr-toggle-${projectId}`}
-                checked={localShowKnr}
-                onCheckedChange={(v) => handleDocSetting("show_knr", v)}
-                disabled={disabled}
-                className="scale-[0.65] origin-right data-[state=checked]:bg-violet-600"
-              />
-            </div>
-            <p className="text-[8px] text-muted-foreground leading-tight truncate">
-              KNR / SEKOCENBUD
-            </p>
-          </div>
-
-          {/* 4 — Czas pracy (r-g) */}
-          <div className="flex flex-col gap-1 p-1.5 rounded-lg bg-white/70 dark:bg-slate-900/50 border border-emerald-200 dark:border-emerald-800/40">
-            <div className="flex items-center gap-1">
-              <Clock className="w-3 h-3 flex-shrink-0 text-emerald-600 dark:text-emerald-400" />
-              <span className="text-[9px] font-semibold text-emerald-700 dark:text-emerald-300 truncate">Czas (r-g)</span>
-              <HintTooltip content={HINTS.columnTime} side="top" iconOnly iconClassName="!w-4 !h-4" />
-            </div>
-            <div className="flex items-center justify-between mt-1">
-              <Label htmlFor={`rg-toggle-${projectId}`} className="text-[8px] text-emerald-600 dark:text-emerald-400 cursor-pointer leading-tight">
-                {localShowRg ? "Widoczny" : "Ukryty"}
-              </Label>
-              <Switch
-                id={`rg-toggle-${projectId}`}
-                name={`rg-toggle-${projectId}`}
-                checked={localShowRg}
-                onCheckedChange={(v) => handleDocSetting("show_labor_hours_in_pdf", v)}
-                disabled={disabled}
-                className="scale-[0.65] origin-right data-[state=checked]:bg-emerald-600"
-              />
-            </div>
-            <p className="text-[8px] text-muted-foreground leading-tight truncate">
-              rbh wg KNR
-            </p>
-          </div>
-
-          {/* 5 — Expert Coloring */}
-          <div className="flex flex-col gap-1 p-1.5 rounded-lg bg-white/70 dark:bg-slate-900/50 border border-indigo-200 dark:border-indigo-800/40 col-span-2 sm:col-span-1">
-            <div className="flex items-center gap-1">
-              <Palette className="w-3 h-3 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
-              <span className="text-[9px] font-semibold text-indigo-700 dark:text-indigo-300 truncate">Kolory</span>
-            </div>
-            <div className="flex items-center justify-between mt-1">
-              <Label htmlFor={`coloring-toggle-${projectId}`} className="text-[8px] text-indigo-600 dark:text-indigo-400 cursor-pointer leading-tight">
-                {localColoring ? "Włączone" : "Mono"}
-              </Label>
-              <Switch
-                id={`coloring-toggle-${projectId}`}
-                name={`coloring-toggle-${projectId}`}
-                checked={localColoring}
-                onCheckedChange={(v) => handleDocSetting("expert_coloring", v)}
-                disabled={disabled}
-                className="scale-[0.65] origin-right data-[state=checked]:bg-indigo-600"
-              />
-            </div>
-            <p className="text-[8px] text-indigo-500/70 leading-tight truncate">
-              {localColoring ? "R=ziel · M=pom" : "PDF mono"}
-            </p>
-          </div>
-
-          {/* 6 — Auto-detect Zestawy (Zestaw Engine v2) — hidden: non-functional for AI-priced projects */}
-
+      <div className="flex items-center gap-2">
+        <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Ceny</span>
+        <div className="inline-flex items-center gap-0.5 rounded-md border border-slate-200 dark:border-slate-700 p-0.5">
+          <button type="button" onClick={() => handleDocSetting("brutto_mode", false)} disabled={disabled} className={seg(!localBrutto)} title="Kwoty w tabeli i na PDF bez VAT">
+            Netto
+          </button>
+          <button type="button" onClick={() => handleDocSetting("brutto_mode", true)} disabled={disabled} className={seg(localBrutto)} title="Kwoty w tabeli i na PDF z VAT">
+            Brutto
+          </button>
         </div>
       </div>
-      )}
+
+      <div className="flex items-center gap-1.5">
+        <Switch
+          id={`knr-toggle-${projectId}`}
+          checked={localShowKnr}
+          onCheckedChange={(v) => handleDocSetting("show_knr", v)}
+          disabled={disabled}
+        />
+        <Label htmlFor={`knr-toggle-${projectId}`} className="text-xs font-medium cursor-pointer" title="Kolumna normy w tabeli i na PDF">
+          Norma
+        </Label>
+      </div>
+
+      <div className="flex items-center gap-1.5">
+        <Switch
+          id={`rg-toggle-${projectId}`}
+          checked={localShowRg}
+          onCheckedChange={(v) => handleDocSetting("show_labor_hours_in_pdf", v)}
+          disabled={disabled}
+        />
+        <Label htmlFor={`rg-toggle-${projectId}`} className="text-xs font-medium cursor-pointer" title="Kolumna godzin w tabeli i na PDF">
+          rbh
+        </Label>
+      </div>
+
+      <div className="flex items-center gap-1.5">
+        <Switch
+          id={`coloring-toggle-${projectId}`}
+          checked={localColoring}
+          onCheckedChange={(v) => handleDocSetting("expert_coloring", v)}
+          disabled={disabled}
+        />
+        <Label htmlFor={`coloring-toggle-${projectId}`} className="text-xs font-medium cursor-pointer" title="Zielony to robocizna, pomarańczowy to materiał">
+          Kolory
+        </Label>
+      </div>
+
+      {isPending && <span className="text-xs text-slate-400">zapisuję...</span>}
     </div>
   );
 }
