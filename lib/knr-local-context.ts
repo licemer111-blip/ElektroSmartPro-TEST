@@ -19,9 +19,19 @@ import fotowoltaika from "@/data/knr/fixed_norms/es_knr_fotowoltaika_kompletna.j
 import halePrzemysl from "@/data/knr/fixed_norms/es_knr_instalacje_przemyslowe_hale.json";
 import sspPpoz from "@/data/knr/fixed_norms/es_knr_ssp_ppoz_rozszerzone.json";
 import biuraKomercja from "@/data/knr/fixed_norms/es_knr_sklepy_biura_hotele_2026.json";
+import kableSrednie from "@/data/knr/fixed_norms/es_knr_kable_srednie_duze.json";
+import kableBezhalogenowe from "@/data/knr/fixed_norms/es_knr_kable_specjalne_bezhalogenowe.json";
+import fotowoltaikaRozszerzona from "@/data/knr/fixed_norms/es_knr_fotowoltaika_rozszerzona.json";
+import robotyZiemne from "@/data/knr/fixed_norms/es_knr_roboty_ziemne_kablowe.json";
+import swiatlowody from "@/data/knr/fixed_norms/es_knr_swiatlowody_kompletne.json";
+import oswietleniePrzemysl from "@/data/knr/fixed_norms/es_knr_oswietlenie_przemyslowe.json";
+import lanWifi from "@/data/knr/fixed_norms/es_knr_lan_wifi_6e.json";
+import rozdzielniceAparatura from "@/data/knr/fixed_norms/es_knr_rozdzielnice_aparatura.json";
 
 interface KnrEntry {
   catalog_code: string;
+  table_number?: string;
+  column_number?: string;
   description: string;
   unit: string;
   labor_norm: number;
@@ -56,7 +66,43 @@ const CORE_KNR_SOURCES: unknown[] = [
   halePrzemysl,
   sspPpoz,
   biuraKomercja,
+  // Unique codes only. First file wins, so everyday hours above stay put.
+  kableSrednie,
+  kableBezhalogenowe,
+  fotowoltaikaRozszerzona,
+  robotyZiemne,
+  swiatlowody,
+  oswietleniePrzemysl,
+  lanWifi,
+  rozdzielniceAparatura,
 ];
+
+/** A code like "KNR 5-08 0401" already names one job. "KNR 5-08" does not. */
+function hasPositionCode(code: string): boolean {
+  return code.trim().split(/\s+/).length >= 3;
+}
+
+function displayCode(entry: KnrEntry): string {
+  const code = entry.catalog_code.trim();
+  if (hasPositionCode(code)) return code;
+  const table = String(entry.table_number ?? "").trim();
+  const column = String(entry.column_number ?? "").trim();
+  const category = (entry.knr_category || "poz")
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, "")
+    .slice(0, 12) || "POZ";
+  if (table && column) return `ES-${category}-${table}-${column}`;
+  return code;
+}
+
+function entryKey(entry: KnrEntry): string {
+  return [
+    entry.catalog_code,
+    entry.table_number ?? "",
+    entry.column_number ?? "",
+    entry.description,
+  ].join("|");
+}
 
 function toEntries(source: unknown): KnrEntry[] {
   if (Array.isArray(source)) return source as KnrEntry[];
@@ -70,8 +116,10 @@ function getAllEntries(): KnrEntry[] {
     _allEntries = [];
     for (const entry of CORE_KNR_SOURCES.flatMap(toEntries)) {
       const code = entry.catalog_code?.trim();
-      if (!code || seen.has(code)) continue;
-      seen.add(code);
+      if (!code || !(Number(entry.labor_norm) > 0)) continue;
+      const key = entryKey(entry);
+      if (seen.has(key)) continue;
+      seen.add(key);
       _allEntries.push(entry);
     }
   }
@@ -376,7 +424,7 @@ export function lookupKnrByName(itemName: string, preferResidential = true): Knr
   // not a way to admit weak matches.
   if (bestEntry && bestRawScore >= 0.5) {
     const adjustedNorm = bestEntry.labor_norm * (bestEntry.unit_factor ?? 1.0);
-    return { code: bestEntry.catalog_code, laborNorm: adjustedNorm, unit: bestEntry.unit };
+    return { code: displayCode(bestEntry), laborNorm: adjustedNorm, unit: bestEntry.unit };
   }
   return null;
 }
