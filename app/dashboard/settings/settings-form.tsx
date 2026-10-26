@@ -280,7 +280,7 @@ export function SettingsForm({ initialProfile }: SettingsFormProps) {
               <Label htmlFor="hourly_rate" className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
                 Domyślna stawka rbh (zł/rbh)
-                <span className="text-muted-foreground text-xs ml-2">(kopiowana do nowych projektów)</span>
+                <span className="text-muted-foreground text-xs ml-2">(ta sama co w Finansach — zmiana przelicza katalog i projekty)</span>
               </Label>
               <Input
                 id="hourly_rate"

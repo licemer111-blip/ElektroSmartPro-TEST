@@ -94,9 +94,10 @@ export const LABOR_PRICE_CEILING: Array<{
   max: number;
   marketPrice: number;
 }> = [
-  { keywords: ["montaż", "gniazda"], unit: "szt", max: 60, marketPrice: 28.0 },
-  { keywords: ["montaż", "łącznika"], unit: "szt", max: 55, marketPrice: 25.0 },
-  { keywords: ["montaż", "osprzętu"], unit: "szt", max: 60, marketPrice: 28.0 },
+  { keywords: ["gniazd", "siłow"], unit: "szt", max: 400, marketPrice: 120.0 },
+  { keywords: ["montaż", "gniazda"], unit: "szt", max: 180, marketPrice: 55.0 },
+  { keywords: ["montaż", "łącznika"], unit: "szt", max: 120, marketPrice: 36.0 },
+  { keywords: ["montaż", "osprzętu"], unit: "szt", max: 180, marketPrice: 55.0 },
   { keywords: ["kucie", "bruzd"], unit: "mb", max: 400, marketPrice: 80.0 },
   { keywords: ["bruzdowanie"], unit: "mb", max: 400, marketPrice: 80.0 },
   // Heavy WLZ cables — MUST precede generic "układanie kabel/przewod" entries.
@@ -108,10 +109,10 @@ export const LABOR_PRICE_CEILING: Array<{
   { keywords: ["nhxmh"],          unit: "mb", max: 130, marketPrice: 55.0 },
   { keywords: ["n2xh"],           unit: "mb", max: 130, marketPrice: 55.0 },
   { keywords: ["lgyo"],           unit: "mb", max: 130, marketPrice: 55.0 },
-  { keywords: ["układanie", "przewod"], unit: "mb", max: 15, marketPrice: 10.0 },
-  { keywords: ["układanie", "kabel"],   unit: "mb", max: 15, marketPrice: 10.0 },
-  { keywords: ["montaż", "oprawy"], unit: "szt", max: 75, marketPrice: 40.0 },
-  { keywords: ["montaż", "puszki"], unit: "szt", max: 25, marketPrice: 15.0 },
+  { keywords: ["układanie", "przewod"], unit: "mb", max: 50, marketPrice: 13.0 },
+  { keywords: ["układanie", "kabel"],   unit: "mb", max: 50, marketPrice: 13.0 },
+  { keywords: ["montaż", "oprawy"], unit: "szt", max: 160, marketPrice: 44.0 },
+  { keywords: ["montaż", "puszki"], unit: "szt", max: 45, marketPrice: 12.0 },
   // ── v10.5: Industrial & specialized labor ──
   { keywords: ["montaż", "rozdzielnic"], unit: "szt", max: 2500, marketPrice: 800.0 },
   { keywords: ["montaż", "drabink"], unit: "mb", max: 45, marketPrice: 25.0 },
@@ -182,18 +183,22 @@ export const LABOR_UNIT_FALLBACK: Record<string, number> = {
 
 // ─── KNR code fallback map (regex-based) ─────────────────────────────────────
 const KNR_LABOR_PATTERNS: Array<{ pattern: RegExp; code: string }> = [
-  { pattern: /gniazdo|łącznik|osprzęt/i, code: "KNR 5-04 0202-01" },
-  { pattern: /puszka\s*(podtynkowa|elektr)/i, code: "KNR 5-04 0601-01" },
-  { pattern: /bruzd|bruzdowanie|kucie/i, code: "KNR 5-04 0701-01" },
-  { pattern: /przewód|przewod|kabel|układanie/i, code: "KNR 5-04 0101-01" },
-  { pattern: /oprawa|oświetlen|downlight|panel.*led/i, code: "KNR 5-04 0401-01" },
-  { pattern: /mcb|rcd|rcbo|aparat.*moduł|wyłącznik.*różnic/i, code: "KNR 5-08 0201-01" },
-  { pattern: /rozdzielni|tablica/i, code: "KNR 5-08 0101-01" },
-  { pattern: /pomiar|odbiór|protokół/i, code: "KNR 5-04 1501-01" },
-  { pattern: /kamera|domofon|wideo/i, code: "KNR 5-09 0401-01" },
-  { pattern: /alarm|czujk/i, code: "KNR 5-09 0301-01" },
-  { pattern: /uziemien|odgrom/i, code: "KNR 5-04 1401-01" },
-  { pattern: /korytko|drabink|tras/i, code: "KNR 5-04 0501-01" },
+  { pattern: /gniazd\w*\s+siłow|cee\s*32/i, code: "KNR 5-08 0409" },
+  { pattern: /gniazd/i, code: "KNR 5-08 0401" },
+  { pattern: /łącznik|lacznik/i, code: "KNR 5-08 0501" },
+  { pattern: /puszk/i, code: "KNR 5-04 0601-01" },
+  { pattern: /bruzd|kucie/i, code: "KNR 5-08 0101" },
+  { pattern: /ydyp?\s*3\s*[x×]\s*2[,.]5/i, code: "KNR 5-08 0202" },
+  { pattern: /ydyp?\s*3\s*[x×]\s*1[,.]5/i, code: "KNR 5-08 0201" },
+  { pattern: /przewód|przewod|kabel|układanie/i, code: "KNR 5-08 0202" },
+  { pattern: /oprawa|oświetlen|downlight|panel.*led/i, code: "ES-OPR-010" },
+  { pattern: /mcb|rcd|rcbo|wyłącznik\s+nadprąd|wylacznik\s+nadprad/i, code: "KNR 5-08 1501" },
+  { pattern: /rozdzielni|tablica/i, code: "KNR 5-08 0301" },
+  { pattern: /pomiar|odbiór|protokół/i, code: "ES-POM-010" },
+  { pattern: /kamera|domofon|wideo/i, code: "KNR 5-09 0401" },
+  { pattern: /alarm|czujk/i, code: "KNR 5-09 0301" },
+  { pattern: /uziemien|odgrom/i, code: "ES-UZ-010" },
+  { pattern: /korytko|drabink|tras/i, code: "ES-TRAS-010" },
 ];
 
 /**
@@ -203,7 +208,7 @@ export function lookupKnrForLabor(name: string): string {
   for (const { pattern, code } of KNR_LABOR_PATTERNS) {
     if (pattern.test(name)) return code;
   }
-  return "KNR 5-04 0202-01"; // generic: montaż osprzętu
+  return "ES-RBH";
 }
 
 /**
@@ -245,8 +250,7 @@ export const LABOR_NORM_CEILING: Array<{
   { keywords: ["kucie", "bruzd"], unit: "mb", maxNorm: 3.0, typicalNorm: 0.85 },
   { keywords: ["bruzdowanie"], unit: "mb", maxNorm: 3.0, typicalNorm: 0.85 },
   // Heavy WLZ cables — MUST precede generic "układanie kabel/przewod" entries.
-  // Real KNR norms for WLZ ≥10mm²: 0.60–1.20 rbh/mb (KNR 5-04 0101-02..05).
-  // Without these entries, clampLaborNorm would cap them at thin-wire 0.032 rbh/mb.
+  // Heavy feeders stay above the thin-wire ceiling (YDYp 3×2.5 is 0.16 rbh/mb).
   { keywords: ["wlz"],   unit: "mb", maxNorm: 2.0, typicalNorm: 0.70 },
   { keywords: ["ykyzo"], unit: "mb", maxNorm: 2.0, typicalNorm: 0.70 },
   { keywords: ["ykyżo"], unit: "mb", maxNorm: 2.0, typicalNorm: 0.70 },
@@ -254,14 +258,15 @@ export const LABOR_NORM_CEILING: Array<{
   { keywords: ["nhxmh"], unit: "mb", maxNorm: 2.0, typicalNorm: 0.70 },
   { keywords: ["n2xh"],  unit: "mb", maxNorm: 2.0, typicalNorm: 0.70 },
   { keywords: ["lgyo"],  unit: "mb", maxNorm: 2.0, typicalNorm: 0.70 },
-  { keywords: ["układanie", "przewod"], unit: "mb", maxNorm: 0.12, typicalNorm: 0.032 },
-  { keywords: ["układanie", "kabel"], unit: "mb", maxNorm: 0.12, typicalNorm: 0.032 },
-  { keywords: ["układanie", "przewód"], unit: "mb", maxNorm: 0.12, typicalNorm: 0.032 },
-  { keywords: ["montaż", "puszki"], unit: "szt", maxNorm: 0.40, typicalNorm: 0.12 },
-  { keywords: ["montaż", "gniazda"], unit: "szt", maxNorm: 0.60, typicalNorm: 0.20 },
-  { keywords: ["montaż", "łącznika"], unit: "szt", maxNorm: 0.50, typicalNorm: 0.18 },
-  { keywords: ["montaż", "oprawy"], unit: "szt", maxNorm: 0.80, typicalNorm: 0.35 },
-  { keywords: ["montaż", "osprzętu"], unit: "szt", maxNorm: 0.60, typicalNorm: 0.20 },
+  { keywords: ["układanie", "przewod"], unit: "mb", maxNorm: 0.45, typicalNorm: 0.16 },
+  { keywords: ["układanie", "kabel"], unit: "mb", maxNorm: 0.45, typicalNorm: 0.16 },
+  { keywords: ["układanie", "przewód"], unit: "mb", maxNorm: 0.45, typicalNorm: 0.16 },
+  { keywords: ["gniazd", "siłow"], unit: "szt", maxNorm: 2.5, typicalNorm: 1.45 },
+  { keywords: ["montaż", "puszki"], unit: "szt", maxNorm: 0.50, typicalNorm: 0.15 },
+  { keywords: ["montaż", "gniazda"], unit: "szt", maxNorm: 2.0, typicalNorm: 0.68 },
+  { keywords: ["montaż", "łącznika"], unit: "szt", maxNorm: 1.2, typicalNorm: 0.45 },
+  { keywords: ["montaż", "oprawy"], unit: "szt", maxNorm: 2.0, typicalNorm: 0.55 },
+  { keywords: ["montaż", "osprzętu"], unit: "szt", maxNorm: 2.0, typicalNorm: 0.68 },
   { keywords: ["pomiar", "odbiorcz"], unit: "szt", maxNorm: 0.40, typicalNorm: 0.20 },
   { keywords: ["pomiar"], unit: "szt", maxNorm: 0.50, typicalNorm: 0.25 },
   { keywords: ["wyłącznik", "mcb"], unit: "szt", maxNorm: 0.30, typicalNorm: 0.15 },

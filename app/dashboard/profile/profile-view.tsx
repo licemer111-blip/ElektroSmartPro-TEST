@@ -137,7 +137,7 @@ export function ProfileView({ data }: ProfileViewProps) {
       {/* ───── NAV SECTIONS — Three columns ───── */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Section title="Narzędzia ES">
-          <Row href="/dashboard/settings/knr-calculator" icon={<Calculator className="w-4 h-4 text-amber-500" />} label="Centrum KNR" desc="Kalkulator + normy KNR" />
+          <Row href="/dashboard/settings/knr-calculator" icon={<Calculator className="w-4 h-4 text-amber-500" />} label="Stawka i normy" desc="Stawka rbh, województwo, norma ES" />
           <Row href="/dashboard/tools" icon={<Wrench className="w-4 h-4 text-emerald-500" />} label="Kalkulatory" desc="12 kalkulatorów inżynierskich" />
         </Section>
 
@@ -146,7 +146,7 @@ export function ProfileView({ data }: ProfileViewProps) {
           <Row href="/dashboard/catalog" icon={<Boxes className="w-4 h-4 text-pink-500" />} label="Katalog" desc="Baza pozycji z cenami" />
           <Row href="/dashboard/assemblies" icon={<Sparkles className="w-4 h-4 text-orange-500" />} label="Zestawy" desc="Gotowe zestawy montażowe" />
           <Row href="/dashboard/templates" icon={<Copy className="w-4 h-4 text-indigo-500" />} label="Szablony" desc="Szablony projektów" />
-          <Row href="/dashboard/market" icon={<TrendingUp className="w-4 h-4 text-sky-500" />} label="Rynek" desc="Trendy cen materiałów" />
+          <Row href="/dashboard/market" icon={<TrendingUp className="w-4 h-4 text-sky-500" />} label="Rynek" desc="Współczynniki województw, robocizna" />
         </Section>
 
         <Section title="Konto i pomoc">

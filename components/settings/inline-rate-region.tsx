@@ -121,7 +121,7 @@ export function InlineRateRegion({ initialRate, initialRegionId, regions }: Inli
             <div>
               <CardTitle className="text-lg sm:text-xl">Województwo</CardTitle>
               <CardDescription className="mt-0.5 sm:mt-1 text-xs sm:text-sm">
-                Korekta regionalna stawek — ceny różnią się w zależności od lokalizacji
+                Mnożnik dotyczy tylko robocizny. Zmiana przepisuje województwo we wszystkich projektach.
               </CardDescription>
             </div>
           </div>

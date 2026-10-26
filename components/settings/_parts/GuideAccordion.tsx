@@ -10,7 +10,7 @@ interface GuideAccordionProps {
   dinCount?: number;
 }
 
-export function GuideAccordion({ catalogCount = 1400, dinCount = 295 }: GuideAccordionProps) {
+export function GuideAccordion({ catalogCount = 1400 }: GuideAccordionProps) {
   return (
     <Accordion type="single" collapsible className="w-full">
       {/* Item 1: Workflow */}
@@ -42,17 +42,11 @@ export function GuideAccordion({ catalogCount = 1400, dinCount = 295 }: GuideAcc
             <li>• Twórz własne szablony z istniejących projektów — używaj wielokrotnie!</li>
             <li>• Gotowe szablony systemowe: Mieszkanie 50m², Łazienka, Rozdzielnica</li>
           </ul>
-          <p className="mt-3"><strong className="text-violet-600 dark:text-violet-400">Sposób 4: 🔌 Konfigurator Rozdzielnic</strong></p>
-          <ul className="mt-2 ml-4 space-y-1 text-sm">
-            <li>• Skonfiguruj rozdzielnicę z {dinCount}+ modułów DIN (wyłączniki, RCD, SPD, złączki...)</li>
-            <li>• Schemat wieloliniowy L1/L2/L3/N/PE generowany automatycznie</li>
-            <li>• Eksport BOM do projektu lub PDF z pełnym zestawieniem</li>
-          </ul>
-          <p className="mt-3"><strong className="text-green-600 dark:text-green-400">Dalej: Edytor & Zestawy</strong></p>
+          <p className="mt-3"><strong className="text-green-600 dark:text-green-400">Dalej: Edytor i zestawy</strong></p>
           <ul className="mt-2 ml-4 space-y-1 text-sm">
             <li>• Edytuj pozycje w Kreatorze — sekcje wg pomieszczeń (Kuchnia, Łazienka, Salon...)</li>
             <li>• Dodaj Zestawy (np. &quot;Punkt Gniazdo&quot; = puszka + kabel + bruzda + robocizna)</li>
-            <li>• Region automatycznie wpływa na stawki r-g i modyfikatory cen</li>
+            <li>• Województwo mnoży tylko robociznę</li>
             <li>• Eksportuj PDF/Excel lub wyślij ofertę mailem z podpisem elektronicznym</li>
           </ul>
           <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
@@ -152,7 +146,7 @@ export function GuideAccordion({ catalogCount = 1400, dinCount = 295 }: GuideAcc
           <p className="mt-3"><strong className="text-indigo-600 dark:text-indigo-400">3 tryby źródła (przełącznik w panelu kategorii)</strong></p>
           <ul className="mt-2 ml-6 space-y-1 list-disc text-sm">
             <li><strong>Własna</strong> — tylko Twoje pozycje; możesz dodawać kategorie i edytować ceny</li>
-            <li><strong>ES-Engine</strong> — globalna baza 8500+ norm KNR z cenami materiału i robocizny</li>
+            <li><strong>ES-Engine</strong> — baza norm ES: materiał i robocizna osobno, rbh razy Twoja stawka</li>
             <li><strong>Hybrydowy</strong> — oba źródła razem, Twoje pozycje mają priorytet</li>
           </ul>
           <p className="mt-3"><strong className="text-green-600 dark:text-green-400">Własne Pozycje i ES-Engine</strong></p>

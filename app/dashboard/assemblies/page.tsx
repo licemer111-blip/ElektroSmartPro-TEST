@@ -89,8 +89,8 @@ export default async function AssembliesPage({
                     <span className="font-semibold text-xs text-slate-900 dark:text-slate-100">Przykład 1</span>
                   </div>
                   <p className="text-[10px] text-slate-700 dark:text-slate-300 leading-snug">
-                    <strong>"Punkt gniazda podwójnego"</strong><br/>
-                    = Puszka + Gniazdo + Kabel 3x2,5mm + Montaż
+                    <strong>"Punkt gniazda 230V"</strong><br/>
+                    = Gniazdo 0,68 rbh + puszka + YDYp 3×2,5 + bruzda w cegle
                   </p>
                 </div>
 

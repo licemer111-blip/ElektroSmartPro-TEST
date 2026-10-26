@@ -169,7 +169,7 @@ ${buildBenchmarkPromptContext()}
             unit: z.string(),
             type: z.enum(["material", "labor"]),
             estimatedPrice: z.number().nullable(),
-            knr_code: z.string().nullable().describe("Kod KNR np. 'KNR 5-04 0202-01' — OBOWIĄZKOWY dla labor"),
+            knr_code: z.string().nullable().describe("Kod normy ES, np. 'KNR 5-08 0401' dla gniazda. Obowiązkowy dla robocizny."),
             labor_norm_rbh: z.number().nullable().describe("Norma robocizny w r-g/jednostkę np. 0.25 — OBOWIĄZKOWA dla labor"),
             notes: z.string().nullable(),
           })),

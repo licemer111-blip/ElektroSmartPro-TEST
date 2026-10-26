@@ -156,22 +156,21 @@ Jeśli NIE — podziel przez 5.
 <output_rules>
 1. Generuj 5–20 pozycji zgodnie z opisem użytkownika.
 2. Każda pozycja materiałowa: base_material_price > 0, base_labor_price = 0.
-3. Każda pozycja robocizny: labor_hours > 0 z <knr_norms_table>. base_labor_price = labor_hours × 62 (OBLICZ, nie zgaduj). MINIMUM: szt≥20zł, mb≥12zł.
+3. Każda pozycja robocizny: labor_hours > 0 z normy ES. Serwer policzy base_labor_price = labor_hours × stawka z profilu.
 4. ZAKAZ: nigdy oba pola = 0 jednocześnie. Robocizna ZAWSZE > 0.
 5. Jednostki: mb (przewody/kable/korytka), szt (osprzęt/aparatura/oprawy), kpl (zestawy/pomiary), h (czas), m² (powierzchnie).
 6. Opis: parametry techniczne (przekrój, moc, IP, wymiary) + kod normy KNR jeśli dotyczy.
 7. Dopasuj kategorię do listy dostępnych kategorii.
 8. ═══ KNR dla ROBOCIZNY: OBOWIĄZKOWY — NIGDY null ═══
    Używaj kodów z <knr_norms_table>. Kody bazowe gdy brak dokładnego:
-   • Montaż osprzętu (gniazdo/łącznik): KNR 5-04 0202-01
-   • Montaż puszki podtynkowej: KNR 5-04 0601-01
-   • Układanie przewodów YDYp w tynku: KNR 5-04 0101-01
-   • Kucie bruzd (cegła): KNR 5-04 0701-01
-   • Montaż oprawy oświetleniowej: KNR 5-04 0401-01
-   • Montaż aparatury modułowej MCB/RCD: KNR 5-08 0201-01
-   • Montaż rozdzielnicy: KNR 5-08 0101-01
-   • Pomiary i odbiory: KNR 5-04 1501-01
-   • Montaż kamery/domofonu: KNR 5-09 0401-01
+   • Gniazdo 230V: KNR 5-08 0401, 0.68 rbh/szt
+   • Łącznik: KNR 5-08 0501, 0.45 rbh/szt
+   • Puszka p/t: KNR 5-04 0601-01, 0.15 rbh/szt
+   • YDYp 3×2.5: KNR 5-08 0202, 0.16 rbh/mb
+   • YDYp 3×1.5: KNR 5-08 0201, 0.13 rbh/mb
+   • Bruzdowanie w cegle: KNR 5-08 0101, 0.85 rbh/mb
+   • Oprawa: ES-OPR-010, 0.55 rbh/szt
+   • Wyłącznik nadprądowy 1P: KNR 5-08 1501, 0.20 rbh/szt
 9. KNR dla materiałów: opcjonalny — używaj z <knr_norms_table> jeśli pasuje, wpisz null jeśli brak.
 10. Zwracaj minimalny JSON — bez zbędnych komentarzy.
 </output_rules>
@@ -186,7 +185,7 @@ Jeśli NIE — podziel przez 5.
     "base_material_price": 5,
     "base_labor_price": 0,
     "is_assembly_parent": false,
-    "knr_code": "KNR 5-04 0101-01"
+    "knr_code": "KNR 5-08 0201"
   },
   {
     "name": "Montaż gniazda",
@@ -196,7 +195,7 @@ Jeśli NIE — podziel przez 5.
     "base_material_price": 0,
     "base_labor_price": 25,
     "is_assembly_parent": false,
-    "knr_code": "KNR 5-04 0202-01"
+    "knr_code": "KNR 5-08 0401"
   }
 ]
 </output_example>
@@ -298,24 +297,26 @@ Jeśli NIE — podziel przez 5.
     }
 
     // Post-processing: calculate labor from KNR norms, enforce KNR codes, clamp prices
-    const DEFAULT_HOURLY_RATE_CATALOG = 62;
+    const { data: rateRow } = await supabase
+      .from("profiles")
+      .select("hourly_rate")
+      .eq("id", user.id)
+      .maybeSingle();
+    const profileRate = (rateRow as { hourly_rate?: number | null } | null)?.hourly_rate ?? 0;
     const processedItems = validatedItems.map(item => {
       let knrCode = item.knr_code ?? null;
       let laborPrice = item.base_labor_price;
       const unit = item.unit ?? "szt";
 
-      // PRIORITY: calculate labor_price from labor_hours × rate (authoritative over AI guess)
-      const laborHours = (item as typeof item & { labor_hours?: number | null }).labor_hours;
-      if (laborHours && laborHours > 0) {
-        laborPrice = Math.round(laborHours * DEFAULT_HOURLY_RATE_CATALOG * 100) / 100;
+      let laborHours = (item as typeof item & { labor_hours?: number | null }).labor_hours ?? null;
+      const knrMatch = lookupKnrByName(item.name);
+      if (knrMatch) {
+        knrCode = knrMatch.code;
+        if (knrMatch.laborNorm > 0) laborHours = knrMatch.laborNorm;
       }
 
-      // Ensure KNR code for labor items via local lookup
-      if (laborPrice > 0 || laborHours) {
-        if (!knrCode) {
-          const knrMatch = lookupKnrByName(item.name);
-          knrCode = knrMatch?.code ?? null;
-        }
+      if (laborHours && laborHours > 0 && profileRate > 0) {
+        laborPrice = Math.round(laborHours * profileRate * 100) / 100;
       }
 
       // v10.5: Benchmark validation for material prices before price guard
@@ -332,7 +333,7 @@ Jeśli NIE — podziel przez 5.
         knr_code: knrCode,
         unit,
       });
-      return { ...item, ...guarded };
+      return { ...item, ...guarded, labor_hours: laborHours };
     });
 
     // 9. Validate material item knr_codes against live es_dictionary (labor KNR kept as-is)

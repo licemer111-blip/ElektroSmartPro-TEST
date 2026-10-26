@@ -32,7 +32,7 @@ export function KnrPageHeader({ isPro }: KnrPageHeaderProps) {
     {
       id: "L2",
       label: "ES-KNR 2026",
-      desc: "Globalna baza 8500+ norm KNR · stawki regionalne · automatyczne dopasowanie",
+      desc: "Baza norm ES · województwo tylko na robociznę · dopasowanie po nazwie",
       active: searchMode === "engine" || searchMode === "hybrid",
       activeColor: "border-orange-400 bg-orange-50 dark:border-orange-600 dark:bg-orange-950/30",
       idColor: "bg-orange-500",

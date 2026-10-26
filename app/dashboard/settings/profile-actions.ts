@@ -5,6 +5,7 @@ import type { Profile } from "@/lib/types/database";
 import { profileSchema, validate } from "@/lib/validations";
 import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
+import { updateGlobalHourlyRate } from "./knr-calculator/actions";
 
 // ============================================================================
 // PROFILE ACTIONS — user data, avatars, InFakt API key
@@ -93,6 +94,25 @@ export async function updateProfile(profileData: {
       return { success: false, error: "Nie jesteś zalogowany" };
     }
 
+    // Company form and the Finanse tab share one rate. A real change must
+    // rewrite catalog labor and every project's default rate, not only the profile.
+    let rateAlreadySaved = false;
+    if (profileData.hourly_rate !== undefined && profileData.hourly_rate >= 1) {
+      const { data: current } = await supabase
+        .from("profiles")
+        .select("hourly_rate")
+        .eq("id", user.id)
+        .single();
+      const previous = (current as { hourly_rate?: number | null } | null)?.hourly_rate ?? 0;
+      if (Math.abs(previous - profileData.hourly_rate) > 0.001) {
+        const rateResult = await updateGlobalHourlyRate(profileData.hourly_rate);
+        if (!rateResult.success) {
+          return { success: false, error: rateResult.error ?? "Błąd zapisu stawki" };
+        }
+        rateAlreadySaved = true;
+      }
+    }
+
     const { error } = await supabase
       .from("profiles")
       .update({
@@ -107,7 +127,7 @@ export async function updateProfile(profileData: {
         email: profileData.email || null,
         bank_account: profileData.bank_account || null,
         logo_url: profileData.logo_url || null,
-        ...(profileData.hourly_rate !== undefined && { hourly_rate: profileData.hourly_rate }),
+        ...(!rateAlreadySaved && profileData.hourly_rate !== undefined && { hourly_rate: profileData.hourly_rate }),
         ...(profileData.use_custom_rates !== undefined && { use_custom_rates: profileData.use_custom_rates }),
         ...(profileData.custom_labor_rate !== undefined && { custom_labor_rate: profileData.custom_labor_rate }),
       })

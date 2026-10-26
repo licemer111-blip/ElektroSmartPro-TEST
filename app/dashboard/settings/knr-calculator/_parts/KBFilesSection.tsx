@@ -203,7 +203,7 @@ export function KBFilesSection({ onStatsChange }: KBFilesSectionProps) {
         <div>
           <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300">Twoje dane — najwyższy priorytet wyceny (L1)</p>
           <p className="text-[10px] text-emerald-700 dark:text-emerald-400 mt-0.5 leading-relaxed">
-            Hierarchia wycen: <strong>L1</strong> Twój katalog → <strong>L2</strong> Globalna baza ES-KNR (8500+ norm) → <strong>L3</strong> ES-Engine AI. Wgraj cenniki, normy lub katalogi — system użyje ich przed bazą globalną.
+            Hierarchia wycen: <strong>L1</strong> Twój katalog → <strong>L2</strong> baza ES → <strong>L3</strong> ES-Engine AI. Wgrane cenniki idą przed bazą ES.
           </p>
         </div>
       </div>

@@ -252,7 +252,7 @@ export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems
                     💡 Wskazówka
                   </p>
                   {activeTab === "guide" && (
-                    <p>Przegląd funkcji systemu: wyceny AI, katalog 8500+ norm KNR, konfigurator rozdzielnic, zestawy, kalkulatory. Możesz też zainstalować aplikację na telefon (PWA).</p>
+                    <p>Wycena ze normy ES, katalog, zestawy i kalkulatory. Aplikację można zainstalować na telefon.</p>
                   )}
                   {activeTab === "profile" && (
                     <p>Dane firmy pojawią się na wszystkich dokumentach PDF.</p>
@@ -262,7 +262,7 @@ export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems
                   )}
                   {activeTab === "database" && (
                     <p>
-                      Zarządzaj danymi katalogu: przełączaj między bazą globalną (8500+ norm) a własnymi pozycjami.
+                      Zarządzaj katalogiem: baza ES albo własne pozycje.
                       {catalogStats.hiddenCount > 0 && ` • ${catalogStats.hiddenCount} ukrytych poz.`} Ukryte pozycje nie pojawiają się w wynikach.
                     </p>
                   )}

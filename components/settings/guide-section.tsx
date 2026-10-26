@@ -21,7 +21,7 @@ export function GuideSection({ catalogCount: catalogCountProp }: GuideSectionPro
             <div className="min-w-0">
               <CardTitle className="text-base sm:text-lg">Przewodnik ElektroSmart PRO</CardTitle>
               <CardDescription className="text-xs sm:text-sm">
-                System kosztorysowy dla elektryków: wyceny AI, bazy KNR, zestawy, kalkulatory i eksport PDF.
+                System kosztorysowy dla elektryków: norma ES, zestawy, kalkulatory i eksport PDF.
               </CardDescription>
             </div>
           </div>
@@ -50,7 +50,7 @@ export function GuideSection({ catalogCount: catalogCountProp }: GuideSectionPro
                 <li><strong>1.</strong> Uzupełnij <strong>Profil Firmy</strong> (NIP, logo, dane) — pojawią się na PDF-ach</li>
                 <li><strong>2.</strong> Ustaw <strong>województwo</strong> i <strong>stawkę R-G</strong> w Ustawienia → Finanse</li>
                 <li><strong>3.</strong> Utwórz pierwszy <strong>projekt</strong> i dodaj pozycje ręcznie lub przez <strong>ES Import</strong></li>
-                <li><strong>4.</strong> Kliknij <strong>ES Wycena</strong> — system przeliczy ceny na podstawie 8500+ norm KNR</li>
+                <li><strong>4.</strong> Kliknij <strong>ES Wycena</strong> — system wpisze rbh z normy ES i Twoją stawkę</li>
                 <li><strong>5.</strong> Wgraj własne cenniki do <strong>Moje Dane</strong> — Twoje ceny będą miały priorytet P1</li>
                 <li><strong>6.</strong> Stwórz <strong>Zestawy</strong> (np. „Punkt gniazda”) — dodawaj gotowe komplety jednym klikiem</li>
                 <li><strong>7.</strong> Eksportuj <strong>PDF z logo</strong> i wyślij klientowi (FREE: watermark DEMO)</li>
@@ -58,7 +58,7 @@ export function GuideSection({ catalogCount: catalogCountProp }: GuideSectionPro
               </ol>
               <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-indigo-200 dark:border-indigo-800">
                 <p className="text-[10px] sm:text-xs text-indigo-700 dark:text-indigo-300">
-                  <strong>W skrócie:</strong> normy KNR · Wyceny AI · Zestawy · Kalkulatory · PDF z logo · Sekcje wg pomieszczeń
+                  <strong>W skrócie:</strong> norma ES · Wyceny AI · Zestawy · Kalkulatory · PDF z logo · Sekcje wg pomieszczeń
                 </p>
               </div>
             </div>
