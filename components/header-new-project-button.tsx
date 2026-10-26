@@ -80,7 +80,7 @@ export function HeaderNewProjectButton() {
     <Button 
       size="sm" 
       data-tour="new-project"
-      className="hidden md:flex shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 hover:shadow-blue-500/50 text-white"
+      className="hidden md:flex mr-3 shadow-md hover:shadow-lg transition-all duration-300 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 hover:shadow-blue-500/50 text-white"
       onClick={handleClick}
       disabled={!data || isLoading}
     >

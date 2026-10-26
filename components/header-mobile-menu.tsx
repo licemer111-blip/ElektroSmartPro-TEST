@@ -60,7 +60,7 @@ export function HeaderMobileMenu({ isAuthenticated, isPro }: HeaderMobileMenuPro
                   Kosztorysy
                 </p>
                 <HeaderMobileNavItem href="/dashboard/projects" icon="PenTool" variant="glow-blue" desc="Kosztorys elektryczny — ostatni edytowany projekt">
-                  Kreator
+                  Kosztorys
                 </HeaderMobileNavItem>
                 <SheetClose asChild>
                   <div className="px-0">

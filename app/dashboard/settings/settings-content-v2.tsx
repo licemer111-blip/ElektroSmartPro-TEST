@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,10 +11,8 @@ import { GuideSection } from "@/components/settings/guide-section";
 import { SubscriptionPanel } from "@/components/settings/subscription-panel";
 import { HiddenItemsPanel } from "@/components/settings/hidden-items-panel";
 import type { CatalogItem } from "@/app/dashboard/catalog/actions";
-import { PortfolioView } from "@/app/dashboard/portfolio/portfolio-view";
 import { ProfileView } from "@/app/dashboard/profile/profile-view";
 import type { ProfileStats } from "@/app/dashboard/profile/actions";
-import type { PortfolioItem } from "@/lib/types/database";
 import { 
   Settings, 
   Database, 
@@ -30,7 +27,6 @@ import {
   MessageCircleHeart,
   Brain,
   Banknote,
-  Briefcase,
   UserCircle,
 } from "lucide-react";
 import type { Profile, Region } from "@/lib/types/database";
@@ -49,10 +45,6 @@ interface SettingsContentProps {
   isAdmin?: boolean;
   hiddenItems?: CatalogItem[];
   activeTab: string;
-  portfolioItems?: PortfolioItem[];
-  portfolioVisible?: boolean;
-  portfolioLimit?: number;
-  portfolioError?: string;
   profileData?: ProfileStats | null;
   initialCatalogStats?: CatalogStats;
   regions?: Region[];
@@ -60,10 +52,9 @@ interface SettingsContentProps {
 
 type Tab = "guide" | "knr" | "profile" | "database" | "subscription" | "konto" | "admin";
 
-export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems = [], activeTab: initialTab, portfolioItems = [], portfolioVisible = true, portfolioLimit = 5, portfolioError, profileData = null, initialCatalogStats, regions = [] }: SettingsContentProps) {
+export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems = [], activeTab: initialTab, profileData = null, initialCatalogStats, regions = [] }: SettingsContentProps) {
   const router = useRouter();
   const activeTab = (initialTab as Tab) || "guide";
-  const [profileSubTab, setProfileSubTab] = useState<"info" | "portfolio">("info");
   const catalogStats = initialCatalogStats ?? { globalCount: 0, userCount: 0, totalCount: 0, hiddenCount: 0 };
 
   const baseTabs = [
@@ -321,39 +312,6 @@ export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems
             {/* Profile Tab */}
             {activeTab === "profile" && (
               <div className="space-y-4 sm:space-y-6">
-                {/* Sub-tab switcher */}
-                <div className="flex gap-1 p-1 bg-slate-100 dark:bg-slate-800/60 rounded-xl w-fit">
-                  <button
-                    onClick={() => setProfileSubTab("info")}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                      profileSubTab === "info"
-                        ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 shadow-sm"
-                        : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
-                    }`}
-                  >
-                    <Building2 className="w-4 h-4" />
-                    Informacje o firmie
-                  </button>
-                  <button
-                    onClick={() => setProfileSubTab("portfolio")}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                      profileSubTab === "portfolio"
-                        ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 shadow-sm"
-                        : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
-                    }`}
-                  >
-                    <Briefcase className="w-4 h-4" />
-                    Portfolio
-                    {portfolioItems.length > 0 && (
-                      <span className="ml-1 text-[10px] bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full px-1.5 py-0.5 font-semibold">
-                        {portfolioItems.length}
-                      </span>
-                    )}
-                  </button>
-                </div>
-
-                {/* Informacje o firmie sub-tab */}
-                {profileSubTab === "info" && (
                   <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 backdrop-blur-md">
                     <CardHeader className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/80 px-4 sm:px-6 py-4 sm:py-6">
                       <div className="flex items-center gap-2.5 sm:gap-3">
@@ -372,18 +330,6 @@ export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems
                       <SettingsForm initialProfile={initialProfile} />
                     </CardContent>
                   </Card>
-                )}
-
-                {/* Portfolio sub-tab */}
-                {profileSubTab === "portfolio" && (
-                  <PortfolioView
-                    items={portfolioItems}
-                    isPro={initialProfile?.is_pro || false}
-                    portfolioVisible={portfolioVisible}
-                    portfolioLimit={portfolioLimit}
-                    error={portfolioError}
-                  />
-                )}
               </div>
             )}
 

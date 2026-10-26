@@ -3,7 +3,6 @@ import { SettingsContentV2 } from "./settings-content-v2";
 import { getProfile, ensureProfile, getCatalogStats } from "./actions";
 import { isAdmin } from "./finance-actions";
 import { getHiddenCatalogItems } from "../catalog/actions";
-import { getPortfolioItems } from "../portfolio/actions";
 import { getProfileStats } from "../profile/actions";
 import { getRegions } from "../actions";
 import { createClient } from "@/utils/supabase/server";
@@ -36,17 +35,9 @@ export default async function SettingsPage({
     getRegions(),
   ]);
 
-  // Fetch portfolio data
-  const { items: portfolioItems, error: portfolioError } = await getPortfolioItems();
-
-  // Fetch portfolio visibility settings
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  const [portfolioProfileResult, profileData] = await Promise.all([
-    user ? supabase.from("profiles").select("portfolio_visible, portfolio_limit").eq("id", user.id).single() : Promise.resolve({ data: null }),
-    user ? getProfileStats(user.email || "") : Promise.resolve(null),
-  ]);
-  const portfolioProfile = portfolioProfileResult.data;
+  const profileData = user ? await getProfileStats(user.email || "") : null;
 
   // Await searchParams (Next.js 15 requirement)
   const params = await searchParams;
@@ -58,10 +49,6 @@ export default async function SettingsPage({
       isAdmin={isUserAdmin} 
       hiddenItems={hiddenItems} 
       activeTab={activeTab}
-      portfolioItems={portfolioItems}
-      portfolioVisible={portfolioProfile?.portfolio_visible ?? true}
-      portfolioLimit={portfolioProfile?.portfolio_limit ?? 5}
-      portfolioError={portfolioError}
       profileData={profileData}
       initialCatalogStats={catalogStats}
       regions={regions}

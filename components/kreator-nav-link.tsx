@@ -38,7 +38,7 @@ export function KreatorNavLink() {
   return (
     <Link
       href={kreatorHref}
-      title="Kreator kosztorysu — otwiera ostatnio edytowany projekt (lub listę projektów)"
+      title="Otwiera ostatnio edytowany kosztorys"
       className={cn(
         "flex items-center gap-1.5 px-3 py-2 rounded-md transition-all duration-200 text-sm font-semibold whitespace-nowrap",
         isActive
@@ -47,7 +47,7 @@ export function KreatorNavLink() {
       )}
     >
       <PenTool className="w-4 h-4" />
-      Kreator
+      Kosztorys
     </Link>
   );
 }
