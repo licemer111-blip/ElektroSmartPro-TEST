@@ -83,8 +83,6 @@ export function SummaryFinancialTotals({
     sectionBreakdown.length > 1 ||
     (sectionBreakdown.length === 1 && sectionBreakdown[0].name !== "Inne pozycje");
 
-  const hasRegionalCorrection = totals.regionalCorrectionAmount !== 0 && totals.regionModifier !== 1.0;
-
   return (
     <div className="space-y-2">
       {/* ── Droga pieniędzy (Clean Table Architecture) ── */}
@@ -99,12 +97,8 @@ export function SummaryFinancialTotals({
               </span>
             </TooltipTrigger>
             <TooltipContent side="left" className="max-w-[260px] text-[11px] leading-snug">
-              Cena katalogowa × ilość, <strong>przed</strong> mnożnikami:
-              <br />• KNR 2026 (mnożnik admin)
-              <br />• korekta regionalna (Województwo)
-              <br />• narzut (Mat./Rob./Marża)
-              <br />• negocjacja
-              <br />Aby zobaczyć kwotę zgodną z sumą wierszy w tabeli — patrz <strong>SUMA NETTO</strong> poniżej.
+              Cena przed województwem, narzutem i negocjacją.
+              <br />Kwota z tabeli jest w <strong>SUMA NETTO</strong>.
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -114,20 +108,21 @@ export function SummaryFinancialTotals({
       </div>
 
       {/* 2. Korekta Regionalna */}
-      {hasRegionalCorrection && (
-        <div className="flex justify-between items-start py-1.5 gap-2">
-          <span className="text-xs text-muted-foreground flex flex-col gap-0.5 min-w-0">
-            <span className="flex items-center gap-1">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-orange-400 flex-shrink-0" />
-              Korekta regionalna
-            </span>
-            <span className="text-[10px] text-orange-500 font-semibold pl-2.5">×{totals.regionModifier.toFixed(2)} ({totals.regionName})</span>
+      <div className="flex justify-between items-start py-1.5 gap-2">
+        <span className="text-xs text-muted-foreground flex flex-col gap-0.5 min-w-0">
+          <span className="flex items-center gap-1">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-orange-400 flex-shrink-0" />
+            Województwo
           </span>
-          <span className={`text-xs font-medium flex-shrink-0 pt-0.5 ${totals.regionalCorrectionAmount > 0 ? "text-orange-500" : "text-blue-500"}`}>
-            {totals.regionalCorrectionAmount > 0 ? "+" : ""}<BlurredPrice value={totals.regionalCorrectionAmount} isPro={isPro} />
+          <span className="text-[10px] text-orange-500 font-semibold pl-2.5">
+            ×{totals.regionModifier.toFixed(2)} ({totals.regionName})
           </span>
-        </div>
-      )}
+        </span>
+        <span className={`text-xs font-medium flex-shrink-0 pt-0.5 ${totals.regionalCorrectionAmount > 0 ? "text-orange-500" : totals.regionalCorrectionAmount < 0 ? "text-blue-500" : "text-slate-400"}`}>
+          {totals.regionalCorrectionAmount > 0 ? "+" : ""}
+          <BlurredPrice value={totals.regionalCorrectionAmount} isPro={isPro} />
+        </span>
+      </div>
 
       {/* 3. M / R / S breakdown (po korektach) */}
       {!materialsOwnedByCustomer && (

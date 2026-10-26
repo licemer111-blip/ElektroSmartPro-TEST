@@ -229,6 +229,13 @@ export function ProjectSummary({
       .sort((a, b) => b.total - a.total);
   }, [items, project, regionModifier, materialsOwnedByCustomer, knrMultiplier]);
 
+  const unpricedCount = useMemo(() => items.filter((item) => {
+    if (item.is_assembly_child) return false;
+    const material = item.final_material_price ?? item.material_price ?? 0;
+    const labor = item.final_labor_price ?? item.labor_price ?? 0;
+    return material === 0 && labor === 0;
+  }).length, [items]);
+
   const handleToggleMaterials = async (enabled: boolean) => {
     const result = await toggleMaterialsOwnedByCustomer(projectId, enabled);
     if (result?.error) {
@@ -257,23 +264,23 @@ export function ProjectSummary({
         {/* Materials Responsibility Toggle */}
         <div
           className={`rounded-lg border transition-colors ${
-            !materialsOwnedByCustomer
-              ? "bg-orange-50/50 dark:bg-orange-950/20 border-orange-300 dark:border-orange-700"
-              : "bg-green-50/50 dark:bg-green-950/20 border-green-300 dark:border-green-700"
+            materialsOwnedByCustomer
+              ? "bg-amber-50/70 dark:bg-amber-950/30 border-amber-400 dark:border-amber-700"
+              : "bg-slate-50/50 dark:bg-slate-900/40 border-slate-200 dark:border-slate-700"
           } ${isFinal ? "cursor-not-allowed opacity-70" : ""}`}
           onClick={() => {
             if (isFinal) {
-              toast({ title: "🔒 Projekt zablokowany", description: "Odblokuj projekt, aby zmienić ustawienia materiałów", variant: "destructive" });
+              toast({ title: "Projekt zablokowany", description: "Odblokuj projekt, aby zmienić ustawienia materiałów", variant: "destructive" });
             }
           }}
         >
           <div className="px-3 py-2.5 flex items-center justify-between gap-3">
-            <Label htmlFor="summary-materials-toggle" className="flex items-center gap-2 min-w-0 cursor-pointer">
-              <span className={`text-xs font-medium ${!materialsOwnedByCustomer ? "text-orange-700 dark:text-orange-300" : "text-green-700 dark:text-green-300"}`}>
-                {!materialsOwnedByCustomer ? "Robocizna + Materiały" : "Tylko Robocizna"}
+            <Label htmlFor="summary-materials-toggle" className="flex flex-col gap-0.5 min-w-0 cursor-pointer">
+              <span className={`text-xs font-medium ${materialsOwnedByCustomer ? "text-amber-800 dark:text-amber-200" : "text-slate-700 dark:text-slate-200"}`}>
+                {materialsOwnedByCustomer ? "Tylko robocizna" : "Robocizna i materiały"}
               </span>
-              <span className="text-[10px] text-slate-400">
-                {!materialsOwnedByCustomer ? "· Brain aktywny" : "· materiały = 0,00 zł"}
+              <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                {materialsOwnedByCustomer ? "W ofercie nie ma materiałów" : "Materiał z wierszy wchodzi do sumy"}
               </span>
             </Label>
             <Switch
@@ -285,6 +292,15 @@ export function ProjectSummary({
             />
           </div>
         </div>
+
+        {unpricedCount > 0 && (
+          <div className="flex items-start gap-2 rounded-lg border border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-950/30 px-3 py-2">
+            <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
+            <p className="text-xs text-red-700 dark:text-red-300 leading-snug">
+              Pozycje bez ceny: {unpricedCount}. Uzupełnij je, zanim wyślesz ofertę.
+            </p>
+          </div>
+        )}
 
         <Separator />
 
