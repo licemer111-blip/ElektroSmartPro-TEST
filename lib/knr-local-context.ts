@@ -134,6 +134,18 @@ function normalize(s: string): string {
     .trim();
 }
 
+const HEAD_NOUNS = [
+  "wylacznik", "gniazd", "lacznik", "puszk", "ydyp", "yky", "ydy",
+  "bruzd", "opraw", "kabel", "przewod", "utp", "rozdziel",
+];
+
+function headNoun(normalizedName: string): string | null {
+  for (const noun of HEAD_NOUNS) {
+    if (normalizedName.includes(noun)) return noun;
+  }
+  return null;
+}
+
 /**
  * Action-verb groups: each item has a primary work-action that determines
  * which KNR family is appropriate. Two actions on the SAME stem (e.g. "bruzd")
@@ -381,6 +393,9 @@ export function lookupKnrByName(itemName: string, preferResidential = true): Knr
       rawScore = Math.max(rawScore, scoreCandidate(needleTokens, candidate));
     }
     if (rawScore === 0) continue;
+
+    const head = headNoun(baseNeedle);
+    if (head && !descNorm.includes(head)) continue;
 
     let effectiveScore = rawScore;
 
