@@ -2,13 +2,21 @@ import React from "react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Database, Shield, DollarSign, Zap, Users, GitBranch,
+  type LucideIcon,
 } from "lucide-react";
+
+interface BentoFeature {
+  gradient: string;
+  icon: LucideIcon;
+  titleFn: (n: number) => string;
+  descFn: (n: number) => string;
+}
 
 interface BentoFeaturesSectionProps {
   catalogCount: number;
 }
 
-const BENTO_FEATURES = [
+const BENTO_FEATURES: BentoFeature[] = [
   {
     gradient: "from-blue-500 to-blue-700",
     icon: Database,
@@ -51,7 +59,7 @@ const BENTO_FEATURES = [
     descFn: () =>
       "Dopisujesz pozycję z własną ceną materiału i robocizny. Baza ES zostaje obok, nie zamiast Twojego cennika.",
   },
-] as const;
+];
 
 function BentoFeaturesSectionInner({ catalogCount }: BentoFeaturesSectionProps) {
   return (
