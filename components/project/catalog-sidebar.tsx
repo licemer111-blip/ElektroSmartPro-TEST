@@ -12,7 +12,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Plus, Search, Package, LayoutGrid, List, Loader2, PlusCircle, FolderPlus, Users, Lock, Star, ChevronDown, ChevronUp, Clock, TrendingUp, Copy, User, PanelLeftClose } from "lucide-react";
-import { BlurredPrice } from "@/components/ui/blurred-price";
+import { catalogAsideText } from "@/lib/catalog/catalog-work";
 import type { Team } from "@/lib/types/database";
 import type { CatalogCategory, CatalogItem } from "@/lib/types/database";
 import { addCatalogItemToProject, importItemsToProject, addProjectItemDirect } from "@/app/dashboard/projects/[id]/actions";
@@ -317,7 +317,7 @@ export function CatalogSidebar({ projectId, categories: initialCategories, catal
                             <p className="text-xs font-medium truncate">{item.name}</p>
                             <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                               <span>{item.unit}</span><span className="text-muted-foreground/40">|</span>
-                              <BlurredPrice value={item.base_material_price + item.base_labor_price} isPro={isPro} className="font-semibold" showBadge={!isPro} />
+                              <span className="font-semibold">{catalogAsideText(item)}</span>
                               {item.useCount > 1 && <><span className="text-muted-foreground/40">|</span><span className="text-blue-500">x{item.useCount}</span></>}
                             </div>
                           </div>
@@ -337,7 +337,7 @@ export function CatalogSidebar({ projectId, categories: initialCategories, catal
                               <p className="text-xs font-medium truncate">{item.name}</p>
                               <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                                 <span>{item.unit}</span><span className="text-muted-foreground/40">|</span>
-                                <BlurredPrice value={item.base_material_price + item.base_labor_price} isPro={isPro} className="font-semibold" showBadge={!isPro} />
+                                <span className="font-semibold">{catalogAsideText(item)}</span>
                                 <span className="text-muted-foreground/40">|</span><span className="text-emerald-600 font-medium">x{item.useCount}</span>
                               </div>
                             </div>
@@ -361,7 +361,7 @@ export function CatalogSidebar({ projectId, categories: initialCategories, catal
                               <p className="text-xs font-medium truncate">{item.name}</p>
                               <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                                 <span>{item.unit}</span><span className="text-muted-foreground/40">|</span>
-                                <BlurredPrice value={item.base_material_price + item.base_labor_price} isPro={isPro} className="font-semibold" showBadge={!isPro} />
+                                <span className="font-semibold">{catalogAsideText(item)}</span>
                               </div>
                             </div>
                             <Button size="sm" onClick={() => handleAddItem(item.id, item.name, { unit: item.unit, base_material_price: item.base_material_price, base_labor_price: item.base_labor_price })} disabled={addingItemId === item.id} className="h-7 w-7 p-0 bg-amber-500 text-white hover:bg-amber-600 shadow-sm flex-shrink-0">

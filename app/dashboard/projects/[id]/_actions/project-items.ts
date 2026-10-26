@@ -7,6 +7,7 @@ import { projectItemUpdateSchema, validate } from "@/lib/validations";
 import { logger } from "@/lib/logger";
 import type { ProjectItem } from "@/lib/types/database";
 import { canUserEditProject, revalidateProject } from "./utils";
+import { laborFromHours, resolveCatalogHours } from "@/lib/catalog/catalog-work";
 // NOTE: KNR multiplier is applied at DISPLAY-TIME only (pricing-calculations.ts)
 // Database stores BASE prices to allow instant recalculation when admin changes multiplier
 
@@ -67,16 +68,37 @@ export async function addCatalogItemToProject(
 
   if (!catalogItem) return { error: "Nie znaleziono pozycji katalogowej" };
 
-  const priceModifier = (project.regions as { price_modifier: number } | null)?.price_modifier || 1.0;
-  // Iron Rule: labor stored as BASE — calcRowPrices applies regionModifier and knrMultiplier at display time
-  const finalLaborPrice = catalogItem.base_labor_price;
-  const finalMaterialPrice = catalogItem.base_material_price;
-  const priceMin = catalogItem.price_min ? catalogItem.price_min * priceModifier : null;
-  const priceMax = catalogItem.price_max ? catalogItem.price_max * priceModifier : null;
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("hourly_rate")
+    .eq("id", user.id)
+    .single();
+  const projectRate = Number(project.default_hourly_rate) || 0;
+  const profileRate = Number(profile?.hourly_rate) || 0;
+  const hourlyRate = projectRate >= 1 ? projectRate : profileRate;
 
   if (catalogItem.is_assembly_parent) {
-    return await expandAssembly(projectId, catalogItemId, priceModifier, catalogItem.name);
+    return await expandAssembly(projectId, catalogItemId, catalogItem.name, hourlyRate);
   }
+
+  const isOwnRow = catalogItem.user_id != null;
+  const resolved = resolveCatalogHours({
+    name: catalogItem.name,
+    unit: catalogItem.unit,
+    labor_norm_rbh: catalogItem.labor_norm_rbh,
+    knr_code: catalogItem.knr_code,
+  });
+  // Own rows keep the electrician's zł. Shared rows: hours × rate, material empty.
+  const finalLaborPrice = isOwnRow
+    ? catalogItem.base_labor_price
+    : laborFromHours(resolved.hours, hourlyRate);
+  const finalMaterialPrice = isOwnRow ? catalogItem.base_material_price : 0;
+  const knrCode = isOwnRow
+    ? (catalogItem.knr_code ?? null)
+    : resolved.code;
+  const laborNorm = !isOwnRow && resolved.hours > 0
+    ? resolved.hours
+    : (isOwnRow ? catalogItem.labor_norm_rbh ?? null : null);
 
   const { data: maxSortData } = await supabase
     .from("project_items")
@@ -88,8 +110,6 @@ export async function addCatalogItemToProject(
 
   const nextSortOrder = (maxSortData?.sort_order || 0) + 1;
 
-  const catalogKnrCode = (catalogItem as Record<string, unknown>).knr_code as string | null | undefined;
-
   const { error } = await supabase.from("project_items").insert({
     project_id: projectId,
     catalog_item_id: catalogItemId,
@@ -98,11 +118,12 @@ export async function addCatalogItemToProject(
     quantity,
     final_material_price: finalMaterialPrice,
     final_labor_price: finalLaborPrice,
-    price_min: priceMin,
-    price_max: priceMax,
+    price_min: isOwnRow ? catalogItem.price_min : null,
+    price_max: isOwnRow ? catalogItem.price_max : null,
     sort_order: nextSortOrder,
-    knr_code: catalogKnrCode ?? null,
-    knr_source: catalogKnrCode ? "catalog" : null,
+    labor_norm: laborNorm,
+    knr_code: knrCode,
+    knr_source: knrCode ? "system_knr" : null,
   });
 
   if (error) {
@@ -118,8 +139,8 @@ export async function addCatalogItemToProject(
 async function expandAssembly(
   projectId: string,
   parentCatalogItemId: string,
-  priceModifier: number,
-  parentName: string
+  parentName: string,
+  hourlyRate: number,
 ) {
   const supabase = await createClient();
 
@@ -128,8 +149,9 @@ async function expandAssembly(
     .select(`
       quantity,
       catalog_items!catalog_assemblies_child_item_id_fkey (
-        id, name, description, unit,
-        base_material_price, base_labor_price, price_min, price_max
+        id, name, description, unit, user_id,
+        base_material_price, base_labor_price, price_min, price_max,
+        labor_norm_rbh, knr_code
       )
     `)
     .eq("parent_item_id", parentCatalogItemId);
@@ -175,14 +197,20 @@ async function expandAssembly(
     name: string;
     description: string | null;
     unit: string;
+    user_id: string | null;
     base_material_price: number;
     base_labor_price: number;
     price_min: number | null;
     price_max: number | null;
+    labor_norm_rbh: number | null;
+    knr_code: string | null;
   }
 
   const childItems = assemblyChildren.map((child: { quantity: number; catalog_items: AssemblyChildItem | AssemblyChildItem[] }) => {
     const item = Array.isArray(child.catalog_items) ? child.catalog_items[0] : child.catalog_items;
+    const isOwnRow = item.user_id != null;
+    const resolved = resolveCatalogHours(item);
+    const hours = !isOwnRow && resolved.hours > 0 ? resolved.hours : null;
     return {
       project_id: projectId,
       catalog_item_id: item.id,
@@ -190,10 +218,13 @@ async function expandAssembly(
       description: item.description,
       unit: item.unit,
       quantity: child.quantity,
-      final_material_price: item.base_material_price,
-      final_labor_price: item.base_labor_price, // BASE — calcRowPrices applies regionModifier at display time
-      price_min: item.price_min ? item.price_min * priceModifier : null,
-      price_max: item.price_max ? item.price_max * priceModifier : null,
+      final_material_price: isOwnRow ? item.base_material_price : 0,
+      final_labor_price: isOwnRow ? item.base_labor_price : laborFromHours(resolved.hours, hourlyRate),
+      price_min: isOwnRow ? item.price_min : null,
+      price_max: isOwnRow ? item.price_max : null,
+      labor_norm: hours,
+      knr_code: isOwnRow ? item.knr_code : resolved.code,
+      knr_source: !isOwnRow && resolved.code ? "system_knr" : null,
       is_custom: false,
       is_assembly_child: true,
       parent_assembly_id: parentItem.id,

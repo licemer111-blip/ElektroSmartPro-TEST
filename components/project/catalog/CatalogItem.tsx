@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { BlurredPrice } from "@/components/ui/blurred-price";
 import { Plus, Loader2, Star, Pencil, Users, AlertTriangle, Brain, User } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { catalogAsideText, resolveCatalogHours } from "@/lib/catalog/catalog-work";
 import type { CatalogItem as CatalogItemType } from "@/lib/types/database";
 
 // ─── Types ────────────────────────────────────────────────────────────────────────
@@ -37,8 +38,10 @@ export const CatalogItem = React.memo(function CatalogItem({
   onToggleFavorite,
 }: CatalogItemProps) {
   const addBtnClass = "bg-blue-600 text-white hover:bg-blue-700 shadow-sm border-transparent";
-  const total = item.base_material_price + item.base_labor_price;
-  const isSuspect = item.base_labor_price === 0 && item.base_material_price === 0;
+  const isShared = item.user_id == null;
+  const sharedHours = isShared ? resolveCatalogHours(item).hours : 0;
+  const aside = catalogAsideText(item);
+  const isSuspect = !isShared && item.base_labor_price === 0 && item.base_material_price === 0;
 
   if (viewMode === "card") {
     return (
@@ -82,13 +85,14 @@ export const CatalogItem = React.memo(function CatalogItem({
             </div>
           </div>
 
-          {/* Price row */}
           <div className="flex items-center justify-between">
             <div className="text-xs space-y-0.5">
               <div className="text-muted-foreground">
                 Jednostka: <span className="font-medium">{item.unit}</span>
               </div>
-              <BlurredPrice value={total} isPro={isPro} className="font-semibold text-slate-900 dark:text-slate-100" showBadge={!isPro} />
+              <div className="font-semibold text-slate-900 dark:text-slate-100" title={isShared ? "Robocizna = rbh × Twoja stawka. Materiał dopiszesz w kosztorysie." : "Twoje ceny"}>
+                {aside}
+              </div>
             </div>
             <div className="flex items-center gap-1">
               <Button size="sm" variant="ghost" onClick={onToggleFavorite} disabled={isTogglingFavorite}
@@ -105,17 +109,24 @@ export const CatalogItem = React.memo(function CatalogItem({
             </div>
           </div>
 
-          {/* Split price */}
-          <div className="grid grid-cols-2 gap-2 text-xs pt-2 border-t">
-            <div>
-              <span className="text-muted-foreground">Materiały:</span>
-              <div><BlurredPrice value={item.base_material_price} isPro={isPro} className="font-medium text-sm" /></div>
+          {isShared ? (
+            <p className="text-[11px] text-muted-foreground pt-2 border-t">
+              {sharedHours > 0
+                ? "Robocizna ze stawki. Materiał dopiszesz w kosztorysie."
+                : "Brak godzin normy ES. Kwotę wpiszesz w kosztorysie."}
+            </p>
+          ) : (
+            <div className="grid grid-cols-2 gap-2 text-xs pt-2 border-t">
+              <div>
+                <span className="text-muted-foreground">Materiały:</span>
+                <div><BlurredPrice value={item.base_material_price} isPro={isPro} className="font-medium text-sm" /></div>
+              </div>
+              <div>
+                <span className="text-muted-foreground">Robocizna:</span>
+                <div><BlurredPrice value={item.base_labor_price} isPro={isPro} className="font-medium text-sm" /></div>
+              </div>
             </div>
-            <div>
-              <span className="text-muted-foreground">Robocizna:</span>
-              <div><BlurredPrice value={item.base_labor_price} isPro={isPro} className="font-medium text-sm" /></div>
-            </div>
-          </div>
+          )}
         </CardContent>
       </Card>
     );
@@ -157,7 +168,9 @@ export const CatalogItem = React.memo(function CatalogItem({
         <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
           <span>{item.unit}</span>
           <span>•</span>
-          <BlurredPrice value={total} isPro={isPro} className="font-semibold text-slate-900 dark:text-slate-100" showBadge={!isPro} />
+          <span className="font-semibold text-slate-900 dark:text-slate-100" title={isShared ? "Robocizna = rbh × Twoja stawka. Materiał dopiszesz w kosztorysie." : "Twoje ceny"}>
+            {aside}
+          </span>
         </div>
       </div>
       <div className="flex items-center gap-1 shrink-0">
