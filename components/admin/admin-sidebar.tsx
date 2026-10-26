@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Users, BarChart3, MessageSquare, TrendingUp,
-  Brain, ShieldCheck, Home, Activity, Shield, Zap, MonitorDot,
-  LayoutGrid, FlaskConical, SlidersHorizontal, Search, Settings,
+  Brain, ShieldCheck, Home, Shield, Zap, MonitorDot,
+  FlaskConical, SlidersHorizontal, Search, Settings,
   ChevronRight,
 } from "lucide-react";
 
@@ -34,15 +34,13 @@ const NAV_GROUPS = [
       { href: "/admin/market",         label: "Ceny Katalogowe", icon: TrendingUp       },
       { href: "/admin/canonical-l0",   label: "L0 Canonical",   icon: SlidersHorizontal },
       { href: "/admin/knowledge-base", label: "Baza Wiedzy",    icon: Brain             },
-      { href: "/admin/panel",          label: "Rozdzielnice",   icon: LayoutGrid        },
     ],
   },
   {
     label: "ES-Engine",
     color: "text-emerald-500",
     items: [
-      { href: "/admin/health",      label: "Health Monitor",  icon: Activity    },
-      { href: "/admin/knr-quality", label: "KNR Quality Hub", icon: FlaskConical },
+      { href: "/admin/knr-quality", label: "Jakość norm ES", icon: FlaskConical },
       { href: "/admin/monitoring",  label: "Monitoring",      icon: MonitorDot  },
       { href: "/admin/audit",       label: "Audit Log",       icon: Shield      },
     ],
@@ -81,12 +79,12 @@ export function AdminSidebar() {
         <button
           className="flex items-center gap-2 w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 hover:bg-white dark:hover:bg-slate-800 text-slate-400 text-[11px] transition-colors"
           onClick={() => {
-            document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true, bubbles: true }));
+            document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", ctrlKey: true, bubbles: true }));
           }}
         >
           <Search className="w-3 h-3 shrink-0" />
           <span className="flex-1 text-left">Szukaj…</span>
-          <kbd className="hidden sm:inline text-[9px] font-mono bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded px-1 py-0.5 text-slate-400">⌘K</kbd>
+          <kbd className="hidden sm:inline text-[9px] font-mono bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded px-1 py-0.5 text-slate-400">Ctrl+K</kbd>
         </button>
       </div>
 

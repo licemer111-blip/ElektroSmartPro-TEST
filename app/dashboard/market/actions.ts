@@ -1,7 +1,6 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { normalizePolish, searchComparator } from "@/lib/utils";
 import { logger } from "@/lib/logger";
 
 export interface MarketItem {
@@ -93,18 +92,16 @@ export async function getMarketData(params: {
     query = query.ilike("name", `%${search}%`);
   }
 
-  // Fetch a reasonable limit (not ALL 5000 items!)
-  const fetchLimit = search ? Math.min(500, pageSize * 10) : pageSize * 2;
-
-  const { data, error, count } = await query.range(0, fetchLimit - 1);
+  const from = Math.max(0, (page - 1) * pageSize);
+  const to = from + pageSize - 1;
+  const { data, error, count } = await query.range(from, to);
 
   if (error) {
     logger.error("Error fetching market data", { search, categoryId, priceType }, error);
     throw new Error("Failed to fetch market data");
   }
 
-  // Map data to include category name and Market Intelligence fields
-  let allItems: MarketItem[] = (data || []).map((item) => ({
+  const items: MarketItem[] = (data || []).map((item) => ({
     id: item.id,
     name: item.name,
     unit: item.unit,
@@ -112,7 +109,6 @@ export async function getMarketData(params: {
     base_material_price: item.base_material_price,
     category_id: item.category_id,
     category_name: (Array.isArray(item.catalog_categories) ? item.catalog_categories[0]?.name : (item.catalog_categories as { name: string } | null)?.name) || "Bez kategorii",
-    // Market Intelligence
     price_min: item.price_min,
     price_max: item.price_max,
     price_trend: item.price_trend,
@@ -121,40 +117,11 @@ export async function getMarketData(params: {
     market_comment: item.market_comment,
     market_comment_type: item.market_comment_type,
     last_verified_at: item.last_verified_at,
+    knr_code: item.knr_code,
   }));
 
-  // ⚡ MOCK DATA INJECTION (If DB is empty/low)
-  // This ensures the grid is never empty for demonstration
-  if (allItems.length < 10 && !search && !categoryId) {
-    const { MOCK_MARKET_ITEMS } = await import("@/lib/data/mock-market-data");
-    // Filter mock items by price type if needed (mostly for display consistency)
-    const mockItems = MOCK_MARKET_ITEMS.filter(m =>
-      priceType === "labor" ? m.base_labor_price > 0 : m.base_material_price > 0
-    );
-    allItems = [...allItems, ...mockItems];
-  }
-
-  // Apply Polish-insensitive search filter with smart sorting (client-side)
-  if (search) {
-    const normalizedSearch = normalizePolish(search);
-    allItems = allItems
-      .filter((item) =>
-        normalizePolish(item.name).includes(normalizedSearch)
-      )
-      .sort((a, b) =>
-        searchComparator(normalizedSearch, normalizePolish(a.name), normalizePolish(b.name))
-      );
-  }
-
-  // Calculate pagination after filtering
-  // NOTE: When search is active, total might be approximate since we fetch a limited set
-  const total = search ? allItems.length : (count || allItems.length);
-  const totalPages = Math.ceil(total / pageSize);
-  const from = (page - 1) * pageSize;
-  const to = from + pageSize;
-
-  // Apply pagination
-  const items = allItems.slice(from, to);
+  const total = count ?? items.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   return {
     items,

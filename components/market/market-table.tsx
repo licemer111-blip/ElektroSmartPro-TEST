@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -45,16 +45,21 @@ export function MarketTable({
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortBy, setSortBy] = useState<"price-asc" | "price-desc" | "name-asc" | "name-desc">("name-asc");
 
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const handleSearch = (value: string) => {
     setSearch(value);
-    const params = new URLSearchParams(searchParams);
-    if (value) {
-      params.set("search", value);
-    } else {
-      params.delete("search");
-    }
-    params.delete("page");
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+    searchTimer.current = setTimeout(() => {
+      const params = new URLSearchParams(searchParams);
+      if (value) {
+        params.set("search", value);
+      } else {
+        params.delete("search");
+      }
+      params.delete("page");
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    }, 300);
   };
 
   const handleCategoryChange = (value: string) => {
@@ -239,7 +244,7 @@ export function MarketTable({
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
             {search || category
-              ? `Znaleziono ${sortedItems.length}`
+              ? `Znaleziono ${initialData.total}`
               : `${totalCatalogCount} pozycji`}
           </h3>
         </div>

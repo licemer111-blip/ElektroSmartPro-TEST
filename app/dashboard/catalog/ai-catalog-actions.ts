@@ -106,9 +106,16 @@ export async function generateCatalogItemsWithAI(
 
     const categoryList = categories?.map(c => `${c.name} (ID: ${c.id})`).join(", ") || "Brak kategorii";
 
-    // 6. Fetch KB context in parallel; inject compact KNR norms (limit 40 — prevents context overload)
+    const { data: rateRowEarly } = await supabase
+      .from("profiles")
+      .select("hourly_rate")
+      .eq("id", user.id)
+      .maybeSingle();
+    const profileRate = Number((rateRowEarly as { hourly_rate?: number | null } | null)?.hourly_rate ?? 0);
+
+    // 6. Fetch KB context in parallel; inject compact ES norms (limit 40 — prevents context overload)
     const kbContext = await fetchCatalogKbContext();
-    const knrNormsContext = buildLocalKnrContext(62, 40);
+    const knrNormsContext = buildLocalKnrContext(profileRate >= 1 ? profileRate : 0, 40);
 
     // Build system prompt via Master Brain + inject KB
     const basePrompt = await buildDynamicSystemPrompt("catalog");
@@ -116,8 +123,8 @@ export async function generateCatalogItemsWithAI(
 
     const knrBlock = `<knr_norms_table>
 ${knrNormsContext}
-FORMAT: [KOD KNR]: [OPIS] → [NORMA rbh/jednostkę] = [CENA PLN przy 62 zł/rbh]
-Używaj DOKŁADNIE tych kodów w polu knr_code. OBLICZ base_labor_price = labor_hours × 62 zł.
+FORMAT: [KOD]: [OPIS] → [NORMA rbh/jednostkę].
+Używaj DOKŁADNIE tych kodów w polu knr_code. Podaj labor_hours. Złotówki robocizny liczy serwer: rbh × stawka z profilu (${profileRate >= 1 ? profileRate : "brak stawki"} zł/h). Nie wymyślaj stawki 62 zł.
 </knr_norms_table>`;
 
     // Dynamic part (changes per user — not cached)
@@ -140,11 +147,13 @@ MATERIĄŁY — LIMITY MAKSYMALNE:
 • Puszka podtynkowa Ø60: MAX 8 zł/szt (typowo 3 zł/szt)
 • Gniazdo pojedyncze: MAX 30 zł/szt, Gniazdo podwójne: MAX 45 zł/szt
 • MCB B16 1P: MAX 40 zł/szt
-ROBOCIZNA — LIMITY MAKSYMALNE:
-• Montaż gniazda/łącznika: MAX 60 zł/szt (typowo 25–35 zł)
-• Kucie bruzd: MAX 30 zł/mb (typowo ~20 zł/mb). NIGDY 120 zł/mb!
-• Uładanie przewodów w tynku: MAX 15 zł/mb (typowo 10–12 zł/mb)
-• Montaż oprawy: MAX 75 zł/szt
+ROBOCIZNA — GODZINY ES, NIE ZŁOTÓWKI Z GŁOWY:
+• Montaż gniazda 230 V: 0,68 rbh/szt
+• Łącznik: 0,45 rbh/szt
+• Bruzda w cegle: 0,85 rbh/mb
+• Układanie YDYp 3×2,5: 0,16 rbh/mb
+• Montaż oprawy: 0,55 rbh/szt
+Zł = te rbh × stawka elektryka. Nie obcinaj do 25–35 zł.
 ILOŚCI MATERIAŁÓW W ZESTAWIE (na 1 punkt):
 • Kabel/przewod dla 1 gniazda: MAX 5–7 mb. Jeśli AI daje 15 mb → to błąd! Użyj 5 mb.
 • Bruzdowanie dla 1 gniazda: MAX 5–7 mb. Nie 15!
@@ -296,13 +305,6 @@ Jeśli NIE — podziel przez 5.
       };
     }
 
-    // Post-processing: calculate labor from KNR norms, enforce KNR codes, clamp prices
-    const { data: rateRow } = await supabase
-      .from("profiles")
-      .select("hourly_rate")
-      .eq("id", user.id)
-      .maybeSingle();
-    const profileRate = (rateRow as { hourly_rate?: number | null } | null)?.hourly_rate ?? 0;
     const processedItems = validatedItems.map(item => {
       let knrCode = item.knr_code ?? null;
       let laborPrice = item.base_labor_price;

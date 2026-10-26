@@ -70,11 +70,12 @@ export async function getCatalogItems(params: {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("show_global_catalog")
+    .select("show_global_catalog, hourly_rate")
     .eq("id", user.id)
     .single();
 
   const showGlobalCatalog = profile?.show_global_catalog ?? true;
+  const hourlyRate = Number(profile?.hourly_rate ?? 0);
 
   const { data: teamMembership } = await supabase
     .from("team_members")
@@ -211,7 +212,7 @@ export async function getCatalogItems(params: {
     }));
 
     // ── Parallel KNR norms search (always runs alongside catalog search) ────────
-    const knrNorms = search.length > 2 ? await searchKnrNorms(search) : [];
+    const knrNorms = search.length > 2 ? await searchKnrNorms(search, hourlyRate) : [];
 
     return { items, total, page, pageSize, totalPages, knrNorms };
   }

@@ -230,7 +230,7 @@ function LoginPageContent() {
         <div className="mt-4 grid grid-cols-3 gap-2">
           <div className="text-center p-3 rounded-xl bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
             <div className="text-lg">⚡</div>
-            <div className="text-xs text-slate-600 dark:text-slate-400 font-medium">Robocizna / Materiał (KNR)</div>
+            <div className="text-xs text-slate-600 dark:text-slate-400 font-medium">Robocizna / Materiał</div>
           </div>
           <div className="text-center p-3 rounded-xl bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
             <div className="text-lg">📐</div>
@@ -238,7 +238,7 @@ function LoginPageContent() {
           </div>
           <div className="text-center p-3 rounded-xl bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
             <div className="text-lg">🛡️</div>
-            <div className="text-xs text-slate-600 dark:text-slate-400 font-medium">VAT 8% / 23% + Portal Klienta</div>
+            <div className="text-xs text-slate-600 dark:text-slate-400 font-medium">VAT 8% / 23%</div>
           </div>
         </div>
 

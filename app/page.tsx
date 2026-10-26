@@ -6,8 +6,6 @@ import { LandingStructuredData } from "@/components/landing/LandingStructuredDat
 import { getGlobalCatalogCount } from "./actions";
 import { DIN_MODULES_COUNT } from "@/lib/data/din-modules-stats";
 import { getSystemStats } from "@/lib/actions/system-stats";
-import { SYSTEM_STATS_FALLBACK } from "@/constants/system";
-
 const FeaturesSection    = dynamic(() => import("@/components/landing/FeaturesSection").then(m => ({ default: m.FeaturesSection })));
 const BentoFeaturesSection = dynamic(() => import("@/components/landing/BentoFeaturesSection").then(m => ({ default: m.BentoFeaturesSection })));
 const FaqSection         = dynamic(() => import("@/components/landing/FaqSection").then(m => ({ default: m.FaqSection })));
@@ -20,7 +18,7 @@ export const revalidate = 3600; // ISR: regenerate landing page once per hour
 export const metadata: Metadata = {
   title: "ElektroSmart PRO — Ekspertowy System Kosztorysów Elektrycznych | ES-Engine",
   description:
-    `Profesjonalny kosztorys elektryczny z ES-Engine: podział Robocizna/Materiał, ${SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR 5-04/5-08/5-09 w ${SYSTEM_STATS_FALLBACK.categoriesLabel} kategoriach, ceny 16 województw, Zestawy 360°, konfigurator rozdzielnic, Portal Klienta, eksport PDF. Demo bezpłatne.`,
+    "Kosztorys elektryczny: robocizna i materiał osobno. Godziny normy ES × Twoja stawka, województwo tylko na robociznę, VAT 8% albo 23%, zestawy punktów, PDF. Demo: widać ceny, znak wodny na PDF, jeden projekt.",
   keywords: [
     "wycena elektryczna",
     "kosztorys elektryczny",
@@ -54,7 +52,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "ElektroSmart PRO — Ekspertowy System Kosztorysów Elektrycznych | ES-Engine",
     description:
-      "ES-Engine dla elektryków: kosztorys z podziałem Robocizna/Materiał, normy KNR, Zestawy 360°, ceny regionalne 16 województw, VAT 8%/23%, Portal Klienta, PDF w 30 sekund. Demo bezpłatne.",
+      "Kosztorys dla elektryka: robocizna osobno od materiału, norma ES, 16 województw, VAT 8/23%, PDF. Demo bezpłatne.",
     type: "website",
     locale: "pl_PL",
     url: "/",

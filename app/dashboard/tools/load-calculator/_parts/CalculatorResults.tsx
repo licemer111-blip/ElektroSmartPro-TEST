@@ -3,6 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
+import { AddLineToProject } from "@/components/tools/add-line-to-project";
 import { CalculatorActionBar } from "@/components/tools/calculator-action-bar";
 import { LoadCalculatorResult, LoadCalculatorParams, ConductorType, Load } from "../_lib/engine";
 
@@ -129,6 +130,12 @@ export function LoadCalculatorResults({ result, params, hasResult, onLoadInputs,
             Metoda: {params.installMethod}, Temp: {params.temperature}°C, Grupowanie: {params.grouping} obw.
           </p>
         </div>
+
+        <AddLineToProject
+          name={`Montaż wyłącznika nadprądowego ${result.recommendedBreaker}A`}
+          unit="szt"
+          quantity={1}
+        />
 
         {/* Cable safety warning */}
         {!result.isCableOk && (

@@ -381,7 +381,7 @@ export function CatalogTable({
               {/* Section header */}
               <div className="px-4 py-2.5 flex items-center justify-between bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20">
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-semibold text-orange-600 dark:text-orange-400 uppercase tracking-widest">Baza Referencyjna KNR 2026</span>
+                  <span className="text-[11px] font-semibold text-orange-600 dark:text-orange-400 uppercase tracking-widest">Norma ES</span>
                   <span className="text-[10px] text-orange-400">(Normy rbh)</span>
                 </div>
                 <span className="text-[10px] text-orange-400">{initialData.knrNorms.length} norm</span>
@@ -394,7 +394,7 @@ export function CatalogTable({
                       <TableHead className="text-xs p-2 sm:p-3 w-[35%] text-orange-700 dark:text-orange-400">Nazwa normy</TableHead>
                       <TableHead className="text-xs p-2 sm:p-3 w-[22%] text-orange-700 dark:text-orange-400">Kod KNR</TableHead>
                       <TableHead className="text-xs p-2 sm:p-3 w-[8%] text-orange-700 dark:text-orange-400">Jedn.</TableHead>
-                      <TableHead className="text-xs p-2 sm:p-3 w-[18%] text-orange-700 dark:text-orange-400">Robocizna (MAZ)</TableHead>
+                      <TableHead className="text-xs p-2 sm:p-3 w-[18%] text-orange-700 dark:text-orange-400">Robocizna</TableHead>
                       <TableHead className="text-xs p-2 sm:p-3 w-[17%] text-right text-orange-700 dark:text-orange-400">Dodaj</TableHead>
                     </TableRow>
                   </TableHeader>

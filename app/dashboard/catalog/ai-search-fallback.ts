@@ -7,7 +7,6 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 import { logger } from "@/lib/logger";
 import type { CatalogItem } from "./catalog-search-actions";
 
-const MAZOWIECKIE_RATE = 62; // PLN/rbh — reference rate for AI suggestions
 
 // ── All 63 KNR category slugs from es_dictionary ──────────────────────────────
 const ALL_CATEGORIES = [
@@ -63,21 +62,34 @@ function normPl(s: string): string {
     .replace(/ś/g,"s").replace(/ź/g,"z").replace(/ż/g,"z");
 }
 
+async function readHourlyRate(userId: string | null): Promise<number> {
+  if (!userId) return 0;
+  const { data } = await supabaseAdmin
+    .from("profiles")
+    .select("hourly_rate")
+    .eq("id", userId)
+    .maybeSingle();
+  const rate = Number((data as { hourly_rate?: number | null } | null)?.hourly_rate ?? 0);
+  return rate >= 1 ? rate : 0;
+}
+
 // ── Shape es_dictionary rows → CatalogItem[] ──────────────────────────────────
 type DictRow = { id: unknown; knr_ref: unknown; label: unknown; unit: unknown; labor_norm_rbh: unknown; category: unknown };
 
-function shapeDictItems(rows: DictRow[]): CatalogItem[] {
+function shapeDictItems(rows: DictRow[], hourlyRate: number): CatalogItem[] {
   const seen = new Set<string>();
   const result: CatalogItem[] = [];
+  const rate = hourlyRate >= 1 ? hourlyRate : 0;
   for (const row of rows) {
     const key = `${row.knr_ref as string}__${row.label as string}`;
     if (seen.has(key)) continue;
     seen.add(key);
+    const hours = Number(row.labor_norm_rbh ?? 0);
     result.push({
       id: row.id as string,
       name: row.label as string,
       unit: (row.unit as string) ?? "szt",
-      base_labor_price: Math.round(Number(row.labor_norm_rbh ?? 0) * MAZOWIECKIE_RATE),
+      base_labor_price: rate > 0 && hours > 0 ? Math.round(hours * rate * 100) / 100 : 0,
       base_material_price: 0,
       category_id: null,
       category_name: (row.knr_ref as string) ?? (row.category as string),
@@ -90,8 +102,8 @@ function shapeDictItems(rows: DictRow[]): CatalogItem[] {
 }
 
 // ── Direct keyword/label search — exported for parallel use ───────────────────
-export async function searchKnrNorms(query: string): Promise<CatalogItem[]> {
-  return directDictSearch(query);
+export async function searchKnrNorms(query: string, hourlyRate = 0): Promise<CatalogItem[]> {
+  return directDictSearch(query, hourlyRate);
 }
 
 // ── Context builder for AI prompt injection ────────────────────────────────────
@@ -145,7 +157,7 @@ export async function searchEsDictionaryContext(description: string): Promise<st
   return `BAZA KNR 2026 — ${unique.length} norm pasujących do opisu:\n${lines.join("\n")}`;
 }
 
-async function directDictSearch(query: string): Promise<CatalogItem[]> {
+async function directDictSearch(query: string, hourlyRate: number): Promise<CatalogItem[]> {
   const q = normPl(query);
 
   const { data: kwData } = await supabaseAdmin
@@ -157,7 +169,7 @@ async function directDictSearch(query: string): Promise<CatalogItem[]> {
     .order("confidence_weight", { ascending: false })
     .limit(100);
 
-  if (kwData && kwData.length > 0) return shapeDictItems(kwData);
+  if (kwData && kwData.length > 0) return shapeDictItems(kwData, hourlyRate);
 
   const { data: lblData } = await supabaseAdmin
     .from("es_dictionary")
@@ -168,7 +180,7 @@ async function directDictSearch(query: string): Promise<CatalogItem[]> {
     .order("confidence_weight", { ascending: false })
     .limit(100);
 
-  if (lblData && lblData.length > 0) return shapeDictItems(lblData);
+  if (lblData && lblData.length > 0) return shapeDictItems(lblData, hourlyRate);
 
   return [];
 }
@@ -180,7 +192,7 @@ export async function getAiSearchFallback(
 ): Promise<{ items: CatalogItem[]; explanation: string }> {
   try {
     // Step 1 — Direct es_dictionary search (reliable, no AI)
-    const directItems = await directDictSearch(query);
+    const directItems = await directDictSearch(query, await readHourlyRate(userId));
     if (directItems.length > 0) {
       void logFailedSearch(query, userId, []);
       return {
@@ -220,7 +232,7 @@ Przykłady: "gniazdko"→["gniazda_wylaczniki"], "lampa"→["oswietlenie"], "uzi
       logger.error("[getAiSearchFallback] query error", { message: error?.message });
       return { items: [], explanation: object.explanation };
     }
-    return { items: shapeDictItems(data), explanation: object.explanation };
+    return { items: shapeDictItems(data, await readHourlyRate(userId)), explanation: object.explanation };
   } catch (err) {
     logger.error("[getAiSearchFallback] error", {}, err as Error);
     void logFailedSearch(query, userId, []);

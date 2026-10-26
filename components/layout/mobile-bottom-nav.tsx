@@ -71,7 +71,7 @@ export function MobileBottomNav() {
             return (
               <div key="new" className="flex items-center justify-center -mt-4">
                 <button
-                  onClick={() => window.location.href = "/dashboard"}
+                  onClick={() => window.location.href = "/dashboard/projects/quick-estimate"}
                   className="relative bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg shadow-blue-500/25 active:scale-95 transition-transform"
                 >
                   <Plus className="w-6 h-6" />

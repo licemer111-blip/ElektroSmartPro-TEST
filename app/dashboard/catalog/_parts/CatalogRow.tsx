@@ -144,7 +144,7 @@ export function CatalogRow({
               {item.isAiSuggestion && (
                 <span
                   className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-gradient-to-r from-violet-100 to-purple-100 dark:from-violet-900/30 dark:to-purple-900/30 text-violet-700 dark:text-violet-300 border border-violet-300 dark:border-violet-700"
-                  title={item.knr_ref ? `Sugestia ES-Engine — KNR: ${item.knr_ref}` : "Sugestia ES-Engine z bazy KNR 2026"}
+                  title={item.knr_ref ? `Norma ES: ${item.knr_ref}` : "Pozycja z normy ES"}
                 >
                   <Brain className="w-2.5 h-2.5" />
                   Sugestia ES

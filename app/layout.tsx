@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { SYSTEM_STATS_FALLBACK } from "@/constants/system";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
@@ -142,7 +141,7 @@ export const metadata: Metadata = {
     url: "/",
     siteName: "ElektroSmart PRO",
     title: "ElektroSmart PRO — Ekspertowy Kosztorys Elektryczny | ES-Engine",
-    description: "Profesjonalny system kosztorysowania instalacji elektrycznych z ES-Engine. Podział Robocizna/Materiał, normy KNR, Zestawy 360°, konfigurator rozdzielnic 120+ modułów DIN, ceny dla 16 województw, VAT 8%/23%, eksport PDF.",
+    description: "Kosztorys elektryczny: robocizna i materiał osobno, godziny normy ES × Twoja stawka, województwo tylko na robociznę, VAT 8%/23%, PDF.",
     images: [
       {
         url: "/opengraph-image",
@@ -155,7 +154,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "ElektroSmart PRO — Kosztorys Elektryczny z ES-Engine | Program dla Elektryków",
-    description: `Profesjonalny system dla elektryków: ES-Engine, normy KNR, Zestawy 360°, ${SYSTEM_STATS_FALLBACK.normsLabelPlus} norm w ${SYSTEM_STATS_FALLBACK.categoriesLabel} kategoriach, 12 kalkulatorów, ceny 16 województw, VAT 8/23%, eksport PDF.`,
+    description: "Program dla elektryków: robocizna osobno od materiału, norma ES, 16 województw, VAT 8/23%, 12 kalkulatorów, PDF.",
     images: ["/opengraph-image"],
     creator: "@elektrosmartpro",
   },

@@ -147,7 +147,7 @@ export default async function Image() {
               justifyContent: 'center',
             }}
           >
-            {['📂 Baza KNR', '🔌 120+ DIN', '⚡ ES-Engine', '🌐 Portal Klienta', '📄 PDF/Excel'].map((feature) => (
+            {['⚡ Robocizna / materiał', '📐 Norma ES', '🗺️ 16 województw', '📄 PDF'].map((feature) => (
               <div
                 key={feature}
                 style={{

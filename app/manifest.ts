@@ -1,6 +1,4 @@
 import type { MetadataRoute } from 'next'
-import { SYSTEM_STATS_FALLBACK } from '@/constants/system'
- 
 /**
  * PWA Manifest for ElektroSmart PRO v5.0
  * Optimized for Polish electrical contractors market
@@ -10,7 +8,7 @@ export default function manifest(): MetadataRoute.Manifest {
     id: 'elektrosmart-pro',
     name: 'ElektroSmart PRO - Kosztorysy Elektryczne z AI',
     short_name: 'ElektroSmart',
-    description: `Ekspertowy system kosztorysów elektrycznych. Konfigurator Rozdzielnic 120+ modułów DIN, Portal Klienta, 12 kalkulatorów, ${SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR, VAT 8%/23%, ceny regionalne 16 województw. Silnik ES-Engine.`,
+    description: "Kosztorys elektryczny: robocizna i materiał osobno, norma ES, 16 województw, VAT 8%/23%, PDF.",
     start_url: '/dashboard/',
     scope: '/',
     display: 'standalone',
@@ -45,15 +43,15 @@ export default function manifest(): MetadataRoute.Manifest {
       {
         name: 'Katalog',
         short_name: 'Katalog',
-        description: `Przeglądaj ${SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR`,
+        description: "Pozycje: materiał i robocizna osobno",
         url: '/dashboard/catalog',
         icons: [{ src: '/icons/icon-192x192.png', sizes: '192x192' }],
       },
       {
-        name: 'Klienci',
-        short_name: 'CRM',
-        description: 'Zarządzaj bazą klientów',
-        url: '/dashboard/clients',
+        name: 'Kalkulatory',
+        short_name: 'Narzędzia',
+        description: 'Przekrój kabla, spadek napięcia, zabezpieczenia',
+        url: '/dashboard/tools',
         icons: [{ src: '/icons/icon-192x192.png', sizes: '192x192' }],
       },
       {

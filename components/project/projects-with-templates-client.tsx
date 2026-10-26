@@ -1,6 +1,4 @@
 "use client";
-import { SYSTEM_STATS_FALLBACK } from "@/constants/system";
-
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -103,7 +101,7 @@ export function ProjectsWithTemplatesClient({
                     Zacznij od swojego pierwszego projektu!
                   </h2>
                   <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-6 text-sm">
-                    Masz {SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR i pełen arsenał narzędzi. Wybierz sposób startu:
+                    Wybierz sposób startu. Robocizna to rbh normy ES razy Twoja stawka.
                   </p>
 
                   {/* 4 ways */}
@@ -114,7 +112,7 @@ export function ProjectsWithTemplatesClient({
                       </div>
                       <div>
                         <p className="text-xs font-semibold text-orange-800 dark:text-orange-300">Szybka Wycena</p>
-                        <p className="text-[11px] text-orange-700/70 dark:text-orange-400/70">Wpisz pozycje — AI wyliczy ceny w minuty</p>
+                        <p className="text-[11px] text-orange-700/70 dark:text-orange-400/70">Metraż, potem ta sama suma w projekcie</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3 bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-800/50 rounded-lg p-3">
@@ -132,7 +130,7 @@ export function ProjectsWithTemplatesClient({
                       </div>
                       <div>
                         <p className="text-xs font-semibold text-blue-800 dark:text-blue-300">Ręcznie</p>
-                        <p className="text-[11px] text-blue-700/70 dark:text-blue-400/70">Dodaj pozycje z katalogu KNR</p>
+                        <p className="text-[11px] text-blue-700/70 dark:text-blue-400/70">Dodaj pozycje z katalogu</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800/50 rounded-lg p-3">

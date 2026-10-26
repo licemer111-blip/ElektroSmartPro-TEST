@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ArrowLeft, Cable, Lightbulb, Info, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { AddLineToProject } from "@/components/tools/add-line-to-project";
 import { CalculatorWrapper } from "@/components/tools/calculator-wrapper";
 import { CalculatorActionBar } from "@/components/tools/calculator-action-bar";
 import { useToolsAccess } from "@/components/tools/tools-provider";
@@ -233,6 +234,12 @@ export function CableCalculatorShell() {
                       <p className="text-[10px] md:text-xs mt-0.5">{result.isVoltageDropOk ? "Spełnia normę ≤5%" : "Przekracza normę 5%! Zwiększ przekrój."}</p>
                     </div>
                   </div>
+
+                  <AddLineToProject
+                    name={`Układanie przewodu ${p.conductor === "copper" ? "Cu" : "Al"} ${result.recommendedSection} mm2`}
+                    unit="mb"
+                    quantity={Math.max(1, Number(p.length) || 1)}
+                  />
 
                   {result.warning && (
                     <Alert className="p-3 bg-amber-50 dark:bg-amber-950/20 border-amber-300 dark:border-amber-800">

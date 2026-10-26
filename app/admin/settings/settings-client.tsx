@@ -1,56 +1,15 @@
 "use client";
 
-import { useState, useTransition } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { updateGlobalBenchmarks } from "../actions";
 import {
-  Settings, Calculator, CheckCircle, AlertCircle, Loader2,
-  Crown, Users, Rocket, Brain, Shield, DollarSign, Lock, FileText,
+  Settings, Crown, Users, Rocket, Shield, Lock, FileText,
 } from "lucide-react";
 import { FREE_TIER_MAX_PROJECTS, PAY_PER_EXPORT_ENABLED } from "@/lib/config/tier-limits";
 import { TRIAL_DURATION_DAYS } from "@/lib/auth/entitlements";
 import { DEMO_AI_LIMIT, PRO_AI_LIMIT } from "@/lib/ai-quota-config";
 
-const KNR_MULTIPLIER_CHANNEL = "knr-multiplier-updates";
-
-interface Props {
-  initialKnrMultiplier: number;
-}
-
-export function SettingsClient({ initialKnrMultiplier }: Props) {
-  const [knrMultiplier, setKnrMultiplier] = useState(initialKnrMultiplier);
-  const [isPending, startTransition] = useTransition();
-  const [saveState, setSaveState] = useState<"idle" | "success" | "error">("idle");
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const handleSave = () => {
-    setSaveState("idle");
-    startTransition(async () => {
-      const result = await updateGlobalBenchmarks({ knr_2026_multiplier: knrMultiplier });
-      if (result.success) {
-        setSaveState("success");
-        setTimeout(() => setSaveState("idle"), 3000);
-        const channel = new BroadcastChannel(KNR_MULTIPLIER_CHANNEL);
-        channel.postMessage({ type: "multiplier-updated" });
-        channel.close();
-      } else {
-        setErrorMessage(result.error ?? "Błąd zapisu");
-        setSaveState("error");
-      }
-    });
-  };
-
-  const handleInputChange = (value: string) => {
-    const numValue = parseFloat(value);
-    if (!isNaN(numValue) && numValue >= 1.0) {
-      setKnrMultiplier(numValue);
-    }
-  };
-
+export function SettingsClient() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
@@ -136,48 +95,13 @@ export function SettingsClient({ initialKnrMultiplier }: Props) {
         </CardContent>
       </Card>
 
-      {/* ── KNR Multiplier ── */}
       <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <Calculator className="w-4 h-4 text-emerald-600" />
-            Współczynnik KNR 2026
-          </CardTitle>
+          <CardTitle className="text-base">Robocizna</CardTitle>
           <CardDescription className="text-xs">
-            Zapisana wartość nie zmienia złotówek. Robocizna = rbh × stawka × województwo.
+            Złotówki = rbh z normy ES × stawka elektryka × województwo. Osobnego współczynnika KNR nie ma.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center gap-4">
-            <Input
-              id="knr-multiplier"
-              type="number"
-              step="0.1"
-              min="1.0"
-              max="3.0"
-              value={knrMultiplier}
-              onChange={(e) => handleInputChange(e.target.value)}
-              disabled={isPending}
-              className="w-28"
-            />
-            <div className="text-xs text-slate-500 space-y-0.5">
-              <p>Zapisane: <strong className="text-emerald-600">{knrMultiplier}×</strong></p>
-              <p className="text-slate-400">Normy 2026 są już w rbh. Stawka elektryka jest stawką.</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Button onClick={handleSave} disabled={isPending} size="sm">
-              {isPending ? <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />Zapisywanie...</> : "Zapisz"}
-            </Button>
-            {saveState === "success" && (
-              <span className="flex items-center gap-1 text-emerald-600 text-xs"><CheckCircle className="w-3.5 h-3.5" />Zapisano</span>
-            )}
-            {saveState === "error" && (
-              <span className="flex items-center gap-1 text-red-600 text-xs"><AlertCircle className="w-3.5 h-3.5" />{errorMessage}</span>
-            )}
-          </div>
-        </CardContent>
       </Card>
 
       {/* ── System Info ── */}

@@ -63,7 +63,7 @@ export function EmptyProjectsState({
         Zacznij od swojego pierwszego projektu!
       </h2>
       <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md mb-6">
-        Utwórz swój pierwszy kosztorys — dodaj pozycje z katalogu, a ES-Engine automatycznie wyliczy robociznę na podstawie norm KNR i Twojej stawki r-g.
+        Utwórz kosztorys. Robocizna to godziny normy ES razy Twoja stawka, województwo mnoży tylko ją.
       </p>
 
       <div className="flex flex-col sm:flex-row items-center gap-3">

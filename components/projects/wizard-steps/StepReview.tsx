@@ -12,6 +12,7 @@ interface StepReviewProps {
   items: EstimateItem[];
   vatRate: number;
   totals: { material: number; labor: number; net: number; vatAmount: number; gross: number };
+  laborFactor?: number;
   viewMode: "all" | "material" | "labor";
   creating: boolean;
   wasFallback: boolean;
@@ -45,7 +46,7 @@ function KnrBadge({ code }: { code: string }) {
 }
 
 export function StepReview({
-  items, vatRate, totals, viewMode, creating, isPro = false, formatCurrency,
+  items, vatRate, totals, laborFactor = 1, viewMode, creating, isPro = false, formatCurrency,
   setViewMode, setManualVatRate, setStep, handleReset, handleCreate,
   updateItemQuantity, removeItem,
 }: StepReviewProps) {
@@ -112,10 +113,9 @@ export function StepReview({
             <Zap className="w-3.5 h-3.5 text-white" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300">Ceny zostaną wyliczone z normy ES</p>
+            <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300">Robocizna bez stawki</p>
             <p className="text-[11px] text-emerald-700/80 dark:text-emerald-400/70 mt-0.5">
-              Po „Utwórz projekt” silnik wpisze rbh z normy ES, Twoją stawkę i województwo. Województwo mnoży tylko robociznę.
-              Każda pozycja otrzyma etykietę „Dlaczego taka cena?” z pełnym rozpisaniem.
+              Brak stawki rbh — ustaw ją w Ustawienia → Finanse. Bez stawki robocizna zostaje pusta i w projekcie.
             </p>
           </div>
           <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
@@ -183,11 +183,12 @@ export function StepReview({
               (viewMode === "material" && isLaborItem) ||
               (viewMode === "labor" && isMaterialItem);
             if (hidden) return null;
+            const laborUnit = item.base_labor_price * laborFactor;
             const unitPrice = viewMode === "material"
               ? item.base_material_price
               : viewMode === "labor"
-                ? item.base_labor_price
-                : item.base_material_price + item.base_labor_price;
+                ? laborUnit
+                : item.base_material_price + laborUnit;
             return (
               <div
                 key={index}
@@ -208,7 +209,7 @@ export function StepReview({
                           Razem: <span>{blurPrice(unitPrice * item.quantity)}</span>
                           {viewMode === "all" && item.base_material_price > 0 && item.base_labor_price > 0 && (
                             <span className="ml-1 text-slate-400">
-                              (Mat: {formatCurrency(item.base_material_price)} · Rob: {formatCurrency(item.base_labor_price)})
+                              (Mat: {formatCurrency(item.base_material_price)} · Rob: {formatCurrency(laborUnit)})
                             </span>
                           )}
                         </>

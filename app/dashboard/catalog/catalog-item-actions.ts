@@ -405,11 +405,18 @@ export async function fixZeroLaborItems(): Promise<{
   const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { fixed: 0, error: "Brak autoryzacji" };
 
-  const { applyPriceGuard } = await import("@/lib/utils/price-validator");
-
   const LABOR_KEYWORDS = ["montaż", "kucie", "układanie", "bruzdowanie", "podłączenie", "pomiar", "instalacj"];
 
-  // Fetch user's own items that may be broken
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("hourly_rate")
+    .eq("id", user.id)
+    .maybeSingle();
+  const rate = Number(profile?.hourly_rate ?? 0);
+  if (rate < 1) {
+    return { fixed: 0, error: "Ustaw stawkę rbh w Ustawienia → Finanse" };
+  }
+
   const { data: items, error: fetchError } = await supabase
     .from("catalog_items")
     .select("id, name, unit, base_labor_price, base_material_price, knr_code")
@@ -421,30 +428,27 @@ export async function fixZeroLaborItems(): Promise<{
   }
 
   const toFix = items.filter(item => {
-    const bothZero = item.base_labor_price === 0 && item.base_material_price === 0;
+    if ((item.base_labor_price ?? 0) > 0) return false;
     const nameLower = (item.name ?? "").toLowerCase();
-    const isLaborType = LABOR_KEYWORDS.some(kw => nameLower.includes(kw));
-    return bothZero || (isLaborType && item.base_labor_price === 0);
+    return LABOR_KEYWORDS.some(kw => nameLower.includes(kw));
   });
 
   if (toFix.length === 0) return { fixed: 0 };
 
+  const { lookupKnrByName } = await import("@/lib/knr-local-context");
+
   let fixedCount = 0;
   for (const item of toFix) {
-    const guarded = applyPriceGuard({
-      name: item.name,
-      unit: item.unit ?? "szt",
-      base_labor_price: item.base_labor_price,
-      base_material_price: item.base_material_price,
-      knr_code: item.knr_code ?? null,
-    });
+    const match = lookupKnrByName(item.name);
+    if (!match || match.laborNorm <= 0) continue;
+    const laborPrice = Math.round(match.laborNorm * rate * 100) / 100;
 
     const { error: updateError } = await supabase
       .from("catalog_items")
       .update({
-        base_labor_price: guarded.base_labor_price,
-        base_material_price: guarded.base_material_price,
-        knr_code: guarded.knr_code ?? item.knr_code,
+        base_labor_price: laborPrice,
+        labor_norm_rbh: match.laborNorm,
+        knr_code: match.code,
       })
       .eq("id", item.id)
       .eq("user_id", user.id);

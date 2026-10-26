@@ -68,11 +68,10 @@ export const TOUR_STEPS: TourStep[] = [
   // ── KROK 5: Katalog i import ──────────────────────────────────────
   {
     id: "catalog",
-    title: "Katalog KNR i import AI",
+    title: "Katalog pozycji",
     description:
-      "Katalog → 5000+ norm KNR 5-08 z opisem, jednostką i czasem r-g. Znajdź po nazwie lub kodzie KNR. " +
-      "AI Import (zakładka \"Do wyceny\"): wklej specyfikację z Worda, foto z telefonu lub e-mail od klienta — " +
-      "system rozpozna pozycje i doda je do projektu. Oszczędza 30-60 minut na kosztorys.",
+      "Katalog: materiał i robocizna osobno. Godziny biorą się z normy ES, złotówki ze stawki w Finansach. " +
+      "Szukaj po nazwie. Własne pozycje zostają Twoje.",
     targetSelector: 'a[href="/dashboard/catalog"]',
     position: "bottom",
     emoji: "📦",
@@ -82,11 +81,10 @@ export const TOUR_STEPS: TourStep[] = [
   // ── KROK 6: ES-Engine Wycena ──────────────────────────────────────
   {
     id: "es-engine",
-    title: "ES-Engine: automatyczna wycena KNR",
+    title: "Wycena z normy ES",
     description:
-      "Masz listę pozycji bez cen? Wejdź do projektu → kliknij pomarańczowy przycisk \"Tryb: Expert Engine\". " +
-      "System przeliczy każdą pozycję wg norm KNR 2026 × Twoja stawka r-g × współczynnik regionu. " +
-      "Robocizna i Materiał są oddzielone — możesz włączyć \"Tylko Robocizna\" jeśli klient dostarcza materiały.",
+      "Robocizna = rbh z normy ES × Twoja stawka × województwo. Materiał województwa nie bierze. " +
+      "Jeśli klient daje materiał, zostawiasz samą robociznę.",
     position: "center",
     emoji: "🤖",
     color: "green",
@@ -100,7 +98,7 @@ export const TOUR_STEPS: TourStep[] = [
       "Prawy panel projektu to centrum sterowania: " +
       "Suma Netto (Robocizna + Materiały) → Narzuty (Kp/Z/Kz) → VAT → KWOTA KOŃCOWA. " +
       "Suwak \"Negocjacje ceny\" pozwala szybko dać rabat lub narzut procentowy. " +
-      "Aktywuj plan PRO, aby zobaczyć kwotę końcową (w wersji FREE jest zamazana).",
+      "W DEMO kwota jest widoczna. PRO zdejmuje znak wodny z PDF i limit jednego projektu.",
     position: "center",
     emoji: "💰",
     color: "violet",
@@ -114,7 +112,7 @@ export const TOUR_STEPS: TourStep[] = [
       "Zakładka \"Ustawienia PDF\" w projekcie → wybierz temat kolorystyczny, dodaj swoje logo i dane firmy. " +
       "Kliknij \"Pobierz PDF\" — otrzymasz profesjonalny dokument z kosztorysem. " +
       "Wersja FREE: PDF z \"DEMO\" watermarkiem. " +
-      "PRO: czysty PDF + Portal Klienta (klient klika link i akceptuje ofertę online).",
+      "PRO: czysty PDF bez znaku wodnego DEMO.",
     position: "center",
     emoji: "📄",
     color: "indigo",
@@ -127,7 +125,7 @@ export const TOUR_STEPS: TourStep[] = [
     description:
       "W Ustawieniach → Finanse ustaw stawkę roboczogodziny (PLN/r-g) i wybierz województwo. " +
       "To wpływa na WSZYSTKIE kosztorysy. " +
-      "Możesz też aktywować 7-dniowy trial PRO za darmo — odblokuje AI bez limitu, czysty PDF i Portal Klienta.",
+      "Trial PRO na 7 dni zdejmuje znak wodny i limit jednego projektu.",
     targetSelector: 'a[href="/dashboard/settings"]',
     position: "bottom",
     emoji: "⚙️",

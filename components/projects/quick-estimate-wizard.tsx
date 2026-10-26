@@ -9,16 +9,17 @@ import { StepDetails } from "./wizard-steps/StepDetails";
 import { StepReview } from "./wizard-steps/StepReview";
 
 interface QuickEstimateWizardProps {
-  regions: { id: string; name: string }[];
+  regions: { id: string; name: string; price_modifier?: number }[];
   objectTypes: { id: string; name: string; default_vat_rate: number }[];
   isPro?: boolean;
+  defaultRegionId?: string | null;
 }
 
-export function QuickEstimateWizard({ regions, objectTypes, isPro = false }: QuickEstimateWizardProps) {
-  const { state, actions, meta } = useEstimateWizard({ regions, objectTypes, isPro });
+export function QuickEstimateWizard({ regions, objectTypes, isPro = false, defaultRegionId }: QuickEstimateWizardProps) {
+  const { state, actions, meta } = useEstimateWizard({ regions, objectTypes, isPro, defaultRegionId });
   const { step, selectedType, area, areaInput, rooms, roomsInput, defaultsApplied,
     projectName, regionId, standard, items, creating, generating, aiUsed, aiLimit,
-    viewMode, zakres, conditionalFields, openAccordion, manualVatRate, vatRate, totals } = state;
+    viewMode, zakres, conditionalFields, openAccordion, manualVatRate, vatRate, totals, laborFactor } = state;
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -31,8 +32,7 @@ export function QuickEstimateWizard({ regions, objectTypes, isPro = false }: Qui
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-bold text-orange-800 dark:text-orange-300">Szybka Wycena — ElektroSmart Core</h3>
             <p className="text-xs text-orange-700/80 dark:text-orange-400/70 mt-0.5">
-              Automatycznie generuj kosztorys na podstawie typu obiektu, powierzchni i standardu wykonania.
-              Silnik inżynieryjny ElektroSmart Engine v2.1 dobiera pozycje i ilości z 6-poziomowej bazy ES-KNR 2026 — Ty możesz je dostosować przed utworzeniem projektu.
+              Lista pozycji z metrażu. Materiał z cennika, robocizna to rbh normy ES razy Twoja stawka. Województwo dolicza się w sumie — ta sama kwota wchodzi do projektu.
             </p>
           </div>
         </div>
@@ -135,6 +135,7 @@ export function QuickEstimateWizard({ regions, objectTypes, isPro = false }: Qui
           items={items}
           vatRate={vatRate}
           totals={totals}
+          laborFactor={laborFactor}
           viewMode={viewMode}
           creating={creating}
           wasFallback={state.wasFallback}

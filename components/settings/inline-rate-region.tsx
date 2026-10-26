@@ -167,7 +167,7 @@ export function InlineRateRegion({ initialRate, initialRegionId, regions }: Inli
             </div>
             <div>
               <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Zaawansowane ustawienia wycen</p>
-              <p className="text-[11px] text-slate-400 dark:text-slate-500">Upload KNR, Sandbox, Kalibracja silnika, Narzuty materiałowe</p>
+              <p className="text-[11px] text-slate-400 dark:text-slate-500">Narzuty na materiał i robociznę, baza norm ES</p>
             </div>
           </div>
           <ChevronRight className="w-4 h-4 text-slate-400 group-hover:translate-x-0.5 transition-transform" />

@@ -34,7 +34,7 @@ export function getRegionalPrice(
 }
 
 export function formatPrice(price: number): string {
-  return `${price.toFixed(2)} zl`;
+  return `${price.toFixed(2)} zł`;
 }
 
 export function getCategoryLabel(category: MarketItem["category"]): string {

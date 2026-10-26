@@ -51,6 +51,8 @@ export interface EstimateItem {
   base_material_price: number;
   base_labor_price: number;
   knr_code?: string | null;
+  /** Hours per unit from the ES norm. Labor zł = this × the electrician's rate. */
+  labor_norm?: number | null;
 }
 
 interface ItemRule {

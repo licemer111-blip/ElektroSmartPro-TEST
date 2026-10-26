@@ -10,9 +10,9 @@ import {
   Users, Crown, TrendingUp, FolderKanban,
   Eye, MousePointerClick, MapPin, Package,
   DollarSign, Activity, Brain, BarChart3,
-  Wrench, FlaskConical, Loader2, CheckCircle, AlertCircle, Trash2,
+  FlaskConical, Loader2, CheckCircle, AlertCircle, Trash2,
   RefreshCw, ArrowUpRight, ChevronRight, Zap, SlidersHorizontal,
-  LayoutGrid, Rocket, Timer,
+  Rocket, Timer,
 } from "lucide-react";
 import { resetStats } from "@/app/admin/actions";
 import type { AdminKpiData, VoivodeshipStat, PopularAssemblyStat } from "@/app/admin/actions";
@@ -367,7 +367,7 @@ export function AdminDashboardClient({ kpi, voivodeships, assemblies, errors }: 
           <CardContent className="px-2 pb-3">
             <NavCard href="/admin/users"          label="Użytkownicy"    icon={Users}          desc="Zarządzanie kontami & PRO override" accent="bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400" />
             <NavCard href="/admin/market"         label="Ceny Katalogowe" icon={TrendingUp}      desc="Globalna baza materiałów i robocizny" accent="bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400" />
-            <NavCard href="/admin/health"         label="Health Monitor"  icon={Activity}       desc="Stan silnika ES-Engine & normy KNR"   accent="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400" />
+            <NavCard href="/admin/knr-quality"  label="Jakość norm ES" icon={FlaskConical} desc="Dopasowania normy ES, nie stary panel DIN" accent="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400" />
             <NavCard href="/admin/canonical-l0"   label="L0 Canonical"   icon={SlidersHorizontal} desc="Overrides bazy KNR L0"             accent="bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400" />
             <NavCard href="/admin/analytics"      label="Analityka"       icon={BarChart3}       desc="Aktywność użytkowników & odchylenia" accent="bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400" />
             <NavCard href="/admin/knowledge-base" label="Baza Wiedzy"    icon={Brain}           desc="Pliki RAG dla ES-Engine"             accent="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400" />
@@ -376,72 +376,6 @@ export function AdminDashboardClient({ kpi, voivodeships, assemblies, errors }: 
 
       </div>
 
-      {/* ── Dev Panel (bottom, compact) ── */}
-      <PaymentTestPanel />
-
-    </div>
-  );
-}
-
-// ─── Payment Test Panel ───────────────────────────────────────────────────────
-
-function PaymentTestPanel() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<{ ok: boolean; message: string } | null>(null);
-
-  const handleTestPayment = async () => {
-    setIsLoading(true);
-    setResult(null);
-    try {
-      const response = await fetch("/api/billing/gateway", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ billingCycle: "monthly", vatRate: 23, isTest: true }),
-      });
-      const data = await response.json() as { url?: string; error?: string; details?: string };
-      if (!response.ok) throw new Error(data.details ?? data.error ?? "Błąd");
-      if (data.url) {
-        setResult({ ok: true, message: "Sesja Stripe utworzona → otwieranie..." });
-        setTimeout(() => { window.open(data.url, "_blank"); }, 600);
-      } else {
-        throw new Error("Brak URL sesji");
-      }
-    } catch (err: unknown) {
-      setResult({ ok: false, message: err instanceof Error ? err.message : "Nieznany błąd" });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <div className="rounded-xl border border-dashed border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/30 px-4 py-3">
-      <div className="flex items-center justify-between gap-4 flex-wrap">
-        <div className="flex items-center gap-3">
-          <div className="w-7 h-7 rounded-md bg-rose-100 dark:bg-rose-900/40 flex items-center justify-center shrink-0">
-            <FlaskConical className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
-          </div>
-          <div>
-            <p className="text-[12px] font-semibold text-slate-600 dark:text-slate-400">Dev — Test Płatności Stripe</p>
-            <p className="text-[10px] text-slate-400">Plan miesięczny + VAT 23% · tylko konto testowe</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-          {result && (
-            <span className={`flex items-center gap-1 text-[11px] font-medium ${result.ok ? "text-emerald-600" : "text-rose-600"}`}>
-              {result.ok ? <CheckCircle className="w-3.5 h-3.5" /> : <AlertCircle className="w-3.5 h-3.5" />}
-              {result.message}
-            </span>
-          )}
-          <Button size="sm" variant="outline" onClick={handleTestPayment} disabled={isLoading}
-            className="h-7 text-xs border-rose-200 text-rose-700 hover:bg-rose-50 dark:border-rose-800 dark:text-rose-400 gap-1.5"
-          >
-            {isLoading
-              ? <><Loader2 className="w-3 h-3 animate-spin" />Tworzenie...</>
-              : <><FlaskConical className="w-3 h-3" />Test 2 PLN</>
-            }
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }

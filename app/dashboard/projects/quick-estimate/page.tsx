@@ -25,7 +25,7 @@ export default async function QuickEstimatePage() {
   // Check PRO status (trial-aware)
   const { data: profile } = await supabase
     .from("profiles")
-    .select("is_pro, trial_started_at, trial_ends_at")
+    .select("is_pro, trial_started_at, trial_ends_at, default_region_id")
     .eq("id", user.id)
     .single();
 
@@ -39,7 +39,8 @@ export default async function QuickEstimatePage() {
   return (
     <PageContainer>
       <QuickEstimateWizard
-        regions={regions.map(r => ({ id: r.id, name: r.name }))}
+        regions={regions.map(r => ({ id: r.id, name: r.name, price_modifier: r.price_modifier }))}
+        defaultRegionId={(profile as { default_region_id?: string | null } | null)?.default_region_id ?? null}
         objectTypes={objectTypes.map(ot => ({ id: ot.id, name: ot.name, default_vat_rate: ot.default_vat_rate }))}
         isPro={isPro}
       />

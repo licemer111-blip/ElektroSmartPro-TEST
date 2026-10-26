@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-import { SYSTEM_STATS_FALLBACK } from "@/constants/system";
 import { getCatalogItems, getCatalogCategories, getCategoryItemCounts, getTotalCatalogCount, getFavoriteCatalogItemIds, getUserCategoriesCount } from "./actions";
 import { CatalogTable } from "./catalog-table";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Info, Lightbulb, PackageSearch, TrendingUp, Star, Layers, DollarSign, Zap, Package } from "lucide-react";
+import { PackageSearch, TrendingUp, Star, Layers, Zap, Package } from "lucide-react";
 import Link from "next/link";
 import { PageContainer } from "@/components/layout/page-container";
 import { PageHeader } from "@/components/layout/page-header";
@@ -19,7 +17,7 @@ export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Katalog Materiałów Elektrycznych",
-  description: `Profesjonalna baza ${SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR z cenami materiałów i robocizny — wyszukiwanie, filtrowanie, ulubione i własne pozycje`,
+  description: "Katalog pozycji: materiał i robocizna osobno. Robocizna = rbh z normy ES × Twoja stawka.",
 };
 
 export default async function CatalogPage({
@@ -44,7 +42,7 @@ export default async function CatalogPage({
 
   const profile = await getUserProfile();
 
-  const [catalogData, categories, itemCounts, totalCount, favoriteIds, userTeam, userCategoriesCount] = await Promise.all([
+  const [catalogData, categories, itemCounts, totalCount, favoriteIds, userTeam, userCategoriesCount, ownItemsCount] = await Promise.all([
     getCatalogItems({ search, categoryId, type, page, pageSize: 20, favoritesOnly: showFavorites, viewMode: effectiveViewMode }).catch(() => ({ items: [], total: 0, page: 1, pageSize: 20, totalPages: 0 })),
     getCatalogCategories().catch(() => []),
     getCategoryItemCounts(effectiveViewMode).catch(() => ({})),
@@ -52,6 +50,7 @@ export default async function CatalogPage({
     getFavoriteCatalogItemIds().catch(() => []),
     getUserTeam().catch(() => null),
     getUserCategoriesCount().catch(() => 0),
+    getTotalCatalogCount("own").catch(() => 0),
   ]);
 
   const isPro = getEffectiveIsPro(profile as Parameters<typeof getEffectiveIsPro>[0]);
@@ -60,7 +59,7 @@ export default async function CatalogPage({
   const totalItems = totalCount;
   const favoritesCount = favoriteIds.length;
   const categoriesCount = userCategoriesCount;
-  const customItemsCount = catalogData.items.filter(item => item.user_id).length;
+  const customItemsCount = ownItemsCount;
 
   // Calculate most used category
   const sortedCounts = Object.entries(itemCounts).sort((a, b) => b[1] - a[1]);
@@ -72,7 +71,7 @@ export default async function CatalogPage({
         {/* Header */}
         <PageHeader
           title="Katalog Pozycji"
-          description={`Baza ${SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR z cenami • Własne pozycje • Przełączaj: Własne / ES-Engine / Hybrydowy`}
+          description="Materiał i robocizna osobno. Robocizna = rbh z normy ES × Twoja stawka. Tryb: własne / baza ES / oba."
           icon={PackageSearch}
           breadcrumbs={[
             { label: "Dashboard", href: "/dashboard" },
@@ -101,9 +100,9 @@ export default async function CatalogPage({
                   <Layers className="h-4 w-4 text-orange-600 dark:text-orange-400" />
                 </div>
               </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Kategorie</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Twoje kategorie</p>
               <p className="text-2xl font-bold text-slate-900 dark:text-slate-50">{categoriesCount}</p>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500">własnych</p>
+              <p className="text-[10px] text-slate-400 dark:text-slate-500">utworzone przez Ciebie</p>
             </CardContent>
           </Card>
 
@@ -158,7 +157,7 @@ export default async function CatalogPage({
                   <p className="text-xs text-slate-600 dark:text-slate-400">Przegląd Twojego katalogu</p>
                 </div>
               </div>
-              <Badge variant="secondary" className="text-xs">{categoriesCount} własnych kategorii</Badge>
+              <Badge variant="secondary" className="text-xs">kategorie z pozycjami</Badge>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
@@ -174,10 +173,16 @@ export default async function CatalogPage({
                 const bgColor = colors[idx % colors.length];
                 const isActive = categoryId === catId;
 
+                const hrefParams = new URLSearchParams();
+                if (modeParam && modeParam !== "hybrid") hrefParams.set("mode", modeParam);
+                if (showFavorites) hrefParams.set("favorites", "true");
+                if (!isActive) hrefParams.set("category", catId);
+                const hrefQuery = hrefParams.toString();
+
                 return (
                   <Link
                     key={catId}
-                    href={isActive ? "/dashboard/catalog" : `/dashboard/catalog?category=${catId}`}
+                    href={hrefQuery ? `/dashboard/catalog?${hrefQuery}` : "/dashboard/catalog"}
                     className={`block p-2.5 border rounded-lg transition-all cursor-pointer ${
                       isActive
                         ? "border-blue-400 dark:border-blue-600 bg-blue-50 dark:bg-blue-950/40 ring-2 ring-blue-400/30 dark:ring-blue-500/20 shadow-md"
@@ -229,7 +234,7 @@ export default async function CatalogPage({
                     Baza ES-Engine
                   </h4>
                   <p className="text-xs text-green-800 dark:text-green-300">
-                    {SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR z cenami materiału i robocizny. Przełącz tryb w panelu kategorii po lewej.
+                    Pozycje bazy ES: materiał i robocizna w osobnych kolumnach. Tryb przełączasz w panelu kategorii po lewej.
                   </p>
                 </div>
               </div>
@@ -265,7 +270,7 @@ export default async function CatalogPage({
                     Ceny regionalne
                   </h4>
                   <p className="text-xs text-blue-800 dark:text-blue-300">
-                    Stawki robocizny są korygowane wg województwa (np. Mazowieckie +15%). Region ustawiasz w Ustawienia → Finanse.
+                    Województwo mnoży tylko robociznę (Mazowieckie +20%, Podkarpackie −12%). Materiał zostaje bez tej korekty. Region: Ustawienia → Finanse.
                   </p>
                 </div>
               </div>

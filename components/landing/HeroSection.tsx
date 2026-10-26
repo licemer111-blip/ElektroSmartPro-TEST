@@ -13,7 +13,8 @@ interface HeroSectionProps {
   categoriesCount?: number;
 }
 
-export function HeroSection({ normsCount = 8011, categoriesCount = 63 }: HeroSectionProps) {
+export function HeroSection(_props: HeroSectionProps) {
+  void _props;
   return (
     <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 md:pt-24 pb-12 sm:pb-16">
       <div className="relative grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
@@ -23,7 +24,7 @@ export function HeroSection({ normsCount = 8011, categoriesCount = 63 }: HeroSec
           {/* Version badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 badge-blue rounded-full text-sm font-medium hover:scale-105 transition-transform duration-300 shadow-sm">
             <Sparkles className="w-4 h-4 animate-pulse" />
-            <span>Profesjonalny System Kosztorysowy | Normy KNR | PN-HD 60364</span>
+            <span>Kosztorys elektryczny | Norma ES | VAT 8% / 23%</span>
           </div>
 
           {/* Engine badge */}
@@ -39,7 +40,7 @@ export function HeroSection({ normsCount = 8011, categoriesCount = 63 }: HeroSec
           {/* Headline */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white leading-tight">
             Profesjonalne Kosztorysowanie{" "}
-            <span className="gradient-text-pro">oparte na normach KNR i stawkach regionalnych</span>
+            <span className="gradient-text-pro">robocizna osobno od materiału</span>
           </h1>
 
           {/* Subheadline */}
@@ -69,8 +70,8 @@ export function HeroSection({ normsCount = 8011, categoriesCount = 63 }: HeroSec
           {/* Stats */}
           <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-4">
             <div className="pro-card rounded-xl p-3 sm:p-4 text-center hover-lift">
-              <div className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">350+</div>
-              <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">Modułów DIN (Pełna baza osprzętu)</div>
+              <div className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">16</div>
+              <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">województw, mnożnik tylko na robociznę</div>
             </div>
             <div className="pro-card rounded-xl p-3 sm:p-4 text-center hover-lift">
               <div className="text-2xl sm:text-3xl font-bold gradient-text">Zestawy</div>
@@ -78,9 +79,9 @@ export function HeroSection({ normsCount = 8011, categoriesCount = 63 }: HeroSec
               <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Buduj zestawy r-g + materiały raz, używaj zawsze</div>
             </div>
             <div className="pro-card rounded-xl p-3 sm:p-4 text-center hover-lift">
-              <div className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">{(Math.floor(normsCount / 1000) * 1000).toLocaleString("pl-PL")}+</div>
-              <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">norm KNR</div>
-              <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">{categoriesCount} kategorii · KNR 5-08 / 5-09</div>
+              <div className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">ES</div>
+              <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">godziny normy ES</div>
+              <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">zł = rbh × Twoja stawka</div>
             </div>
           </div>
         </div>

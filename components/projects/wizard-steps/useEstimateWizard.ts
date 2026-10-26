@@ -15,6 +15,7 @@ import {
   generateQuickEstimateWithAI,
   getQuickEstimateUsage,
 } from "@/app/dashboard/projects/quick-estimate/actions";
+import { computeComplexityFromContext } from "@/lib/pricing-complexity";
 import { toast } from "sonner";
 
 const OBJECT_TYPE_DEFAULTS: Record<ObjectTypeKey, { area: number; rooms: number; placeholder: string }> = {
@@ -31,12 +32,13 @@ const OBJECT_TYPE_DEFAULTS: Record<ObjectTypeKey, { area: number; rooms: number;
 export { OBJECT_TYPE_DEFAULTS };
 
 interface UseEstimateWizardProps {
-  regions: { id: string; name: string }[];
+  regions: { id: string; name: string; price_modifier?: number }[];
   objectTypes: { id: string; name: string; default_vat_rate: number }[];
   isPro?: boolean;
+  defaultRegionId?: string | null;
 }
 
-export function useEstimateWizard({ regions, objectTypes, isPro = false }: UseEstimateWizardProps) {
+export function useEstimateWizard({ regions, objectTypes, isPro = false, defaultRegionId }: UseEstimateWizardProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -48,7 +50,7 @@ export function useEstimateWizard({ regions, objectTypes, isPro = false }: UseEs
   const [roomsInput, setRoomsInput] = useState("3");
   const [defaultsApplied, setDefaultsApplied] = useState<ObjectTypeKey | null>(null);
   const [projectName, setProjectName] = useState("");
-  const [regionId, setRegionId] = useState(regions[0]?.id || "");
+  const [regionId, setRegionId] = useState(defaultRegionId || regions[0]?.id || "");
   const [standard, setStandard] = useState<QualityStandard>("standard");
   const [items, setItems] = useState<EstimateItem[]>([]);
   const [creating, setCreating] = useState(false);
@@ -127,16 +129,19 @@ export function useEstimateWizard({ regions, objectTypes, isPro = false }: UseEs
     return objectTypes.find(ot => ot.id === dbId)?.default_vat_rate || 8;
   }, [manualVatRate, selectedType, objectTypeMap, objectTypes]);
 
+  const regionModifier = regions.find((r) => r.id === regionId)?.price_modifier ?? 1;
+  const complexityFactor = computeComplexityFromContext(conditionalFields).factor;
+
   const totals = useMemo(() => {
     let material = 0, labor = 0;
     for (const item of items) {
       material += item.base_material_price * item.quantity;
-      labor += item.base_labor_price * item.quantity;
+      labor += item.base_labor_price * item.quantity * regionModifier * complexityFactor;
     }
     const net = material + labor;
     const vatAmount = net * (vatRate / 100);
     return { material, labor, net, vatAmount, gross: net + vatAmount };
-  }, [items, vatRate]);
+  }, [items, vatRate, regionModifier, complexityFactor]);
 
   const handleGenerateItems = async () => {
     if (!selectedType) return;
@@ -161,9 +166,9 @@ export function useEstimateWizard({ regions, objectTypes, isPro = false }: UseEs
       }
       if (result.fallback) {
         setWasFallback(true);
-        toast.info("Użyto kalkulatora lokalnego (AI niedostępne)");
+        toast.success("Pozycje policzone: materiał z cennika, robocizna = rbh × Twoja stawka");
       } else {
-        toast.success(`AI wygenerowało ${result.items?.length || 0} pozycji kosztorysu`);
+        toast.success(`Przygotowano ${result.items?.length || 0} pozycji`);
       }
       setStep(3);
     } catch {
@@ -188,6 +193,7 @@ export function useEstimateWizard({ regions, objectTypes, isPro = false }: UseEs
         objectTypeId: objectTypeMap[selectedType],
         vatRate,
         items: activeItems,
+        conditionalFields,
       });
       if (result.error) {
         toast.error(result.error);
@@ -219,7 +225,7 @@ export function useEstimateWizard({ regions, objectTypes, isPro = false }: UseEs
       defaultsApplied, projectName, regionId, standard, items,
       creating, generating, aiUsed, aiLimit, wasFallback,
       viewMode, zakres, conditionalFields, openAccordion, manualVatRate,
-      vatRate, totals,
+      vatRate, totals, laborFactor: regionModifier * complexityFactor,
     },
     actions: {
       setStep, setSelectedType, setArea, setAreaInput, setRooms, setRoomsInput,

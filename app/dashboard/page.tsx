@@ -124,14 +124,14 @@ export default async function DashboardPage({
                 <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold text-sm">2</div>
                 <div>
                   <p className="text-sm font-semibold text-emerald-900 dark:text-emerald-100">Dodaj pozycje</p>
-                  <p className="text-xs text-emerald-700 dark:text-emerald-400 mt-0.5">Z katalogu KNR, zestawów (Puszka+Kabel+Bruzda) lub AI</p>
+                  <p className="text-xs text-emerald-700 dark:text-emerald-400 mt-0.5">Z katalogu, zestawu (gniazdo + puszka + kabel + bruzda) albo ręcznie</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800">
                 <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-amber-600 flex items-center justify-center text-white font-bold text-sm">3</div>
                 <div>
                   <p className="text-sm font-semibold text-amber-900 dark:text-amber-100">Eksportuj PDF</p>
-                  <p className="text-xs text-amber-700 dark:text-amber-400 mt-0.5">Wyślij PDF klientowi lub udostępnij przez Portal Klienta</p>
+                  <p className="text-xs text-amber-700 dark:text-amber-400 mt-0.5">Wyślij PDF. W DEMO jest znak wodny, czysty wydruk jest w PRO.</p>
                 </div>
               </div>
             </div>
