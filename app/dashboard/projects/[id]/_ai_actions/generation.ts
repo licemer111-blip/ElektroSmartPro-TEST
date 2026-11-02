@@ -8,6 +8,7 @@ import { logger } from "@/lib/logger";
 // ═══════════════════════════════════════════════════════════════════
 
 import { google } from "@ai-sdk/google";
+import { AI_MODEL_TIER2 } from "@/lib/ai-models";
 import { generateObject, generateText } from "ai";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
@@ -425,7 +426,7 @@ INSTRUKCJA: Generuj TYLKO pozycje, jednostki i ilosci. Nie podawaj cen i nie wym
 
     const generateWithRetry = async (attempt: number) => {
       return generateObject({
-        model: google("gemini-2.0-flash"),
+        model: google(AI_MODEL_TIER2),
         system: `${masterSystemPrompt}\n\n${dynamicContext}`,
         prompt: description,
         schema: itemSchema,
@@ -531,8 +532,9 @@ INSTRUKCJA: Generuj TYLKO pozycje, jednostki i ilosci. Nie podawaj cen i nie wym
     revalidatePath(`/dashboard/projects/${projectId}`);
     return { success: true, items: generatedItems, addedCount: itemsToInsert.length };
   } catch (error) {
-    logger.error("[generateProjectItemsWithAI] error:", {}, error);
-    return { success: false, error: "Nieoczekiwany blad" };
+    const detail = error instanceof Error ? error.message : String(error);
+    logger.error("[generateProjectItemsWithAI] error", { detail: detail.slice(0, 400) });
+    return { success: false, error: "Asystent nie odpowiedział. Spróbuj jeszcze raz." };
   }
 }
 
@@ -624,7 +626,7 @@ Zwroc WYLACZNIE poprawny JSON (bez markdown) w formacie:
 
     const attemptGenerate = async (desc: string, temp: number) => {
       const { text } = await generateText({
-        model: google("gemini-2.0-flash"),
+        model: google(AI_MODEL_TIER2),
         system: PANEL_SYSTEM_PROMPT,
         prompt: buildPrompt(desc),
         temperature: temp,

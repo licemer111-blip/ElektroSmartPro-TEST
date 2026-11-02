@@ -1,6 +1,7 @@
 "use server";
 
 import { google } from "@ai-sdk/google";
+import { AI_MODEL_TIER2 } from "@/lib/ai-models";
 import { generateObject } from "ai";
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/supabase-admin";
@@ -203,7 +204,7 @@ export async function getAiSearchFallback(
 
     // Step 2 — AI fallback (only when direct search also returned 0)
     const { object } = await generateObject({
-      model: google("gemini-2.0-flash"),
+      model: google(AI_MODEL_TIER2),
       schema: AiCategorySchema,
       prompt: `Jesteś ekspertem polskiego kosztorysowania elektrycznego KNR 2026.
 Użytkownik wpisał: "${query}" — brak wyników w katalogu i słowniku KNR.

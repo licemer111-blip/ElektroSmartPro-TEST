@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 
 // Model name for Knowledge Base — confirmed to support createCachedContent
 // (gemini-1.5-pro is NOT available on this API key's tier)
-export const KB_MODEL = "gemini-2.0-flash";
+export const KB_MODEL = "gemini-3.5-flash";
 
 // Default TTL for cached content: 24 hours in seconds
 export const CACHE_TTL_SECONDS = 86400;

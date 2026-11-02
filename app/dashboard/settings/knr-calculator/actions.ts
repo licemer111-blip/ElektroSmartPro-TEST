@@ -5,6 +5,7 @@ import { tryAuth } from "@/lib/auth";
 import { normalizeKnrCode, looksLikeKnrCode } from "@/lib/services/pricing-config";
 import { matchItem, type EngineSettings } from "@/lib/services/matching-engine";
 import { google } from "@ai-sdk/google";
+import { AI_MODEL_TIER2 } from "@/lib/ai-models";
 import { generateText } from "ai";
 import { bulkRecalculateLaborPrices } from "@/app/dashboard/catalog/bulk-recalculate-labor";
 
@@ -464,7 +465,7 @@ export async function searchDictionaryWithAI(
 
     try {
       const { text } = await generateText({
-        model: google("gemini-2.0-flash"),
+        model: google(AI_MODEL_TIER2),
         messages: [{
           role: "user",
           content: `Jesteś ekspertem instalacji elektrycznych w Polsce (KNR, SEP, PN-HD 60364).\nZapytanie: "${query}"\nPodaj 5 krótkich polskich słów kluczowych (max 3 słowa każde) ze słownictwa KNR, które najlepiej opisują tę pracę lub materiał. Uwzględnij synonimy i skróty branżowe.\nOdpowiedź WYŁĄCZNIE JSON: {"terms":["term1","term2","term3","term4","term5"],"explanation":"1-zdaniowe wyjaśnienie"}`,

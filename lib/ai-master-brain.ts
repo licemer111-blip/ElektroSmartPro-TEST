@@ -308,6 +308,6 @@ export function getKnrMetadata(
 
 // ─── Model Routing Constants ──────────────────────────────────────────────────
 
-export const GEMINI_RAG_MODEL = "gemini-2.0-flash" as const;
+export const GEMINI_RAG_MODEL = "gemini-3.5-flash" as const;
 // Stage 2 Auditor — uses Tier 1 for deeper verification of pricing/schemat output
 export const GEMINI_PRO_MODEL = AI_MODEL_TIER1;

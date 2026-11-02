@@ -12,6 +12,7 @@
  */
 
 import { google } from "@ai-sdk/google";
+import { AI_MODEL_TIER2 } from "@/lib/ai-models";
 import { generateText } from "ai";
 import { queryCatalogCache } from "./catalog-context.service";
 
@@ -343,7 +344,7 @@ export async function generateExpertResponse(
 
   try {
     const result = await generateText({
-      model: google("gemini-2.0-flash"),
+      model: google(AI_MODEL_TIER2),
       messages,
       maxOutputTokens: MAX_OUTPUT_TOKENS,
       temperature: 0.4,
@@ -352,7 +353,7 @@ export async function generateExpertResponse(
   } catch {
     try {
       const result = await generateText({
-        model: google("gemini-2.0-flash"),
+        model: google(AI_MODEL_TIER2),
         messages: [{ role: "user", content: userMessage.slice(0, 1500) }],
         maxOutputTokens: MAX_OUTPUT_TOKENS,
         temperature: 0.4,

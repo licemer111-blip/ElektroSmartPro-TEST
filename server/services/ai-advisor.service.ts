@@ -5,7 +5,7 @@
  * to ALL app modules (Estimator, Switchboard, Creator, etc.)
  *
  * Two-Stage "AI Auditor" Pattern (for pricing + schemat modules):
- *   Stage 1 — Generator : gemini-2.0-flash        → fast structured JSON output
+ *   Stage 1 — Generator : gemini-3.5-flash        → fast structured JSON output
  *   Stage 2 — Auditor   : AI_MODEL_TIER1 (Tier 1) → verify, fix, return audited result (generateObject)
  *
  * Single-Stage Pattern (all other modules):
@@ -66,7 +66,7 @@ const AUDITED_MODULES: ReadonlySet<AIModule> = new Set(["pricing", "schemat"]);
 // ─── Stage 2: Auditor ─────────────────────────────────────────────────────────
 
 /**
- * Runs the Stage 2 Auditor pass using gemini-2.0-flash (GEMINI_PRO_MODEL).
+ * Runs the Stage 2 Auditor pass using gemini-3.5-flash (GEMINI_PRO_MODEL).
  * Receives the Stage 1 JSON output, verifies it, and returns a fixed version
  * along with a list of issues found.
  *

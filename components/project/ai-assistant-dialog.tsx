@@ -101,7 +101,7 @@ export function AIAssistantDialog({ projectId, isPro = false, projectStatus = "d
       if (error instanceof Error && (error.message.includes("Failed to find Server Action") || error.message.includes("Server Action"))) {
         setResult({ success: false, error: "Strona wymaga odświeżenia. Odśwież stronę i spróbuj ponownie." });
       } else {
-        setResult({ success: false, error: "Nieoczekiwany błąd. Spróbuj ponownie." });
+        setResult({ success: false, error: "Asystent nie odpowiedział. Odśwież stronę i spróbuj jeszcze raz." });
       }
     } finally {
       setIsGenerating(false);

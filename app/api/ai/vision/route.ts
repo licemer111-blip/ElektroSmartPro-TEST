@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { checkAndIncrementAiUsage } from "@/lib/ai-usage";
 import { AI_FUNCTION_NAMES } from "@/lib/ai-quota-config";
 import { google } from "@ai-sdk/google";
+import { AI_MODEL_TIER2 } from "@/lib/ai-models";
 import { generateObject } from "ai";
 import { z } from "zod";
 import { buildDynamicSystemPrompt, injectKbContext } from "@/lib/ai-master-brain";
@@ -39,7 +40,7 @@ async function callGeminiVision(userContent: ContentPart[], systemPrompt: string
   for (let attempt = 0; attempt < DELAYS.length; attempt++) {
     try {
       const { object } = await generateObject({
-        model: google("gemini-2.0-flash"),
+        model: google(AI_MODEL_TIER2),
         messages: [
           { role: "system" as const, content: systemPrompt },
           { role: "user" as const, content: userContent },

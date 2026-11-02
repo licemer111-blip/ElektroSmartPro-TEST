@@ -8,6 +8,7 @@ import { logger } from "@/lib/logger";
 // ═══════════════════════════════════════════════════════════════════
 
 import { google } from "@ai-sdk/google";
+import { AI_MODEL_TIER2 } from "@/lib/ai-models";
 import { generateObject } from "ai";
 import { z } from "zod";
 import { tryAuth } from "@/lib/auth";
@@ -49,7 +50,7 @@ export async function categorizeCatalogItemWithAI(
     }
 
     const { object: parsed } = await generateObject({
-      model: google("gemini-2.0-flash"),
+      model: google(AI_MODEL_TIER2),
       system: CATEGORIZATION_SYSTEM_PROMPT,
       prompt: itemName,
       schema: z.object({
@@ -94,7 +95,7 @@ export async function detectPriceAnomalyWithAI(
     }
 
     const { object: parsed } = await generateObject({
-      model: google("gemini-2.0-flash"),
+      model: google(AI_MODEL_TIER2),
       system: PRICE_ANOMALY_SYSTEM_PROMPT,
       prompt: `Produkt: ${itemName}\nCena materialu: ${price} PLN`,
       schema: z.object({
@@ -182,7 +183,7 @@ export async function fillMissingKnrCodes(projectId: string): Promise<KnrCodeRes
       .join("\n");
 
     const { object: result } = await generateObject({
-      model: google("gemini-2.0-flash"),
+      model: google(AI_MODEL_TIER2),
       system: `Jesteś ekspertem KNR (Katalog Norm Rzeczowych) dla instalacji elektrycznych w Polsce.
 Twoim zadaniem jest znalezienie kodu KNR dla każdej pozycji robocizny.
 
@@ -302,7 +303,7 @@ export async function fillMissingRbhNorms(projectId: string): Promise<RbhNormRes
       .join("\n");
 
     const { object: result } = await generateObject({
-      model: google("gemini-2.0-flash"),
+      model: google(AI_MODEL_TIER2),
       system: `Jestes ekspertem KNR (Katalog Norm Rzeczowych) dla instalacji elektrycznych w Polsce.
 Twoim zadaniem jest znalezienie normy czasu pracy (labor_norm) w rbh/jm dla kazdej pozycji.
 ZASADY:

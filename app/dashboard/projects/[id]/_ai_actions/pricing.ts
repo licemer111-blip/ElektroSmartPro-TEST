@@ -8,6 +8,7 @@ import { logger } from "@/lib/logger";
 // ═══════════════════════════════════════════════════════════════════
 
 import { google } from "@ai-sdk/google";
+import { AI_MODEL_TIER2 } from "@/lib/ai-models";
 import { generateObject } from "ai";
 import { z } from "zod";
 import { AI_FUNCTION_NAMES } from "@/lib/ai-quota-config";
@@ -1162,7 +1163,7 @@ Jeśli znasz godziny — labor_price = labor_norm_rbh × ${baseRateForCalc}.
               batchResult = object;
             } catch {
               const { object } = await generateObject({
-                model: google("gemini-2.0-flash"),
+                model: google(AI_MODEL_TIER2),
                 system: systemPromptL3,
                 prompt: batchPrompt,
                 schema: l3Schema,
@@ -1173,7 +1174,7 @@ Jeśli znasz godziny — labor_price = labor_norm_rbh × ${baseRateForCalc}.
             }
           } else {
             const { object } = await generateObject({
-              model: google("gemini-2.0-flash"),
+              model: google(AI_MODEL_TIER2),
               system: systemPromptL3,
               prompt: batchPrompt,
               schema: l3Schema,
@@ -1403,7 +1404,7 @@ Jeśli znasz godziny — labor_price = labor_norm_rbh × ${baseRateForCalc}.
 
             try {
               const { object: chunkResult } = await generateObject({
-                model: google("gemini-2.0-flash"),
+                model: google(AI_MODEL_TIER2),
                 system: `Podaj ceny MATERIAŁÓW netto hurtowe 2026 PLN/jm dla elektroinstalacji. ×${inflationMult.toFixed(2)}. note: max 3 słowa. Zero FORBIDDEN.\n\n${priceRefContext}`,
                 prompt: chunkList,
                 schema: matFallbackSchema,
@@ -1745,7 +1746,7 @@ export async function repriceSingleItem(
     const ctxProjectName = (project.name as string | null) ?? "";
 
     const { object: estResult } = await generateObject({
-      model: google("gemini-2.0-flash"),
+      model: google(AI_MODEL_TIER2),
       system: `${PRICING_STATIC_SYSTEM_PROMPT}
 <context>
 - Stawka robocizny: ${baseRateForCalc} PLN/rbh (BAZOWA — bez wsp. regionalnego)
@@ -2158,7 +2159,7 @@ Uzasadnij skąd pochodzi cena (KNR, norma, doświadczenie rynkowe 2026).
 </task>`;
 
     const { object: result } = await generateObject({
-      model: google("gemini-2.0-flash"),
+      model: google(AI_MODEL_TIER2),
       system: expertSystemPrompt,
       prompt: `Wycen pozycję: "${positionName}" | jednostka: ${unit} | region: ${regionName} | stawka bazowa: ${baseRateForCalc} PLN/rbh\n\nPodaj cenę JEDNOSTKOWĄ (za 1 ${unit}). Uzasadnij krótko skąd pochodzi wycena.`,
       schema: z.object({

@@ -4,6 +4,7 @@
  */
 
 import { logger } from "@/lib/logger";
+import { AI_MODEL_TIER2 } from "@/lib/ai-models";
 import type {
   CatalogItemRef,
   CatalogMatchResult,
@@ -324,7 +325,7 @@ export async function semanticCatalogMatch(
     const { generateText } = await import("ai");
 
     const { text } = await generateText({
-      model: google("gemini-2.0-flash"),
+      model: google(AI_MODEL_TIER2),
       messages: [{ role: "user", content: prompt }],
       temperature: 0,
       maxOutputTokens: 60,
@@ -390,7 +391,7 @@ export async function batchSemanticCatalogMatch(
     const { generateText } = await import("ai");
 
     const { text } = await generateText({
-      model: google("gemini-2.0-flash"),
+      model: google(AI_MODEL_TIER2),
       messages: [{ role: "user", content: prompt }],
       temperature: 0,
       maxOutputTokens: Math.min(200 + items.length * 30, 2000),
