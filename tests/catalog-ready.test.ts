@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { catalogNameMatches, catalogSearchRank } from "@/lib/catalog/catalog-search";
+import { catalogNameMatches, catalogSearchRank, isLegacySizeChase } from "@/lib/catalog/catalog-search";
 import { resolveCatalogHours } from "@/lib/catalog/catalog-work";
 import { findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
 import { dedupeObjectTypes, vatForObjectType } from "@/lib/projects/object-vat";
+import { STARTER_KITS, resolveStarterLine } from "@/lib/assemblies/starter-kits";
 
 describe("catalog name search", () => {
   it("finds a switch written without Polish letters", () => {
@@ -24,6 +25,8 @@ describe("catalog name search", () => {
   });
 
   it("hides the old size-split chase rows", () => {
+    expect(isLegacySizeChase("Bruzda w cegle 20x20mm")).toBe(true);
+    expect(isLegacySizeChase("Bruzda w betonie 40x40mm")).toBe(true);
     expect(catalogNameMatches("bruzda", "Bruzda w cegle 20x20mm")).toBe(false);
     expect(catalogNameMatches("bruzda", "Bruzda w betonie 40x40mm")).toBe(false);
     expect(catalogNameMatches("bruzda", "Bruzda w płycie G-K")).toBe(true);
@@ -123,5 +126,18 @@ describe("object type VAT", () => {
       { id: "3", name: "Mieszkanie / Dom (VAT 8/23%)", slug: "mieszkanie" },
     ]);
     expect(rows.map((row) => row.id)).toEqual(["3", "1"]);
+  });
+});
+
+describe("starter kits", () => {
+  it("takes every line from the ES hour norm and does not invent a material price", () => {
+    for (const kit of STARTER_KITS) {
+      expect(kit.lines.length).toBeGreaterThan(0);
+      for (const line of kit.lines) {
+        const resolved = resolveStarterLine(line);
+        expect(resolved, line.name).not.toBeNull();
+        expect(resolved?.laborNorm).toBeGreaterThan(0);
+      }
+    }
   });
 });

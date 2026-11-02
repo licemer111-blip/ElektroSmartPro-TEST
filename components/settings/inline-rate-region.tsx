@@ -121,7 +121,7 @@ export function InlineRateRegion({ initialRate, initialRegionId, regions }: Inli
             <div>
               <CardTitle className="text-lg sm:text-xl">Województwo</CardTitle>
               <CardDescription className="mt-0.5 sm:mt-1 text-xs sm:text-sm">
-                Mnożnik dotyczy tylko robocizny na kosztorysie. Zapisany region wpisuje się też do Twoich projektów.
+                Mnożnik dotyczy tylko robocizny na kosztorysie. Ten wybór dotyczy nowych kosztorysów. Już otwarte zostają przy swoim województwie.
               </CardDescription>
             </div>
           </div>

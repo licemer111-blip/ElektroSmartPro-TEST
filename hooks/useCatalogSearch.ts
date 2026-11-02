@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { getCatalogItemsByCategory, getCatalogDataBatch } from "@/app/dashboard/projects/[id]/actions";
-import { catalogNameMatches, catalogSearchRank } from "@/lib/catalog/catalog-search";
+import { catalogNameMatches, catalogSearchRank, isLegacySizeChase } from "@/lib/catalog/catalog-search";
 import type { CatalogCategory, CatalogItem } from "@/lib/types/database";
 import type { DataSourceMode } from "@/hooks/use-search-mode";
 
@@ -144,16 +144,17 @@ export function useCatalogSearch({
 
   // ── Filter items by sourceFilter / searchMode ────────────────────────────────
   const filterItems = useCallback((items: CatalogItem[]): CatalogItem[] => {
+    const visible = items.filter((item) => !isLegacySizeChase(item.name));
     if (searchMode === "engine") {
-      return items.filter(item => item.user_id === null);
+      return visible.filter(item => item.user_id === null);
     }
     if (sourceFilter === "personal") {
-      return items.filter(item => item.user_id && (item.visibility === "personal" || !item.visibility));
+      return visible.filter(item => item.user_id && (item.visibility === "personal" || !item.visibility));
     }
     if (sourceFilter === "team") {
-      return items.filter(item => item.visibility === "team" && item.team_id);
+      return visible.filter(item => item.visibility === "team" && item.team_id);
     }
-    return items;
+    return visible;
   }, [sourceFilter, searchMode]);
 
   // ── Visible categories (hide empty for personal/team) ────────────────────────

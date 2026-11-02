@@ -223,6 +223,8 @@ export async function createProject(formData: FormData) {
       client_address: client_address?.trim() || null,
       client_nip: client_nip?.trim() || null,
       default_hourly_rate: defaultHourlyRate,
+      // Labor until the electrician turns materials on and prices them from their own list.
+      materials_owned_by_customer: true,
     })
     .select()
     .single();

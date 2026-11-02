@@ -943,6 +943,11 @@ const ContentPage = ({
                 <Image src={logoBase64} style={{ maxWidth: 90, maxHeight: 35, marginBottom: 4, objectFit: 'contain' }} />
               ) : null}
               <Text style={[base.companyName, { color: palette.textPrimary }]}>{companyName}</Text>
+              {!profile?.company_name ? (
+                <Text style={[base.companyDetail, { color: palette.textSecondary }]}>
+                  Uzupełnij nazwę firmy i NIP w Ustawieniach — pojawią się tutaj.
+                </Text>
+              ) : null}
               <Text style={[base.companyDetail, { color: palette.textSecondary }]}>
                 {[profile?.street, [profile?.postal_code, profile?.city].filter(Boolean).join(' ')].filter(Boolean).join(', ')}
               </Text>
@@ -1065,7 +1070,7 @@ const watermarkStyles = StyleSheet.create({
     fontSize: 78,
     fontWeight: 'bold',
     color: '#DC2626',
-    opacity: 0.14,
+    opacity: 0.28,
     letterSpacing: 4,
     textAlign: 'center',
   },

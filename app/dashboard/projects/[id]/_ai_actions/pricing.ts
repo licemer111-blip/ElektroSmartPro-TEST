@@ -22,6 +22,7 @@ import {
   PRICING_STATIC_SYSTEM_PROMPT,
 } from "@/lib/services/ai";
 import { checkGuard, checkAuthOnly, createAdminClient } from "./utils";
+import { checkAndIncrementAiUsage } from "@/lib/ai-usage";
 import { canUserEditProject } from "../_actions/utils";
 import { revalidatePath } from "next/cache";
 import {
@@ -250,7 +251,7 @@ export async function estimatePricesWithAI(
 ): Promise<AiPriceResult> {
   const { targetItemIds, keepExistingPrices = false, bypassL1Exclusive = false, sectorOverride } = options ?? {};
   try {
-    const guard = await checkGuard(AI_FUNCTION_NAMES.aiPricing);
+    const guard = await checkAuthOnly();
     if ("error" in guard) return { success: false, error: guard.error };
     const { user, supabase } = guard;
 
@@ -1081,9 +1082,16 @@ export async function estimatePricesWithAI(
 
     const L3_CHUNK_SIZE = 10;
     const L3_MAX_ITEMS = 20;
-    const l2MissItems = clearItems
+    let l2MissItems = clearItems
       .filter(item => l2Estimates.find(e => e.itemId === item.id)?.trace === "unmatched")
       .slice(0, L3_MAX_ITEMS);
+
+    if (l2MissItems.length > 0) {
+      const aiCheck = await checkAndIncrementAiUsage(user.id, AI_FUNCTION_NAMES.aiPricing);
+      if (!aiCheck.allowed) {
+        l2MissItems = [];
+      }
+    }
 
     if (l2MissItems.length > 0) {
       const rateSourceL3: RateSource = "manual";

@@ -409,7 +409,7 @@ export async function generateProjectItemsWithAI(
 Dopasuj nazwy DOKLADNIE do katalogu jesli pasuje:
 ${catalogContext || "(brak katalogu — generuj standardowe nazwy elektryczne)"}
 </user_catalog>
-INSTRUKCJA: Generuj TYLKO pozycje, jednostki i ilosci. Jedna pozycja to jedna robota — nie łącz dwóch robót ukośnikiem ani słowem „lub”. Nie podawaj cen i nie wymyslaj kodu tabeli. Robociznę policzy przycisk Wyceń.`;
+INSTRUKCJA: Generuj TYLKO pozycje, jednostki i ilosci. Jedna pozycja to jedna robota. Dwie roboty w opisie to dwa wiersze. Nie łącz ich ukośnikiem ani słowem „lub”. Nie podawaj cen i nie wymyslaj kodu tabeli. Robociznę policzy przycisk Wyceń.`;
 
     const itemSchema = z.object({
       items: z.array(z.object({

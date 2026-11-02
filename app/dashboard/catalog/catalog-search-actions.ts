@@ -1,7 +1,7 @@
 "use server";
 
 import { unstable_noStore as noStore } from "next/cache";
-import { catalogNameMatches, catalogSearchRank } from "@/lib/catalog/catalog-search";
+import { catalogNameMatches, catalogSearchRank, isLegacySizeChase } from "@/lib/catalog/catalog-search";
 import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import { searchKnrNorms } from "./ai-search-fallback";
@@ -242,6 +242,7 @@ export async function getCatalogItems(params: {
     .filter((item) => {
       if (hiddenItemIds.has(item.id)) return false;
       if (favoriteItemIds && !favoriteItemIds.has(item.id)) return false;
+      if (isLegacySizeChase(item.name)) return false;
       return true;
     })
     .map((item) => ({

@@ -12,6 +12,7 @@ import type {
   UnitType,
   DataVisibility,
 } from "@/lib/types/database";
+import { STARTER_KITS, resolveStarterLine } from "@/lib/assemblies/starter-kits";
 
 export interface CreateAssemblyItemInput {
   name: string;
@@ -42,6 +43,69 @@ export interface UpdateAssemblyInput {
   team_id?: string;
 }
 
+async function ensureStarterAssemblies(
+  supabase: NonNullable<Awaited<ReturnType<typeof tryAuth>>["supabase"]>,
+  userId: string,
+) {
+  const { count } = await supabase
+    .from("user_assemblies")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", userId);
+  if ((count ?? 0) > 0) return;
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("hourly_rate")
+    .eq("id", userId)
+    .maybeSingle();
+  const rate = Number((profile as { hourly_rate?: number | null } | null)?.hourly_rate) || 0;
+
+  for (const kit of STARTER_KITS) {
+    const lines = kit.lines
+      .map(resolveStarterLine)
+      .filter((line): line is NonNullable<ReturnType<typeof resolveStarterLine>> => line != null);
+    if (lines.length !== kit.lines.length) {
+      logger.error("Starter kit is missing an ES norm", { name: kit.name });
+      continue;
+    }
+
+    const { data: assembly, error } = await supabase
+      .from("user_assemblies")
+      .insert({
+        user_id: userId,
+        name: kit.name,
+        description: kit.description,
+        building_type: "Dom",
+        visibility: "personal",
+        is_ai_generated: false,
+      })
+      .select("id")
+      .single();
+    if (error || !assembly) {
+      logger.error("Starter kit insert failed", { name: kit.name }, error);
+      continue;
+    }
+
+    const { error: itemsError } = await supabase.from("user_assembly_items").insert(
+      lines.map((line, index) => ({
+        assembly_id: assembly.id,
+        name: line.name,
+        unit: line.unit,
+        type: "labor" as const,
+        price: Math.round(line.laborNorm * rate * 100) / 100,
+        labor_norm_rbh: line.laborNorm,
+        knr_code: line.knrCode,
+        quantity: line.quantity,
+        sort_order: index,
+      })),
+    );
+    if (itemsError) {
+      logger.error("Starter kit lines failed", { name: kit.name }, itemsError);
+      await supabase.from("user_assemblies").delete().eq("id", assembly.id);
+    }
+  }
+}
+
 export async function getUserAssemblies(
   visibilityFilter?: "all" | "personal" | "team"
 ): Promise<UserAssemblyWithItems[]> {
@@ -51,6 +115,8 @@ export async function getUserAssemblies(
       logger.error("No authenticated user in getUserAssemblies");
       redirect("/login");
     }
+
+    await ensureStarterAssemblies(supabase, user.id);
 
     const { data: teamMembership } = await supabase
       .from("team_members")
@@ -67,7 +133,7 @@ export async function getUserAssemblies(
       .select(`
         *,
         user_assembly_items (
-          id, assembly_id, name, unit, type, price, quantity, sort_order
+          id, assembly_id, name, unit, type, price, quantity, sort_order, labor_norm_rbh, knr_code
         )
       `)
       .order("created_at", { ascending: false });
@@ -112,7 +178,7 @@ export async function getUserAssemblyById(
 
     const { data, error } = await supabase
       .from("user_assemblies")
-      .select(`*, user_assembly_items (id, assembly_id, name, unit, type, price, quantity, sort_order)`)
+      .select(`*, user_assembly_items (id, assembly_id, name, unit, type, price, quantity, sort_order, labor_norm_rbh, knr_code)`)
       .eq("id", assemblyId)
       .eq("user_id", user.id)
       .single();

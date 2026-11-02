@@ -31,7 +31,12 @@ function wordHits(queryWord: string, nameWord: string): boolean {
   return nameWord.startsWith(qs) || ns.startsWith(qs) || (qs.startsWith(ns) && ns.length >= 4);
 }
 
-/** A glued typo such as "bruździeutr" is not a real work name. */
+/** Old size rows ("Bruzda w cegle 20x20mm") kept a lump zł price next to Bruzdowanie. */
+export function isLegacySizeChase(name: string): boolean {
+  const folded = foldCatalogText(name);
+  if (/^bruzda w (betonie|cegle)\b/.test(folded)) return true;
+  return /^wykucie bruzdy w\b/.test(folded) && /\b1x1/.test(folded);
+}
 function isBrokenName(name: string): boolean {
   return /bruzd\w*utr/.test(name);
 }
@@ -46,9 +51,6 @@ function sameJob(query: string, name: string): boolean {
   if (words.length > 2) return true;
 
   if (/^bruzd/.test(head)) {
-    // Size rows for brick and concrete duplicate Bruzdowanie and kept an old lump price.
-    if (/^bruzda w (betonie|cegle)\b/.test(name)) return false;
-    if (/^wykucie bruzdy w\b/.test(name) && /\b1x1/.test(name)) return false;
     const cutting = /\bbruzdowan|\bkucie bruzd|\bwykucie bruzd|\bbruzda w\b|\bbruzdy w\b/.test(name);
     const other = /\b(uklad|montaz|przeciag|demont|zapraw|tynkow)\b/.test(name);
     if (/\b(zapraw|tynkow)\b/.test(name) && !/\b(zapraw|tynk)/.test(query)) return false;
@@ -66,6 +68,7 @@ function sameJob(query: string, name: string): boolean {
 
 /** True when every word of the query hits the same kind of catalog name. */
 export function catalogNameMatches(query: string, name: string): boolean {
+  if (isLegacySizeChase(name)) return false;
   const q = foldCatalogText(query);
   const n = foldCatalogText(name);
   if (!q || !n || isBrokenName(n)) return false;

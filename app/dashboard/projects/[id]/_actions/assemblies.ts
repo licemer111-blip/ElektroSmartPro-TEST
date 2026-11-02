@@ -165,7 +165,7 @@ export async function addUserAssemblyToProject(
       const finalQuantity = quantity * baseQuantity;
 
       const finalMaterialPrice = item.type === "material" ? item.price : 0;
-      // Iron Rule: store labor as BASE — calcRowPrices applies regionModifier at display time
+      // Hours × the electrician's rate, without the voivodeship. The estimate screen adds the region once.
       const finalLaborPrice = item.type === "labor" ? item.price : 0;
 
       const calculationInfo = quantity > 1
@@ -179,8 +179,12 @@ export async function addUserAssemblyToProject(
         description: `Z zestawu: ${assembly.name}${calculationInfo}`,
         unit: item.unit,
         quantity: finalQuantity,
+        material_price: finalMaterialPrice,
+        labor_price: finalLaborPrice,
         final_material_price: finalMaterialPrice,
         final_labor_price: finalLaborPrice,
+        labor_norm: item.labor_norm_rbh ?? null,
+        knr_code: item.knr_code ?? null,
         is_custom: false,
         is_assembly_child: true,
         parent_assembly_id: headerItem.id,

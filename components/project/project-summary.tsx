@@ -281,7 +281,7 @@ export function ProjectSummary({
               </span>
               <span className="text-[10px] text-slate-500 dark:text-slate-400">
                 {materialsOwnedByCustomer
-                  ? "W ofercie nie ma materiałów"
+                  ? "Materiały włączysz tym przełącznikiem i wycenisz ze swojego cennika"
                   : totals.laborTotal > 0 && totals.materialTotal === 0
                     ? "W wierszach nie ma cen materiałów"
                     : "Materiał z wierszy wchodzi do sumy"}

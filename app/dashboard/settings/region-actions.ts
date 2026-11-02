@@ -41,11 +41,8 @@ export async function updateUserRegion(
       };
     }
 
-    // Also sync region to all user's active projects (global setting cascades)
-    await supabase
-      .from("projects")
-      .update({ region_id: cleanId })
-      .eq("user_id", user.id);
+    // Default for the next estimate only. An open job in another voivodeship
+    // keeps the region already saved on that project.
 
     // Revalidate paths that might display region-dependent data
     revalidatePath("/dashboard/settings");

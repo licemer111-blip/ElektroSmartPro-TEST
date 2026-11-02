@@ -62,7 +62,7 @@ export default async function AssembliesPage({
                 Katalog Zestawów
               </h1>
               <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400">
-                Gotowe komplety pozycji (materiał + robocizna) — dodajesz jednym klikiem do kosztorysu
+                Gotowe komplety robocizny z normy ES — dodajesz jednym klikiem. Cenę materiału dopiszesz ze swojego cennika.
               </p>
             </div>
           </div>
