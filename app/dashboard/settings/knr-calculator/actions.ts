@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { tryAuth } from "@/lib/auth";
 import { normalizeKnrCode, looksLikeKnrCode } from "@/lib/services/pricing-config";
 import { matchItem, type EngineSettings } from "@/lib/services/matching-engine";
+import { findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
 import { google } from "@ai-sdk/google";
 import { AI_MODEL_TIER2 } from "@/lib/ai-models";
 import { generateText } from "ai";
@@ -207,6 +208,7 @@ export async function searchKnrNorm(
     knrCode?: string;
     laborCost: number;
     confidence: "high" | "medium" | "low";
+    esNorm?: boolean;
   }>;
   error?: string;
 }> {
@@ -230,7 +232,24 @@ export async function searchKnrNorm(
       knrCode?: string;
       laborCost: number;
       confidence: "high" | "medium" | "low";
+      esNorm?: boolean;
     }> = [];
+
+    const canonical = ["szt", "mb", "m", "kpl", "m2"]
+      .map((unit) => findCanonicalL0(normalizedQuery, unit))
+      .find((hit) => hit != null);
+    if (canonical) {
+      results.push({
+        name: canonical.description,
+        norm: canonical.laborNorm,
+        unit: canonical.unit,
+        source: "KNR",
+        knrCode: canonical.knrCode,
+        laborCost: parseFloat((canonical.laborNorm * safeRate).toFixed(2)),
+        confidence: "high",
+        esNorm: true,
+      });
+    }
 
     // ── PRIMARY: ES-Engine 4-phase dictionary lookup ──────────────────────────
     const engineSettings: EngineSettings = {
@@ -245,7 +264,8 @@ export async function searchKnrNorm(
     if (match.match_method !== "no_match" && match.labor_norm_rbh != null) {
       const norm = match.labor_norm_rbh;
       const isUserEntry = match.matched_keyword != null && match.confidence_level === "L1";
-      results.push({
+      const sameAsNorm = results.some((r) => r.esNorm && r.knrCode && match.knr_ref && r.knrCode === match.knr_ref);
+      if (!sameAsNorm) results.push({
         name: match.label ?? query,
         norm,
         unit: match.unit,

@@ -81,43 +81,43 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   // ── KABLE I PRZEWODY (układanie p/t — KNR 5-08, KNR 5-10, KNR 5-12) ──
 
   // YDYp 2×1.5 — dzwonek, sygnalizacja, 2-przewodowe obwody
-  { pattern: /\bydy(?:p|[żz]o?)?\s*2\s*[x×*]\s*1[,.]5\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*2\s*[x×*]\s*1[,.]5(?!\d)/i,
     knrCode: "KNR 5-08 0200", laborNorm: 0.11, unit: "mb",
     description: "Przewód YDYp 2×1.5 mm² układany p/t", materialPrice: 3.50 },
 
   // YDYp 3×1.5 — najczęściej używany do oświetlenia
-  { pattern: /\bydy(?:p|[żz]o?)?\s*3\s*[x×*]\s*1[,.]5\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*3\s*[x×*]\s*1[,.]5(?!\d)/i,
     knrCode: "KNR 5-08 0201", laborNorm: 0.13, unit: "mb",
     description: "Przewód YDYp 3×1.5 mm² układany p/t", materialPrice: 5.20 },
   // YDYp 3×2.5 — gniazda 16A
-  { pattern: /\bydy(?:p|[żz]o?)?\s*3\s*[x×*]\s*2[,.]5\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*3\s*[x×*]\s*2[,.]5(?!\d)/i,
     knrCode: "KNR 5-08 0202", laborNorm: 0.16, unit: "mb",
     description: "Przewód YDYp 3×2.5 mm² układany p/t", materialPrice: 6.94 },
   // YDYp 4×1.5 — własny kod, 0203 w słowniku to już 5×2.5
-  { pattern: /\bydy(?:p|[żz]o?)?\s*4\s*[x×*]\s*1[,.]5\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*4\s*[x×*]\s*1[,.]5(?!\d)/i,
     knrCode: "KNR 5-08 0216", laborNorm: 0.15, unit: "mb",
     description: "Przewód YDYp 4×1.5 mm² układany p/t", materialPrice: 6.50 },
   // YDYp 4×2.5
-  { pattern: /\bydy(?:p|[żz]o?)?\s*4\s*[x×*]\s*2[,.]5\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*4\s*[x×*]\s*2[,.]5(?!\d)/i,
     knrCode: "KNR 5-08 0217", laborNorm: 0.18, unit: "mb",
     description: "Przewód YDYp 4×2.5 mm² układany p/t", materialPrice: 8.80 },
   // YDYp 5×1.5
-  { pattern: /\bydy(?:p|[żz]o?)?\s*5\s*[x×*]\s*1[,.]5\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*5\s*[x×*]\s*1[,.]5(?!\d)/i,
     knrCode: "KNR 5-08 0218", laborNorm: 0.16, unit: "mb",
     description: "Przewód YDYp 5×1.5 mm² układany p/t", materialPrice: 7.80 },
   // YDYp 5×2.5 — ten sam kod i rbh co es_knr_instalacja_podstawowa
-  { pattern: /\bydy(?:p|[żz]o?)?\s*5\s*[x×*]\s*2[,.]5\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*5\s*[x×*]\s*2[,.]5(?!\d)/i,
     knrCode: "KNR 5-08 0203", laborNorm: 0.20, unit: "mb",
     description: "Przewód YDYp 5×2.5 mm² układany p/t", materialPrice: 11.20 },
   // YDYp 5×4 / 5×6 — zasilanie kuchenek, indukcji
-  { pattern: /\bydy(?:p|[żz]o?)?\s*5\s*[x×*]\s*4\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*5\s*[x×*]\s*4(?!\d)/i,
     knrCode: "KNR 5-08 0204", laborNorm: 0.24, unit: "mb",
     description: "Przewód YDYp 5×4 mm² układany p/t", materialPrice: 17.50 },
-  { pattern: /\bydy(?:p|[żz]o?)?\s*5\s*[x×*]\s*6\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*5\s*[x×*]\s*6(?!\d)/i,
     knrCode: "KNR 5-08 0205", laborNorm: 0.28, unit: "mb",
     description: "Przewód YDYp 5×6 mm² układany p/t", materialPrice: 26.00 },
   // YDYp generic fallback (3-5 żył, dowolny przekrój ≤ 6)
-  { pattern: /\bydy(?:p|[żz]o?)?\s*[3-5]\s*[x×*]\s*\d+(?:[,.]\d+)?\b/i,
+  { pattern: /\bydy(?:p|[żz]o?)?\s*[3-5]\s*[x×*]\s*\d+(?:[,.]\d+)?(?!\d)/i,
     knrCode: "KNR 5-08 0202", laborNorm: 0.16, unit: "mb",
     description: "Przewód YDYp (generic fallback) układany p/t",
     notes: "Used when specific cross-section pattern doesn't match exactly" },

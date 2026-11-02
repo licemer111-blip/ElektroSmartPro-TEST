@@ -27,6 +27,13 @@ describe("L0 Canonical KNR Reference — pattern matching", () => {
       expect(m?.unit).toBe("mb");
     });
 
+    it("keeps the same hour when the size is written without a space", () => {
+      expect(findCanonicalL0("Kabel YDYp 3x1.5mm2 (obwody oświetleniowe)", "mb")?.laborNorm).toBe(0.13);
+      expect(findCanonicalL0("Kabel YDYp 3x2.5mm2 (prowadzenie w ścianie)", "mb")?.laborNorm).toBe(0.16);
+      expect(findCanonicalL0("Punkt oświetleniowy (wypust sufitowy)", "szt")?.laborNorm).toBe(0.35);
+      expect(findCanonicalL0("gniazdo podwójne", "szt")?.laborNorm).toBe(0.82);
+    });
+
     it("YDYp 3x2,5 (Polish comma + lowercase x) → KNR 5-08 0202, 0.16 rbh/mb", () => {
       const m = findCanonicalL0("Przewód YDYp 3x2,5 mm²", "mb");
       expect(m?.knrCode).toBe("KNR 5-08 0202");

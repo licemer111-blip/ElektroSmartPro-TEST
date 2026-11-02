@@ -8,12 +8,16 @@ import { computeComplexityFromContext } from "@/lib/pricing-complexity";
 import { logger } from "@/lib/logger";
 import { getEffectiveMaxProjects } from "@/lib/config/tier-limits";
 import { lookupKnrByName } from "@/lib/knr-local-context";
+import { findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
 
 function stampEsLabor(items: EstimateItem[], hourlyRate: number): EstimateItem[] {
   const rate = hourlyRate >= 1 ? hourlyRate : 0;
   return items.map((item) => {
     if (rate < 1) return { ...item, base_labor_price: 0, labor_norm: null };
-    const match = lookupKnrByName(item.name);
+    const canonical = findCanonicalL0(item.name, item.unit);
+    const match = canonical
+      ? { code: canonical.knrCode, laborNorm: canonical.laborNorm }
+      : lookupKnrByName(item.name);
     if (!match || match.laborNorm <= 0) return item;
     return {
       ...item,

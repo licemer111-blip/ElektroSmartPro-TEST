@@ -27,6 +27,7 @@ type SearchResult = {
   knrCode?: string;
   laborCost: number;
   confidence: "high" | "medium" | "low";
+  esNorm?: boolean;
 };
 
 const SOURCE_COLORS: Record<string, string> = {
@@ -201,7 +202,7 @@ export function KnrSandbox({ hourlyRate, hourlyInput, totalCoeff = 1, isPro: _is
                       {r.knrCode && <p className="text-xs text-slate-400 mt-0.5 font-mono">{r.knrCode}</p>}
                     </div>
                     <div className="flex items-center gap-1.5 flex-shrink-0">
-                      <Badge className={`text-[10px] ${SOURCE_COLORS[r.source]}`}>{r.source}</Badge>
+                      <Badge className={`text-[10px] ${SOURCE_COLORS[r.source]}`}>{r.esNorm ? "Norma ES" : r.source}</Badge>
                       <span className={`text-xs font-medium ${CONFIDENCE_COLORS[r.confidence]}`}>
                         {r.confidence === "high" ? "★★★" : r.confidence === "medium" ? "★★☆" : "★☆☆"}
                       </span>
@@ -232,9 +233,11 @@ export function KnrSandbox({ hourlyRate, hourlyInput, totalCoeff = 1, isPro: _is
                       <p className="text-[10px] text-slate-500">PLN/{r.unit}</p>
                     </div>
                   </div>
-                  <p className="px-4 py-2 text-[11px] text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-700">
-                    To jest wyszukana pozycja bazy. W kosztorysie ta sama praca liczy się z normy ES i Twojej stawki.
-                  </p>
+                  {!r.esNorm && (
+                    <p className="px-4 py-2 text-[11px] text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-700">
+                      Inna pozycja bazy. Kosztorys liczy tę pracę z normy ES, jeśli nazwa do niej pasuje.
+                    </p>
+                  )}
                 </div>
               );
             })}
