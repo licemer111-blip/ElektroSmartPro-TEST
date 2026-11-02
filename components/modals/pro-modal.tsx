@@ -16,10 +16,9 @@ import { VATSelector, type VATRate } from "@/components/subscription/vat-selecto
 import { Badge } from "@/components/ui/badge";
 
 const FEATURES = [
-  "Nielimitowane projekty",
-  "Widoczne sumy i kwoty końcowe",
-  "Czysty PDF bez watermarku",
-  "500 zapytań AI / miesiąc",
+  "Więcej niż jeden własny projekt",
+  "Czysty PDF bez znaku DEMO",
+  "80 zapytań AI miesięcznie",
 ];
 
 export function ProModal() {

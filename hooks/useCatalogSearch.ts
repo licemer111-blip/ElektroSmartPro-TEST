@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { getCatalogItemsByCategory, getCatalogDataBatch } from "@/app/dashboard/projects/[id]/actions";
-import { catalogNameMatches } from "@/lib/catalog/catalog-search";
+import { catalogNameMatches, catalogSearchRank } from "@/lib/catalog/catalog-search";
 import type { CatalogCategory, CatalogItem } from "@/lib/types/database";
 import type { DataSourceMode } from "@/hooks/use-search-mode";
 
@@ -130,7 +130,12 @@ export function useCatalogSearch({
       setIsSearching(true);
       return;
     }
-    const results = pool.filter((item) => catalogNameMatches(query, item.name));
+    const results = pool
+      .filter((item) => catalogNameMatches(query, item.name))
+      .sort((a, b) =>
+        catalogSearchRank(query, b.name) - catalogSearchRank(query, a.name)
+        || a.name.localeCompare(b.name, "pl")
+      );
     setSearchResults(results);
     setIsSearching(false);
     const firstCategory = results[0]?.category_id;

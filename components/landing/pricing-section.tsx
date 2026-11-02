@@ -134,7 +134,7 @@ export function PricingSection({ catalogCount = 1400, dinCount = 295 }: PricingS
                 {[
                   { text: "Nieograniczone projekty", included: true },
                   { text: `Katalog ${catalogCount}+ pozycji KNR`, included: true },
-                  { text: "Wszystkie ceny i sumy widoczne", included: true },
+                  { text: "Robocizna: godziny normy ES × Twoja stawka", included: true },
                   { text: "12 kalkulatorów inżynierskich", included: true },
                   { text: "Zestawy materiałów", included: true },
                   { text: "80 zapytań ES-Engine / miesiąc", included: true },

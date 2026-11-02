@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { catalogNameMatches } from "@/lib/catalog/catalog-search";
+import { catalogNameMatches, catalogSearchRank } from "@/lib/catalog/catalog-search";
 import { resolveCatalogHours } from "@/lib/catalog/catalog-work";
+import { findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
 import { dedupeObjectTypes, vatForObjectType } from "@/lib/projects/object-vat";
 
 describe("catalog name search", () => {
@@ -20,6 +21,23 @@ describe("catalog name search", () => {
   it("treats bruzda and bruzdowanie as the same work", () => {
     expect(catalogNameMatches("bruzda", "Bruzdowanie w cegle")).toBe(true);
     expect(catalogNameMatches("bruzda", "Bruzda w cegle 20x20mm")).toBe(true);
+  });
+
+  it("does not turn a chase search into cable laying or a glued typo", () => {
+    expect(catalogNameMatches("bruzda", "Układanie przewodu w bruździe (za mb)")).toBe(false);
+    expect(catalogNameMatches("bruzda", "Montaż YDYp 3x2.5mm² w bruździe")).toBe(false);
+    expect(catalogNameMatches("bruzda", "Zaprawianie bruzd")).toBe(false);
+    expect(catalogNameMatches("bruzda", "Układanie przewodu w bruździeutr (za mb)")).toBe(false);
+  });
+
+  it("ranks the canonical chase name ahead of the old size row", () => {
+    expect(catalogSearchRank("bruzda", "Bruzdowanie w cegle"))
+      .toBeGreaterThan(catalogSearchRank("bruzda", "Bruzda w cegle 20x20mm"));
+  });
+
+  it("keeps cable search on the cable, including one laid in a chase", () => {
+    expect(catalogNameMatches("ydyp", "Montaż YDYp 3x2.5mm² w bruździe")).toBe(true);
+    expect(catalogNameMatches("ydyp 3x2.5", "Układanie przewodu YDYp 3×2.5")).toBe(true);
   });
 
   it("does not match a socket cable when the query is just a socket", () => {
@@ -50,6 +68,28 @@ describe("shared catalog hours", () => {
     });
     expect(resolved.hours).toBe(1.1);
     expect(resolved.source).toBe("stored");
+  });
+});
+
+describe("the same work has one hour in a flat, office, shop or hall", () => {
+  const rows: Array<[string, string, number]> = [
+    ["Gniazdo 230V p/t pojedyncze", "szt", 0.68],
+    ["Łącznik pojedynczy p/t", "szt", 0.45],
+    ["Wyłącznik różnicowy", "szt", 0.30],
+    ["Wyłącznik nadprądowy 1P", "szt", 0.20],
+    ["Puszka podtynkowa", "szt", 0.15],
+    ["Punkt świetlny", "szt", 0.35],
+    ["Oprawa LED panel 60x60", "szt", 0.72],
+    ["Oprawa hermetyczna IP65", "szt", 0.45],
+    ["Układanie przewodu YDYp 3x2.5", "mb", 0.16],
+    ["Bruzdowanie w cegle", "mb", 0.85],
+    ["Bruzdowanie w betonie", "mb", 2],
+    ["Bruzdowanie w żelbecie", "mb", 2.5],
+    ["Zaprawianie bruzd", "mb", 0.12],
+  ];
+
+  it.each(rows)("%s is %s h", (name, unit, hours) => {
+    expect(findCanonicalL0(name, unit)?.laborNorm).toBe(hours);
   });
 });
 

@@ -95,7 +95,7 @@ export function BillingHistory({
 
         {/* Active benefits grid */}
         <div className="grid sm:grid-cols-2 gap-3">
-          {["Nielimitowane projekty", "Pełne ceny", "Eksport PDF", "Wsparcie PRO"].map((benefit) => (
+          {["Nielimitowane projekty", "Czysty PDF bez DEMO", "Eksport PDF", "Wsparcie PRO"].map((benefit) => (
             <div key={benefit} className="flex items-center gap-2.5 p-3 bg-white/80 dark:bg-slate-900/60 backdrop-blur-sm rounded-xl border border-amber-200 dark:border-amber-800 shadow-md">
               <Check className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0" />
               <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{benefit}</span>

@@ -71,7 +71,7 @@ export function PricingPlans() {
         <CardContent className="space-y-3">
           {[
             { icon: Infinity, gradient: "from-blue-500 to-indigo-600", title: "Nielimitowane projekty", desc: "Twórz dowolną ilość wycen bez ograniczeń" },
-            { icon: DollarSign, gradient: "from-green-500 to-emerald-600", title: "Pełna widoczność cen", desc: "Dostęp do wszystkich kalkulacji i marż" },
+            { icon: DollarSign, gradient: "from-green-500 to-emerald-600", title: "Czysty PDF bez znaku DEMO", desc: "Oferta dla klienta bez napisu DEMO" },
             { icon: FileText, gradient: "from-amber-500 to-orange-600", title: "Profesjonalny eksport PDF", desc: "Oferty z Twoim logo i brandingiem" },
             { icon: Headphones, gradient: "from-purple-500 to-indigo-600", title: "Wsparcie priorytetowe", desc: "Szybka pomoc dedykowana dla PRO" },
           ].map(({ icon: Icon, gradient, title, desc }) => (

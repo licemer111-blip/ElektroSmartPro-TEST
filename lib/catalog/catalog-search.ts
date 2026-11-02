@@ -31,13 +31,59 @@ function wordHits(queryWord: string, nameWord: string): boolean {
   return nameWord.startsWith(qs) || ns.startsWith(qs) || (qs.startsWith(ns) && ns.length >= 4);
 }
 
+/** A glued typo such as "bruździeutr" is not a real work name. */
+function isBrokenName(name: string): boolean {
+  return /bruzd\w*utr/.test(name);
+}
+
+/**
+ * A short query names one job. "bruzda" is cutting the chase, not laying a cable
+ * in a chase and not filling it. The same hours apply in a flat, office, shop or hall.
+ */
+function sameJob(query: string, name: string): boolean {
+  const words = query.split(" ");
+  const head = words[0] ?? "";
+  if (words.length > 2) return true;
+
+  if (/^bruzd/.test(head)) {
+    const cutting = /\bbruzdowan|\bkucie bruzd|\bwykucie bruzd|\bbruzda w\b|\bbruzdy w\b/.test(name);
+    const other = /\b(uklad|montaz|przeciag|demont|zapraw|tynkow)\b/.test(name);
+    if (/\b(zapraw|tynkow)\b/.test(name) && !/\b(zapraw|tynk)/.test(query)) return false;
+    if (other && !cutting) return false;
+    return cutting;
+  }
+  if (/^gniazd/.test(head)) return /\bgniazd/.test(name) && !/gniazdkow/.test(name);
+  if (head === "lacznik") return /\blacznik/.test(name) && !/\bwylacz/.test(name);
+  if (head === "wylacznik") return /\bwylacz/.test(name);
+  if (/^puszk/.test(head)) return /\bpuszk/.test(name);
+  if (/^(opraw|lampa|oswietl)/.test(head)) return /\b(opraw|lamp|oswietl|plafon|downlight)/.test(name);
+  if (/^(ydyp|yky|ydy|kabel|przewod)/.test(head)) return /\b(ydyp|yky|ydy|kabel|przewod)/.test(name);
+  return true;
+}
+
 /** True when every word of the query hits the same kind of catalog name. */
 export function catalogNameMatches(query: string, name: string): boolean {
   const q = foldCatalogText(query);
   const n = foldCatalogText(name);
-  if (!q || !n) return false;
+  if (!q || !n || isBrokenName(n)) return false;
+  if (!sameJob(q, n)) return false;
   const queryWords = q.split(" ").filter((word) => word.length >= 2);
   if (queryWords.length === 0) return false;
   const nameWords = n.split(" ");
   return queryWords.every((word) => nameWords.some((nameWord) => wordHits(word, nameWord)));
+}
+
+/** Higher rank is the work the electrician meant. Canonical names come first. */
+export function catalogSearchRank(query: string, name: string): number {
+  if (!catalogNameMatches(query, name)) return 0;
+  const q = foldCatalogText(query);
+  const n = foldCatalogText(name);
+  if (/^bruzd/.test(q)) {
+    if (n.startsWith("bruzdow")) return 5;
+    if (n.startsWith("kucie bruzd") || n.startsWith("wykucie bruzd")) return 4;
+    return 2;
+  }
+  const head = q.split(" ")[0] ?? "";
+  if (head && n.startsWith(head)) return 5;
+  return 1;
 }

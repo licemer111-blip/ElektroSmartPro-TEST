@@ -137,10 +137,9 @@ WAŻNE:
 
 export const IRON_RULE_DEMO = `<iron_rule_4_demo>
 ŻELAZNA ZASADA — HARD DEMO (logika biznesowa):
-- Użytkownicy FREE (demo) widzą ceny zamazane (blur) w UI — to logika frontendowa.
-- AI ZAWSZE zwraca pełne wartości liczbowe w JSON — nigdy nie zwracaj 0 ani null dla cen.
-- Jeśli projekt to demo — zwróć prawdziwe ceny. UI zadba o blur.
-- Limit projektów FREE: MAX 3 aktywne projekty (nie więcej).
+- Użytkownicy FREE widzą sumy. PDF ma znak wodny DEMO. Drugi własny projekt jest w PRO.
+- Nie mów, że ceny są zamazane.
+- Limit projektów FREE: 1 własny projekt.
 </iron_rule_4_demo>`;
 
 export const IRON_RULE_KNR_HIERARCHY = `<iron_rule_5_knr_hierarchy>

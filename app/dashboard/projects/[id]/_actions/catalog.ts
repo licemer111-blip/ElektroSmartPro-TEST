@@ -2,7 +2,7 @@
 
 import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
-import { catalogNameMatches } from "@/lib/catalog/catalog-search";
+import { catalogNameMatches, catalogSearchRank } from "@/lib/catalog/catalog-search";
 import type { CatalogItem, CatalogCategory } from "@/lib/types/database";
 
 // Helper type for category with count
@@ -385,15 +385,16 @@ export async function searchCatalogItems(
     !hiddenItemIds.has(item.id) && catalogNameMatches(searchTerm, item.name)
   );
 
-  // hybrid: sort own items first, then global (user_id === null)
-  if (searchMode === "hybrid") {
-    filtered.sort((a, b) => {
+  filtered.sort((a, b) => {
+    const byRank = catalogSearchRank(searchTerm, b.name) - catalogSearchRank(searchTerm, a.name);
+    if (byRank !== 0) return byRank;
+    if (searchMode === "hybrid") {
       const aIsOwn = a.user_id !== null ? 0 : 1;
       const bIsOwn = b.user_id !== null ? 0 : 1;
       if (aIsOwn !== bIsOwn) return aIsOwn - bIsOwn;
-      return a.name.localeCompare(b.name);
-    });
-  }
+    }
+    return a.name.localeCompare(b.name, "pl");
+  });
 
   return filtered.slice(0, 80);
 }

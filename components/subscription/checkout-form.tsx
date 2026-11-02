@@ -197,10 +197,10 @@ export function CheckoutForm() {
               </div>
               <div>
                 <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">
-                  Pełne ceny
+                  Czysty PDF
                 </h4>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
-                  Wszystkie kalkulacje
+                  Bez znaku DEMO
                 </p>
               </div>
             </div>

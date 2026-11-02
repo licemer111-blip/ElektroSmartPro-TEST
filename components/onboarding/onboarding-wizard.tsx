@@ -117,8 +117,8 @@ export function OnboardingWizard({ regions, userName, userId }: OnboardingWizard
             {userName ? `Witaj, ${userName.split(" ")[0]}!` : "Witaj w ElektroSmart!"}
           </h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
-            Skonfiguruj podstawowe parametry — zajmie to 30 sekund.
-            Dzięki temu kosztorysy będą od razu dokładne.
+            Trzy kroki. Potem kosztorys liczy robociznę jako godziny normy ES razy Twoja stawka.
+            Ta sama praca ma te same godziny w mieszkaniu, biurze, sklepie i hali.
           </p>
         </div>
 
@@ -156,7 +156,7 @@ export function OnboardingWizard({ regions, userName, userId }: OnboardingWizard
                   <div>
                     <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Twoja stawka roboczogodziny</h2>
                     <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Podstawa wszystkich wycen kosztorysowych (PLN/r-g netto)
+                      Robocizna = godziny × ta stawka. Materiał dopisujesz sam, katalog go nie wymyśla.
                     </p>
                   </div>
                 </div>
@@ -201,7 +201,7 @@ export function OnboardingWizard({ regions, userName, userId }: OnboardingWizard
                 </div>
 
                 <p className="text-[11px] text-slate-400 dark:text-slate-500 text-center">
-                  Możesz zmienić tę stawkę w dowolnym momencie w Ustawieniach.
+                  Przykład: gniazdo 0,68 rbh × Twoja stawka. Województwo doliczy się dopiero na kosztorysie. Stawkę zmienisz w Ustawieniach.
                 </p>
               </div>
             )}
@@ -216,7 +216,7 @@ export function OnboardingWizard({ regions, userName, userId }: OnboardingWizard
                   <div>
                     <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Twoje województwo</h2>
                     <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Stawki różnią się regionalnie — wybierz gdzie pracujesz
+                      Mnoży tylko robociznę, raz, na ekranie kosztorysu. Godziny normy się nie zmieniają.
                     </p>
                   </div>
                 </div>
@@ -261,8 +261,8 @@ export function OnboardingWizard({ regions, userName, userId }: OnboardingWizard
                 {selectedRegion && (
                   <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-blue-700 dark:text-blue-300">Twoja efektywna stawka w {selectedRegion.name}:</span>
-                      <span className="text-base font-bold text-blue-600 dark:text-blue-400">{effectiveRate} PLN/r-g</span>
+                      <span className="text-xs text-blue-700 dark:text-blue-300">Na kosztorysie robocizna × {selectedRegion.price_modifier.toFixed(2)} ({selectedRegion.name})</span>
+                      <span className="text-base font-bold text-blue-600 dark:text-blue-400">{effectiveRate} zł/rbh</span>
                     </div>
                   </div>
                 )}
@@ -271,7 +271,7 @@ export function OnboardingWizard({ regions, userName, userId }: OnboardingWizard
                   onClick={() => setSelectedRegionId(null)}
                   className="text-xs text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
                 >
-                  Pomiń — ustaw później
+                  Zostaw bez korekty województwa (×1,00)
                 </button>
               </div>
             )}
@@ -305,8 +305,8 @@ export function OnboardingWizard({ regions, userName, userId }: OnboardingWizard
                   </div>
                   {selectedRegion && (
                     <div className="flex items-center justify-between p-3 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
-                      <span className="text-sm text-blue-700 dark:text-blue-300">Efektywna stawka</span>
-                      <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{effectiveRate} PLN/r-g</span>
+                      <span className="text-sm text-blue-700 dark:text-blue-300">Robocizna na kosztorysie</span>
+                      <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{hourlyRate} zł × {selectedRegion.price_modifier.toFixed(2)}</span>
                     </div>
                   )}
                 </div>
@@ -323,7 +323,7 @@ export function OnboardingWizard({ regions, userName, userId }: OnboardingWizard
                     className="text-sm"
                   />
                   <p className="text-[11px] text-slate-400 dark:text-slate-500">
-                    Dane firmy możesz uzupełnić później w Ustawieniach → Profil Firmy.
+                    Mieszkanie startuje z VAT 8%, biuro, sklep i hala z 23%. Zmienisz to na kosztorysie. Firmę dopiszesz później w Ustawieniach.
                   </p>
                 </div>
 
