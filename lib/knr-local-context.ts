@@ -27,6 +27,58 @@ import swiatlowody from "@/data/knr/fixed_norms/es_knr_swiatlowody_kompletne.jso
 import oswietleniePrzemysl from "@/data/knr/fixed_norms/es_knr_oswietlenie_przemyslowe.json";
 import lanWifi from "@/data/knr/fixed_norms/es_knr_lan_wifi_6e.json";
 import rozdzielniceAparatura from "@/data/knr/fixed_norms/es_knr_rozdzielnice_aparatura.json";
+import agregatyUps from "@/data/knr/fixed_norms/es_knr_agregaty_ups_szr_pelny.json";
+import daliKnx from "@/data/knr/fixed_norms/es_knr_dali_knx_bms_pelny.json";
+import demontaz from "@/data/knr/fixed_norms/es_knr_demontaz_rozbiorka.json";
+import infrastrukturaSpecjalna from "@/data/knr/fixed_norms/es_knr_infrastruktura_specjalna.json";
+import instalacjeRurowe from "@/data/knr/fixed_norms/es_knr_instalacje_rurowe.json";
+import instalacjeZewnetrzne from "@/data/knr/fixed_norms/es_knr_instalacje_zewnetrzne_pelny.json";
+import klimatyzacja from "@/data/knr/fixed_norms/es_knr_klimatyzacja_wentylacja.json";
+import lanRack from "@/data/knr/fixed_norms/es_knr_lan_rack_expert.json";
+import ogrzewanie from "@/data/knr/fixed_norms/es_knr_ogrzewanie_elektryczne.json";
+import oswietlenieSmart from "@/data/knr/fixed_norms/es_knr_oswietlenie_smart.json";
+import ozeEv from "@/data/knr/fixed_norms/es_knr_oze_ev_ogrzewanie.json";
+import pompyCiepla from "@/data/knr/fixed_norms/es_knr_pompy_ciepla_oze.json";
+import praceZiemne from "@/data/knr/fixed_norms/es_knr_prace_ziemne.json";
+import przepusty from "@/data/knr/fixed_norms/es_knr_przepusty_uszczelnienia.json";
+import remontyPomiary from "@/data/knr/fixed_norms/es_knr_remonty_pomiary.json";
+import rozdzielniceMontaz from "@/data/knr/fixed_norms/es_knr_rozdzielnice_montaz_pelny.json";
+import securityCctv from "@/data/knr/fixed_norms/es_knr_security_cctv_alarm.json";
+import silniki from "@/data/knr/fixed_norms/es_knr_silniki_napedy_przemyslowe.json";
+import sspOddymianie from "@/data/knr/fixed_norms/es_knr_ssp_oddymianie.json";
+import stacjeTrafo from "@/data/knr/fixed_norms/es_knr_stacje_transformatorowe.json";
+import trasyPrzemysl from "@/data/knr/fixed_norms/es_knr_trasy_przemysl.json";
+import uziomy from "@/data/knr/fixed_norms/es_knr_uziomy_odgromowa.json";
+import wlzPelny from "@/data/knr/fixed_norms/es_knr_wlz_przylacza_pelny.json";
+import automation from "@/data/knr/fixed_norms/ES-KNR-AUTOMATION.json";
+import pv2026 from "@/data/knr/fixed_norms/Fotowoltaika i Magazynowanie Energii (2026).json";
+import lan2026 from "@/data/knr/fixed_norms/Infrastruktura IT, Sieci LAN i Wi-Fi (2026).json";
+import ev2026 from "@/data/knr/fixed_norms/Infrastruktura Ladowania EV (2026).json";
+import smart2026 from "@/data/knr/fixed_norms/Inteligentny Dom (Smart Home 2026).json";
+import knr403 from "@/data/knr/fixed_norms/KNR 4-03 (Wyceny w starym budownictwie).json";
+import knr506 from "@/data/knr/fixed_norms/KNR 5-06 (Teletechnika i PPOz).json";
+import knr508pomiary from "@/data/knr/fixed_norms/KNR 5-08 Pomiary i Badania (Rozdział 09).json";
+import knr510 from "@/data/knr/fixed_norms/KNR 5-10 (Hale i Magazyny).json";
+import knr512 from "@/data/knr/fixed_norms/KNR 5-12 (Biurowce i Sieci LAN).json";
+import knr403b from "@/data/knr/fixed_norms/KNR_403_Remonty_Wyzwania.json";
+import knr510b from "@/data/knr/fixed_norms/KNR_510_Hale_Przemysl.json";
+import knr512b from "@/data/knr/fixed_norms/KNR_512_Biura_IT.json";
+import knrK38 from "@/data/knr/fixed_norms/KNR_K38_Lanster_AMP.json";
+import ogrzewanie2026 from "@/data/knr/fixed_norms/Ogrzewanie Elektryczne, EMS i Interkomy (2026).json";
+import osprzet2026 from "@/data/knr/fixed_norms/Osprzet Dekoracyjny, LED i Mediabox (2026).json";
+import ogrod2026 from "@/data/knr/fixed_norms/Oswietlenie Ogrodowe i Baseny (2026).json";
+import przemyslSwiatlo2026 from "@/data/knr/fixed_norms/Oswietlenie Przemyslowe i Prace Wysokosciowe (2026).json";
+import pomiary2026 from "@/data/knr/fixed_norms/Pomiary, Termowizja i Dokumentacja (2026).json";
+import prefab2026 from "@/data/knr/fixed_norms/Prefabrykacja i Montaz Rozdzielnic (2026).json";
+import hvac2026 from "@/data/knr/fixed_norms/Przylacza i Sterowanie HVAC (2026).json";
+import wlz2026 from "@/data/knr/fixed_norms/Przylacza, WLZ i Zasilanie Glowne (2026).json";
+import serwis2026 from "@/data/knr/fixed_norms/Serwis, Awarie i Modernizacje (2026).json";
+import swiatlowod2026 from "@/data/knr/fixed_norms/Swiatlowody i Sieci Magistralne (2026).json";
+import alarm2026 from "@/data/knr/fixed_norms/Systemy Alarmowe i Monitoringu CCTV (2026).json";
+import ppoz2026 from "@/data/knr/fixed_norms/Systemy Przeciwpozarowe i PWP (2026).json";
+import odgrom2026 from "@/data/knr/fixed_norms/Uziomy i Instalacja Odgromowa (2026).json";
+import ups2026 from "@/data/knr/fixed_norms/Zasilanie Awaryjne SZR, Agregaty, UPS (2026).json";
+import placBudowy2026 from "@/data/knr/fixed_norms/Zasilanie Placu Budowy i Wynajem (2026).json";
 
 interface KnrEntry {
   catalog_code: string;
@@ -75,6 +127,58 @@ const CORE_KNR_SOURCES: unknown[] = [
   oswietleniePrzemysl,
   lanWifi,
   rozdzielniceAparatura,
+  agregatyUps,
+  daliKnx,
+  demontaz,
+  infrastrukturaSpecjalna,
+  instalacjeRurowe,
+  instalacjeZewnetrzne,
+  klimatyzacja,
+  lanRack,
+  ogrzewanie,
+  oswietlenieSmart,
+  ozeEv,
+  pompyCiepla,
+  praceZiemne,
+  przepusty,
+  remontyPomiary,
+  rozdzielniceMontaz,
+  securityCctv,
+  silniki,
+  sspOddymianie,
+  stacjeTrafo,
+  trasyPrzemysl,
+  uziomy,
+  wlzPelny,
+  automation,
+  pv2026,
+  lan2026,
+  ev2026,
+  smart2026,
+  knr403,
+  knr506,
+  knr508pomiary,
+  knr510,
+  knr512,
+  knr403b,
+  knr510b,
+  knr512b,
+  knrK38,
+  ogrzewanie2026,
+  osprzet2026,
+  ogrod2026,
+  przemyslSwiatlo2026,
+  pomiary2026,
+  prefab2026,
+  hvac2026,
+  wlz2026,
+  serwis2026,
+  swiatlowod2026,
+  alarm2026,
+  ppoz2026,
+  odgrom2026,
+  ups2026,
+  placBudowy2026,
 ];
 
 /** A code like "KNR 5-08 0401" already names one job. "KNR 5-08" does not. */
@@ -87,6 +191,9 @@ function displayCode(entry: KnrEntry): string {
   if (hasPositionCode(code)) return code;
   const table = String(entry.table_number ?? "").trim();
   const column = String(entry.column_number ?? "").trim();
+  if (/^KNR\b/i.test(code) && table) {
+    return column ? `${code} ${table}-${column}` : `${code} ${table}`;
+  }
   const category = (entry.knr_category || "poz")
     .toUpperCase()
     .replace(/[^A-Z0-9]/g, "")
@@ -349,6 +456,12 @@ function tokenMatches(needle: string, haystack: string): boolean {
 
 function scoreCandidate(needleTokens: string[], candidate: string): number {
   const candTokens = candidate.split(" ").filter((t) => t.length > 2);
+  if (needleTokens.length === 1) {
+    const word = needleTokens[0];
+    const leads = candTokens[0] === word
+      || (candTokens[0]?.startsWith(word) && candTokens[0].length - word.length <= 3);
+    if (!leads) return 0;
+  }
   const hits = needleTokens.filter((nt) =>
     candTokens.some((ct) => tokenMatches(nt, ct) || tokenMatches(ct, nt))
   ).length;

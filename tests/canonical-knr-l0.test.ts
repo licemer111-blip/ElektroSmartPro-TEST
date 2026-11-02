@@ -79,6 +79,21 @@ describe("L0 Canonical KNR Reference — pattern matching", () => {
       expect(m?.laborNorm).toBe(0.82);
     });
 
+    it("recognises a double socket whatever the word order", () => {
+      expect(findCanonicalL0("Gniazdo podwójne", "szt")?.laborNorm).toBe(0.82);
+      expect(findCanonicalL0("Gniazdo podwójne p/t", "szt")?.laborNorm).toBe(0.82);
+      expect(findCanonicalL0("Gniazdo schuko podwójne", "szt")?.laborNorm).toBe(0.82);
+    });
+
+    it("does not price removal or replacement as a new socket", () => {
+      expect(findCanonicalL0("Demontaż gniazda podtynkowego", "szt")?.laborNorm).toBe(0.05);
+      expect(findCanonicalL0("Wymiana gniazda", "szt")?.laborNorm).toBe(0.28);
+    });
+
+    it("keeps a data outlet off the power socket", () => {
+      expect(findCanonicalL0("Gniazdo DATA", "szt")?.laborNorm).toBe(0.50);
+    });
+
     it("Gniazdo CEE 16A 5P → 1.18 rbh/szt", () => {
       const m = findCanonicalL0("Gniazdo siłowe 16A 5P (CEE) p/t", "szt");
       expect(m?.knrCode).toBe("KNR 5-08 0408");

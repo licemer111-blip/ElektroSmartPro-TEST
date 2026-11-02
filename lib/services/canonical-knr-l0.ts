@@ -48,6 +48,8 @@ export interface CanonicalL0Entry {
   materialPrice?: number;
   /** Optional note explaining the norm choice. */
   notes?: string;
+  /** Demontaż / wymiana. Install patterns must not claim these names. */
+  removal?: boolean;
 }
 
 export interface CanonicalL0Match extends CanonicalL0Entry {
@@ -62,6 +64,20 @@ export interface CanonicalL0Match extends CanonicalL0Entry {
  * The first matching entry wins — keep the list sorted by specificity.
  */
 export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
+  // Removal and replacement first. Hours are the ones already stored in the norm files.
+  { pattern: /\b(?:demonta|wybi[oó]rk|zdemont|usuni).{0,40}\bgniazd|\bgniazd.{0,24}(?:demonta|wybi[oó]rk)/i,
+    knrCode: "KNR 4-03 0202-01", laborNorm: 0.05, unit: "szt", removal: true,
+    description: "Demontaż gniazda p/t" },
+  { pattern: /\b(?:demonta|wybi[oó]rk|zdemont|usuni).{0,40}(?:łącznik|lacznik|wyłącznik|wylacznik|włącznik|wlacznik)/i,
+    knrCode: "KNR 4-03 0202-02", laborNorm: 0.04, unit: "szt", removal: true,
+    description: "Demontaż łącznika p/t" },
+  { pattern: /\b(?:demonta|wybi[oó]rk|zdemont).{0,40}\bopraw/i,
+    knrCode: "KNR 4-03 0201-01", laborNorm: 0.08, unit: "szt", removal: true,
+    description: "Demontaż oprawy" },
+  { pattern: /\bwymian[aęy].{0,40}(?:gniazd|łącznik|lacznik|wyłącznik|wylacznik|kontakt)/i,
+    knrCode: "KNR 5-08 1102", laborNorm: 0.28, unit: "szt", removal: true,
+    description: "Wymiana gniazda lub łącznika" },
+
   // ── KABLE I PRZEWODY (układanie p/t — KNR 5-08, KNR 5-10, KNR 5-12) ──
 
   // YDYp 2×1.5 — dzwonek, sygnalizacja, 2-przewodowe obwody
@@ -190,6 +206,9 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /\bgniazd[ao]\s+(?:hermetyc|n\/t|n\.t\.|natynkow)/i,
     knrCode: "KNR 5-08 0406", laborNorm: 0.54, unit: "szt",
     description: "Gniazdo 230V natynkowe", materialPrice: 28.00 },
+  { pattern: /\bgniazd[ao].{0,48}(?:podw[oó]jn|podwoj|schuko)|(?:podw[oó]jn|podwoj).{0,24}\bgniazd/i,
+    knrCode: "KNR 5-08 0402", laborNorm: 0.82, unit: "szt",
+    description: "Gniazdo 230V podwójne" },
   { pattern: /\bgniazd[ao]\s+(?:\d+\s*[x×]\s*)?(?:230v?|elektr|sieciow)/i,
     knrCode: "KNR 5-08 0401", laborNorm: 0.68, unit: "szt",
     description: "Gniazdo 230V (generic) p/t", materialPrice: 22.00 },
@@ -211,7 +230,7 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /\bstycznik\b.*\b(?:modu[lł]ow|3[\s-]?pol|4[\s-]?pol|szynow)/i,
     knrCode: "KNR 5-08 1504", laborNorm: 0.35, unit: "szt",
     description: "Stycznik modułowy 3P/4P", materialPrice: 90.00 },
-  { pattern: /\bogranicznik\s+(?:przep[ie]ci|spd|t1|t2|t3|b\+c|c\+d)/i,
+  { pattern: /\b(?:ogranicznik\s+przepie|\bspd\b)/i,
     knrCode: "KNR 5-08 1505", laborNorm: 0.45, unit: "szt",
     description: "Ogranicznik przepięć T1+T2 / T2", materialPrice: 220.00 },
 
@@ -243,7 +262,7 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
     description: "Łącznik (generic) p/t", materialPrice: 14.00 },
 
   // ── OSPRZĘT — GNIAZDA TELEINFORMATYCZNE ──
-  { pattern: /\bgniazd[ao]\s+(?:komputerow[eyao]|rj\s*45|lan|sieciow[eyao]|teleinf|cat[\s.]*[56])/i,
+  { pattern: /\bgniazd[ao]\s+(?:komputerow[eyao]|rj\s*45|lan|sieciow[eyao]|teleinf|cat[\s.]*[56]|\bdata\b)/i,
     knrCode: "KNR 5-09 0106", laborNorm: 0.50, unit: "szt",
     description: "Gniazdo RJ45 cat 6 p/t", materialPrice: 40.00 },
   { pattern: /\bgniazd[ao]\s+(?:tv|antenow[eyao]|tele|sat)/i,
@@ -391,7 +410,7 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /\bczujk[ai]\s+(?:dymu|optyczn|tlenku|co|temperatur)/i,
     knrCode: "KNR 5-09 0602-01", laborNorm: 0.40, unit: "szt",
     description: "Czujka dymu optyczna (SSP)", materialPrice: 95.00 },
-  { pattern: /\b(?:przycisk|rop|ostrzegacz)\s+(?:p[oó]żarow|pozarow|alarm)/i,
+  { pattern: /\b(?:przycisk|rop|ostrzegacz)\s+(?:p[oó]żarow|pozarow|ppoz|ppoż|alarm)/i,
     knrCode: "KNR 5-09 0603-01", laborNorm: 0.45, unit: "szt",
     description: "Ręczny ostrzegacz pożarowy (ROP)", materialPrice: 120.00 },
   { pattern: /\bsygnaliz(?:ator|ac).*(?:akustyczn|optyczn|opt[\s-]akustyczn)/i,
@@ -450,7 +469,10 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
     description: "Maszt antenowy z montażem", materialPrice: 250.00 },
 
   // ── DOMOFONY / WIDEODOMOFONY (KNR 5-09 08xx) ──
-  { pattern: /\bpanel\s+(?:zewn[eę]trzn|domofon|wej[śs]ciow)|\b(?:wideo|video)?domofon.*panel/i,
+  { pattern: /\bcentral[ai]\s+domofon|\bdomofon\s+wielorodzinn/i,
+    knrCode: "KNR 5-09 0504", laborNorm: 2.00, unit: "szt",
+    description: "Centrala domofonowa" },
+  { pattern: /\b(?:wideo|video)?domofon\b|\bpanel\s+(?:zewn[eę]trzn|domofon|wej[śs]ciow)|\b(?:wideo|video)?domofon.*panel/i,
     knrCode: "KNR 5-09 0801", laborNorm: 1.20, unit: "szt",
     description: "Panel zewnętrzny domofonu / wideodomofonu", materialPrice: 480.00 },
   { pattern: /\b(?:unifon|wideounifon|videounifon|monitor\s+(?:domofon|wideodomofon))/i,
@@ -464,7 +486,7 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /\bdrabinka\s+kablow|\bdrabinka\b/i,
     knrCode: "KNR 5-08 1302", laborNorm: 0.55, unit: "mb",
     description: "Drabinka kablowa metalowa", materialPrice: 65.00 },
-  { pattern: /\bkorytko\s+(?:kablow|metalow|siatkow|drucian)|\bkorytk[ao]\b/i,
+  { pattern: /\bkorytko\s+(?:kablow|metalow|siatkow|drucian)|\bkoryt[oa]\b/i,
     knrCode: "KNR 5-08 1301", laborNorm: 0.40, unit: "mb",
     description: "Korytko kablowe metalowe / siatkowe", materialPrice: 35.00 },
   { pattern: /\b(?:listwa\s+(?:pcv|elektroin|instalacyjn|kablowa)|kana[lł]\s+kablow|peszel)/i,
@@ -649,12 +671,12 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /\brekuperator|\bcentrala\s+wentylacyjn|\bwentylacja\s+mechaniczna\s+z\s+rekup/i,
     knrCode: "ES-OGR-010", laborNorm: 6.00, unit: "kpl",
     description: "Rekuperator — montaż + sterowanie (kpl)", materialPrice: 0 },
-  { pattern: /\b(?:wentylator|wywietrznik)\s+(?:łazienkow|kuchen|kanal|sufit|ścienn)/i,
+  { pattern: /\b(?:wentylator|wywietrznik)\s+(?:łazien|lazien|kuchen|kanal|sufit|ścienn|scienn)/i,
     knrCode: "ES-OGR-020", laborNorm: 0.55, unit: "szt",
     description: "Wentylator łazienkowy / kuchenny / kanałowy", materialPrice: 65.00 },
 
   // ── SMART HOME / KNX / DALI (ES-SMART-xxx) ──
-  { pattern: /\b(?:moduł|aktor|bramka)\s+knx|\bknx\s+(?:moduł|aktor|bramka|i\/o|wej[śs]cia)/i,
+  { pattern: /\b(?:moduł|modul|aktor|bramka)\s+knx|\bknx\s+(?:moduł|modul|aktor|bramka|i\/o|wej[śs]cia)/i,
     knrCode: "ES-SMART-001", laborNorm: 0.85, unit: "szt",
     description: "Moduł / aktor KNX", materialPrice: 280.00 },
   { pattern: /\bczujnik\s+knx|\bknx\s+czujnik/i,
@@ -674,7 +696,7 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
     description: "Inteligentny przełącznik / przekaznik (smart)", materialPrice: 95.00 },
 
   // ── ŚWIATŁOWODY / SIEĆ / RACK (ES-FO-xxx) ──
-  { pattern: /\b(?:kabel|przewód)\s+(?:światłowodow|fo\b|swiatlowod|fiber)/i,
+  { pattern: /\b(?:kabel|przewód|przewod)?\s*(?:światłowod|swiatlowod)\w*|\bfiber\b/i,
     knrCode: "ES-FO-001", laborNorm: 0.18, unit: "mb",
     description: "Kabel światłowodowy", materialPrice: 8.00 },
   { pattern: /\bspaw(?:anie)?\s+(?:światłowod|fo|fiber)|\bzgrzew.*światłowod/i,
@@ -712,6 +734,9 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /\bczujka\s+(?:pir\s+zewn|zewn[\s.]\s*pir|alarm.*pir|pir\s+sswin|pir\s+ip6)/i,
     knrCode: "ES-CCTV-020", laborNorm: 0.55, unit: "szt",
     description: "Czujka PIR zewnętrzna alarmowa", materialPrice: 130.00 },
+  { pattern: /\bczujk[ai]\s+pir\b/i,
+    knrCode: "KNR 5-09 0303", laborNorm: 0.30, unit: "szt",
+    description: "Czujka ruchu PIR" },
   { pattern: /\bbariera\s+(?:podczerw|aktywn|alarm|fotoelektr)/i,
     knrCode: "ES-CCTV-021", laborNorm: 1.20, unit: "szt",
     description: "Bariera podczerwona alarmowa", materialPrice: 280.00 },
@@ -852,6 +877,9 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /\bagregat\s+(?:pr[aą]dotw[oó]rczy|pr[aą]dotw|generator|dieslowy|benzynowy)/i,
     knrCode: "ES-AGR-001", laborNorm: 6.00, unit: "szt",
     description: "Agregat prądotwórczy — montaż + podłączenie", materialPrice: 0 },
+  { pattern: /\bszr\b|\bszaf[ay]\s+szr/i,
+    knrCode: "KNR 5-08 9013-02", laborNorm: 8.50, unit: "kpl",
+    description: "Szafa SZR" },
   { pattern: /\bats\b|\b(?:automatyczny?|auto)\s+przełącznik\s+(?:zasilani|rezerw)|\bszafa\s+(?:ats|szs)\b/i,
     knrCode: "ES-AGR-002", laborNorm: 2.50, unit: "szt",
     description: "Szafa ATS / automatyczny przełącznik zasilania", materialPrice: 0 },
@@ -897,7 +925,9 @@ export function findCanonicalL0(
   const unit = itemUnit.trim();
   if (name.length === 0 || unit.length === 0) return null;
 
+  const removal = /\b(demonta|wybi[oó]rk|zdemont|rozbi[oó]r|wymian|likwidac)/i.test(name);
   for (const entry of CANONICAL_L0_REFERENCE) {
+    if (removal !== Boolean(entry.removal)) continue;
     if (!entry.pattern.test(name)) continue;
     const compat = unitsCompatible(entry.unit, unit);
     if (!compat) continue;
