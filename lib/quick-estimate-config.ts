@@ -84,9 +84,19 @@ const SMARTHOME_RULES = rulesData.smarthome_rules as Partial<Record<ObjectTypeKe
 /** P-POZ extra rules — loaded from JSON */
 const PPOZ_RULES = rulesData.ppoz_rules as Partial<Record<ObjectTypeKey, ItemRule[]>>;
 
-function ruleToItem(rule: ItemRule, areaM2: number, roomCount: number, circuitCount: number, mult: { material: number; labor: number }): EstimateItem {
+/** One RCD protects a group of circuits. A flat does not get one RCD per MCB. */
+function rcdGroupCount(objectType: ObjectTypeKey, areaM2: number): number {
+  if (objectType === "mieszkanie") return areaM2 > 70 ? 2 : 1;
+  if (objectType === "dom") return areaM2 > 160 ? 3 : 2;
+  if (objectType === "przemysl" || objectType === "parking") return areaM2 > 400 ? 4 : 2;
+  return areaM2 > 200 ? 3 : 2;
+}
+
+function ruleToItem(rule: ItemRule, areaM2: number, roomCount: number, circuitCount: number, mult: { material: number; labor: number }, objectType: ObjectTypeKey): EstimateItem {
   let quantity: number;
-  switch (rule.calc) {
+  if (/różnicowoprądow|roznicowopradow/i.test(rule.name)) {
+    quantity = rcdGroupCount(objectType, areaM2) * rule.factor;
+  } else switch (rule.calc) {
     case "per_room": quantity = roomCount * rule.factor; break;
     case "per_area": quantity = areaM2 * rule.factor; break;
     case "per_circuit": quantity = circuitCount * rule.factor; break;
@@ -142,7 +152,7 @@ export function generateEstimateItems(params: {
   const heightMult = { material: mult.material, labor: mult.labor * heightLaborMult };
 
   const items: EstimateItem[] = allRules.map((rule) =>
-    ruleToItem(rule, areaM2, roomCount, circuitCount, objectType === "przemysl" ? heightMult : mult)
+    ruleToItem(rule, areaM2, roomCount, circuitCount, objectType === "przemysl" ? heightMult : mult, objectType)
   );
 
   // Conditional extras

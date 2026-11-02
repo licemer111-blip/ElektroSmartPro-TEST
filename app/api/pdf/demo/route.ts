@@ -2,6 +2,7 @@ import React from "react";
 import { NextResponse } from "next/server";
 import { renderToBuffer, type DocumentProps } from "@react-pdf/renderer";
 import { PremiumPdfDocument, type PdfEngineData, type PdfRow } from "@/lib/pdf-engine";
+import { findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
 import { classifyIntent } from "@/lib/services/semantic-classifier";
 
 // ─── Hardcoded demo items (matches createDemoProject seed data) ───────────────
@@ -16,7 +17,7 @@ interface DemoItem {
 }
 
 const DEMO_ITEMS: DemoItem[] = [
-  { name: "Gniazdo podtynkowe 2P+Z Schuko",             unit: "szt", quantity: 12,  mat: 28,    lab: 35,    rg: 0.42 },
+  { name: "Gniazdo 230V p/t pojedyncze",                 unit: "szt", quantity: 12,  mat: 28,    lab: 35 },
   { name: "Gniazdo podwójne 2P+Z podtynkowe",           unit: "szt", quantity: 8,   mat: 38,    lab: 38,    rg: 0.45 },
   { name: "Gniazdo IP44 łazienka",                       unit: "szt", quantity: 3,   mat: 42,    lab: 40,    rg: 0.50 },
   { name: "Łącznik jednobiegunowy",                      unit: "szt", quantity: 8,   mat: 18,    lab: 28,    rg: 0.35 },
@@ -32,7 +33,7 @@ const DEMO_ITEMS: DemoItem[] = [
   { name: "Wyłącznik nadprądowy B10A 1P",                unit: "szt", quantity: 6,   mat: 28,    lab: 18,    rg: 0.22 },
   { name: "Wyłącznik nadprądowy B16A 1P",                unit: "szt", quantity: 8,   mat: 30,    lab: 18,    rg: 0.22 },
   { name: "Wyłącznik różnicowoprądowy 25A/30mA",        unit: "szt", quantity: 2,   mat: 185,   lab: 45,    rg: 0.55 },
-  { name: "Ochronnik przepięć T2 4P",                    unit: "szt", quantity: 1,   mat: 320,   lab: 60,    rg: 0.75 },
+  { name: "Ogranicznik przepięć T2",                      unit: "szt", quantity: 1,   mat: 320,   lab: 60 },
   { name: "Obwód kuchenka elektryczna 3x4mm²",          unit: "szt", quantity: 1,   mat: 85,    lab: 120,   rg: 1.50 },
   { name: "Obwód zmywarka 3x2,5mm²",                    unit: "szt", quantity: 1,   mat: 55,    lab: 80,    rg: 1.00 },
   { name: "Wentylator łazienkowy z czujnikiem wilg.",    unit: "szt", quantity: 1,   mat: 145,   lab: 85,    rg: 1.05 },
@@ -84,17 +85,26 @@ export async function POST(req: Request) {
     const clientName  = String(body.clientName  ?? "Jan Kowalski").trim() || "Jan Kowalski";
 
     const VAT_RATE = 8; // residential
+    const SAMPLE_RATE = 80;
 
     // ─── Build calc items ────────────────────────────────────────────────────
-    const calcItems = DEMO_ITEMS.map((item, idx) => ({
-      id: String(idx),
-      name: item.name,
-      unit: item.unit,
-      quantity: item.quantity,
-      finalMat: item.mat,
-      finalLab: item.lab,
-      parent_assembly_id: null,
-    }));
+    // Labor zł follows the ES hour × 80 zł whenever the name matches the norm.
+    // Material zł in this sample stays an example, not the electrician's cennik.
+    const calcItems = DEMO_ITEMS.map((item, idx) => {
+      const hit = findCanonicalL0(item.name, item.unit === "kpl" ? "szt" : item.unit);
+      const rg = hit?.laborNorm ?? null;
+      const lab = rg != null ? Math.round(rg * SAMPLE_RATE * 100) / 100 : item.lab;
+      return {
+        id: String(idx),
+        name: item.name,
+        unit: item.unit,
+        quantity: item.quantity,
+        finalMat: item.mat,
+        finalLab: lab,
+        rg,
+        parent_assembly_id: null,
+      };
+    });
 
     const sectionMap = new Map<string, PdfSectionId>();
     calcItems.forEach(item => { sectionMap.set(item.id, classifySection(item.name)); });
@@ -115,15 +125,14 @@ export async function POST(req: Request) {
 
     // Build flat rows per item (no assembly children in demo)
     const rawRows = new Map<string, PdfRow>();
-    calcItems.forEach((item, idx) => {
+    calcItems.forEach((item) => {
       const matVal = item.finalMat * item.quantity;
       const labVal = item.finalLab * item.quantity;
       const totalVal = matVal + labVal;
       totalMatSum += item.finalMat * item.quantity;
       totalLabSum += item.finalLab * item.quantity;
 
-      const demItem = DEMO_ITEMS[idx];
-      const rgTotal = demItem?.rg ? (demItem.rg * item.quantity).toFixed(3) + " rbh" : "";
+      const rgTotal = item.rg != null ? (item.rg * item.quantity).toFixed(3) + " rbh" : "";
       const rowType = totalVal === 0 ? "warning" : "single";
       rawRows.set(item.id, {
         index: String(globalIndex++),
@@ -212,7 +221,7 @@ export async function POST(req: Request) {
       totalGross,
       pdfNarzuty: undefined,
       priceDisplay: "netto",
-      notes: "⭐ PROJEKT POKAZOWY — ElektroSmart PRO. Pełny kosztorys z rzeczywistymi cenami dla instalacji elektrycznej mieszkania 65m². Wygenerowano przez ElektroSmart PRO — system kosztorysowania dla elektrykw.",
+      notes: "Wzór wyglądu PDF. Robocizna = godzina normy ES × 80 zł. Ceny materiału w tym pliku są przykładowe, nie z cennika hurtowni.",
       pdfStructure: {
         showCoverPage: false,
         showCompanyHeader: true,

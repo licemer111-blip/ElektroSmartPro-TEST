@@ -32,7 +32,7 @@ export function QuickEstimateWizard({ regions, objectTypes, isPro = false, defau
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-bold text-orange-800 dark:text-orange-300">Szybka Wycena — ElektroSmart Core</h3>
             <p className="text-xs text-orange-700/80 dark:text-orange-400/70 mt-0.5">
-              Lista pozycji z metrażu. Materiał z cennika, robocizna to rbh normy ES razy Twoja stawka. Województwo dolicza się w sumie — ta sama kwota wchodzi do projektu.
+              Lista z metrażu. Robocizna to rbh normy ES razy Twoja stawka. Materiał na liście jest orientacyjny — przed wysłaniem klientowi wpisz ceny ze swojego cennika. Województwo dolicza się w sumie.
             </p>
           </div>
         </div>

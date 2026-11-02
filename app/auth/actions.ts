@@ -33,9 +33,8 @@ export async function login(formData: FormData) {
     return { error: "Błąd logowania. Spróbuj ponownie." };
   }
 
-  // Revalidate and redirect on success
   revalidatePath("/", "layout");
-  redirect("/dashboard");
+  return { ok: true as const };
 }
 
 export async function signup(formData: FormData) {
@@ -84,15 +83,12 @@ export async function signup(formData: FormData) {
 
   // Profile is created automatically by database trigger (handle_new_user)
 
-  // If no session returned — email confirmation is required in Supabase settings
-  // Redirect to login with info message instead of letting unconfirmed users into dashboard
   if (!signUpData.session) {
-    redirect("/login?message=confirm-email");
+    return { confirmEmail: true as const };
   }
 
-  // Session exists = email confirmation disabled, user is immediately active
   revalidatePath("/", "layout");
-  redirect("/dashboard");
+  return { ok: true as const };
 }
 
 export async function signOut(): Promise<void> {

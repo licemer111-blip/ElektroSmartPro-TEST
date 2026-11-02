@@ -30,7 +30,9 @@ function LoginForm() {
     const result = await login(formData);
     if (result?.error) {
       setError(result.error);
+      return;
     }
+    window.location.assign("/dashboard");
   }
 
   return (
@@ -93,7 +95,13 @@ function SignupForm() {
     const result = await signup(formData);
     if (result?.error) {
       setError(result.error);
+      return;
     }
+    if (result && "confirmEmail" in result && result.confirmEmail) {
+      window.location.assign("/login?message=confirm-email");
+      return;
+    }
+    window.location.assign("/dashboard");
   }
 
   return (
@@ -185,7 +193,7 @@ function LoginPageContent() {
             </div>
           </Link>
           <p className="text-slate-600 dark:text-slate-400 mt-3 text-sm">
-            Ekspertowy system kosztorysowy — <span className="font-semibold text-indigo-600 dark:text-indigo-400">Normy KNR | Nakłady r-g | ES-Engine | 16 Województw</span>
+            Kosztorys dla elektryka: Twoja stawka, norma ES, VAT i PDF.
           </p>
         </div>
 
@@ -220,9 +228,9 @@ function LoginPageContent() {
         <div className="mt-6 flex justify-center">
           <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-700 border border-slate-700 dark:border-slate-600 shadow-lg">
             <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs font-medium text-slate-300">Powered by</span>
-            <span className="text-xs font-bold text-white tracking-wide">ES-Engine</span>
-            <span className="text-[10px] text-slate-400 border-l border-slate-600 pl-2.5">PN-HD 60364</span>
+            <span className="text-xs font-medium text-slate-300">Konto darmowe</span>
+            <span className="text-xs font-bold text-white tracking-wide">1 projekt</span>
+            <span className="text-[10px] text-slate-400 border-l border-slate-600 pl-2.5">PDF ze znakiem DEMO</span>
           </div>
         </div>
 
