@@ -10,6 +10,7 @@ import {
   fMoney,
   sanitize,
   getVatMultiplier,
+  vatRateForPdf,
   calcPdfTotals,
   type PriceDisplay,
 } from "@/lib/pdf-pricing";
@@ -126,11 +127,11 @@ export async function POST(req: Request) {
       showLegend:         rawPdfStructure?.showLegend         ?? true,
     };
 
-    const pricingParams = {
+    let pricingParams = {
       vatMode: Number(vatMode),
       priceDisplay: priceDisplay as PriceDisplay,
     };
-    const vatMultiplier = getVatMultiplier(priceDisplay as PriceDisplay, Number(vatMode));
+    let vatMultiplier = getVatMultiplier(priceDisplay as PriceDisplay, pricingParams.vatMode);
 
     // ─── Fetch data ────────────────────────────────────────────────────────────
 
@@ -150,6 +151,10 @@ export async function POST(req: Request) {
       logger.error("Project or items not found", {});
       return new NextResponse("Error", { status: 404 });
     }
+
+    const vatForDocument = vatRateForPdf((project as { vat_rate?: number | null }).vat_rate, vatMode);
+    pricingParams = { ...pricingParams, vatMode: vatForDocument };
+    vatMultiplier = getVatMultiplier(pricingParams.priceDisplay, vatForDocument);
 
     // Flatten so every child item appears immediately after its parent
     const flatItems = flattenProjectItems(items as unknown as ProjectItem[]) as typeof items;

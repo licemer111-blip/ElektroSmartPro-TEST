@@ -103,6 +103,7 @@ export function ProjectViewClient({
     projectName: project.name,
     adjustmentPercentage: project.adjustment_percentage || 0,
     colorMode,
+    vatRate: liveVatRate,
   });
 
   const { summaryCollapsed, toggleSummary } = useSummaryCollapse();

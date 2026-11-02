@@ -9,6 +9,7 @@ interface UseProjectPdfDownloadOptions {
   projectName: string;
   adjustmentPercentage: number;
   colorMode: boolean;
+  vatRate: number;
 }
 
 export function useProjectPdfDownload({
@@ -16,9 +17,10 @@ export function useProjectPdfDownload({
   projectName,
   adjustmentPercentage,
   colorMode,
+  vatRate,
 }: UseProjectPdfDownloadOptions) {
   const { toast } = useToast();
-  const { vatMode, priceDisplay, pdfStructure } = useGlobalSettings();
+  const { priceDisplay, pdfStructure } = useGlobalSettings();
 
   const [isDownloading, setIsDownloading] = useState(false);
   const [pdfNotes, setPdfNotes] = useState("");
@@ -46,7 +48,7 @@ export function useProjectPdfDownload({
             typeof window !== "undefined"
               ? localStorage.getItem("elektrosmart-pdf-template") || "klasyczny"
               : "klasyczny",
-          vatMode,
+          vatMode: vatRate,
           priceDisplay,
           pdfStructure,
         }),

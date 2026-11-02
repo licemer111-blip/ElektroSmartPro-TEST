@@ -45,6 +45,15 @@ export const fMoney = (val: number): string => {
 export const getVatMultiplier = (priceDisplay: PriceDisplay, vatMode: number): number =>
   priceDisplay === "brutto" ? 1 + Number(vatMode) / 100 : 1;
 
+/** The estimate's saved VAT wins. A global default of 23% must not override an 8% flat. */
+export function vatRateForPdf(projectVat: unknown, requestedVat: unknown): 8 | 23 {
+  const stored = Number(projectVat);
+  if (stored === 8 || stored === 23) return stored;
+  const requested = Number(requestedVat);
+  if (requested === 8 || requested === 23) return requested;
+  return 23;
+}
+
 // ─── Summary totals calculation ───────────────────────────────────────────────
 // Called once after all rows are summed.
 // totalMatSum + totalLabSum already have vatMultiplier applied from row calculation.

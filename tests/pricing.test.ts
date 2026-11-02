@@ -10,6 +10,7 @@ import {
   fMoney,
   getVatMultiplier,
   calcPdfTotals,
+  vatRateForPdf,
   sanitize as pdfSanitize,
 } from "@/lib/pdf-pricing";
 import {
@@ -113,6 +114,18 @@ describe("calcPdfTotals", () => {
   it("zaokrąglenie: vatAmount = round(totalNet × vatRate)", () => {
     const r = calcPdfTotals(333.33, 333.33, params23netto);
     expect(r.vatAmount).toBe(roundPrice(r.totalNet * 0.23));
+  });
+});
+
+describe("vatRateForPdf", () => {
+  it("uses the estimate rate even when the request still says 23", () => {
+    expect(vatRateForPdf(8, 23)).toBe(8);
+    expect(vatRateForPdf(23, 8)).toBe(23);
+  });
+
+  it("falls back to the request, then to 23", () => {
+    expect(vatRateForPdf(null, 8)).toBe(8);
+    expect(vatRateForPdf(undefined, 99)).toBe(23);
   });
 });
 
