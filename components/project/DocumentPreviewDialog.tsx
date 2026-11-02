@@ -294,10 +294,10 @@ export function DocumentPreviewDialog({
             <p className="text-xs text-muted-foreground mr-auto">💡 Ctrl + kółko = zoom | Tryb &quot;Przeciąganie&quot; = scroll | Narzędzia rysowania = zaznaczanie</p>
           )}
           {doc && isPdf(doc.name) && (
-            <p className="text-xs text-muted-foreground mr-auto">💡 Kliknij <strong>ES Import</strong>, aby wyciągnąć pozycje do kosztorysu</p>
+            <p className="text-xs text-muted-foreground mr-auto">Kliknij <strong>Wczytaj</strong>, żeby wciągnąć pozycje. Ceny policzysz przyciskiem Wyceń.</p>
           )}
           {doc && isSpreadsheet(doc.name) && (
-            <p className="text-xs text-muted-foreground mr-auto">💡 Kliknij <strong>ES Import</strong>, aby przeanalizować dane i dodać do kosztorysu</p>
+            <p className="text-xs text-muted-foreground mr-auto">Kliknij <strong>Wczytaj</strong>, żeby wciągnąć pozycje. Ceny policzysz przyciskiem Wyceń.</p>
           )}
           {doc && isText(doc.name) && (
             <p className="text-xs text-muted-foreground mr-auto">💡 Plik tekstowy — możesz skopiować zawartość lub pobrać</p>

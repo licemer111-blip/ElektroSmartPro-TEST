@@ -252,7 +252,7 @@ export function TemplatesPageClient({ templates }: TemplatesPageClientProps) {
             </div>
             <h2 className="text-lg font-bold mb-2">Brak szablonów</h2>
             <p className="text-sm text-muted-foreground max-w-md mx-auto mb-6">
-              Nie masz jeszcze szablonów. Utwórz pierwszy projekt (ręcznie, przez Szybką Wycenę lub ES Import),
+              Nie masz jeszcze szablonów. Utwórz pierwszy projekt ręcznie, przez Szybką Wycenę albo przyciskiem Wczytaj,
               a następnie na karcie projektu wybierz menu (&hellip;) &rarr; &quot;Utwórz szablon&quot;. Poniżej kilka pomysłów na szablony:
             </p>
             <Button onClick={() => router.push("/dashboard")} className="bg-blue-600 hover:bg-blue-700 text-white">

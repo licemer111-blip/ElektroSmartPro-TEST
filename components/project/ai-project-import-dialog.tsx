@@ -68,7 +68,7 @@ export function AIProjectImportDialog({
   const {
     step, importMode, error, importCount,
     fileName, rawRows,
-    przedmiarText, przedmiarCleaning, przedmiarCleanupDone,
+    przedmiarText, przedmiarCleaning,
     pdfFile, pdfFileName, pdfPageNumber, pdfInstructions, pdfAnalyzing, pdfProgress,
     excelHeaders, excelParsedRows, excelImporting, excelAnalyzing,
     aiItems, selectedItems, editingIndex,
@@ -94,15 +94,15 @@ export function AIProjectImportDialog({
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg shadow-orange-500/20">
               {importMode === "plik" ? <Table2 className="w-4 h-4 text-white" /> : importMode === "pdf" ? <ScanText className="w-4 h-4 text-white" /> : <FileText className="w-4 h-4 text-white" />}
             </div>
-            ES-Engine Import
+            Wczytaj pozycje
             {importMode === "pdf" && <QuotaBadge info={visionQuotaInfo} className="ml-auto" />}
           </DialogTitle>
           <DialogDescription>
             {importMode === "plik"
-              ? "Wgraj Excel lub CSV — pozycje zostaną dodane do kosztorysu. Ceny wycenisz osobno przez ES-Engine."
+              ? "Excel lub CSV. Nazwa, ilość i jednostka wchodzą od razu. Ceny z pliku zostają, puste dopiszesz przyciskiem Wyceń."
               : importMode === "pdf"
-              ? "Wgraj skan lub PDF — pozycje zostaną dodane do kosztorysu bez cen"
-              : "Wklej listę pozycji z SMS, notatki lub dokumentu — bez automatycznej wyceny"}
+              ? "Zdjęcie albo PDF przedmiaru. Pozycje wejdą bez cen. To zużywa jedno zapytanie."
+              : "Wklej listę z SMS albo notatki. Czystą listę rozpoznasz od razu. Bałagan najpierw uporządkuj."}
           </DialogDescription>
         </DialogHeader>
 
@@ -159,7 +159,7 @@ export function AIProjectImportDialog({
                   <p className="text-xs text-muted-foreground mb-1">
                     Pozycje zostaną dodane do kosztorysu
                   </p>
-                  <p className="text-[10px] text-muted-foreground mb-3">Ceny wycenisz osobno przyciskiem <strong>Wyceń z ES-Engine</strong></p>
+                  <p className="text-[10px] text-muted-foreground mb-3">Potem jedno kliknięcie <strong>Wyceń</strong> — robocizna z normy ES i Twojej stawki.</p>
                   <label className="inline-block cursor-pointer">
                     <Input type="file" accept=".xlsx,.xls,.csv,.tsv,.txt" onChange={handleFileSelect} className="hidden" />
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-medium text-sm transition-all shadow-md shadow-green-500/30">
@@ -299,7 +299,7 @@ export function AIProjectImportDialog({
                     type="button"
                     onClick={handleCleanPrzedmiar}
                     disabled={przedmiarCleaning || !przedmiarText.trim() || cleanQuotaInfo?.isExhausted}
-                    title={cleanQuotaInfo?.isExhausted ? `Limit ES Cleanup wyczerpany (${cleanQuotaInfo.used}/${cleanQuotaInfo.limit})` : "Uporządkuj strukturę przez ES-Engine"}
+                    title={cleanQuotaInfo?.isExhausted ? `Limit uporządkowania wyczerpany (${cleanQuotaInfo.used}/${cleanQuotaInfo.limit})` : "Opcjonalnie: poukładaj bałagan z notatki. Czystej listy nie trzeba."}
                     className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold transition-all border ${
                       cleanQuotaInfo?.isExhausted
                         ? "border-red-200 text-red-400 bg-red-50 dark:bg-red-950/20 cursor-not-allowed opacity-60"
@@ -337,13 +337,9 @@ export function AIProjectImportDialog({
               <div className="flex items-center gap-2">
                 <Button
                   onClick={handleParsePrzedmiar}
-                  disabled={!przedmiarText.trim() || !przedmiarCleanupDone}
-                  title={!przedmiarCleanupDone ? "Najpierw kliknij 'Uporządkuj' aby ES-Engine przetworzył tekst" : undefined}
-                  className={`gap-2 text-white transition-all ${
-                    !przedmiarCleanupDone
-                      ? "bg-blue-300 dark:bg-blue-900/40 opacity-50 cursor-not-allowed"
-                      : "bg-blue-600 hover:bg-blue-700"
-                  }`}>
+                  disabled={!przedmiarText.trim()}
+                  title="Rozpoznaj nazwę, ilość i jednostkę. Cen nie wpisuje."
+                  className="gap-2 text-white transition-all bg-blue-600 hover:bg-blue-700">
                   <Check className="w-4 h-4" />
                   Rozpoznaj pozycje
                 </Button>

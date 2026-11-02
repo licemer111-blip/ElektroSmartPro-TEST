@@ -238,7 +238,7 @@ export function ProjectDocumentsSection({ projectId }: ProjectDocumentsSectionPr
           Dokumentacja projektu
         </CardTitle>
         <p className="text-sm text-muted-foreground">
-          Wgraj rysunki, specyfikacje, przedmiary PDF — pliki są dostępne w projekcie. Chcesz wyciągnąć pozycje z pliku? Użyj ES Import.
+          Wgraj rysunki i przedmiary. Żeby wciągnąć pozycje do kosztorysu, kliknij Wczytaj.
         </p>
       </CardHeader>
       <CardContent className="space-y-4">

@@ -120,8 +120,8 @@ export function ProjectsWithTemplatesClient({
                         <Upload className="w-4 h-4 text-white" />
                       </div>
                       <div>
-                        <p className="text-xs font-semibold text-violet-800 dark:text-violet-300">ES Import</p>
-                        <p className="text-[11px] text-violet-700/70 dark:text-violet-400/70">Wgraj przedmiar PDF/Excel — system wyciągnie pozycje</p>
+                        <p className="text-xs font-semibold text-violet-800 dark:text-violet-300">Wczytaj listę</p>
+                        <p className="text-[11px] text-violet-700/70 dark:text-violet-400/70">SMS, Excel albo PDF. Potem jedno Wyceń.</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/50 rounded-lg p-3">

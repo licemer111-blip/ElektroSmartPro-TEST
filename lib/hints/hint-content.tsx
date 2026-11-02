@@ -120,14 +120,9 @@ export const HINTS = {
   // ── Toolbar / AI ──────────────────────────────────────────────────
   aiPricing: (
     <div className="space-y-1.5">
-      <p className="font-semibold text-indigo-700 dark:text-indigo-300">🤖 Wycena AI</p>
-      <p>Automatycznie wycenia zaznaczone pozycje używając bazy KNR i cen rynkowych 2026.</p>
-      <ul className="space-y-0.5 text-slate-400">
-        <li>• L0: bezpośredni KNR (najdokładniejszy)</li>
-        <li>• L1: Twój katalog osobisty</li>
-        <li>• L2: baza ES-Dictionary</li>
-        <li>• L3: AI Gemini (dla nieznanych pozycji)</li>
-      </ul>
+      <p className="font-semibold text-indigo-700 dark:text-indigo-300">Wczytaj, potem Wyceń</p>
+      <p>Wczytaj bierze listę z SMS, Excela albo PDF. Pozycje wchodzą bez cen, jeśli plik ich nie ma.</p>
+      <p>Wyceń liczy robociznę: godzina normy ES × Twoja stawka. Asystent dopisuje brakujące nazwy.</p>
     </div>
   ),
 
