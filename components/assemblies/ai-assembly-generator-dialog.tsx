@@ -129,10 +129,18 @@ export function AIAssemblyGeneratorDialog({ isPro = false, userTeam, triggerClas
         </DialogHeader>
 
         <div className="space-y-3">
-          {quotaInfo?.isExhausted && (
-            <QuotaBlocker info={quotaInfo} featureName="ES Generator Zestawów" />
-          )}
-
+          {quotaInfo?.isExhausted ? (
+            <>
+              <QuotaBlocker info={quotaInfo} featureName="ES Generator Zestawów" />
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Zestaw dodasz ręcznie. Limit AI odnowi się w następnym miesiącu.
+              </p>
+              <Button variant="outline" onClick={() => { setIsOpen(false); setDescription(""); setResult(null); }}>
+                Zamknij
+              </Button>
+            </>
+          ) : (
+          <>
           {/* Description Input */}
           <div className="relative">
             <Textarea
@@ -214,6 +222,8 @@ export function AIAssemblyGeneratorDialog({ isPro = false, userTeam, triggerClas
               Anuluj
             </Button>
           </div>
+          </>
+          )}
         </div>
       </DialogContent>
     </Dialog>

@@ -20,7 +20,21 @@ describe("catalog name search", () => {
 
   it("treats bruzda and bruzdowanie as the same work", () => {
     expect(catalogNameMatches("bruzda", "Bruzdowanie w cegle")).toBe(true);
-    expect(catalogNameMatches("bruzda", "Bruzda w cegle 20x20mm")).toBe(true);
+    expect(catalogNameMatches("bruzda", "Kucie bruzd w ścianie (cegła/bloczki)")).toBe(true);
+  });
+
+  it("hides the old size-split chase rows", () => {
+    expect(catalogNameMatches("bruzda", "Bruzda w cegle 20x20mm")).toBe(false);
+    expect(catalogNameMatches("bruzda", "Bruzda w betonie 40x40mm")).toBe(false);
+    expect(catalogNameMatches("bruzda", "Bruzda w płycie G-K")).toBe(true);
+    expect(catalogNameMatches("bruzda", "Bruzda w tynku gipsowym")).toBe(true);
+  });
+
+  it("does not match a disconnector, a changeover or a word that only contains łącznik", () => {
+    expect(catalogNameMatches("lacznik", "Rozłącznik izolacyjny 2P 63A")).toBe(false);
+    expect(catalogNameMatches("lacznik", "Włącznik krzyżowy")).toBe(false);
+    expect(catalogNameMatches("lacznik", "Przełącznik ATS 63A")).toBe(false);
+    expect(catalogNameMatches("lacznik", "Łącznik schodowy p/t")).toBe(true);
   });
 
   it("does not turn a chase search into cable laying or a glued typo", () => {
@@ -30,9 +44,9 @@ describe("catalog name search", () => {
     expect(catalogNameMatches("bruzda", "Układanie przewodu w bruździeutr (za mb)")).toBe(false);
   });
 
-  it("ranks the canonical chase name ahead of the old size row", () => {
-    expect(catalogSearchRank("bruzda", "Bruzdowanie w cegle"))
-      .toBeGreaterThan(catalogSearchRank("bruzda", "Bruzda w cegle 20x20mm"));
+  it("ranks the canonical chase name and drops the old size row", () => {
+    expect(catalogSearchRank("bruzda", "Bruzdowanie w cegle")).toBeGreaterThan(0);
+    expect(catalogSearchRank("bruzda", "Bruzda w cegle 20x20mm")).toBe(0);
   });
 
   it("keeps cable search on the cable, including one laid in a chase", () => {

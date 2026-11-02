@@ -106,7 +106,7 @@ export function InlineRateRegion({ initialRate, initialRegionId, regions }: Inli
             </Button>
           </div>
           <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-2">
-            Średnia krajowa: 70–90 PLN/r-g. Zmiana stawki automatycznie przelicza ceny w katalogu i zestawach.
+            Stawka zapisuje się w profilu i w projektach. Twoje pozycje w katalogu przeliczają robociznę. Region mnoży ją na ekranie kosztorysu.
           </p>
         </CardContent>
       </Card>
@@ -121,7 +121,7 @@ export function InlineRateRegion({ initialRate, initialRegionId, regions }: Inli
             <div>
               <CardTitle className="text-lg sm:text-xl">Województwo</CardTitle>
               <CardDescription className="mt-0.5 sm:mt-1 text-xs sm:text-sm">
-                Mnożnik dotyczy tylko robocizny. Zmiana przepisuje województwo we wszystkich projektach.
+                Mnożnik dotyczy tylko robocizny na kosztorysie. Zapisany region wpisuje się też do Twoich projektów.
               </CardDescription>
             </div>
           </div>
@@ -148,9 +148,9 @@ export function InlineRateRegion({ initialRate, initialRegionId, regions }: Inli
           {selectedRegion && rateInput && parseFloat(rateInput) > 0 && (
             <div className="mt-3 p-2.5 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
               <div className="flex items-center justify-between text-xs">
-                <span className="text-blue-700 dark:text-blue-300">Efektywna stawka w {selectedRegion.name}:</span>
+                <span className="text-blue-700 dark:text-blue-300">Na kosztorysie robocizna × {selectedRegion.price_modifier.toFixed(2)}:</span>
                 <span className="font-bold text-blue-600 dark:text-blue-400">
-                  {(parseFloat(rateInput) * selectedRegion.price_modifier).toFixed(0)} PLN/r-g
+                  {parseFloat(rateInput).toFixed(0)} zł × {selectedRegion.price_modifier.toFixed(2)}
                 </span>
               </div>
             </div>

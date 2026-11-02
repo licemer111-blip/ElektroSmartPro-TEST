@@ -46,6 +46,9 @@ function sameJob(query: string, name: string): boolean {
   if (words.length > 2) return true;
 
   if (/^bruzd/.test(head)) {
+    // Size rows for brick and concrete duplicate Bruzdowanie and kept an old lump price.
+    if (/^bruzda w (betonie|cegle)\b/.test(name)) return false;
+    if (/^wykucie bruzdy w\b/.test(name) && /\b1x1/.test(name)) return false;
     const cutting = /\bbruzdowan|\bkucie bruzd|\bwykucie bruzd|\bbruzda w\b|\bbruzdy w\b/.test(name);
     const other = /\b(uklad|montaz|przeciag|demont|zapraw|tynkow)\b/.test(name);
     if (/\b(zapraw|tynkow)\b/.test(name) && !/\b(zapraw|tynk)/.test(query)) return false;

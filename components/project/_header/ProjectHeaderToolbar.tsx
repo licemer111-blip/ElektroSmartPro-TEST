@@ -352,8 +352,8 @@ export function ProjectHeaderToolbar({
                   data-save-project
                   title={
                     projectStatus === "final"
-                      ? "Kliknij aby odblokować edycję"
-                      : "Kliknij aby zablokować i umożliwić eksport"
+                      ? "Wróć do edycji kosztorysu"
+                      : "Zablokuj edycję oferty. PDF i Excel działają też przed zatwierdzeniem."
                   }
                 >
                   {isSaving ? (
@@ -363,7 +363,7 @@ export function ProjectHeaderToolbar({
                   ) : (
                     <Save className="h-3.5 w-3.5" />
                   )}
-                  {projectStatus === "final" ? "🔒 Zapisany" : "Zapisz"}
+                  {projectStatus === "final" ? "Odblokuj" : "Zatwierdź"}
                 </Button>
               </div>
             </div>

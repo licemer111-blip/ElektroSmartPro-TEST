@@ -199,6 +199,29 @@ export function ProjectsManagerView({
       );
   }
 
+  const onlyArchivedHidden =
+    filteredProjects.length === 0 && archivedCount > 0 && !showArchived && !searchQuery.trim();
+
+  const emptyProjects = (
+    <div className="flex flex-col items-center justify-center py-16 text-slate-500 dark:text-slate-400">
+      <FolderOpen className="w-12 h-12 mb-3 text-slate-300 dark:text-slate-600" />
+      {onlyArchivedHidden ? (
+        <>
+          <p className="text-sm font-medium">Nie ma aktywnych projektów</p>
+          <p className="text-xs mt-1 mb-3">W archiwum jest {archivedCount}.</p>
+          <Button size="sm" variant="outline" onClick={() => setShowArchived(true)}>
+            Pokaż archiwum
+          </Button>
+        </>
+      ) : (
+        <>
+          <p className="text-sm font-medium">Brak projektów do wyświetlenia</p>
+          <p className="text-xs mt-1">Spróbuj zmienić filtry lub kryteria wyszukiwania</p>
+        </>
+      )}
+    </div>
+  );
+
   return (
     <div className="flex gap-4 h-auto md:h-[calc(100vh-20rem)]">
       {/* Category Sidebar - Hidden on mobile */}
@@ -393,6 +416,7 @@ export function ProjectsManagerView({
               projects={filteredProjects}
               categories={categories}
               currentUserId={currentUserId}
+              emptyContent={emptyProjects}
             />
           ) : viewMode === "kanban" ? (
             <ProjectKanbanView projects={filteredProjects} />
@@ -401,11 +425,7 @@ export function ProjectsManagerView({
           ) : (
             <div>
               {filteredProjects.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-16 text-slate-500 dark:text-slate-400">
-                  <FolderOpen className="w-12 h-12 mb-3 text-slate-300 dark:text-slate-600" />
-                  <p className="text-sm font-medium">Brak projektów do wyświetlenia</p>
-                  <p className="text-xs mt-1">Spróbuj zmienić filtry lub kryteria wyszukiwania</p>
-                </div>
+                emptyProjects
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 animate-in fade-in duration-500">
                   {filteredProjects.map((project, index) => (
@@ -451,7 +471,15 @@ export function ProjectsManagerView({
         <div className="border-t border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 px-4 py-3">
           <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-400">
             <div>
-              Wyświetlono <span className="font-semibold text-slate-900 dark:text-slate-100">{filteredProjects.length}</span> z <span className="font-semibold text-slate-900 dark:text-slate-100">{projects.length}</span> projektów
+              {onlyArchivedHidden ? (
+                <>
+                  Wyświetlono <span className="font-semibold text-slate-900 dark:text-slate-100">0</span> aktywnych. W archiwum: <span className="font-semibold text-slate-900 dark:text-slate-100">{archivedCount}</span>.
+                </>
+              ) : (
+                <>
+                  Wyświetlono <span className="font-semibold text-slate-900 dark:text-slate-100">{filteredProjects.length}</span> z <span className="font-semibold text-slate-900 dark:text-slate-100">{showArchived ? projects.length : activeProjects.length}</span> projektów
+                </>
+              )}
             </div>
             <div className="text-xs">
               {selectedCategoryId ? (

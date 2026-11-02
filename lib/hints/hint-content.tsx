@@ -157,9 +157,9 @@ export const HINTS = {
 
   projectFinal: (
     <div className="space-y-1.5">
-      <p className="font-semibold text-emerald-700 dark:text-emerald-300">✅ Zapisz / Zablokuj</p>
-      <p>Zatwierdza projekt i blokuje edycję. Odblokowuje PDF, Excel i Portal Klienta.</p>
-      <p className="text-slate-400">Możesz odblokować ponownie w dowolnym momencie.</p>
+      <p className="font-semibold text-emerald-700 dark:text-emerald-300">✅ Zatwierdź ofertę</p>
+      <p>Blokuje edycję, żeby wysłana oferta się nie zmieniła. PDF i Excel działają też przed zatwierdzeniem.</p>
+      <p className="text-slate-400">Odblokujesz projekt w dowolnym momencie.</p>
     </div>
   ),
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
 import {
@@ -41,6 +42,7 @@ type TabType = "generate" | "duplicates";
 export function AIAssistantDialog({ projectId, isPro = false, projectStatus = "draft", externalOpen, onExternalOpenChange }: AIAssistantDialogProps) {
   const isFinal = projectStatus === "final";
   const { toast } = useToast();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
   // Sync with external (viewer) open state
@@ -92,6 +94,7 @@ export function AIAssistantDialog({ projectId, isPro = false, projectStatus = "d
       setResult(response);
       if (response.success) {
         void refreshQuota();
+        router.refresh();
         setTimeout(() => { setIsOpen(false); setDescription(""); setResult(null); }, 2000);
       } else if (response.error?.includes("Premium")) {
         setIsOpen(false);
@@ -250,7 +253,7 @@ export function AIAssistantDialog({ projectId, isPro = false, projectStatus = "d
                 result.success ? "bg-green-50 dark:bg-green-950/20 text-green-800 dark:text-green-200" : "bg-red-50 dark:bg-red-950/20 text-red-800 dark:text-red-200"
               }`}>
                 {result.success ? <CheckCircle2 className="w-4 h-4 flex-shrink-0" /> : <AlertCircle className="w-4 h-4 flex-shrink-0" />}
-                <p className="text-xs font-medium">{result.success ? `Dodano ${result.addedCount} pozycji!` : result.error}</p>
+                <p className="text-xs font-medium">{result.success ? `Dodano ${result.addedCount} pozycji. Ceny policzysz przyciskiem Wyceń.` : result.error}</p>
               </div>
             )}
 

@@ -28,7 +28,6 @@ import {
 } from "@/lib/services/ai";
 import { checkGuard, type GeneratedItem, type AIGenerateResult } from "./utils";
 import { lookupKnrByName } from "@/lib/knr-local-context";
-import { estimatePricesWithAI, applyAiPrices } from "./pricing";
 import { normalizeKnrCode } from "@/lib/services/pricing-config";
 
 
@@ -410,7 +409,7 @@ export async function generateProjectItemsWithAI(
 Dopasuj nazwy DOKLADNIE do katalogu jesli pasuje:
 ${catalogContext || "(brak katalogu — generuj standardowe nazwy elektryczne)"}
 </user_catalog>
-INSTRUKCJA: Generuj TYLKO pozycje, jednostki i ilosci. Nie podawaj cen i nie wymyslaj kodu tabeli. Robocizne liczy program z normy ES i stawki.`;
+INSTRUKCJA: Generuj TYLKO pozycje, jednostki i ilosci. Jedna pozycja to jedna robota — nie łącz dwóch robót ukośnikiem ani słowem „lub”. Nie podawaj cen i nie wymyslaj kodu tabeli. Robociznę policzy przycisk Wyceń.`;
 
     const itemSchema = z.object({
       items: z.array(z.object({
@@ -492,45 +491,17 @@ INSTRUKCJA: Generuj TYLKO pozycje, jednostki i ilosci. Nie podawaj cen i nie wym
     const { error: insertError } = await supabase.from("project_items").insert(itemsToInsert);
     if (insertError) {
       logger.error("Error inserting AI-generated items:", {}, insertError);
-      return { success: false, error: "Blad podczas dodawania pozycji" };
+      return { success: false, error: "Nie udało się dodać pozycji. Spróbuj jeszcze raz." };
     }
 
-    // ── Run full KNR Pricing Pipeline (L0 → L1 → L2 → L3) ────────────────────────
-    // Applies: PricingConfig (height ×1.25, difficulty ×1.22, surface) + user r-g
-    // + regional modifier + confidence_note for 'Dlaczego taka cena?' tooltips
+    // Prices stay at 0. A second AI pass here used to time out after the rows
+    // were already saved, and the dialog showed a failure. Wyceń prices them.
     try {
-      const pricingResult = await estimatePricesWithAI(projectId, "all");
-      if (pricingResult.success && pricingResult.estimates && pricingResult.estimates.length > 0) {
-        await applyAiPrices(
-          projectId,
-          pricingResult.estimates.map(est => ({
-            itemId: est.itemId,
-            material_price: est.suggestedMaterial,
-            labor_price: est.suggestedLabor,
-            unit: est.guardedUnit ?? est.unit,
-            note: est.note,
-            knr_code: est.knrCode,
-            knr_source: est.knrSource,
-            labor_norm: est.laborNorm,
-            labor_hours_total: est.laborHoursTotal ?? null,
-            confidence_level: (
-              est.confidence === "high" ? "verified" :
-              est.confidence === "medium" ? "analog" :
-              "estimated"
-            ) as "verified" | "analog" | "estimated",
-            expert_override:   est.expert_override,
-            is_low_confidence: est.isLowConfidence,
-            calculation_log:   est.calculationLog,
-          }))
-        );
-      }
-    } catch (pricingErr) {
-      logger.error("[generateProjectItemsWithAI] KNR pricing failed", { projectId }, pricingErr);
-      // Non-fatal: items created, user can run ES Wycena manually
+      revalidatePath(`/dashboard/projects/${projectId}`);
+    } catch {
+      // Rows are saved. The screen refresh is not required for the insert.
     }
-
-    revalidatePath(`/dashboard/projects/${projectId}`);
-    return { success: true, items: generatedItems, addedCount: itemsToInsert.length };
+    return { success: true, addedCount: itemsToInsert.length };
   } catch (error) {
     const detail = error instanceof Error ? error.message : String(error);
     logger.error("[generateProjectItemsWithAI] error", { detail: detail.slice(0, 400) });

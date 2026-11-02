@@ -95,7 +95,7 @@ export function QuotaBlocker({ info, featureName }: { info: AiQuotaInfo | null; 
           className="ml-auto flex items-center gap-1 font-semibold text-amber-600 dark:text-amber-400 hover:underline whitespace-nowrap"
         >
           <Crown className="w-3 h-3" />
-          Zupgraduj do PRO
+          Przejdź na PRO
         </a>
       )}
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import {
   Table,
@@ -57,9 +57,10 @@ interface ProjectListViewProps {
   projects: Project[];
   categories: ProjectCategory[];
   currentUserId?: string;
+  emptyContent?: ReactNode;
 }
 
-export function ProjectListView({ projects, categories, currentUserId }: ProjectListViewProps) {
+export function ProjectListView({ projects, categories, currentUserId, emptyContent }: ProjectListViewProps) {
   const [projectToMove, setProjectToMove] = useState<Project | null>(null);
   const [targetCategoryId, setTargetCategoryId] = useState<string>("");
   const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
@@ -143,7 +144,7 @@ export function ProjectListView({ projects, categories, currentUserId }: Project
             {projects.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center py-8 text-slate-500">
-                  Brak projektów do wyświetlenia
+                  {emptyContent ?? "Brak projektów do wyświetlenia"}
                 </TableCell>
               </TableRow>
             ) : (

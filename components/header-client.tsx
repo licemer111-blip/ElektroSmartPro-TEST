@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Settings, Zap, FileText, Crown, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HeaderNewProjectButton } from "@/components/header-new-project-button";
@@ -25,6 +26,9 @@ interface HeaderClientProps {
 }
 
 export default function HeaderClient({ user, isPro, isDashboard = true }: HeaderClientProps) {
+    const router = useRouter();
+    const openMore = (href: string) => router.push(href);
+
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-slate-900/95 dark:border-slate-800 dark:supports-[backdrop-filter]:bg-slate-900/60">
             <div className="flex h-16 items-center px-2 md:px-6">
@@ -84,30 +88,22 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="start" className="w-52">
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/projects/quick-estimate" className="flex items-center gap-2 cursor-pointer">
-                                            <Zap className="w-4 h-4" />
-                                            Szybka Wycena
-                                        </Link>
+                                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onSelect={() => openMore("/dashboard/projects/quick-estimate")}>
+                                        <Zap className="w-4 h-4" />
+                                        Szybka Wycena
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/tools" className="flex items-center gap-2 cursor-pointer">
-                                            <Wrench className="w-4 h-4" />
-                                            Kalkulatory
-                                        </Link>
+                                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onSelect={() => openMore("/dashboard/tools")}>
+                                        <Wrench className="w-4 h-4" />
+                                        Kalkulatory
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/templates" className="flex items-center gap-2 cursor-pointer">
-                                            <FileText className="w-4 h-4" />
-                                            Szablony
-                                        </Link>
+                                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onSelect={() => openMore("/dashboard/templates")}>
+                                        <FileText className="w-4 h-4" />
+                                        Szablony
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/dashboard/settings" className="flex items-center gap-2 cursor-pointer">
-                                            <Settings className="w-4 h-4" />
-                                            Ustawienia
-                                        </Link>
+                                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onSelect={() => openMore("/dashboard/settings")}>
+                                        <Settings className="w-4 h-4" />
+                                        Ustawienia
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>

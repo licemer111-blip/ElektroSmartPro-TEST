@@ -24,7 +24,6 @@ interface SummaryExportPanelProps {
   items: ProjectItem[];
   profile?: Profile | null;
   isPro: boolean;
-  isFinal: boolean;
   grandTotal: number;
   pdfNotes: string;
   onPdfNotesChange?: (notes: string) => void;
@@ -38,7 +37,6 @@ export function SummaryExportPanel({
   items,
   profile,
   isPro,
-  isFinal,
   grandTotal,
   pdfNotes,
   onPdfNotesChange,
@@ -132,11 +130,8 @@ export function SummaryExportPanel({
       </div>
 
       {/* Dokumentacja */}
-      <div
-        className={`relative w-full transition-all duration-150 ${!isFinal ? "opacity-50 cursor-pointer active:scale-95 active:opacity-40" : "hover:brightness-110 hover:scale-[1.01]"}`}
-        onClick={!isFinal ? () => toast({ title: "📋 Najpierw zapisz projekt", description: "Kliknij 'Zapisz', aby odblokować Dokumentację", variant: "destructive" }) : undefined}
-      >
-        <div className={`[&>button]:w-full [&>button]:h-9 [&>button]:text-sm ${!isFinal ? "pointer-events-none" : ""}`}>
+      <div className="relative w-full">
+        <div className="[&>button]:w-full [&>button]:h-9 [&>button]:text-sm">
           <DocumentationDialog
             projectId={project.id}
             projectStatus={project.status as string}
@@ -194,11 +189,8 @@ export function SummaryExportPanel({
         )}
 
         {/* PDF + Excel buttons */}
-        <div
-          className={`relative w-full transition-all duration-150 ${!isFinal ? "opacity-50 cursor-pointer active:scale-95 active:opacity-40" : ""}`}
-          onClick={!isFinal ? () => toast({ title: "📋 Najpierw zapisz projekt", description: "Kliknij 'Zapisz', aby odblokować eksport PDF i Excel", variant: "destructive" }) : undefined}
-        >
-          <div className={`flex w-full rounded-lg overflow-hidden shadow-lg border-2 border-red-400/50 ${!isFinal ? "pointer-events-none" : ""}`}>
+        <div className="relative w-full">
+          <div className="flex w-full rounded-lg overflow-hidden shadow-lg border-2 border-red-400/50">
             <button
               onClick={handleExportPDF}
               disabled={isDownloading}

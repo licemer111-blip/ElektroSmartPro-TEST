@@ -1,7 +1,7 @@
 "use server";
 
 import { unstable_noStore as noStore } from "next/cache";
-import { normalizePolish, searchComparator } from "@/lib/utils";
+import { catalogNameMatches, catalogSearchRank } from "@/lib/catalog/catalog-search";
 import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import { searchKnrNorms } from "./ai-search-fallback";
@@ -190,10 +190,13 @@ export async function getCatalogItems(params: {
       return true;
     });
 
-    const normalizedSearch = normalizePolish(search);
-    filtered = filtered.sort((a, b) =>
-      searchComparator(normalizedSearch, normalizePolish(a.name), normalizePolish(b.name))
-    );
+    filtered = filtered
+      .filter((item) => catalogNameMatches(search, item.name))
+      .sort((a, b) => {
+        const byRank = catalogSearchRank(search, b.name) - catalogSearchRank(search, a.name);
+        if (byRank !== 0) return byRank;
+        return a.name.localeCompare(b.name, "pl");
+      });
 
     const total = filtered.length;
     const totalPages = Math.ceil(total / pageSize);

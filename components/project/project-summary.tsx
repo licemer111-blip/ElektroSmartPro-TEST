@@ -392,7 +392,6 @@ export function ProjectSummary({
           items={items}
           profile={profile}
           isPro={isPro}
-          isFinal={isFinal}
           grandTotal={totals.grandTotal}
           pdfNotes={pdfNotes}
           onPdfNotesChange={onPdfNotesChange}

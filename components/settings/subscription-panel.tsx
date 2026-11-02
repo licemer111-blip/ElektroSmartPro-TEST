@@ -81,7 +81,7 @@ export function SubscriptionPanel({ profile }: SubscriptionPanelProps) {
               </div>
               <div className="flex-1">
                 <CardTitle className="text-lg sm:text-xl bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
-                  Zupgraduj do PRO
+                  Przejdź na PRO
                 </CardTitle>
                 <CardDescription className="text-xs sm:text-sm">
                   159 zł/m-c • Anuluj kiedy chcesz • 1 wycena dla klienta zwraca koszt

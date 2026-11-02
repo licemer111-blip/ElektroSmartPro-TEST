@@ -31,8 +31,10 @@ export function ProjectMaterialsList({
     const groups: Record<string, MaterialGroup> = {};
 
     items.forEach((item) => {
-      const key = item.name.toLowerCase().trim();
       const materialPrice = item.final_material_price ?? item.material_price ?? 0;
+      if (!(materialPrice > 0)) return;
+
+      const key = item.name.toLowerCase().trim();
 
       if (!groups[key]) {
         groups[key] = {
@@ -61,7 +63,7 @@ export function ProjectMaterialsList({
     [materialGroups]
   );
 
-  const totalPositions = items.length;
+  const totalPositions = materialGroups.reduce((sum, group) => sum + group.items.length, 0);
   const uniqueMaterials = materialGroups.length;
 
   const formatPrice = (price: number) => {
@@ -140,7 +142,9 @@ export function ProjectMaterialsList({
         <CardContent>
           {materialGroups.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
-              Brak materiałów w projekcie. Dodaj pozycje do kosztorysu.
+              {items.length > 0
+                ? "W tych wierszach nie ma ceny materiału. Robocizna zostaje na zakładce Kosztorys. Cenę materiału dopiszesz w wierszu."
+                : "Brak materiałów w projekcie. Dodaj pozycje do kosztorysu."}
             </div>
           ) : (
             <div className="space-y-2">

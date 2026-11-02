@@ -103,18 +103,10 @@ export function MobileSummaryBar({
   };
 
   const handleExportPDF = async () => {
-    if (!isFinal) {
-      toast({ title: "📋 Najpierw zapisz projekt", description: "Kliknij 'Zapisz finalny', aby wygenerować PDF", variant: "destructive" });
-      return;
-    }
     if (onDownloadPDF) await onDownloadPDF();
   };
 
   const handleExportExcel = async () => {
-    if (!isFinal) {
-      toast({ title: "📋 Najpierw zapisz projekt", description: "Kliknij 'Zapisz finalny', aby eksportować do Excel", variant: "destructive" });
-      return;
-    }
     try {
       const { exportProjectToExcel } = await import("@/lib/utils/excel-export");
       const result = exportProjectToExcel(project, items, isPro, knrMultiplier);
@@ -333,7 +325,7 @@ export function MobileSummaryBar({
             <div className="grid grid-cols-2 gap-2 pb-4">
               <Button
                 onClick={handleExportPDF}
-                disabled={isDownloading || !isFinal}
+                disabled={isDownloading}
                 className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-lg"
                 size="lg"
               >
@@ -342,7 +334,7 @@ export function MobileSummaryBar({
               </Button>
               <Button
                 onClick={handleExportExcel}
-                disabled={isDownloading || !isFinal}
+                disabled={isDownloading}
                 className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-lg"
                 size="lg"
               >
