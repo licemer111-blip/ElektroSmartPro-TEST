@@ -318,7 +318,7 @@ export function OnboardingWizard({ regions, userName, userId }: OnboardingWizard
                     className="text-sm"
                   />
                   <p className="text-[11px] text-slate-400 dark:text-slate-500">
-                    Mieszkanie startuje z VAT 8%, biuro, sklep i hala z 23%. Zmienisz to na kosztorysie. Firmę dopiszesz później w Ustawieniach.
+                    Mieszkanie startuje z VAT 8%, biuro, sklep i hala z 23%. Zmienisz to na kosztorysie. Potem wczytaj listę albo dodaj z katalogu, kliknij Wyceń i wyślij PDF. Na darmowym koncie jest jeden projekt, a na pliku znak DEMO.
                   </p>
                 </div>
 

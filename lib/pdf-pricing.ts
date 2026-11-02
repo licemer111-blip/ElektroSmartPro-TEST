@@ -39,6 +39,16 @@ export const fMoney = (val: number): string => {
   return `${formatted} zl`;
 };
 
+/** Same amount, with zł. The cost-estimate PDF uses a font that has the letter. */
+export const formatPln = (val: number): string =>
+  fMoney(val).replace(/ zl$/, " zł");
+
+/** Keep Polish letters. Drop only control characters. */
+export function pdfPlainText(text: string | null | undefined): string {
+  if (!text) return "";
+  return String(text).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "");
+}
+
 // ─── VAT multiplier ───────────────────────────────────────────────────────────
 // brutto mode: prices already include VAT → multiply row prices by (1 + vat%)
 // netto mode:  prices are net → no multiplication on rows, add VAT in summary

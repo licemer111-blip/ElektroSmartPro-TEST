@@ -7,8 +7,8 @@ import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 import { flattenProjectItems } from "@/lib/utils/flatten-project-items";
 import type { ProjectItem } from "@/lib/types/database";
 import {
-  fMoney,
-  sanitize,
+  formatPln,
+  pdfPlainText,
   getVatMultiplier,
   vatRateForPdf,
   calcPdfTotals,
@@ -345,9 +345,9 @@ export async function POST(req: Request) {
       const effRegion = isManualItem ? 1.0 : regionModifier;
       const unitCombined = item.finalMat + item.finalLab;
       let totalVal = unitCombined * item.quantity;
-      let matDisplay = maskPrices ? "*** zl" : fMoney(item.finalMat);
-      let labDisplay = maskPrices ? "*** zl" : fMoney(item.finalLab);
-      const combinedDisplay = maskPrices ? "*** zl" : fMoney(unitCombined);
+      let matDisplay = maskPrices ? "*** zł" : formatPln(item.finalMat);
+      let labDisplay = maskPrices ? "*** zł" : formatPln(item.finalLab);
+      const combinedDisplay = maskPrices ? "*** zł" : formatPln(unitCombined);
       let indexDisplay = "";
       let rowType = "single";
 
@@ -390,8 +390,8 @@ export async function POST(req: Request) {
       }
 
       const rawKnrCode = (item as Record<string, unknown>).knr_code as string | null | undefined;
-      const knrCode = rawKnrCode ? sanitize(rawKnrCode, true) : "";
-      let name = sanitize(item.name as string, true);
+      const knrCode = rawKnrCode ? pdfPlainText(rawKnrCode) : "";
+      let name = pdfPlainText(item.name as string);
       if (isChild) {
         name = rowType === "warning" ? `   - ${name} (BRAK CENY!)` : `   - ${name}`;
       } else if (rowType === "warning") {
@@ -405,7 +405,7 @@ export async function POST(req: Request) {
       rowsRaw.push({
         index: indexDisplay, name, knrCode, unit: item.unit as string, qty: item.quantity as number,
         rg: laborNormDisplay, mat: matDisplay, lab: labDisplay, combined: combinedDisplay,
-        total: maskPrices ? (isPro && blindMode ? "---" : "*** zl") : fMoney(totalVal), rawTotal: blindMode ? 0 : totalVal, rowType, isParent: isParent || isAiParent, isChild,
+        total: maskPrices ? (isPro && blindMode ? "---" : "*** zł") : formatPln(totalVal), rawTotal: blindMode ? 0 : totalVal, rowType, isParent: isParent || isAiParent, isChild,
         isInvestorMat: item.isInvestorMat, _itemId: item.id as string,
       });
       rowItemIds.push(item.id as string);
@@ -423,15 +423,15 @@ export async function POST(req: Request) {
           rowItemIds.push(item.id as string);
           rowsRaw.push({
             index: "",
-            name: `   - ${sanitize(vChild.label, true)}`,
-            knrCode: vChild.knrCode ? sanitize(vChild.knrCode, true) : "",
+            name: `   - ${pdfPlainText(vChild.label)}`,
+            knrCode: vChild.knrCode ? pdfPlainText(vChild.knrCode) : "",
             unit: vChild.unit,
             qty: vChild.quantity,
             rg: vRg,
-            mat: maskPrices ? "*** zl" : (vChild.materialTotal > 0 ? fMoney(vMat) : "---"),
-            lab: maskPrices ? "*** zl" : (vChild.rbhTotal > 0 ? fMoney(vLab) : "---"),
-            combined: maskPrices ? "*** zl" : fMoney(vTotal),
-            total: maskPrices ? "*** zl" : fMoney(vTotal),
+            mat: maskPrices ? "*** zł" : (vChild.materialTotal > 0 ? formatPln(vMat) : "---"),
+            lab: maskPrices ? "*** zł" : (vChild.rbhTotal > 0 ? formatPln(vLab) : "---"),
+            combined: maskPrices ? "*** zł" : formatPln(vTotal),
+            total: maskPrices ? "*** zł" : formatPln(vTotal),
             rawTotal: blindMode ? 0 : vTotal,
             rowType: vRowType, isParent: false, isChild: true, _itemId: item.id as string,
           });
@@ -486,7 +486,7 @@ export async function POST(req: Request) {
           name: `${secDef.roman}. ${secDef.label}  (${secItemCount} poz.)`,
           knrCode: "", unit: "", qty: 0,
           rg: "", mat: "", lab: "", combined: "",
-          total: maskPrices ? "" : fMoney(secTot),
+          total: maskPrices ? "" : formatPln(secTot),
           rawTotal: secTot,
           rowType: "section_header", isParent: false, isChild: false,
         });
@@ -495,13 +495,13 @@ export async function POST(req: Request) {
 
         rows.push({
           index: "",
-          name: sanitize(`Suma sekcji: Material ${fMoney(secT.mat)} PLN | Robocizna ${fMoney(secT.lab)} PLN`, true),
+          name: `Suma sekcji: Materiał ${formatPln(secT.mat)} | Robocizna ${formatPln(secT.lab)}`,
           knrCode: "", unit: "", qty: 0,
           rg: "",
-          mat: maskPrices ? "" : fMoney(secT.mat),
-          lab: maskPrices ? "" : fMoney(secT.lab),
+          mat: maskPrices ? "" : formatPln(secT.mat),
+          lab: maskPrices ? "" : formatPln(secT.lab),
           combined: "",
-          total: maskPrices ? "" : fMoney(secTot),
+          total: maskPrices ? "" : formatPln(secTot),
           rawTotal: secTot,
           rowType: "section_subtotal", isParent: false, isChild: false,
         });

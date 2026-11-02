@@ -11,6 +11,8 @@ import {
   getVatMultiplier,
   calcPdfTotals,
   vatRateForPdf,
+  pdfPlainText,
+  formatPln,
   sanitize as pdfSanitize,
 } from "@/lib/pdf-pricing";
 import {
@@ -114,6 +116,14 @@ describe("calcPdfTotals", () => {
   it("zaokrąglenie: vatAmount = round(totalNet × vatRate)", () => {
     const r = calcPdfTotals(333.33, 333.33, params23netto);
     expect(r.vatAmount).toBe(roundPrice(r.totalNet * 0.23));
+  });
+});
+
+describe("pdf text for the client file", () => {
+  it("keeps Polish letters and the złoty sign", () => {
+    expect(pdfPlainText("Układanie przewodu YDYp 3×2,5 mm²")).toBe("Układanie przewodu YDYp 3×2,5 mm²");
+    expect(formatPln(15.36)).toContain("zł");
+    expect(formatPln(15.36)).not.toMatch(/ zl$/);
   });
 });
 

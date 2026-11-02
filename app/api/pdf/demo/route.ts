@@ -169,7 +169,7 @@ export async function POST(req: Request) {
       secItems.forEach(item => { rows.push(rawRows.get(item.id)!); });
 
       rows.push({
-        index: "", name: `Suma sekcji: Material ${fMoney(secT.mat)} PLN | Robocizna ${fMoney(secT.lab)} PLN`,
+        index: "", name: `Suma sekcji: Materiał ${fMoney(secT.mat)} | Robocizna ${fMoney(secT.lab)}`,
         knrCode: "", unit: "", qty: 0, rg: "",
         mat: fMoney(secT.mat), lab: fMoney(secT.lab), combined: "",
         total: fMoney(secTot), rawTotal: secTot,
