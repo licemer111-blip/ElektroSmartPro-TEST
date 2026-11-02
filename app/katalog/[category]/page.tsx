@@ -151,7 +151,7 @@ export async function generateMetadata(
   const title = `KNR 2026: Cennik i normy montażu — ${meta.pl} | ElektroSmart`;
   return {
     title,
-    description: `Baza ${SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR 2026 — ${meta.pl}. ${meta.description} Wykonaj kosztorys w 15 minut. Pierwsze 3 projekty free.`,
+    description: `Baza ${SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR 2026 — ${meta.pl}. ${meta.description} Wykonaj kosztorys w 15 minut. Jeden własny projekt za darmo, PDF ze znakiem DEMO.`,
     metadataBase: new URL("https://elektrosmart.pro"),
     keywords: [...meta.keywords, "KNR 2026", "normy pracy elektryka", "kosztorys elektryczny online", "ElektroSmart"],
     openGraph: {
@@ -369,16 +369,16 @@ export default async function KatalogCategoryPage(
                       <Lock className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                     </div>
                     <p className="text-base font-semibold text-slate-800 dark:text-slate-100 mb-1">
-                      Zarejestruj się, aby odblokować pełną bazę i pobrać PDF
+                      Załóż konto, żeby policzyć kosztorys i pobrać PDF
                     </p>
                     <p className="text-sm text-slate-500 dark:text-slate-400 mb-5">
-                      {hiddenCount} pozycji + kosztorys dla Twojego województwa · <strong>3 projekty free</strong>
+                      {hiddenCount} pozycji. Ceny widać od razu. Własny projekt jest jeden, na PDF jest znak DEMO.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
                       <Link href="/login?tab=signup">
                         <Button className="bg-blue-600 hover:bg-blue-700 text-white gap-2 w-full sm:w-auto">
                           <Zap className="w-4 h-4" />
-                          Sprawdź Demo — 3 projekty free
+                          Sprawdź Demo — 1 projekt za darmo
                         </Button>
                       </Link>
                       <Link href="/login">
@@ -415,7 +415,7 @@ export default async function KatalogCategoryPage(
               Wygeneruj profesjonalną ofertę PDF
             </h2>
             <p className="text-blue-100 text-sm mb-5 max-w-xl mx-auto">
-              ElektroSmart PRO — jedyna platforma kosztorysowa zaprojektowana przez elektryków dla elektryków. Normy KNR 2026, 16 województw, eksport PDF. Pierwsze 3 projekty 100% za darmo.
+              ElektroSmart PRO — kosztorys dla elektryka. Norma ES, 16 województw, PDF. Jeden własny projekt za darmo, czysty PDF jest w PRO.
             </p>
             <Link href="/login?tab=signup">
               <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 font-semibold gap-2">

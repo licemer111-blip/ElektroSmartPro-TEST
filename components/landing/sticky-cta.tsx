@@ -46,7 +46,7 @@ export function StickyCTA() {
           </Button>
         </div>
         <p className="text-center text-xs text-slate-500 mt-2">
-          ✓ Bez karty kredytowej • ✓ 3 projekty za darmo
+          ✓ Bez karty kredytowej • ✓ 1 własny projekt za darmo
         </p>
       </div>
     </div>

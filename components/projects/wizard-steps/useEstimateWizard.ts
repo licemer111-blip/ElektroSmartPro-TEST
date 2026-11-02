@@ -54,6 +54,7 @@ export function useEstimateWizard({ regions, objectTypes, isPro = false, default
   const [standard, setStandard] = useState<QualityStandard>("standard");
   const [items, setItems] = useState<EstimateItem[]>([]);
   const [creating, setCreating] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
   const [aiUsed, setAiUsed] = useState<number | null>(null);
   const [aiLimit, setAiLimit] = useState<number | null>(null);
@@ -79,6 +80,7 @@ export function useEstimateWizard({ regions, objectTypes, isPro = false, default
     setZakres(["electrical"]);
     setConditionalFields({});
     setOpenAccordion("podstawowe");
+    setCreateError(null);
   }, []);
 
   useEffect(() => {
@@ -186,6 +188,7 @@ export function useEstimateWizard({ regions, objectTypes, isPro = false, default
       return;
     }
     setCreating(true);
+    setCreateError(null);
     try {
       const result = await createQuickEstimateProject({
         name: projectName || `Szybka wycena - ${OBJECT_TYPE_OPTIONS.find(o => o.key === selectedType)?.label} ${area}m²`,
@@ -196,12 +199,14 @@ export function useEstimateWizard({ regions, objectTypes, isPro = false, default
         conditionalFields,
       });
       if (result.error) {
+        setCreateError(result.error);
         toast.error(result.error);
       } else if (result.projectId) {
         toast.success("Projekt utworzony! Możesz teraz dostosować pozycje.");
         router.push(`/dashboard/projects/${result.projectId}`);
       }
     } catch {
+      setCreateError("Nie udało się utworzyć projektu. Sprawdź połączenie i spróbuj jeszcze raz.");
       toast.error("Wystąpił błąd");
     } finally {
       setCreating(false);
@@ -223,7 +228,7 @@ export function useEstimateWizard({ regions, objectTypes, isPro = false, default
     state: {
       step, selectedType, area, areaInput, rooms, roomsInput,
       defaultsApplied, projectName, regionId, standard, items,
-      creating, generating, aiUsed, aiLimit, wasFallback,
+      creating, createError, generating, aiUsed, aiLimit, wasFallback,
       viewMode, zakres, conditionalFields, openAccordion, manualVatRate,
       vatRate, totals, laborFactor: regionModifier * complexityFactor,
     },

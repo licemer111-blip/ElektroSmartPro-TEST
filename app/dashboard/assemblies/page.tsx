@@ -78,8 +78,8 @@ export default async function AssembliesPage({
           <AlertDescription className="text-blue-800 dark:text-blue-300 mt-2">
             <div className="space-y-3">
               <p className="text-xs leading-relaxed">
-                <strong>Zestaw</strong> = gotowy komplet pozycji (materiał + robocizna), który dodajesz do kosztorysu jednym klikiem.
-                Zamiast ręcznie wpisywać gniazdo + puszkę + kabel + montaż — wybierasz zestaw i <strong>wszystko dodaje się automatycznie</strong> z poprawnymi cenami.
+                <strong>Zestaw</strong> = gotowy komplet robocizny z normy ES. Dodajesz go do kosztorysu jednym kliknięciem.
+                Cena materiału jest pusta — dopisujesz ją ze swojego cennika. Godziny zostają, złotówki liczy Twoja stawka.
               </p>
               
               <div className="grid md:grid-cols-3 gap-3 mt-3">
@@ -100,8 +100,8 @@ export default async function AssembliesPage({
                     <span className="font-semibold text-xs text-slate-900 dark:text-slate-100">Przykład 2</span>
                   </div>
                   <p className="text-[10px] text-slate-700 dark:text-slate-300 leading-snug">
-                    <strong>"Punkt oświetleniowy LED"</strong><br/>
-                    = Oprawa LED + Przewód + Łącznik + Instalacja
+                    <strong>"Punkt łącznika"</strong><br/>
+                    = Łącznik + puszka + YDYp 3×1,5 + bruzda w cegle
                   </p>
                 </div>
 
@@ -111,8 +111,8 @@ export default async function AssembliesPage({
                     <span className="font-semibold text-xs text-slate-900 dark:text-slate-100">Przykład 3</span>
                   </div>
                   <p className="text-[10px] text-slate-700 dark:text-slate-300 leading-snug">
-                    <strong>"Instalacja w pokoju"</strong><br/>
-                    = 4x Gniazdo + 2x Oświetlenie + Rozdzielnia
+                    <strong>"Punkt świetlny"</strong><br/>
+                    = Punkt + puszka + YDYp 3×1,5 + bruzda w cegle
                   </p>
                 </div>
               </div>
@@ -124,7 +124,7 @@ export default async function AssembliesPage({
                 <ol className="text-[11px] space-y-0.5 text-blue-800 dark:text-blue-300 list-decimal list-inside leading-relaxed">
                   <li>Stwórz zestaw raz — np. "Punkt gniazda" z gniazdem, puszką, kablem i montażem</li>
                   <li>W projekcie kliknij "Dodaj Zestaw" — wszystkie pozycje trafią do kosztorysu</li>
-                  <li>Ceny materiałów i robocizny są zawsze spójne między projektami</li>
+                  <li>Robocizna jest ta sama w każdym projekcie: rbh z normy ES × Twoja stawka. Materiał dopisujesz sam</li>
                   <li>Możesz duplikować i modyfikować zestawy pod konkretne zlecenia</li>
                 </ol>
               </div>

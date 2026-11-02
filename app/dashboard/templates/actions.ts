@@ -182,7 +182,7 @@ export async function createProjectFromTemplate(
         .eq("user_id", user.id);
       if (count !== null && count >= maxAllowed) {
         return {
-          error: `Dla Twojego konta obowiązuje limit ${maxAllowed} projektów. Przejdź na PRO, aby tworzyć nielimitowane projekty.`,
+          error: `Na tym koncie jest limit ${maxAllowed} projektów. Kolejny projekt i PDF bez znaku DEMO są w PRO.`,
         };
       }
     }

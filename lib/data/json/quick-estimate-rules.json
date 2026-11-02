@@ -1,8 +1,8 @@
 {
   "standard_multipliers": {
     "ekonomiczny": {
-      "material": 1.0,
-      "labor": 1.0
+      "material": 1,
+      "labor": 1
     },
     "standard": {
       "material": 1.3,
@@ -55,18 +55,18 @@
     {
       "key": "dom",
       "label": "Dom jednorodzinny",
-      "description": "Dom wolnostojacy / blizniak",
+      "description": "Dom wolnostojący / bliźniak",
       "icon": "home"
     },
     {
       "key": "biuro",
-      "label": "Biuro / Lokal uslugowy",
-      "description": "Przestrzen biurowa lub handlowa",
+      "label": "Biuro / Lokal usługowy",
+      "description": "Przestrzeń biurowa lub handlowa",
       "icon": "briefcase"
     },
     {
       "key": "przemysl",
-      "label": "Przemysl / Hala",
+      "label": "Przemysł / Hala",
       "description": "Hala produkcyjna lub magazyn",
       "icon": "factory"
     },
@@ -78,8 +78,8 @@
     },
     {
       "key": "parking",
-      "label": "Parking / Garaz",
-      "description": "Parking podziemny, garaz wielostanowiskowy",
+      "label": "Parking / Garaż",
+      "description": "Parking podziemny, garaż wielostanowiskowy",
       "icon": "car"
     },
     {
@@ -90,8 +90,8 @@
     },
     {
       "key": "szkola",
-      "label": "Szkola / Placowka",
-      "description": "Szkola, przedszkole, uczelnia, urzad",
+      "label": "Szkoła / Placówka",
+      "description": "Szkoła, przedszkole, uczelnia, urząd",
       "icon": "school"
     }
   ],
@@ -99,20 +99,20 @@
     {
       "key": "ekonomiczny",
       "label": "Ekonomiczny",
-      "description": "Podstawowe materialy, sprawdzone rozwiazania",
-      "priceNote": "Najnizszy koszt"
+      "description": "Podstawowe materiały, sprawdzone rozwiązania",
+      "priceNote": "Najniższy koszt"
     },
     {
       "key": "standard",
       "label": "Standard",
-      "description": "Markowe materialy, dobra jakosc wykonania",
-      "priceNote": "+30% materialy, +15% robocizna"
+      "description": "Markowe materiały, dobra jakość wykonania",
+      "priceNote": "+30% materiały, +15% robocizna"
     },
     {
       "key": "premium",
       "label": "Premium",
-      "description": "Topowe materialy, inteligentny dom, najwyzsza jakosc",
-      "priceNote": "+80% materialy, +35% robocizna"
+      "description": "Topowe materiały, inteligentny dom, najwyższa jakość",
+      "priceNote": "+80% materiały, +35% robocizna"
     }
   ],
   "item_rules": {
@@ -126,7 +126,7 @@
         "factor": 0.25
       },
       {
-        "name": "Lacznik pojedynczy (podtynkowy)",
+        "name": "Łącznik pojedynczy (podtynkowy)",
         "unit": "szt",
         "base_material": 15,
         "base_labor": 30,
@@ -134,28 +134,28 @@
         "factor": 1.5
       },
       {
-        "name": "Punkt oswietleniowy (wypust sufitowy)",
+        "name": "Punkt oświetleniowy (wypust sufitowy)",
         "unit": "szt",
         "base_material": 12,
         "base_labor": 45,
         "calc": "per_room",
-        "factor": 1.0
+        "factor": 1
       },
       {
-        "name": "Kabel YDYp 3x2.5mm2 (prowadzenie w scianie)",
+        "name": "Kabel YDYp 3x2.5mm2 (prowadzenie w ścianie)",
         "unit": "mb",
         "base_material": 5.5,
         "base_labor": 18,
         "calc": "per_area",
-        "factor": 2.0
+        "factor": 2
       },
       {
-        "name": "Kabel YDYp 3x1.5mm2 (obwody oswietleniowe)",
+        "name": "Kabel YDYp 3x1.5mm2 (obwody oświetleniowe)",
         "unit": "mb",
-        "base_material": 4.0,
+        "base_material": 4,
         "base_labor": 18,
         "calc": "per_area",
-        "factor": 1.0
+        "factor": 1
       },
       {
         "name": "Puszka podtynkowa O60mm",
@@ -166,7 +166,7 @@
         "factor": 0.15
       },
       {
-        "name": "Rozdzielnica podtynkowa (12-18 modulow)",
+        "name": "Rozdzielnica podtynkowa (12-18 modułów)",
         "unit": "szt",
         "base_material": 85,
         "base_labor": 120,
@@ -174,7 +174,7 @@
         "factor": 1
       },
       {
-        "name": "Wylacznik roznicowoprądowy 30mA",
+        "name": "Wyłącznik różnicowoprądowy 30mA",
         "unit": "szt",
         "base_material": 75,
         "base_labor": 35,
@@ -182,7 +182,7 @@
         "factor": 1
       },
       {
-        "name": "Wylacznik nadpradowy B16A",
+        "name": "Wyłącznik nadprądowy B16A",
         "unit": "szt",
         "base_material": 22,
         "base_labor": 15,
@@ -190,7 +190,7 @@
         "factor": 1
       },
       {
-        "name": "Kucie bruzd w scianie (pod przewody)",
+        "name": "Kucie bruzd w ścianie (pod przewody)",
         "unit": "mb",
         "base_material": 0,
         "base_labor": 25,
@@ -198,7 +198,7 @@
         "factor": 1.5
       },
       {
-        "name": "Gniazdo RJ45 (siec komputerowa)",
+        "name": "Gniazdo RJ45 (sieć komputerowa)",
         "unit": "szt",
         "base_material": 25,
         "base_labor": 40,
@@ -206,7 +206,7 @@
         "factor": 0.5
       },
       {
-        "name": "Gniazdo hermetyczne IP44 (lazienka)",
+        "name": "Gniazdo hermetyczne IP44 (łazienka)",
         "unit": "szt",
         "base_material": 28,
         "base_labor": 40,
@@ -224,15 +224,15 @@
         "factor": 0.22
       },
       {
-        "name": "Lacznik pojedynczy (podtynkowy)",
+        "name": "Łącznik pojedynczy (podtynkowy)",
         "unit": "szt",
         "base_material": 15,
         "base_labor": 30,
         "calc": "per_room",
-        "factor": 2.0
+        "factor": 2
       },
       {
-        "name": "Lacznik schodowy/krzyzowy",
+        "name": "Łącznik schodowy/krzyżowy",
         "unit": "szt",
         "base_material": 22,
         "base_labor": 35,
@@ -240,7 +240,7 @@
         "factor": 0.5
       },
       {
-        "name": "Punkt oswietleniowy (wypust sufitowy)",
+        "name": "Punkt oświetleniowy (wypust sufitowy)",
         "unit": "szt",
         "base_material": 12,
         "base_labor": 45,
@@ -248,7 +248,7 @@
         "factor": 1.5
       },
       {
-        "name": "Kabel YDYp 3x2.5mm2 (prowadzenie w scianie)",
+        "name": "Kabel YDYp 3x2.5mm2 (prowadzenie w ścianie)",
         "unit": "mb",
         "base_material": 5.5,
         "base_labor": 18,
@@ -256,9 +256,9 @@
         "factor": 2.5
       },
       {
-        "name": "Kabel YDYp 3x1.5mm2 (obwody oswietleniowe)",
+        "name": "Kabel YDYp 3x1.5mm2 (obwody oświetleniowe)",
         "unit": "mb",
-        "base_material": 4.0,
+        "base_material": 4,
         "base_labor": 18,
         "calc": "per_area",
         "factor": 1.2
@@ -266,7 +266,7 @@
       {
         "name": "Kabel YDYp 5x2.5mm2 (kuchnia/sila)",
         "unit": "mb",
-        "base_material": 9.0,
+        "base_material": 9,
         "base_labor": 22,
         "calc": "fixed",
         "factor": 15
@@ -280,7 +280,7 @@
         "factor": 0.18
       },
       {
-        "name": "Rozdzielnica podtynkowa (24-36 modulow)",
+        "name": "Rozdzielnica podtynkowa (24-36 modułów)",
         "unit": "szt",
         "base_material": 140,
         "base_labor": 180,
@@ -288,7 +288,7 @@
         "factor": 1
       },
       {
-        "name": "Wylacznik roznicowoprądowy 30mA",
+        "name": "Wyłącznik różnicowoprądowy 30mA",
         "unit": "szt",
         "base_material": 75,
         "base_labor": 35,
@@ -296,7 +296,7 @@
         "factor": 1
       },
       {
-        "name": "Wylacznik nadpradowy B16A",
+        "name": "Wyłącznik nadprądowy B16A",
         "unit": "szt",
         "base_material": 22,
         "base_labor": 15,
@@ -304,7 +304,7 @@
         "factor": 1
       },
       {
-        "name": "Wylacznik nadpradowy B10A",
+        "name": "Wyłącznik nadprądowy B10A",
         "unit": "szt",
         "base_material": 20,
         "base_labor": 15,
@@ -312,7 +312,7 @@
         "factor": 0.5
       },
       {
-        "name": "Kucie bruzd w scianie (pod przewody)",
+        "name": "Kucie bruzd w ścianie (pod przewody)",
         "unit": "mb",
         "base_material": 0,
         "base_labor": 25,
@@ -320,15 +320,15 @@
         "factor": 1.8
       },
       {
-        "name": "Gniazdo RJ45 (siec komputerowa)",
+        "name": "Gniazdo RJ45 (sieć komputerowa)",
         "unit": "szt",
         "base_material": 25,
         "base_labor": 40,
         "calc": "per_room",
-        "factor": 1.0
+        "factor": 1
       },
       {
-        "name": "Gniazdo hermetyczne IP44 (lazienka)",
+        "name": "Gniazdo hermetyczne IP44 (łazienka)",
         "unit": "szt",
         "base_material": 28,
         "base_labor": 40,
@@ -378,15 +378,15 @@
         "factor": 0.1
       },
       {
-        "name": "Lacznik pojedynczy (podtynkowy)",
+        "name": "Łącznik pojedynczy (podtynkowy)",
         "unit": "szt",
         "base_material": 15,
         "base_labor": 30,
         "calc": "per_room",
-        "factor": 1.0
+        "factor": 1
       },
       {
-        "name": "Punkt oswietleniowy (panel LED)",
+        "name": "Punkt oświetleniowy (panel LED)",
         "unit": "szt",
         "base_material": 85,
         "base_labor": 55,
@@ -394,7 +394,7 @@
         "factor": 0.15
       },
       {
-        "name": "Kabel YDYp 3x2.5mm2 (prowadzenie w scianie)",
+        "name": "Kabel YDYp 3x2.5mm2 (prowadzenie w ścianie)",
         "unit": "mb",
         "base_material": 5.5,
         "base_labor": 18,
@@ -402,15 +402,15 @@
         "factor": 2.5
       },
       {
-        "name": "Kabel YDYp 3x1.5mm2 (obwody oswietleniowe)",
+        "name": "Kabel YDYp 3x1.5mm2 (obwody oświetleniowe)",
         "unit": "mb",
-        "base_material": 4.0,
+        "base_material": 4,
         "base_labor": 18,
         "calc": "per_area",
         "factor": 1.5
       },
       {
-        "name": "Gniazdo RJ45 kat.6 (siec komputerowa)",
+        "name": "Gniazdo RJ45 kat.6 (sieć komputerowa)",
         "unit": "szt",
         "base_material": 30,
         "base_labor": 45,
@@ -423,7 +423,7 @@
         "base_material": 3.5,
         "base_labor": 12,
         "calc": "per_area",
-        "factor": 2.0
+        "factor": 2
       },
       {
         "name": "Puszka podtynkowa O60mm",
@@ -442,7 +442,7 @@
         "factor": 1
       },
       {
-        "name": "Wylacznik roznicowoprądowy 30mA",
+        "name": "Wyłącznik różnicowoprądowy 30mA",
         "unit": "szt",
         "base_material": 75,
         "base_labor": 35,
@@ -450,7 +450,7 @@
         "factor": 1
       },
       {
-        "name": "Wylacznik nadpradowy B16A",
+        "name": "Wyłącznik nadprądowy B16A",
         "unit": "szt",
         "base_material": 22,
         "base_labor": 15,
@@ -458,12 +458,12 @@
         "factor": 1
       },
       {
-        "name": "Kucie bruzd w scianie (pod przewody)",
+        "name": "Kucie bruzd w ścianie (pod przewody)",
         "unit": "mb",
         "base_material": 0,
         "base_labor": 25,
         "calc": "per_area",
-        "factor": 2.0
+        "factor": 2
       },
       {
         "name": "Oswietlenie awaryjne",
@@ -500,7 +500,7 @@
         "factor": 0.01
       },
       {
-        "name": "Punkt oswietleniowy (oprawa przemyslowa)",
+        "name": "Punkt oświetleniowy (oprawa przemysłowa)",
         "unit": "szt",
         "base_material": 180,
         "base_labor": 65,
@@ -521,7 +521,7 @@
         "base_material": 5.5,
         "base_labor": 18,
         "calc": "per_area",
-        "factor": 1.0
+        "factor": 1
       },
       {
         "name": "Korytko kablowe 200x60mm",
@@ -532,7 +532,7 @@
         "factor": 0.3
       },
       {
-        "name": "Rozdzielnica natynkowa (48+ modulow)",
+        "name": "Rozdzielnica natynkowa (48+ modułów)",
         "unit": "szt",
         "base_material": 350,
         "base_labor": 300,
@@ -540,7 +540,7 @@
         "factor": 1
       },
       {
-        "name": "Wylacznik roznicowoprądowy 30mA",
+        "name": "Wyłącznik różnicowoprądowy 30mA",
         "unit": "szt",
         "base_material": 75,
         "base_labor": 35,
@@ -548,7 +548,7 @@
         "factor": 1
       },
       {
-        "name": "Wylacznik nadpradowy B/C 16-32A",
+        "name": "Wyłącznik nadprądowy B/C 16-32A",
         "unit": "szt",
         "base_material": 28,
         "base_labor": 15,
@@ -598,7 +598,7 @@
         "factor": 0.12
       },
       {
-        "name": "Punkt oswietleniowy (panel LED 60x60)",
+        "name": "Punkt oświetleniowy (panel LED 60x60)",
         "unit": "szt",
         "base_material": 95,
         "base_labor": 55,
@@ -624,7 +624,7 @@
       {
         "name": "Kabel YDYp 3x1.5mm2 (oswietlenie)",
         "unit": "mb",
-        "base_material": 4.0,
+        "base_material": 4,
         "base_labor": 18,
         "calc": "per_area",
         "factor": 1.5
@@ -638,7 +638,7 @@
         "factor": 0.2
       },
       {
-        "name": "Rozdzielnica handlowa (36 modulow)",
+        "name": "Rozdzielnica handlowa (36 modułów)",
         "unit": "szt",
         "base_material": 180,
         "base_labor": 180,
@@ -646,7 +646,7 @@
         "factor": 1
       },
       {
-        "name": "Wylacznik roznicowoprądowy 30mA",
+        "name": "Wyłącznik różnicowoprądowy 30mA",
         "unit": "szt",
         "base_material": 75,
         "base_labor": 35,
@@ -654,7 +654,7 @@
         "factor": 1
       },
       {
-        "name": "Wylacznik nadpradowy B16A",
+        "name": "Wyłącznik nadprądowy B16A",
         "unit": "szt",
         "base_material": 22,
         "base_labor": 15,
@@ -667,7 +667,7 @@
         "base_material": 30,
         "base_labor": 45,
         "calc": "per_room",
-        "factor": 2.0
+        "factor": 2
       },
       {
         "name": "Oswietlenie awaryjne / ewakuacyjne",
@@ -696,7 +696,7 @@
     ],
     "parking": [
       {
-        "name": "Oprawa oswietleniowa LED (hermetyczna IP65)",
+        "name": "Oprawa oświetleniowa LED (hermetyczna IP65)",
         "unit": "szt",
         "base_material": 220,
         "base_labor": 65,
@@ -744,7 +744,7 @@
         "factor": 0.005
       },
       {
-        "name": "Rozdzielnica natynkowa IP54 (36 modulow)",
+        "name": "Rozdzielnica natynkowa IP54 (36 modułów)",
         "unit": "szt",
         "base_material": 280,
         "base_labor": 220,
@@ -752,7 +752,7 @@
         "factor": 1
       },
       {
-        "name": "Wylacznik roznicowoprądowy 30mA",
+        "name": "Wyłącznik różnicowoprądowy 30mA",
         "unit": "szt",
         "base_material": 75,
         "base_labor": 35,
@@ -760,7 +760,7 @@
         "factor": 1
       },
       {
-        "name": "Wylacznik nadpradowy B/C 16A",
+        "name": "Wyłącznik nadprądowy B/C 16A",
         "unit": "szt",
         "base_material": 22,
         "base_labor": 15,
@@ -807,7 +807,7 @@
         "base_material": 18,
         "base_labor": 35,
         "calc": "per_room",
-        "factor": 6.0
+        "factor": 6
       },
       {
         "name": "Gniazdo USB-A/C (ladowanie przy lozku)",
@@ -815,23 +815,23 @@
         "base_material": 45,
         "base_labor": 40,
         "calc": "per_room",
-        "factor": 2.0
+        "factor": 2
       },
       {
-        "name": "Lacznik pojedynczy / hotelowy",
+        "name": "Łącznik pojedynczy / hotelowy",
         "unit": "szt",
         "base_material": 22,
         "base_labor": 30,
         "calc": "per_room",
-        "factor": 3.0
+        "factor": 3
       },
       {
-        "name": "Punkt oswietleniowy (sufitowy)",
+        "name": "Punkt oświetleniowy (sufitowy)",
         "unit": "szt",
         "base_material": 35,
         "base_labor": 45,
         "calc": "per_room",
-        "factor": 3.0
+        "factor": 3
       },
       {
         "name": "Oswietlenie LED (tasma dekoracyjna)",
@@ -839,7 +839,7 @@
         "base_material": 25,
         "base_labor": 30,
         "calc": "per_room",
-        "factor": 4.0
+        "factor": 4
       },
       {
         "name": "Kabel YDYp 3x2.5mm2",
@@ -852,7 +852,7 @@
       {
         "name": "Kabel YDYp 3x1.5mm2 (oswietlenie)",
         "unit": "mb",
-        "base_material": 4.0,
+        "base_material": 4,
         "base_labor": 18,
         "calc": "per_area",
         "factor": 1.5
@@ -863,7 +863,7 @@
         "base_material": 30,
         "base_labor": 45,
         "calc": "per_room",
-        "factor": 2.0
+        "factor": 2
       },
       {
         "name": "Rozdzielnica pietrowa (24 moduly)",
@@ -874,7 +874,7 @@
         "factor": 0.008
       },
       {
-        "name": "Wylacznik roznicowoprądowy 30mA",
+        "name": "Wyłącznik różnicowoprądowy 30mA",
         "unit": "szt",
         "base_material": 75,
         "base_labor": 35,
@@ -882,7 +882,7 @@
         "factor": 1
       },
       {
-        "name": "Wylacznik nadpradowy B16A",
+        "name": "Wyłącznik nadprądowy B16A",
         "unit": "szt",
         "base_material": 22,
         "base_labor": 15,
@@ -890,12 +890,12 @@
         "factor": 1
       },
       {
-        "name": "Gniazdo hermetyczne IP44 (lazienka)",
+        "name": "Gniazdo hermetyczne IP44 (łazienka)",
         "unit": "szt",
         "base_material": 28,
         "base_labor": 40,
         "calc": "per_room",
-        "factor": 1.0
+        "factor": 1
       },
       {
         "name": "Oswietlenie awaryjne / ewakuacyjne",
@@ -914,12 +914,12 @@
         "factor": 1
       },
       {
-        "name": "Kucie bruzd w scianie",
+        "name": "Kucie bruzd w ścianie",
         "unit": "mb",
         "base_material": 0,
         "base_labor": 25,
         "calc": "per_area",
-        "factor": 2.0
+        "factor": 2
       }
     ],
     "szkola": [
@@ -929,18 +929,18 @@
         "base_material": 18,
         "base_labor": 35,
         "calc": "per_room",
-        "factor": 4.0
+        "factor": 4
       },
       {
-        "name": "Gniazdo RJ45 kat.6 (siec komputerowa)",
+        "name": "Gniazdo RJ45 kat.6 (sieć komputerowa)",
         "unit": "szt",
         "base_material": 30,
         "base_labor": 45,
         "calc": "per_room",
-        "factor": 3.0
+        "factor": 3
       },
       {
-        "name": "Punkt oswietleniowy (panel LED 60x60)",
+        "name": "Punkt oświetleniowy (panel LED 60x60)",
         "unit": "szt",
         "base_material": 95,
         "base_labor": 55,
@@ -948,12 +948,12 @@
         "factor": 0.1
       },
       {
-        "name": "Lacznik pojedynczy (podtynkowy)",
+        "name": "Łącznik pojedynczy (podtynkowy)",
         "unit": "szt",
         "base_material": 15,
         "base_labor": 30,
         "calc": "per_room",
-        "factor": 2.0
+        "factor": 2
       },
       {
         "name": "Kabel YDYp 3x2.5mm2",
@@ -966,7 +966,7 @@
       {
         "name": "Kabel YDYp 3x1.5mm2 (oswietlenie)",
         "unit": "mb",
-        "base_material": 4.0,
+        "base_material": 4,
         "base_labor": 18,
         "calc": "per_area",
         "factor": 1.5
@@ -988,7 +988,7 @@
         "factor": 0.25
       },
       {
-        "name": "Rozdzielnica podtynkowa (36 modulow)",
+        "name": "Rozdzielnica podtynkowa (36 modułów)",
         "unit": "szt",
         "base_material": 160,
         "base_labor": 180,
@@ -996,7 +996,7 @@
         "factor": 0.006
       },
       {
-        "name": "Wylacznik roznicowoprądowy 30mA",
+        "name": "Wyłącznik różnicowoprądowy 30mA",
         "unit": "szt",
         "base_material": 75,
         "base_labor": 35,
@@ -1004,7 +1004,7 @@
         "factor": 1
       },
       {
-        "name": "Wylacznik nadpradowy B16A",
+        "name": "Wyłącznik nadprądowy B16A",
         "unit": "szt",
         "base_material": 22,
         "base_labor": 15,
@@ -1036,7 +1036,7 @@
         "factor": 1
       },
       {
-        "name": "Kucie bruzd w scianie",
+        "name": "Kucie bruzd w ścianie",
         "unit": "mb",
         "base_material": 0,
         "base_labor": 25,
@@ -1053,7 +1053,7 @@
         "base_material": 30,
         "base_labor": 45,
         "calc": "per_room",
-        "factor": 1.0,
+        "factor": 1,
         "zakres": "teletechnical"
       },
       {
@@ -1100,7 +1100,7 @@
         "base_material": 3.5,
         "base_labor": 12,
         "calc": "per_area",
-        "factor": 2.0,
+        "factor": 2,
         "zakres": "teletechnical"
       },
       {
@@ -1135,10 +1135,10 @@
       {
         "name": "Kabel UTP kat.6A",
         "unit": "mb",
-        "base_material": 5.0,
+        "base_material": 5,
         "base_labor": 14,
         "calc": "per_area",
-        "factor": 3.0,
+        "factor": 3,
         "zakres": "teletechnical"
       },
       {
@@ -1171,9 +1171,9 @@
     ],
     "przemysl": [
       {
-        "name": "Kabel UTP kat.6 (siec przemyslowa)",
+        "name": "Kabel UTP kat.6 (siec przemysłowa)",
         "unit": "mb",
-        "base_material": 4.0,
+        "base_material": 4,
         "base_labor": 14,
         "calc": "per_area",
         "factor": 0.5,
@@ -1205,7 +1205,7 @@
         "base_material": 30,
         "base_labor": 45,
         "calc": "per_room",
-        "factor": 2.0,
+        "factor": 2,
         "zakres": "teletechnical"
       },
       {
@@ -1281,7 +1281,7 @@
         "base_material": 3.5,
         "base_labor": 12,
         "calc": "per_area",
-        "factor": 1.0,
+        "factor": 1,
         "zakres": "teletechnical"
       }
     ],
@@ -1370,7 +1370,7 @@
         "base_material": 85,
         "base_labor": 40,
         "calc": "per_room",
-        "factor": 1.0,
+        "factor": 1,
         "zakres": "alarm"
       },
       {
@@ -1379,7 +1379,7 @@
         "base_material": 45,
         "base_labor": 30,
         "calc": "per_room",
-        "factor": 2.0,
+        "factor": 2,
         "zakres": "alarm"
       },
       {
@@ -1479,7 +1479,7 @@
         "zakres": "alarm"
       },
       {
-        "name": "Czujka PIR przemyslowa",
+        "name": "Czujka PIR przemysłowa",
         "unit": "szt",
         "base_material": 150,
         "base_labor": 55,
@@ -1531,7 +1531,7 @@
         "base_material": 580,
         "base_labor": 120,
         "calc": "per_room",
-        "factor": 1.0,
+        "factor": 1,
         "zakres": "alarm"
       }
     ],
@@ -1640,7 +1640,7 @@
         "base_material": 480,
         "base_labor": 100,
         "calc": "per_room",
-        "factor": 1.0,
+        "factor": 1,
         "zakres": "smarthome"
       },
       {
@@ -1725,7 +1725,7 @@
         "base_material": 1200,
         "base_labor": 180,
         "calc": "per_room",
-        "factor": 1.0,
+        "factor": 1,
         "zakres": "smarthome"
       },
       {
@@ -1734,7 +1734,7 @@
         "base_material": 850,
         "base_labor": 120,
         "calc": "per_room",
-        "factor": 1.0,
+        "factor": 1,
         "zakres": "smarthome"
       },
       {
@@ -1823,7 +1823,7 @@
         "base_material": 6.5,
         "base_labor": 15,
         "calc": "per_area",
-        "factor": 2.0,
+        "factor": 2,
         "zakres": "ppoz"
       }
     ],
@@ -1861,7 +1861,7 @@
         "base_material": 6.5,
         "base_labor": 15,
         "calc": "per_area",
-        "factor": 1.0,
+        "factor": 1,
         "zakres": "ppoz"
       }
     ],
@@ -1937,7 +1937,7 @@
         "base_material": 6.5,
         "base_labor": 15,
         "calc": "per_area",
-        "factor": 2.0,
+        "factor": 2,
         "zakres": "ppoz"
       }
     ],
@@ -1972,7 +1972,7 @@
     ],
     "parking": [
       {
-        "name": "Centrala SSP (garaz)",
+        "name": "Centrala SSP (garaż)",
         "unit": "szt",
         "base_material": 3800,
         "base_labor": 600,

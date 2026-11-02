@@ -109,7 +109,7 @@ export function AIContentManager() {
             <h3 className="font-semibold text-slate-900 dark:text-slate-100">Pozycje Katalogowe</h3>
           </div>
           <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-            Usuń wszystkie pozycje katalogowe wygenerowane przez ES Creator
+            Usuń pozycje, które dodał asystent do Twojego katalogu
           </p>
           <Button
             variant="destructive"
@@ -125,7 +125,7 @@ export function AIContentManager() {
             ) : (
               <>
                 <Trash2 className="w-4 h-4 mr-2" />
-                Usuń Pozycje AI
+                Usuń pozycje asystenta
               </>
             )}
           </Button>
@@ -135,10 +135,10 @@ export function AIContentManager() {
         <div className="bg-white dark:bg-slate-900 p-6 rounded-lg border-2 border-amber-200 dark:border-amber-800">
           <div className="flex items-center gap-2 mb-3">
             <Sparkles className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-            <h3 className="font-semibold text-slate-900 dark:text-slate-100">Zestawy (Assemblies)</h3>
+            <h3 className="font-semibold text-slate-900 dark:text-slate-100">Zestawy</h3>
           </div>
           <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-            Usuń wszystkie zestawy wygenerowane przez ES-Engine Assembly Creator
+            Usuń zestawy, które zbudował asystent. Twoje ręczne zestawy zostają.
           </p>
           <Button
             variant="destructive"
@@ -154,7 +154,7 @@ export function AIContentManager() {
             ) : (
               <>
                 <Trash2 className="w-4 h-4 mr-2" />
-                Usuń Zestawy ES
+                Usuń zestawy asystenta
               </>
             )}
           </Button>

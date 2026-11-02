@@ -364,15 +364,22 @@ export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems
                         <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 dark:text-amber-400" />
                       </div>
                       <div>
-                        <CardTitle className="text-lg sm:text-xl">Zarządzanie Treścią ES-Engine</CardTitle>
+                        <CardTitle className="text-lg sm:text-xl">Usuwanie treści asystenta</CardTitle>
                         <CardDescription className="mt-0.5 sm:mt-1 text-xs sm:text-sm">
-                          Usuń pozycje i zestawy wygenerowane przez ES-Engine
+                          Schowane, bo kasuje bez powrotu. Otwórz tylko wtedy, gdy chcesz wyczyścić pozycje dodane przez asystenta.
                         </CardDescription>
                       </div>
                     </div>
                   </CardHeader>
                   <CardContent className="pt-4 sm:pt-6 px-4 sm:px-6">
-                    <AIContentManager />
+                    <details>
+                      <summary className="cursor-pointer text-sm font-medium text-slate-700 dark:text-slate-200">
+                        Pokaż przyciski usuwania
+                      </summary>
+                      <div className="pt-4">
+                        <AIContentManager />
+                      </div>
+                    </details>
                   </CardContent>
                 </Card>
 

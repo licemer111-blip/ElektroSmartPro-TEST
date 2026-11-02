@@ -98,11 +98,6 @@ export function OnboardingWizard({ regions, userName, userId }: OnboardingWizard
     });
   };
 
-  // Computed preview
-  const effectiveRate = selectedRegion
-    ? Math.round(hourlyRate * selectedRegion.price_modifier * 100) / 100
-    : hourlyRate;
-
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4 py-8 animate-in fade-in duration-700">
       <div className="w-full max-w-xl">
@@ -250,7 +245,7 @@ export function OnboardingWizard({ regions, userName, userId }: OnboardingWizard
                           <span className={`text-xs ${
                             pctDiff > 0 ? "text-green-600 dark:text-green-400" : pctDiff < 0 ? "text-red-500 dark:text-red-400" : "text-slate-500"
                           }`}>
-                            {pctDiff > 0 ? "+" : ""}{pctDiff}% vs średnia
+                            {pctDiff > 0 ? "+" : ""}{pctDiff}% do robocizny
                           </span>
                         </button>
                       );
@@ -261,8 +256,8 @@ export function OnboardingWizard({ regions, userName, userId }: OnboardingWizard
                 {selectedRegion && (
                   <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-blue-700 dark:text-blue-300">Na kosztorysie robocizna × {selectedRegion.price_modifier.toFixed(2)} ({selectedRegion.name})</span>
-                      <span className="text-base font-bold text-blue-600 dark:text-blue-400">{effectiveRate} zł/rbh</span>
+                      <span className="text-xs text-blue-700 dark:text-blue-300">Na kosztorysie: {hourlyRate} zł × {selectedRegion.price_modifier.toFixed(2)}</span>
+                      <span className="text-base font-bold text-blue-600 dark:text-blue-400">{selectedRegion.name}</span>
                     </div>
                   </div>
                 )}

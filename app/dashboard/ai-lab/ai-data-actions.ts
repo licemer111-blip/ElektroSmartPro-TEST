@@ -190,7 +190,7 @@ export async function createQuickEstimateFromMaterials(input: {
         if (count !== null && count >= maxAllowed) {
           return {
             success: false,
-            error: `Dla Twojego konta obowiązuje limit ${maxAllowed} projektów. Przejdź na PRO, aby tworzyć nielimitowane projekty.`,
+            error: `Na tym koncie jest limit ${maxAllowed} projektów. Kolejny projekt i PDF bez znaku DEMO są w PRO.`,
           };
         }
       }

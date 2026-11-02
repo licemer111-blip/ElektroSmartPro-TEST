@@ -15,6 +15,7 @@ interface StepReviewProps {
   laborFactor?: number;
   viewMode: "all" | "material" | "labor";
   creating: boolean;
+  createError?: string | null;
   wasFallback: boolean;
   isPro?: boolean;
   formatCurrency: (v: number) => string;
@@ -46,7 +47,7 @@ function KnrBadge({ code }: { code: string }) {
 }
 
 export function StepReview({
-  items, vatRate, totals, laborFactor = 1, viewMode, creating, isPro = false, formatCurrency,
+  items, vatRate, totals, laborFactor = 1, viewMode, creating, createError = null, isPro = false, formatCurrency,
   setViewMode, setManualVatRate, setStep, handleReset, handleCreate,
   updateItemQuantity, removeItem,
 }: StepReviewProps) {
@@ -245,6 +246,12 @@ export function StepReview({
           })}
         </div>
       </div>
+
+      {createError && (
+        <p className="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100">
+          {createError}
+        </p>
+      )}
 
       {/* Mobile: secondary row on top, CTA full-width below. sm+: side-by-side */}
       <div className="flex flex-col sm:flex-row sm:justify-between gap-2">

@@ -105,7 +105,7 @@ export async function createQuickEstimateProject(params: {
         .or("is_demo_project.is.null,is_demo_project.eq.false");
       if (count !== null && count >= maxAllowed) {
         return {
-          error: `Dla Twojego konta obowiązuje limit ${maxAllowed} projektów. Przejdź na PRO, aby tworzyć nielimitowane projekty.`,
+          error: `Na tym koncie jest limit ${maxAllowed} projektów. Kolejny projekt i PDF bez znaku DEMO są w PRO.`,
         };
       }
     }

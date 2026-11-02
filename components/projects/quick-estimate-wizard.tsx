@@ -18,7 +18,7 @@ interface QuickEstimateWizardProps {
 export function QuickEstimateWizard({ regions, objectTypes, isPro = false, defaultRegionId }: QuickEstimateWizardProps) {
   const { state, actions, meta } = useEstimateWizard({ regions, objectTypes, isPro, defaultRegionId });
   const { step, selectedType, area, areaInput, rooms, roomsInput, defaultsApplied,
-    projectName, regionId, standard, items, creating, generating, aiUsed, aiLimit,
+    projectName, regionId, standard, items, creating, createError, generating, aiUsed, aiLimit,
     viewMode, zakres, conditionalFields, openAccordion, manualVatRate, vatRate, totals, laborFactor } = state;
 
   return (
@@ -138,6 +138,7 @@ export function QuickEstimateWizard({ regions, objectTypes, isPro = false, defau
           laborFactor={laborFactor}
           viewMode={viewMode}
           creating={creating}
+          createError={createError}
           wasFallback={state.wasFallback}
           isPro={isPro}
           formatCurrency={actions.formatCurrency}
