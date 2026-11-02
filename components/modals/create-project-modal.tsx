@@ -14,6 +14,7 @@ import { useModalStore } from "@/hooks/use-modal-store";
 import { createProject } from "@/app/dashboard/actions";
 import { getTemplates, createProjectFromTemplate, type ProjectTemplate } from "@/app/dashboard/templates/actions";
 import { StepBasicInfo } from "@/components/modals/_parts/StepBasicInfo";
+import { vatForObjectType } from "@/lib/projects/object-vat";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -41,7 +42,7 @@ export function CreateProjectModal() {
   const { isOpen, type, data, onClose } = useModalStore();
   const [error, setError] = useState<string | null>(null);
   const [selectedObjectType, setSelectedObjectType] = useState<string>("");
-  const [selectedVatRate, setSelectedVatRate] = useState<number>(23);
+  const [selectedVatRate, setSelectedVatRate] = useState<number>(8);
   const [templates, setTemplates] = useState<ProjectTemplate[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
   const [isLoadingTemplates, setIsLoadingTemplates] = useState(false);
@@ -75,7 +76,7 @@ export function CreateProjectModal() {
   useEffect(() => {
     if (!isModalOpen) {
       setSelectedObjectType("");
-      setSelectedVatRate(23);
+      setSelectedVatRate(8);
       setSelectedTemplate("");
       setError(null);
     }
@@ -193,7 +194,7 @@ export function CreateProjectModal() {
       
       // Reset form
       setSelectedObjectType("");
-      setSelectedVatRate(23);
+      setSelectedVatRate(8);
       setError(null);
       
       // 🚀 REDIRECT: post-create target or new project page
@@ -265,7 +266,11 @@ export function CreateProjectModal() {
             selectedTemplate={selectedTemplate}
             onTemplateChange={setSelectedTemplate}
             selectedObjectType={selectedObjectType}
-            onObjectTypeChange={setSelectedObjectType}
+            onObjectTypeChange={(id) => {
+              setSelectedObjectType(id);
+              const picked = objectTypes.find((type) => type.id === id);
+              if (picked) setSelectedVatRate(vatForObjectType(picked.name, picked.default_vat_rate));
+            }}
             objectTypes={objectTypes}
             hasError={!!error}
           />

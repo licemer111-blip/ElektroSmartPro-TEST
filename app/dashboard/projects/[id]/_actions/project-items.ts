@@ -83,6 +83,7 @@ export async function addCatalogItemToProject(
 
   const isOwnRow = catalogItem.user_id != null;
   const resolved = resolveCatalogHours({
+    user_id: catalogItem.user_id,
     name: catalogItem.name,
     unit: catalogItem.unit,
     labor_norm_rbh: catalogItem.labor_norm_rbh,

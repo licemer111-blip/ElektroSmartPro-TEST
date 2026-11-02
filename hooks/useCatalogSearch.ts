@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { searchCatalogItems, getCatalogItemsByCategory, getCatalogDataBatch } from "@/app/dashboard/projects/[id]/actions";
+import { getCatalogItemsByCategory, getCatalogDataBatch } from "@/app/dashboard/projects/[id]/actions";
+import { catalogNameMatches } from "@/lib/catalog/catalog-search";
 import type { CatalogCategory, CatalogItem } from "@/lib/types/database";
 import type { DataSourceMode } from "@/hooks/use-search-mode";
 
@@ -115,25 +116,26 @@ export function useCatalogSearch({
     fetchItems();
   }, [expandedCategory]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // ── Debounced server-side search (500ms) ─────────────────────────────────────
+  // Search the rows already on screen. Folding Polish letters here is what
+  // makes "lacznik" find "Łącznik" and keeps a breaker out of a switch search.
   useEffect(() => {
-    if (!searchTerm.trim()) {
+    const query = searchTerm.trim();
+    if (!query) {
       setSearchResults([]);
+      setIsSearching(false);
       return;
     }
-    const timer = setTimeout(async () => {
+    const pool = Object.values(loadedItems).flat();
+    if (pool.length === 0) {
       setIsSearching(true);
-      try {
-        const results = await searchCatalogItems(searchTerm, searchMode);
-        setSearchResults(results);
-      } catch {
-        // silently fail
-      } finally {
-        setIsSearching(false);
-      }
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [searchTerm, searchMode]); // eslint-disable-line react-hooks/exhaustive-deps
+      return;
+    }
+    const results = pool.filter((item) => catalogNameMatches(query, item.name));
+    setSearchResults(results);
+    setIsSearching(false);
+    const firstCategory = results[0]?.category_id;
+    if (firstCategory) setExpandedCategory(firstCategory);
+  }, [searchTerm, loadedItems]);
 
   // ── Filter items by sourceFilter / searchMode ────────────────────────────────
   const filterItems = useCallback((items: CatalogItem[]): CatalogItem[] => {

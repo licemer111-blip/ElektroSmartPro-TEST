@@ -431,7 +431,15 @@ export function CatalogSidebar({ projectId, categories: initialCategories, catal
             })}
           </Accordion>
 
-          {visibleCategories.length === 0 && (
+          {searchTerm.trim() && !isSearching && visibleCategories.every((category) => filterItems(getItemsForCategory(category.id)).length === 0) && (
+            <div className="text-center py-8 text-muted-foreground">
+              <Search className="w-8 h-8 mx-auto mb-2 opacity-30" />
+              <p className="text-sm">Nic nie znaleziono dla „{searchTerm.trim()}”.</p>
+              <p className="text-xs mt-1">Wpisz krócej: gniazdo, lacznik, bruzda, ydyp.</p>
+            </div>
+          )}
+
+          {visibleCategories.length === 0 && !searchTerm.trim() && (
             <div className="text-center py-8 text-muted-foreground">
               <Package className="w-12 h-12 mx-auto mb-2 opacity-30" />
               <p className="text-sm">Brak kategorii w katalogu</p>

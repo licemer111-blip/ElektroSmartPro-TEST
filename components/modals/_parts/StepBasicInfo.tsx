@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/select";
 import type { ProjectTemplate } from "@/app/dashboard/templates/actions";
 import type { ObjectType } from "@/lib/types/database";
+import { dedupeObjectTypes, objectTypeLabel } from "@/lib/projects/object-vat";
 
 export interface StepBasicInfoProps {
   templates: ProjectTemplate[];
@@ -95,29 +96,11 @@ export function StepBasicInfo({
                 Brak typów obiektów
               </div>
             ) : (
-              objectTypes
-                .filter((type) => {
-                  const n = type.name.toLowerCase();
-                  return (
-                    n.includes("mieszkan") || n.includes("dom") ||
-                    n.includes("biuro") || n.includes("lokal") ||
-                    n.includes("przemys") || n.includes("hala")
-                  );
-                })
-                .map((type) => {
-                  const n = type.name.toLowerCase();
-                  let displayName: string;
-                  if (n.includes("mieszkan") || n.includes("dom")) displayName = "Mieszkanie / Dom";
-                  else if (n.includes("biuro") || n.includes("lokal")) displayName = "Biuro / Lokale";
-                  else if (n.includes("przemys") || n.includes("hala")) displayName = "Przemysł / Hala";
-                  else if (n.includes("sklep") || n.includes("uslug")) displayName = "Sklep / Lokal usługowy";
-                  else displayName = type.name.replace(/\s*\(VAT[^)]*\)/gi, "").trim();
-                  return (
-                    <SelectItem key={type.id} value={type.id}>
-                      {displayName}
-                    </SelectItem>
-                  );
-                })
+              dedupeObjectTypes(objectTypes).map((type) => (
+                <SelectItem key={type.id} value={type.id}>
+                  {objectTypeLabel(type.name)}
+                </SelectItem>
+              ))
             )}
           </SelectContent>
         </Select>

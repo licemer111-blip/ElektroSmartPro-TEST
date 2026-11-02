@@ -178,13 +178,10 @@ export function MobileSummaryBar({
                 <Calculator className="w-4 h-4 text-white" />
               </div>
               <div className="text-left">
-                <p className="text-[10px] text-muted-foreground leading-none mb-0.5">{isPro ? "Suma brutto" : "Suma brutto (Tryb Demo)"}</p>
+                <p className="text-[10px] text-muted-foreground leading-none mb-0.5">{isPro ? "Suma brutto" : "Suma brutto · PDF ze znakiem DEMO"}</p>
                 <p className="text-xl font-extrabold text-blue-600 dark:text-blue-400 leading-none tracking-tight">
                   <BlurredPrice value={grandTotal} isPro={isPro} />
                 </p>
-                {!isPro && (
-                  <p className="text-[9px] text-amber-600 dark:text-amber-400 font-semibold mt-0.5 leading-none">🔒 Zupgraduj aby odblokować</p>
-                )}
               </div>
             </div>
             <div className="flex items-center gap-2">

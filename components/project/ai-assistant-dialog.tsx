@@ -143,7 +143,7 @@ export function AIAssistantDialog({ projectId, isPro = false, projectStatus = "d
   return (
     <Dialog open={isOpen} onOpenChange={(open) => {
       if (open && isFinal) {
-        toast({ title: "🔒 Projekt zablokowany", description: "Odblokuj projekt, aby używać ES-Engine", variant: "destructive" });
+        toast({ title: "Projekt zablokowany", description: "Odblokuj projekt, aby użyć asystenta", variant: "destructive" });
         return;
       }
       setIsOpen(open);
@@ -156,13 +156,13 @@ export function AIAssistantDialog({ projectId, isPro = false, projectStatus = "d
           onClick={(e) => {
             if (isFinal) {
               e.preventDefault();
-              toast({ title: "🔒 Projekt zablokowany", description: "Odblokuj projekt, aby używać ES-Engine", variant: "destructive" });
+              toast({ title: "Projekt zablokowany", description: "Odblokuj projekt, aby użyć asystenta", variant: "destructive" });
             }
           }}
           className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 flex-shrink-0 rounded-md bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white border-0 ${isFinal ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           <Sparkles className="h-3.5 w-3.5" />
-          <span>ES Assist</span>
+          <span>Asystent</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
@@ -171,15 +171,11 @@ export function AIAssistantDialog({ projectId, isPro = false, projectStatus = "d
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg shadow-orange-500/20">
               <Wand2 className="w-4 h-4 text-white" />
             </div>
-            ES-Engine
-            <span className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-900 dark:bg-slate-700 text-[9px] font-medium text-slate-300">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Napędzane przez ES-Engine
-            </span>
+            Asystent
             <QuotaBadge info={quotaInfo} className="ml-1" />
           </DialogTitle>
           <DialogDescription>
-            {tab === "generate" ? "Opisz pomieszczenie — silnik inżynieryjny wygeneruje BOM" : "Znajdź i scal zduplikowane pozycje"}
+            {tab === "generate" ? "Opisz pomieszczenie. Asystent doda nazwy i ilości. Ceny policzysz przyciskiem Wyceń." : "Znajdź i scal zduplikowane pozycje"}
           </DialogDescription>
         </DialogHeader>
 
@@ -213,7 +209,7 @@ export function AIAssistantDialog({ projectId, isPro = false, projectStatus = "d
         {tab === "generate" && (
           <div className="space-y-3">
             {quotaInfo?.isExhausted && (
-              <QuotaBlocker info={quotaInfo} featureName="ES-Engine Generowania" />
+              <QuotaBlocker info={quotaInfo} featureName="asystenta" />
             )}
 
             <div className="relative">
@@ -279,7 +275,7 @@ export function AIAssistantDialog({ projectId, isPro = false, projectStatus = "d
             {!dupScanned ? (
               <>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
-                  ES-Engine przeskanuje kosztorys i znajdzie podobne pozycje (np. &quot;Gniazdo podwójne&quot; i &quot;Gniazdko podwójne&quot;). Duplikaty można scalić — ilości się zsumują.
+                  Asystent znajdzie podobne pozycje (np. „Gniazdo podwójne” i „Gniazdko podwójne”). Duplikaty można scalić — ilości się zsumują.
                 </p>
                 <Button
                   onClick={handleDupScan}

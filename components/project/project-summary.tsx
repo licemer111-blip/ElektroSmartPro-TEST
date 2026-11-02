@@ -280,7 +280,11 @@ export function ProjectSummary({
                 {materialsOwnedByCustomer ? "Tylko robocizna" : "Robocizna i materiały"}
               </span>
               <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                {materialsOwnedByCustomer ? "W ofercie nie ma materiałów" : "Materiał z wierszy wchodzi do sumy"}
+                {materialsOwnedByCustomer
+                  ? "W ofercie nie ma materiałów"
+                  : totals.laborTotal > 0 && totals.materialTotal === 0
+                    ? "W wierszach nie ma cen materiałów"
+                    : "Materiał z wierszy wchodzi do sumy"}
               </span>
             </Label>
             <Switch
@@ -292,6 +296,15 @@ export function ProjectSummary({
             />
           </div>
         </div>
+
+        {!materialsOwnedByCustomer && totals.laborTotal > 0 && totals.materialTotal === 0 && (
+          <div className="flex items-start gap-2 rounded-lg border border-amber-300 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/30 px-3 py-2">
+            <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
+            <p className="text-xs text-amber-800 dark:text-amber-200 leading-snug">
+              Materiały są włączone, ale żaden wiersz nie ma ceny materiału. Dopisz ją albo włącz samą robociznę, zanim wyślesz ofertę.
+            </p>
+          </div>
+        )}
 
         {unpricedCount > 0 && (
           <div className="flex items-start gap-2 rounded-lg border border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-950/30 px-3 py-2">

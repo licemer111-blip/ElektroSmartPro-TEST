@@ -276,7 +276,7 @@ export function PriceAdjuster({ projectId, basePrice, initialAdjustment, isPro =
       }`}>
         <span>{isDiscount ? "Rabat:" : "Marża:"}</span>
         <span className="font-bold">
-          {isPro ? `${isDiscount ? "-" : "+"}${Math.abs(targetPrice - safeBasePrice).toFixed(2)} zł` : "***"}
+          {`${isDiscount ? "-" : "+"}${Math.abs(targetPrice - safeBasePrice).toFixed(2).replace(".", ",")} zł`}
         </span>
       </div>
     </div>

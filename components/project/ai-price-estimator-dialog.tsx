@@ -48,7 +48,7 @@ interface AiPriceEstimatorDialogProps {
 }
 
 const modeButtons: { mode: PriceMode; label: string; desc: string; icon: typeof Banknote }[] = [
-  { mode: "all", label: "Wyceń", desc: "Robocizna: rbh normy ES × Twoja stawka × województwo. Materiał z katalogu.", icon: Wrench },
+  { mode: "all", label: "Wyceń", desc: "Robocizna: rbh normy ES × Twoja stawka. Województwo dolicza ekran kosztorysu. Materiał z Twojego cennika.", icon: Wrench },
 ];
 
 export function AiPriceEstimatorDialog({

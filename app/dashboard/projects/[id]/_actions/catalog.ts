@@ -2,6 +2,7 @@
 
 import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
+import { catalogNameMatches } from "@/lib/catalog/catalog-search";
 import type { CatalogItem, CatalogCategory } from "@/lib/types/database";
 
 // Helper type for category with count
@@ -345,8 +346,7 @@ export async function searchCatalogItems(
     .from("catalog_items")
     .select("*")
     .eq("is_active", true)
-    .ilike("name", `%${searchTerm}%`)
-    .limit(60);
+    .limit(2000);
 
   if (searchMode === "own") {
     if (userTeamId) {
@@ -381,7 +381,9 @@ export async function searchCatalogItems(
 
   const hiddenItemIds = new Set((hiddenItems || []).map((h: { catalog_item_id: string }) => h.catalog_item_id));
 
-  const filtered = (data as CatalogItem[] || []).filter((item) => !hiddenItemIds.has(item.id));
+  const filtered = (data as CatalogItem[] || []).filter((item) =>
+    !hiddenItemIds.has(item.id) && catalogNameMatches(searchTerm, item.name)
+  );
 
   // hybrid: sort own items first, then global (user_id === null)
   if (searchMode === "hybrid") {
@@ -393,5 +395,5 @@ export async function searchCatalogItems(
     });
   }
 
-  return filtered;
+  return filtered.slice(0, 80);
 }

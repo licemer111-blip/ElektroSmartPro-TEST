@@ -32,7 +32,7 @@ export function QuotaBadge({ info, className, showUpgrade = true }: QuotaBadgePr
         )}
         title={isPro ? "Limit miesięczny wyczerpany" : "Limit demo wyczerpany — przejdź na PRO"}
       >
-        <span>{used}/{limit}</span>
+        <span>AI {used}/{limit}</span>
         {!isPro && showUpgrade && (
           <a
             href="/dashboard/subscription"
@@ -57,7 +57,7 @@ export function QuotaBadge({ info, className, showUpgrade = true }: QuotaBadgePr
         title="Ostatnie zapytanie AI w planie Demo — przejdź na PRO"
       >
         <Zap className="w-2.5 h-2.5" />
-        <span>{used}/{limit}</span>
+        <span>AI {used}/{limit}</span>
       </span>
     );
   }
@@ -74,7 +74,7 @@ export function QuotaBadge({ info, className, showUpgrade = true }: QuotaBadgePr
       title={isPro ? `${remaining} zapytań AI pozostało w tym miesiącu` : `${remaining} z ${limit} darmowych zapytań AI`}
     >
       {isPro && <Crown className="w-2.5 h-2.5" />}
-      <span>{used}/{limit}</span>
+      <span>AI {used}/{limit}</span>
     </span>
   );
 }

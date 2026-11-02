@@ -11,6 +11,7 @@ import { getEffectiveMaxProjects } from "@/lib/config/tier-limits";
 import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { DEMO_PROJECT } from "@/lib/config/demo-project";
+import { vatForObjectType } from "@/lib/projects/object-vat";
 
 export async function getProjects(): Promise<ProjectWithRelations[]> {
   const { user, supabase } = await tryAuth();
@@ -178,7 +179,7 @@ export async function createProject(formData: FormData) {
 
   const name = formData.get("name") as string;
   const object_type_id = formData.get("object_type_id") as string;
-  const vat_rate = parseInt(formData.get("vat_rate") as string) || 8;
+  const requestedVat = parseInt(formData.get("vat_rate") as string);
   const client_name = (formData.get("client_name") as string) || null;
   const client_address = (formData.get("client_address") as string) || null;
   const client_nip = (formData.get("client_nip") as string) || null;
@@ -200,6 +201,15 @@ export async function createProject(formData: FormData) {
   }
 
   const defaultHourlyRate = (profile as { hourly_rate?: number | null } | null)?.hourly_rate ?? 0;
+
+  const { data: objectType } = await supabase
+    .from("object_types")
+    .select("name, default_vat_rate")
+    .eq("id", object_type_id)
+    .maybeSingle();
+  const vat_rate = objectType
+    ? vatForObjectType(objectType.name, objectType.default_vat_rate)
+    : (requestedVat === 23 ? 23 : 8);
 
   const { data, error } = await supabase
     .from("projects")

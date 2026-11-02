@@ -16,9 +16,16 @@ export interface ResolvedCatalogWork {
   source: "stored" | "es" | "none";
 }
 
-/** Hours for a shared catalog row. Stored rbh wins. Otherwise the same ES list the estimate already uses. */
+/** Hours for a catalog row. A shared row uses the ES norm when the name is known, so an old stored hour cannot underprice the work. */
 export function resolveCatalogHours(item: CatalogWorkInput): ResolvedCatalogWork {
   const stored = Number(item.labor_norm_rbh) || 0;
+  const shared = item.user_id == null;
+  if (shared) {
+    const match = findCanonicalL0(item.name, item.unit);
+    if (match) {
+      return { hours: match.laborNorm, code: match.knrCode, source: "es" };
+    }
+  }
   if (stored > 0) {
     return { hours: stored, code: item.knr_code ?? null, source: "stored" };
   }
