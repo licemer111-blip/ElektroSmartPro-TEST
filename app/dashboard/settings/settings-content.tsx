@@ -80,7 +80,7 @@ export function SettingsContent({ initialProfile }: SettingsContentProps) {
                       <div>
                         <CardTitle className="text-xl">Narzędzia Bazy Danych</CardTitle>
                         <CardDescription className="mt-1">
-                          Uzupełnij bazę gotowymi materiałami: Globalny katalog ({SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR) już dostępny
+                          Katalog normy ES ({SYSTEM_STATS_FALLBACK.normsLabelPlus} pozycji) jest już dostępny. Ceny materiałów wpisujesz sam.
                         </CardDescription>
                       </div>
                     </div>

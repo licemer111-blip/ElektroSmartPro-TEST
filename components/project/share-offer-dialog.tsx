@@ -255,14 +255,14 @@ export function ShareOfferDialog({ projectId, projectName, clientName, clientEma
                 <div className="flex items-center gap-1.5">
                   <BookOpen className="w-3.5 h-3.5 text-violet-500 flex-shrink-0" />
                   <div>
-                    <p className="text-[11px] font-medium text-slate-700 dark:text-slate-200">Pokaż kody KNR</p>
-                    <p className="text-[9px] text-slate-400">Wyświetla kody norm KNR na portalu.</p>
+                    <p className="text-[11px] font-medium text-slate-700 dark:text-slate-200">Pokaż kody normy</p>
+                    <p className="text-[9px] text-slate-400">Wyświetla kody normy ES na portalu.</p>
                   </div>
                 </div>
                 <Switch
                   id="portal-show-knr"
                   name="portal-show-knr"
-                  aria-label="Pokaż kody KNR"
+                  aria-label="Pokaż kody normy"
                   checked={portalShowKnr}
                   onCheckedChange={setPortalShowKnr}
                   className="scale-75 origin-right data-[state=checked]:bg-violet-600"

@@ -48,8 +48,8 @@ export const metadata: Metadata = {
     // ===== AI & TECHNOLOGY KEYWORDS =====
     "schemat jednokreskowy AI",
     "program do schematów jednokreskowych",
-    "KNR 5-08",
-    "normy KNR 5-08",
+    "norma ES",
+    "kosztorys elektryczny norma ES",
     "projektowanie rozdzielnic",
     "kalkulator rozdzielnic elektrycznych",
     "kosztorys godzina razy stawka",
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     // ===== PRICING KEYWORDS =====
     "cennik usług elektrycznych 2026",
     "stawki robocizny elektryk 2026",
-    "ceny materiałów elektrycznych 2026",
+    "własny cennik materiałów elektryka",
     "ile kosztuje punkt elektryczny",
     "cena instalacji elektrycznej",
     "cennik elektryka 2026",

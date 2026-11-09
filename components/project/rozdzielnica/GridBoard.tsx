@@ -297,8 +297,8 @@ export const GridBoard = React.memo(function GridBoard({
                         name={`mod-lab-${selectedModule.uid}`}
                         aria-label="Cena robocizny"
                         type="number" min={0} step={0.01}
-                        placeholder={String(selectedModule.module.defaultLaborPrice)}
-                        value={selectedModule.isZugBlock ? (selectedModule.customLaborPrice ?? "") : (selectedModule.customLaborPrice ?? selectedModule.module.defaultLaborPrice)}
+                        placeholder="Twoja cena"
+                        value={selectedModule.customLaborPrice ?? ""}
                         onChange={(e) => updateModule(selectedModule.uid, { customLaborPrice: e.target.value === "" ? undefined : parseFloat(e.target.value) || 0 })}
                         className="h-7 text-xs border-blue-200 dark:border-blue-800/50 focus-visible:ring-blue-400 bg-blue-50/50 dark:bg-blue-950/20"
                       />

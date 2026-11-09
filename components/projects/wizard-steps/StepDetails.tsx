@@ -241,9 +241,9 @@ export function StepDetails({
                 <Label id="wizard-ceiling-height-label">Wysokość hali / sufitu</Label>
                 <div role="group" aria-labelledby="wizard-ceiling-height-label" className="flex rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700">
                   {([
-                    { key: "low" as const,    label: "< 3m",  hint: "KNR ×1.0" },
-                    { key: "medium" as const, label: "3–6m",  hint: "KNR ×1.25" },
-                    { key: "high" as const,   label: "> 6m",  hint: "KNR ×1.50" },
+                    { key: "low" as const,    label: "< 3m",  hint: "norma ×1,0" },
+                    { key: "medium" as const, label: "3–6m",  hint: "norma ×1,25" },
+                    { key: "high" as const,   label: "> 6m",  hint: "norma ×1,50" },
                   ]).map((opt, i) => (
                     <button key={opt.key} type="button"
                       onClick={() => setConditionalFields(p => ({ ...p, ceilingHeight: opt.key }))}

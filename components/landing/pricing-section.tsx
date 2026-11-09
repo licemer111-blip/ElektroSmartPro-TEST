@@ -59,12 +59,12 @@ export function PricingSection({ catalogCount = 1400, dinCount = 295 }: PricingS
               <ul className="space-y-3 mb-6">
                 {[
                   { text: "1 projekt + projekt demonstracyjny", included: true },
-                  { text: `Katalog ${catalogCount}+ pozycji KNR`, included: true },
+                  { text: `Katalog ${catalogCount}+ pozycji normy ES`, included: true },
                   { text: "Pełne ceny i sumy widoczne", included: true },
                   { text: "12 kalkulatorów inżynierskich", included: true },
-                  { text: "Zestawy materiałów", included: true },
+                  { text: "Gotowe zestawy robót", included: true },
                   { text: "10 zapytań AI / miesiąc", included: true },
-                  { text: "Kreator wyceny z KNR", included: true },
+                  { text: "Szybka wycena z normy ES", included: true },
                   { text: "PDF/Excel z watermarkiem DEMO", included: true },
                   { text: "Nielimitowane projekty", included: false },
                   { text: "Czysty PDF bez watermarku", included: false },
@@ -133,12 +133,12 @@ export function PricingSection({ catalogCount = 1400, dinCount = 295 }: PricingS
               <ul className="space-y-3 mb-6">
                 {[
                   { text: "Nieograniczone projekty", included: true },
-                  { text: `Katalog ${catalogCount}+ pozycji KNR`, included: true },
+                  { text: `Katalog ${catalogCount}+ pozycji normy ES`, included: true },
                   { text: "Robocizna: godziny normy ES × Twoja stawka", included: true },
                   { text: "12 kalkulatorów inżynierskich", included: true },
-                  { text: "Zestawy materiałów", included: true },
+                  { text: "Gotowe zestawy robót", included: true },
                   { text: "500 zapytań AI / miesiąc", included: true },
-                  { text: "Kreator wyceny z KNR", included: true },
+                  { text: "Szybka wycena z normy ES", included: true },
                   { text: "Czysty PDF/Excel (bez watermarku)", included: true },
                   { text: "Szablony i własne zestawy", included: true },
                   { text: "CRM klientów + Analityka biznesowa", included: true },

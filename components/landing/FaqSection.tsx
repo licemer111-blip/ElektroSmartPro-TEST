@@ -14,7 +14,7 @@ function FaqSectionInner(_props: FaqProps) {
       <>
         <p className="font-medium text-slate-900 dark:text-white">Z ElektroSmart PRO — 3 kroki, mniej niż 10 minut:</p>
         <ol className="list-decimal list-inside mt-2 sm:mt-3 space-y-1.5 sm:space-y-2">
-          <li><strong>Województwo + rodzaj obiektu</strong> — system ustawia stawki r-g i VAT (8%/23%) automatycznie</li>
+          <li><strong>Województwo + rodzaj obiektu</strong> — współczynnik województwa i jeden VAT (8% albo 23%). Stawkę godzinową wpisujesz sam</li>
           <li><strong>Dodaj pozycje</strong> — z katalogu, z zestawu albo z szybkiej wyceny po metrażu</li>
           <li><strong>Eksportuj PDF</strong> z logo i NIP. W DEMO jest znak wodny</li>
         </ol>
@@ -28,7 +28,7 @@ function FaqSectionInner(_props: FaqProps) {
     q: "Ile kosztuje punkt elektryczny w Polsce w 2026 roku?",
     a: (
       <>
-        <p>Program nie podaje jednej ceny „punktu” z ulicy. Punkt gniazda to gniazdo, puszka, kabel i bruzda. Robocizna wychodzi z godzin normy ES i Twojej stawki. Mazowieckie dodaje 20% tylko do robocizny, Podkarpackie odejmuje 12%. Materiał zostaje w cenie z katalogu.</p>
+        <p>Program nie podaje jednej ceny „punktu” z ulicy. Punkt gniazda to gniazdo, puszka, kabel i bruzda. Robocizna wychodzi z godzin normy ES i Twojej stawki. Mazowieckie dodaje 20% tylko do robocizny, Podkarpackie odejmuje 12%. Materiał bierzesz ze swojego cennika.</p>
       </>
     ),
   },

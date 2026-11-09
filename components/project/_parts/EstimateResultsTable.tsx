@@ -230,7 +230,7 @@ export function EstimateResultsTable({
         {lowConfCount > 0 && (
           <Badge className="bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 gap-1">
             <Zap className="w-2.5 h-2.5" />
-            {lowConfCount} Poza KNR
+            {lowConfCount} bez godziny ES
           </Badge>
         )}
         {interventionCount > 0 && (
@@ -255,7 +255,7 @@ export function EstimateResultsTable({
       {/* Warning */}
       <div className="flex items-start gap-2 p-2 rounded-lg bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 text-[10px] text-amber-700 dark:text-amber-300 flex-shrink-0">
         <AlertTriangle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-        <span>Wycena ekspercka ES-KNR — zweryfikuj kluczowe pozycje przed wysłaniem oferty. Odznacz pozycje, których nie chcesz aktualizować.</span>
+        <span>Wycena z normy ES — sprawdź kluczowe pozycje przed ofertą. Odznacz te, których nie chcesz zapisać.</span>
       </div>
 
       {/* Table */}
@@ -276,7 +276,7 @@ export function EstimateResultsTable({
                 {showMatCol && <TableHead className="text-[10px] font-semibold w-20 text-right">Mat./jm. <span className="font-normal text-slate-400">({priceLabel})</span></TableHead>}
                 {showLabCol && <TableHead className="text-[10px] font-semibold w-20 text-right">Rob./jm. <span className="font-normal text-slate-400">({priceLabel})</span></TableHead>}
                 <TableHead className="text-[10px] font-semibold w-24 text-right">Razem <span className="font-normal text-slate-400">({priceLabel})</span></TableHead>
-                <TableHead className="text-[10px] font-semibold w-28">Kod KNR</TableHead>
+                <TableHead className="text-[10px] font-semibold w-28">Norma ES</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -469,11 +469,11 @@ export function EstimateResultsTable({
                           </span>
                         ) : rowType === "knr-a" ? (
                           <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 w-fit">
-                            <ShieldCheck className="w-2.5 h-2.5" />KNR Baza A
+                            <ShieldCheck className="w-2.5 h-2.5" />Norma ES
                           </span>
                         ) : rowType === "knr-b" ? (
                           <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 w-fit">
-                            KNR Baza B
+                            Podobna norma ES
                           </span>
                         ) : rowType === "poza-knr" ? (
                           <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-medium bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 w-fit">
@@ -591,7 +591,7 @@ export function EstimateResultsTable({
           <Sparkles className="w-3.5 h-3.5 text-violet-500 flex-shrink-0 mt-0.5" />
           <div className="flex-1 min-w-0">
             <p className="text-[11px] font-semibold text-violet-700 dark:text-violet-400">
-              {unmatchedCount} {unmatchedCount === 1 ? "pozycja poza" : "pozycji poza"} katalogiem i bazą KNR
+              {unmatchedCount} {unmatchedCount === 1 ? "pozycja poza" : "pozycji poza"} katalogiem i normą ES
             </p>
             <p className="text-[10px] text-violet-600/80 dark:text-violet-500/80 mt-0.5">
               Nie znaleziono dopasowania w katalogu prywatnym ani ES-Dictionary.

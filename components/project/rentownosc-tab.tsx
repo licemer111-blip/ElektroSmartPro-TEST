@@ -152,7 +152,7 @@ function KnrSafetyBadge({ score, manual, total }: { score: number; manual: numbe
       ? { label: "Wysoka pewność", icon: ShieldCheck, bg: "bg-emerald-50 dark:bg-emerald-950/30", border: "border-emerald-200 dark:border-emerald-800", text: "text-emerald-700 dark:text-emerald-300", bar: "bg-emerald-500", desc: "Większość pozycji posiada zweryfikowane kody KNR." }
       : manualPct <= 50
         ? { label: "Średnie ryzyko", icon: ShieldAlert, bg: "bg-amber-50 dark:bg-amber-950/30", border: "border-amber-200 dark:border-amber-800", text: "text-amber-700 dark:text-amber-300", bar: "bg-amber-500", desc: "Część pozycji wymaga ręcznej weryfikacji cen." }
-        : { label: "Wysokie ryzyko", icon: ShieldX, bg: "bg-red-50 dark:bg-red-950/30", border: "border-red-200 dark:border-red-800", text: "text-red-700 dark:text-red-300", bar: "bg-red-500", desc: "Ponad połowa pozycji nie ma przypisanych norm KNR — ceny mogą być niedokładne." };
+        : { label: "Wysokie ryzyko", icon: ShieldX, bg: "bg-red-50 dark:bg-red-950/30", border: "border-red-200 dark:border-red-800", text: "text-red-700 dark:text-red-300", bar: "bg-red-500", desc: "Ponad połowa pozycji nie ma godziny normy ES — robocizna może być pusta." };
 
   const Icon = config.icon;
 

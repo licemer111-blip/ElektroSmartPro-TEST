@@ -172,7 +172,7 @@ export function EstimateTable({
           )
         );
         toast({
-          title: "Wyceniono z KNR/AI",
+          title: "Wyceniono z normy ES",
           description: result.estimate.note?.slice(0, 120) ?? "Cena zaktualizowana",
         });
       } else {

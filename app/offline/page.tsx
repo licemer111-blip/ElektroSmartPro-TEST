@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const OFFLINE_ROUTES = [
   { href: "/dashboard/projects", icon: FolderOpen, label: "Projekty", desc: "Przeglądaj zapisane kosztorysy" },
-  { href: "/dashboard/catalog", icon: BookOpen, label: "Katalog KNR", desc: `${SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR dostępnych offline` },
+  { href: "/dashboard/catalog", icon: BookOpen, label: "Katalog", desc: `${SYSTEM_STATS_FALLBACK.normsLabelPlus} pozycji normy ES` },
   { href: "/dashboard/tools", icon: Calculator, label: "Kalkulatory", desc: "12 kalkulatorów inżynierskich" },
   { href: "/dashboard/clients", icon: Users, label: "Klienci", desc: "Baza klientów i historia" },
 ];

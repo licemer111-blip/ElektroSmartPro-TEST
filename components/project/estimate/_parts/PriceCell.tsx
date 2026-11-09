@@ -47,7 +47,7 @@ export function PriceCell({ item, isLoading, onTriggerL3, className }: PriceCell
           </Tooltip>
         </TooltipProvider>
       )}
-      <span className="text-[8px] text-slate-400 dark:text-slate-600 leading-none">poza KNR</span>
+      <span className="text-[8px] text-slate-400 dark:text-slate-600 leading-none">bez normy ES</span>
     </div>
   );
 }

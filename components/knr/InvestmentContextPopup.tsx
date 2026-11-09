@@ -162,7 +162,7 @@ export function InvestmentContextPopup({ externalOpen, onExternalOpenChange }: I
           size="sm"
           onClick={() => setOpen(true)}
           className="h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white flex-shrink-0 rounded-md"
-          title="Kontekst Inwestycji — AI weźmie pod uwagę przy dopasowywaniu KNR"
+          title="Kontekst inwestycji — program uwzględni go przy doborze godziny"
         >
           <Sparkles className="h-3.5 w-3.5" />
           Kontekst
@@ -185,7 +185,7 @@ export function InvestmentContextPopup({ externalOpen, onExternalOpenChange }: I
               Kontekst Inwestycji
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Opisz typ obiektu (np. biurowiec, dom, hala) — AI lepiej dobierze normy KNR i materiały do wyceny.
+              Opisz typ obiektu (np. biurowiec, dom, hala). Program lepiej dobierze godzinę. Ceny materiału sam nie wymyśla.
             </DialogDescription>
           </DialogHeader>
 

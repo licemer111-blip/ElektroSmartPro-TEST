@@ -57,7 +57,7 @@ export function HourlyRateInput({
         toast({
           title: "✅ Stawka zaktualizowana",
           description: updatedCount > 0
-            ? `${rounded} PLN/rbh · przeliczono ${updatedCount} poz. z normą KNR`
+            ? `${rounded} PLN/rbh · przeliczono ${updatedCount} poz. z godziną normy ES`
             : `${rounded} PLN/rbh`,
         });
       }
@@ -125,7 +125,7 @@ export function HourlyRateInput({
 
         {/* ── Stawka r-g ── */}
         <div className="flex items-center gap-1.5 flex-nowrap">
-          <span title="Stawka za roboczogodzinę (rbh). Mnożona przez normy KNR dla każdej pozycji w trybie Ekspert." className="flex-shrink-0 cursor-help">
+          <span title="Stawka za roboczogodzinę. Mnożona przez godziny normy ES." className="flex-shrink-0 cursor-help">
             <CircleDollarSign className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
           </span>
           <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap select-none">
@@ -165,7 +165,7 @@ export function HourlyRateInput({
 
         {/* ── PDF toggle ── */}
         <div
-          title="Szczegółowe r-g w PDF: Włącz, aby pokazać klientowi nakłady czasu pracy (wg KNR) dla każdej pozycji w pliku PDF."
+          title="Godziny w PDF: pokaż klientowi nakład rbh przy każdej pozycji."
           className="flex items-center gap-1 cursor-pointer"
           onClick={() => !isFinal && !isPending && handlePdfToggle(!showInPdf)}
         >

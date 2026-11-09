@@ -72,7 +72,7 @@ export function LandingStructuredData({ catalogCount }: LandingStructuredDataPro
         name: "Ile kosztuje punkt elektryczny w 2026 roku?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Program nie podaje jednej ceny punktu z ulicy. Punkt gniazda to gniazdo, puszka, kabel i bruzda. Robocizna = godziny normy ES × stawka × województwo. Mazowieckie +20% tylko na robociznę, Podkarpackie −12%. Materiał zostaje w cenie katalogu.",
+          text: "Program nie podaje jednej ceny punktu z ulicy. Punkt gniazda to gniazdo, puszka, kabel i bruzda. Robocizna = godziny normy ES × stawka × województwo. Mazowieckie +20% tylko na robociznę, Podkarpackie −12%. Materiał bierzesz ze swojego cennika.",
         },
       },
       {

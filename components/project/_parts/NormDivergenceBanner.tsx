@@ -48,8 +48,8 @@ export function NormDivergenceBanner({ items }: NormDivergenceBannerProps) {
         <div className="flex-1 min-w-0">
           <span className="text-sm font-medium text-amber-800 dark:text-amber-300">
             {divergent.length === 1
-              ? "1 pozycja ma normę rbh znacznie odbiegającą od bazy KNR"
-              : `${divergent.length} pozycji ma normy rbh znacznie odbiegające od bazy KNR`}
+              ? "1 pozycja ma godzinę znacznie inną niż norma ES"
+              : `${divergent.length} pozycji ma godziny znacznie inne niż norma ES`}
           </span>
           <span className="ml-2 text-xs text-amber-600 dark:text-amber-400">
             (różnica {'>'} 3×)

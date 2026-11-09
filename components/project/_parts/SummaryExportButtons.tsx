@@ -50,7 +50,7 @@ export function SummaryExportButtons({
             <Button
               onClick={handleAddToProject}
               disabled={isAdding || !panelName.trim()}
-              title="Kopiuj rozdzielnicę do kosztorysu projektu — wszystkie moduły zostaną dodane jako pozycje z cenami KNR."
+              title="Kopiuj rozdzielnicę do kosztorysu. Moduły wejdą jako pozycje. Cenę materiału wpisujesz sam."
               className="gap-1 bg-blue-600 hover:bg-blue-700 text-white h-9 text-xs font-semibold rounded-none rounded-l-lg border-r border-blue-500/30 flex-1"
             >
               {isAdding ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileDown className="w-3.5 h-3.5" />}
@@ -88,7 +88,7 @@ export function SummaryExportButtons({
             <Button
               onClick={handleDownloadPdf}
               disabled={isDownloading || !panelName.trim()}
-              title="Pobierz specyfikację techniczną rozdzielnicy jako PDF z kosztorysem KNR."
+              title="Pobierz specyfikację rozdzielnicy jako PDF."
               className="gap-1 bg-red-600 hover:bg-red-700 text-white h-9 text-xs font-semibold rounded-none rounded-l-lg border-r border-red-500/30 flex-1"
             >
               {isDownloading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileDown className="w-3.5 h-3.5" />}
@@ -145,7 +145,7 @@ export function SummaryExportButtons({
         <div className="text-[11px] text-blue-800 dark:text-blue-300 leading-relaxed">
           <strong>Dodaj w dokumenty</strong> zapisuje do projektu:
           <ul className="mt-1 space-y-0.5 list-none">
-            <li className="flex items-center gap-1"><span className="text-emerald-600 font-bold">✓</span> PDF — specyfikacja techniczna z kosztorysem KNR</li>
+            <li className="flex items-center gap-1"><span className="text-emerald-600 font-bold">✓</span> PDF — specyfikacja techniczna</li>
             <li className="flex items-center gap-1"><span className="text-emerald-600 font-bold">✓</span> SVG — wizualizacja front-view modułów na szynie</li>
             <li className="flex items-center gap-1"><span className={schematReadyRef.current ? "text-emerald-600 font-bold" : "text-amber-500 font-bold"}>{schematReadyRef.current ? "✓" : "!"}</span>
               <span>{schematReadyRef.current ? "SVG — schemat wieloliniowy" : "SVG schemat — wygeneruj w zakładce Schemat"}</span>

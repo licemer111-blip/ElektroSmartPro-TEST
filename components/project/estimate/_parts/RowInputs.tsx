@@ -270,10 +270,10 @@ export function RowMaterialCell({
             <button
               onClick={(e) => { e.stopPropagation(); onGlobalFallbackAction!(item.id); }}
               className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline cursor-pointer transition-colors"
-              title="Pomiń katalog osobisty i wycen z KNR/AI"
+              title="Szukaj godziny w normie ES"
             >
               <Search className="w-3 h-3" />
-              <span>Szukaj w KNR/AI</span>
+              <span>Szukaj w normie ES</span>
             </button>
           )}
           <span className="text-[8px] text-slate-400 dark:text-slate-500">brak w P1</span>
@@ -521,7 +521,7 @@ export function RowRgCell({
                             ? "text-amber-500 hover:text-rose-500 dark:text-amber-400 dark:hover:text-rose-400"
                             : "text-emerald-500 hover:text-amber-500 dark:hover:text-amber-400"
                       }`}
-                      title={confirmReset ? "Kliknij ponownie, aby potwierdzić" : isDivergent && !item.norm_protected ? "Norma odbiega od KNR — kliknij, aby zresetować" : "Norma chroniona — kliknij, aby zresetować do KNR"}
+                      title={confirmReset ? "Kliknij ponownie, aby potwierdzić" : isDivergent && !item.norm_protected ? "Godzina odbiega od normy ES — kliknij, aby zresetować" : "Godzina chroniona — kliknij, aby wrócić do normy ES"}
                     >
                       {isPending
                         ? <Loader2 className="w-2.5 h-2.5 animate-spin" />
@@ -536,8 +536,8 @@ export function RowRgCell({
                     {confirmReset
                       ? "⚠️ Kliknij ponownie — norma zostanie usunięta i odblokowana"
                       : isDivergent && !item.norm_protected
-                        ? `Norma ${ln && sn ? (ln / sn > 1 ? `×${(ln/sn).toFixed(1)} wyższa` : `×${(sn/ln!).toFixed(1)} niższa`) : ""} od bazy KNR. Kliknij, aby zresetować do KNR (${sn?.toFixed(3)} rbh)`
-                        : "Norma chroniona. Kliknij, aby zresetować do KNR"}
+                        ? `Godzina ${ln && sn ? (ln / sn > 1 ? `×${(ln/sn).toFixed(1)} wyższa` : `×${(sn/ln!).toFixed(1)} niższa`) : ""} od normy ES. Kliknij, aby wrócić do ${sn?.toFixed(3)} rbh`
+                        : "Godzina chroniona. Kliknij, aby wrócić do normy ES"}
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -557,7 +557,7 @@ export function RowRgCell({
                       <Info className="w-2.5 h-2.5 text-sky-500 dark:text-sky-400 shrink-0 cursor-help" />
                     </TooltipTrigger>
                     <TooltipContent side="left" className="text-xs max-w-[200px]">
-                      Norma przeliczona z jednostki KNR ({knrUnit})
+                      Godzina przeliczona z jednostki normy ES ({knrUnit})
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -575,7 +575,7 @@ export function RowRgCell({
           <button
             onClick={() => onGlobalFallbackAction(item.id)}
             disabled={isLoading}
-            title="Uzupełnij normę RBH z KNR/AI"
+            title="Uzupełnij godziny z normy ES"
             className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-semibold text-white bg-cyan-500 hover:bg-cyan-600 dark:bg-cyan-600 dark:hover:bg-cyan-500 transition-colors disabled:opacity-60 disabled:cursor-not-allowed animate-pulse shadow-[0_0_6px_rgba(6,182,212,0.6)] hover:shadow-[0_0_8px_rgba(6,182,212,0.9)] hover:animate-none"
           >
             {isLoading

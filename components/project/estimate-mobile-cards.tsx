@@ -374,7 +374,7 @@ export function EstimateMobileCards({
 
                         {item.labor_norm && (
                           <p className="text-[11px] text-slate-400">
-                            Norma KNR: {item.labor_norm} rbh/{item.unit ?? "szt"} · Razem: {((item.labor_norm ?? 0) * item.quantity).toFixed(2)} rbh
+                            Norma ES: {item.labor_norm} rbh/{item.unit ?? "szt"} · Razem: {((item.labor_norm ?? 0) * item.quantity).toFixed(2)} rbh
                           </p>
                         )}
 

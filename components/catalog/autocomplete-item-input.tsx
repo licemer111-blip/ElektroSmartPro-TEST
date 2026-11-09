@@ -157,7 +157,7 @@ export function AutocompleteItemInput({
         <ul className="absolute z-50 mt-1 w-full rounded-md border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 py-1 shadow-lg max-h-64 overflow-auto">
           <li className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-orange-600 dark:text-orange-400 border-b border-slate-100 dark:border-slate-800 flex items-center gap-1.5">
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-orange-500" />
-            Baza Referencyjna KNR
+            Norma ES
           </li>
           {suggestions.map((item, index) => (
             <li
@@ -198,7 +198,7 @@ export function AutocompleteItemInput({
       {isLoading && debouncedValue.length >= 2 && (
         <div className="absolute z-50 mt-1 w-full rounded-md border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 py-2 shadow-lg">
           <div className="px-4 py-2 text-sm text-slate-500 dark:text-slate-400 text-center">
-            Szukam w bazie KNR...
+            Szukam w normie ES...
           </div>
         </div>
       )}
@@ -206,7 +206,7 @@ export function AutocompleteItemInput({
       {!isLoading && isOpen && suggestions.length === 0 && debouncedValue.length >= 2 && (
         <div className="absolute z-50 mt-1 w-full rounded-md border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 py-2 shadow-lg">
           <div className="px-4 py-2 text-sm text-slate-500 dark:text-slate-400 text-center">
-            Nie znaleziono w bazie KNR
+            Nie znaleziono w normie ES
           </div>
         </div>
       )}

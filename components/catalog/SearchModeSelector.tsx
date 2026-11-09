@@ -26,7 +26,7 @@ const MODES: ModeConfig[] = [
     id: "engine",
     icon: Brain,
     label: "Baza",
-    description: "Baza programu: pozycje z nakładami KNR",
+    description: "Baza programu: pozycje z godzinami normy ES",
     active:   "bg-orange-100 text-orange-700 dark:bg-orange-900/50 dark:text-orange-300 shadow-sm",
     inactive: "text-slate-500 hover:text-orange-600 hover:bg-orange-50/80 dark:hover:bg-orange-950/20",
   },

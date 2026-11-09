@@ -298,7 +298,7 @@ export const SummaryView = React.memo(function SummaryView({
                 {/* Project actions */}
                 <div className="flex rounded-lg overflow-hidden shadow-sm">
                   <Button onClick={handleAddToProject} disabled={isAdding || overflow || !panelName.trim()}
-                    title="Kopiuj rozdzielnicę do kosztorysu projektu — wszystkie moduły zostaną dodane jako pozycje z cenami KNR."
+                    title="Kopiuj rozdzielnicę do kosztorysu. Cenę materiału wpisujesz sam."
                     className="gap-1 bg-blue-600 hover:bg-blue-700 text-white h-9 text-xs font-semibold rounded-none rounded-l-lg border-r border-blue-500/30 flex-1">
                     {isAdding ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ArrowDown className="w-3.5 h-3.5" />}
                     Kosztorys
@@ -314,7 +314,7 @@ export const SummaryView = React.memo(function SummaryView({
                 {/* Export formats */}
                 <div className="flex rounded-lg overflow-hidden shadow-sm">
                   <Button onClick={handleDownloadPdf} disabled={isDownloading || !panelName.trim()}
-                    title="Pobierz specyfikację techniczną rozdzielnicy jako PDF z kosztorysem KNR."
+                    title="Pobierz specyfikację rozdzielnicy jako PDF."
                     className="gap-1 bg-red-600 hover:bg-red-700 text-white h-9 text-xs font-semibold rounded-none rounded-l-lg border-r border-red-500/30 flex-1">
                     {isDownloading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileDown className="w-3.5 h-3.5" />}
                     PDF

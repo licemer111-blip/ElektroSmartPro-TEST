@@ -168,7 +168,7 @@ export default function ONasPage() {
                       <p className="text-sm text-slate-700 dark:text-slate-300">
                         Kosztorys, który wcześniej zajmował Ci 3 godziny, teraz przygotuj w <strong>15 minut</strong>. 
                         Szybkie obliczenia, gotowe szablony zestawów (np. "Punkt gniazda podtynkowy"), 
-                        katalog {SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR i możliwość importu Excel/CSV.
+                        katalog {SYSTEM_STATS_FALLBACK.normsLabelPlus} pozycji normy ES i możliwość importu Excel/CSV.
                       </p>
                     </div>
                   </div>
@@ -179,12 +179,12 @@ export default function ONasPage() {
                     <Shield className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-1" />
                     <div>
                       <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-1">
-                        Precyzja (Katalog {SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR)
+                        Precyzja (Katalog {SYSTEM_STATS_FALLBACK.normsLabelPlus} pozycji normy ES)
                       </h3>
                       <p className="text-sm text-slate-700 dark:text-slate-300">
-                        Nasz <strong>Katalog</strong> zawiera <strong>{SYSTEM_STATS_FALLBACK.normsLabelRounded} norm KNR</strong> z rynku polskiego: 
-                        ceny materiałów, robocizny, jednostki miary. Wszystko oparte na rzeczywistych ofertach z 2026 roku. 
-                        Fulltext search z obsługą błędów pisowni. Bez guessingu, bez błędów.
+                        Nasz <strong>Katalog</strong> zawiera <strong>{SYSTEM_STATS_FALLBACK.normsLabelRounded} pozycji normy ES</strong>:
+                        godzina na jednostkę i jednostka miary. Złotówki robocizny liczysz swoją stawką. Materiał wpisujesz sam.
+                        Wyszukiwanie łapie też literówki.
                       </p>
                     </div>
                   </div>
@@ -199,7 +199,7 @@ export default function ONasPage() {
                       </h3>
                       <p className="text-sm text-slate-700 dark:text-slate-300">
                         Program <strong>automatycznie</strong> liczy VAT 8% dla budownictwa mieszkaniowego i 23% dla komercyjnego. 
-                        Współczynniki regionalne dla 16 województw. Aktualne ceny materiałów 2026.
+                        Współczynnik województwa dotyczy tylko robocizny. Mazowieckie to ×1,20.
                       </p>
                     </div>
                   </div>

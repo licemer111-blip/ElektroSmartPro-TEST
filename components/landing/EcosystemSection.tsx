@@ -32,13 +32,13 @@ function EcosystemSectionInner() {
             <CardContent>
               <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
                 Co{" "}
-                <strong className="text-blue-600 dark:text-blue-400">2–6 miesięcy</strong> — nowe funkcje, świeże cenniki, poprawki zgłoszone przez elektryków.
-                Płacisz raz, korzystasz wiecznie.
+                <strong className="text-blue-600 dark:text-blue-400">2–6 miesięcy</strong> — nowe funkcje i poprawki zgłoszone przez elektryków.
+                PRO to abonament 159 zł netto miesięcznie.
               </p>
               <div className="mt-4 pt-4 border-t border-slate-200/50 dark:border-slate-700/50">
                 <div className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 font-medium">
                   <div className="w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full animate-pulse" />
-                  Następna aktualizacja: Kwiecień 2026
+                  Godziny normy ES zostają w programie
                 </div>
               </div>
             </CardContent>
@@ -77,13 +77,13 @@ function EcosystemSectionInner() {
             </CardHeader>
             <CardContent>
               <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-                <strong className="text-blue-600 dark:text-blue-400">Aktualne ceny miedzi, kabli i materiałów</strong> wg trendów rynku 2026.
-                Nie wyceniasz z pamięci — wyceniasz z danych.
+                <strong className="text-blue-600 dark:text-blue-400">Godziny normy ES i Twoja stawka.</strong> Materiał bierzesz ze swojego cennika.
+                Program nie podaje giełdowej ceny miedzi.
               </p>
               <div className="mt-4 pt-4 border-t border-slate-200/50 dark:border-slate-700/50">
                 <div className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 font-medium">
                   <RefreshCcw className="w-4 h-4" />
-                  Aktualizacja co tydzień
+                  Cena materiału zostaje Twoja
                 </div>
               </div>
             </CardContent>

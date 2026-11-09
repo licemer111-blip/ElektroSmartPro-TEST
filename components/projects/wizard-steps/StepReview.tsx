@@ -33,8 +33,8 @@ function KnrBadge({ code }: { code: string }) {
   return (
     <span
       title={isManual
-        ? "Ta pozycja nie posiada przypisanej normy KNR w bazie. Ceny mogą wymagać ręcznej korekty."
-        : `Kod KNR: ${code}`}
+        ? "Ta pozycja nie ma godziny w normie ES. Cenę dopiszesz ręcznie."
+        : `Kod normy ES: ${code}`}
       className={`inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-mono font-semibold cursor-help ${
         isManual
           ? "bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-400/30"
@@ -201,7 +201,7 @@ export function StepReview({
                     <span className="text-[10px] text-muted-foreground">
                       {allBlankPrices ? (
                         <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
-                          <Zap className="w-2.5 h-2.5" /> Cena KNR / {item.unit}
+                          <Zap className="w-2.5 h-2.5" /> Godzina normy ES / {item.unit}
                         </span>
                       ) : (
                         <>
@@ -277,10 +277,10 @@ export function StepReview({
           size="lg"
         >
           {creating ? (
-            <><Loader2 className="w-4 h-4 mr-2 animate-spin" />{allBlankPrices ? "Tworzenie i wycena KNR..." : "Tworzenie projektu..."}</>
+            <><Loader2 className="w-4 h-4 mr-2 animate-spin" />{allBlankPrices ? "Tworzenie i wycena z normy ES..." : "Tworzenie projektu..."}</>
           ) : (
             allBlankPrices
-              ? <><Zap className="w-4 h-4 mr-2" />Utwórz i wyceń z KNR</>
+              ? <><Zap className="w-4 h-4 mr-2" />Utwórz i wyceń z normy ES</>
               : <><FileText className="w-4 h-4 mr-2" />{`Utwórz projekt (${formatCurrency(totals.gross)})`}</>
           )}
         </Button>

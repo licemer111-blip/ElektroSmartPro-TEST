@@ -469,7 +469,7 @@ export function CatalogSidebar({ projectId, categories: initialCategories, catal
             <div className="grid gap-2">
               <Label htmlFor="item-name">Nazwa pozycji *</Label>
               <AutocompleteItemInput id="item-name" value={newItemName} onChange={setNewItemName} onItemSelect={(sel) => { setNewItemName(sel.name); setNewItemUnit(sel.unit); }} placeholder="np. Gniazdo wtyczkowe 230V" disabled={isCreating} />
-              <p className="text-xs text-slate-500 dark:text-slate-400">Zacznij pisac, aby zobaczyc podpowiedzi z Bazy KNR</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Zacznij pisać, żeby zobaczyć pozycje normy ES</p>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="item-category">Kategoria</Label>

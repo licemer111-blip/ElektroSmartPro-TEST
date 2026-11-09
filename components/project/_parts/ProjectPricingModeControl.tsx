@@ -25,7 +25,7 @@ const MANUAL_CFG = {
   icon: PenLine,
   badge: "bg-purple-100 dark:bg-purple-950/40 border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-300",
   dot: "bg-purple-500",
-  description: "P1 Własny — Twoje stawki i katalog prywatny mają najwyższy priorytet (P1). Normy KNR ES-KNR używane jako uzupełnienie.",
+  description: "P1 Własny — Twoje stawki i katalog prywatny mają pierwszeństwo. Norma ES uzupełnia brakującą godzinę.",
 };
 
 export function ProjectPricingModeControl({
@@ -44,7 +44,7 @@ export function ProjectPricingModeControl({
       {useCustomRates && (
         <div
           className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold flex-shrink-0 ${MANUAL_CFG.badge}`}
-          title="Liczę Twoimi stawkami z katalogu. Baza KNR uzupełnia braki."
+          title="Liczę Twoimi stawkami z katalogu. Norma ES uzupełnia brakującą godzinę."
         >
           <Icon className="h-3 w-3" />
           <span>Twoje stawki</span>

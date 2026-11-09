@@ -125,7 +125,7 @@ export function WelcomeWizard({ userId, hasCompanyName, hasRate }: WelcomeWizard
               <div className="flex items-start gap-2.5 p-3 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900">
                 <Zap className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                 <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Stawkę roboczą i region ustaw później w <strong>Ustawienia → KNR</strong>.
+                  Stawkę godzinową i województwo ustawisz później w ustawieniach.
                 </p>
               </div>
 

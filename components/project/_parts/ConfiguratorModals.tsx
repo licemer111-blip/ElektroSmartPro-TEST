@@ -88,7 +88,7 @@ function AiPricingProgressDialog({ open }: { open: boolean }) {
 
         {/* Footer note */}
         <p className="text-[10px] text-slate-400 mt-6 text-center">
-          Normy KNR 5-08 · Producent · Współczynnik regionalny
+          Norma ES · Twoja stawka · współczynnik województwa
         </p>
       </div>
     </div>

@@ -97,7 +97,7 @@ export function RowTotalCell({
       )}
       {isLowConfidence && !isAnomalyHigh && (
         <div
-          title="Cena została oszacowana przez AI (brak dokładnej normy KNR). Zweryfikuj ręcznie przed wysłaniem klientowi."
+          title="To szacunek. Nie ma dokładnej godziny normy ES. Sprawdź przed ofertą."
           className="text-[9px] text-amber-600 dark:text-amber-400 font-semibold flex items-center justify-end gap-1 cursor-help"
         >
           <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-500" />
@@ -134,7 +134,7 @@ export function RowTotalCell({
             R — Robocizna
           </div>
           <div className="flex justify-between gap-3">
-            <span className="text-slate-400">Norma KNR:</span>
+            <span className="text-slate-400">Norma ES:</span>
             <span className="font-medium">{effectiveNorm.toFixed(3)} rbh/jm</span>
           </div>
           {mods.cable != null && (
@@ -151,7 +151,7 @@ export function RowTotalCell({
           )}
           {mods.laborMod != null && (
             <div className={cn("flex justify-between gap-3", mods.laborMod > 1.0 ? "text-amber-500" : "text-slate-400")}>
-              <span>× KNR (wys./trudn.):</span>
+              <span>× wysokość / trudność:</span>
               <span className="font-semibold">{mods.laborMod.toFixed(3)}</span>
             </div>
           )}
