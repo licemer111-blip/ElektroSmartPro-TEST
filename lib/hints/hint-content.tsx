@@ -5,8 +5,8 @@ export const HINTS = {
   columnMaterial: (
     <div className="space-y-1.5">
       <p className="font-semibold text-amber-700 dark:text-amber-300">💰 Materiał</p>
-      <p>Koszt materiałów netto za jednostkę i łącznie (ilość × cena).</p>
-      <p className="text-slate-400">Cena bazowa bez narzutów. Regionalizacja i marże stosowane osobno.</p>
+      <p>Cena materiału netto za jednostkę i łącznie (ilość × cena).</p>
+      <p className="text-slate-400">Pusta, dopóki nie wpiszesz jej sam albo nie weźmiesz z zakładki Moje. Województwo materiału nie rusza.</p>
     </div>
   ),
 
@@ -58,10 +58,9 @@ export const HINTS = {
     <div className="space-y-1.5">
       <p className="font-semibold">⚙️ Akcje</p>
       <ul className="space-y-0.5 text-slate-400">
-        <li>✏️ Edytuj nazwę, ilość, ceny</li>
-        <li>🔄 Przelicz cenę z AI/KNR</li>
-        <li>🗑️ Usuń pozycję</li>
-        <li>🛡 Resetuj normę do KNR</li>
+        <li>Edytuj nazwę, ilość i ceny</li>
+        <li>Usuń pozycję</li>
+        <li>Wyceń liczy robociznę z godziny i stawki</li>
       </ul>
     </div>
   ),
@@ -70,25 +69,25 @@ export const HINTS = {
   negotiationSlider: (
     <div className="space-y-1.5">
       <p className="font-semibold text-blue-700 dark:text-blue-300">🤝 Negocjacje Ceny</p>
-      <p>Globalny mnożnik ceny końcowej dla klienta (negocjacyjny).</p>
+      <p>Jeden rabat albo narzut na cały kosztorys. Suwak od −20% do +20%.</p>
       <ul className="space-y-0.5 text-slate-400">
-        <li>• 100% = cena bazowa bez zmiany</li>
-        <li>• 90% = rabat 10% dla klienta</li>
-        <li>• 110% = narzut 10% ponad bazę</li>
+        <li>• 0% — bez zmiany</li>
+        <li>• −10% — rabat dla klienta</li>
+        <li>• +10% — narzut</li>
       </ul>
-      <p className="text-slate-400">Nie zmienia cen w bazie — tylko wyświetlanie.</p>
+      <p className="text-slate-400">Nie przepisuje zapisanych cen. Widać go na ekranie i w PDF.</p>
     </div>
   ),
 
   pdfExport: (
     <div className="space-y-1.5">
       <p className="font-semibold text-red-700 dark:text-red-300">📄 Eksport PDF</p>
-      <p>Generuje profesjonalny kosztorys PDF gotowy do wysłania klientowi.</p>
+      <p>Kosztorys PDF. Działa też przed zatwierdzeniem oferty.</p>
       <ul className="space-y-0.5 text-slate-400">
-        <li>• Pełne ceny (materiał + robocizna)</li>
+        <li>• Robocizna i materiał osobno</li>
         <li>• Logo i dane firmy z profilu</li>
-        <li>• Uwagi i warunki płatności</li>
-        <li>• Wymaga zapisania projektu (status: Final)</li>
+        <li>• Na darmowym koncie znak DEMO</li>
+        <li>• Czysty PDF jest w PRO</li>
       </ul>
     </div>
   ),
@@ -137,8 +136,8 @@ export const HINTS = {
   addKit: (
     <div className="space-y-1.5">
       <p className="font-semibold text-blue-700 dark:text-blue-300">📦 Zestawy (Kits)</p>
-      <p>Gotowe zestawy pozycji — np. &quot;Gniazdko p/t&quot; automatycznie dodaje urządzenie, puszkę, przewód i bruzdę.</p>
-      <p className="text-slate-400">Eliminuje ręczne wpisywanie powiązanych pozycji.</p>
+      <p>Przycisk Dodaj Zestaw wstawia składniki jako osobne wiersze. Samo słowo „zestaw” w nazwie ceny nie zmienia.</p>
+      <p className="text-slate-400">Robocizna ze stawki. Materiał pusty, dopóki go nie wpiszesz.</p>
     </div>
   ),
 
@@ -162,31 +161,31 @@ export const HINTS = {
   navSzybkaWycena: (
     <div className="space-y-1.5">
       <p className="font-semibold text-yellow-700 dark:text-yellow-300">⚡ Szybka Wycena</p>
-      <p>Kreator AI — opisz obiekt (m², typ, zakres) i otrzymaj wstępny kosztorys w 30 sekund.</p>
-      <p className="text-slate-400">Idealny do szybkiej orientacji w cenie przed wizją.</p>
+      <p>Z metrażu układa listę prac. Robociznę liczy godzina × stawka. Materiału nie wymyśla.</p>
+      <p className="text-slate-400">Do pierwszej rozmowy z klientem, zanim wpiszesz swoje ceny.</p>
     </div>
   ),
 
   navKreator: (
     <div className="space-y-1.5">
       <p className="font-semibold text-violet-700 dark:text-violet-300">🎨 Kreator</p>
-      <p>Krok po kroku tworzy projekt na podstawie rzutu lub opisu pomieszczeń.</p>
+      <p>Nowy projekt: nazwa, typ obiektu i VAT. Potem katalog albo Wczytaj, na końcu Wyceń.</p>
     </div>
   ),
 
   navKatalog: (
     <div className="space-y-1.5">
       <p className="font-semibold">📚 Katalog</p>
-      <p>Twój osobisty cennik materiałów i robocizny. Pozycje z katalogu są używane priorytetowo przez AI (L1).</p>
-      <p className="text-slate-400">Im lepszy katalog, tym dokładniejsza automatyczna wycena.</p>
+      <p>Moje to Twój cennik. Baza to wspólne nazwy i godziny, bez ceny materiału. Razem pokazuje oba.</p>
+      <p className="text-slate-400">Cenę materiału z Moje program bierze do kosztorysu. Z Bazy — nie.</p>
     </div>
   ),
 
   navZestawy: (
     <div className="space-y-1.5">
       <p className="font-semibold text-blue-700 dark:text-blue-300">📦 Zestawy</p>
-      <p>Predefiniowane grupy pozycji (np. punkt elektryczny = urządzenie + puszka + przewód + kucie).</p>
-      <p className="text-slate-400">Dodajesz 1 pozycję — system wstawia 4-5 powiązanych.</p>
+      <p>Gotowa lista prac, którą dodajesz jednym kliknięciem. Każda praca to osobny wiersz.</p>
+      <p className="text-slate-400">Godziny ze stawki. Ceny materiału dopisujesz sam.</p>
     </div>
   ),
 
@@ -198,7 +197,7 @@ export const HINTS = {
         <li>• <strong>8%</strong> — budownictwo mieszkaniowe (PKOB 11)</li>
         <li>• <strong>23%</strong> — komercja, B2B, biura, usługi</li>
       </ul>
-      <p className="text-slate-400">Zmień w ustawieniach projektu → Typ obiektu.</p>
+      <p className="text-slate-400">Jedna stawka na cały kosztorys. Przełącznik 8% / 23% jest na pasku.</p>
     </div>
   ),
 
