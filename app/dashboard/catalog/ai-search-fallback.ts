@@ -155,7 +155,7 @@ export async function searchEsDictionaryContext(description: string): Promise<st
       `${r.knr_ref} | ${r.label} | ${r.unit} | rbh: ${r.labor_norm_rbh ?? "—"}`
   );
 
-  return `BAZA KNR 2026 — ${unique.length} norm pasujących do opisu:\n${lines.join("\n")}`;
+  return `Norma ES — ${unique.length} godzin pasujących do opisu:\n${lines.join("\n")}`;
 }
 
 async function directDictSearch(query: string, hourlyRate: number): Promise<CatalogItem[]> {

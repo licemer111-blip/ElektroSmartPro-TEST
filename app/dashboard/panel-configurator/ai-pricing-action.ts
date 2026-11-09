@@ -1,22 +1,16 @@
 "use server";
 
-import { logger } from "@/lib/logger";
 /**
  * AI Pricing Action — Panel Configurator
  *
- * Sends the board JSON to the RAG pipeline (KB + ES-Intelligence v2.1).
- * Returns per-module material + labor prices based on:
- *   - ES-KNR 2026 norms (from Knowledge Base)
- *   - Voivodeship modifier
- *   - Manufacturer coefficient
+ * Labor is the ES hour times the electrician's own rate.
+ * Material is the catalog price of the device already on the rail.
+ * The region is not baked in, and this action does not call the model.
  */
 
-import { askExpertWithAudit } from "@/server/services/ai-advisor.service";
-import { listKbFileNames } from "@/lib/kb-storage";
 import { VOIVODESHIP_MODIFIERS } from "@/lib/ai-master-brain";
 import { getEffectiveRate } from "@/lib/global-benchmarks";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { z } from "zod";
 
 // ── Input types ──────────────────────────────────────────────────────────────
 
@@ -26,6 +20,8 @@ export interface PricingModule {
   category: string;
   rating?: number;
   quantity: number;
+  /** Catalog price of the device the electrician already placed. Not an AI guess. */
+  materialPrice?: number;
 }
 
 export interface PricingSection {
@@ -102,42 +98,6 @@ export interface PricingResult {
   /** KB files used for pricing (user-uploaded documents) */
   kbFileNames?: string[];
 }
-
-// ── Zod schema for AI response ────────────────────────────────────────────────
-
-const PricedModuleSchema = z.object({
-  moduleId: z.string(),
-  namePl: z.string(),
-  quantity: z.number(),
-  unitMaterial: z.number().nullable().describe("Cena materiału netto PLN za 1 szt. NULL jeśli brak danych (UNCERTAIN)"),
-  unitLabor: z.number().nullable().describe("Koszt robocizny netto PLN za 1 szt. wg KNR. NULL jeśli brak danych (UNCERTAIN)"),
-  totalMaterial: z.number().nullable(),
-  totalLabor: z.number().nullable(),
-  knrCode: z.string().describe("Kod KNR np. KNR 5-04 0101-01, 'szacunek' lub 'brak'"),
-  isEstimate: z.boolean(),
-  confidenceLevel: z.enum(["verified", "analog", "estimated", "uncertain"])
-    .describe("verified=dokładne trafienie w ES-KNR, analog=znaleziono podobny produkt, estimated=szacunek rynkowy, uncertain=brak danych"),
-  confidenceNote: z.string().optional()
-    .describe("Dla analog: nazwa znalezionego analogu. Dla uncertain: 'Wymaga wyceny ręcznej'. Dla estimated: 'Szacunek rynkowy 2026'."),
-});
-
-const PricedSectionSchema = z.object({
-  sectionName: z.string(),
-  enclosureMaterial: z.number().describe("Cena obudowy netto PLN"),
-  enclosureLabor: z.number().describe("Koszt montażu obudowy netto PLN"),
-  modules: z.array(PricedModuleSchema),
-  accessories: z.array(PricedModuleSchema),
-  sectionTotalMaterial: z.number(),
-  sectionTotalLabor: z.number(),
-});
-
-const PricingResponseSchema = z.object({
-  sections: z.array(PricedSectionSchema),
-  grandTotalMaterial: z.number(),
-  grandTotalLabor: z.number(),
-  grandTotal: z.number(),
-  isEstimate: z.boolean(),
-});
 
 // ── KNR Labor Map for DIN Modules (KNR 5-08) ────────────────────────────────
 // Source: KNR 5-08 Montaż aparatury elektrycznej. Norms in rbh/szt.
@@ -284,15 +244,8 @@ export async function pricePanelWithAI(
       error: "Nie ustawiono stawki robocizny. Ustaw stawkę w ustawieniach projektu (PLN/rbh).",
     };
   }
-  const materialMultiplier = effectiveRate.matMultiplier;
-  // Region is applied once on the estimate screen. Do not bake it into the stored hour.
   const laborRatePLN = laborRateForCalc ?? 0;
-
-  const totalModules = sections.reduce(
-    (s, sec) => s + sec.modules.length + sec.accessories.length,
-    0
-  );
-
+  const totalModules = sections.reduce((sum, sec) => sum + sec.modules.length + sec.accessories.length, 0);
   if (totalModules === 0) {
     return {
       success: false,
@@ -308,231 +261,80 @@ export async function pricePanelWithAI(
       error: "Brak urządzeń do wyceny.",
     };
   }
+  void panelName;
+  void manufacturerId;
+  void expertDirectives;
 
-  const boardJson = JSON.stringify(
-    sections.map((sec) => ({
-      sekcja: sec.sectionName,
-      obudowa: `${sec.enclosureName} (${sec.enclosureModules} mod.)`,
-      urzadzenia: sec.modules.map((m) => ({
-        id: m.moduleId,
-        nazwa: m.namePl,
-        kategoria: m.category,
-        prad: m.rating ? `${m.rating}A` : undefined,
-        ilosc: m.quantity,
-      })),
-      akcesoria: sec.accessories.map((a) => ({
-        id: a.moduleId,
-        nazwa: a.namePl,
-        kategoria: a.category,
-        ilosc: a.quantity,
-      })),
-    })),
-    null,
-    2
-  );
-
-  const context = `Rozdzielnica: "${panelName}"
-Producent: ${manufacturerId} (współczynnik: ×${manufacturerCoeff.toFixed(2)})
-Województwo: ${request.voivodeshipName ?? "Nieznane"} (współczynnik: ×${voivodeshipModifier.toFixed(2)})
-Stawka robocizny: ${laborRatePLN} PLN/rbh (uwzgl. region ×${effectiveRate.regionModifier.toFixed(2)}) (OBOWIĄZUJE: każda rbh = ${laborRatePLN} PLN netto)
-Współczynnik inflacji materiałów: ×${materialMultiplier.toFixed(2)} (stosuj do cen katalogowych)
-
-SKŁAD ROZDZIELNICY (JSON):
-${boardJson}`;
-
-  const query = `Wycień tę rozdzielnicę elektryczną zgodnie z normami ES-KNR 2026.
-
-══ POLITYKA ZEROWEJ HALUCYNACJI (OBOWIĄZKOWE) ══
-Dla KAŻDEGO urządzenia musisz wykonać następującą klasyfikację:
-
-1. VERIFIED (confidenceLevel="verified") — tylko jeśli masz DOKŁADNE trafienie w bazie ES-KNR po nazwie lub kategorii:
-   → Podaj rzeczywistą cenę, knrCode w formacie "KNR X-XX XXXX-XX"
-   → isEstimate=false
-
-2. ANALOG (confidenceLevel="analog") — jeśli brak dokładnego trafiania, ale znalazłeś podobny produkt tej samej kategorii:
-   → Podaj cenę analogu, w confidenceNote napisz "Analog: [nazwa analogu]"
-   → isEstimate=true, knrCode="szacunek"
-
-3. ESTIMATED (confidenceLevel="estimated") — jeśli brak analogu, ale możesz oszacować cenę na podstawie kategorii i przeciętnych cen rynkowych 2026:
-   → Podaj szacunkową cenę, confidenceNote="Szacunek rynkowy 2026"
-   → isEstimate=true, knrCode="szacunek"
-
-4. UNCERTAIN (confidenceLevel="uncertain") — TYLKO jeśli NIE MASZ ŻADNYCH danych i nie możesz nawet oszacować:
-   → unitMaterial=null, unitLabor=null, totalMaterial=null, totalLabor=null
-   → knrCode="brak", confidenceNote="Wymaga wyceny ręcznej"
-   → isEstimate=true
-   ⚠️ NIE WPISUJ LOSOWYCH LICZB. Zostaw null.
-
-══ ZASADY WYCENY ══
-1. Ceny materiałów: aktualne ceny rynkowe 2026 netto PLN (bez VAT)
-2. Robocizna: wg KNR (Katalogi Nakładów Rzeczowych) × stawka regionalna
-3. Podaj BAZOWE ceny materiałów (ceny katalogowe netto PLN bez żadnych współczynników producenta — współczynnik producenta zostanie zastosowany automatycznie)
-4. Zastosuj współczynnik regionalny ×${voivodeshipModifier.toFixed(2)} do robocizny
-5. Dla obudowy: enclosureMaterial (cena obudowy), enclosureLabor (montaż obudowy)
-6. Oblicz sumy sekcji i grand total (null traktuj jako 0 w sumach)
-
-Zwróć kompletny obiekt JSON ze wszystkimi sekcjami, modułami i sumami.`;
-
-  try {
-    const [result, kbFiles] = await Promise.all([
-      askExpertWithAudit(context, query, PricingResponseSchema, "KNR wycena rozdzielnicy elektrycznej montaż", "pricing", expertDirectives, userId),
-      listKbFileNames().catch(() => [] as string[]),
-    ]);
-
-    // Derive human-readable price source for each priced module
-    // Rule: files starting with "ES-KNR" / "es-knr" are system KNR files → Green badge
-    //       other uploaded files are user data → Blue badge
-    const isEsKnrFile = (n: string) => n.toLowerCase().startsWith("es-knr");
-    const userFile = kbFiles.find(f => !isEsKnrFile(f));
-    const kbSourceLabel = kbFiles.length === 0
-      ? "ES-KNR 2026"
-      : userFile
-        ? `User File: ${userFile.replace(/\.json$/i, "")}`
-        : kbFiles[0].replace(/\.json$/i, ""); // e.g. "ES-KNR-AUTOMATION" → green via badge
-
-    const deriveSource = (mod: z.infer<typeof PricedModuleSchema>): string => {
-      if (mod.confidenceLevel === "uncertain") return "Brak danych";
-      if (mod.confidenceLevel === "verified") {
-        if (mod.knrCode && mod.knrCode.startsWith("KNR ")) return mod.knrCode;
-        return kbSourceLabel;
-      }
-      if (mod.confidenceLevel === "analog") return "AI Analog";
-      if (mod.isEstimate || mod.knrCode === "szacunek") return "AI Szacunek";
-      return result.source === "KNR" ? kbSourceLabel : "AI Szacunek";
-    };
-
-    // enrichModule: AI handles material price; labor is replaced with deterministic KNR norm.
-    // L0 (KNR 5-08 lookup) → L3 (AI fallback) for unmatched modules.
-    const enrichModule = (mod: z.infer<typeof PricedModuleSchema>): PricedModule => {
-      const baseQty = mod.quantity;
-      // Apply manufacturerCoeff deterministically to base material price from AI
-      const baseMat = 0;
-      const knrEntry = resolveModuleKnr(mod.moduleId);
-
-      if (knrEntry) {
-        // L0: KNR-verified — deterministic labor, no AI guessing
-        const unitLabor = Math.round(knrEntry.laborNorm * laborRatePLN * 100) / 100;
-        const modStr = "";
-        const voivStr = request.voivodeshipName
-          ? ` | ${request.voivodeshipName} ×${voivodeshipModifier.toFixed(2)}`
-          : "";
-        return {
-          moduleId: mod.moduleId,
-          namePl: mod.namePl,
-          quantity: baseQty,
-          unitMaterial: baseMat,
-          unitLabor,
-          totalMaterial: Math.round(baseMat * baseQty * 100) / 100,
-          totalLabor: Math.round(unitLabor * baseQty * 100) / 100,
-          knrCode: knrEntry.knrCode,
-          isEstimate: false,
-          priceSource: knrEntry.knrCode,
-          confidenceLevel: "verified",
-          confidenceNote: `${knrEntry.knrCode} | ${knrEntry.laborNorm} rbh × ${Math.round(laborRatePLN)} PLN/rbh${modStr}${voivStr} | mat ×${manufacturerCoeff.toFixed(2)} (${manufacturerId})`,
-        };
-      }
-
-      // L3: No KNR match — keep AI estimate (material + labor)
-      const unitLabor = 0;
+  const priceOne = (mod: PricingModule): PricedModule => {
+    const qty = mod.quantity || 0;
+    const material = Math.round((mod.materialPrice ?? 0) * 100) / 100;
+    const knr = resolveModuleKnr(mod.moduleId);
+    if (!knr) {
       return {
         moduleId: mod.moduleId,
         namePl: mod.namePl,
-        quantity: baseQty,
-        unitMaterial: baseMat,
-        unitLabor,
-        totalMaterial: Math.round(baseMat * baseQty * 100) / 100,
-        totalLabor: Math.round(unitLabor * baseQty * 100) / 100,
-        knrCode: mod.knrCode || "szacunek",
+        quantity: qty,
+        unitMaterial: material,
+        unitLabor: 0,
+        totalMaterial: Math.round(material * qty * 100) / 100,
+        totalLabor: 0,
+        knrCode: "",
         isEstimate: true,
-        priceSource: deriveSource(mod),
-        confidenceLevel: mod.confidenceLevel ?? "estimated",
-        confidenceNote: mod.confidenceNote ?? `Szacunek rynkowy 2026 (brak normy KNR 5-08) | mat ×${manufacturerCoeff.toFixed(2)} (${manufacturerId})`,
+        priceSource: "Brak normy ES",
+        confidenceLevel: "uncertain",
+        confidenceNote: "Brak godziny normy ES. Robocizna zostaje pusta. Materiał z wybranego aparatu.",
       };
-    };
-
-    const pricedSections: PricedSection[] = (result.data?.sections ?? []).map((sec) => {
-      // KNR 5-08 0101-XX: enclosure assembly labor by module count (from input sections)
-      const inputSec = sections.find(s => s.sectionName === sec.sectionName);
-      const enclosureKnr = resolveEnclosureKnr(inputSec?.enclosureModules ?? 36);
-      const enclosureLabor = Math.round(
-        enclosureKnr.laborNorm * laborRatePLN * 100
-      ) / 100;
-      // Apply manufacturerCoeff to enclosure material price
-      const enclosureMaterialWithCoeff = 0;
-
-      const enrichedModules = (sec.modules ?? []).map(enrichModule);
-      const enrichedAccessories = (sec.accessories ?? []).map(enrichModule);
-
-      const sectionTotalMaterial =
-        enrichedModules.reduce((s, m) => s + m.totalMaterial, 0) +
-        enrichedAccessories.reduce((s, a) => s + a.totalMaterial, 0) +
-        enclosureMaterialWithCoeff;
-      const sectionTotalLabor =
-        enrichedModules.reduce((s, m) => s + m.totalLabor, 0) +
-        enrichedAccessories.reduce((s, a) => s + a.totalLabor, 0) +
-        enclosureLabor;
-
-      return {
-        sectionName: sec.sectionName,
-        enclosureMaterial: enclosureMaterialWithCoeff,
-        enclosureLabor,
-        modules: enrichedModules,
-        accessories: enrichedAccessories,
-        sectionTotalMaterial: Math.round(sectionTotalMaterial * 100) / 100,
-        sectionTotalLabor: Math.round(sectionTotalLabor * 100) / 100,
-      };
-    });
-
-    // Recompute grand totals from KNR-overridden section data (not from AI output)
-    const grandTotalMaterial = Math.round(
-      pricedSections.reduce((s, sec) => s + sec.sectionTotalMaterial, 0) * 100
-    ) / 100;
-    const grandTotalLabor = Math.round(
-      pricedSections.reduce((s, sec) => s + sec.sectionTotalLabor, 0) * 100
-    ) / 100;
-    const grandTotal = Math.round((grandTotalMaterial + grandTotalLabor) * 100) / 100;
-
-    // Derive overall confidence from KNR coverage
-    const allMods = pricedSections.flatMap(sec => [...sec.modules, ...sec.accessories]);
-    const verifiedCount = allMods.filter(m => m.confidenceLevel === "verified").length;
-    const computedSource: "KNR" | "GPT-estimate" | "fallback" =
-      verifiedCount > 0 ? "KNR" : "GPT-estimate";
-    const computedConfidence: "high" | "medium" | "low" =
-      allMods.length === 0 ? "low" :
-      verifiedCount === allMods.length ? "high" :
-      verifiedCount >= allMods.length * 0.7 ? "medium" : "low";
-
+    }
+    const unitLabor = Math.round(knr.laborNorm * laborRatePLN * 100) / 100;
     return {
-      success: true,
-      source: computedSource,
-      confidence: computedConfidence,
-      voivodeshipModifier,
-      manufacturerCoeff,
-      sections: pricedSections,
-      grandTotalMaterial,
-      grandTotalLabor,
-      grandTotal,
-      isEstimate: verifiedCount < allMods.length,
-      audited: result.audited,
-      auditFixed: result.auditFixed,
-      auditIssues: result.auditIssues,
-      auditConfidence: result.auditConfidence,
-      kbFileNames: kbFiles,
+      moduleId: mod.moduleId,
+      namePl: mod.namePl,
+      quantity: qty,
+      unitMaterial: material,
+      unitLabor,
+      totalMaterial: Math.round(material * qty * 100) / 100,
+      totalLabor: Math.round(unitLabor * qty * 100) / 100,
+      knrCode: knr.knrCode,
+      isEstimate: false,
+      priceSource: "Norma ES",
+      confidenceLevel: "verified",
+      confidenceNote: `${knr.laborNorm} rbh × ${Math.round(laborRatePLN)} zł. Województwo dolicza kosztorys.`,
     };
-  } catch (error) {
-    logger.error("[AI Pricing] pricePanelWithAI failed:", {}, error);
+  };
+
+  const pricedSections: PricedSection[] = sections.map((sec) => {
+    const enclosureKnr = resolveEnclosureKnr(sec.enclosureModules ?? 36);
+    const enclosureLabor = Math.round(enclosureKnr.laborNorm * laborRatePLN * 100) / 100;
+    const modules = sec.modules.map(priceOne);
+    const accessories = sec.accessories.map(priceOne);
+    const sectionTotalMaterial = Math.round((modules.reduce((s, m) => s + m.totalMaterial, 0) + accessories.reduce((s, a) => s + a.totalMaterial, 0)) * 100) / 100;
+    const sectionTotalLabor = Math.round((modules.reduce((s, m) => s + m.totalLabor, 0) + accessories.reduce((s, a) => s + a.totalLabor, 0) + enclosureLabor) * 100) / 100;
     return {
-      success: false,
-      source: "fallback",
-      confidence: "low",
-      voivodeshipModifier,
-      manufacturerCoeff,
-      sections: [],
-      grandTotalMaterial: 0,
-      grandTotalLabor: 0,
-      grandTotal: 0,
-      isEstimate: true,
-      error: "Nie udało się wycenić rozdzielnicy. Spróbuj ponownie.",
+      sectionName: sec.sectionName,
+      enclosureMaterial: 0,
+      enclosureLabor,
+      modules,
+      accessories,
+      sectionTotalMaterial,
+      sectionTotalLabor,
     };
-  }
+  });
+
+  const grandTotalMaterial = Math.round(pricedSections.reduce((s, sec) => s + sec.sectionTotalMaterial, 0) * 100) / 100;
+  const grandTotalLabor = Math.round(pricedSections.reduce((s, sec) => s + sec.sectionTotalLabor, 0) * 100) / 100;
+  const allMods = pricedSections.flatMap((sec) => [...sec.modules, ...sec.accessories]);
+  const verifiedCount = allMods.filter((m) => m.confidenceLevel === "verified").length;
+
+  return {
+    success: true,
+    source: verifiedCount > 0 ? "KNR" : "fallback",
+    confidence: allMods.length === 0 ? "low" : verifiedCount === allMods.length ? "high" : verifiedCount > 0 ? "medium" : "low",
+    voivodeshipModifier,
+    manufacturerCoeff,
+    sections: pricedSections,
+    grandTotalMaterial,
+    grandTotalLabor,
+    grandTotal: Math.round((grandTotalMaterial + grandTotalLabor) * 100) / 100,
+    isEstimate: verifiedCount < allMods.length,
+  };
 }

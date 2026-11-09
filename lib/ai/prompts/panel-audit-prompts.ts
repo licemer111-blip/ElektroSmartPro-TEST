@@ -123,5 +123,5 @@ Dla każdej wygenerowanej pozycji MUSISZ:
 2. Oszacować czas montażu (labor_hours) w roboczogodzinach (r-g) na jednostkę.
 3. Przestrzegać SPLIT PRICING: base_material_price = TYLKO materiał, base_labor_price = TYLKO robocizna.
 4. Używać polskiej nomenklatury technicznej (YDYp 3×2,5mm², nie 'kabel 2.5mm').
-5. Ceny NETTO PLN 2026 wg SEKOCENBUD / Elektroskandia / TIM SA.
+5. base_material_price = 0. Nie podawaj cen hurtowych. Robociznę w złotych zostaw 0. Podaj tylko godzinę, jeśli ją znasz z normy ES.
 </module_catalog>`;

@@ -290,13 +290,16 @@ export function usePanelAiActions(p: UsePanelAiActionsParams) {
           category: m.module.category,
           rating: m.rating ?? m.module.defaultRating,
           quantity: 1,
+          materialPrice: Math.round((m.customMaterialPrice ?? (m.module.defaultPrice ?? 0) * p.manufacturerCoeff) * 100) / 100,
         })),
         accessories: sec.accessories.map((a) => ({
           moduleId: a.module.id,
           namePl: a.module.namePl,
           category: a.module.category,
-          rating: a.module.category === "labor" ? a.module.defaultLaborPrice : undefined,
           quantity: a.quantity || 1,
+          materialPrice: a.module.category === "labor"
+            ? 0
+            : Math.round((a.customMaterialPrice ?? (a.module.defaultPrice ?? 0) * p.manufacturerCoeff) * 100) / 100,
         })),
       }));
       const result = await pricePanelWithAI({
@@ -318,7 +321,6 @@ export function usePanelAiActions(p: UsePanelAiActionsParams) {
           const match = sec.modules.find((m) => m.module.id === pm.moduleId && m.customMaterialPrice === undefined);
           if (match) {
             p.updateModule(match.uid, {
-              customMaterialPrice: Math.round(pm.unitMaterial * 100) / 100,
               customLaborPrice: Math.round(pm.unitLabor * 100) / 100,
             });
           }
@@ -326,16 +328,8 @@ export function usePanelAiActions(p: UsePanelAiActionsParams) {
         for (const pa of pricedSec.accessories) {
           const match = sec.accessories.find((a) => a.module.id === pa.moduleId && a.customMaterialPrice === undefined);
           if (match) {
-            const isLaborMod = match.module.category === "labor";
-            // For labor modules: if AI returned 0 labor price, fall back to module default
-            const resolvedLabor = (isLaborMod && pa.unitLabor === 0)
-              ? match.module.defaultLaborPrice
-              : pa.unitLabor;
-            // For labor modules: material is always 0 (service, not goods)
-            const resolvedMaterial = isLaborMod ? 0 : pa.unitMaterial;
             p.updateModule(match.uid, {
-              customMaterialPrice: Math.round(resolvedMaterial * 100) / 100,
-              customLaborPrice: Math.round(resolvedLabor * 100) / 100,
+              customLaborPrice: Math.round(pa.unitLabor * 100) / 100,
             });
           }
         }
@@ -345,7 +339,7 @@ export function usePanelAiActions(p: UsePanelAiActionsParams) {
       const confidence = result.confidence === "high" ? "wysoka" : result.confidence === "medium" ? "średnia" : "niska";
       p.toast({
         title: `Wycena gotowa — ${result.grandTotal.toFixed(0)} zł netto`,
-        description: `Źródło: ${result.source === "KNR" ? "ES-KNR 2026" : "AI Szacunek"} · Pewność: ${confidence}`,
+        description: `Robocizna: godzina normy ES × Twoja stawka. Materiał z wybranych aparatów. ${confidence === "wysoka" ? "Godziny są przy każdym aparacie." : "Część aparatów nie ma godziny — dopisz ją ręcznie."}`,
       });
       p.setActiveTab("summary");
     } catch {

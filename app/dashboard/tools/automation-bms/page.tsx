@@ -418,7 +418,7 @@ export default function AutomationBmsCalculatorPage() {
               <Info className="w-4 h-4 text-blue-500" />
               <AlertDescription className="text-xs text-blue-700 dark:text-blue-300 space-y-1">
                 <p><strong>Tryb Automatyki (×3 ZUG)</strong> — aktywny gdy wybrany jest KNX/DALI/BMS. Dodatkowe złączki na magistrale sterownicze i kable sygnałowe.</p>
-                <p><strong>Źródło cen:</strong> ES-KNR 2026 — Katalog Nakładów Rzeczowych 5-08 (Instalacje elektryczne). Ceny katalogowe NETTO PLN 2026.</p>
+                <p><strong>Źródło:</strong> godzina normy ES × Twoja stawka. Cena aparatu z katalogu, który wybrałeś. To nie jest cennik hurtowy.</p>
               </AlertDescription>
             </Alert>
           </div>
@@ -447,7 +447,7 @@ export default function AutomationBmsCalculatorPage() {
             { label: "Razem netto", value: `${grandTotal.toFixed(2)} zł`, highlight: true },
           ]}
           standard="ES-BMS"
-          notes="Źródło: ES-KNR 2026 (Automation Module). Ceny NETTO PLN 2026."
+          notes="Godzina normy ES × Twoja stawka. Materiał z wybranego aparatu."
           currentInputs={{ circuits1p, circuits3p, bmsPoints, bmsSensors, encModules, automationSystem, wymaganeZugi, hasPpoz }}
           currentLabel={`${c1p + c3p} obw. | ${bms} pkt. | ${automationSystem}`}
           onLoadInputs={(inputs) => {

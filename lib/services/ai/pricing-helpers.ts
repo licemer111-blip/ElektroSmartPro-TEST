@@ -34,48 +34,12 @@ export function buildRateSourceInstruction(
     ? `WŁASNA STAWKA (${userHourlyRate} PLN/rbh)`
     : `ES-ENGINE 2026 (${userHourlyRate} PLN/rbh)`;
 
-  return `źRÓDŁO STAWKI: ${rateLabel}
-KROK 1 — SZUKAJ KODU KNR: Dla każdej pozycji OBOŁĄZKOWO znajdź kod KNR z poniższej bazy ES-KNR 2026.
-  Jeśli znajdziesz → ustaw knr_code="KNR X-XX XXXX-XX", knr_source="official", confidence="high".
-  Jeśli nie znajdziesz dokładnego → szukaj semantycznie (np. "kabel LAN"→"Kabel UTP kat.6") → knr_source="official".
-  Jeśli brak odpowiednika → generuj syntetyczny "KNR-ES-XXXX" → knr_source="es-synthetic", confidence="low".
-  NIGDY nie zostawiaj knr_code=null gdy istnieje choć przybliżone dopasowanie.
-
-KROK 2 — WYLICZ CENĘ przez normę r-g:
-  labor_price = norma_rg × ${userHourlyRate} PLN/rbh.
-  KATEGORYCZNIE ZABRONIONYM jest używanie wartości PLN z metadanych plików JSON.
-  material_price = koszt materiału za 1 jednostkę miary (dane katalogowe lub rynkowe 2026).
-  NIE zgaduj gotowej sumy — wylicz przez normę!
-
-BAZA KNR ES-ENGINE 2026 (fragmenty):
-  KNR 5-04 0101-01 | Przewód YDYp 3x1.5 /100mb | r-g=2.50
-  KNR 5-04 0101-02 | Przewód YDYp 3x2.5 /100mb | r-g=3.00
-  KNR 5-04 0101-03 | Przewód YDYp 5x2.5 /100mb | r-g=3.50
-  KNR 5-04 0101-04 | Przewód YDYp 5x6 /100mb | r-g=4.00
-  KNR 5-04 0301-01 | Gniazdo 230V wtyczkowe /szt | r-g=0.22
-  KNR 5-04 0302-01 | Łącznik instalacyjny /szt | r-g=0.20
-  KNR 5-04 0401-01 | Oprawa LED natynkowa /szt | r-g=0.40
-  KNR 5-04 0501-01 | MCB 1P wyłącznik naprądowy /szt | r-g=0.15
-  KNR 5-04 0501-02 | MCB 3P wyłącznik naprądowy /szt | r-g=0.25
-  KNR 5-04 0501-03 | RCD 2P 40A/30mA /szt | r-g=0.20
-  KNR 5-04 0601-01 | Rozdzielnica podtynkowa montaż /kpl | r-g=2.00
-  KNR 5-04 0701-01 | Bruzda w tynku /mb | r-g=0.06
-  KNR 5-04 0801-01 | Rura instalacyjna M20 /mb | r-g=0.015
-  KNR 5-06 0101-01 | Kabel UTP kat.6 /100mb | r-g=2.00
-  KNR 5-06 0101-02 | Kabel UTP kat.6a /100mb | r-g=2.50
-  KNR 5-06 0201-01 | Gniazdo RJ45 kat.6 /szt | r-g=0.20
-  KNR 5-06 0201-02 | Gniazdo RJ45 kat.6 podwójne /szt | r-g=0.25
-  KNR 5-06 0301-01 | Patchpanel 24p montaż /szt | r-g=0.45
-  KNR 5-06 0401-01 | Szafa rack 12U montaż /szt | r-g=0.90
-  KNR 5-06 0401-02 | Szafa rack 42U montaż /szt | r-g=2.50
-  KNR 5-06 0501-01 | Wkładka keystonowa RJ45 /szt | r-g=0.05
-  KNR 5-06 0701-01 | Certyfikacja linii LAN /mb | r-g=0.15
-  KNR 5-07 0101-01 | Kamera IP kopułkowa montaż /szt | r-g=1.20
-  KNR 5-07 0201-01 | Rejestrator NVR montaż /szt | r-g=1.50
-  KNR 5-08 0101-01 | Koryto kablowe 60x40 /mb | r-g=0.08
-  KNR 5-08 0201-01 | Drabinka kablowa 200mm /mb | r-g=0.15
-
-Hierarchia źródeł: katalog prywatny L1 → normy KNR L2 → szacunek rynkowy 2026 L3 (confidence=low).`;
+  return `ŹRÓDŁO STAWKI: ${rateLabel}
+Nie wymyślaj numeru tabeli i nie nazywaj godziny oficjalnym KNR.
+material_price ZAWSZE 0. Nie podawaj ceny hurtowej.
+Jak znasz godzinę normy ES: labor_norm_rbh = ta godzina, labor_price = godzina × ${userHourlyRate}.
+Jak nie znasz godziny: labor_norm_rbh = 0, labor_price = 0, knr_code pusty.
+Nie mnoż przez województwo. Program doliczy je na ekranie.`;
 }
 
 /**

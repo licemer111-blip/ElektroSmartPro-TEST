@@ -304,15 +304,11 @@ export async function fillMissingRbhNorms(projectId: string): Promise<RbhNormRes
 
     const { object: result } = await generateObject({
       model: google(AI_MODEL_TIER2),
-      system: `Jestes ekspertem KNR (Katalog Norm Rzeczowych) dla instalacji elektrycznych w Polsce.
-Twoim zadaniem jest znalezienie normy czasu pracy (labor_norm) w rbh/jm dla kazdej pozycji.
-ZASADY:
-- Zwracaj TYLKO labor_norm (rbh na jednostke miary), NIE ceny.
-- Normy wg ES-KNR 2026 / KNR 5-01 / KNR 2-21.
-- Jesli znasz dokladna norme KNR -> confidence="high".
-- Jesli szacujesz na podstawie podobnych pozycji -> confidence="medium".
-- Jesli brak danych -> labor_norm=0, confidence="low".
-- Przyklady: gniazdo 230V=0.25rbh/szt, punkt oswietleniowy=0.35rbh/szt, przewod YDYp 3x2.5=0.08rbh/mb, tablica 12-mod=2.5rbh/szt.`,
+      system: `Znasz godziny normy ES dla typowych prac elektrycznych w Polsce.
+Zwracaj TYLKO labor_norm (rbh na jednostke), nie ceny i nie numer tabeli.
+Jak znasz godzine z normy ES -> confidence="high".
+Jak nie znasz -> labor_norm=0, confidence="low". Nie zgaduj godziny.
+Znane godziny: gniazdo pojedyncze 0.68 rbh/szt, lacznik 0.45, YDYp 3x2.5 0.16 rbh/m, bruzda w cegle 0.85 rbh/m. Innej pozycji nie wymyslaj.`,
       prompt: `Znajdz normy rbh/jm dla nastepujacych pozycji:\n\n${itemsList}`,
       schema: z.object({
         norms: z.array(z.object({

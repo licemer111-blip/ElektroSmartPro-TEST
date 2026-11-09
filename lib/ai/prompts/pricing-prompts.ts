@@ -1,86 +1,6 @@
 export const PRICING_PROMPT = `<module_pricing>
-ZADANIE: Wycena rozdzielnicy elektrycznej wg ES-KNR 2026.
-
-REGUŁY:
-- unitMaterial = cena 1 szt. materiału (PLN netto bez montażu)
-- unitLabor = koszt montażu 1 szt. wg KNR (rbh × stawka_regionalna)
-- grandTotal = grandTotalMaterial + grandTotalLabor (ZAWSZE sprawdzaj!)
-- Kod KNR dla każdej pozycji: KNR 5-08 0401-xx lub "szacunek"
-- Zastosuj współczynnik regionalny TYLKO do robocizny
-
-CENNIK APARATURY ROZDZIELNIC (NETTO PLN 2026):
-ZABEZPIECZENIA:
-• MCB B06/1P:  14,00 PLN  | montaż: 0,20 rbh (KNR 5-08 0401-01)
-• MCB B10/1P:  15,00 PLN  | montaż: 0,20 rbh
-• MCB B16/1P:  18,00 PLN  | montaż: 0,20 rbh
-• MCB B20/1P:  20,00 PLN  | montaż: 0,20 rbh
-• MCB B25/1P:  22,00 PLN  | montaż: 0,20 rbh
-• MCB B32/1P:  25,00 PLN  | montaż: 0,20 rbh
-• MCB C10/1P:  18,00 PLN  | montaż: 0,20 rbh
-• MCB C16/1P:  20,00 PLN  | montaż: 0,20 rbh
-• MCB C20/1P:  22,00 PLN  | montaż: 0,20 rbh
-• MCB C25/1P:  24,00 PLN  | montaż: 0,20 rbh
-• MCB C32/1P:  27,00 PLN  | montaż: 0,20 rbh
-• MCB C40/1P:  32,00 PLN  | montaż: 0,20 rbh
-• MCB B16/3P:  52,00 PLN  | montaż: 0,30 rbh (KNR 5-08 0401-02)
-• MCB C16/3P:  55,00 PLN  | montaż: 0,30 rbh
-• MCB C20/3P:  58,00 PLN  | montaż: 0,30 rbh
-• MCB C25/3P:  62,00 PLN  | montaż: 0,30 rbh
-• MCB C32/3P:  70,00 PLN  | montaż: 0,30 rbh
-• MCB C40/3P:  78,00 PLN  | montaż: 0,30 rbh
-• MCB C63/3P:  95,00 PLN  | montaż: 0,35 rbh
-• MCCB 3P 100A: 320,00 PLN | montaż: 1,50 rbh
-• MCCB 3P 160A: 520,00 PLN | montaż: 1,80 rbh
-• MCCB 3P 250A: 850,00 PLN | montaż: 2,00 rbh
-• MCCB 3P 400A: 2800,00 PLN | montaż: 2,50 rbh
-• MCCB 3P 630A: 5500,00 PLN | montaż: 3,00 rbh
-• ACB 3P 800A: 12000,00 PLN | montaż: 4,00 rbh
-• ACB 3P 1600A: 22000,00 PLN | montaż: 5,50 rbh
-• MCB D 1P: 24,00 PLN | montaż: 0,15 rbh (charakterystyka D — silniki/transformatory)
-• MCB D 3P: 65,00 PLN | montaż: 0,25 rbh
-• RCBO C 100mA 1P: 92,00 PLN | montaż: 0,20 rbh (ochrona ppoż.)
-• RCBO C 30mA typ F: 145,00 PLN | montaż: 0,20 rbh (do obwodów VFD)
-OCHRONA RÓŻNICOWA:
-• RCD 40A/30mA/2P typ A:   95,00 PLN | montaż: 0,25 rbh (KNR 5-08 0401-09)
-• RCD 63A/30mA/2P typ A:  110,00 PLN | montaż: 0,25 rbh
-• RCD 40A/30mA/4P typ A:  165,00 PLN | montaż: 0,35 rbh (KNR 5-08 0401-10)
-• RCD 63A/30mA/4P typ A:  180,00 PLN | montaż: 0,35 rbh
-• RCD 63A/300mA/4P (p.poż.): 185,00 PLN | montaż: 0,35 rbh
-• RCBO C16/30mA/1P:       65,00 PLN  | montaż: 0,30 rbh (KNR 5-08 0401-15)
-• RCBO C20/30mA/1P:       70,00 PLN  | montaż: 0,30 rbh
-• RCBO C25/30mA/1P:       75,00 PLN  | montaż: 0,30 rbh
-OCHRONA PRZEPIĘCIOWA:
-• SPD T1+T2 1-faz.:       180,00 PLN | montaż: 0,50 rbh (KNR 5-08 0402-01)
-• SPD T2 3-faz. 4P:       250,00 PLN | montaż: 0,60 rbh (KNR 5-08 0402-02)
-• SPD T3 1-faz.:          120,00 PLN | montaż: 0,40 rbh
-ROZŁĄCZNIKI I WYŁĄCZNIKI:
-• Rozłącznik główny 3P 63A:  90,00 PLN | montaż: 0,60 rbh (KNR 5-08 0403-01)
-• Rozłącznik główny 3P 100A: 150,00 PLN | montaż: 0,80 rbh
-• Rozłącznik główny 3P 125A: 190,00 PLN | montaż: 1,00 rbh
-• Przetwornik ATS 3P 63A:    350,00 PLN | montaż: 1,50 rbh
-STEROWANIE I POMIAR:
-• Licznik energii 1-faz.:   120,00 PLN | montaż: 1,00 rbh (KNR 5-08 0501-01)
-• Licznik energii 3-faz.:   180,00 PLN | montaż: 1,20 rbh (KNR 5-08 0501-02)
-• Przekaźnik faz 3P:         85,00 PLN | montaż: 0,50 rbh
-• Lampka sygnalizacyjna:      8,00 PLN | montaż: 0,15 rbh
-• Przekaźnik bistabilny:     45,00 PLN | montaż: 0,30 rbh
-• Programator astronomiczny: 125,00 PLN | montaż: 0,50 rbh
-• Automat schodowy:          55,00 PLN | montaż: 0,30 rbh
-• Kontaktron magistralny KNX: 180,00 PLN | montaż: 1,00 rbh
-OBUDOWY (materiał + montaż):
-• Obudowa 12-mod. n/t:      65,00 PLN  | montaż: 1,5 rbh
-• Obudowa 24-mod. n/t:     120,00 PLN  | montaż: 2,0 rbh (KNR 5-08 0101-01)
-• Obudowa 36-mod. n/t:     160,00 PLN  | montaż: 2,5 rbh
-• Obudowa 48-mod. p/t:     200,00 PLN  | montaż: 3,0 rbh (KNR 5-08 0101-02)
-• Obudowa 72-mod. p/t:     320,00 PLN  | montaż: 4,0 rbh (KNR 5-08 0101-03)
-• Obudowa 96-mod.:         420,00 PLN  | montaż: 5,0 rbh
-• Obudowa 144-mod. metall.: 680,00 PLN  | montaż: 7,0 rbh
-MATERIAŁY POMOCNICZE:
-• Szyna TH35 DIN 1mb:       8,00 PLN  | montaż: 0,05 rbh/mb
-• Listwa ZUG 2,5mm² szt:    3,50 PLN  | montaż: 0,10 rbh/szt
-• Koryto kablowe w sza. mb:  8,00 PLN  | montaż: 0,15 rbh/mb
-• Końcówka tulejkowa 100szt: 25,00 PLN | montaż: 0,30 rbh/kpl
-• Oznacznik przewodów kpl:   15,00 PLN | montaż: 0,20 rbh/kpl
+Nie wyceniaj materiału. unitMaterial = 0.
+unitLabor = 0. Jak znasz godzinę normy ES, podaj ją osobno. Nie mnoż przez województwo i nie kopiuj cen hurtowych.
 </module_pricing>`;
 
 export const ESTIMATOR_PROMPT = `<module_estimator>
@@ -100,10 +20,7 @@ REGUŁY:
 - Nakład w rbh/jednostkę (roboczogodzina na jednostkę miary)
 - Cena robocizny netto PLN = labor_norm_rbh × {PROJECT_RATE}
 - Jednostki wg KNR: m (metry), szt (sztuki), kpl (komplet), m² (metry kwadratowe)
-- KRYTYCZNE: NIGDY nie zwracaj null dla nakładu rbh. Jeśli brak dokładnej normy → SZACUJ:
-  Prosta wymiana → 0.15–0.30 rbh/szt | Standardowy montaż → 0.20–0.60 rbh/szt
-  Układanie kabla YDYp p/t → 0.13–0.28 rbh/m | Bruzda/kucie cegła → 0.85 rbh/m | Bruzda beton → 2.0 rbh/m
-  Złożony montaż (rozdzielnica, szafa) → 3.0–14.0 rbh/szt | Minimum → 0.05 rbh
+- Jak nie znasz godziny normy ES, zwróć labor_norm_rbh = 0 i labor_price = 0. Nie zgaduj widełek.
 
 REFERENCJA NAKŁADÓW ROBOCIZNY 2026 (rbh/jedn.):
 UKŁADANIE KABLI (KNR 5-08 — instalacja mieszkaniowa p/t w bruzdzie):

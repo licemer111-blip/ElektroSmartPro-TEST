@@ -72,7 +72,7 @@ export function KnrImportDialog({ item, open, onOpenChange }: KnrImportDialogPro
             Importuj normę KNR do katalogu
           </DialogTitle>
           <DialogDescription>
-            Pozycja zostanie dodana do Twoich pozycji katalogowych z normą robocizny z KNR 2026.
+            Pozycja trafi do Twojego cennika z godziną normy ES. Cenę robocizny policzysz swoją stawką.
           </DialogDescription>
         </DialogHeader>
 

@@ -121,7 +121,7 @@ export function SummaryFinancialCards({
           <div className="w-9 h-9 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center flex-shrink-0"><Zap className="w-5 h-5 text-emerald-600" /></div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold text-emerald-800 dark:text-emerald-300">Wycena gotowa — {`${pricingResult.grandTotal.toFixed(0)} zł netto`}</p>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">ES-KNR 2026 · Pewność: {pricingResult.confidence === "high" ? "wysoka" : pricingResult.confidence === "medium" ? "średnia" : "niska"} · {allModules.length} urządzeń</p>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">Norma ES × stawka · {pricingResult.confidence === "high" ? "godziny znane" : pricingResult.confidence === "medium" ? "część bez godziny" : "brak godzin"} · {allModules.length} urządzeń</p>
           </div>
           <Button size="sm" variant="outline" className="gap-1 text-xs h-7 border-emerald-400 text-emerald-700 dark:text-emerald-400 flex-shrink-0"
             onClick={() => { setPricingResult(null); setPricingMode("none"); setManualPrices({}); }}>

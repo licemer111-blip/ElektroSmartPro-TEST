@@ -135,7 +135,7 @@ export const SummaryView = React.memo(function SummaryView({
                 Wycena Ekspercka Gotowa — {isPro ? `${pricingResult.grandTotal.toFixed(0)} zł netto` : "*** zł netto"}
               </p>
               <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                ES-KNR 2026 · Pewność: {pricingResult.confidence === "high" ? "wysoka" : pricingResult.confidence === "medium" ? "średnia" : "niska"} · {allModules.length} urządzeń
+                Norma ES × stawka · {pricingResult.confidence === "high" ? "godziny znane" : pricingResult.confidence === "medium" ? "część bez godziny" : "brak godzin"} · {allModules.length} urządzeń
               </p>
             </div>
             <Button size="sm" variant="outline"

@@ -399,10 +399,6 @@ export const KNR_CANONICAL_2026_FULL = [
   KNR_CANONICAL_2026_PRZEMYSL,
   "",
   KNR_CANONICAL_2026_OZE,
-  "",
-  KNR_CANONICAL_2026_MATERIAL_PRICES,
-  "",
-  KNR_CANONICAL_2026_REGIONAL_RATES,
 ].join("\n");
 
 /** Krótki reference dla mniejszych prompts (bez cennika i regionów). */
