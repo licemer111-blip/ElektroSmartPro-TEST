@@ -414,8 +414,12 @@ export async function addCustomItem(projectId: string, formData: FormData) {
     project_id: projectId,
     catalog_item_id: null,
     name, unit, quantity,
+    material_price: materialPrice,
+    labor_price: laborPrice,
     final_material_price: materialPrice,
     final_labor_price: laborPrice,
+    is_custom: true,
+    confidence_level: "manual",
     sort_order: nextSortOrder,
   });
 

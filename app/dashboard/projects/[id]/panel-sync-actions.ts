@@ -6,6 +6,7 @@ import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import {
   computeZestawAggregates,
+  getLaborNorm,
   SKIP_CONSUMABLE_CATEGORIES,
 } from "@/lib/zestawy-logic";
 
@@ -53,6 +54,23 @@ export async function syncPanelToEstimate(
     }
 
     const { projectId, modules, regionModifier, sectionName } = input;
+    void regionModifier;
+
+    const { data: projectRow } = await supabase
+      .from("projects")
+      .select("default_hourly_rate, user_id")
+      .eq("id", projectId)
+      .maybeSingle();
+    let hourlyRate = Number((projectRow as { default_hourly_rate?: number | null } | null)?.default_hourly_rate) || 0;
+    const ownerId = (projectRow as { user_id?: string | null } | null)?.user_id;
+    if (hourlyRate <= 0 && ownerId) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("hourly_rate")
+        .eq("id", ownerId)
+        .maybeSingle();
+      hourlyRate = Number((profile as { hourly_rate?: number | null } | null)?.hourly_rate) || 0;
+    }
 
     // Verify project access (owner or editor)
     const { data: canEdit } = await supabase.rpc("user_can_edit_project", { p_project_id: projectId });
@@ -125,7 +143,13 @@ export async function syncPanelToEstimate(
 
       const qty = mod.quantity ?? 1;
       const matPrice = mod.materialPrice; // Iron Rule: no regionModifier on material
-      const labPrice = mod.laborPrice; // BASE price — calcRowPrices applies regionModifier at display time
+      const laborNormValue = (mod.laborNorm && mod.laborNorm > 0)
+        ? mod.laborNorm
+        : getLaborNorm(mod.category, mod.poles);
+      const labFromRate = hourlyRate > 0
+        ? Math.round(laborNormValue * hourlyRate * 100) / 100
+        : 0;
+      const labPrice = mod.laborPrice > 0 ? mod.laborPrice : labFromRate;
 
       const existingMat = materialMap.get(mod.uid);
       const existingLab = laborMap.get(mod.uid);
@@ -167,8 +191,8 @@ export async function syncPanelToEstimate(
       }
 
       // Labor row (only if laborPrice > 0)
-      if (labPrice > 0 || (mod.laborNorm ?? 0) > 0) {
-        const laborNorm = mod.laborNorm ?? null;
+      if (labPrice > 0 || laborNormValue > 0) {
+        const laborNorm = laborNormValue;
         const laborHours = laborNorm != null ? laborNorm * qty : null;
 
         if (existingLab) {
@@ -260,7 +284,7 @@ export async function syncPanelToEstimate(
       .filter(m => !SKIP_CONSUMABLE_CATEGORIES.has(m.category))
       .map(m => ({ uid: m.uid, category: m.category, poles: m.poles, quantity: m.quantity }));
 
-    const aggregates = computeZestawAggregates(zestawModules, isFirstSync);
+    const aggregates = computeZestawAggregates(zestawModules, isFirstSync, hourlyRate);
     let zestawInserted = 0;
 
     for (const agg of aggregates) {
@@ -289,6 +313,7 @@ export async function syncPanelToEstimate(
           labor_price: isLabor ? agg.totalPrice : 0,
           final_material_price: isLabor ? 0 : agg.totalPrice,
           final_labor_price: isLabor ? agg.totalPrice : 0,
+          labor_norm: isLabor ? 2 : null,
           is_custom: true,
           origin_id: agg.aggregateKey,
           origin_type: agg.originType,

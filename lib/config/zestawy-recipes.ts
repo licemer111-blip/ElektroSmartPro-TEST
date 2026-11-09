@@ -53,7 +53,7 @@ export const ZESTAWY_RECIPES: ZestawRecipe[] = [
     keywords: ["punkt oswietleniowy", "punkt oświetleniowy"],
     label: "Punkt oświetleniowy",
     components: [
-      { id: "ow_rob_opr",  type: "robocizna", label: "Montaż oprawy LED",      unit: "szt", qtyFactor: 1,   knrRef: "ES-OPR-010", laborNormRbh: 0.55 },
+      { id: "ow_rob_opr",  type: "robocizna", label: "Montaż oprawy LED",      unit: "szt", qtyFactor: 1,   knrRef: "KNR 5-04 0301-01", laborNormRbh: 0.35 },
       { id: "ow_rob_lac",  type: "robocizna", label: "Montaż łącznika",        unit: "szt", qtyFactor: 1,   knrRef: "KNR 5-08 0501", laborNormRbh: 0.45 },
       { id: "ow_rob_pus",  type: "robocizna", label: "Montaż puszki",          unit: "szt", qtyFactor: 1,   knrRef: "KNR 5-04 0601-01", laborNormRbh: 0.15 },
       { id: "ow_rob_kab",  type: "robocizna", label: "Okablowanie YDYp 3×1.5", unit: "mb",  qtyFactor: 3.5, knrRef: "KNR 5-08 0201", laborNormRbh: 0.13 },
@@ -71,7 +71,7 @@ export const ZESTAWY_RECIPES: ZestawRecipe[] = [
     keywords: ["wypust oswietleniowy", "wypust oświetleniowy"],
     label: "Wypust oświetleniowy",
     components: [
-      { id: "wp_rob_opr",  type: "robocizna", label: "Montaż oprawy LED",      unit: "szt", qtyFactor: 1,   knrRef: "ES-OPR-010", laborNormRbh: 0.55 },
+      { id: "wp_rob_opr",  type: "robocizna", label: "Montaż oprawy LED",      unit: "szt", qtyFactor: 1,   knrRef: "KNR 5-04 0301-01", laborNormRbh: 0.35 },
       { id: "wp_rob_pus",  type: "robocizna", label: "Montaż puszki",          unit: "szt", qtyFactor: 1,   knrRef: "KNR 5-04 0601-01", laborNormRbh: 0.15 },
       { id: "wp_rob_kab",  type: "robocizna", label: "Okablowanie YDYp 3×1.5", unit: "mb",  qtyFactor: 3.5, knrRef: "KNR 5-08 0201", laborNormRbh: 0.13 },
       { id: "wp_rob_brz",  type: "robocizna", label: "Bruzdowanie",             unit: "mb",  qtyFactor: 3.5, knrRef: "KNR 5-08 0101", laborNormRbh: 0.85, onlyForMontage: ["w_tynku", "pod_tynkiem"] },

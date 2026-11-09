@@ -44,11 +44,9 @@ import {
   // v2.4: getModernizationFactor / getMFactorLabel are no longer used in
   // storage formulas (KNR 2026 norms already factor in modern tooling).
   // Re-import only if reintroducing M-Factor for AI L3 calibration context.
-  CONNECTION_MIN_NORM, HEAVY_CONNECTION_MIN_NORM,
   CONNECTION_RE, HEAVY_APPLIANCE_RE,
   normalizePlName, isZelbet,
   getCeilingModifier, getHeightModifier,
-  classifyIntent, GROOVE_FLOOR_RE, DRILL_FLOOR_RE,
 } from "@/lib/services/semantic-classifier";
 
 // ── Re-export types for external consumers ────────────────────────
@@ -330,15 +328,6 @@ export async function estimatePricesWithAI(
       // items priced by a previous bad L0/KNR run are stuck below floor because
       // the filter excludes them (effectiveLab !== 0), so securityAuditLayer never fires.
       // Iron Rule: an item priced at 2.16 PLN for "Podłączenie pompy" MUST be corrected.
-      if (mode === "labor" || mode === "all") {
-        const curLab = effectiveLab(item);
-        if (curLab > 0) {
-          // Use SemanticInterpreter to detect underpriced items of any category
-          const profile = classifyIntent(item.name);
-          if (profile.intent !== "GENERAL" && curLab < profile.baseFloor) return true;
-        }
-      }
-
       // No selection: reprice only blank items (or when keepExistingPrices=false)
       if (keepExistingPrices) {
         if (mode === "material") return effectiveMat(item) === 0;
@@ -995,11 +984,8 @@ export async function estimatePricesWithAI(
         const itemUnitForScale25 = (item.unit ?? originalItem?.unit ?? "");
         const scaledNorm25 = scaleLaborNorm(l25Match.laborNorm, l25Match.unit, itemUnitForScale25);
         // Apply connection floor (heavy appliance or general commissioning)
-        const normWithFloor25 = isHeavyConnMiss
-          ? Math.max(scaledNorm25, HEAVY_CONNECTION_MIN_NORM)
-          : isConnMiss
-            ? Math.max(scaledNorm25, CONNECTION_MIN_NORM)
-            : scaledNorm25;
+        const normWithFloor25 = scaledNorm25;
+        void isHeavyConnMiss;
         // v2.4: M-Factor REMOVED — see L0 above for rationale.
         const _l25CableSection = isCableItem(item.name)
           ? (() => { const _m = item.name.match(CABLE_SECTION_RE); return _m ? parseFloat(_m[2].replace(",", ".")) : null; })()
@@ -1039,12 +1025,7 @@ export async function estimatePricesWithAI(
       }
 
       // L2.5 also missed → existing connection floor (or full L3 AI fallback for non-connection)
-      const connFloorMiss = isConnMiss
-        ? Math.round(
-            (isHeavyConnMiss ? HEAVY_CONNECTION_MIN_NORM : CONNECTION_MIN_NORM)
-            * baseRateForCalc * 100
-          ) / 100
-        : 0;
+      void isConnMiss;
       return {
         itemId: item.id,
         name: item.name,
@@ -1053,18 +1034,14 @@ export async function estimatePricesWithAI(
         currentMaterial: item.material_price || 0,
         currentLabor: item.labor_price || 0,
         suggestedMaterial: 0,
-        suggestedLabor: connFloorMiss,
-        confidence: isConnMiss ? "medium" as const : "low" as const,
-        note: isConnMiss
-          ? `ES-Engine: Brak dokładnej normy KNR. Zastosowano minimalny koszt podłączenia: ${connFloorMiss.toFixed(2)} PLN/szt.`
-          : `Brak w katalogu osobistym i ES-Dictionary. Kliknij „Wyceń" aby uruchomić wycenę AI.`,
+        suggestedLabor: 0,
+        confidence: "low" as const,
+        note: "Brak normy ES dla tej pozycji. Cena zostaje pusta.",
         knrCode: null,
         knrSource: null,
-        laborNorm: isConnMiss ? (isHeavyConnMiss ? HEAVY_CONNECTION_MIN_NORM : CONNECTION_MIN_NORM) : null,
+        laborNorm: null,
         isAmbiguous: false,
-        trace: isConnMiss
-          ? `L2 Miss → connection floor: ${isHeavyConnMiss ? "heavy" : "std"} (${isHeavyConnMiss ? HEAVY_CONNECTION_MIN_NORM : CONNECTION_MIN_NORM}rbh × ${baseRateForCalc.toFixed(1)}PLN/h = ${connFloorMiss.toFixed(2)}PLN)`
-          : "unmatched",
+        trace: "unmatched",
       };
     });
 
@@ -1660,9 +1637,9 @@ export async function repriceSingleItem(
         const scaledNormR = scaleLaborNorm(l25Repr.laborNorm, l25Repr.unit, effectiveUnit);
         const isConnR = CONNECTION_RE.test(normalizePlName(item.name));
         const isHeavyR = isConnR && HEAVY_APPLIANCE_RE.test(normalizePlName(item.name) + " " + item.name);
-        const normFloorR = isHeavyR ? Math.max(scaledNormR, HEAVY_CONNECTION_MIN_NORM)
-          : isConnR ? Math.max(scaledNormR, CONNECTION_MIN_NORM)
-          : scaledNormR;
+        const normFloorR = scaledNormR;
+        void isHeavyR;
+        void isConnR;
         // v2.4: M-Factor REMOVED — see L0 above for rationale.
         const wymianaActiveR = WYMIANA_RE.test(item.name) || DEMONTAZ_MONTAZ_RE.test(item.name);
         const wymianaFactorR = wymianaActiveR ? WYMIANA_FACTOR : 1.0;
@@ -2068,9 +2045,9 @@ export async function triggerL3Estimation(
       const scaledNormT = scaleLaborNorm(l25Trigger.laborNorm, l25Trigger.unit, unit);
       const isConnT = CONNECTION_RE.test(normalizePlName(positionName));
       const isHeavyT = isConnT && HEAVY_APPLIANCE_RE.test(normalizePlName(positionName) + " " + positionName);
-      const normFloorT = isHeavyT ? Math.max(scaledNormT, HEAVY_CONNECTION_MIN_NORM)
-        : isConnT ? Math.max(scaledNormT, CONNECTION_MIN_NORM)
-        : scaledNormT;
+      const normFloorT = scaledNormT;
+      void isHeavyT;
+      void isConnT;
       // v2.4: M-Factor REMOVED — see L0 above for rationale.
       const wymianaActiveT = WYMIANA_RE.test(positionName) || DEMONTAZ_MONTAZ_RE.test(positionName);
       const wymianaFactorT = wymianaActiveT ? WYMIANA_FACTOR : 1.0;

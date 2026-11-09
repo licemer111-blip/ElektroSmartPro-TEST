@@ -5,18 +5,6 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import type { AiPriceEstimate } from "./pricing-types";
-import {
-  // v2.4: M-Factor removed from floor formulas — KNR 2026 norms already
-  // factor in modern tooling. Re-import only if reintroducing M-Factor.
-  CONNECTION_MIN_NORM, HEAVY_CONNECTION_MIN_NORM,
-  SAL_HEAVY_CONN_FLOOR_PLN, SAL_STD_CONN_FLOOR_PLN,
-  SAL_HARD_SURFACE_FLOOR_PLN, SAL_DRILLING_FLOOR_PLN, SAL_GROOVE_ZELBET_FLOOR_PLN,
-  SAL_ACTION_STEMS_RE, CONNECTION_RE, HEAVY_APPLIANCE_RE, CEILING_RE,
-  normalizePlName, isZelbet, isHardSurface,
-  getCeilingModifier, getHeightModifier, salMultiplier,
-  classifyIntent, GROOVE_FLOOR_RE, DRILL_FLOOR_RE,
-  type SemanticIntent, type SemanticProfile,
-} from "@/lib/services/semantic-classifier";
 import { applyRealityCheck } from "@/lib/services/reality-check";
 
 // ─── KNR code validators ──────────────────────────────────────────
@@ -593,66 +581,14 @@ export function applySanityCheck(est: AiPriceEstimate, laborRate: number): AiPri
 }
 
 // ─── enforceExpertGuards ──────────────────────────────────────────
-// FINAL post-processing step — runs AFTER L0/L1/L2/L3 and applySanityCheck.
-// Cannot be bypassed. Enforces:
-//   A. Connection PLN floor for ALL connection/commissioning items.
-//   B. Hard surface price floor based on stored laborNorm × surface tier.
-// This is the last line of defence — no multiplier chain can undercut it.
+// Kept in the pipeline so every price path calls the same function.
+// It does not raise the price. Hours × rate is the amount.
 
 export function enforceExpertGuards(
   est: AiPriceEstimate,
-  baseRate: number,
-  globalMod: number,
+  _baseRate: number,
+  _globalMod: number,
 ): AiPriceEstimate {
-  const name    = est.name ?? "";
-  const profile = classifyIntent(name);
-
-  // A. Connection/commissioning formula floor — rate-dependent (contrast: securityAuditLayer is hardcoded)
-  // v2.4: M-Factor REMOVED — KNR 2026 baseNorm already accounts for modern tooling.
-  // SKIP for verified canonical KNR items (confidence=high + explicit laborNorm):
-  // those norms are pre-calibrated — applying CONNECTION_MIN_NORM (0.50 rbh) on top of
-  // e.g. Łącznik canonical (0.25 rbh) would double the price.
-  // AI/fuzzy items (confidence≠high or no norm) still benefit from this floor.
-  const hasVerifiedKnrNorm = est.confidence === "high" && est.laborNorm != null && est.laborNorm > 0 && est.knrSource !== "catalog-l1";
-  if (!hasVerifiedKnrNorm && (profile.intent === "HEAVY_CONNECTION" || profile.intent === "STANDARD_ACTION" || profile.intent === "DISTRIBUTION_BOARD")) {
-    const priceFloor = Math.round(profile.baseNorm * baseRate * globalMod * 100) / 100;
-    if ((est.suggestedLabor ?? 0) < priceFloor) {
-      return {
-        ...est,
-        suggestedLabor: priceFloor,
-        laborNorm: Math.max(est.laborNorm ?? 0, profile.baseNorm),
-        confidence: "medium" as const,
-        trace: `${est.trace ?? ""} [⬆EXPERT: conn-floor [${profile.intent}] ${priceFloor.toFixed(2)}PLN]`,
-        note: `${est.note ?? ""} | ⬆ Minimalny koszt [${profile.intent}]: ${priceFloor.toFixed(2)} PLN/szt (KNR 5-04 floor)`,
-      };
-    }
-  }
-
-  // B. Hard surface formula floor — using stored laborNorm (reliable for L0/L2; skip if null)
-  // v2.4: M-Factor REMOVED. Formula: surfaceFloor = laborNorm × surfaceTier × baseRate × globalMod
-  // Uses a separate surface-tier matrix (silka 1.75x is not in classifyIntent — material property, not intent).
-  // SKIP for wall-chasing / hole-cutting ops: their KNR norms are already substrate-aware
-  // (bruzdowanie w betonie=2.00 vs cegła=0.85 — the substrate is encoded in the norm itself).
-  // Applying hardTier again would double-count the concrete difficulty.
-  const isSubstrateAwareOp = /\bbruzd|\bkuci|\bwykuc|\bfrezow|\bsztrobow/i.test(name);
-  if (!isSubstrateAwareOp && est.laborNorm != null && est.laborNorm > 0) {
-    const hardTier = isZelbet(name) ? 2.25
-      : /silk[aąei]|silce/i.test(name) ? 1.75
-      : /\bbeton/i.test(name) ? 1.50
-      : 0;
-    if (hardTier > 0) {
-      const surfaceFloor = Math.round(est.laborNorm * hardTier * baseRate * globalMod * 100) / 100;
-      if ((est.suggestedLabor ?? 0) < surfaceFloor) {
-        return {
-          ...est,
-          suggestedLabor: surfaceFloor,
-          trace: `${est.trace ?? ""} [⬆EXPERT: surface-floor ×${hardTier} → ${surfaceFloor.toFixed(2)}PLN]`,
-          note: `${est.note ?? ""} | ⬆ Twarda pow.: ${hardTier}x → ${surfaceFloor.toFixed(2)} PLN`,
-        };
-      }
-    }
-  }
-
   return est;
 }
 
@@ -679,96 +615,8 @@ export function enforceExpertGuards(
  *   - Silnik przemysłowy 55+ kW + zabezpieczenia (3000–5000 PLN)
  * 5000 PLN is the new ceiling for a SINGLE UNIT of labor (not the total job).
  */
-const SAL_MAX_LABOR_PLN = 5000;
-
 export function securityAuditLayer(est: AiPriceEstimate): AiPriceEstimate {
-  const name    = est.name ?? "";
-  // v10.1: merge AI Context into classification so surface keywords in the
-  // context box are honoured by Expert Guardrails (not just by the AI prompt).
-  const hardCtx      = (est.hardContext ?? "").trim();
-  const effectiveName = hardCtx ? `${name} ${hardCtx}` : name;
-
-  // Zestawy bypass: assembly child items are priced by their parent assembly's logic.
-  if (est.isAssemblyChild) return est;
-
-  const profile = classifyIntent(effectiveName);
-
-  // A stored ES hour already priced this row as hours × rate. Do not replace it with a zł floor.
-  const hasEsNorm = est.confidence === "high" && est.laborNorm != null && est.laborNorm > 0 && est.knrSource !== "catalog-l1";
-  if (hasEsNorm) return est;
-
-  // No category floor — pass through, but still generate calculationLog for transparency
-  if (profile.intent === "GENERAL") return est;
-
-  // ── Cumulative multiplier breakdown (for Explainability Layer)
-  // Use effectiveName for surface detection — catches zelbet only in context box
-  const surfaceMod = isZelbet(effectiveName) ? 2.25 : 1.0;
-  const ceilingMod = CEILING_RE.test(effectiveName) ? 2.50 : 1.0;
-  const heightMod  = getHeightModifier(effectiveName, "");
-  const mult       = surfaceMod * ceilingMod * (heightMod > 1.0 ? heightMod : 1.0);
-  let   floor      = Math.round(profile.baseFloor * mult * 100) / 100;
-
-  // v10.1: Groove-żelbet Nuclear Override
-  // When item is groove/chasing work AND combined context has żelbet/beton/monolit,
-  // enforce hard minimum: 150 PLN/mb regardless of KNR norm result.
-  // Physics: diamond blade, rebar present, slow progress → KNR norms 0.45–0.80 rbh/mb
-  // 0.45 rbh/mb × 85 PLN/rbh = 38 PLN — clearly insufficient. Floor at 150.
-  if (GROOVE_FLOOR_RE.test(name) && isZelbet(effectiveName)) {
-    floor = Math.max(floor, SAL_GROOVE_ZELBET_FLOOR_PLN);
-  }
-  const prevPrice  = est.suggestedLabor ?? 0;
-
-  // Unit enforcement: ACTION/HEAVY_CONNECTION always → szt, regardless of mb in name
-  const currentUnit = (est.guardedUnit ?? est.unit ?? "").toLowerCase().trim();
-  const forcedUnit  = profile.forcedUnit ?? currentUnit;
-  const unitChanged = forcedUnit !== currentUnit;
-
-  // Confidence flags
-  const isLowConf = profile.confidence === "low";
-
-  // ── Explainability Layer: generate calculationLog for every non-GENERAL item
-  const objectHint  = (HEAVY_APPLIANCE_RE.test(name) || /kocio[lł]/i.test(name)) ? "Ciężkie urządz." : "Osprzęt";
-  const surfTag     = surfaceMod !== 1.0 ? `Pow.×${surfaceMod}` : "Pow.×1.0";
-  const ceilTag     = ceilingMod !== 1.0 ? `Suf.×${ceilingMod}` : "Suf.×1.0";
-  const htTag       = heightMod > 1.0 ? `Wys.×${heightMod.toFixed(2)}` : "Wys.×1.0";
-  const confTag     = isLowConf ? " [Pewność: NISKA]" : "";
-  const calculationLog =
-    `Wykryto: [${profile.intent}] (${objectHint})${confTag}. ` +
-    `Norma bazowa: ${profile.baseNorm.toFixed(2)} rbh. ` +
-    `Floor: ${profile.baseFloor.toFixed(2)} PLN. ` +
-    `Mnożniki: ${surfTag} × ${ceilTag} × ${htTag} → Końcowa: ${(prevPrice > 0 ? Math.max(prevPrice, floor) : floor).toFixed(2)} PLN`;
-
-  // Trigger correction if price below floor OR unit wrong.
-  // NOTE: prevPrice > 0 guard REMOVED — items zeroed by applySanityCheck (SANITY_FAIL)
-  // must also be corrected to the expert floor (Iron Rule: 0 PLN for Pompa is illegal).
-  const cappedFloor    = Math.min(floor, SAL_MAX_LABOR_PLN);
-  const priceBelowFloor = prevPrice < cappedFloor;
-  if (!priceBelowFloor && !unitChanged) {
-    // No price correction needed, but still attach calculationLog + isLowConfidence
-    if (isLowConf || !est.calculationLog) {
-      return { ...est, calculationLog, isLowConfidence: isLowConf || est.isLowConfidence };
-    }
-    return est;
-  }
-
-  const finalPrice = prevPrice > 0 ? Math.max(prevPrice, floor) : floor;
-  const multTag    = mult > 1.0 ? ` × ${mult.toFixed(2)}(pow/suf/wys)` : "";
-  const ambiguityNote = isLowConf
-    ? " ⚠️ Niejednoznaczna formułowanie. Zastosowano cenę ochronną. Sprawdź ręcznie."
-    : "";
-
-  return {
-    ...est,
-    suggestedLabor:  finalPrice,
-    guardedUnit:     forcedUnit,
-    laborNorm:       Math.max(est.laborNorm ?? 0, profile.baseNorm),
-    confidence:      "medium" as const,
-    expert_override: true,
-    isLowConfidence: isLowConf,
-    calculationLog:  calculationLog,
-    trace: `${est.trace ?? ""} [🚩 Экспертный щит: Категория [${profile.intent}]. Цена скорректирована с ${prevPrice.toFixed(2)} до ${finalPrice.toFixed(2)} PLN${multTag}${ambiguityNote}]`,
-    note:  `${est.note ?? ""} | 🚩 Expert Shield [${profile.intent}]: min. ${cappedFloor.toFixed(2)} PLN${ambiguityNote}`,
-  };
+  return est;
 }
 
 // ─── applyPostProcessPipeline ─────────────────────────────────────

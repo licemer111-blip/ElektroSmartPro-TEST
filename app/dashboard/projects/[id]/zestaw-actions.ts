@@ -13,7 +13,6 @@ import { revalidatePath } from "next/cache";
 import { unpackCompositeItem, recalcChildrenQty } from "@/lib/services/composer-engine";
 import { findRecipeByKeyword } from "@/lib/config/zestawy-recipes";
 import { updateProjectItem } from "@/app/dashboard/projects/[id]/actions";
-import { estimatePricesWithAI } from "@/app/dashboard/projects/[id]/_ai_actions/pricing";
 import type { EngineCalibration } from "@/app/dashboard/settings/knr-calculator/_parts/KnrEngineCalibration";
 import type { UnitType } from "@/lib/types/database";
 
@@ -46,11 +45,21 @@ export async function addZestawToProject({
     // Verify project ownership
     const { data: project, error: projectError } = await supabase
       .from("projects")
-      .select("id, user_id")
+      .select("id, user_id, default_hourly_rate")
       .eq("id", projectId)
       .eq("user_id", user.id)
       .single();
     if (projectError || !project) return { success: false, error: "Projekt nie znaleziony lub brak dostępu" };
+
+    let hourlyRate = Number((project as { default_hourly_rate?: number | null }).default_hourly_rate) || 0;
+    if (hourlyRate <= 0) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("hourly_rate")
+        .eq("id", user.id)
+        .maybeSingle();
+      hourlyRate = Number((profile as { hourly_rate?: number | null } | null)?.hourly_rate) || 0;
+    }
 
     // Find recipe
     const recipe = findRecipeByKeyword(zestawName);
@@ -106,7 +115,11 @@ export async function addZestawToProject({
     const parentId = parentRow.id as string;
 
     // Insert children
-    const children = result.children.map((child) => ({
+    const children = result.children.map((child) => {
+      const labor = child.type === "robocizna" && child.laborNormRbh && hourlyRate > 0
+        ? Math.round(child.laborNormRbh * hourlyRate * 100) / 100
+        : 0;
+      return {
       project_id:        projectId,
       catalog_item_id:   null,
       name:              child.label,
@@ -114,8 +127,10 @@ export async function addZestawToProject({
       metadata:          { ...child.metadata, childType: child.type },
       unit:              child.unit,
       quantity:          child.quantity,
-      material_price:    child.type === "material" ? 0 : 0,
-      labor_price:       child.type === "robocizna" ? 0 : 0,
+      material_price:    0,
+      labor_price:       labor,
+      final_material_price: 0,
+      final_labor_price: labor,
       is_custom:         false,
       is_assembly_child: true,
       parent_assembly_id: parentId,
@@ -126,7 +141,8 @@ export async function addZestawToProject({
       labor_hours_total: child.laborNormRbh != null ? child.laborNormRbh * child.quantity : null,
       knr_source:        child.knrRef ? "es_synthetic" : null,
       confidence_level:  child.knrRef ? "verified" : ("estimated" as const),
-    }));
+      };
+    });
 
     const { error: childError } = await supabase
       .from("project_items")
@@ -139,15 +155,6 @@ export async function addZestawToProject({
     }
 
     revalidatePath(`/dashboard/projects/${projectId}`);
-
-    // Z2 fix: auto-price the new zestaw immediately, scoped to this parent only.
-    // Non-fatal: if pricing fails the items remain at 0 PLN and user can run
-    // "Wycena AI" manually — same UX as before this fix.
-    try {
-      await estimatePricesWithAI(projectId, "all", { targetItemIds: [parentId] });
-    } catch (pricingErr) {
-      logger.error("Auto-pricing after zestaw insert failed (non-fatal):", { projectId, parentId }, pricingErr);
-    }
 
     return { success: true, error: null, parentId, addedCount: 1 + children.length };
 

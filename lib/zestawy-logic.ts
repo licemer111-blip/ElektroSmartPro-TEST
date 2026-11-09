@@ -25,7 +25,7 @@ export const SKIP_CONSUMABLE_CATEGORIES = new Set([
 // ─── KNR Labor norms (rbh per unit) ──────────────────────────────────────────
 
 export const LABOR_NORMS: Record<string, number> = {
-  breaker_1p:  0.15,
+  breaker_1p:  0.20,
   breaker_2p:  0.20,
   breaker_3p:  0.35,
   breaker_4p:  0.40,
@@ -132,55 +132,16 @@ export interface ZestawAggregate {
 export function computeZestawAggregates(
   modules: ZestawModule[],
   isFirstSync: boolean,
+  hourlyRate = 0,
 ): ZestawAggregate[] {
   const result: ZestawAggregate[] = [];
+  void modules;
 
-  // ── 1. Consumables (tulejki + oznakowanie) ────────────────────────────────
-  for (const def of MODULE_CONSUMABLES) {
-    let totalQty = 0;
-    let totalPrice = 0;
+  // Ferrules, labels and the busbar share used to arrive with a made-up złoty
+  // price. The electrician prices those from his own list, so they are not inserted.
 
-    for (const mod of modules) {
-      if (SKIP_CONSUMABLE_CATEGORIES.has(mod.category)) continue;
-      totalQty += mod.quantity;
-      totalPrice += def.basePricePerModule * mod.quantity; // Iron Rule: no regionModifier on material
-    }
-
-    if (totalQty > 0) {
-      result.push({
-        aggregateKey: def.aggregateKey,
-        name: def.name,
-        unit: def.unit,
-        totalQty,
-        totalPrice,
-        originType: "panel_consumable",
-      });
-    }
-  }
-
-  // ── 2. Busbar share (Szyna łączeniowa) ───────────────────────────────────
-  let totalPoles = 0;
-  for (const mod of modules) {
-    if (!POWER_CATEGORIES.has(mod.category)) continue;
-    totalPoles += mod.poles * mod.quantity;
-  }
-
-  if (totalPoles > 0) {
-    const busbarsNeeded = totalPoles; // ilość udziałów (każdy = 1 pol)
-    const busbarsPrice = BUSBAR_LOGIC.pricePerPole * totalPoles; // Iron Rule: no regionModifier on material
-    result.push({
-      aggregateKey: BUSBAR_LOGIC.aggregateKey,
-      name: BUSBAR_LOGIC.name,
-      unit: BUSBAR_LOGIC.unit,
-      totalQty: Math.round(busbarsNeeded * 100) / 100,
-      totalPrice: Math.round(busbarsPrice * 100) / 100,
-      originType: "panel_busbar",
-    });
-  }
-
-  // ── 3. Panel assembly base (tylko przy pierwszej synchronizacji) ──────────
-  if (isFirstSync) {
-    const laborPrice = PANEL_ASSEMBLY.laborNormBase * PANEL_ASSEMBLY.baseLaborRate; // BASE price — calcRowPrices applies regionModifier at display time
+  if (isFirstSync && hourlyRate > 0) {
+    const laborPrice = Math.round(PANEL_ASSEMBLY.laborNormBase * hourlyRate * 100) / 100;
     result.push({
       aggregateKey: PANEL_ASSEMBLY.aggregateKey,
       name: PANEL_ASSEMBLY.name,

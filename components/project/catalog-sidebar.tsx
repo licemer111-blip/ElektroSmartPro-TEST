@@ -389,6 +389,8 @@ export function CatalogSidebar({ projectId, categories: initialCategories, catal
               const items = getItemsForCategory(category.id);
               const filteredItems = filterItems(items);
               const isLoaded = loadedItems[category.id] !== undefined;
+              const listedCount = (category as CatalogCategory & { count?: number }).count ?? 0;
+              if (!searchTerm && !isLoaded && listedCount === 0) return null;
               if (isLoaded && filteredItems.length === 0) return null;
               if (searchTerm && filteredItems.length === 0) return null;
               return (
