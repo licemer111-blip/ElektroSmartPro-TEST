@@ -47,7 +47,7 @@ export function PanelAiDialog({ open, onOpenChange, aiDescription, setAiDescript
             <div className="grid grid-cols-1 gap-2 text-sm text-slate-700 dark:text-slate-300">
               <div className="flex items-start gap-2"><span className="text-orange-500 font-bold mt-0.5">✓</span><span><strong>Standardy PN-HD 60364</strong> — Projektowanie zgodnie z wymogami bezpieczeństwa.</span></div>
               <div className="flex items-start gap-2"><span className="text-orange-500 font-bold mt-0.5">✓</span><span><strong>Inteligentny Balans Faz</strong> — Automatyczna optymalizacja obciążeń L1/L2/L3.</span></div>
-              <div className="flex items-start gap-2"><span className="text-orange-500 font-bold mt-0.5">✓</span><span><strong>Wycena KNR 2026</strong> — Precyzyjne stawki materiałowe i robocizna dla 16 województw.</span></div>
+              <div className="flex items-start gap-2"><span className="text-orange-500 font-bold mt-0.5">✓</span><span><strong>Robocizna</strong> — godzina normy ES × Twoja stawka. Województwo dolicza kosztorys.</span></div>
               <div className="flex items-start gap-2"><span className="text-orange-500 font-bold mt-0.5">✓</span><span><strong>Tryb Współpracy (Viewer)</strong> — Konsultuj projekt z klientem w czasie rzeczywistym.</span></div>
             </div>
           </div>

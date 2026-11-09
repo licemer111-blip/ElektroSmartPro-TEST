@@ -2097,10 +2097,9 @@ export async function triggerL3Estimation(
 ${l3PriceRef}
 
 <task>
-Wycen JEDNĄ pozycję której NIE ZNALEZIONO w katalogu osobistym ani bazie ES-Dictionary.
-MUSISZ podać zarówno cenę materiału jak i robocizny (żadna nie może być 0 jeśli pozycja ma sens techniczny).
-Użyj norm KNR ES-KNR 2026. Ceny materiałów MUSZĄ odpowiadać cennikowi hurtowemu 2026 (patrz price_reference_2026).
-Uzasadnij skąd pochodzi cena (KNR, norma, doświadczenie rynkowe 2026).
+Wycen JEDNĄ pozycję, której nie ma w katalogu elektryka ani w normie ES.
+Robocizna = godzina normy × podana stawka bazowa. Nie wymyślaj ceny materiału: material_price = 0, dopóki elektryk nie wpisze jej ze swojego cennika.
+Jeśli nie znasz godziny, labor_norm = 0 i labor_price = 0. Nie wymyślaj kodu KNR.
 </task>`;
 
     const { object: result } = await generateObject({

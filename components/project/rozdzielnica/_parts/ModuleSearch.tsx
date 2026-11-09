@@ -78,7 +78,7 @@ export function ModuleSearch({
           className="h-9 px-2.5 gap-1.5 flex-shrink-0 bg-orange-500 hover:bg-orange-600 text-white font-bold shadow-lg"
           onClick={handleAIPricing}
           disabled={isWycenLoading || allModulesCount === 0}
-          title="Wyceń rozdzielnicę wg KNR 2026 (AI)"
+          title="Policz robociznę: godzina normy ES × Twoja stawka"
         >
           {isWycenLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Zap className="w-3.5 h-3.5" />}
           <span className="text-[11px]">Wyceń</span>

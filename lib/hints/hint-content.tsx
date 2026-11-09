@@ -15,7 +15,7 @@ export const HINTS = {
       <p className="font-semibold text-emerald-700 dark:text-emerald-300">👷 Robocizna (r-g)</p>
       <p>Koszt robocizny (montażu) netto za jednostkę i łącznie.</p>
       <ul className="space-y-0.5 text-slate-400">
-        <li>• Obliczana wg norm KNR × stawka PLN/rbh</li>
+        <li>• Godzina normy ES × Twoja stawka</li>
         <li>• Górna wartość = cena za 1 jedn.</li>
         <li>• Dolna wartość = suma (× ilość)</li>
       </ul>
@@ -25,11 +25,11 @@ export const HINTS = {
   columnKnr: (
     <div className="space-y-1.5">
       <p className="font-semibold text-violet-700 dark:text-violet-300">📋 Kod KNR</p>
-      <p>Kod normy z Katalogów Nakładów Rzeczowych (KNR) — polskiego standardu kosztorysowego.</p>
+      <p>Numer normy ES. To godzina pracy, nie urzędowy tom KNR.</p>
       <ul className="space-y-0.5 text-slate-400">
-        <li>• <span className="text-emerald-600">KNR kat. A</span> — norma oficjalna z bazy</li>
-        <li>• <span className="text-emerald-500">≈ KNR kat. B</span> — norma analogowa (ES)</li>
-        <li>• Brak — pozycja bez normy (cena ręczna)</li>
+        <li>• Zielony — godzina z normy ES</li>
+        <li>• Przybliżenie — podobna pozycja, sprawdź przed ofertą</li>
+        <li>• Brak — wpisz cenę ręcznie</li>
       </ul>
     </div>
   ),
@@ -39,7 +39,7 @@ export const HINTS = {
       <p className="font-semibold text-cyan-700 dark:text-cyan-300">⏱ Czas pracy (rbh)</p>
       <p>Norma czasu pracy w roboczogodzinach (rbh) na jednostkę miary.</p>
       <ul className="space-y-0.5 text-slate-400">
-        <li>• rbh/jedn. = norma KNR na 1 szt/mb/kpl</li>
+        <li>• rbh/jedn. = godzina normy ES na 1 szt/mb/kpl</li>
         <li>• Σ rbh = czas całkowity (× ilość)</li>
         <li>• Wpływa na koszt: stawka PLN/rbh × norma</li>
       </ul>

@@ -31,8 +31,8 @@ export function PanelInfoFooter() {
             <FileDown className="w-4 h-4 text-emerald-600" />
           </div>
           <div>
-            <p className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 mb-0.5">Wycena wg KNR 2026</p>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed">Ceny robocizny wg KNR 5-04, 5-08, 5-09, 5-10. Stawki regionalne dla 16 województw. Baza ES-KNR 2026.</p>
+            <p className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 mb-0.5">Robocizna: godzina × Twoja stawka</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed">Godziny normy ES. Województwo dolicza ekran kosztorysu. Materiał z katalogu modułów, dopóki nie wpiszesz swojego.</p>
           </div>
         </div>
 

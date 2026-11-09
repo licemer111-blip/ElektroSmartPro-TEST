@@ -27,9 +27,9 @@ const CATEGORY_META: Record<string, CategoryMeta> = {
   demontaze:               { pl: "Demontaż instalacji",              description: "Prace demontażowe instalacji elektrycznych. Normy KNR i ceny robocizny dla demontaży 2026.", keywords: ["demontaż elektryczny KNR", "demontaż wycena 2026"] },
   ev_ladowanie:            { pl: "Ładowanie pojazdów elektrycznych", description: "Instalacja stacji ładowania EV (7,4 kW–22 kW). Normy KNR i ceny montażu wallbox 2026.", keywords: ["wallbox montaż KNR", "stacja ładowania EV cena", "instalacja ładowarki samochodu elektrycznego"] },
   fotowoltaika:            { pl: "Fotowoltaika (PV)",                description: "Montaż instalacji fotowoltaicznych, falowników, okablowania DC/AC. Normy KNR i ceny PV 2026.", keywords: ["fotowoltaika montaż KNR", "instalacja PV cena 2026", "montaż paneli solar"] },
-  gniazda_przemyslowe:     { pl: "Gniazda przemysłowe",             description: "Montaż gniazd przemysłowych CEE, gniazdek 3-fazowych, listew zasilających. Normy KNR 2026.", keywords: ["gniazda przemysłowe CEE montaż KNR", "gniazdo 3-fazowe cena"] },
+  gniazda_przemyslowe:     { pl: "Gniazda przemysłowe",             description: "Montaż gniazd przemysłowych CEE, gniazdek 3-fazowych, listew zasilających. Godziny normy ES.", keywords: ["gniazda przemysłowe CEE montaż KNR", "gniazdo 3-fazowe cena"] },
   gniazda_wylaczniki:      { pl: "Gniazda i wyłączniki",            description: "Montaż gniazd wtykowych i wyłączników instalacyjnych. Normy KNR i ceny robocizny 2026.", keywords: ["montaż gniazdka cena KNR", "wyłącznik podtynkowy montaż", "koszt montażu gniazda 2026"] },
-  heat_tracing:            { pl: "Ogrzewanie elektryczne (heat tracing)", description: "Montaż systemów ogrzewania elektrycznego, przewodów grzejnych, sterowników. Normy KNR 2026.", keywords: ["heat tracing montaż KNR", "ogrzewanie elektryczne przewody grzejne cena"] },
+  heat_tracing:            { pl: "Ogrzewanie elektryczne (heat tracing)", description: "Montaż systemów ogrzewania elektrycznego, przewodów grzejnych, sterowników. Godziny normy ES.", keywords: ["heat tracing montaż KNR", "ogrzewanie elektryczne przewody grzejne cena"] },
   hvac:                    { pl: "Instalacje HVAC — część elektryczna", description: "Elektryczna część instalacji wentylacyjnych i klimatyzacyjnych. Normy KNR i ceny 2026.", keywords: ["HVAC elektryka KNR", "klimatyzacja instalacja elektryczna cena"] },
   infrastruktura:          { pl: "Infrastruktura elektryczna",       description: "Prace infrastrukturalne: przepusty, wsporniki, koryta kablowe. Normy KNR i ceny 2026.", keywords: ["infrastruktura elektryczna KNR", "korytka kablowe montaż cena"] },
   infrastruktura_specjalna:{ pl: "Infrastruktura specjalna",         description: "Specjalne systemy infrastruktury elektrycznej. Normy KNR i ceny robocizny 2026.", keywords: ["infrastruktura specjalna elektryczna KNR", "instalacja specjalna cena"] },
@@ -49,22 +49,22 @@ const CATEGORY_META: Record<string, CategoryMeta> = {
   oswietlenie_awaryjne:    { pl: "Oświetlenie awaryjne",             description: "Montaż opraw awaryjnych i ewakuacyjnych. Normy KNR i ceny robocizny 2026.", keywords: ["oświetlenie awaryjne montaż KNR", "oprawa ewakuacyjna cena", "wyjście ewakuacyjne LED"] },
   oswietlenie_drogowe:     { pl: "Oświetlenie drogowe i uliczne",    description: "Montaż latarni, słupów oświetleniowych, opraw drogowych. Normy KNR i ceny 2026.", keywords: ["oświetlenie drogowe montaż KNR", "latarnia uliczna cena montaż", "słup oświetleniowy wycena"] },
   oswietlenie_montaz:      { pl: "Montaż opraw oświetleniowych",     description: "Kompleksowy montaż opraw oświetleniowych wszystkich typów. Normy KNR i ceny 2026.", keywords: ["montaż oprawy oświetleniowej KNR", "lampa montaż cena 2026", "oprawa oświetleniowa wycena"] },
-  oswietlenie_podstawowe:  { pl: "Oświetlenie podstawowe",           description: "Podstawowe instalacje oświetleniowe w budynkach mieszkalnych i komercyjnych. Normy KNR 2026.", keywords: ["oświetlenie podstawowe KNR", "instalacja oświetlenia cena", "montaż lampy sufitowej wycena"] },
-  oswietlenie_przemyslowe: { pl: "Oświetlenie przemysłowe",          description: "Montaż opraw przemysłowych High Bay, naświetlaczy LED, oświetlenia hal. Normy KNR 2026.", keywords: ["oświetlenie przemysłowe KNR", "High Bay LED montaż cena", "naświetlacz LED hala wycena"] },
+  oswietlenie_podstawowe:  { pl: "Oświetlenie podstawowe",           description: "Podstawowe instalacje oświetleniowe w budynkach mieszkalnych i komercyjnych. Godziny normy ES.", keywords: ["oświetlenie podstawowe KNR", "instalacja oświetlenia cena", "montaż lampy sufitowej wycena"] },
+  oswietlenie_przemyslowe: { pl: "Oświetlenie przemysłowe",          description: "Montaż opraw przemysłowych High Bay, naświetlaczy LED, oświetlenia hal. Godziny normy ES.", keywords: ["oświetlenie przemysłowe KNR", "High Bay LED montaż cena", "naświetlacz LED hala wycena"] },
   oze_ev_ogrzewanie:       { pl: "OZE, EV i ogrzewanie elektryczne", description: "Kompleksowe instalacje OZE: fotowoltaika, ładowarki EV, pompy ciepła. Normy KNR i ceny 2026.", keywords: ["OZE instalacja KNR", "pompa ciepła elektryka cena", "fotowoltaika EV ogrzewanie wycena"] },
   pomiary_dokumentacja:    { pl: "Pomiary elektryczne i dokumentacja", description: "Pomiary ochronne instalacji elektrycznej, dokumentacja powykonawcza. Normy KNR i ceny 2026.", keywords: ["pomiary elektryczne KNR", "protokół pomiarowy cena", "dokumentacja elektryczna wycena 2026"] },
-  ppoz:                    { pl: "Ochrona przeciwpożarowa (elektryka)", description: "Elektryczne instalacje ochrony ppoż.: kable HDGs, przyciski ROP, centrale. Normy KNR 2026.", keywords: ["instalacja ppoż elektryczna KNR", "kabel pożarowy HDGs montaż cena", "ochrona przeciwpożarowa elektryka"] },
+  ppoz:                    { pl: "Ochrona przeciwpożarowa (elektryka)", description: "Elektryczne instalacje ochrony ppoż.: kable HDGs, przyciski ROP, centrale. Godziny normy ES.", keywords: ["instalacja ppoż elektryczna KNR", "kabel pożarowy HDGs montaż cena", "ochrona przeciwpożarowa elektryka"] },
   ppoz_ssp:                { pl: "System sygnalizacji pożaru (SSP)",  description: "Montaż central SSP, czujek dymu, sygnalizatorów. Normy KNR i ceny 2026.", keywords: ["SSP montaż KNR", "czujka dymu instalacja cena", "system sygnalizacji pożaru wycena"] },
   prace_dodatkowe:         { pl: "Prace dodatkowe i uzupełniające",  description: "Dodatkowe prace elektryczne, regulacje, uruchomienia. Normy KNR i ceny robocizny 2026.", keywords: ["prace elektryczne dodatkowe KNR", "regulacja instalacji elektrycznej cena"] },
   prace_ziemne:            { pl: "Roboty ziemne (elektryka)",        description: "Wykopy pod kable, układanie rur ochronnych w ziemi. Normy KNR i ceny 2026.", keywords: ["roboty ziemne elektryka KNR", "wykop pod kabel cena", "rura ochronna w ziemi wycena"] },
   prad_budowlany:          { pl: "Prąd budowlany (przyłącze tymczasowe)", description: "Montaż tymczasowych przyłączy energetycznych na budowie. Normy KNR i ceny 2026.", keywords: ["prąd budowlany KNR", "przyłącze tymczasowe cena", "tablica budowlana montaż"] },
   prowadzenie:             { pl: "Prowadzenie tras kablowych",       description: "Montaż koryt kablowych, drabinek, rur stalowych, mocowań. Normy KNR i ceny 2026.", keywords: ["koryto kablowe montaż KNR", "drabinka kablowa cena", "trasa kablowa wycena 2026"] },
-  przygotowanie:           { pl: "Przygotowanie prac elektrycznych", description: "Prace przygotowawcze i organizacyjne przed montażem instalacji. Normy KNR 2026.", keywords: ["przygotowanie prac elektrycznych KNR", "organizacja robót elektrycznych cena"] },
+  przygotowanie:           { pl: "Przygotowanie prac elektrycznych", description: "Prace przygotowawcze i organizacyjne przed montażem instalacji. Godziny normy ES.", keywords: ["przygotowanie prac elektrycznych KNR", "organizacja robót elektrycznych cena"] },
   przylacza_wlz:           { pl: "Przyłącza i wewnętrzne linie zasilające (WLZ)", description: "Montaż przyłączy kablowych i wewnętrznych linii zasilających WLZ. Normy KNR i ceny 2026.", keywords: ["WLZ montaż KNR", "wewnętrzna linia zasilająca cena", "przyłącze kablowe wycena"] },
   pv_ev:                   { pl: "Fotowoltaika i ładowarki EV",      description: "Kompleksowe instalacje PV i stacje ładowania pojazdów elektrycznych. Normy KNR i ceny 2026.", keywords: ["fotowoltaika montaż KNR 2026", "ładowarka EV instalacja cena", "wallbox montaż wycena"] },
   remonty_pomiary:         { pl: "Remonty i pomiary elektryczne",    description: "Remonty instalacji elektrycznych i pomiary ochronne. Normy KNR i ceny 2026.", keywords: ["remont instalacji elektrycznej KNR", "pomiary elektryczne cena 2026", "przegląd instalacji wycena"] },
-  retail_sklepy:           { pl: "Instalacje dla sklepów i retail",  description: "Elektryka dla sklepów: oświetlenie ekspozycyjne, zasilanie kas, gniazda. Normy KNR 2026.", keywords: ["instalacja elektryczna sklep KNR", "elektryka retail cena", "oświetlenie ekspozycyjne montaż"] },
-  roboty_ziemne:           { pl: "Roboty ziemne elektryczne",        description: "Prace ziemne przy kablach energetycznych i telekomunikacyjnych. Normy KNR 2026.", keywords: ["roboty ziemne kabel KNR", "układanie kabla w ziemi cena", "wykop kablowy wycena"] },
+  retail_sklepy:           { pl: "Instalacje dla sklepów i retail",  description: "Elektryka dla sklepów: oświetlenie ekspozycyjne, zasilanie kas, gniazda. Godziny normy ES.", keywords: ["instalacja elektryczna sklep KNR", "elektryka retail cena", "oświetlenie ekspozycyjne montaż"] },
+  roboty_ziemne:           { pl: "Roboty ziemne elektryczne",        description: "Prace ziemne przy kablach energetycznych i telekomunikacyjnych. Godziny normy ES.", keywords: ["roboty ziemne kabel KNR", "układanie kabla w ziemi cena", "wykop kablowy wycena"] },
   rozdzielnice:            { pl: "Rozdzielnice elektryczne",         description: "Montaż rozdzielnic głównych i mieszkaniowych, tablic elektrycznych. Normy KNR i ceny 2026.", keywords: ["rozdzielnica montaż KNR", "tablica elektryczna cena montaż", "rozdzielnica mieszkaniowa wycena 2026"] },
   rury_trasy:              { pl: "Rury i trasy kablowe",             description: "Układanie rur instalacyjnych, koryt kablowych, drabinek. Normy KNR i ceny 2026.", keywords: ["rura instalacyjna montaż KNR", "koryto kablowe cena", "drabinka kablowa wycena"] },
   serwis_awarie:           { pl: "Serwis i usuwanie awarii",         description: "Usługi serwisowe i usuwanie awarii instalacji elektrycznych. Normy KNR i ceny 2026.", keywords: ["serwis elektryczny KNR", "awaria elektryczna usuwanie cena", "elektryk na awarie wycena"] },
@@ -81,7 +81,7 @@ const CATEGORY_META: Record<string, CategoryMeta> = {
   wentylacja_hvac_el:      { pl: "Wentylacja i HVAC — elektryka",    description: "Elektryczna część systemów wentylacyjnych i klimatyzacyjnych. Normy KNR i ceny 2026.", keywords: ["wentylacja elektryka KNR", "klimatyzacja podłączenie elektryczne cena", "central wentylacyjna elektryka wycena"] },
   zasilanie_awaryjne:      { pl: "Zasilanie awaryjne (UPS / agregat)", description: "Montaż systemów UPS, agregatów prądotwórczych, ATS. Normy KNR i ceny 2026.", keywords: ["UPS montaż KNR", "agregat prądotwórczy instalacja cena", "zasilanie awaryjne wycena 2026"] },
   zasilanie_gwar:          { pl: "Zasilanie gwarantowane",           description: "Systemy zasilania gwarantowanego, SZR, układy rezerwowe. Normy KNR i ceny 2026.", keywords: ["zasilanie gwarantowane KNR", "SZR montaż cena", "zasilanie rezerwowe wycena"] },
-  zestawy:                 { pl: "Zestawy instalacyjne (punkty)",    description: "Kompleksowe zestawy instalacyjne: punkt gniazdkowy, oświetleniowy, punkt danych. Normy KNR 2026.", keywords: ["zestaw instalacyjny KNR", "punkt elektryczny cena 2026", "punkt gniazdkowy koszt montaż"] },
+  zestawy:                 { pl: "Zestawy instalacyjne (punkty)",    description: "Kompleksowe zestawy instalacyjne: punkt gniazdkowy, oświetleniowy, punkt danych. Godziny normy ES.", keywords: ["zestaw instalacyjny KNR", "punkt elektryczny cena 2026", "punkt gniazdkowy koszt montaż"] },
 };
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -148,10 +148,10 @@ export async function generateMetadata(
     return { robots: { index: false, follow: false } };
   }
 
-  const title = `KNR 2026: Cennik i normy montażu — ${meta.pl} | ElektroSmart`;
+  const title = `Norma ES: ${meta.pl} — godzina × Twoja stawka | ElektroSmart`;
   return {
     title,
-    description: `Baza ${SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR 2026 — ${meta.pl}. ${meta.description} Wykonaj kosztorys w 15 minut. Jeden własny projekt za darmo, PDF ze znakiem DEMO.`,
+    description: `Godziny normy ES dla: ${meta.pl}. Cenę liczysz swoją stawką, materiał ze swojego cennika. Kosztorys w 15 minut. Jeden własny projekt za darmo, PDF ze znakiem DEMO.`,
     metadataBase: new URL("https://elektrosmart.pro"),
     keywords: [...meta.keywords, "KNR 2026", "normy pracy elektryka", "kosztorys elektryczny online", "ElektroSmart"],
     openGraph: {
@@ -184,7 +184,7 @@ function buildJsonLd(category: string, meta: CategoryMeta, items: DictRow[]) {
   return {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": `KNR 2026 — ${meta.pl}`,
+    "name": `Norma ES — ${meta.pl}`,
     "description": meta.description,
     "url": `https://elektrosmart.pro/katalog/${category}`,
     "inLanguage": "pl",
@@ -247,7 +247,7 @@ export default async function KatalogCategoryPage(
               <div>
                 {/* H1 — SEO-optimized title */}
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight">
-                  KNR 2026: Cennik i normy montażu<br />
+                  Norma ES, cena z Twojej stawki<br />
                   <span className="text-blue-300">{meta.pl}</span>
                 </h1>
                 <p className="mt-3 text-slate-300 max-w-2xl leading-relaxed">
@@ -256,7 +256,7 @@ export default async function KatalogCategoryPage(
                 {/* Stats row */}
                 <div className="flex flex-wrap gap-3 mt-5">
                   <Badge className="bg-blue-500/20 text-blue-200 border-blue-400/30 hover:bg-blue-500/30">
-                    {items.length}+ pozycji KNR
+                    {items.length}+ pozycji
                   </Badge>
                   <Badge className="bg-emerald-500/20 text-emerald-200 border-emerald-400/30 hover:bg-emerald-500/30">
                     Aktualne ceny 2026
@@ -398,7 +398,7 @@ export default async function KatalogCategoryPage(
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
               { icon: "🗺️", title: "16 województw", desc: "Ceny dopasowane do Twojego regionu — Mazowieckie, Małopolskie, Śląskie i inne." },
-              { icon: "📋", title: "7 799+ pozycji KNR", desc: "Pełna baza robót elektrycznych: silnoprądowe, teletechniczne, OZE, EV." },
+              { icon: "📋", title: "Katalog robót", desc: "Godziny normy ES. Cenę liczysz swoją stawką, materiał ze swojego cennika." },
               { icon: "📄", title: "Eksport PDF / Excel", desc: "Profesjonalny kosztorys z logo firmy gotowy do wysłania klientowi." },
             ].map((card) => (
               <div key={card.title} className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5">

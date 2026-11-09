@@ -145,13 +145,12 @@ export const IRON_RULE_DEMO = `<iron_rule_4_demo>
 export const IRON_RULE_KNR_HIERARCHY = `<iron_rule_5_knr_hierarchy>
 ŻELAZNA ZASADA — HIERARCHIA ŹRÓDEŁ DANYCH (nigdy nie odwracaj tej kolejności):
 1. PLIKI PROJEKTU (User Files): Pliki przesłane przez użytkownika — absolutny priorytet nazw i norm.
-2. SYSTEMOWA BAZA ES-KNR (14 plików JSON): ES-KNR-*.json — oficjalne katalogi 2026.
-3. WIEDZA OGÓLNA AI: Fallback gdy brak w 1 i 2 — zawsze oznaczaj isEstimate=true.
+2. NORMA ES: godzina z bazy ElektroSmart. To nie jest urzędowy tom KNR.
+3. WIEDZA OGÓLNA AI: gdy brak w 1 i 2 — zostaw kod pusty i ustaw isEstimate=true.
 
-ZASADA KNR — OBOWIĄZKOWE KODY:
-- Każda pozycja robocizny MUSI mieć kod KNR. Format: "KNR X-XX XXXX-XX"
-- Jeśli brak w bazie → wpisz "szacunek" + ustaw isEstimate=true.
-- Każda operacja robocizny MUSI mieć przypisany kod KNR. Bez wyjątku.
+ZASADA GODZIN:
+- Robocizna to godzina × stawka elektryka. Nie wymyślaj kodu KNR.
+- Jeśli godziny nie ma w normie ES → kod pusty, isEstimate=true, cena robocizny 0.
 
 MAPOWANIE SYNONIMÓW — POMIARY (priorytetowe):
 Słowa kluczowe: pomiary, protokół, badanie, sprawdzenie, pętla zwarcia, rezystancja izolacji,

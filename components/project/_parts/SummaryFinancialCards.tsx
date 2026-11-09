@@ -104,7 +104,7 @@ export function SummaryFinancialCards({
             <p className="text-xs text-slate-500 dark:text-slate-400 mb-5">{allModules.length} urządzeń w {sections.length} {sections.length === 1 ? "sekcji" : "sekcjach"} — wybierz metodę:</p>
             <div className="flex flex-col gap-2">
               <Button size="sm" className="bg-gradient-to-r from-yellow-400 to-amber-400 hover:from-yellow-500 hover:to-amber-500 text-slate-900 font-bold gap-1.5 h-9" onClick={handleAIPricing} disabled={isWycenLoading}>
-                {isWycenLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Zap className="w-3.5 h-3.5" />} Wyceń ES-Engine (KNR 2026)
+                {isWycenLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Zap className="w-3.5 h-3.5" />} Wyceń: godzina × stawka
               </Button>
               <Button size="sm" variant="outline" className="gap-1.5 border-slate-300 text-slate-600 dark:text-slate-400" onClick={() => setPricingMode("manual")}>
                 <Pencil className="w-3.5 h-3.5" /> Wpisz ceny ręcznie

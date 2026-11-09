@@ -16,7 +16,7 @@ export const TOUR_STEPS: TourStep[] = [
     id: "welcome",
     title: "Witaj w ElektroSmart PRO!",
     description:
-      "System kosztorysowy oparty na normach KNR 2026 — dla elektryków, którzy cenią czas. " +
+      "Kosztorys ze swojej stawki: godzina normy ES × Twoja stawka, materiał z Twojego cennika. " +
       "W 2 minutach pokażemy Ci 8 najważniejszych funkcji: od tworzenia projektu, przez zestawy i wyceny AI, po eksport PDF dla klienta.",
     position: "center",
     emoji: "⚡",

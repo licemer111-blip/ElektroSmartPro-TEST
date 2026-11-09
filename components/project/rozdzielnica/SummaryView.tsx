@@ -106,7 +106,7 @@ export const SummaryView = React.memo(function SummaryView({
                 className="bg-gradient-to-r from-yellow-400 to-amber-400 hover:from-yellow-500 hover:to-amber-500 text-slate-900 font-bold gap-1.5 h-9"
                 onClick={handleAIPricing} disabled={isWycenLoading}>
                 {isWycenLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Zap className="w-3.5 h-3.5" />}
-                Wyceń ES-Engine (KNR 2026)
+                Wyceń: godzina × stawka
               </Button>
               <Button size="sm" variant="outline"
                 className="gap-1.5 border-slate-300 text-slate-600 dark:text-slate-400"

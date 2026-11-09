@@ -6,6 +6,7 @@
 
 import instalacjaPodstawowa from "@/data/knr/fixed_norms/es_knr_instalacja_podstawowa.json";
 import { getModernizationFactor, classifyIntent, isMetal } from "@/lib/services/semantic-classifier";
+import { findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
 import gniazda from "@/data/knr/fixed_norms/es_knr_gniazda_wylaczniki_oprawy.json";
 import trasyPvc from "@/data/knr/fixed_norms/es_knr_trasy_kablowe_pvc.json";
 import pomiary from "@/data/knr/fixed_norms/es_knr_pomiary_odbiory_2026.json";
@@ -502,6 +503,9 @@ export function lookupKnrByName(itemName: string, preferResidential = true): Knr
     const rawCode = (entry.catalog_code || "").trim();
     if (/^KNR\s+\d+(?:-\d+)?$/i.test(rawCode)) continue;
     if (/^ES-KNR-[A-Z]+$/i.test(rawCode)) continue;
+    // A "complete board" hour already includes the breakers. Pricing it as one
+    // line double-counts the devices the electrician lists separately.
+    if (/komplet\s*\(/i.test(entry.description)) continue;
 
     const descNorm = normalize(entry.description);
     const synonymNorms = (entry.synonyms ?? []).map(normalize);
@@ -557,6 +561,12 @@ export function lookupKnrByName(itemName: string, preferResidential = true): Knr
   // No score-fallback — boosts are tiebreakers among already-recalling entries,
   // not a way to admit weak matches.
   if (bestEntry && bestRawScore >= 0.5) {
+    const canonical = ["szt", "mb", "m", "kpl", "m2"]
+      .map((unit) => findCanonicalL0(itemName, unit))
+      .find((hit) => hit != null);
+    if (canonical) {
+      return { code: canonical.knrCode, laborNorm: canonical.laborNorm, unit: canonical.unit };
+    }
     const adjustedNorm = bestEntry.labor_norm * (bestEntry.unit_factor ?? 1.0);
     return { code: displayCode(bestEntry), laborNorm: adjustedNorm, unit: bestEntry.unit };
   }

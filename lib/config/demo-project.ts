@@ -70,7 +70,7 @@ export const DEMO_PROJECT: DemoProjectSeed = {
   pdf_notes:
     "To jest przykładowy projekt demonstracyjny wygenerowany automatycznie po utworzeniu konta. " +
     "Możesz go edytować, kopiować lub usunąć. Pokazuje on jak wygląda pełny kosztorys ElektroSmart PRO " +
-    "z podziałem Robocizna / Materiał, zestawami 360°, normami KNR 2026 i automatycznym przeliczaniem VAT.",
+    "z podziałem Robocizna / Materiał. Robocizna to godzina normy ES × Twoja stawka.",
   items: [
     // ══ I. PRACE PRZYGOTOWAWCZE ═══════════════════════════════════════════
     {
