@@ -1,24 +1,23 @@
 /**
  * Centralized AI quota limits — importable from both server and client.
  *
- * v2.1 Freemium model:
- *   - FREE tier: 5 AI requests / month — enough to evaluate the product,
- *     insufficient for routine use (drives trial activation / PRO upgrade).
- *   - 7-DAY TRIAL: gets PRO_AI_LIMIT (unlimited in practice).
- *   - PRO tier: 80 AI requests / month — enough for real import work,
- *     not enough to dump a knowledge base into Gemini 500 times.
+ * One monthly pool for every AI window (import, assistant, photo, panel).
+ *   - FREE: 10 requests / month. Enough to try photo import and the assistant.
+ *   - 7-day trial: same pool as PRO.
+ *   - PRO: 500 requests / month. Room for daily work, not an open tap.
+ * A priced row from the ES hour list does not spend a request.
  *   Limits are GLOBAL (shared across all AI features), not per-function.
  */
-export const DEMO_AI_LIMIT = 5;
-export const PRO_AI_LIMIT = 80;
+export const DEMO_AI_LIMIT = 10;
+export const PRO_AI_LIMIT = 500;
 
 /**
  * Per-function overrides (if not set, falls back to DEMO/PRO_AI_LIMIT).
  * aiSchemat historically had higher demo limit — kept for backward compat,
- * but capped to FREE ceiling of 5 (v2.1 unified limit across all AI functions).
+ * but capped to the FREE ceiling (one pool for every AI window).
  */
 export const FUNCTION_LIMITS: Partial<Record<string, { demo: number; pro: number }>> = {
-  // No per-function overrides in v2.1 — all AI features share the 5/500 limit.
+  // No per-function overrides — all AI features share the 10/500 pool.
   // Add entries here ONLY if a specific function needs a different cap.
 };
 

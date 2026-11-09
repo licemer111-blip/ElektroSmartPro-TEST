@@ -29,28 +29,15 @@ export function PanelAiDialog({ open, onOpenChange, aiDescription, setAiDescript
       <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Sparkles className="w-6 h-6 text-orange-500" />
-            ElektroSmart AI Engine v2.0 Pro
-            <span className="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-900 dark:bg-slate-700 text-[9px] font-medium text-slate-300">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              ES Engine v2.0
-            </span>
+            <Sparkles className="w-5 h-5 text-orange-500" />
+            Rozdzielnica z opisu
           </DialogTitle>
           <DialogDescription className="text-sm">
-            Ekspercki System Projektowania Rozdzielnic (Zgodność z PN-HD 60364)
+            Opisz obiekt i odbiory. Program zaproponuje obwody. To jedno zapytanie AI. Godziny montażu policzysz stawką na kosztorysie.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
-          <div className="rounded-xl bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 border-2 border-orange-200 dark:border-orange-800 p-4 animate-pulse-glow-orange">
-            <p className="text-sm font-semibold text-orange-800 dark:text-orange-300 mb-3">Możliwości silnika ES v2.0:</p>
-            <div className="grid grid-cols-1 gap-2 text-sm text-slate-700 dark:text-slate-300">
-              <div className="flex items-start gap-2"><span className="text-orange-500 font-bold mt-0.5">✓</span><span><strong>Standardy PN-HD 60364</strong> — Projektowanie zgodnie z wymogami bezpieczeństwa.</span></div>
-              <div className="flex items-start gap-2"><span className="text-orange-500 font-bold mt-0.5">✓</span><span><strong>Inteligentny Balans Faz</strong> — Automatyczna optymalizacja obciążeń L1/L2/L3.</span></div>
-              <div className="flex items-start gap-2"><span className="text-orange-500 font-bold mt-0.5">✓</span><span><strong>Robocizna</strong> — godzina normy ES × Twoja stawka. Województwo dolicza kosztorys.</span></div>
-              <div className="flex items-start gap-2"><span className="text-orange-500 font-bold mt-0.5">✓</span><span><strong>Tryb Współpracy (Viewer)</strong> — Konsultuj projekt z klientem w czasie rzeczywistym.</span></div>
-            </div>
-          </div>
 
           <div className="space-y-2">
             <label htmlFor="ai-panel-description" className="text-sm font-semibold text-slate-700 dark:text-slate-300">
@@ -88,7 +75,7 @@ export function PanelAiDialog({ open, onOpenChange, aiDescription, setAiDescript
             {aiGenerating ? (
               <><Loader2 className="w-5 h-5 animate-spin" />AI projektuje rozdzielnicę...</>
             ) : (
-              <><Sparkles className="w-5 h-5" />Generuj konfigurację i kosztorys</>
+              <><Sparkles className="w-5 h-5" />Ułóż rozdzielnicę</>
             )}
           </Button>
         </div>

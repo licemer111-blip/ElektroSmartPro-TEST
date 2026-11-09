@@ -10,7 +10,7 @@ export interface AiQuotaInfo {
   remaining: number;
   isPro: boolean;
   isExhausted: boolean;
-  isLow: boolean; // remaining === 1 for demo users
+  isLow: boolean; // demo and only a couple of requests left
 }
 
 export interface UseAiQuotaReturn {
@@ -40,7 +40,7 @@ export function useAiQuota(
         enriched[fn] = {
           ...info,
           isExhausted: info.remaining <= 0,
-          isLow: !info.isPro && info.remaining === 1,
+          isLow: !info.isPro && info.remaining > 0 && info.remaining <= 2,
         };
       }
       setQuota(enriched);

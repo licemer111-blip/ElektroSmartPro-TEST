@@ -85,14 +85,14 @@ const CONFIG: Record<ConfidenceLevel, ConfidenceConfig> = {
   estimated: {
     dot: "bg-amber-400",
     bar: "bg-amber-400",
-    label: "L3 · Szacunek AI",
-    tooltip: "L3 · Szacunek AI — brak normy KNR w słowniku ES-Dictionary. Cena to oszacowanie rynkowe bez gwarantowanej normy rbh. Aby uzyskać normę KNR, naciśnij 'Szukaj w KNR/AI' w kolumnie KNR.",
+    label: "Szacunek",
+    tooltip: "Brak pozycji w bazie ES. Cena jest szacunkiem. Sprawdź ją przed ofertą.",
   },
   uncertain: {
     dot: "bg-red-500",
     bar: "bg-red-500",
     label: "Brak wyceny",
-    tooltip: "ES-Engine nie znalazł danych KNR — wprowadź cenę ręcznie lub naciśnij 'Wyceń z ES-Engine' w pasku narzędzi",
+    tooltip: "Brak normy ES. Wpisz cenę ręcznie albo kliknij Wyceń.",
   },
   manual: {
     dot: "bg-slate-400",
@@ -103,19 +103,19 @@ const CONFIG: Record<ConfidenceLevel, ConfidenceConfig> = {
   unmatched: {
     dot: "bg-violet-500",
     bar: "bg-violet-500",
-    label: "⚡ Wyceń teraz",
-    tooltip: "Pozycja poza słownikiem ES-KNR — naciśnij przycisk 'Wyceń z ES-Engine' lub użyj lupki 🔍 w kolumnie KNR aby uruchomić wycenę",
+    label: "Wyceń",
+    tooltip: "Tej pozycji nie ma w bazie ES. Kliknij Wyceń albo wpisz cenę ręcznie.",
   },
 };
 
 // ─── Dot indicator (compact, for table rows) ──────────────────────────────────────────────
 
 const KNR_SOURCE_TOOLTIP: Partial<Record<NonNullable<KnrSource>, string>> = {
-  system_knr:    "L2 · KNR kat. A — norma zweryfikowana ES-KNR 2026 (Exact Match)",
-  user_knr:      "L1 · Twój Katalog — dopasowanie z katalogu prywatnego elektryka",
-  catalog:       "L2 · KNR kat. A — dane ze słownika ES-Dictionary",
-  ai_estimation: "L3 · Szacunek — brak dokładnej normy KNR (ES-Engine oszacował)",
-  es_synthetic:  "Szacunek ES — podobna pozycja, nie oficjalny KNR",
+  system_knr:    "Norma z bazy ES. To nie jest oficjalny tomik KNR.",
+  user_knr:      "Pozycja z Twojego cennika.",
+  catalog:       "Pozycja z bazy ES.",
+  ai_estimation: "Szacunek. Sprawdź godzinę przed ofertą.",
+  es_synthetic:  "Podobna pozycja z bazy ES, nie oficjalny KNR.",
 };
 
 interface ConfidenceDotProps {
@@ -217,7 +217,7 @@ export function ConfidenceBadge({ level, note, showLabel = true, className }: Co
 
 export function UncertainPriceWarning({ note }: { note?: string | null }) {
   return (
-    <div className="flex items-center gap-1.5 text-red-600 dark:text-red-400" title="ES-Engine nie znalazł danych KNR — wprowadź cenę ręcznie">
+    <div className="flex items-center gap-1.5 text-red-600 dark:text-red-400" title="Brak normy ES. Wpisz cenę ręcznie.">
       <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />
       <span className="text-[10px] font-medium">Wymaga wyceny</span>
     </div>

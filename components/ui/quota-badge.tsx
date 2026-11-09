@@ -54,7 +54,7 @@ export function QuotaBadge({ info, className, showUpgrade = true }: QuotaBadgePr
           "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 animate-pulse",
           className
         )}
-        title="Ostatnie zapytanie AI w planie Demo — przejdź na PRO"
+        title={remaining === 1 ? "Ostatnie zapytanie AI w planie Demo — przejdź na PRO" : `Zostało ${remaining} z ${limit} zapytań AI`}
       >
         <Zap className="w-2.5 h-2.5" />
         <span>AI {used}/{limit}</span>

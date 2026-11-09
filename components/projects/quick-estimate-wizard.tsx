@@ -60,7 +60,7 @@ export function QuickEstimateWizard({ regions, objectTypes, isPro = false, defau
             }`}
           >
             <Sparkles className="w-3 h-3" />
-            Użyto: {aiUsed}/{aiLimit ?? (isPro ? 100 : 5)} prób AI
+            Użyto: {aiUsed}/{aiLimit ?? (isPro ? 500 : 10)} zapytań AI
           </Badge>
         )}
       </div>

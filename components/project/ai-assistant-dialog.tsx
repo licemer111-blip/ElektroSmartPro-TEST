@@ -178,7 +178,7 @@ export function AIAssistantDialog({ projectId, isPro = false, projectStatus = "d
             <QuotaBadge info={quotaInfo} className="ml-1" />
           </DialogTitle>
           <DialogDescription>
-            {tab === "generate" ? "Opisz pomieszczenie. Asystent doda nazwy i ilości. Ceny policzysz przyciskiem Wyceń." : "Znajdź i scal zduplikowane pozycje"}
+            {tab === "generate" ? "Opisz pomieszczenie. Asystent doda nazwy i ilości. To jedno zapytanie AI. Ceny policzysz przyciskiem Wyceń." : "Znajdź i scal zduplikowane pozycje. To jedno zapytanie AI."}
           </DialogDescription>
         </DialogHeader>
 

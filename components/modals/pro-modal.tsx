@@ -18,7 +18,7 @@ import { Badge } from "@/components/ui/badge";
 const FEATURES = [
   "Więcej niż jeden własny projekt",
   "Czysty PDF bez znaku DEMO",
-  "80 zapytań AI miesięcznie",
+  "500 zapytań AI miesięcznie",
 ];
 
 export function ProModal() {

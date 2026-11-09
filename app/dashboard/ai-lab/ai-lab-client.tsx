@@ -391,7 +391,7 @@ export function AiLabClient({ isPro }: AiLabClientProps) {
                 </div>
               ))}
               <div className="border-t pt-3 text-[10px] text-slate-500 dark:text-slate-400">
-                <strong>Dostep:</strong> {isPro ? "Plan PRO (159 PLN/mies.)" : "Demo (5 prob/mies.)"}
+                <strong>Dostęp:</strong> {isPro ? "Plan PRO, 500 zapytań AI / miesiąc" : "Demo, 10 zapytań AI / miesiąc"}
               </div>
             </CardContent>
           </Card>

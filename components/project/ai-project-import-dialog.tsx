@@ -111,7 +111,7 @@ export function AIProjectImportDialog({
           <div className="grid grid-cols-3 gap-1 p-1 rounded-lg bg-slate-100 dark:bg-slate-800">
             <button
               onClick={() => dispatch({ type: "SET_IMPORT_MODE", payload: "plik" })}
-              className={`flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-all ${importMode === "plik" ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-sm shadow-green-500/30" : "text-slate-600 dark:text-slate-400 hover:text-green-700 dark:hover:text-green-400"}`}
+              className={`flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-all ${importMode === "plik" ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 shadow-sm" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"}`}
             >
               <Table2 className="w-3 h-3 flex-shrink-0" />
               <span className="truncate">Plik (Excel/CSV)</span>
@@ -119,7 +119,7 @@ export function AIProjectImportDialog({
 
             <button
               onClick={() => dispatch({ type: "SET_IMPORT_MODE", payload: "pdf" })}
-              className={`relative flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-all ${importMode === "pdf" ? "bg-gradient-to-r from-red-600 to-red-500 text-white shadow-sm" : "text-slate-600 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400"}`}
+              className={`relative flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-all ${importMode === "pdf" ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 shadow-sm" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"}`}
             >
               <ScanText className="w-3 h-3 flex-shrink-0" />
               <span className="truncate">Zdjęcie / PDF</span>
@@ -132,7 +132,7 @@ export function AIProjectImportDialog({
 
             <button
               onClick={() => dispatch({ type: "SET_IMPORT_MODE", payload: "przedmiar" })}
-              className={`flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-all ${importMode === "przedmiar" ? "bg-blue-600 text-white shadow-sm" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"}`}
+              className={`flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-all ${importMode === "przedmiar" ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 shadow-sm" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"}`}
             >
               <ClipboardPaste className="w-3 h-3 flex-shrink-0" />
               <span className="truncate">Tekst (Przedmiar)</span>

@@ -19,7 +19,7 @@ interface AiUsageResult {
 
 /**
  * Check if user can use AI features and increment counter if allowed.
- * GLOBAL monthly cap (FREE 5 / PRO 80) is the only allow/deny gate.
+ * GLOBAL monthly cap (FREE 10 / PRO 500) is the only allow/deny gate.
  * Per-function rows in ai_usage_stats are telemetry for the UI, not extra quota.
  * Counter auto-resets on the first call of each new month.
  * Call this BEFORE making any AI API request.

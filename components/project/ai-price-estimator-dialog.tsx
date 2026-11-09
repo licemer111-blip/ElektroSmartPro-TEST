@@ -166,7 +166,7 @@ export function AiPriceEstimatorDialog({
               <QuotaBadge info={est.quotaInfo} className="ml-auto" />
             </DialogTitle>
             <DialogDescription className="text-xs">
-              Robocizna z normy ES i Twojej stawki. Województwo dolicza ekran kosztorysu.
+              Robocizna z normy ES i Twojej stawki. Województwo dolicza ekran kosztorysu. Znana pozycja nie zużywa zapytania. Licznik spada tylko wtedy, gdy normy nie ma.
             </DialogDescription>
           </DialogHeader>
 
