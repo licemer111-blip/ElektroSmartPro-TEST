@@ -62,6 +62,14 @@ describe("catalog name search", () => {
     expect(isHiddenCatalogCategory("Robotyka i automatyka przemysłowa")).toBe(true);
     expect(isHiddenCatalogCategory("kory")).toBe(true);
     expect(isHiddenCatalogCategory("Oświetlenie")).toBe(false);
+    expect(isHiddenCatalogCategory("Rozdzielnice")).toBe(true);
+    expect(isHiddenCatalogCategory("Rozdzielnice i tablice")).toBe(false);
+    expect(isHiddenCatalogCategory("Pomiary")).toBe(true);
+    expect(isHiddenCatalogCategory("Pomiary i badania")).toBe(false);
+    expect(isHiddenCatalogCategory("Smart Home")).toBe(true);
+    expect(isHiddenCatalogCategory("Smart Home & KNX")).toBe(false);
+    expect(isHiddenCatalogCategory("Okablowanie")).toBe(true);
+    expect(isHiddenCatalogCategory("Kable i przewody")).toBe(false);
     expect(isOffTradeCatalogItem("Anemostat okrągły fi 125mm")).toBe(true);
     expect(isOffTradeCatalogItem("Klimatyzator split Daikin FTXM35R 3.5kW")).toBe(true);
     expect(isOffTradeCatalogItem("Chwytak pneumatyczny Schunk PZN+50")).toBe(true);

@@ -37,6 +37,11 @@ export function isHiddenCatalogCategory(name: string): boolean {
   if (folded === "kory") return true;
   if (folded.startsWith("wentylacja i klimat")) return true;
   if (folded.startsWith("robotyka i automatyka")) return true;
+  // Short folders repeat a longer one. Rows stay searchable.
+  if (folded === "rozdzielnice") return true;
+  if (folded === "pomiary") return true;
+  if (folded === "smart home") return true;
+  if (folded === "okablowanie") return true;
   return false;
 }
 

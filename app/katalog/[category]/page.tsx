@@ -7,8 +7,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
-// ── Mazowieckie average rate for public price preview ─────────────────────────
-const MAZOWIECKIE_RATE_PLN = 62; // PLN/rbh — Mazowieckie 2026 average
 const FREE_ROWS = 10;
 
 // ── Category metadata map ────────────────────────────────────────────────────
@@ -19,34 +17,34 @@ interface CategoryMeta {
 }
 
 const CATEGORY_META: Record<string, CategoryMeta> = {
-  aparatura:               { pl: "Aparatura elektryczna",            description: "Montaż aparatury elektrycznej: wyłączniki, rozłączniki, zabezpieczenia nadprądowe. Normy KNR i ceny robocizny 2026.", keywords: ["aparatura elektryczna KNR", "montaż wyłączników", "zabezpieczenia elektryczne cena"] },
-  bezpieczenstwo:          { pl: "Systemy bezpieczeństwa",           description: "Instalacje alarmowe, CCTV, kontrola dostępu. Normy KNR i ceny montażu systemów bezpieczeństwa 2026.", keywords: ["instalacja alarmowa KNR", "system CCTV montaż cena", "kontrola dostępu KNR"] },
-  dali_awaryjne:           { pl: "Oświetlenie awaryjne DALI",        description: "Montaż oświetlenia awaryjnego DALI/DSI. Normy KNR i ceny robocizny dla oświetlenia awaryjnego 2026.", keywords: ["oświetlenie awaryjne DALI KNR", "montaż opraw awaryjnych cena"] },
-  dali_bms:                { pl: "Automatyka BMS/DALI",              description: "Systemy automatyki budynkowej BMS i DALI. Normy KNR i ceny montażu automatyki 2026.", keywords: ["BMS automatyka budynkowa KNR", "DALI sterowanie oświetleniem cena"] },
-  demontaz:                { pl: "Demontaż instalacji",              description: "Prace demontażowe instalacji elektrycznych. Normy KNR i ceny robocizny dla demontaży 2026.", keywords: ["demontaż instalacji elektrycznej KNR", "demontaż rozdzielnicy cena"] },
-  demontaze:               { pl: "Demontaż instalacji",              description: "Prace demontażowe instalacji elektrycznych. Normy KNR i ceny robocizny dla demontaży 2026.", keywords: ["demontaż elektryczny KNR", "demontaż wycena 2026"] },
-  ev_ladowanie:            { pl: "Ładowanie pojazdów elektrycznych", description: "Instalacja stacji ładowania EV (7,4 kW–22 kW). Normy KNR i ceny montażu wallbox 2026.", keywords: ["wallbox montaż KNR", "stacja ładowania EV cena", "instalacja ładowarki samochodu elektrycznego"] },
-  fotowoltaika:            { pl: "Fotowoltaika (PV)",                description: "Montaż instalacji fotowoltaicznych, falowników, okablowania DC/AC. Normy KNR i ceny PV 2026.", keywords: ["fotowoltaika montaż KNR", "instalacja PV cena 2026", "montaż paneli solar"] },
+  aparatura:               { pl: "Aparatura elektryczna",            description: "Montaż aparatury elektrycznej: wyłączniki, rozłączniki, zabezpieczenia nadprądowe. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["aparatura elektryczna KNR", "montaż wyłączników", "zabezpieczenia elektryczne cena"] },
+  bezpieczenstwo:          { pl: "Systemy bezpieczeństwa",           description: "Instalacje alarmowe, CCTV, kontrola dostępu. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["instalacja alarmowa KNR", "system CCTV montaż cena", "kontrola dostępu KNR"] },
+  dali_awaryjne:           { pl: "Oświetlenie awaryjne DALI",        description: "Montaż oświetlenia awaryjnego DALI/DSI. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["oświetlenie awaryjne DALI KNR", "montaż opraw awaryjnych cena"] },
+  dali_bms:                { pl: "Automatyka BMS/DALI",              description: "Systemy automatyki budynkowej BMS i DALI. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["BMS automatyka budynkowa KNR", "DALI sterowanie oświetleniem cena"] },
+  demontaz:                { pl: "Demontaż instalacji",              description: "Prace demontażowe instalacji elektrycznych. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["demontaż instalacji elektrycznej KNR", "demontaż rozdzielnicy cena"] },
+  demontaze:               { pl: "Demontaż instalacji",              description: "Prace demontażowe instalacji elektrycznych. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["demontaż elektryczny KNR", "demontaż wycena 2026"] },
+  ev_ladowanie:            { pl: "Ładowanie pojazdów elektrycznych", description: "Instalacja stacji ładowania EV (7,4 kW–22 kW). Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["wallbox montaż KNR", "stacja ładowania EV cena", "instalacja ładowarki samochodu elektrycznego"] },
+  fotowoltaika:            { pl: "Fotowoltaika (PV)",                description: "Montaż instalacji fotowoltaicznych, falowników, okablowania DC/AC. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["fotowoltaika montaż KNR", "instalacja PV cena 2026", "montaż paneli solar"] },
   gniazda_przemyslowe:     { pl: "Gniazda przemysłowe",             description: "Montaż gniazd przemysłowych CEE, gniazdek 3-fazowych, listew zasilających. Godziny normy ES.", keywords: ["gniazda przemysłowe CEE montaż KNR", "gniazdo 3-fazowe cena"] },
-  gniazda_wylaczniki:      { pl: "Gniazda i wyłączniki",            description: "Montaż gniazd wtykowych i wyłączników instalacyjnych. Normy KNR i ceny robocizny 2026.", keywords: ["montaż gniazdka cena KNR", "wyłącznik podtynkowy montaż", "koszt montażu gniazda 2026"] },
+  gniazda_wylaczniki:      { pl: "Gniazda i wyłączniki",            description: "Montaż gniazd wtykowych i wyłączników instalacyjnych. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["montaż gniazdka cena KNR", "wyłącznik podtynkowy montaż", "koszt montażu gniazda 2026"] },
   heat_tracing:            { pl: "Ogrzewanie elektryczne (heat tracing)", description: "Montaż systemów ogrzewania elektrycznego, przewodów grzejnych, sterowników. Godziny normy ES.", keywords: ["heat tracing montaż KNR", "ogrzewanie elektryczne przewody grzejne cena"] },
   hvac:                    { pl: "Instalacje HVAC — część elektryczna", description: "Elektryczna część instalacji wentylacyjnych i klimatyzacyjnych. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["HVAC elektryka KNR", "klimatyzacja instalacja elektryczna cena"] },
   infrastruktura:          { pl: "Infrastruktura elektryczna",       description: "Prace infrastrukturalne: przepusty, wsporniki, koryta kablowe. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["infrastruktura elektryczna KNR", "korytka kablowe montaż cena"] },
-  infrastruktura_specjalna:{ pl: "Infrastruktura specjalna",         description: "Specjalne systemy infrastruktury elektrycznej. Normy KNR i ceny robocizny 2026.", keywords: ["infrastruktura specjalna elektryczna KNR", "instalacja specjalna cena"] },
-  instalacje_podstawowe:   { pl: "Instalacje elektryczne podstawowe", description: "Podstawowe prace instalacji elektrycznej w budynkach. Normy KNR i ceny robocizny 2026.", keywords: ["instalacja elektryczna cena KNR", "montaż instalacji elektrycznej 2026", "koszt elektryki w mieszkaniu"] },
+  infrastruktura_specjalna:{ pl: "Infrastruktura specjalna",         description: "Specjalne systemy infrastruktury elektrycznej. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["infrastruktura specjalna elektryczna KNR", "instalacja specjalna cena"] },
+  instalacje_podstawowe:   { pl: "Instalacje elektryczne podstawowe", description: "Podstawowe prace instalacji elektrycznej w budynkach. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["instalacja elektryczna cena KNR", "montaż instalacji elektrycznej 2026", "koszt elektryki w mieszkaniu"] },
   interkomy:               { pl: "Domofony i wideofony",             description: "Montaż domofonów, wideofonów, systemów interkomowych. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["domofon montaż KNR", "wideodomofon cena montaż", "interkom instalacja"] },
-  it_siec:                 { pl: "Sieci LAN i infrastruktura IT",    description: "Montaż sieci komputerowych LAN, szaf rack, access pointów WiFi. Normy KNR i ceny IT 2026.", keywords: ["sieć LAN montaż KNR", "okablowanie strukturalne cena", "szafa rack instalacja wycena"] },
-  kable_silnopradowe:      { pl: "Kable i przewody silnoprądowe",   description: "Układanie kabli silnoprądowych YKY, NYY, NHXMH. Normy KNR i ceny robocizny 2026.", keywords: ["układanie kabli KNR", "kabel YKY montaż cena", "przewód NYY koszt ułożenia 2026"] },
+  it_siec:                 { pl: "Sieci LAN i infrastruktura IT",    description: "Montaż sieci komputerowych LAN, szaf rack, access pointów WiFi. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["sieć LAN montaż KNR", "okablowanie strukturalne cena", "szafa rack instalacja wycena"] },
+  kable_silnopradowe:      { pl: "Kable i przewody silnoprądowe",   description: "Układanie kabli silnoprądowych YKY, NYY, NHXMH. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["układanie kabli KNR", "kabel YKY montaż cena", "przewód NYY koszt ułożenia 2026"] },
   kable_slabopradowe:      { pl: "Kable słaboprądowe i sygnałowe",  description: "Montaż kabli teletechnicznych, UTP, HDMI, sygnałowych. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["kabel UTP montaż KNR", "okablowanie teletechniczne cena", "kable sygnałowe instalacja"] },
-  kablowanie:              { pl: "Kablowanie i prowadzenie przewodów", description: "Prowadzenie i układanie kabli w budynkach. Normy KNR i ceny robocizny 2026.", keywords: ["kablowanie montaż KNR", "prowadzenie przewodów cena", "układanie kabli wycena"] },
+  kablowanie:              { pl: "Kablowanie i prowadzenie przewodów", description: "Prowadzenie i układanie kabli w budynkach. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["kablowanie montaż KNR", "prowadzenie przewodów cena", "układanie kabli wycena"] },
   lan_rack:                { pl: "Szafy rack i infrastruktura LAN",  description: "Montaż szaf rack, patch paneli, switch'y, infrastruktury LAN. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["szafa rack montaż KNR", "patch panel instalacja cena", "infrastruktura LAN wycena"] },
   led_dekoracyjny:         { pl: "Oświetlenie LED dekoracyjne",      description: "Montaż dekoracyjnych opraw LED, taśm LED, profili aluminiowych. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["taśma LED montaż KNR", "oświetlenie dekoracyjne LED cena", "profil aluminiowy LED instalacja"] },
   maszyny_napedy:          { pl: "Maszyny i napędy elektryczne",     description: "Montaż falowników, softstarterów, silników elektrycznych. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["falownik montaż KNR", "softstarter instalacja cena", "silnik elektryczny podłączenie wycena"] },
-  ogrod_basen:             { pl: "Instalacje ogrodowe i basenowe",   description: "Elektryka ogrodu, basenu, strefy zewnętrznej. Normy KNR i ceny robocizny 2026.", keywords: ["instalacja elektryczna ogrodu KNR", "elektryka basenu cena", "oświetlenie ogrodowe montaż"] },
+  ogrod_basen:             { pl: "Instalacje ogrodowe i basenowe",   description: "Elektryka ogrodu, basenu, strefy zewnętrznej. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["instalacja elektryczna ogrodu KNR", "elektryka basenu cena", "oświetlenie ogrodowe montaż"] },
   ogrzewanie:              { pl: "Ogrzewanie elektryczne",           description: "Elektryczne systemy ogrzewania podłogowego i grzejniki elektryczne. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["ogrzewanie podłogowe elektryczne KNR", "mata grzewcza montaż cena", "grzejnik elektryczny instalacja"] },
   osprzet:                 { pl: "Osprzęt elektroinstalacyjny",      description: "Montaż osprzętu elektrycznego: puszki, tablice, korytkowania. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["osprzęt elektryczny montaż KNR", "puszka instalacyjna cena", "tablica rozdzielcza montaż"] },
-  oswietlenie:             { pl: "Oświetlenie",                      description: "Montaż opraw oświetleniowych, opraw LED, oświetlenia wewnętrznego i zewnętrznego. Normy KNR i ceny robocizny 2026.", keywords: ["montaż oświetlenia KNR", "oprawa LED cena montaż", "koszt montażu lampy 2026"] },
-  oswietlenie_awaryjne:    { pl: "Oświetlenie awaryjne",             description: "Montaż opraw awaryjnych i ewakuacyjnych. Normy KNR i ceny robocizny 2026.", keywords: ["oświetlenie awaryjne montaż KNR", "oprawa ewakuacyjna cena", "wyjście ewakuacyjne LED"] },
+  oswietlenie:             { pl: "Oświetlenie",                      description: "Montaż opraw oświetleniowych, opraw LED, oświetlenia wewnętrznego i zewnętrznego. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["montaż oświetlenia KNR", "oprawa LED cena montaż", "koszt montażu lampy 2026"] },
+  oswietlenie_awaryjne:    { pl: "Oświetlenie awaryjne",             description: "Montaż opraw awaryjnych i ewakuacyjnych. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["oświetlenie awaryjne montaż KNR", "oprawa ewakuacyjna cena", "wyjście ewakuacyjne LED"] },
   oswietlenie_drogowe:     { pl: "Oświetlenie drogowe i uliczne",    description: "Montaż latarni, słupów oświetleniowych, opraw drogowych. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["oświetlenie drogowe montaż KNR", "latarnia uliczna cena montaż", "słup oświetleniowy wycena"] },
   oswietlenie_montaz:      { pl: "Montaż opraw oświetleniowych",     description: "Kompleksowy montaż opraw oświetleniowych wszystkich typów. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["montaż oprawy oświetleniowej KNR", "lampa montaż cena 2026", "oprawa oświetleniowa wycena"] },
   oswietlenie_podstawowe:  { pl: "Oświetlenie podstawowe",           description: "Podstawowe instalacje oświetleniowe w budynkach mieszkalnych i komercyjnych. Godziny normy ES.", keywords: ["oświetlenie podstawowe KNR", "instalacja oświetlenia cena", "montaż lampy sufitowej wycena"] },
@@ -55,7 +53,7 @@ const CATEGORY_META: Record<string, CategoryMeta> = {
   pomiary_dokumentacja:    { pl: "Pomiary elektryczne i dokumentacja", description: "Pomiary ochronne instalacji elektrycznej, dokumentacja powykonawcza. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["pomiary elektryczne KNR", "protokół pomiarowy cena", "dokumentacja elektryczna wycena 2026"] },
   ppoz:                    { pl: "Ochrona przeciwpożarowa (elektryka)", description: "Elektryczne instalacje ochrony ppoż.: kable HDGs, przyciski ROP, centrale. Godziny normy ES.", keywords: ["instalacja ppoż elektryczna KNR", "kabel pożarowy HDGs montaż cena", "ochrona przeciwpożarowa elektryka"] },
   ppoz_ssp:                { pl: "System sygnalizacji pożaru (SSP)",  description: "Montaż central SSP, czujek dymu, sygnalizatorów. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["SSP montaż KNR", "czujka dymu instalacja cena", "system sygnalizacji pożaru wycena"] },
-  prace_dodatkowe:         { pl: "Prace dodatkowe i uzupełniające",  description: "Dodatkowe prace elektryczne, regulacje, uruchomienia. Normy KNR i ceny robocizny 2026.", keywords: ["prace elektryczne dodatkowe KNR", "regulacja instalacji elektrycznej cena"] },
+  prace_dodatkowe:         { pl: "Prace dodatkowe i uzupełniające",  description: "Dodatkowe prace elektryczne, regulacje, uruchomienia. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["prace elektryczne dodatkowe KNR", "regulacja instalacji elektrycznej cena"] },
   prace_ziemne:            { pl: "Roboty ziemne (elektryka)",        description: "Wykopy pod kable, układanie rur ochronnych w ziemi. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["roboty ziemne elektryka KNR", "wykop pod kabel cena", "rura ochronna w ziemi wycena"] },
   prad_budowlany:          { pl: "Prąd budowlany (przyłącze tymczasowe)", description: "Montaż tymczasowych przyłączy energetycznych na budowie. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["prąd budowlany KNR", "przyłącze tymczasowe cena", "tablica budowlana montaż"] },
   prowadzenie:             { pl: "Prowadzenie tras kablowych",       description: "Montaż koryt kablowych, drabinek, rur stalowych, mocowań. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["koryto kablowe montaż KNR", "drabinka kablowa cena", "trasa kablowa wycena 2026"] },
@@ -168,12 +166,6 @@ export async function generateMetadata(
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-function formatPrice(rbh: number): string {
-  if (!rbh || rbh <= 0) return "—";
-  const price = rbh * MAZOWIECKIE_RATE_PLN;
-  return `${price.toFixed(0)} zł`;
-}
-
 function formatRbh(rbh: number): string {
   if (!rbh || rbh <= 0) return "—";
   return `${rbh.toFixed(2)} rbh`;
@@ -195,7 +187,7 @@ function buildJsonLd(category: string, meta: CategoryMeta, items: DictRow[]) {
     },
     "mainEntity": {
       "@type": "Table",
-      "name": `Normy KNR — ${meta.pl}`,
+      "name": `Norma ES — ${meta.pl}`,
       "about": meta.pl,
       "size": items.length,
     },
@@ -235,7 +227,7 @@ export default async function KatalogCategoryPage(
             <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-slate-400 mb-6">
               <Link href="/" className="hover:text-white transition-colors">Strona główna</Link>
               <ChevronRight className="w-3.5 h-3.5" />
-              <Link href="/katalog" className="hover:text-white transition-colors">Katalog KNR</Link>
+              <Link href="/katalog" className="hover:text-white transition-colors">Katalog</Link>
               <ChevronRight className="w-3.5 h-3.5" />
               <span className="text-slate-200">{meta.pl}</span>
             </nav>
@@ -259,10 +251,10 @@ export default async function KatalogCategoryPage(
                     {items.length}+ pozycji
                   </Badge>
                   <Badge className="bg-emerald-500/20 text-emerald-200 border-emerald-400/30 hover:bg-emerald-500/30">
-                    Aktualne ceny 2026
+                    Godzina × Twoja stawka
                   </Badge>
                   <Badge className="bg-amber-500/20 text-amber-200 border-amber-400/30 hover:bg-amber-500/30">
-                    Mazowieckie — {MAZOWIECKIE_RATE_PLN} zł/rbh
+                    Materiał z Twojego cennika
                   </Badge>
                 </div>
               </div>
@@ -279,7 +271,7 @@ export default async function KatalogCategoryPage(
                 Normy i ceny robocizny — <span className="text-blue-600 dark:text-blue-400">{meta.pl}</span>
               </h2>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                Ceny orientacyjne dla woj. Mazowieckiego · Stawka: {MAZOWIECKIE_RATE_PLN} zł/rbh
+                Godziny normy ES. Złotówki policzysz swoją stawką po zalogowaniu.
               </p>
             </div>
             <Link href="/login?tab=signup">
@@ -296,13 +288,10 @@ export default async function KatalogCategoryPage(
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-slate-800 dark:bg-slate-800 text-white">
-                    <th className="px-4 py-3 text-left font-semibold text-xs uppercase tracking-wide w-40">Kod KNR</th>
+                    <th className="px-4 py-3 text-left font-semibold text-xs uppercase tracking-wide w-40">Norma ES</th>
                     <th className="px-4 py-3 text-left font-semibold text-xs uppercase tracking-wide">Opis pracy</th>
                     <th className="px-4 py-3 text-center font-semibold text-xs uppercase tracking-wide w-16">Jm.</th>
-                    <th className="px-4 py-3 text-right font-semibold text-xs uppercase tracking-wide w-24">Robocizna</th>
-                    <th className="px-4 py-3 text-right font-semibold text-xs uppercase tracking-wide w-28">
-                      Cena śr. (MAZ)
-                    </th>
+                    <th className="px-4 py-3 text-right font-semibold text-xs uppercase tracking-wide w-28">Godzina</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -319,11 +308,8 @@ export default async function KatalogCategoryPage(
                       </td>
                       <td className="px-4 py-3 text-slate-700 dark:text-slate-300">{row.label}</td>
                       <td className="px-4 py-3 text-center text-slate-500 dark:text-slate-400 font-medium">{row.unit}</td>
-                      <td className="px-4 py-3 text-right text-slate-600 dark:text-slate-400 font-mono text-xs">
-                        {formatRbh(row.labor_norm_rbh)}
-                      </td>
                       <td className="px-4 py-3 text-right font-semibold text-blue-600 dark:text-blue-400">
-                        {formatPrice(row.labor_norm_rbh)}
+                        {formatRbh(row.labor_norm_rbh)}
                       </td>
                     </tr>
                   ))}
@@ -350,11 +336,8 @@ export default async function KatalogCategoryPage(
                           </td>
                           <td className="px-4 py-3 text-slate-700 dark:text-slate-300">{row.label}</td>
                           <td className="px-4 py-3 text-center text-slate-500 w-16">{row.unit}</td>
-                          <td className="px-4 py-3 text-right text-slate-600 w-24 font-mono text-xs">
-                            {formatRbh(row.labor_norm_rbh)}
-                          </td>
                           <td className="px-4 py-3 text-right font-semibold text-blue-600 w-28">
-                            {formatPrice(row.labor_norm_rbh)}
+                            {formatRbh(row.labor_norm_rbh)}
                           </td>
                         </tr>
                       ))}
