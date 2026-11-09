@@ -150,13 +150,16 @@ export function useAiPriceEstimator({
         targetItemIds,
         ...(sectorOverride ? { sectorOverride } : {}),
       });
-      if (result.success && result.estimates) {
+      if (result.success && result.estimates && result.estimates.length > 0) {
         const ids = new Set(
           result.estimates
             .filter((e) => !e.isAmbiguous && e.trace !== "unmatched")
             .map((e) => e.itemId)
         );
         setPendingData({ estimates: result.estimates, initialSelectedIds: ids });
+      } else if (result.success) {
+        setError("Wycena nie zwróciła pozycji. Ceny w kosztorysie zostały bez zmian.");
+        setStep("choose");
       } else {
         setError(result.error || "Błąd wyceny");
         setStep("choose");

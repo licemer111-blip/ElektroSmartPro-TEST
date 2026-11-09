@@ -328,7 +328,7 @@ export function EstimateTable({
           </div>
           <h3 className="text-base font-semibold text-slate-700 dark:text-slate-200 mb-1">Kosztorys jest pusty</h3>
           <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 max-w-xs mx-auto">
-            Dodaj pozycje z katalogu po lewej, użyj ES-Engine lub zaimportuj z Excela
+            Dodaj z katalogu po lewej albo kliknij Wczytaj. Potem Wyceń policzy robociznę.
           </p>
           <div className="flex flex-wrap gap-2 justify-center text-[10px] text-slate-400 dark:text-slate-500">
             {["Katalog", "ES-Engine", "Import Excel", "Zestawy"].map(label => (

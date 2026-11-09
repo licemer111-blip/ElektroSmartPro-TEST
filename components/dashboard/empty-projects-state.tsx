@@ -63,7 +63,7 @@ export function EmptyProjectsState({
         Zacznij od swojego pierwszego projektu!
       </h2>
       <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md mb-6">
-        Utwórz kosztorys. Robocizna to godziny normy ES razy Twoja stawka, województwo mnoży tylko ją.
+        Nowy kosztorys, potem Wczytaj listę albo katalog. Wyceń liczy robociznę: godzina normy ES × Twoja stawka. PDF na darmowym koncie ma znak DEMO.
       </p>
 
       <div className="flex flex-col sm:flex-row items-center gap-3">

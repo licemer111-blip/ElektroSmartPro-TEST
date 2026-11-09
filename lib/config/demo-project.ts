@@ -20,8 +20,9 @@
  *   - labor_norm is per-unit r-g (rbh) — KNR 5-04 / 5-08 references
  *   - confidence_level "verified" means this row is sourced from a real KNR
  *
- * IMPORTANT: Keep this dataset realistic. It's the user's first impression
- * of calculation quality.
+ * IMPORTANT: project creation copies names and quantities only.
+ * Hours come from the ES norm and the electrician's own rate.
+ * The złoty and KNR fields below are not written into a new project.
  * ═══════════════════════════════════════════════════════════════════════════
  */
 

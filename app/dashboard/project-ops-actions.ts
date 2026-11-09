@@ -11,6 +11,7 @@ import { getEffectiveMaxProjects } from "@/lib/config/tier-limits";
 import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { DEMO_PROJECT } from "@/lib/config/demo-project";
+import { findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
 import { vatForObjectType } from "@/lib/projects/object-vat";
 
 export async function getProjects(): Promise<ProjectWithRelations[]> {
@@ -560,6 +561,14 @@ export async function createDemoProject(): Promise<{ success?: boolean; error?: 
   const objectTypeId = (objTypeData as { id: string } | null)?.id;
   if (!regionId || !objectTypeId) return { error: "Błąd konfiguracji bazy — brak regionów lub typów obiektów" };
 
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("hourly_rate, default_region_id")
+    .eq("id", user.id)
+    .maybeSingle();
+  const hourlyRate = Number((profile as { hourly_rate?: number | null } | null)?.hourly_rate) || 0;
+  const profileRegionId = (profile as { default_region_id?: string | null } | null)?.default_region_id ?? null;
+
   // Check if demo project already exists for this user
   const { data: existingDemo } = await supabase
     .from("projects")
@@ -593,13 +602,15 @@ export async function createDemoProject(): Promise<{ success?: boolean; error?: 
       .insert({
         user_id: user.id,
         name: "DEMO — Instalacja Elektryczna Dom 150m²",
-        region_id: regionId,
+        region_id: profileRegionId || regionId,
         object_type_id: objectTypeId,
         vat_rate: 8,
         client_name: "Jan Kowalski",
         client_address: "ul. Przykładowa 12, 00-001 Warszawa",
         status: "draft",
-        default_hourly_rate: 0,
+        default_hourly_rate: hourlyRate > 0 ? hourlyRate : null,
+        materials_owned_by_customer: true,
+        description: "Projekt demonstracyjny. Robocizna to godzina normy ES × Twoja stawka. Materiał doliczysz ze swojego cennika.",
         is_demo_project: true,
       })
       .select("id")
@@ -612,18 +623,27 @@ export async function createDemoProject(): Promise<{ success?: boolean; error?: 
     projectId = newProject.id;
   }
 
-  // Insert demo items unpriced (final_* default = 0) so user discovers ES Wycena themselves.
-  // material_price / labor_price are stored as KNR reference but NOT shown until user prices.
-  const itemsToInsert = DEMO_PROJECT.items.map((item, idx) => ({
-    project_id: projectId,
-    name: item.name,
-    unit: item.unit,
-    quantity: item.quantity,
-    material_price: item.material_price,
-    labor_price: item.labor_price,
-    section: item.section,
-    sort_order: idx,
-  }));
+  // Names and quantities come from the sample list. Hours come from the ES norm,
+  // never from the sample's old złoty figures. Material stays empty.
+  const itemsToInsert = DEMO_PROJECT.items.map((item, idx) => {
+    const unit = item.unit === "kpl" ? "szt" : item.unit;
+    const norm = findCanonicalL0(item.name, unit);
+    const labor = norm && hourlyRate > 0
+      ? Math.round(norm.laborNorm * hourlyRate * 100) / 100
+      : 0;
+    return {
+      project_id: projectId,
+      name: item.name,
+      unit: item.unit,
+      quantity: item.quantity,
+      material_price: 0,
+      labor_price: labor,
+      labor_norm: norm?.laborNorm ?? null,
+      knr_code: norm?.knrCode ?? null,
+      section: item.section,
+      sort_order: idx,
+    };
+  });
 
   // Use supabaseAdmin to bypass RLS — demo insert is a trusted server-side operation
   const { error: itemsError } = await supabaseAdmin.from("project_items").insert(itemsToInsert);

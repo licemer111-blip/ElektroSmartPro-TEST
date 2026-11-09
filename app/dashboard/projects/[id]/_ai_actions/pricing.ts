@@ -723,9 +723,11 @@ export async function estimatePricesWithAI(
       // since One Rate Refactor (use_custom_rates eliminated). Dead code cleaned up.
       const notInCatalog: NotInCatalogEntry[] = keywordMisses;
 
-      // All items resolved via personal catalog — return immediately, skip AI entirely
+      // Nothing left for the dictionary or AI. Keep the canonical L0 rows:
+      // they were skipped in the loop above, so returning only l1Estimates
+      // made Wyceń say "prices applied" while the estimate stayed at 0.
       if (notInCatalog.length === 0) {
-        return { success: true, estimates: l1Estimates };
+        return { success: true, estimates: [...l0Estimates, ...l1Estimates] };
       }
     }
     // ─────────────────────────────────────────────────────────────────────────
@@ -776,7 +778,7 @@ export async function estimatePricesWithAI(
     }));
 
     if (clearItems.length === 0) {
-      return { success: true, estimates: [...l1Estimates, ...ambiguousEstimates] };
+      return { success: true, estimates: [...l0Estimates, ...l1Estimates, ...ambiguousEstimates] };
     }
 
     // Map l2Candidates by ID for O(1) esResolved index lookup

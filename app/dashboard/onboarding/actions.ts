@@ -1,8 +1,8 @@
 "use server";
 
-import { createClient } from "@/utils/supabase/server";
 import { tryAuth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
 
 export interface OnboardingData {
   companyName: string;
@@ -66,6 +66,14 @@ export async function createDemoProject(): Promise<{ projectId?: string; error?:
     return { projectId: existingDemo.data.id };
   }
 
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("hourly_rate, default_region_id")
+    .eq("id", user.id)
+    .maybeSingle();
+  const hourlyRate = Number((profile as { hourly_rate?: number | null } | null)?.hourly_rate) || 0;
+  const regionId = (profile as { default_region_id?: string | null } | null)?.default_region_id ?? null;
+
   const { data: project, error: projectError } = await supabase
     .from("projects")
     .insert({
@@ -76,9 +84,11 @@ export async function createDemoProject(): Promise<{ projectId?: string; error?:
       client_nip: "123-456-78-90",
       status: "draft",
       rate_source: "engine",
-      default_hourly_rate: null,
+      default_hourly_rate: hourlyRate,
+      region_id: regionId,
       vat_rate: 8,
-      description: "Projekt demonstracyjny — pełny kosztorys instalacji elektrycznej mieszkania 65m². Zawiera osprzęt, okablowanie, rozdzielnicę i pomiary. Ceny oparte na normach KNR i stawkach regionalnych.",
+      materials_owned_by_customer: true,
+      description: "Projekt demonstracyjny. Robocizna to godzina normy ES × Twoja stawka. Materiał doliczysz ze swojego cennika.",
       is_demo_project: true,
     })
     .select("id")
@@ -86,16 +96,25 @@ export async function createDemoProject(): Promise<{ projectId?: string; error?:
 
   if (projectError || !project) return { error: "Nie udało się utworzyć projektu demonstracyjnego" };
 
-  const itemsToInsert = DEMO_ITEMS.map((item, idx) => ({
-    project_id: project.id,
-    name: item.name,
-    unit: item.unit,
-    quantity: item.quantity,
-    material_price: item.material_price,
-    labor_price: item.labor_price,
-    section: item.section,
-    sort_order: idx,
-  }));
+  const itemsToInsert = DEMO_ITEMS.map((item, idx) => {
+    const unit = item.unit === "kpl" ? "szt" : item.unit;
+    const norm = findCanonicalL0(item.name, unit);
+    const labor = norm && hourlyRate > 0
+      ? Math.round(norm.laborNorm * hourlyRate * 100) / 100
+      : 0;
+    return {
+      project_id: project.id,
+      name: item.name,
+      unit: item.unit,
+      quantity: item.quantity,
+      material_price: 0,
+      labor_price: labor,
+      labor_norm: norm?.laborNorm ?? null,
+      knr_code: norm?.knrCode ?? null,
+      section: item.section,
+      sort_order: idx,
+    };
+  });
 
   await supabase.from("project_items").insert(itemsToInsert);
 

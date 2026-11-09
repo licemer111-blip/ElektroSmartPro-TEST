@@ -42,8 +42,8 @@ export default async function DashboardPage({
 
   // ── Onboarding gate: show wizard if user hasn't set up basics ──────────
   const needsOnboarding = profile != null
-    && !profile.onboarding_completed
-    && (!profile.hourly_rate || profile.hourly_rate <= 0);
+    && profile.onboarding_completed !== true
+    && projects.length === 0;
 
   if (needsOnboarding) {
     return (

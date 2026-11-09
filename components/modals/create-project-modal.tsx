@@ -286,7 +286,7 @@ export function CreateProjectModal() {
               <SubmitButton />
             )}
             <p className="text-[10px] text-muted-foreground text-center mt-2">
-              Po utworzeniu dodasz pozycje z katalogu i wygenerujesz PDF
+              Po utworzeniu kliknij Wczytaj albo katalog, potem Wyceń. PDF na darmowym koncie ma znak DEMO.
             </p>
           </div>
         </form>

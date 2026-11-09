@@ -13,7 +13,7 @@ import { QuotaBadge, QuotaBlocker } from "@/components/ui/quota-badge";
 import Link from "next/link";
 import {
   CircleDollarSign, Loader2, Check, AlertTriangle, Banknote, Wrench,
-  CheckCircle2, Info,
+  Info,
 } from "lucide-react";
 import { useAiPriceEstimator } from "@/components/project/_parts/useAiPriceEstimator";
 import { EstimateResultsTable } from "@/components/project/_parts/EstimateResultsTable";
@@ -283,12 +283,12 @@ export function AiPriceEstimatorDialog({
           {est.step === "preview" && (
             est.estimates.length === 0 ? (
               <div className="text-center py-8 space-y-4">
-                <div className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto">
-                  <CheckCircle2 className="w-8 h-8 text-green-600" />
+                <div className="w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center mx-auto">
+                  <AlertTriangle className="w-8 h-8 text-amber-600" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300">Wszystkie ceny zastosowane</h3>
-                  <p className="text-sm text-slate-500 mt-1">Możesz zamknąć okno lub uruchomić wycenę ponownie.</p>
+                  <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300">Brak pozycji do zastosowania</h3>
+                  <p className="text-sm text-slate-500 mt-1">Kosztorys się nie zmienił. Zaznacz wiersze i uruchom wycenę ponownie.</p>
                 </div>
                 <Button onClick={est.handleClose} className="bg-blue-600 hover:bg-blue-700 text-white">Zamknij</Button>
               </div>
