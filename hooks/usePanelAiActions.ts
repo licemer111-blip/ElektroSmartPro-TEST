@@ -290,7 +290,7 @@ export function usePanelAiActions(p: UsePanelAiActionsParams) {
           category: m.module.category,
           rating: m.rating ?? m.module.defaultRating,
           quantity: 1,
-          materialPrice: Math.round((m.customMaterialPrice ?? (m.module.defaultPrice ?? 0) * p.manufacturerCoeff) * 100) / 100,
+          materialPrice: m.customMaterialPrice ?? 0,
         })),
         accessories: sec.accessories.map((a) => ({
           moduleId: a.module.id,
@@ -299,7 +299,7 @@ export function usePanelAiActions(p: UsePanelAiActionsParams) {
           quantity: a.quantity || 1,
           materialPrice: a.module.category === "labor"
             ? 0
-            : Math.round((a.customMaterialPrice ?? (a.module.defaultPrice ?? 0) * p.manufacturerCoeff) * 100) / 100,
+            : (a.customMaterialPrice ?? 0),
         })),
       }));
       const result = await pricePanelWithAI({

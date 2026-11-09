@@ -278,8 +278,8 @@ export const GridBoard = React.memo(function GridBoard({
                         name={`mod-mat-${selectedModule.uid}`}
                         aria-label="Cena materiału"
                         type="number" min={0} step={0.01}
-                        placeholder={String(Math.round(selectedModule.module.defaultPrice * manufacturerCoeff * 100) / 100)}
-                        value={selectedModule.isZugBlock ? (selectedModule.customMaterialPrice ?? "") : (selectedModule.customMaterialPrice ?? Math.round(selectedModule.module.defaultPrice * manufacturerCoeff * 100) / 100)}
+                        placeholder="Twoja cena"
+                        value={selectedModule.customMaterialPrice ?? ""}
                         onChange={(e) => updateModule(selectedModule.uid, { customMaterialPrice: e.target.value === "" ? undefined : parseFloat(e.target.value) || 0 })}
                         className="h-7 text-xs border-amber-200 dark:border-amber-800/50 focus-visible:ring-amber-400 bg-amber-50/50 dark:bg-amber-950/20"
                       />

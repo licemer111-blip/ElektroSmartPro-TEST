@@ -61,10 +61,8 @@ export function useBOMData({
 
     const groupedModules: BOMGroupedModule[] = Array.from(grouped.entries()).map(([key, g]) => {
       const firstItem = g.items[0];
-      const perUnitMat =
-        firstItem.customMaterialPrice ??
-        Math.round(firstItem.module.defaultPrice * manufacturerCoeff * 100) / 100;
-      const perUnitLab = firstItem.customLaborPrice ?? firstItem.module.defaultLaborPrice;
+      const perUnitMat = firstItem.customMaterialPrice ?? 0;
+      const perUnitLab = firstItem.customLaborPrice ?? 0;
       return {
         module: g.module,
         items: g.items,

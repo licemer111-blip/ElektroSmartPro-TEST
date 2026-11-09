@@ -290,7 +290,7 @@ export function generateEstimateItems(params: {
     items.push({ name: "Koryto siatkowe 200mm (lekkie/IT)", unit: "mb", quantity: Math.max(10, Math.ceil(areaM2 * 0.12)), base_material_price: Math.round(38 * mult.material * 100) / 100, base_labor_price: Math.round(22 * mult.labor * 100) / 100 });
   }
 
-  return items;
+  return items.map((item) => ({ ...item, base_material_price: 0 }));
 }
 
 /** Object type labels for the wizard — loaded from JSON */

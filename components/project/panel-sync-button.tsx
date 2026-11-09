@@ -18,7 +18,8 @@ interface PanelSyncButtonProps {
 }
 
 function getModulePrice(mod: RailModule, coeff: number) {
-  const mat = mod.customMaterialPrice ?? mod.module.defaultPrice * coeff;
+  const mat = mod.customMaterialPrice ?? 0;
+  void coeff;
   // A typed labor price stays. The catalog's flat złoty does not.
   const lab = mod.customLaborPrice ?? 0;
   return { material: mat, labor: lab };

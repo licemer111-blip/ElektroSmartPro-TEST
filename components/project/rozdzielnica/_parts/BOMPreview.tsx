@@ -121,8 +121,8 @@ export function BOMPreview({
                       isZug={isZug}
                       isDinModule
                       isPro={isPro}
-                      defaultMat={Math.round(module.defaultPrice * manufacturerCoeff * 100) / 100}
-                      defaultLab={module.defaultLaborPrice}
+                      defaultMat={0}
+                      defaultLab={0}
                       accentClass="emerald"
                       updateModule={updateModule}
                       onClose={() => setEditingAccessoryUid(null)}
@@ -300,8 +300,8 @@ function BOMAccessoryRow({
           item={item}
           isPro={isPro}
           isZug={false}
-          defaultMat={Math.round(item.module.defaultPrice * manufacturerCoeff * 100) / 100}
-          defaultLab={item.module.defaultLaborPrice}
+          defaultMat={0}
+          defaultLab={0}
           showQty
           accentClass={colorClass}
           updateModule={updateModule}

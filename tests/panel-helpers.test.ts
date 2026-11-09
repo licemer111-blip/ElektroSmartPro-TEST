@@ -192,18 +192,18 @@ describe("getModuleAbbr", () => {
 // ─── getModulePrice ───────────────────────────────────────────────────────────
 
 describe("getModulePrice", () => {
-  it("returns default prices without custom overrides", () => {
+  it("leaves material and labor empty until the electrician types them", () => {
     const m = mkRailModule();
     const p = getModulePrice(m, 1.0);
-    expect(p.material).toBe(28);
-    expect(p.labor).toBe(12);
+    expect(p.material).toBe(0);
+    expect(p.labor).toBe(0);
   });
 
-  it("applies manufacturer coefficient to material price", () => {
+  it("does not turn the catalog złoty into an offer price", () => {
     const m = mkRailModule();
     const p = getModulePrice(m, 1.2);
-    expect(p.material).toBeCloseTo(28 * 1.2, 2);
-    expect(p.labor).toBe(12); // labor not affected by coeff
+    expect(p.material).toBe(0);
+    expect(p.labor).toBe(0);
   });
 
   it("custom material price overrides default + coeff", () => {
@@ -218,24 +218,24 @@ describe("getModulePrice", () => {
     expect(p.labor).toBe(99);
   });
 
-  it("quantity multiplies both prices", () => {
-    const m = mkRailModule({ quantity: 5 });
+  it("quantity multiplies a typed price", () => {
+    const m = mkRailModule({ quantity: 5, customMaterialPrice: 10, customLaborPrice: 4 });
     const p = getModulePrice(m, 1.0);
-    expect(p.material).toBe(28 * 5);
-    expect(p.labor).toBe(12 * 5);
+    expect(p.material).toBe(50);
+    expect(p.labor).toBe(20);
   });
 
   it("ZUG block uses terminalCount as quantity", () => {
-    const m = mkRailModule({ isZugBlock: true, terminalCount: 20 });
+    const m = mkRailModule({ isZugBlock: true, terminalCount: 20, customMaterialPrice: 2, customLaborPrice: 1 });
     const p = getModulePrice(m, 1.0);
-    expect(p.material).toBe(28 * 20);
-    expect(p.labor).toBe(12 * 20);
+    expect(p.material).toBe(40);
+    expect(p.labor).toBe(20);
   });
 
   it("ZUG block with no terminalCount defaults to 15", () => {
-    const m = mkRailModule({ isZugBlock: true, terminalCount: undefined });
+    const m = mkRailModule({ isZugBlock: true, terminalCount: undefined, customMaterialPrice: 2 });
     const p = getModulePrice(m, 1.0);
-    expect(p.material).toBe(28 * 15);
+    expect(p.material).toBe(30);
   });
 
   it("zero price module returns 0", () => {

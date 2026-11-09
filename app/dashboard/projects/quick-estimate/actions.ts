@@ -13,14 +13,17 @@ import { findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
 function stampEsLabor(items: EstimateItem[], hourlyRate: number): EstimateItem[] {
   const rate = hourlyRate >= 1 ? hourlyRate : 0;
   return items.map((item) => {
-    if (rate < 1) return { ...item, base_labor_price: 0, labor_norm: null };
+    if (rate < 1) return { ...item, base_material_price: 0, base_labor_price: 0, labor_norm: null };
     const canonical = findCanonicalL0(item.name, item.unit);
     const match = canonical
       ? { code: canonical.knrCode, laborNorm: canonical.laborNorm }
       : lookupKnrByName(item.name);
-    if (!match || match.laborNorm <= 0) return item;
+    if (!match || match.laborNorm <= 0) {
+      return { ...item, base_material_price: 0, base_labor_price: 0, labor_norm: null };
+    }
     return {
       ...item,
+      base_material_price: 0,
       knr_code: match.code,
       labor_norm: match.laborNorm,
       base_labor_price: Math.round(match.laborNorm * rate * 100) / 100,

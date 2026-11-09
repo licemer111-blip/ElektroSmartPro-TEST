@@ -138,10 +138,10 @@ export function getModuleAbbr(id: string, name: string): string {
 }
 
 // ─── Module price calculation ─────────────────────────────────────────────────
-export function getModulePrice(m: RailModule, manufacturerCoeff: number = 1.0): { material: number; labor: number } {
+export function getModulePrice(m: RailModule, _manufacturerCoeff: number = 1.0): { material: number; labor: number } {
   const qty = m.isZugBlock ? (m.terminalCount || 15) : (m.quantity || 1);
-  const unitMaterial = m.customMaterialPrice ?? Math.round(m.module.defaultPrice * manufacturerCoeff * 100) / 100;
-  const unitLabor = m.customLaborPrice ?? m.module.defaultLaborPrice;
+  const unitMaterial = m.customMaterialPrice ?? 0;
+  const unitLabor = m.customLaborPrice ?? 0;
   return {
     material: unitMaterial * qty,
     labor: unitLabor * qty,
