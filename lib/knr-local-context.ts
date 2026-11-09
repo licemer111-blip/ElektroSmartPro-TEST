@@ -497,6 +497,12 @@ export function lookupKnrByName(itemName: string, preferResidential = true): Knr
   let bestRawScore = 0; // for threshold checking, separate from bonused score
 
   for (const entry of getAllEntries()) {
+    // "KNR 5-08" without a table position is an AI label, not a norm.
+    // Those rows must not win a price.
+    const rawCode = (entry.catalog_code || "").trim();
+    if (/^KNR\s+\d+(?:-\d+)?$/i.test(rawCode)) continue;
+    if (/^ES-KNR-[A-Z]+$/i.test(rawCode)) continue;
+
     const descNorm = normalize(entry.description);
     const synonymNorms = (entry.synonyms ?? []).map(normalize);
     const candidates = [descNorm, ...synonymNorms];

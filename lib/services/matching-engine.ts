@@ -254,7 +254,7 @@ const SEMANTIC_SYNONYM_GROUPS: ReadonlyArray<SynonymGroup> = [
     triggers: ["lampa sufitow", "lampa nastaw", "downlight", "highbay", "lowbay", "punkt swietln", "plafoniera", "spot led"] },
 
   // ── Wyłącznik — switch / dimmer slang ────────────────────────────────────
-  { canonical: "wylacznik",
+  { canonical: "lacznik sciemniacz",
     triggers: ["sciemniacz", "dimmer", "schalter", "klawisz swietln", "przycisk swietln"] },
 
   // ── Falownik — VFD / frequency inverter ──────────────────────────────────
@@ -291,7 +291,7 @@ const SEMANTIC_SYNONYM_GROUPS: ReadonlyArray<SynonymGroup> = [
 
   // ── Zasilacz UPS / SZR — emergency power ─────────────────────────────────
   { canonical: "zasilacz ups",
-    triggers: ["zasilanie awaryjn", "szr", "automatyczny przela", "agregat pradotw"] },
+    triggers: ["szr", "automatyczny przela", "agregat pradotw"] },
 ] as const;
 
 /**
