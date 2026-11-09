@@ -53,7 +53,6 @@ export function CategorySidebar({
   onAddItem,
 }: CategorySidebarProps) {
   const isOwnView = currentView === "own";
-  const isGlobalView = currentView === "core" || currentView === "all";
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -109,24 +108,24 @@ export function CategorySidebar({
             className="w-full mb-3"
           />
 
-          {isOwnView && (
-            <div className="flex items-center gap-1 rounded-xl bg-slate-100 dark:bg-slate-800 p-0.5 border-2 border-slate-200 dark:border-slate-700 shadow-sm">
+          <div className="flex items-center gap-1 p-1 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
+            {onAddItem && (
               <button
-                onClick={() => setIsCreateDialogOpen(true)}
-                className="flex-1 text-[10px] font-semibold py-1.5 rounded-md transition-all bg-purple-600 text-white hover:bg-purple-700"
+                type="button"
+                onClick={onAddItem}
+                className="flex-1 h-7 text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md"
               >
-                + Kategoria
+                Pozycja
               </button>
-              {onAddItem && (
-                <button
-                  onClick={onAddItem}
-                  className="flex-1 text-[10px] font-semibold py-1.5 rounded-md transition-all bg-purple-600 text-white hover:bg-purple-700"
-                >
-                  + Pozycja
-                </button>
-              )}
-            </div>
-          )}
+            )}
+            <button
+              type="button"
+              onClick={() => setIsCreateDialogOpen(true)}
+              className="flex-1 h-7 text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md"
+            >
+              Kategoria
+            </button>
+          </div>
         </div>
 
         {/* Category List */}

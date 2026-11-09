@@ -162,35 +162,37 @@ export function ProjectControlPanel({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-1.5">
-        <span className="text-xs text-slate-500 dark:text-slate-400">Pokaż</span>
-        <button
-          type="button"
-          disabled={disabled}
-          onClick={() => handleDocSetting("show_knr", !localShowKnr)}
-          title="Kolumna z kodem normy w tabeli i na PDF"
-          className={seg(localShowKnr)}
-        >
-          Norma
-        </button>
-        <button
-          type="button"
-          disabled={disabled}
-          onClick={() => handleDocSetting("show_labor_hours_in_pdf", !localShowRg)}
-          title="Kolumna z godzinami w tabeli i na PDF"
-          className={seg(localShowRg)}
-        >
-          rbh
-        </button>
-        <button
-          type="button"
-          disabled={disabled}
-          onClick={() => handleDocSetting("expert_coloring", !localColoring)}
-          title="Zielony to robocizna, pomarańczowy to materiał"
-          className={seg(localColoring)}
-        >
-          Kolory
-        </button>
+      <div className="flex items-center gap-2">
+        <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Pokaż</span>
+        <div className="inline-flex items-center gap-0.5 rounded-md border border-slate-200 dark:border-slate-700 p-0.5">
+          <button
+            type="button"
+            disabled={disabled}
+            onClick={() => handleDocSetting("show_knr", !localShowKnr)}
+            title="Kolumna z kodem normy w tabeli i na PDF"
+            className={seg(localShowKnr)}
+          >
+            Norma
+          </button>
+          <button
+            type="button"
+            disabled={disabled}
+            onClick={() => handleDocSetting("show_labor_hours_in_pdf", !localShowRg)}
+            title="Kolumna z godzinami w tabeli i na PDF"
+            className={seg(localShowRg)}
+          >
+            rbh
+          </button>
+          <button
+            type="button"
+            disabled={disabled}
+            onClick={() => handleDocSetting("expert_coloring", !localColoring)}
+            title="Zielony to robocizna, pomarańczowy to materiał"
+            className={seg(localColoring)}
+          >
+            Kolory
+          </button>
+        </div>
       </div>
 
       {isPending && <span className="text-xs text-slate-400">zapisuję...</span>}
