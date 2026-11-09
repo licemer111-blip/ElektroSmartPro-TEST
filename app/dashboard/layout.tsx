@@ -4,6 +4,7 @@ import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
 import { MobileBottomNavPadding } from "@/components/layout/mobile-bottom-nav";
 import { OfflineIndicator } from "@/components/ui/offline-indicator";
 import { SurveyWidget } from "@/components/feedback/survey-widget";
+import { AiHelperWidget } from "@/components/ai-helper/ai-helper-widget";
 import { WhatsNewDialog } from "@/components/changelog/whats-new-dialog";
 import { FieldModeProvider } from "@/components/project/field-mode-toggle";
 import { NotificationProvider } from "@/components/notifications/notification-system";
@@ -32,6 +33,7 @@ export default async function DashboardLayout({
       <MobileBottomNavPadding />
       <OfflineIndicator />
       <SurveyWidget />
+      <AiHelperWidget />
       <WhatsNewDialog />
     </div>
   );

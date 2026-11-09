@@ -23,7 +23,6 @@ const FEATURE_OPTIONS = [
   "Inne",
 ];
 
-const DISMISS_KEY = "survey_dismissed_at";
 const SESSION_HIDE_KEY = "survey_hidden_session";
 
 export function SurveyWidget() {
@@ -45,18 +44,7 @@ export function SurveyWidget() {
 
   const checkVisibility = async () => {
     // Check session dismiss
-    if (typeof window !== "undefined") {
-      if (sessionStorage.getItem(SESSION_HIDE_KEY)) return;
-
-      // Check 7-day dismiss
-      const dismissedAt = localStorage.getItem(DISMISS_KEY);
-      if (dismissedAt) {
-        const dismissed = new Date(dismissedAt);
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-        if (dismissed > sevenDaysAgo) return;
-      }
-    }
+    if (typeof window !== "undefined" && sessionStorage.getItem(SESSION_HIDE_KEY)) return;
 
     try {
       const show = await shouldShowSurvey();
@@ -69,12 +57,15 @@ export function SurveyWidget() {
     }
   };
 
-  const handleDismiss = () => {
+  const handleCollapse = () => {
+    setExpanded(false);
+  };
+
+  const handleLater = () => {
     setExpanded(false);
     setVisible(false);
     if (typeof window !== "undefined") {
       sessionStorage.setItem(SESSION_HIDE_KEY, "1");
-      localStorage.setItem(DISMISS_KEY, new Date().toISOString());
     }
   };
 
@@ -125,7 +116,7 @@ export function SurveyWidget() {
               variant="ghost"
               size="icon"
               className="h-7 w-7"
-              onClick={handleDismiss}
+              onClick={handleCollapse}
               aria-label="Zamknij ankietę"
             >
               <X className="w-4 h-4" />
@@ -276,6 +267,13 @@ export function SurveyWidget() {
                   </>
                 )}
               </Button>
+              <button
+                type="button"
+                onClick={handleLater}
+                className="w-full text-[11px] text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+              >
+                Nie teraz. Przypomnij przy następnej wizycie.
+              </button>
             </div>
           )}
         </div>

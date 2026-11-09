@@ -75,13 +75,7 @@ export async function shouldShowSurvey(): Promise<boolean> {
 
     if (!profile) return false;
 
-    // User must be registered for at least 3 days
-    const registeredAt = new Date(profile.created_at);
-    const threeDaysAgo = new Date();
-    threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
-    if (registeredAt > threeDaysAgo) return false;
-
-    // If never surveyed, show
+    // If never surveyed, show. A new account can write on the first day.
     if (!profile.last_survey_at) return true;
 
     // If surveyed more than 30 days ago, show again

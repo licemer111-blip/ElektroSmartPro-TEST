@@ -20,14 +20,13 @@ interface Message {
 }
 
 const QUICK_QUESTIONS = [
-  "Jak szybko wycenić mieszkanie 60m²?",
-  "Kiedy VAT 8% a kiedy 23%?",
-  "Jak działa pipeline L0→L1→L2→L3?",
-  "Jak wygenerować pozycje z opisu słownego?",
-  "Jak skonfigurować rozdzielnicę i wyeksportować BOM?",
-  "Jaki kabel na obwód 25A, 20m, cosφ=0.85?",
-  "Kiedy stosować współczynnik trudności ×1.22?",
-  "Jak wydrukować PDF kosztorysu z KNR?",
+  "Gdzie ustawiam swoją stawkę roboczogodziny?",
+  "Kiedy VAT 8%, a kiedy 23%?",
+  "Co robi przycisk Wyceń?",
+  "Jak wczytać listę z Excela albo ze zdjęcia?",
+  "Czym różnią się Moje, Baza i Razem?",
+  "Jak dodać własną pozycję i kategorię?",
+  "Dlaczego na PDF jest napis DEMO?",
 ];
 
 const STORAGE_KEY_HIDDEN = "ai-helper-hidden";
@@ -309,8 +308,8 @@ export function AiHelperWidget() {
                 <Bot className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-white">ES-Expert</h3>
-                <p className="text-[10px] text-white/70">Dokumentacja i Normy • ElektroSmart PRO v2.1</p>
+                <h3 className="text-sm font-semibold text-white">Pomoc</h3>
+                <p className="text-[10px] text-white/70">Podpowiedzi do aplikacji. Jedno pytanie to jedno zapytanie AI.</p>
               </div>
             </div>
             <div className="flex items-center gap-1">
@@ -343,10 +342,10 @@ export function AiHelperWidget() {
                   <Sparkles className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                 </div>
                 <h4 className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">
-                  ES-Expert v2.1
+                  Pomocnik ElektroSmart
                 </h4>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
-                  Asystent inżynieryjny ElektroSmart PRO. Pytaj o normy KNR, bezpieczeństwo elektryczne, optymalizację kosztorysów, funkcje aplikacji.
+                  Pytaj, gdzie kliknąć i jak liczy się kosztorys. Odpowiedź zużywa jedno zapytanie AI.
                 </p>
                 <div className="space-y-2">
                   {QUICK_QUESTIONS.map((q) => (
