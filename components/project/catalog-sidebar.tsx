@@ -273,15 +273,15 @@ export function CatalogSidebar({ projectId, categories: initialCategories, catal
         />
         <CategoryNav sourceFilter={sourceFilter} onSourceFilterChange={setSourceFilter} userTeam={userTeam} />
 
-        <div className="mb-3 flex items-center gap-1 p-1 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700/50 flex-shrink-0 overflow-hidden">
-          <Button onClick={() => setIsCreateDialogOpen(true)} variant="ghost" size="sm" className="flex-1 min-w-0 h-7 text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 gap-1 px-1">
-            <PlusCircle className="w-3.5 h-3.5 flex-shrink-0" /><span className="truncate">Pozycja</span>
+        <div className="mb-3 grid grid-cols-2 gap-1 p-1 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700/50 flex-shrink-0">
+          <Button onClick={() => setIsCreateDialogOpen(true)} variant="ghost" size="sm" className="h-7 text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 gap-1 px-1">
+            <PlusCircle className="w-3.5 h-3.5 flex-shrink-0" />Pozycja
           </Button>
-          <Button onClick={() => setIsCategoryDialogOpen(true)} variant="ghost" size="sm" className="flex-1 min-w-0 h-7 text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 gap-1 px-1">
-            <FolderPlus className="w-3.5 h-3.5 flex-shrink-0" /><span className="truncate">Kategoria</span>
+          <Button onClick={() => setIsCategoryDialogOpen(true)} variant="ghost" size="sm" className="h-7 text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 gap-1 px-1">
+            <FolderPlus className="w-3.5 h-3.5 flex-shrink-0" />Kategoria
           </Button>
-          <Button onClick={() => { if (isFinal) { toast({ title: "Projekt zablokowany", description: "Odblokuj projekt, aby dodawac pozycje", variant: "destructive" }); return; } setIsCopyDialogOpen(true); }} variant="ghost" size="sm" className="flex-1 min-w-0 h-7 text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 gap-1 px-1" disabled={isFinal}>
-            <Copy className="w-3.5 h-3.5 flex-shrink-0" /><span className="truncate">Z proj.</span>
+          <Button onClick={() => { if (isFinal) { toast({ title: "Projekt zablokowany", description: "Odblokuj projekt, aby dodawać pozycje", variant: "destructive" }); return; } setIsCopyDialogOpen(true); }} variant="ghost" size="sm" className="col-span-2 h-7 text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 gap-1 px-1" disabled={isFinal}>
+            <Copy className="w-3.5 h-3.5 flex-shrink-0" />Z innego projektu
           </Button>
         </div>
 
@@ -290,7 +290,7 @@ export function CatalogSidebar({ projectId, categories: initialCategories, catal
           {!searchTerm && (recentItems.length > 0 || favoriteItems.length > 0) && (
             <div className="mb-3">
               <button onClick={() => setQuickAddExpanded(!quickAddExpanded)} className="w-full flex items-center justify-between px-1 py-1.5 text-xs font-semibold text-blue-700 dark:text-blue-400 uppercase tracking-wider hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
-                <span className="flex items-center gap-1.5"><Star className="w-3.5 h-3.5" />Szybki dostep</span>
+                <span className="flex items-center gap-1.5"><Star className="w-3.5 h-3.5" />Szybki dostęp</span>
                 {quickAddExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
               </button>
               {quickAddExpanded && (

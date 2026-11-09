@@ -27,16 +27,16 @@ const BENTO_FEATURES: BentoFeature[] = [
   {
     gradient: "from-slate-600 to-slate-800",
     icon: Shield,
-    titleFn: () => "Smart VAT 8% / 23%",
+    titleFn: () => "VAT 8% albo 23%",
     descFn: () =>
-      "<strong>Dom/mieszkanie → 8%, biuro/komercja → 23%</strong>. Stawka ustawiana automatycznie na podstawie typu projektu.",
+      "<strong>Dom i mieszkanie 8%, biuro i hala 23%.</strong> Program stawia stawkę z typu obiektu. Zmienisz ją na pasku.",
   },
   {
     gradient: "from-blue-600 to-blue-800",
     icon: DollarSign,
-    titleFn: () => "Ochrona Marży",
+    titleFn: () => "Widać, z czego jest kwota",
     descFn: () =>
-      "Widzisz <strong>marżę brutto, zysk netto i Narzut</strong> przed wysłaniem oferty. Zero nieprzyjemnych niespodzianek.",
+      "Narzut na robociznę i na materiał ustawiasz sam. Przed PDF widać, ile jest pracy, a ile towaru.",
   },
   {
     gradient: "from-slate-500 to-slate-700",

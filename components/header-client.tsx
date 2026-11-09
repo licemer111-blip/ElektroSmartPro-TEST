@@ -44,7 +44,7 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                         </span>
                         <span className={`${isPro ? 'bg-gradient-to-r from-amber-500 to-orange-500' : 'bg-slate-400 dark:bg-slate-600'} text-white px-1 md:px-1.5 py-0.5 rounded-md text-xs md:text-sm font-bold ml-0.5 md:ml-1 self-center flex items-center gap-0.5 md:gap-1`}>
                             {isPro && <Crown className="w-2.5 h-2.5 md:w-3 md:h-3" />}
-                            PRO
+                            {isPro ? "PRO" : "Demo"}
                         </span>
                     </Link>
                 ) : (
@@ -115,6 +115,14 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                         <nav className="hidden md:flex items-center gap-1 text-sm font-medium ml-auto mr-4">
                             <NavLink href="/#features" icon="Zap">
                                 Funkcje
+                            </NavLink>
+
+                            <NavLink href="/#pricing" icon="Crown">
+                                Cennik
+                            </NavLink>
+
+                            <NavLink href="/katalog" icon="PackageSearch">
+                                Katalog
                             </NavLink>
 
                             <NavLink href="/blog" icon="FileText">

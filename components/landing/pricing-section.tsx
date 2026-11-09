@@ -43,7 +43,7 @@ export function PricingSection({ catalogCount = 1400, dinCount = 295 }: PricingS
                 <div className="p-2 rounded-lg bg-gradient-to-br from-slate-500 to-slate-700">
                   <Zap className="w-5 h-5 text-white" />
                 </div>
-                <CardTitle className="text-2xl">FREE</CardTitle>
+                <CardTitle className="text-2xl">Demo</CardTitle>
               </div>
               
               <div className="flex items-baseline gap-1">
@@ -65,7 +65,7 @@ export function PricingSection({ catalogCount = 1400, dinCount = 295 }: PricingS
                   { text: "Gotowe zestawy robót", included: true },
                   { text: "10 zapytań AI / miesiąc", included: true },
                   { text: "Szybka wycena z normy ES", included: true },
-                  { text: "PDF/Excel z watermarkiem DEMO", included: true },
+                  { text: "PDF i Excel ze znakiem DEMO", included: true },
                   { text: "Nielimitowane projekty", included: false },
                   { text: "Czysty PDF bez watermarku", included: false },
                 ].map((feature, idx) => (

@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
-import { Zap, ArrowRight, Sparkles, Shield } from "lucide-react";
+import { Zap, ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 const PDFDemoButton = dynamic(
@@ -32,24 +32,24 @@ export function HeroSection(_props: HeroSectionProps) {
             <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-[11px] font-medium text-slate-300">Liczy</span>
             <span className="text-[11px] font-bold text-white tracking-wide">Twoją stawką</span>
-            <span className="text-[9px] text-slate-400 border-l border-slate-600 pl-2.5 flex items-center gap-1.5">
-              <Shield className="w-3 h-3" /> PN-HD 60364
+            <span className="text-[9px] text-slate-400 border-l border-slate-600 pl-2.5">
+              Mazowieckie ×1,20 tylko na robociznę
             </span>
           </div>
 
           {/* Headline */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white leading-tight">
-            Profesjonalne Kosztorysowanie{" "}
-            <span className="gradient-text-pro">robocizna osobno od materiału</span>
+            Kosztorys elektryczny,{" "}
+            <span className="gradient-text-pro">w którym widać za co płaci klient</span>
           </h1>
 
           {/* Subheadline */}
           <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed">
             <strong className="text-slate-900 dark:text-white">
-              Jedyny system w Polsce, który automatycznie rozdziela Robociznę od Materiału,
+              Robocizna i materiał w dwóch kolumnach.
             </strong>{" "}
-            pilnuje stawek r-g dla Twojego województwa i inteligentnie dobiera VAT{" "}
-            <span className="font-semibold text-slate-800 dark:text-slate-200">(8% mieszkanie / 23% komercja)</span>.
+            Godzina normy ES × Twoja stawka × województwo. Materiał zostaje w cenie z Twojego cennika.{" "}
+            <span className="font-semibold text-slate-800 dark:text-slate-200">VAT 8% albo 23% — jeden na cały dokument.</span>
           </p>
 
           {/* CTA Buttons */}

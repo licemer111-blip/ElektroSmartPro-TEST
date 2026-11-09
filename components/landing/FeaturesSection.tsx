@@ -10,9 +10,9 @@ const PILLARS = [
     num: "I",
     gradient: "from-blue-600 to-blue-800",
     icon: SplitSquareHorizontal,
-    title: "Inteligentna Architektura Ceny",
+    title: "Robocizna i materiał osobno",
     intro:
-      "System, który wie, że Robocizna i Materiał to dwie osobne rzeczy.",
+      "Klient widzi dwie kwoty, nie jedną zlepioną cenę.",
     points: [
       {
         label: "Pełne rozdzielenie kosztów",
@@ -23,8 +23,8 @@ const PILLARS = [
         text: "Mazowieckie +20%, Podkarpackie i Podlaskie −12%. Współczynnik mnoży tylko robociznę.",
       },
       {
-        label: "Smart VAT — 8% lub 23%",
-        text: "Wybierasz typ obiektu (dom/biuro) — system sam ustawia właściwą stawkę VAT i przelicza sumę brutto.",
+        label: "VAT 8% albo 23%",
+        text: "Dom i mieszkanie startują od 8%, biuro i hala od 23%. Stawkę zmienisz na pasku kosztorysu. Jedna na cały dokument.",
       },
     ],
   },
@@ -54,21 +54,21 @@ const PILLARS = [
     num: "III",
     gradient: "from-blue-500 to-blue-700",
     icon: Layers,
-    title: "System Inteligentnych Zestawów",
+    title: "Punkt gniazda jednym kliknięciem",
     intro:
-      "Wybierasz punkt — system sam liczy całą resztę.",
+      "Zestaw rozkłada się na gniazdo, puszkę, kabel i bruzdę.",
     points: [
       {
-        label: "Jeden klik = kompletny BOM",
+        label: "Cztery pozycje zamiast jednej",
         text: "Punkt gniazda 230 V dokłada gniazdo, puszkę, YDYp 3×2,5 i bruzdę w cegle. Godziny są z normy ES.",
       },
       {
-        label: "Żadnej ręcznej roboty",
-        text: "Długość kabla w gotowym zestawie jest wpisana w przepis (dla gniazda 3,5 m). Sam jej z rysunku nie mierzy.",
+        label: "Długość kabla jest wpisana",
+        text: "W gotowym gnieździe leży 3,5 m przewodu. Program nie mierzy ściany z rysunku. Metry poprawisz w wierszu.",
       },
       {
-        label: "Szablony wielokrotnego użycia",
-        text: "Zapisujesz zestaw raz — używasz na każdym mieszkaniu. Wycena 3-pokojowego mieszkania: poniżej 5 minut.",
+        label: "Ten sam zestaw na kolejne mieszkanie",
+        text: "Zapisujesz raz i wkładasz w następny kosztorys. Nie składasz gniazda od zera.",
       },
     ],
   },
