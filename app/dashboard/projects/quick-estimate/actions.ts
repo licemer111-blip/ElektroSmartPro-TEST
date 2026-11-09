@@ -86,7 +86,7 @@ export async function createQuickEstimateProject(params: {
 
   const { data: existingProfile } = await supabase
     .from("profiles")
-    .select("id, hourly_rate, is_pro, max_projects")
+    .select("id, hourly_rate, is_pro, max_projects, trial_started_at, trial_ends_at")
     .eq("id", user.id)
     .maybeSingle();
 

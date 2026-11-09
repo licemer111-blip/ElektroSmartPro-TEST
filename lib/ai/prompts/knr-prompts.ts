@@ -10,11 +10,9 @@
  */
 
 import {
-  KNR_CANONICAL_2026_FULL,
   KNR_CANONICAL_2026_COMPACT,
   KNR_CANONICAL_2026_IRON_RULES,
   KNR_CANONICAL_2026_ELEKTRYKA,
-  KNR_CANONICAL_2026_MATERIAL_PRICES,
 } from "./knr-canonical-2026";
 
 export const GENERATOR_PROMPT = `<module_generator>
@@ -25,21 +23,9 @@ ZADANIE: Generowanie PROFESJONALNEGO kosztorysu z opisu projektu elektrycznego.
 2. POLSKIE NAZEWNICTWO TECHNICZNE: YDYp 3×2,5mm², nie "kabel 2.5".
 3. Dopasuj do katalogu użytkownika jeśli dostępny.
 4. Grupuj wg sekcji (Kuchnia, Łazienka, Salon, Garaż itp.) dla obiektów mieszkalnych.
-5. KAŻDA robocizna → kod KNR obowiązkowy. Brak pewności → null + isEstimate=true (silnik znajdzie po nazwie).
-6. Na końcu dodaj pozycję "Pomiar rezystancji izolacji obwodu", bez wymyślonego numeru tabeli.
+5. Nie wymyślaj numeru tabeli. Jak nie znasz godziny normy ES, zostaw kod pusty.
+6. Nie dopisuj pomiaru, bruzdy ani peszla, jeśli nie ma ich w opisie.
 7. Nie podawaj cen. Robociznę liczy program: godziny normy ES × stawka elektryka. Materiał zostaje pusty.
-
-${KNR_CANONICAL_2026_FULL}
-
-═══ ZASADA KOMPLETNOŚCI KAŻDEGO OBWODU (Doktryna 360°) ═══
-Dla każdego obwodu elektrycznego ZAWSZE generuj:
-1. Materiał kablowy (typ + m) → cena materiału (PLN/m)
-2. Osprzęt końcowy (gniazdo/wyłącznik/oprawa) → cena materiału (PLN/szt)
-3. Robocizna układanie kabla (KNR 5-08 02xx) → cena robocizny
-4. Robocizna montaż osprzętu (KNR 5-08 04xx lub 05xx) → cena robocizny
-5. Kucie bruzdy (KNR 5-08 0101) → dla instalacji p/t (podtynkowych)
-6. Puszka instalacyjna p/t (KNR 5-08 0301) → dla każdego punktu p/t
-7. Pomiary i odbiory (KNR 5-08 9101-9104, 9999) → ZAWSZE na końcu
 
 ═══ SPECYFIKA OBIEKTÓW ═══
 MIESZKANIE (50-120m²): ~20-35 obwodów: 3-4 oświetlenie, 8-12 gniazd, 3-4 obwody siłowe (pralka, zmywarka, kuchenka), 1-2 łazienka IP44, 1-2 gniazda zewnętrzne.
@@ -50,98 +36,12 @@ PARKING: EV ładowarki, oświetlenie LED hermetyczne, detekcja CO, oświetlenie 
 </module_generator>`;
 
 export const ASSEMBLIES_PROMPT = `<module_assemblies>
-ZADANIE: Generowanie zestawów 360° (punktów elektrycznych) wg standardu ElektroSmart PRO.
-Każdy Zestaw = KOMPLET materiałów + robocizna. Doktryna 360° (Iron Rule 6) — BEZWZGLĘDNA.
-
-═══ OBOWIĄZKOWE ELEMENTY KAŻDEGO ZESTAWU ═══
-1. URZĄDZENIE (type="material"): gniazdo/wyłącznik/czujnik/oprawa — cena materiału
-2. PUSZKA (type="material"): puszka p/t 60mm + pokrywa/ramka (dla p/t) lub puszka n/t
-3. PRZEWÓD (type="material"): YDYp 3×2,5mm² (gniazda 16A), YDYp 3×1,5mm² (oświetlenie/łączniki),
-   YDYp 5×4mm² (obwody siłowe), J-Y(St)Y 2×2×0,8 (sygnał KNX/BMS). Ilość w m od tablicy (min. 5m).
-4. BRUZDOWANIE (type="labor"): użyj kodu wg materiału ściany — cegła KNR 5-08 0101, beton KNR 5-08 0101b, żelbet KNR 5-08 0101z, ytong KNR 5-08 0101g, GK KNR 5-08 0101k.
-5. UKŁADANIE KABLA (type="labor"): KNR 5-08 0201 (3×1,5) lub 0202 (3×2,5) — norma 0,13-0,16 rbh/m.
-6. MONTAŻ PUSZKI (type="labor"): KNR 5-08 0301 — norma 0,12 rbh/szt.
-7. MONTAŻ OSPRZĘTU (type="labor"): KNR 5-08 0401 (gniazdo pojedyncze), 0402 (podwójne), 0405 (IP44), 0501 (łącznik) — normy 0,45-0,98 rbh/szt.
-8. POMIARY ODBIORCZE (type="labor"): KNR 5-08 9101 (izolacja) + 9102 (PE) + 9103 (pętla zw.) — łącznie ≈0,60 rbh/obwód.
+ZADANIE: Lista prac, o które prosi elektryk. Jedna praca to jedna pozycja.
+Nie dopisuj bruzdy, peszla, tulejek ani pomiaru, jeśli o nich nie napisał.
+material_price = 0. labor_price = 0. Godzinę podaj tylko gdy znasz normę ES, inaczej zostaw pustą.
+Nie podawaj cen hurtowych.
 
 ${KNR_CANONICAL_2026_COMPACT}
-
-═══ TYPY ZESTAWÓW I CENY 2026 (netto, stawka bazowa 95 PLN/rbh) ═══
-
-ZESTAW: GNIAZDKO 230V PODTYNKOWE (standard):
-- Gniazdo 230V p/t Schuko (Legrand/Ospel): 22,00 PLN
-- Ramka pojedyncza: 8,00 PLN + Puszka p/t 60mm: 3,00 PLN
-- Kabel YDYp 3×2,5 mm² (8m od tablicy): 7,20 PLN/m = 57,60 PLN
-- Bruzda 8m × 0,85 rbh/m (cegła): 6,80 rbh (KNR 5-08 0101)
-- Układanie kabla 8m × 0,16 rbh/m: 1,28 rbh (KNR 5-08 0202)
-- Montaż puszki: 0,12 rbh (KNR 5-08 0301)
-- Montaż gniazda: 0,68 rbh (KNR 5-08 0401)
-- Pomiary: 0,60 rbh/obwód (KNR 5-08 9101-9104)
-→ RAZEM LABOR: ≈9,48 rbh × stawka regionalna
-
-ZESTAW: GNIAZDKO PODWÓJNE:
-- Gniazdo podwójne p/t (2×230V): 30,00 PLN + ramka 10,00 PLN + puszka 3,00 PLN
-- Kabel YDYp 3×2,5 mm² (10m): 72,00 PLN
-- Labor: bruzda 8,50 rbh (KNR 5-08 0101) + układanie 1,60 rbh (KNR 5-08 0202) + puszka 0,12 rbh + gniazdo 0,82 rbh (KNR 5-08 0402) + pomiary 0,60 rbh
-
-ZESTAW: WYŁĄCZNIK / ŁĄCZNIK:
-- Wyłącznik 1-klaw. p/t: 14,00 PLN + ramka 8,00 PLN + puszka 3,00 PLN
-- Kabel YDYp 3×1,5 mm² (6m): 31,20 PLN
-- Labor: bruzda 5,10 rbh (KNR 5-08 0101) + układanie 0,78 rbh (KNR 5-08 0201) + puszka 0,12 rbh + łącznik 0,45 rbh (KNR 5-08 0501) + pomiary 0,60 rbh
-
-ZESTAW: WYŁĄCZNIK SCHODOWY (trójnik):
-- Wyłącznik schodowy × 2 szt: 36,00 PLN + 2 puszki + 2 ramki
-- Kabel YDYp 3×1,5 mm² (10m) + 3-żyłowy dodatkowy (10m)
-- Labor: bruzda + układanie + 2× montaż łącznika (2×0,50 rbh KNR 5-08 0504) + pomiary
-
-ZESTAW: GNIAZDO HERMETYCZNE IP44 (łazienka/pralnia/zewnętrzne):
-- Gniazdo IP44 n/t lub p/t: 35,00 PLN (puszka wbudowana w n/t)
-- Kabel YDYp 3×2,5 mm² (8m): 57,60 PLN
-- Labor: bruzda 6,80 rbh + układanie 1,28 rbh + gniazdo 0,98 rbh (KNR 5-08 0405) + pomiary 0,60 rbh
-
-ZESTAW: PUNKT RJ45 CAT6 (sieć LAN):
-- Gniazdo RJ45 keystone Cat6 podwójne: 36,00 PLN + puszka/ramka: 11,00 PLN
-- Kabel UTP Cat6 (15m od patch panelu): 2,20 PLN/m = 33,00 PLN
-- Labor: kucie/trasa (wg surface) + układanie 1,20 rbh (KNR 5-09 0101) + gniazdo 0,50 rbh (KNR 5-09 0106) + konfiguracja 0,20 rbh
-
-ZESTAW: PUNKT TV/SAT (RG6 koaks.):
-- Gniazdo TV-SAT keystone: 28,00 PLN + puszka + ramka
-- Kabel RG6 (15m): 2,80 PLN/m = 42,00 PLN
-- Labor: ułożenie kabla + montaż gniazda + konfiguracja
-
-ZESTAW: PUNKT KNX / BUS:
-- Gniazdo BUS / przycisk KNX 4-klaw.: 110,00 PLN + puszka KNX + ramka
-- Kabel magistrali KNX TP (10m): 35,00 PLN + zasilający YDYp 3×1,5 (8m): 41,60 PLN
-- Labor: ułożenie 0,70 rbh (KNR 5-09 0703) + montaż 0,80 rbh + programowanie 0,50 rbh + pomiary 0,60 rbh
-
-ZESTAW: GNIAZDO PRZEMYSŁOWE CEE 16A/5P:
-- Gniazdo CEE 16A/5P: 65,00 PLN
-- Kabel YDYp 5×2,5 mm² (10m): 105,00 PLN
-- Labor: trasa 1,80 rbh + układanie 1,80 rbh + gniazdo 0,50 rbh (KNR 5-10 0602) + pomiary 0,60 rbh
-
-ZESTAW: OPRAWA LED DOWNLIGHT (punkt oświetleniowy sufit):
-- Oprawa LED downlight 12W p/t: 45,00 PLN
-- Kabel YDYp 3×1,5 mm² (5m): 26,00 PLN
-- Puszka łączeniowa p/t: 3,00 PLN
-- Labor: bruzda 4,25 rbh + układanie 0,65 rbh (KNR 5-08 0201) + puszka 0,12 rbh + oprawa 0,31 rbh (KNR 5-08 0502, × 1,25 gdy sufit wysoki) + pomiary 0,60 rbh
-
-ZESTAW: OPRAWA AWARYJNA EXIT:
-- Oprawa EXIT LED 3h: 110,00 PLN
-- Kabel NHXMH 3×1,5 mm² bezhalogenowy (8m): 7,50 PLN/m = 60,00 PLN
-- Labor: ułożenie NHXMH 0,72 rbh (KNR 5-08 0301B) + montaż oprawy 0,45 rbh (KNR 5-08 0802o) + test 0,20 rbh
-
-ZESTAW: CZUJKA DYMU SSP ADRESOWALNA:
-- Czujka dymu adresowalna + podstawa: 110,00 PLN
-- Kabel HDGs 2×1,0 mm² (15m): 4,50 PLN/m = 67,50 PLN
-- Labor: ułożenie HDGs 1,20 rbh (KNR 5-06 0605) + montaż czujki 0,40 rbh (KNR 5-06 0612) + adresowanie 0,20 rbh
-- Mnożnik RBH ×1,35 (specjalista SEP z uprawnieniami SSP)
-
-ZESTAW: PUNKT DALI (oprawa sterowalna):
-- Oprawa LED DALI dimmable: 220,00 PLN
-- Kabel zasilający YDYp 3×2,5 (8m) + magistrala DALI J-Y(St)Y (8m)
-- Labor: ułożenie kabli + montaż oprawy + adresowanie DALI
-
-Ceny NETTO PLN 2026. SPLIT: unit_material_price i unit_labor_price ZAWSZE OSOBNO.
 </module_assemblies>`;
 
 export const IMPORTER_PROMPT = `<module_importer>
@@ -154,21 +54,8 @@ A) KOSZTORYS / PRZEDMIAR ROBÓT:
    - Zachowaj podział materiał/robocizna jeśli widoczny
    - Sumuj sekcje, nie powielaj nagłówków sekcji jako pozycje
 
-B) DOKUMENT KNR (Katalog Nakładów Rzeczowych):
-   - Format: KOD KNR | OPIS PRACY | JEDNOSTKA | NAKŁAD rbh
-   - TRANSLACJA kodów starych → nowych (JEŚLI w dokumencie widzisz serię 5-04, MUSISZ przepisać na serię 5-08 2026 w polu knr_code, a w polu description zachować oryginalny opis):
-     KNR 5-04 0101-01 (YDYp 3×1,5) → KNR 5-08 0201
-     KNR 5-04 0101-02 (YDYp 3×2,5) → KNR 5-08 0202
-     KNR 5-04 0201-01 (gniazdo pojedyncze) → KNR 5-08 0401
-     KNR 5-04 0201-03 (gniazdo podwójne) → KNR 5-08 0402
-     KNR 5-04 0201-04 (gniazdo IP44) → KNR 5-08 0405
-     KNR 5-04 0201-06 (wyłącznik 1-klaw.) → KNR 5-08 0501
-     KNR 5-04 0301-02 (downlight LED) → KNR 5-08 0502
-     KNR 5-04 0401-01 (puszka p/t) → KNR 5-08 0301
-     KNR 5-04 0501-01 (bruzda cegła) → KNR 5-08 0101
-     KNR 5-04 0901-01 (pomiary) → KNR 5-08 9101
-     KNR 5-04 0901-04 (protokół) → KNR 5-08 9999
-   - Nowa seria 5-08 i KNR 5-09/5-10/5-11/4-03 — zachowaj BEZ ZMIAN.
+B) DOKUMENT Z KODAMI:
+   - Zostaw kod tak, jak jest napisany w pliku. Nie przepisuj serii 5-04 na inną.
 
 C) FAKTURA VAT / PARAGON:
    - Odczytaj: Nazwa towaru/usługi | Ilość | JM | Cena netto | Wartość netto
@@ -199,8 +86,7 @@ F) FORMULARZ / SPECYFIKACJA TECHNICZNA:
 5. GRUPOWANIE: Łącz identyczne pozycje, sumuj ilości
 6. NIE wymyślaj pozycji których nie ma w dokumencie
 7. WSZYSTKIE WIERSZE: Przetwórz do 300+ pozycji bez skracania
-
-${KNR_CANONICAL_2026_MATERIAL_PRICES}
+8. Cenę z pliku zachowaj. Jak w pliku ceny nie ma, zostaw 0. Nie dopisuj cennika hurtowego.
 </module_importer>`;
 
 export const QUICK_ESTIMATE_PROMPT = `<module_quick_estimate>
@@ -208,10 +94,10 @@ ZADANIE: Generowanie PROFESJONALNEGO kosztorysu dla całego obiektu na podstawie
 
 ═══ ZASADY GENEROWANIA ═══
 1. KOMPLETNY kosztorys: materiały + robocizna OSOBNO dla każdej pozycji
-2. ZAWSZE uwzględnij: instalację el., oświetlenie, rozdzielnicę, pomiary odbiorcze
-3. KAŻDA robocizna: kod KNR obowiązkowy. Jeśli brak pewności → null (silnik znajdzie po nazwie)
-4. OSTATNIA POZYCJA: "Pomiary i odbiory — protokół komplet" (KNR 5-08 9999)
-5. Ceny NETTO PLN 2026: ekonomiczny=tańsze materiały, standard=+30%mat/+15%rob, premium=+80%mat/+35%rob
+2. Tylko prace, które wynikają z opisu. Nie dopisuj protokołu odbioru.
+3. Nie wymyślaj numeru tabeli. Jak nie znasz godziny, zostaw kod pusty.
+4. Nie podawaj cen. Materiał 0, robocizna 0. Program policzy godziny stawką elektryka.
+5. Nie mnoż cen przez „ekonomiczny / premium”.
 6. VAT (informacyjnie, nie w cenach): 8% dla mieszkalnych, 23% dla komercyjnych/B2B
 7. Ilości REALISTYCZNE wyliczone z pow. m² i liczby pomieszczeń
 

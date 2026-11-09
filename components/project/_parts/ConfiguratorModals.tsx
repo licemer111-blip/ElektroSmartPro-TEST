@@ -43,7 +43,7 @@ function AiPricingProgressDialog({ open }: { open: boolean }) {
           </div>
           <div>
             <p className="font-bold text-slate-900 dark:text-slate-100 text-sm">ES-Engine Wycena</p>
-            <p className="text-[11px] text-slate-400">Rozdzielnica elektryczna · ES-KNR 2026</p>
+            <p className="text-[11px] text-slate-400">Rozdzielnica elektryczna · norma ES</p>
           </div>
         </div>
 

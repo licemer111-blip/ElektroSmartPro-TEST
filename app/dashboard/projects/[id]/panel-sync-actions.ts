@@ -184,7 +184,7 @@ export async function syncPanelToEstimate(
           origin_id: mod.uid,
           origin_type: "panel_material",
           confidence_level: "verified",
-          confidence_note: `ES-KNR 2026 · ${mod.category}`,
+          confidence_note: `Norma ES · ${mod.category}`,
           section: sectionName ?? "Rozdzielnica",
           sort_order: sortOrder++,
         });
@@ -228,7 +228,7 @@ export async function syncPanelToEstimate(
             origin_id: mod.uid,
             origin_type: "panel_labor",
             confidence_level: "verified",
-            confidence_note: `ES-KNR 2026 · robocizna`,
+            confidence_note: `Norma ES · robocizna`,
             section: sectionName ?? "Rozdzielnica",
             sort_order: sortOrder++,
           });
@@ -318,7 +318,7 @@ export async function syncPanelToEstimate(
           origin_id: agg.aggregateKey,
           origin_type: agg.originType,
           confidence_level: "verified",
-          confidence_note: "ES-KNR 2026 · Zestaw rozdzielnica",
+          confidence_note: "Norma ES · zestaw rozdzielnicy",
           section: sectionName ?? "Rozdzielnica",
           sort_order: sortOrder++,
         });

@@ -285,7 +285,8 @@ export async function pricePanelWithAI(
     };
   }
   const materialMultiplier = effectiveRate.matMultiplier;
-  const laborRatePLN = effectiveRate.laborRate;
+  // Region is applied once on the estimate screen. Do not bake it into the stored hour.
+  const laborRatePLN = laborRateForCalc ?? 0;
 
   const totalModules = sections.reduce(
     (s, sec) => s + sec.modules.length + sec.accessories.length,
@@ -405,7 +406,7 @@ Zwróć kompletny obiekt JSON ze wszystkimi sekcjami, modułami i sumami.`;
     const enrichModule = (mod: z.infer<typeof PricedModuleSchema>): PricedModule => {
       const baseQty = mod.quantity;
       // Apply manufacturerCoeff deterministically to base material price from AI
-      const baseMat = Math.round((mod.unitMaterial ?? 0) * manufacturerCoeff * 100) / 100;
+      const baseMat = 0;
       const knrEntry = resolveModuleKnr(mod.moduleId);
 
       if (knrEntry) {
@@ -432,7 +433,7 @@ Zwróć kompletny obiekt JSON ze wszystkimi sekcjami, modułami i sumami.`;
       }
 
       // L3: No KNR match — keep AI estimate (material + labor)
-      const unitLabor = mod.unitLabor ?? 0;
+      const unitLabor = 0;
       return {
         moduleId: mod.moduleId,
         namePl: mod.namePl,
@@ -457,7 +458,7 @@ Zwróć kompletny obiekt JSON ze wszystkimi sekcjami, modułami i sumami.`;
         enclosureKnr.laborNorm * laborRatePLN * 100
       ) / 100;
       // Apply manufacturerCoeff to enclosure material price
-      const enclosureMaterialWithCoeff = Math.round((sec.enclosureMaterial ?? 0) * manufacturerCoeff * 100) / 100;
+      const enclosureMaterialWithCoeff = 0;
 
       const enrichedModules = (sec.modules ?? []).map(enrichModule);
       const enrichedAccessories = (sec.accessories ?? []).map(enrichModule);

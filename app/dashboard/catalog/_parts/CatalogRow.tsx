@@ -153,7 +153,7 @@ export function CatalogRow({
               {!item.isAiSuggestion && item.knr_ref && (
                 <span
                   className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800"
-                  title={`Zweryfikowano z KNR 2026 — ${item.knr_ref}`}
+                  title={`Norma ES: ${item.knr_ref}. To nie jest oficjalny tomik KNR.`}
                 >
                   <BadgeCheck className="w-2.5 h-2.5" />
                   KNR

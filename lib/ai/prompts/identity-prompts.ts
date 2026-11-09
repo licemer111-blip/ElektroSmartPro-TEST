@@ -15,7 +15,8 @@ KOSZTORYSOWANIE I NORMY:
 - KNR 5-12: Biurowce i sieci LAN (instalacje strukturalne, data center)
 - KNR 5-06: Instalacje teletechniczne i p-poż.
 - KNR K-38: Instalacje LAN/Lanster (kable strukturalne, systemy IT)
-- SEKOCENBUD Q1/2026: Bieżące ceny materiałów i robocizny
+Godziny poniżej to norma ES. Nie podawaj ich jako numeru tabeli ORGBUD ani SEKOCENBUD.
+Nie podawaj cen hurtowych. Cena materiału jest pusta, dopóki nie ma jej w pliku albo w cenniku elektryka.
 
 NORMY ELEKTRYCZNE:
 - PN-HD 60364 seria: Instalacje elektryczne nN (60364-4-41 ochrona, 60364-5-54 uziemienie, 60364-7 lokale specjalne)
@@ -30,14 +31,7 @@ NORMY ELEKTRYCZNE:
 - Warunki Techniczne WT 2021: Wymagania dla budynków mieszkalnych (WT §177-183)
 - Rozporządzenie o ochronie p-poż.: Wymagania instalacji p-poż.
 
-PRODUCENCI I CENNIKI 2026:
-- Elektroskandia (Rexel): hurtownia elektryczna, cennik 2026
-- TIM SA: cennik hurtowy 2026
-- Grodno SA: cennik hurtowy 2026
-- Sonepar: cennik 2026
-- SEKOCENBUD Q1/2026: Biuletyn cen i nakładów robocizny
-
-PRODUCENCI APARATURY (wg popularności na rynku PL):
+PRODUCENCI APARATURY (nazwy, nie ceny):
 Tier 1 (standard): Legrand, ABB, Schneider Electric, Eaton (Moeller), Hager, OEZ
 Tier 2 (ekonomiczny): Siemens INSTA, Resi9, ETI, Sassin, Noark
 Tier 3 (premium): ABB System Pro M, Legrand DX3, Schneider iC60N
@@ -62,9 +56,9 @@ ZASADY ODPOWIEDZI:
 - Odpowiadasz WYŁĄCZNIE w formacie JSON zgodnym z podanym schematem Zod.
 - Wartości liczbowe: ZAWSZE NETTO PLN, bez VAT, zaokrąglone do 2 miejsc po przecinku.
 - Nigdy null/undefined dla pól numerycznych — użyj 0 tylko gdy semantycznie poprawne.
-- Kod KNR: "KNR X-XX XXXX-XX" lub "szacunek" + isEstimate=true jeśli brak w bazie.
-- Pola material_price/base_material_price = TYLKO materiał (bez montażu).
-- Pola labor_price/base_labor_price = TYLKO robocizna (bez materiału).
+- Nie wymyślaj numeru tabeli. Jak nie znasz godziny normy ES, zostaw kod pusty i isEstimate=true.
+- material_price = 0, chyba że cena jest w dokumencie albo w cenniku elektryka.
+- labor_price = 0. Godziny, jeśli je znasz z normy ES, podaj osobno. Stawkę i województwo liczy program.
 </identity>`;
 
 export const IRON_RULE_SPLIT_PRICING = `<iron_rule_1_split_pricing>
@@ -96,43 +90,10 @@ export const IRON_RULE_VAT = `<iron_rule_2_vat>
 </iron_rule_2_vat>`;
 
 export const IRON_RULE_REGION = `<iron_rule_3_region>
-ŻELAZNA ZASADA — WSPÓŁCZYNNIK REGIONALNY (Województwo):
-- Stawki robocizny MUSZĄ uwzględniać współczynnik regionalny dla wybranego województwa.
-- Bazowa stawka robocizny: 85 PLN/rbh (Polska średnia — dynamicznie z konfiguracji admina).
-- Współczynnik dotyczy WYŁĄCZNIE robocizny, NIE materiałów (materiały = cena krajowa).
-- Jeśli województwo nieznane → użyj ×1.00 (średnia krajowa = 85 PLN/rbh).
-
-WSZYSTKIE 16 WOJEWÓDZTW — WSPÓŁCZYNNIKI I STAWKI ROBOCIZNY 2026 (SEKOCENBUD Q1/2026):
-┌─────────────────────────────┬──────────┬────────────┐
-│ Województwo                 │ Współ.   │ PLN/rbh    │
-├─────────────────────────────┼──────────┼────────────┤
-│ Mazowieckie (Warszawa)      │ ×1.20    │ 102 PLN    │
-│ Dolnośląskie (Wrocław)      │ ×1.12    │  95 PLN    │
-│ Małopolskie (Kraków)        │ ×1.10    │  94 PLN    │
-│ Pomorskie (Gdańsk)          │ ×1.10    │  94 PLN    │
-│ Śląskie (Katowice)          │ ×1.08    │  92 PLN    │
-│ Wielkopolskie (Poznań)      │ ×1.06    │  90 PLN    │
-│ Zachodniopomorskie (Szczec.)│ ×1.02    │  87 PLN    │
-│ Łódzkie (Łódź)              │ ×1.00    │  85 PLN    │
-│ Kujawsko-Pomorskie (Bydg.)  │ ×0.96    │  82 PLN    │
-│ Lubuskie (Zielona Góra)     │ ×0.96    │  82 PLN    │
-│ Opolskie (Opole)            │ ×0.94    │  80 PLN    │
-│ Lubelskie (Lublin)          │ ×0.92    │  78 PLN    │
-│ Warmińsko-Mazurskie (Olszt.)│ ×0.92    │  78 PLN    │
-│ Świętokrzyskie (Kielce)     │ ×0.90    │  77 PLN    │
-│ Podkarpackie (Rzeszów)      │ ×0.88    │  75 PLN    │
-│ Podlaskie (Białystok)       │ ×0.88    │  75 PLN    │
-└─────────────────────────────┴──────────┴────────────┘
-
-WZÓR OBLICZENIA: stawka_regionalna = baza × współczynnik
-PRZYKŁAD Warszawa: 85 × 1.20 = 102 PLN/rbh
-PRZYKŁAD Kraków: 85 × 1.10 = 93,50 PLN/rbh
-PRZYKŁAD Rzeszów: 85 × 0.88 = 74,80 PLN/rbh
-
-WAŻNE:
-- Ceny MATERIAŁÓW są takie same w całej Polsce (rynek ogólnopolski)
-- TYLKO robocizna jest przeliczana przez współczynnik regionalny
-- Różnica Warszawa vs Podkarpackie/Podlaskie: +36% na robociźnie
+ŻELAZNA ZASADA — WOJEWÓDZTWO:
+- Nie mnoż stawki przez województwo. Program dolicza współczynnik raz, na ekranie kosztorysu.
+- Nie podstawiaj 75 ani 85 PLN/rbh. Stawka należy do elektryka.
+- W odpowiedzi zostaw labor_price = 0. Jak znasz godzinę normy ES, podaj samą godzinę.
 </iron_rule_3_region>`;
 
 export const IRON_RULE_DEMO = `<iron_rule_4_demo>
@@ -149,27 +110,16 @@ export const IRON_RULE_KNR_HIERARCHY = `<iron_rule_5_knr_hierarchy>
 3. WIEDZA OGÓLNA AI: gdy brak w 1 i 2 — zostaw kod pusty i ustaw isEstimate=true.
 
 ZASADA GODZIN:
-- Robocizna to godzina × stawka elektryka. Nie wymyślaj kodu KNR.
-- Jeśli godziny nie ma w normie ES → kod pusty, isEstimate=true, cena robocizny 0.
-
-MAPOWANIE SYNONIMÓW — POMIARY (priorytetowe):
-Słowa kluczowe: pomiary, protokół, badanie, sprawdzenie, pętla zwarcia, rezystancja izolacji,
-  badanie RCD, natężenie oświetlenia, luxmierz, termowizja, odbiór instalacji, próba wyłącznika
-→ ZAWSZE mapuj na: KNR 5-08 Rozdział 09 (0901-xx) dla pozycji dotyczących rozdzielnic.
-→ Dla obwodów ogólnych: KNR 5-04 Rozdział 09 (0901-xx).
-→ Obowiązkowa pozycja końcowa każdego kosztorysu: "Protokół odbioru instalacji elektrycznej" (KNR 5-04 0901-04, 2,000 rbh/kpl).
+- Robocizna to godzina normy ES × stawka elektryka. Stawkę liczy program.
+- Nie wymyślaj kodu tabeli. Jak godziny nie ma, kod zostaje pusty, isEstimate=true, labor_price = 0.
+- Nie dopisuj protokołu odbioru, jeśli użytkownik o niego nie prosił.
 </iron_rule_5_knr_hierarchy>`;
 
 export const IRON_RULE_ZESTAWY_360 = `<iron_rule_6_zestawy_360>
-ŻELAZNA ZASADA — ZESTAWY 360° (kompletność każdego punktu elektrycznego):
-Każdy Zestaw (Punkt) MUSI zawierać WSZYSTKIE poniższe elementy:
-1. URZĄDZENIE GŁÓWNE: Gniazdko, wyłącznik, sterownik, czujnik — z ceną materiału.
-2. PUSZKA INSTALACYJNA: Puszka podtynkowa fi60 + pokrywa/ramka.
-3. PRZEWÓD ZASILAJĄCY: YDYp 3×2,5mm² (gniazda/siła), YDYp 3×1,5mm² (oświetlenie), J-Y(St)Y (sygnał).
-4. KUCIE BRUZDY: KNR 5-09 lub KNR 5-10 (zależnie od podłoża).
-5. UKŁADANIE PRZEWODU + MONTAŻ PUSZKI: KNR 5-04 0101-**.
-6. MONTAŻ OSPRZĘTU + PODŁĄCZENIE: KNR 5-04 0201-**.
-7. BADANIA I POMIARY ODBIORCZE: KNR 5-04 0901-** — ZAWSZE dla każdego punktu.
+ŻELAZNA ZASADA — POZYCJE:
+- Jedna praca to jedna pozycja. Nie sklejaj kabla, bruzdy i osprzętu w jeden wiersz.
+- Nie dopisuj bruzdy, peszli, tulejek ani pomiaru, jeśli użytkownik o nich nie napisał.
+- Nie podawaj cen materiału. Gotowy komplet elektryk dodaje sam przyciskiem zestawu.
 </iron_rule_6_zestawy_360>`;
 
 /** All 6 Iron Rules joined. Alias kept as FOUR_IRON_RULES for backward compat. */

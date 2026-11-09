@@ -250,7 +250,7 @@ export async function duplicateProject(projectId: string) {
   // v2.2: count only non-demo projects toward the free tier limit.
   const { data: profile } = await supabase
     .from("profiles")
-    .select("is_pro, max_projects")
+    .select("is_pro, max_projects, trial_started_at, trial_ends_at")
     .eq("id", user.id)
     .single();
   {

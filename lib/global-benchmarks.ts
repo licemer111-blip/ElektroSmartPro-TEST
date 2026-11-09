@@ -119,36 +119,10 @@ export async function getEffectiveRate(
  * Replaces the hardcoded string in ai-master-brain.ts at prompt build time.
  */
 export async function buildDynamicRegionRule(): Promise<string> {
-  const base = 75; // hardcoded base rate (project-specific, not global anymore)
-  // Multipliers from POLISH_REGIONS (regions.ts) — SEKOCENBUD Q1/2026
-  const regions: Array<[string, number]> = [
-    ["Mazowieckie (Warszawa)",       1.20],
-    ["Dolnośląskie (Wrocław)",       1.12],
-    ["Małopolskie (Kraków)",         1.10],
-    ["Pomorskie (Gdańsk)",           1.10],
-    ["Śląskie (Katowice)",           1.08],
-    ["Wielkopolskie (Poznań)",       1.06],
-    ["Zachodniopomorskie (Szczecin)",1.02],
-    ["Łódzkie (Łódź)",               1.00],
-    ["Kujawsko-Pomorskie (Bydgoszcz)",0.96],
-    ["Lubuskie (Zielona Góra)",      0.96],
-    ["Opolskie (Opole)",             0.94],
-    ["Lubelskie (Lublin)",           0.92],
-    ["Warmińsko-Mazurskie (Olsztyn)",0.92],
-    ["Świętokrzyskie (Kielce)",      0.90],
-    ["Podkarpackie (Rzeszów)",       0.88],
-    ["Podlaskie (Białystok)",        0.88],
-  ];
-  const rows = regions
-    .map(([name, mult]) => `  * ${name}: ×${mult.toFixed(2)} → ~${Math.round(base * mult)} PLN/rbh`)
-    .join("\n");
   return `<iron_rule_3_region>
-ŻELAZNA ZASADA — WSPÓŁCZYNNIK REGIONALNY (Województwo):
-- Stawki robocizny MUSZĄ uwzględniać współczynnik regionalny dla wybranego województwa.
-- Bazowa stawka robocizny: ${base} PLN/rbh (Polska średnia — stawka projektowa).
-- Współczynniki wg województw (SEKOCENBUD Q1/2026):
-${rows}
-- Jeśli województwo nieznane — użyj współczynnika ×1.0 (średnia krajowa).
-- Współczynnik dotyczy TYLKO robocizny, NIE materiałów.
+ŻELAZNA ZASADA — WOJEWÓDZTWO:
+- Nie mnoż stawki przez województwo. Program dolicza współczynnik raz, na ekranie kosztorysu.
+- Nie podstawiaj własnej stawki. Stawka należy do elektryka.
+- W odpowiedzi zostaw labor_price = 0. Jak znasz godzinę normy ES, podaj samą godzinę.
 </iron_rule_3_region>`;
 }

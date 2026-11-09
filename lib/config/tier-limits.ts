@@ -9,12 +9,11 @@
  *     ✓ 1 własny projekt + Demo project
  *     ✓ Widoczne ceny pozycji ORAZ sumy (netto / VAT / brutto) na 1 projekcie
  *     ✓ Paywall dnia 1: 2. projekt + czysty PDF (eksport ma znak DEMO)
- *     ✓ AI = 5 requests/month (shared across Szybka Wycena, Blueprint, Chat,
- *       KNR auto-pricing, Smart Assemblies expansion, Vision OCR)
+ *     ✓ AI = 10 requests/month (one pool: import, assistant, photo, panel)
  *     ✓ PDF/Excel export WITH "DEMO" watermark (still sendable for own use)
  *     ✓ Pay-per-Export (29 zł) → one-shot clean PDF for a specific project
  *     ✓ Demo project (seeded) — showcase, exports WITH watermark
- *     ✗ AI beyond 5/mo, clean PDF, Portal Klienta, branding → PRO
+ *     ✗ AI beyond 10/mo, clean PDF, Portal Klienta, branding → PRO
  *
  *   7-DAY FREE TRIAL (no card, one-shot per account)
  *     = Full PRO for 7 days; after expiry → silent downgrade to FREE.
@@ -25,7 +24,7 @@
  *
  *   PRO (159 zł/miesiąc)
  *     ✓ Unlimited projects
- *     ✓ AI = 80/mo (shared across all AI features)
+ *     ✓ AI = 500/mo (one pool for every AI window)
  *     ✓ Clean PDF (no watermark) + own branding
  *     ✓ Portal Klienta z e-podpisami
  *     ✓ Team collaboration + Offline mode

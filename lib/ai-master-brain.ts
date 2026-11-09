@@ -126,14 +126,13 @@ export function buildLightSystemPrompt(extras?: string, expertDirectives?: strin
 
 export function injectKbContext(basePrompt: string, kbContext: string | null): string {
   if (!kbContext) {
-    return basePrompt + `\n\n<kb_status>Baza wiedzy użytkownika niedostępna. Używaj kodów KNR z katalogu wbudowanego w system prompt (KNR 5-04, KNR 5-08 itp.). Oznaczaj jako szacunek (isEstimate=true, knrCode="szacunek") TYLKO pozycje, dla których nie ma odpowiedniego kodu KNR w katalogu.</kb_status>`;
+    return basePrompt + `\n\n<kb_status>Brak plików użytkownika. Nie wymyślaj numeru tabeli. Zostaw kod pusty.</kb_status>`;
   }
   return basePrompt + `\n\n<kb_context_injected>
 HIERARCHIA ŹRÓDEŁ (stosuj w tej kolejności):
-1. Poniższe dane KB (ES-KNR 2026 / pliki użytkownika) — ABSOLUTNY PRIORYTET.
-2. Wiedza ogólna AI — TYLKO dla pozycji nieobecnych w KB. Ustaw isEstimate=true.
-
-ŹRÓDŁO: ES-KNR 2026 — Oficjalna Baza Wiedzy ElektroSmart PRO
+1. Plik użytkownika — nazwy i ilości z dokumentu.
+2. Norma ES — tylko godzina, jeśli pozycja jest znana. To nie jest urzędowy tom KNR.
+3. Jak pozycji nie ma — kod pusty, isEstimate=true, bez ceny.
 
 ${kbContext}
 </kb_context_injected>`;
