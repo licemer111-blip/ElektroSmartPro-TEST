@@ -5,7 +5,7 @@ import { MetadataRoute } from "next";
  * Guides search engine crawlers on which pages to index.
  * 
  * Public pages: /, /login, /o-nas, /kontakt, /blog, /offer/*, legal pages
- * Blocked: /api/, /dashboard/, /admin/, /reset-password, /_next/, /offline
+ * Blocked: /api/, /dashboard/, /admin/, /reset-password, /offline
  */
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = "https://elektrosmart.pro";
@@ -32,7 +32,6 @@ export default function robots(): MetadataRoute.Robots {
           "/dashboard/",
           "/admin/",
           "/reset-password",
-          "/_next/",
           "/offline",
         ],
       },
@@ -56,7 +55,6 @@ export default function robots(): MetadataRoute.Robots {
           "/dashboard/",
           "/admin/",
           "/reset-password",
-          "/_next/",
           "/offline",
         ],
       },

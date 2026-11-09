@@ -16,7 +16,7 @@ interface CategoryMeta {
   keywords: string[];
 }
 
-const CATEGORY_META: Record<string, CategoryMeta> = {
+export const CATEGORY_META: Record<string, CategoryMeta> = {
   aparatura:               { pl: "Aparatura elektryczna",            description: "Montaż aparatury elektrycznej: wyłączniki, rozłączniki, zabezpieczenia nadprądowe. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["aparatura elektryczna KNR", "montaż wyłączników", "zabezpieczenia elektryczne cena"] },
   bezpieczenstwo:          { pl: "Systemy bezpieczeństwa",           description: "Instalacje alarmowe, CCTV, kontrola dostępu. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["instalacja alarmowa KNR", "system CCTV montaż cena", "kontrola dostępu KNR"] },
   dali_awaryjne:           { pl: "Oświetlenie awaryjne DALI",        description: "Montaż oświetlenia awaryjnego DALI/DSI. Godziny normy ES. Cenę liczysz swoją stawką.", keywords: ["oświetlenie awaryjne DALI KNR", "montaż opraw awaryjnych cena"] },

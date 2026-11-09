@@ -68,20 +68,18 @@ export function HeroSection(_props: HeroSectionProps) {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-4">
-            <div className="pro-card rounded-xl p-3 sm:p-4 text-center hover-lift">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-4">
+            <div className="pro-card rounded-xl p-2.5 sm:p-4 text-center">
               <div className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">16</div>
-              <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">województw, mnożnik tylko na robociznę</div>
+              <div className="text-[11px] sm:text-sm text-slate-600 dark:text-slate-400 mt-1 leading-tight">województw</div>
             </div>
-            <div className="pro-card rounded-xl p-3 sm:p-4 text-center hover-lift">
-              <div className="text-2xl sm:text-3xl font-bold gradient-text">Zestawy</div>
-              <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">Twoje własne Assemblies</div>
-              <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Buduj zestawy r-g + materiały raz, używaj zawsze</div>
+            <div className="pro-card rounded-xl p-2.5 sm:p-4 text-center">
+              <div className="text-xl sm:text-3xl font-bold gradient-text leading-tight">Zestawy</div>
+              <div className="text-[11px] sm:text-sm text-slate-600 dark:text-slate-400 mt-1 leading-tight">własne punkty</div>
             </div>
-            <div className="pro-card rounded-xl p-3 sm:p-4 text-center hover-lift">
+            <div className="pro-card rounded-xl p-2.5 sm:p-4 text-center">
               <div className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">ES</div>
-              <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">godziny normy ES</div>
-              <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">zł = rbh × Twoja stawka</div>
+              <div className="text-[11px] sm:text-sm text-slate-600 dark:text-slate-400 mt-1 leading-tight">godziny normy</div>
             </div>
           </div>
         </div>

@@ -286,7 +286,7 @@ export function ProjectViewClient({
       isLoading={brain.isLoading}
       refreshBrain={brain.refresh}
     >
-    <div className="flex flex-col pb-20 lg:pb-0">
+    <div className="flex flex-col pb-36 lg:pb-0">
       <div className={`grid grid-cols-1 ${summaryCollapsed ? "" : "lg:grid-cols-[1fr_minmax(0,280px)]"} gap-4 lg:gap-6 items-start`}>
         {/* Main content — all tabs via _parts/ProjectTabContainer */}
         <div className="min-w-0">

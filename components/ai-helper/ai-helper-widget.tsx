@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -34,7 +35,14 @@ const STORAGE_KEY_MESSAGES = "ai-helper-messages";
 const MAX_STORED_MESSAGES = 12;
 const DRAG_THRESHOLD = 6;
 
+function helperBottom(pathname: string): number {
+  if (typeof window === "undefined" || window.innerWidth >= 1024) return 80;
+  const onProject = /\/dashboard\/projects\/[^/]+/.test(pathname);
+  return onProject ? 136 : 88;
+}
+
 export function AiHelperWidget() {
+  const pathname = usePathname() ?? "";
   const [isOpen, setIsOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const [messages, setMessages] = useState<Message[]>(() => {
@@ -179,6 +187,11 @@ export function AiHelperWidget() {
     btnRef.current.style.right = `${posRef.current.right}px`;
     btnRef.current.style.bottom = `${posRef.current.bottom}px`;
   }, []);
+
+  useEffect(() => {
+    posRef.current = { right: 16, bottom: helperBottom(pathname) };
+    applyPosition();
+  }, [pathname, applyPosition]);
 
   const onDocPointerMove = useCallback((e: PointerEvent) => {
     if (!isDragging.current) return;
@@ -499,7 +512,7 @@ export function AiHelperWidget() {
               ? "bg-slate-700 hover:bg-slate-800"
               : "bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700"
           } cursor-pointer hover:scale-105 active:scale-95`}
-          title="ElektroSmart Core — Silnik Inżynieryjny"
+          title="Pomoc. Jedno pytanie to jedno zapytanie AI."
         >
           {isOpen ? (
             <X className="w-6 h-6 text-white" />

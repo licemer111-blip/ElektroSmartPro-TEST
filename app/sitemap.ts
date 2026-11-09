@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { BLOG_POSTS } from "@/lib/blog-posts";
 
 /**
  * SEO-Захват 2026 — Dynamic Sitemap for ElektroSmart PRO
@@ -19,13 +20,6 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export const revalidate = 86400; // Revalidate sitemap every 24 hours
 
-// Blog slugs are hardcoded (no blog_posts table in DB)
-const BLOG_SLUGS: { slug: string; date: string }[] = [
-  { slug: "jak-wycenic-instalacje-2026", date: "2026-01-08" },
-  { slug: "vat-8-czy-23-przewodnik",      date: "2026-01-10" },
-  { slug: "profesjonalny-kosztorys-pdf",  date: "2026-01-05" },
-];
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://elektrosmart.pro";
   const now = new Date();
@@ -37,14 +31,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/o-nas`,                lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/kontakt`,              lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/blog`,                 lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
+    { url: `${baseUrl}/katalog`,              lastModified: now, changeFrequency: "weekly",  priority: 0.9 },
     { url: `${baseUrl}/polityka-prywatnosci`, lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
     { url: `${baseUrl}/regulamin`,            lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
   ];
 
   // ── 2. Blog posts (hardcoded slugs) ───────────────────────────────────────
-  const blogPages: MetadataRoute.Sitemap = BLOG_SLUGS.map(({ slug, date }) => ({
-    url: `${baseUrl}/blog/${slug}`,
-    lastModified: new Date(date),
+  const blogPages: MetadataRoute.Sitemap = BLOG_POSTS.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.date),
     changeFrequency: "monthly" as const,
     priority: 0.8,
   }));

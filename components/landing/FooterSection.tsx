@@ -26,8 +26,10 @@ function FooterSectionInner() {
             <ul className="space-y-3 text-sm">
               {[
                 { href: "/#features", label: "Funkcje" },
-                { href: "/dashboard/subscription", label: "Cennik" },
-                { href: "/dashboard", label: "Demo" },
+                { href: "/#pricing", label: "Cennik" },
+                { href: "/katalog", label: "Katalog godzin" },
+                { href: "/blog", label: "Blog" },
+                { href: "/login", label: "Demo" },
               ].map(({ href, label }) => (
                 <li key={href}>
                   <Link

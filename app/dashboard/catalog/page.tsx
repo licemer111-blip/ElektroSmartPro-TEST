@@ -138,7 +138,7 @@ export default async function CatalogPage({
                 </div>
               </div>
               <p className="text-xs text-slate-600 dark:text-slate-400 mb-1">Top kategoria</p>
-              <p className="text-sm font-bold text-slate-900 dark:text-slate-50 truncate">{topCategory || "—"}</p>
+              <p className="text-sm font-bold text-slate-900 dark:text-slate-50 line-clamp-2 leading-snug">{topCategory || "—"}</p>
             </CardContent>
           </Card>
         </div>
@@ -147,7 +147,7 @@ export default async function CatalogPage({
         {/* Categories Overview - Compact */}
         <Card className="mb-6 border-slate-200 dark:border-slate-800 shadow-lg">
           <CardContent className="p-5">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
               <div className="flex items-center gap-2">
                 <div className="p-2 rounded-lg bg-orange-600">
                   <Layers className="h-4 w-4 text-white" />
@@ -191,7 +191,7 @@ export default async function CatalogPage({
                   >
                     <div className="flex items-center gap-1.5 mb-1">
                       <div className={`w-1.5 h-1.5 rounded-full ${bgColor}`} />
-                      <p className={`text-xs font-medium truncate flex-1 ${
+                      <p className={`text-xs font-medium line-clamp-2 leading-snug flex-1 ${
                         isActive ? "text-blue-700 dark:text-blue-300" : "text-slate-900 dark:text-slate-100"
                       }`}>{category.name}</p>
                     </div>

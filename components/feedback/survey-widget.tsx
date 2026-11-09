@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -94,13 +95,19 @@ export function SurveyWidget() {
     }
   };
 
+  const pathname = usePathname() ?? "";
+  const onProject = /\/dashboard\/projects\/[^/]+/.test(pathname);
+
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6">
+    <div className={cn(
+      "fixed z-50 left-3 sm:left-auto sm:right-6 sm:bottom-6",
+      onProject ? "bottom-36" : "bottom-[5.5rem]",
+    )}>
       {/* Expanded survey panel */}
       {expanded ? (
-        <div className="w-[340px] sm:w-[380px] max-h-[85vh] overflow-y-auto rounded-2xl border border-border bg-background shadow-2xl animate-in slide-in-from-bottom-4 fade-in duration-300">
+        <div className="w-[min(340px,calc(100vw-1.5rem))] sm:w-[380px] max-h-[85vh] overflow-y-auto rounded-2xl border border-border bg-background shadow-2xl animate-in slide-in-from-bottom-4 fade-in duration-300">
           {/* Header */}
           <div className="sticky top-0 z-10 flex items-center justify-between p-4 pb-3 border-b bg-background rounded-t-2xl">
             <div className="flex items-center gap-2">

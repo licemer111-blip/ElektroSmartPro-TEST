@@ -67,18 +67,18 @@ export function MobileBottomNav() {
           const isActive = item.active;
           
           if (item.href === "#new") {
-            // Central "New" button
             return (
-              <div key="new" className="flex items-center justify-center -mt-4">
+              <div key="new" className="flex flex-col items-center justify-end pb-1">
                 <button
                   onClick={() => window.location.href = "/dashboard/projects/quick-estimate"}
-                  className="relative bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg shadow-blue-500/25 active:scale-95 transition-transform"
+                  aria-label="Nowy kosztorys"
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full w-11 h-11 -mt-3 flex items-center justify-center shadow-lg shadow-blue-500/25 active:scale-95 transition-transform"
                 >
-                  <Plus className="w-6 h-6" />
-                  <span className="absolute -bottom-6 text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap">
-                    Nowy
-                  </span>
+                  <Plus className="w-5 h-5" />
                 </button>
+                <span className="text-[10px] leading-none mt-0.5 text-slate-600 dark:text-slate-400">
+                  Nowy
+                </span>
               </div>
             );
           }
@@ -122,6 +122,6 @@ export function MobileBottomNav() {
 // Bottom padding spacer for main content
 export function MobileBottomNavPadding() {
   return (
-    <div className="h-16 md:hidden" />
+    <div className="h-36 md:hidden" />
   );
 }

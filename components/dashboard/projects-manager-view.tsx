@@ -336,7 +336,7 @@ export function ProjectsManagerView({
             </div>
 
             {/* View Toggle */}
-            <div className="flex p-0.5 bg-slate-100 dark:bg-slate-800 rounded-lg gap-0.5">
+            <div className="flex p-0.5 bg-slate-100 dark:bg-slate-800 rounded-lg gap-0.5 overflow-x-auto">
               {([
                 { key: "grid" as const, icon: LayoutGrid, label: "Karty" },
                 { key: "list" as const, icon: List, label: "Lista" },
@@ -346,7 +346,7 @@ export function ProjectsManagerView({
                 <button
                   key={key}
                   onClick={() => setViewMode(key)}
-                  className={`flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-md text-[11px] sm:text-xs font-medium transition-all ${
+                  className={`flex shrink-0 items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-md text-[11px] sm:text-xs font-medium transition-all ${
                     viewMode === key
                       ? "bg-blue-600 text-white shadow-sm"
                       : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"

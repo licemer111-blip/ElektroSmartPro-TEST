@@ -877,11 +877,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             {post.category}
           </Badge>
 
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4 leading-tight">
+          <h1 className="text-2xl sm:text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4 leading-tight">
             {post.title}
           </h1>
 
-          <div className="flex items-center gap-4 text-sm text-slate-600 dark:text-slate-400">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-600 dark:text-slate-400">
             <div className="flex items-center gap-1.5">
               <Calendar className="w-4 h-4" />
               <span>{post.date}</span>

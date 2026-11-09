@@ -222,7 +222,7 @@ export function ProjectHeaderToolbar({
           </div>
 
           {/* Status badges row */}
-          <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap no-scrollbar pb-0.5">
+          <div className="flex flex-wrap items-center gap-2">
             <Badge
               variant={
                 projectStatus === "draft"
