@@ -168,7 +168,7 @@ export function EstimateFilterBar({
         {isAnalyzing && (
           <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/30 border border-violet-200 dark:border-violet-700 text-[10px] text-violet-600 dark:text-violet-400 font-medium flex-shrink-0 animate-pulse">
             <Loader2 className="w-2.5 h-2.5 animate-spin" />
-            ES-Engine analizuje...
+            Szukam normy ES...
           </div>
         )}
         {/* Region indicator (right-aligned) */}

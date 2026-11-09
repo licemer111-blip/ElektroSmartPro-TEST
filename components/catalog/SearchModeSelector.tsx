@@ -89,7 +89,7 @@ export function OriginBadge({
   if (isGlobal) {
     return (
       <span
-        title="ES-Engine — globalny katalog"
+        title="Wspólna baza programu"
         className={cn(
           "inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[9px] font-semibold",
           "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300",

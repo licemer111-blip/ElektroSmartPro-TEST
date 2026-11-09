@@ -157,7 +157,7 @@ export default function AutomationBmsCalculatorPage() {
             </p>
             <div className="flex items-center gap-2 mt-1.5">
               <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 border border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300">
-                ES-KNR 2026 (Automation Module)
+                Norma ES
               </span>
               <span className="text-[10px] text-slate-400">ES-BMS</span>
             </div>

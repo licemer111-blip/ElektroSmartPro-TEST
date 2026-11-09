@@ -16,7 +16,7 @@ const StickyCTA          = dynamic(() => import("@/components/landing/sticky-cta
 export const revalidate = 3600; // ISR: regenerate landing page once per hour
 
 export const metadata: Metadata = {
-  title: "ElektroSmart PRO — Ekspertowy System Kosztorysów Elektrycznych | ES-Engine",
+  title: "ElektroSmart PRO — kosztorys elektryczny: godzina × Twoja stawka",
   description:
     "Kosztorys elektryczny: robocizna i materiał osobno. Godziny normy ES × Twoja stawka, województwo tylko na robociznę, VAT 8% albo 23%, zestawy punktów, PDF. Demo: widać ceny, znak wodny na PDF, jeden projekt.",
   keywords: [
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     "oprogramowanie dla elektryka",
   ],
   openGraph: {
-    title: "ElektroSmart PRO — Ekspertowy System Kosztorysów Elektrycznych | ES-Engine",
+    title: "ElektroSmart PRO — kosztorys elektryczny: godzina × Twoja stawka",
     description:
       "Kosztorys dla elektryka: robocizna osobno od materiału, norma ES, 16 województw, VAT 8/23%, PDF. Demo bezpłatne.",
     type: "website",
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "ElektroSmart PRO — Kosztorys Elektryczny z ES-Engine",
+    title: "ElektroSmart PRO — kosztorys elektryczny dla elektryka",
     description:
       "Kosztorys elektryczny: robocizna osobno od materiału, norma ES, 16 województw, VAT 8/23%, PDF. Demo: jeden projekt i znak wodny.",
     images: ["/opengraph-image"],

@@ -128,7 +128,7 @@ export async function addMaterialsToProject(
         sort_order: nextSortOrder++,
         description:
           aiMaterialPrice > 0 || aiLaborPrice > 0
-            ? "Dodano przez ES Import (ES-KNR 2026)"
+            ? "Dodano przez ES Import (normy ES)"
             : "Dodano przez ES Import",
       };
     });
@@ -265,7 +265,7 @@ export async function createQuickEstimateFromMaterials(input: {
         sort_order: sortOrder++,
         description:
           aiMaterialPrice > 0 || aiLaborPrice > 0
-            ? "Szybka wycena z ES Import (ES-KNR 2026)"
+            ? "Szybka wycena z ES Import (normy ES)"
             : "Szybka wycena z ES Import (brak dopasowania w katalogu)",
       };
     });

@@ -416,7 +416,7 @@ export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems
                   <div>
                     <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">Panel Administratora</h2>
                     <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                      Pełna administracja systemu jest dostępna w dedykowanym panelu z własną nawigacją — zarządzanie użytkownikami, cenami, analizą i bazą wiedzy ES-Engine.
+                      Pełna administracja jest w osobnym panelu: użytkownicy, ceny, analiza i baza godzin.
                     </p>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-xs text-left">

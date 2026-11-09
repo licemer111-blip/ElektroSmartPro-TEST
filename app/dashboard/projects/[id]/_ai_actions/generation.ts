@@ -322,7 +322,7 @@ const PanelSectionSchema = z.object({
 });
 
 const PanelConfigResponseSchema = z.object({
-  panelName: z.string().default("Rozdzielnica ES-Engine"),
+  panelName: z.string().default("Rozdzielnica"),
   enclosureModules: z.number().optional(),
   reasoning: PanelReasoningSchema,
   modules: z.array(PanelModuleSchema).optional(),
@@ -604,7 +604,7 @@ Zwroc WYLACZNIE poprawny JSON (bez markdown) w formacie:
         maxOutputTokens: 10000,
       });
       const jsonMatch = text.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) throw new Error("Brak JSON w odpowiedzi ES-Engine");
+      if (!jsonMatch) throw new Error("Brak listy w odpowiedzi");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return JSON.parse(jsonMatch[0]) as Record<string, any>;
     };
@@ -657,7 +657,7 @@ Zwroc WYLACZNIE poprawny JSON (bez markdown) w formacie:
       const totalEncMods = processedSections.reduce((s, sec) => s + sec.enclosureModules, 0);
       return {
         success: true,
-        panelName: typeof parsed.panelName === "string" ? parsed.panelName : "Rozdzielnica ES-Engine",
+        panelName: typeof parsed.panelName === "string" ? parsed.panelName : "Rozdzielnica",
         reasoning: parsed.reasoning ? mapReasoning(parsed.reasoning as Record<string, unknown>) : undefined,
         accessories: computeAccessories(allMods, totalEncMods, phaseCount, mainRating),
         sections: processedSections,
@@ -666,7 +666,7 @@ Zwroc WYLACZNIE poprawny JSON (bez markdown) w formacie:
 
     const rawModules = Array.isArray(parsed.modules) ? parsed.modules as Record<string, unknown>[] : [];
     if (rawModules.length === 0) {
-      return { success: false, error: "ES-Engine nie zwróciło listy modułów. Spróbuj bardziej szczegółowego opisu." };
+      return { success: false, error: "Nie udało się ułożyć listy aparatów. Dopisz pomieszczenia i odbiory." };
     }
 
     const singleEncMods = typeof parsed.enclosureModules === "number" ? parsed.enclosureModules : 36;
@@ -681,7 +681,7 @@ Zwroc WYLACZNIE poprawny JSON (bez markdown) w formacie:
     const autoEnclosure = Math.max(singleEncMods, computeEnclosureModules(processedModules));
     return {
       success: true,
-      panelName: typeof parsed.panelName === "string" ? parsed.panelName : "Rozdzielnica ES-Engine",
+      panelName: typeof parsed.panelName === "string" ? parsed.panelName : "Rozdzielnica",
       reasoning: parsed.reasoning ? mapReasoning(parsed.reasoning as Record<string, unknown>) : undefined,
       enclosureModules: autoEnclosure,
       modules: processedModules,
@@ -690,6 +690,6 @@ Zwroc WYLACZNIE poprawny JSON (bez markdown) w formacie:
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
     logger.error("generatePanelConfigWithAI error:", {}, msg);
-    return { success: false, error: `Błąd ES-Engine: ${msg.slice(0, 200)}` };
+    return { success: false, error: `Nie udało się ułożyć rozdzielnicy: ${msg.slice(0, 200)}` };
   }
 }

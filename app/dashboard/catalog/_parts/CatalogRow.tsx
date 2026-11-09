@@ -117,7 +117,7 @@ export function CatalogRow({
               {item.user_id !== null && item.market_comment && item.market_comment.includes("AI Generated") && (
                 <span
                   className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-gradient-to-r from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-800"
-                  title="Pozycja wygenerowana przez ES-Engine"
+                  title="Pozycja dopisana z opisu. Sprawdź godzinę przed ofertą."
                 >
                   <Sparkles className="w-2.5 h-2.5" />
                   ES

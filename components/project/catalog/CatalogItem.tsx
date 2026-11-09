@@ -61,7 +61,7 @@ export const CatalogItem = React.memo(function CatalogItem({
                   </Badge>
                 )}
                 {item.user_id === null ? (
-                  <span title="ES-Engine — globalny katalog" className="inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[9px] font-semibold bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">
+                  <span title="Pozycja ze wspólnej bazy" className="inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[9px] font-semibold bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">
                     <Brain className="w-2.5 h-2.5" />ES
                   </span>
                 ) : (
@@ -147,7 +147,7 @@ export const CatalogItem = React.memo(function CatalogItem({
             </Badge>
           )}
           {item.user_id === null ? (
-            <span title="ES-Engine" className="inline-flex items-center px-1 py-0.5 rounded text-[9px] font-semibold bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">
+            <span title="Wspólna baza" className="inline-flex items-center px-1 py-0.5 rounded text-[9px] font-semibold bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">
               <Brain className="w-2.5 h-2.5" />
             </span>
           ) : (

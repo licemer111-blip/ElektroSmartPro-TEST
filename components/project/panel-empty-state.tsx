@@ -16,7 +16,7 @@ export function PanelEmptyState() {
         <p><strong className="text-blue-600">4.</strong> Dodaj <strong>label</strong> (opis obwodu: &quot;Kuchnia gniazdka&quot;)</p>
         <p><strong className="text-blue-600">5.</strong> Przejdź do <strong>Schemat</strong> → AI wygeneruje schemat wieloliniowy</p>
         <p className="pt-2 mt-2 border-t border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-400 font-medium">
-          💡 <strong>Tip:</strong> Użyj <strong className="text-orange-600">ES-Engine</strong> (pomarańczowy przycisk) aby zaprojektować automatycznie!
+          Ułóż tablicę z opisu albo dodaj aparaty z listy. Wyceń policzy montaż Twoją stawką.
         </p>
       </div>
     </div>

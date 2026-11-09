@@ -90,7 +90,7 @@ export async function addZestawToProject({
         project_id:       projectId,
         catalog_item_id:  null,
         name:             result.recipe.label,
-        description:      `Zestaw ES-Engine: ${result.recipe.label}`,
+        description:      `Zestaw: ${result.recipe.label}`,
         metadata:         { recipe_key: result.recipe.key },
         unit:             "szt" as UnitType,
         quantity,

@@ -88,7 +88,7 @@ export function AIContentManager() {
         <Sparkles className="h-5 w-5 text-amber-600 dark:text-amber-400" />
         <AlertDescription className="text-slate-900 dark:text-slate-100">
           <p className="font-semibold text-base mb-2">
-            ⚙️ Zarządzanie Treścią ES-Engine
+            Baza godzin i treści
           </p>
           <p className="text-sm text-slate-700 dark:text-slate-300">
             Możesz usunąć wszystkie pozycje katalogowe i zestawy wygenerowane przez ES Creator. 
@@ -220,7 +220,7 @@ export function AIContentManager() {
               Usunąć zestawy ES?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Ta operacja usunie wszystkie zestawy (assemblies) wygenerowane przez ES-Engine Assembly Creator (oznaczone znaczkiem ES).
+              Ta operacja usunie zestawy oznaczone znaczkiem ES.
               <br /><br />
               <strong className="text-red-600 dark:text-red-400">
                 Tej operacji nie można cofnąć!

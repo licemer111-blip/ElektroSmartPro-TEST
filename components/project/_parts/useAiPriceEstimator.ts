@@ -383,7 +383,7 @@ export function useAiPriceEstimator({
     if (isFinal) {
       e.preventDefault();
       e.stopPropagation();
-      toast({ title: "🔒 Projekt zablokowany", description: "Odblokuj projekt, aby użyć ES-Engine wyceny", variant: "destructive" });
+      toast({ title: "Projekt zablokowany", description: "Odblokuj projekt, aby wycenić pozycje", variant: "destructive" });
       return;
     }
     setOpen(true);

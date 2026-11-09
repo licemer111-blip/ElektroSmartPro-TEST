@@ -138,7 +138,7 @@ export function SummaryFinancialCards({
           </div>
           <div className="flex gap-1.5 flex-shrink-0">
             <Button size="sm" className="gap-1 text-xs h-7 bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold" onClick={handleAIPricing} disabled={isWycenLoading}>
-              {isWycenLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Zap className="w-3 h-3" />} Wyceń ES-Engine
+              {isWycenLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Zap className="w-3 h-3" />} Wyceń: godzina × stawka
             </Button>
             <Button size="sm" variant="outline" className="gap-1 text-xs h-7 text-slate-500" onClick={() => { setManualPrices({}); setPricingMode("none"); }}>
               <X className="w-3 h-3" /> Anuluj
@@ -154,7 +154,7 @@ export function SummaryFinancialCards({
               {sections.length > 1 && <Badge variant="secondary" className="text-[10px] font-normal">{sections.length} sekcji</Badge>}
               {hasManualPrices
                 ? <Badge className="text-[10px] bg-emerald-100 text-emerald-700 border-emerald-300 ml-auto">Wycena ręczna · {manualTotal.toFixed(0)} zł</Badge>
-                : <Badge variant="outline" className="text-[10px] text-slate-500 ml-auto">Wpisz ceny ręcznie lub uruchom ES-Engine</Badge>}
+                : <Badge variant="outline" className="text-[10px] text-slate-500 ml-auto">Wpisz ceny ręcznie albo kliknij Wyceń</Badge>}
             </CardTitle>
           </CardHeader>
           <CardContent className="px-4 pb-4">

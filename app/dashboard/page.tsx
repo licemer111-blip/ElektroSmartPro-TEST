@@ -16,7 +16,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: "Dashboard — Twoje Projekty",
-  description: "Centrum dowodzenia elektryka — projekty, statystyki, aktywność zespołu i szybki dostęp do narzędzi ES-Engine",
+  description: "Projekty, stawka i kosztorys. Robocizna to godzina normy ES × Twoja stawka.",
 };
 
 export default async function DashboardPage({

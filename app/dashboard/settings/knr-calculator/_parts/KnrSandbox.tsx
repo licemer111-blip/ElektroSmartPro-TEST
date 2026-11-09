@@ -121,7 +121,7 @@ export function KnrSandbox({ hourlyRate, hourlyInput, totalCoeff = 1, isPro: _is
             )}
             {searchMode === "engine" && (
               <Badge className="bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300 text-xs border border-orange-300 dark:border-orange-700">
-                ES-Engine
+                Baza ES
               </Badge>
             )}
             {coeffLabel && (

@@ -331,7 +331,7 @@ export function EstimateTable({
             Dodaj z katalogu po lewej albo kliknij Wczytaj. Potem Wyceń policzy robociznę.
           </p>
           <div className="flex flex-wrap gap-2 justify-center text-[10px] text-slate-400 dark:text-slate-500">
-            {["Katalog", "ES-Engine", "Import Excel", "Zestawy"].map(label => (
+            {["Katalog", "Wyceń", "Wczytaj", "Zestawy"].map(label => (
               <span key={label} className="px-2 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">{label}</span>
             ))}
           </div>

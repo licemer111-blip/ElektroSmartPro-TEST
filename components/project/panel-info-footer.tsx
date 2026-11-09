@@ -41,8 +41,8 @@ export function PanelInfoFooter() {
             <Sparkles className="w-4 h-4 text-orange-500" />
           </div>
           <div>
-            <p className="text-[11px] font-bold text-orange-800 dark:text-orange-300 mb-0.5">ES-Engine — Silnik ekspertowy</p>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed">Automatyczny projekt rozdzielnicy, schemat jednokreskowy, wycena ES-Engine oraz walidacja selektywności zabezpieczeń.</p>
+            <p className="text-[11px] font-bold text-orange-800 dark:text-orange-300 mb-0.5">Z opisu i ze stawki</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed">Opis układa obwody. Wyceń liczy robociznę: godzina normy ES × Twoja stawka. Cena aparatu jest z katalogu, który wybrałeś.</p>
           </div>
         </div>
 
@@ -52,7 +52,7 @@ export function PanelInfoFooter() {
           </div>
           <div>
             <p className="text-[11px] font-bold text-violet-800 dark:text-violet-300 mb-0.5">Eksport PDF / CSV</p>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed">Specyfikacja techniczna PDF z kosztorysem, schemat SVG, eksport CSV do Excela z kodami KNR.</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed">PDF ze specyfikacją i schematem oraz CSV do Excela. Na darmowym koncie PDF ma znak DEMO.</p>
           </div>
         </div>
       </div>
@@ -68,8 +68,8 @@ export function PanelInfoFooter() {
         <div className="flex items-center gap-4 text-[10px] text-slate-400 dark:text-slate-500">
           <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />{DIN_MODULES_COUNT}+ modułów DIN</span>
           <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-blue-400" />Wizualizacja Live</span>
-          <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-orange-400" />ES-Engine</span>
-          <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-violet-400" />Kosztorys KNR</span>
+          <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-orange-400" />Twoja stawka</span>
+          <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-violet-400" />Norma ES</span>
         </div>
         <div className="text-[10px] text-slate-400">
           &copy; 2026 ElektroSmart · Wszelkie prawa zastrzeżone

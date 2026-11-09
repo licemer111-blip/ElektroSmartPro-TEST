@@ -68,10 +68,10 @@ export function ModuleSearch({
           size="lg"
           className="h-9 px-2.5 gap-1.5 flex-shrink-0 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold shadow-lg"
           onClick={() => setShowAiPanel(true)}
-          title="ES-Engine — zaprojektuj rozdzielnicę automatycznie"
+          title="Ułóż rozdzielnicę z opisu. To jedno zapytanie AI."
         >
           <Sparkles className="w-3.5 h-3.5" />
-          <span className="text-[11px]">ES-Engine</span>
+          <span className="text-[11px]">Z opisu</span>
         </Button>
         <Button
           size="lg"

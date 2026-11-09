@@ -88,7 +88,7 @@ export function AiLabClient({ isPro }: AiLabClientProps) {
         const f = new File([blob], parsed.filename, { type: mimeMap[ext] || "application/octet-stream" });
         setFile(f); setFileName(parsed.filename); setError(""); setMaterials([]); setRawText("");
         if (parsed.analysisMode === "vision") setPreviewUrl(URL.createObjectURL(f));
-        toast({ title: "Dokument zaladowany", description: `${parsed.filename} gotowy do analizy ES-Engine` });
+        toast({ title: "Dokument załadowany", description: `${parsed.filename} gotowy do odczytu` });
       } catch (err) { console.error("Failed to load pending document:", err); toast({ title: "Blad", description: "Nie udalo sie zaladowac dokumentu", variant: "destructive" }); }
     };
     load();
@@ -262,7 +262,7 @@ export function AiLabClient({ isPro }: AiLabClientProps) {
             <Lock className="w-4 h-4 text-amber-600" />
             <AlertTitle className="text-amber-900 dark:text-amber-100 font-semibold text-sm">Tryb demonstracyjny</AlertTitle>
             <AlertDescription className="text-amber-800 dark:text-amber-200 text-xs">
-              Analiza ES-Engine dostepna tylko w planie PRO.{" "}
+              Odczyt pliku jest w planie PRO.{" "}
               <button onClick={() => onOpen("proModal")} className="underline font-semibold">Zaktualizuj do PRO</button>
             </AlertDescription>
           </Alert>
@@ -290,7 +290,7 @@ export function AiLabClient({ isPro }: AiLabClientProps) {
             <Eye className="h-4 w-4 text-orange-600" />
             <AlertTitle className="text-orange-900 dark:text-orange-100 text-sm">Odczyt PDF (Kosztorysy i Dokumenty)</AlertTitle>
             <AlertDescription className="text-orange-700 dark:text-orange-300 text-xs">
-              ES-Engine czyta tekst z PDF (w tym skanów), wyodrębnia nazwy materiałów, ilości i jednostki.
+              Program czyta tekst z PDF, także ze skanu, i wypisuje nazwy, ilości i jednostki. Cen nie dopisuje.
             </AlertDescription>
           </Alert>
         )}
@@ -366,9 +366,9 @@ export function AiLabClient({ isPro }: AiLabClientProps) {
                 </div>
               </div>
               <Button onClick={isPro ? handleAnalyze : () => onOpen("proModal")} disabled={isPro && (!file || isProcessing)} variant={isPro ? "ai" : "default"} className={isPro ? "w-full gap-2 shadow-md" : "w-full gap-2 bg-slate-400 hover:bg-slate-500 text-white"}>
-                {!isPro ? (<><Lock className="w-5 h-5" />Analiza ES-Engine (Tylko PRO)<Crown className="w-4 h-4 ml-1" /></>)
+                {!isPro ? (<><Lock className="w-5 h-5" />Odczyt pliku (tylko PRO)<Crown className="w-4 h-4 ml-1" /></>)
                   : isProcessing ? (<><Loader2 className="w-5 h-5 animate-spin" />Analiza w toku...</>)
-                  : (<><Brain className="w-5 h-5" />Analizuj przez ES-Engine</>)}
+                  : (<><Brain className="w-5 h-5" />Odczytaj plik</>)}
               </Button>
               {isProcessing && (
                 <div className="bg-orange-50 dark:bg-orange-950/30 p-3 rounded-md flex items-center gap-2">
@@ -384,7 +384,7 @@ export function AiLabClient({ isPro }: AiLabClientProps) {
           <Card className="lg:col-span-1 hover:shadow-md transition-shadow">
             <CardHeader className="p-4 pb-3"><CardTitle className="flex items-center gap-2 text-base"><Sparkles className="w-4 h-4 text-orange-600" />Jak to dziala?</CardTitle></CardHeader>
             <CardContent className="space-y-3 p-4 pt-0">
-              {[{ s: "1", t: "Wgraj plik", d: analysisMode === "vision" ? "PDF konwertowany do obrazu" : "Excel, CSV lub TXT" }, { s: "2", t: "ES-Engine analizuje i wydobywa dane", d: "ES-Engine wydobywa pozycje kosztorysowe" }, { s: "3", t: "Gotowa lista materialow", d: "Nazwa, Ilosc, Jednostka — gotowe do eksportu" }].map(({ s, t, d }) => (
+              {[{ s: "1", t: "Wgraj plik", d: analysisMode === "vision" ? "PDF konwertowany do obrazu" : "Excel, CSV lub TXT" }, { s: "2", t: "Program wypisuje pozycje", d: "Nazwa, ilość i jednostka. Cenę policzysz przyciskiem Wyceń." }, { s: "3", t: "Gotowa lista materialow", d: "Nazwa, Ilosc, Jednostka — gotowe do eksportu" }].map(({ s, t, d }) => (
                 <div key={s} className="flex items-start gap-2">
                   <div className="bg-orange-100 dark:bg-orange-950 rounded-full p-1.5 flex-shrink-0"><span className="text-xs font-bold text-orange-700 dark:text-orange-300">{s}</span></div>
                   <div><p className="text-xs font-semibold text-slate-900 dark:text-slate-100">{t}</p><p className="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5">{d}</p></div>
@@ -404,7 +404,7 @@ export function AiLabClient({ isPro }: AiLabClientProps) {
               <ul className="text-[10px] text-green-700 dark:text-green-300 space-y-1">
                 <li><strong>Excel/CSV:</strong> Pliki z wyrazna struktura kolumn daja najlepsze wyniki</li>
                 <li><strong>PDF:</strong> Dokumenty z tekstem dzialaja dobrze nawet jako skany</li>
-                <li><strong>Instrukcje:</strong> Podaj ES-Engine konkretne zadanie</li>
+                <li><strong>Dopisek:</strong> napisz, które pozycje mają wejść na listę</li>
               </ul>
             </div>
           </CardContent>
@@ -413,7 +413,7 @@ export function AiLabClient({ isPro }: AiLabClientProps) {
           <CardContent className="p-4 flex items-start gap-2">
             <AlertCircle className="w-4 h-4 text-orange-600 mt-0.5 flex-shrink-0" />
             <div><p className="text-xs font-semibold text-orange-900 dark:text-orange-100 mb-1">Zawsze weryfikuj wyniki</p>
-              <p className="text-[10px] text-orange-700 dark:text-orange-300">ES-Engine może pomylić ilości lub pominąć niektóre elementy. Sprawdzaj wyniki przed dodaniem do kosztorysu.</p>
+              <p className="text-[10px] text-orange-700 dark:text-orange-300">Odczyt może pomylić ilość albo pominąć wiersz. Sprawdź listę, zanim dodasz ją do kosztorysu.</p>
             </div>
           </CardContent>
         </Card>

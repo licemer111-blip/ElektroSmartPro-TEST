@@ -436,7 +436,7 @@ export const EstimateRow = React.memo(function EstimateRow({
               )}
               {isAmbiguous && !isEditing && (
                 <span
-                  title="ES-Engine: Zbyt ogólny opis. Podaj konkretne materiały, aby uzyskać rzetelną wycenę"
+                  title="Opis jest za ogólny. Dopisz, co dokładnie montujesz, i kliknij Wyceń."
                   className="inline-flex items-center gap-0.5 mr-1 px-1 py-0.5 rounded text-[8px] font-bold bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 cursor-help"
                 >
                   <Flag className="w-2.5 h-2.5" />

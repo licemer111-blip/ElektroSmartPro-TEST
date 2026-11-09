@@ -87,7 +87,7 @@ function FeaturesSectionInner({ normsCount = 0 }: FeaturesProps) {
     {
       gradient: "from-blue-500 to-blue-700",
       icon: Cpu,
-      title: "ES-Engine — Silnik Kosztorysowy",
+      title: "Godzina normy ES × Twoja stawka",
       desc: "Najpierw Twój katalog, potem norma ES, na końcu szacunek AI. Godziny widać w rbh, złotówki liczy stawka.",
     },
     {

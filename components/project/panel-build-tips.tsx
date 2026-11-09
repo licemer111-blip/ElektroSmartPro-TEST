@@ -16,7 +16,7 @@ export function PanelBuildTips() {
           <span>·</span>
           <span>{DIN_MODULES_CATEGORIES} kategorii</span>
           <span>·</span>
-          <span>ES-Engine</span>
+          <span>Z opisu</span>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-[10px] text-slate-600 dark:text-slate-400">
@@ -30,7 +30,7 @@ export function PanelBuildTips() {
         </div>
         <div className="flex items-start gap-2">
           <span className="text-blue-600 font-bold flex-shrink-0">3.</span>
-          <span>Użyj <strong className="text-orange-600">ES-Engine</strong> do automatycznego projektu</span>
+          <span>Opis układa obwody. Montaż liczy przycisk Wyceń.</span>
         </div>
         <div className="flex items-start gap-2">
           <span className="text-blue-600 font-bold flex-shrink-0">4.</span>

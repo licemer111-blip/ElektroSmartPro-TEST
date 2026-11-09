@@ -30,8 +30,8 @@ export function HeroSection(_props: HeroSectionProps) {
           {/* Engine badge */}
           <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-700 border border-slate-700/50 shadow-lg">
             <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-[11px] font-medium text-slate-300">Powered by</span>
-            <span className="text-[11px] font-bold text-white tracking-wide">ES-Engine</span>
+            <span className="text-[11px] font-medium text-slate-300">Liczy</span>
+            <span className="text-[11px] font-bold text-white tracking-wide">Twoją stawką</span>
             <span className="text-[9px] text-slate-400 border-l border-slate-600 pl-2.5 flex items-center gap-1.5">
               <Shield className="w-3 h-3" /> PN-HD 60364
             </span>

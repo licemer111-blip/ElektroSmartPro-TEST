@@ -12,11 +12,11 @@ import { Loader2, CheckCircle2, Zap, BookOpen, Calculator, Hammer, FileCheck } f
 // ─── AI Pricing Progress Dialog ──────────────────────────────────────────────
 
 const PRICING_STEPS = [
-  { icon: Zap,        label: "Łączenie z ES-Engine",           delay: 0 },
-  { icon: BookOpen,   label: "Analiza urządzeń DIN (KNR 5-08)", delay: 1200 },
-  { icon: Calculator, label: "Kalkulacja cen materiałów",       delay: 2800 },
-  { icon: Hammer,     label: "Obliczanie robocizny (rbh)",      delay: 4200 },
-  { icon: FileCheck,  label: "Finalizowanie wyceny...",          delay: 5600 },
+  { icon: Zap,        label: "Czytam aparaty na szynie",        delay: 0 },
+  { icon: BookOpen,   label: "Szukam godzin normy ES",          delay: 800 },
+  { icon: Calculator, label: "Materiał zostaje z katalogu",     delay: 1600 },
+  { icon: Hammer,     label: "Robocizna: godzina × stawka",     delay: 2400 },
+  { icon: FileCheck,  label: "Gotowe",                          delay: 3200 },
 ] as const;
 
 function AiPricingProgressDialog({ open }: { open: boolean }) {
@@ -42,7 +42,7 @@ function AiPricingProgressDialog({ open }: { open: boolean }) {
             <Zap className="w-5 h-5 text-white" />
           </div>
           <div>
-            <p className="font-bold text-slate-900 dark:text-slate-100 text-sm">ES-Engine Wycena</p>
+            <p className="font-bold text-slate-900 dark:text-slate-100 text-sm">Wyceń rozdzielnicę</p>
             <p className="text-[11px] text-slate-400">Rozdzielnica elektryczna · norma ES</p>
           </div>
         </div>

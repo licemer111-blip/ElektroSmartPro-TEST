@@ -150,7 +150,7 @@ export function AIProjectImportDialog({
               {state.excelAnalyzing ? (
                 <div className="rounded-xl border-2 border-green-300 dark:border-green-700 bg-green-50/50 dark:bg-green-950/20 p-8 text-center">
                   <Loader2 className="w-8 h-8 text-green-500 mx-auto mb-3 animate-spin" />
-                  <p className="text-sm font-medium text-green-700 dark:text-green-300">ES-Engine rozpoznaje strukturę pliku...</p>
+                  <p className="text-sm font-medium text-green-700 dark:text-green-300">Czytam strukturę pliku...</p>
                   <p className="text-[11px] text-muted-foreground mt-1">{fileName}</p>
                 </div>
               ) : (
@@ -186,7 +186,7 @@ export function AIProjectImportDialog({
                     <p className="text-sm font-medium text-red-700 dark:text-red-300">
                       {pdfProgress
                         ? `Skanowanie strony ${pdfProgress.current} z ${pdfProgress.total}...`
-                        : "ES-Engine rozpoznaje dokument..."}
+                        : "Czytam dokument..."}
                     </p>
                     <p className="text-[11px] text-muted-foreground mt-1">{pdfFileName}</p>
                   </div>
@@ -228,7 +228,7 @@ export function AIProjectImportDialog({
                     </div>
                   )}
                   <div>
-                    <label className="text-xs text-slate-500 mb-1 block">Instrukcja dla ES-Engine (opcjonalnie)</label>
+                    <label className="text-xs text-slate-500 mb-1 block">Dopisek do odczytu (opcjonalnie)</label>
                     <div className="relative">
                       <textarea
                         value={pdfInstructions}
@@ -376,7 +376,7 @@ export function AIProjectImportDialog({
             <div className="flex flex-col items-center justify-center py-8 gap-3">
               <Loader2 className="w-8 h-8 text-orange-500 animate-spin" />
               <div className="text-center">
-                <p className="text-sm font-medium">ES-Engine analizuje plik...</p>
+                <p className="text-sm font-medium">Czytam plik...</p>
                 <p className="text-xs text-muted-foreground mt-0.5">{fileName} · {rawRows.length} wierszy</p>
               </div>
             </div>

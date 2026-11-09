@@ -138,7 +138,7 @@ export function ConfidenceDot({ level: storedLevel, note, className, knrSource, 
     : level === "analog" && note
     ? `Cena na podstawie analogu: ${note.replace("Analog: ", "")}`
     : level === "uncertain"
-    ? "ES-Engine nie znalazł danych KNR — wprowadź cenę ręcznie"
+    ? "Brak normy ES. Wpisz cenę ręcznie."
     : cfg.tooltip;
 
   return (

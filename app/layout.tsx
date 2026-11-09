@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     "normy KNR 5-08",
     "projektowanie rozdzielnic",
     "kalkulator rozdzielnic elektrycznych",
-    "ES-Engine kosztorysowanie",
+    "kosztorys godzina razy stawka",
     "kosztorys elektryczny ES",
     "automatyczny kosztorys elektryczny",
     "ekspertowy system kosztorysów elektrycznych",
@@ -140,7 +140,7 @@ export const metadata: Metadata = {
     locale: "pl_PL",
     url: "/",
     siteName: "ElektroSmart PRO",
-    title: "ElektroSmart PRO — Ekspertowy Kosztorys Elektryczny | ES-Engine",
+    title: "ElektroSmart PRO — kosztorys elektryczny: godzina × Twoja stawka",
     description: "Kosztorys elektryczny: robocizna i materiał osobno, godziny normy ES × Twoja stawka, województwo tylko na robociznę, VAT 8%/23%, PDF.",
     images: [
       {
@@ -153,7 +153,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "ElektroSmart PRO — Kosztorys Elektryczny z ES-Engine | Program dla Elektryków",
+    title: "ElektroSmart PRO — program do kosztorysu dla elektryka",
     description: "Program dla elektryków: robocizna osobno od materiału, norma ES, 16 województw, VAT 8/23%, 12 kalkulatorów, PDF.",
     images: ["/opengraph-image"],
     creator: "@elektrosmartpro",

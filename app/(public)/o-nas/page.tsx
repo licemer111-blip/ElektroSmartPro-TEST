@@ -228,8 +228,8 @@ export default function ONasPage() {
                         ⚡ ElektroSmart Core + Konfigurator Rozdzielnic (v4.0)
                       </h3>
                       <p className="text-sm text-slate-700 dark:text-slate-300">
-                        <strong>Silnik inżynieryjny ES-Engine wspomaga analizę dokumentów i specyfikacji.</strong>{" "}
-                        Import ręczny Excel/CSV lub z pomocą silnika inżynieryjnego. Konfigurator rozdzielnic 120+ modułów DIN wg PN-EN 61439, schemat jednokreskowy, Live Chat i protokoły PN-HD 60364-6.
+                        <strong>Robocizna to godzina normy ES razy Twoja stawka. Materiał bierzesz ze swojego cennika.</strong>{" "}
+                        Excel i czysty tekst wchodzą bez zapytania. Zdjęcie zużywa jedno. Rozdzielnica: aparat z katalogu, montaż ze stawki. PDF dla klienta, na darmowym koncie ze znakiem DEMO.
                       </p>
                     </div>
                   </div>
