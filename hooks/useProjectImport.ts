@@ -75,7 +75,7 @@ export function useProjectImport({ projectId, onImport }: UseProjectImportOption
         dispatch({ type: "SET_AI_ITEMS", payload: items });
         dispatch({ type: "SET_SELECTED_ITEMS", payload: new Set(items.map((_, i) => i)) });
         dispatch({ type: "SET_STEP", payload: "preview" });
-        toast.success(`ES-Engine 2: rozpoznano ${items.length} pozycji z pliku TXT`);
+        toast.success(`Rozpoznano ${items.length} pozycji z pliku TXT`);
       } catch {
         dispatch({ type: "SET_ERROR", payload: "Błąd odczytu pliku TXT" });
       }
@@ -130,7 +130,7 @@ export function useProjectImport({ projectId, onImport }: UseProjectImportOption
       dispatch({ type: "SET_AI_ITEMS", payload: items });
       dispatch({ type: "SET_SELECTED_ITEMS", payload: new Set(items.map((_, i) => i)) });
       dispatch({ type: "SET_STEP", payload: "preview" });
-      toast.success(`ES-Engine 2: rozpoznano ${items.length} pozycji z pliku ${file.name}`);
+      toast.success(`Rozpoznano ${items.length} pozycji z pliku ${file.name}`);
     } catch (err: unknown) {
       dispatch({ type: "SET_EXCEL_ANALYZING", payload: false });
       dispatch({ type: "SET_ERROR", payload: err instanceof Error ? err.message : "Błąd odczytu pliku" });
@@ -237,7 +237,7 @@ export function useProjectImport({ projectId, onImport }: UseProjectImportOption
             }
           } catch {
             if (page === 1) {
-              dispatch({ type: "SET_ERROR", payload: "Błąd połączenia z ES-Engine 2. Sprawdź internet i spróbuj ponownie." });
+              dispatch({ type: "SET_ERROR", payload: "Błąd połączenia. Sprawdź internet i spróbuj ponownie." });
               dispatch({ type: "SET_PDF_ANALYZING", payload: false });
               return;
             }
@@ -250,12 +250,12 @@ export function useProjectImport({ projectId, onImport }: UseProjectImportOption
         dispatch({ type: "SET_SELECTED_ITEMS", payload: new Set(allOcrItems.map((_, i) => i)) });
         dispatch({ type: "SET_STEP", payload: "preview" });
         void refreshVisionQuota();
-        toast.success(`ES-Engine 2: rozpoznano ${allOcrItems.length} pozycji${!isImage ? ` z ${pdfPageNumber} stron PDF` : ""}`);
+        toast.success(`Rozpoznano ${allOcrItems.length} pozycji${!isImage ? ` z ${pdfPageNumber} stron PDF` : ""}`);
       } else {
-        dispatch({ type: "SET_ERROR", payload: "ES-Engine 2 nie rozpoznał żadnych pozycji w dokumencie" });
+        dispatch({ type: "SET_ERROR", payload: "Nie rozpoznano żadnych pozycji w dokumencie" });
       }
     } catch (err) {
-      dispatch({ type: "SET_ERROR", payload: `Błąd połączenia z ES-Engine 2. Sprawdź internet i spróbuj ponownie.${err instanceof Error ? ` (${err.message.slice(0, 60)})` : ""}` });
+      dispatch({ type: "SET_ERROR", payload: `Błąd połączenia. Sprawdź internet i spróbuj ponownie.${err instanceof Error ? ` (${err.message.slice(0, 60)})` : ""}` });
     } finally {
       dispatch({ type: "SET_PDF_ANALYZING", payload: false });
       dispatch({ type: "SET_PDF_PROGRESS", payload: null });
@@ -295,9 +295,9 @@ export function useProjectImport({ projectId, onImport }: UseProjectImportOption
           dispatch({ type: "SET_PRZEDMIAR_CLEANUP_DONE", payload: true });
         }
         void refreshCleanQuota();
-        toast.success(`ES-Engine 2 uporządkował ${result.items.length} pozycji`);
+        toast.success(`Uporządkowano ${result.items.length} pozycji`);
       } else {
-        toast.error(result.error || "ES-Engine 2 nie rozpoznało pozycji");
+        toast.error(result.error || "Nie rozpoznano pozycji");
       }
     } catch {
       toast.error("Błąd podczas porządkowania struktury");
@@ -418,7 +418,7 @@ export function useProjectImport({ projectId, onImport }: UseProjectImportOption
       if (aiMap && aiMap.nameIdx >= 0) {
         parsed = applyColumnMap(aiMap, data);
         const conf = aiMap.confidence === "high" ? "✓" : "~";
-        toast.success(`ES-Engine 2: rozpoznano ${parsed.length} pozycji (pewność: ${aiMap.confidence})`);
+        toast.success(`Rozpoznano ${parsed.length} pozycji (pewność: ${aiMap.confidence})`);
       } else {
         parsed = smartParseExcel(hdrs, data);
         toast.success(`Rozpoznano ${parsed.length} pozycji (algorytm)`);

@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
     // 5. Build system prompt — ES-Engine 2 OCR specialist (no pricing)
     const kbContext = await fetchVisionKbContext();
     void buildDynamicSystemPrompt; void injectKbContext;
-    const systemPrompt = `Jesteś ekspertem-kosztorysantem ElektroSmart (ES-Engine 2). Specjalizujesz się w odczycie polskich Przedmiarów Robót (BOQ). Twoje zadanie to WYŁĄCZNIE precyzyjna ekstrakcja pozycji kosztorysowych.
+    const systemPrompt = `Czytasz polski przedmiar. Wypisujesz nazwę, ilość i jednostkę. Ceny nie dopisujesz, jeśli jej nie ma w dokumencie. Numeru tabeli nie wymyślasz.
 
 ═══════════════════════════════════════════════════
 ZŁOTY FILTR — wyodrębnij wiersz TYLKO jeśli spełnia WSZYSTKIE 4 warunki jednocześnie:
@@ -192,7 +192,7 @@ ${baseTask}`
     const result = await callGeminiVision(userContent, systemPrompt);
 
     if (!result) {
-      return NextResponse.json({ success: false, error: "ES-Engine 2 nie znalazł pozycji w dokumencie. Sprawdź jakość obrazu lub spróbuj inną stronę." });
+      return NextResponse.json({ success: false, error: "Nie znaleziono pozycji w dokumencie. Sprawdź jakość obrazu albo inną stronę." });
     }
     if ("rateLimited" in result) {
       return NextResponse.json(
@@ -201,7 +201,7 @@ ${baseTask}`
       );
     }
     if (result.materials.length === 0) {
-      return NextResponse.json({ success: false, error: "ES-Engine 2 nie znalazł pozycji w dokumencie. Sprawdź jakość obrazu lub spróbuj inną stronę." });
+      return NextResponse.json({ success: false, error: "Nie znaleziono pozycji w dokumencie. Sprawdź jakość obrazu albo inną stronę." });
     }
 
     type MatItem = VisionResult["materials"][number];

@@ -38,7 +38,7 @@ export function BlueprintSelector({ open, onOpenChange, onApply }: BlueprintSele
               </DialogTitle>
               <DialogDescription className="text-xs text-slate-500 mt-1">
                 Wybierz gotowy schemat — fazy L1/L2/L3, numery obwodów i przewody są już wypełnione.
-                Po zastosowaniu możesz od razu uruchomić ES-Engine 2.
+                Po wstawieniu kliknij Wyceń. Robociznę policzy Twoja stawka.
               </DialogDescription>
             </div>
             <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => onOpenChange(false)}>

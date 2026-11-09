@@ -285,7 +285,7 @@ export function PanelSchematTab(props: PanelSchematTabProps) {
                       <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/25">
                         <Zap className="w-8 h-8 text-white" />
                       </div>
-                      <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">Schemat wieloliniowy ES-Engine</p>
+                      <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">Schemat wieloliniowy</p>
                       <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Dodaj moduły w zakładce <strong>Konstruktor</strong>, a następnie wygeneruj schemat</p>
                     </div>
                   );
@@ -337,7 +337,7 @@ export function PanelSchematTab(props: PanelSchematTabProps) {
                       </div>
                       <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">Dane rozdzielnicy gotowe — 100%</p>
                       <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs">
-                        Naciśnij przycisk <strong className="text-emerald-600">Generuj schemat (ES-Engine)</strong>, aby wygenerować schemat wieloliniowy
+                        Naciśnij <strong className="text-emerald-600">Generuj schemat</strong>, żeby narysować schemat wieloliniowy
                       </p>
                       <p className="text-[10px] text-slate-400 mt-2">
                         {allModules.length} modułów · {circuitsLocal.length} obwodów · {sections.length} {sections.length === 1 ? "sekcja" : "sekcji"}

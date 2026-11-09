@@ -242,7 +242,7 @@ export function SystemDictionaryBrowser() {
             {isLoading ? (
               <div className="p-6 flex items-center justify-center gap-2 text-xs text-slate-400">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                {isAiSearching ? "ES-Engine analizuje zapytanie…" : "Szukam w bazie…"}
+                {isAiSearching ? "Szukam godziny…" : "Szukam w bazie…"}
               </div>
             ) : entries.length === 0 ? (
               /* ── Empty state with AI fallback button ── */
@@ -253,7 +253,7 @@ export function SystemDictionaryBrowser() {
                     Nie znaleziono w bazie ES
                   </p>
                   <p className="text-[11px] text-slate-400 mt-0.5">
-                    Spróbuj innej pisowni lub zapytaj ES-Engine — zna synonimy branżowe i odmiany
+                    Spróbuj innej pisowni. Baza zna odmiany nazw.
                   </p>
                 </div>
                 <Button
@@ -268,7 +268,7 @@ export function SystemDictionaryBrowser() {
                   ) : (
                     <Sparkles className="h-3.5 w-3.5" />
                   )}
-                  Zapytaj ES-Engine
+                  Szukaj godziny
                 </Button>
               </div>
             ) : (

@@ -110,7 +110,7 @@ export function KnrInvestmentContext({ value, onChange }: KnrInvestmentContextPr
         toast({ title: "Błąd", description: result.error, variant: "destructive" });
       } else {
         setSaved(true);
-        toast({ title: "Kontekst zapisany", description: "ES-Engine będzie używać go przy kalkulacjach" });
+        toast({ title: "Kontekst zapisany", description: "Opis obiektu będzie widoczny przy kolejnych podpowiedziach." });
       }
     });
   }, [localValue, toast]);

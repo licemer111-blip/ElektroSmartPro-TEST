@@ -96,6 +96,6 @@ export async function learnKnrMapping(
 
     return { success: true };
   } catch {
-    return { success: false, error: "Błąd systemu ES-Engine" };
+    return { success: false, error: "Nie udało się zapisać pozycji w cenniku" };
   }
 }

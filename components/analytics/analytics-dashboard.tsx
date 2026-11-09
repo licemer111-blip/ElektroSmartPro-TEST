@@ -75,8 +75,8 @@ export function AnalyticsDashboard({ data, timeRange, onTimeRangeChange }: Analy
                 <Activity className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-1">Planuj z ES-Engine</h4>
-                <p className="text-xs text-slate-600 dark:text-slate-400">Prognozy ES-Engine wspierają planowanie zleceń</p>
+                <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-1">Planuj kolejne zlecenia</h4>
+                <p className="text-xs text-slate-600 dark:text-slate-400">Suma z kosztorysów pomaga zobaczyć, ile pracy przed Tobą</p>
               </div>
             </div>
           </div>

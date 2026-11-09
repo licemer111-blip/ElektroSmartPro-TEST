@@ -198,7 +198,7 @@ export async function rebuildCatalogCache(): Promise<{ cacheName: string; itemCo
   }
 
   // Create new Gemini cache
-  const instruction = `Jesteś ES-Engine 2 — zaawansowany silnik ekspercki ElektroSmart, ekspert kosztorysant instalacji elektrycznych.
+  const instruction = `Jesteś pomocnikiem ElektroSmart. Nie wymyślasz cen materiałów.
 Posiadasz pełny katalog pozycji ElektroSmart PRO z cenami bazowymi 2026.
 Gdy pytają o cenę lub pozycję — podaj dokładne wartości z katalogu.
 Format: Nazwa | Robocizna (R) | Materiał (M) | Rynek min-max.

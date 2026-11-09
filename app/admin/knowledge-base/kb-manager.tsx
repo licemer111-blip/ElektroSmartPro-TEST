@@ -168,7 +168,7 @@ export function KbManager({ initialFiles, knrCategories }: KbManagerProps) {
             <p className="text-xs text-slate-500 mt-0.5">
               Wgraj plik <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded">.json</code> z normami robocizny.
               Dane trafiają do tabeli <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded">knr_norms</code> i są używane przez
-              <strong> ES-Engine</strong> do kalkulacji kosztorysów. Wymagany format v1.4.
+              <strong> wycenę</strong>. Godzina z pliku, cena materiału nie. Wymagany format v1.4.
             </p>
           </div>
         </div>
@@ -246,7 +246,7 @@ export function KbManager({ initialFiles, knrCategories }: KbManagerProps) {
           <div>
             <h2 className="text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
               <Settings2 className="w-4 h-4 text-slate-500" />
-              Ustawienia globalne ES-Engine
+              Ustawienia bazy godzin
             </h2>
             <p className="text-xs text-slate-500 mt-0.5">
               Dyrektywy eksperta — globalne instrukcje wstrzykiwane do każdego promptu AI.

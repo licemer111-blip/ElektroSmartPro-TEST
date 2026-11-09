@@ -134,8 +134,8 @@ export function KBFilesSection({ onStatsChange }: KBFilesSectionProps) {
         toast({
           title: "✅ Dane dodane",
           description: isSheet
-            ? `${file.name} — zindeksowano jako Moje Normy (szybkie dopasowanie + ES-Engine)`
-            : `${file.name} — dodano do bazy wiedzy ES-Engine`,
+            ? `${file.name} — zapisano w Twoich normach`
+            : `${file.name} — dodano do bazy godzin`,
         });
         await loadAll();
       } else {
@@ -257,7 +257,7 @@ export function KBFilesSection({ onStatsChange }: KBFilesSectionProps) {
                 <Loader2 className="h-7 w-7 text-blue-500 animate-spin" />
                 <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{uploadingFile}</p>
                 <p className="text-[10px] text-slate-400">
-                  {uploadingRoute === "normy" ? "Indeksuję normy + przesyłam do ES-Engine..." : "Przesyłam do bazy wiedzy..."}
+                  {uploadingRoute === "normy" ? "Zapisuję normy..." : "Przesyłam do bazy..."}
                 </p>
               </div>
             ) : (

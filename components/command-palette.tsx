@@ -308,14 +308,14 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
               <Search className="w-10 h-10 mx-auto text-slate-300 dark:text-slate-600" />
               <div>
                 <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Brak wyników dla „{query}"</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Spróbuj innej frazy lub zapytaj ES-Engine</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Spróbuj innej frazy albo otwórz Pomoc</p>
               </div>
               <button
                 onClick={() => { onClose(); router.push(`/dashboard/projects?ai=true&q=${encodeURIComponent(query)}`); }}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white text-xs font-medium hover:from-purple-700 hover:to-blue-700 transition-all shadow-sm"
               >
                 <Bot className="w-3.5 h-3.5" />
-                Zapytaj ES-Engine o &bdquo;{query}&rdquo;
+                Zapytaj Pomoc o &bdquo;{query}&rdquo;
               </button>
             </div>
           ) : (

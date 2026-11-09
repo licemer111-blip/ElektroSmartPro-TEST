@@ -189,7 +189,7 @@ export function HealthClient({ report }: HealthClientProps) {
           </h1>
           <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-1">
             <Clock className="w-3 h-3" />
-            {new Date(report.generatedAt).toLocaleString("pl-PL")} · ES-KNR 2026 · Zestawy v2.0
+            {new Date(report.generatedAt).toLocaleString("pl-PL")} · norma ES · zestawy
           </p>
         </div>
         <Button size="sm" variant="outline" onClick={() => window.location.reload()} className="gap-1.5 h-8">
@@ -693,7 +693,7 @@ export function HealthClient({ report }: HealthClientProps) {
             <CardContent className="px-4 py-4">
               <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1.5">
                 <Cpu className="w-3.5 h-3.5 text-blue-500" />
-                ES-Engine — Hierarchia źródeł cen (P1 → P2 → P3)
+                Skąd bierze się cena: Twój cennik, potem godzina × stawka
               </p>
               <div className="space-y-1">
                 {[

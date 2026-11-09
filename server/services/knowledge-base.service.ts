@@ -120,7 +120,7 @@ export async function createOrUpdateCache(
     try { await geminiV1Delete(existing.cache_name); } catch { /* expired */ }
   }
 
-  const defaultInstruction = `Jesteś ES-Engine 2 — zaawansowany silnik ekspercki ElektroSmart, ekspert kosztorysant instalacji elektrycznych w Polsce z uprawnieniami SEP.
+  const defaultInstruction = `Jesteś pomocnikiem ElektroSmart. Czytasz polskie przedmiary. Nie wymyślasz cen materiałów ani numerów tabel.
 Posiadasz pełną wiedzę z KNR (Katalogi Nakładów Rzeczowych), norm branżowych i cenników rynkowych 2026.
 Odpowiadaj precyzyjnie, podając konkretne wartości, kody KNR, jednostki miary i ceny netto PLN.
 Język odpowiedzi: polski. Styl: techniczny, zwięzły.`;
@@ -193,7 +193,7 @@ export async function queryKnowledgeBase(
   // Fallback: no active cache — direct query without file context
   const answer = await geminiV1Generate({
     model: `models/${KB_MODEL}`,
-    systemInstruction: `Jesteś ES-Engine 2 — zaawansowany silnik ekspercki ElektroSmart, ekspert kosztorysant instalacji elektrycznych w Polsce z uprawnieniami SEP.
+    systemInstruction: `Jesteś pomocnikiem ElektroSmart. Czytasz polskie przedmiary. Nie wymyślasz cen materiałów ani numerów tabel.
 Odpowiadaj precyzyjnie po polsku, podając konkretne wartości i ceny netto PLN 2026.`,
     prompt,
     temperature: options?.temperature ?? 0.1,
@@ -395,7 +395,7 @@ export async function buildUserCache(userId: string): Promise<string> {
     try { await geminiV1Delete(existingCache); } catch { /* expired */ }
   }
 
-  const userInstruction = `Jesteś ES-Engine 2 — zaawansowany silnik ekspercki ElektroSmart, ekspert kosztorysant instalacji elektrycznych w Polsce z uprawnieniami SEP.
+  const userInstruction = `Jesteś pomocnikiem ElektroSmart. Czytasz polskie przedmiary. Nie wymyślasz cen materiałów ani numerów tabel.
 Posiadasz dostęp do PRYWATNEJ bazy wiedzy użytkownika — jego własnych cenników, norm i dokumentów.
 PRIORYTET 1: Dane z prywatnych dokumentów użytkownika (poniżej).
 PRIORYTET 2: Ogólna wiedza branżowa KNR i normy polskie.
@@ -483,7 +483,7 @@ export async function queryUserKnowledgeBaseDirectMode(
 
   if (!files || files.length === 0) return null;
 
-  const systemInstruction = `Jesteś ES-Engine 2 — zaawansowany silnik ekspercki ElektroSmart, ekspert kosztorysant instalacji elektrycznych w Polsce z uprawnieniami SEP.
+  const systemInstruction = `Jesteś pomocnikiem ElektroSmart. Czytasz polskie przedmiary. Nie wymyślasz cen materiałów ani numerów tabel.
 Posiadasz dostęp do PRYWATNEJ bazy wiedzy użytkownika — jego własnych cenników, norm i dokumentów.
 PRIORYTET 1: Dane z prywatnych dokumentów użytkownika (poniżej).
 PRIORYTET 2: Ogólna wiedza branżowa KNR i normy polskie.

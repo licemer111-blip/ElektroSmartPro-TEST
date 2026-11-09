@@ -8,7 +8,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "O Nas — ElektroSmart PRO | Profesjonalny Program Kosztorysowy",
-  description: `ElektroSmart PRO v1.0 — program kosztorysowy od elektryków dla elektryków. Import Excel/CSV + silnik inżynieryjny ES-Engine, konfigurator rozdzielnic 120+ modułów DIN, portal klienta z e-podpisem. ✓ ${SYSTEM_STATS_FALLBACK.normsLabelPlus} norm KNR ✓ 12 kalkulatorów ✓ VAT 8%/23% ✓ 16 województw.`,
+  description: `ElektroSmart PRO — kosztorys od elektryków dla elektryków. Robocizna to godzina normy ES × Twoja stawka. Materiał z Twojego cennika. ✓ ${SYSTEM_STATS_FALLBACK.normsLabelPlus} godzin ES ✓ 12 kalkulatorów ✓ VAT 8%/23% ✓ 16 województw.`,
   keywords: [
     "o nas elektrosmart",
     "program dla elektryków",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "O Nas — ElektroSmart PRO v1.0 | Program Kosztorysowy",
-    description: "Poznaj ElektroSmart PRO — import Excel/CSV + silnik inżynieryjny ES-Engine, konfigurator rozdzielnic 120+ modułów DIN, portal klienta z e-podpisem.",
+    description: "Poznaj ElektroSmart PRO — godzina normy ES × Twoja stawka, materiał z Twojego cennika, PDF dla klienta.",
     type: "website",
     locale: "pl_PL",
   },

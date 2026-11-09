@@ -39,7 +39,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     title: "Wersja 1.0 — Single Source of Truth, VAT Guard, Pełne KNR",
     tag: "new",
     highlights: [
-      "Pełny kontekst AI: dostęp do 100% bazy wiedzy (23/23 kategorie) opartej na 15 oficjalnych plikach KNR w systemie RAG",
+      "Podpowiedzi biorą godziny normy ES. Cen materiałów z tych plików nie ma.",
       "Dynamiczne dyrektywy: aktualna stawka bazowa i mnożnik inflacyjny wstrzykiwane do każdego zapytania AI — koniec przestarzałych wycen",
       "Bridge dla plików KNR użytkownika: normy czasu z własnych plików automatycznie przeliczane na aktualne stawki z panelu admina",
       "VAT Guard: bezwzględna blokada stawki 8% dla projektów B2B/biuro/hotel/przemysł — system wymusza 23% VAT",
@@ -56,7 +56,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     tag: "new",
     highlights: [
       "Moja Baza KNR — wgraj własne normy KNR, cenniki i stawki r-g (PDF/Excel/TXT). AI korzysta z nich w pierwszej kolejności!",
-      "6-poziomowa baza ES-KNR 2026: Twoja Baza KNR → normy KNR 5-08/5-09 → katalog rynkowy → ES-Engine",
+      "Robocizna: godzina normy ES × Twoja stawka. Materiał tylko z Twojego cennika.",
       "Negocjacje dwukierunkowe w Portalu Klienta — klient proponuje zmiany, Ty akceptujesz lub kontr-oferta",
       "Portfolio przeniesione do Profilu Firmy — dwie zakładki: Informacje o firmie + Portfolio",
       "Schemat wieloliniowy L1/L2/L3/N/PE w Konfiguratorze Rozdzielnic",

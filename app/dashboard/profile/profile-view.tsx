@@ -125,7 +125,7 @@ export function ProfileView({ data }: ProfileViewProps) {
         <Stat icon={<FolderOpen className="w-3.5 h-3.5 text-blue-500" />} label="Projekty" value={stats.projectsTotal} />
         <Stat icon={<FileText className="w-3.5 h-3.5 text-emerald-500" />} label="Pozycje" value={stats.totalItems} />
         <Stat icon={<Users className="w-3.5 h-3.5 text-violet-500" />} label="Klienci" value={stats.clientsCount} />
-        <Stat icon={<Bot className="w-3.5 h-3.5 text-amber-500" />} label="ES-Engine" value={stats.aiUsageCount} />
+        <Stat icon={<Bot className="w-3.5 h-3.5 text-amber-500" />} label="Zapytania AI" value={stats.aiUsageCount} />
         <Stat icon={<Boxes className="w-3.5 h-3.5 text-pink-500" />} label="Zestawy" value={stats.assembliesCount} />
         <Stat icon={<BookOpen className="w-3.5 h-3.5 text-teal-500" />} label="Katalog" value={stats.catalogItemsCount} />
       </div>

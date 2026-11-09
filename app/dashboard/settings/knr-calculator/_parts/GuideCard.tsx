@@ -59,7 +59,7 @@ export function GuideCard() {
           <div className="rounded-lg bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 p-3">
             <p className="font-semibold text-amber-800 dark:text-amber-300 text-xs mb-1.5">💡 Wskazówki dla najlepszych wyników:</p>
             <ul className="space-y-1 text-xs text-amber-700 dark:text-amber-400 list-disc list-inside">
-              <li>Używaj polskich nazw pozycji — ES-Engine lepiej dopasuje do pytań</li>
+              <li>Pisz polskie nazwy pozycji. Po nich łatwiej znaleźć godzinę normy ES.</li>
               <li>Podawaj jednostki miary: <strong>szt, mb, kpl, m², godz</strong></li>
               <li>System przetwarza pliki automatycznie — nie musisz ręcznie budować cache</li>
               <li>Po dodaniu nowych plików wyceny natychmiast korzystają z Twoich danych</li>

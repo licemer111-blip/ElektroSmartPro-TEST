@@ -31,7 +31,7 @@ export function KnrPageHeader({ isPro }: KnrPageHeaderProps) {
     },
     {
       id: "L2",
-      label: "ES-KNR 2026",
+      label: "Norma ES",
       desc: "Baza norm ES · województwo tylko na robociznę · dopasowanie po nazwie",
       active: searchMode === "engine" || searchMode === "hybrid",
       activeColor: "border-orange-400 bg-orange-50 dark:border-orange-600 dark:bg-orange-950/30",
@@ -40,7 +40,7 @@ export function KnrPageHeader({ isPro }: KnrPageHeaderProps) {
     },
     {
       id: "L3",
-      label: "ES-Engine AI",
+      label: "Szacunek",
       desc: "Wycena AI na żądanie — przycisk ‘Wyceń’ w tabeli kosztorysu",
       active: false,
       activeColor: "",
@@ -51,8 +51,8 @@ export function KnrPageHeader({ isPro }: KnrPageHeaderProps) {
 
   const modeDesc =
     searchMode === "own" ? "Tryb Własny — tylko Twoje dane (L1). Baza globalna pominięta." :
-    searchMode === "hybrid" ? "Tryb Hybrydowy — Twój katalog (L1) + baza ES-KNR (L2) dla braków" :
-    "ES-Engine 2026 — baza ES-KNR (L2) + Twoja stawka R-G. AI (L3) na żądanie.";
+    searchMode === "hybrid" ? "Najpierw Twój cennik, potem godzina normy ES." :
+    "Robocizna: godzina normy ES × Twoja stawka. Materiał tylko z Twojego cennika.";
 
   return (
     <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-5 py-4 shadow-sm">
@@ -130,9 +130,9 @@ interface KnrTierVisualizerProps {
 export function KnrTierVisualizer({ isPro: _isPro }: KnrTierVisualizerProps) {
   const TIERS = [
     { id: "T1", label: "Twoje Normy", icon: BookOpen, color: "from-violet-500 to-purple-600" },
-    { id: "T2", label: "ES-KNR 2026", icon: Database, color: "from-blue-500 to-cyan-600" },
+    { id: "T2", label: "Norma ES", icon: Database, color: "from-blue-500 to-cyan-600" },
     { id: "T3", label: "Katalog Rynkowy", icon: Shield, color: "from-emerald-500 to-teal-600" },
-    { id: "T4", label: "Szacunek ES-Engine", icon: Brain, color: "from-orange-500 to-amber-500" },
+    { id: "T4", label: "Szacunek", icon: Brain, color: "from-orange-500 to-amber-500" },
   ];
   return (
     <div className="flex items-center gap-2 p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40">

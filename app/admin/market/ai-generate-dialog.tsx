@@ -166,7 +166,7 @@ export function AiGenerateDialog() {
             ES Generator Pozycji Katalogowych
           </DialogTitle>
           <DialogDescription>
-            Opisz, jakie pozycje chcesz wygenerować, a ES-Engine stworzy je z realistycznymi cenami rynkowymi.
+            Opisz pozycje. Program dopisze nazwy. Cen materiałów nie wymyśla.
           </DialogDescription>
         </DialogHeader>
 

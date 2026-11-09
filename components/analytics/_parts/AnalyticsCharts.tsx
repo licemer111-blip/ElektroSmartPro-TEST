@@ -261,7 +261,7 @@ export function AnalyticsCharts({ profitability, predictions, totalRevenue, time
                 <div className="p-1.5 rounded-lg bg-indigo-700"><Activity className="h-4 w-4 text-white" /></div>
                 <div>
                   <CardTitle className="text-base">Prognozowany przychód</CardTitle>
-                  <CardDescription className="text-xs">ES-Engine — analiza na następny miesiąc</CardDescription>
+                  <CardDescription className="text-xs">Szacunek na następny miesiąc</CardDescription>
                 </div>
               </div>
             </CardHeader>

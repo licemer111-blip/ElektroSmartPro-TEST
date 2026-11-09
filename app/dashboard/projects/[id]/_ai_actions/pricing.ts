@@ -663,7 +663,7 @@ export async function estimatePricesWithAI(
             suggestedMaterial: 0,
             suggestedLabor: 0,
             confidence: "low" as const,
-            note: "ES-Engine: Zbyt ogólny opis. Podaj konkretne materiały, aby uzyskać rzetelną wycenę",
+            note: "Opis jest za ogólny. Dopisz, co montujesz.",
             knrCode: null,
             knrSource: null,
             laborNorm: null,
@@ -757,7 +757,7 @@ export async function estimatePricesWithAI(
       suggestedMaterial: 0,
       suggestedLabor: 0,
       confidence: "low" as const,
-      note: "ES-Engine: Zbyt ogólny opis. Podaj konkretne materiały, aby uzyskać rzetelną wycenę",
+      note: "Opis jest za ogólny. Dopisz, co montujesz.",
       knrCode: null,
       knrSource: null,
       laborNorm: null,
@@ -1696,7 +1696,7 @@ export async function repriceSingleItem(
 <context>
 - Stawka robocizny: ${baseRateForCalc} PLN/rbh (BAZOWA — bez wsp. regionalnego)
 - WAŻNE: Podaj cenę przy tej stawce BAZOWEJ. NIE stosuj współczynnika regionalnego — system robi to automatycznie.
-- źródło stawki: ${rateSource === "manual" ? "Własna Stawka" : "ES-Engine 2026"}
+- źródło stawki: ${rateSource === "manual" ? "Własna stawka" : "Stawka elektryka"}
 - Rok: 2026, ceny PLN netto
 - ${knrInstruction}
 </context>
@@ -2088,7 +2088,7 @@ export async function triggerL3Estimation(
 <context>
 - Stawka robocizny: ${baseRateForCalc} PLN/rbh (BAZOWA — bez współczynnika regionalnego)
 - WAŻNE: Podaj cenę przy tej stawce BAZOWEJ. NIE stosuj współczynnika regionalnego — system robi to automatycznie.
-- źródło stawki: ${rateSource === "manual" ? "Własna Stawka" : "ES-Engine 2026"}
+- źródło stawki: ${rateSource === "manual" ? "Własna stawka" : "Stawka elektryka"}
 - Rok: 2026, ceny PLN netto (bez VAT)
 - Typ obliczeń: ES-KNR ON-DEMAND (pozycja nieznaleziona w katalogu)
 - ${knrInstruction}
@@ -2147,7 +2147,7 @@ Jeśli nie znasz godziny, labor_norm = 0 i labor_price = 0. Nie wymyślaj kodu K
         : clampPrice(positionName, unit, rawMat, "material"),
       suggestedLabor: rawLab,
       confidence: result.confidence,
-      note: `L3 ES-Engine: ${result.justification}`,
+      note: `Szacunek: ${result.justification}`,
       knrCode,
       knrSource: knrCode ? (isOfficialKnr(knrCode) ? "official" : "es-synthetic") : null,
       laborNorm,
@@ -2158,7 +2158,7 @@ Jeśli nie znasz godziny, labor_norm = 0 i labor_price = 0. Nie wymyślaj kodu K
     const mat = processed.suggestedMaterial;
     const lab = processed.suggestedLabor;
     const finalLaborNorm = processed.laborNorm ?? laborNorm;
-    const match_trace = `L3: ES-Engine (${result.confidence})${processed.expert_override ? " [Expert Override]" : ""}`;
+    const match_trace = `Szacunek (${result.confidence})${processed.expert_override ? " [korekta]" : ""}`;
 
     const confidenceLevel: "verified" | "analog" | "estimated" = result.confidence === "high"
       ? "verified"
@@ -2209,7 +2209,7 @@ Jeśli nie znasz godziny, labor_norm = 0 i labor_price = 0. Nie wymyślaj kodu K
         labor_hours_total: laborHoursTotal,
         suggested_norm: finalLaborNorm,
         confidence_level: confidenceLevel,
-        confidence_note: (processed.note ?? `L3 ES-Engine: ${result.justification}`).slice(0, 400),
+        confidence_note: (processed.note ?? `Szacunek: ${result.justification}`).slice(0, 400),
         expert_override: processed.expert_override ?? false,
         is_low_confidence: processed.isLowConfidence ?? false,
         calculation_log: (processed.calculationLog ?? "").slice(0, 500),
@@ -2246,6 +2246,6 @@ Jeśli nie znasz godziny, labor_norm = 0 i labor_price = 0. Nie wymyślaj kodu K
     };
   } catch (error) {
     logger.error("triggerL3Estimation error:", {}, error);
-    return { success: false, price_labor: 0, price_material: 0, justification: "", match_trace: "", knr_code: null, labor_norm: null, error: "Błąd wyceny ES-Engine" };
+    return { success: false, price_labor: 0, price_material: 0, justification: "", match_trace: "", knr_code: null, labor_norm: null, error: "Nie udało się wycenić tej pozycji" };
   }
 }

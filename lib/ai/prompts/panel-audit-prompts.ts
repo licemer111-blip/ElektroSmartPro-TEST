@@ -109,7 +109,7 @@ export const CATALOG_PROMPT = `<module_catalog>
 ZADANIE: Generowanie pozycji katalogowych (Pozycje Katalogowe) dla systemu ElektroSmart PRO.
 
 Dla każdej wygenerowanej pozycji MUSISZ:
-1. Dopasować najbardziej zbliżony kod KNR (knr_code) z dostarczonej bazy ES-KNR 2026.
+1. Nie wymyślaj numeru tabeli. Godzinę podaj tylko wtedy, gdy znasz normę ES.
    ⛔ ZAKAZ: seria KNR 5-04 (stara, 2015) — NIE istnieje w bazie.
    ✅ UŻYWAJ: KNR 5-08 (elektryka), KNR 5-09 (teletechnika), KNR 5-10 (przemysł), KNR 5-11 (PV/odgromowa), KNR 4-03 (demontaż/pomiary).
    Przykłady kanoniczne 2026:

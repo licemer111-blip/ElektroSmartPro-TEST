@@ -477,7 +477,7 @@ export function EstimateResultsTable({
                           </span>
                         ) : rowType === "poza-knr" ? (
                           <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-medium bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 w-fit">
-                            <Zap className="w-2.5 h-2.5" />Poza KNR · ES-Engine 2
+                            <Zap className="w-2.5 h-2.5" />Brak normy ES
                           </span>
                         ) : null}
                         {est.knrCode && est.knrSource && !needsIntervention && (
@@ -552,7 +552,7 @@ export function EstimateResultsTable({
                               className="h-8 px-3 text-[11px] gap-1 border-orange-300 text-orange-700 hover:bg-orange-50 dark:border-orange-700 dark:text-orange-400"
                             >
                               {editRepricing ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
-                              ES-Engine
+                              Szacunek
                             </Button>
                           </div>
 
@@ -595,7 +595,7 @@ export function EstimateResultsTable({
             </p>
             <p className="text-[10px] text-violet-600/80 dark:text-violet-500/80 mt-0.5">
               Nie znaleziono dopasowania w katalogu prywatnym ani ES-Dictionary.
-              Użyj przycisku <strong>Wyceń ręcznie</strong> lub <strong>Szacuj z ES-Engine 2</strong> bezpośrednio w tabeli.
+              Wpisz cenę ręcznie albo kliknij <strong>Wyceń</strong>. Materiał zostaje pusty, jeśli nie ma go w Twoim cenniku.
             </p>
           </div>
         </div>

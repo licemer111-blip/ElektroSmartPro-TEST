@@ -321,7 +321,7 @@ export const AIPreviewPanel = memo(function AIPreviewPanel({
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <Badge className="bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300">
           <Sparkles className="w-3 h-3 mr-1" />
-          ES-Engine zidentyfikował {items.length} pozycji
+          Rozpoznano {items.length} pozycji
         </Badge>
         <Button variant="ghost" size="sm" onClick={onToggleAll} className="text-xs h-7">
           {selectedItems.size === items.length ? "Odznacz" : "Zaznacz"} wszystko

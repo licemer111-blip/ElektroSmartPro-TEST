@@ -169,7 +169,7 @@ export function SmartSuggestions({ projectData, onApplySuggestion }: SmartSugges
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Lightbulb className="h-5 w-5" />
-            ES-Engine analizuje projekt...
+            Szukam braków w projekcie...
           </CardTitle>
         </CardHeader>
         <CardContent>

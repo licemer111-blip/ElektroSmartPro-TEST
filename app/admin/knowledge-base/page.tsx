@@ -24,11 +24,11 @@ export default async function KnowledgeBasePage() {
             <Brain className="w-4 h-4 text-indigo-600" />
           </div>
           <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-            Baza Wiedzy ES-Engine
+            Baza godzin
           </h1>
         </div>
         <p className="text-xs text-slate-500 ml-9">
-          Pliki JSON z normami KNR i konfiguracjami — dynamicznie wstrzykiwane do ES-Engine jako kontekst RAG.
+          Pliki z godzinami normy ES. To nie jest cennik materiałów.
         </p>
         {error && (
           <div className="mt-2 ml-9 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">

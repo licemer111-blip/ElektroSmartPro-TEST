@@ -2,7 +2,7 @@
 
 // ═══════════════════════════════════════════════════════════════════
 // knr-calculator/_parts/KnrEngineCalibration.tsx
-// Etaż 2: Kalibracja ES-Engine — montaż + autouczenie + czułość
+// Name matching: default mounting, memory and sensitivity. Does not rewrite saved hours.
 // UI-only, stany lokalne (bez zapisu do DB na tym etapie)
 // ═══════════════════════════════════════════════════════════════════
 
@@ -99,7 +99,7 @@ export function KnrEngineCalibration({ calibration, onChange }: KnrEngineCalibra
             <BrainCog className="w-4 h-4 text-white" />
           </div>
           <div>
-            <CardTitle className="text-base leading-tight">Kalibracja Silnika ES-Engine</CardTitle>
+            <CardTitle className="text-base leading-tight">Dopasowanie nazw</CardTitle>
             <CardDescription className="text-xs mt-0.5">
               Sposób montażu i czułość dopasowania nazwy. Godzin w zapisanej pozycji to nie przelicza.
             </CardDescription>
@@ -157,7 +157,7 @@ export function KnrEngineCalibration({ calibration, onChange }: KnrEngineCalibra
                   htmlFor="knr-auto-learning"
                   className={`text-xs font-semibold cursor-pointer ${calibration.autoLearning ? "text-slate-900 dark:text-slate-100" : "text-slate-500 dark:text-slate-400"}`}
                 >
-                  Pamięć ES-Engine
+                  Pamięć dopasowań
                 </Label>
               </div>
               <Switch
@@ -191,7 +191,7 @@ export function KnrEngineCalibration({ calibration, onChange }: KnrEngineCalibra
                 htmlFor="knr-sensitivity"
                 className="text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-default"
               >
-                Czułość dopasowania ES-Engine
+                Czułość dopasowania nazwy
               </Label>
             </div>
             <Select

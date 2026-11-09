@@ -357,7 +357,7 @@ export function SchematToolbar({
                   {aiSchematLoading ? (
                     <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Analiza obwodów...</>
                   ) : (
-                    <><Sparkles className="w-3.5 h-3.5" /> Generuj schemat (ES-Engine)</>
+                    <><Sparkles className="w-3.5 h-3.5" /> Generuj schemat</>
                   )}
                 </Button>
               </span>
@@ -379,12 +379,12 @@ export function SchematToolbar({
 
           {aiSchematTrees.length > 0 && (
             <Badge className="bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300 text-[10px]">
-              ES-Engine · {aiSchematTrees.length} sekcji
+              Schemat · {aiSchematTrees.length} sekcji
             </Badge>
           )}
           {aiUsageInfo && (
             <span className={`ml-auto text-[10px] font-medium ${aiUsageInfo.used >= aiUsageInfo.limit ? "text-red-500" : "text-slate-500"}`}>
-              {aiUsageInfo.used}/{aiUsageInfo.limit} zapytań ES-Engine{aiUsageInfo.isPro ? " /mies." : " (demo)"}
+              {aiUsageInfo.used}/{aiUsageInfo.limit} zapytań AI{aiUsageInfo.isPro ? " /mies." : " (demo)"}
             </span>
           )}
         </div>

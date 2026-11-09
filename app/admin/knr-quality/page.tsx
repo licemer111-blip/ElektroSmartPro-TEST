@@ -30,7 +30,7 @@ export default async function KnrQualityHubPage() {
           <div>
             <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">KNR Quality Hub</h1>
             <p className="text-xs text-slate-500 mt-0.5">
-              ES-Engine · analiza jakości dopasowań · awanse L2 → L0
+              Jakość dopasowania nazw do godzin normy ES
             </p>
           </div>
         </div>
@@ -61,7 +61,7 @@ export default async function KnrQualityHubPage() {
               L3 rate przekroczył próg 5% ({stats.l3Rate}%)
             </p>
             <p className="text-xs text-amber-700/80 dark:text-amber-400/80 mt-0.5">
-              ES-Engine nie znalazł dopasowań L1/L2 dla{" "}
+              Nie znaleziono godziny normy ES dla{" "}
               <strong>{stats.auditL3 + stats.auditUnmatched}</strong> pozycji.
               Użyj tabeli poniżej aby awansować najczęstsze pozycje do L0.
             </p>

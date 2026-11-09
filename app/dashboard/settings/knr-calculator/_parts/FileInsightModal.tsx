@@ -27,7 +27,7 @@ export function isSpreadsheet(mimeType: string): boolean {
 }
 
 export function getFileRoutingLabel(mimeType: string): { label: string; color: string } {
-  if (mimeType === "application/pdf") return { label: "ES-Engine Kontekst", color: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300" };
+  if (mimeType === "application/pdf") return { label: "Opis z PDF", color: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300" };
   if (isSpreadsheet(mimeType)) return { label: "Moje Normy", color: "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300" };
   return { label: "Własne dane", color: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400" };
 }
@@ -66,7 +66,7 @@ export function FileInsightModal({ file, onClose }: FileInsightModalProps) {
         { label: "Format", value: "Tekst z PDF (nie skany!)", color: "text-slate-600 dark:text-slate-300" },
       ]
     : [
-        { label: "Używane przez", value: "ES-Engine L1 (błyskawiczne dopasowanie)", color: "text-violet-600 dark:text-violet-400" },
+        { label: "Używane przez", value: "Twój cennik przy dopasowaniu nazwy", color: "text-violet-600 dark:text-violet-400" },
         { label: "Kiedy", value: "Przy każdej wycenie — przed globalną bazą KNR", color: "text-slate-600 dark:text-slate-300" },
         { label: "Co wyciąga", value: "Nazwy pozycji → kody KNR → normy rbh/jedn.", color: "text-slate-600 dark:text-slate-300" },
         { label: "Format", value: "Kolumny: Nazwa | KNR | Norma | Jednostka", color: "text-slate-600 dark:text-slate-300" },

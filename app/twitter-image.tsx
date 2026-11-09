@@ -113,7 +113,7 @@ export default async function Image() {
 
           {/* Features Row */}
           <div style={{ display: 'flex', gap: '16px' }}>
-            {['📚 Baza KNR', '📊 120+ DIN', '⚡ ES-Engine'].map((f) => (
+            {['Godzina × stawka', '120+ DIN', 'Twój cennik'].map((f) => (
               <div
                 key={f}
                 style={{

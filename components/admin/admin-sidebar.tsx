@@ -37,7 +37,7 @@ const NAV_GROUPS = [
     ],
   },
   {
-    label: "ES-Engine",
+    label: "Godziny",
     color: "text-emerald-500",
     items: [
       { href: "/admin/knr-quality", label: "Jakość norm ES", icon: FlaskConical },

@@ -370,7 +370,7 @@ export function AdminDashboardClient({ kpi, voivodeships, assemblies, errors }: 
             <NavCard href="/admin/knr-quality"  label="Jakość norm ES" icon={FlaskConical} desc="Dopasowania normy ES, nie stary panel DIN" accent="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400" />
             <NavCard href="/admin/canonical-l0"   label="L0 Canonical"   icon={SlidersHorizontal} desc="Overrides bazy KNR L0"             accent="bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400" />
             <NavCard href="/admin/analytics"      label="Analityka"       icon={BarChart3}       desc="Aktywność użytkowników & odchylenia" accent="bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400" />
-            <NavCard href="/admin/knowledge-base" label="Baza Wiedzy"    icon={Brain}           desc="Pliki RAG dla ES-Engine"             accent="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400" />
+            <NavCard href="/admin/knowledge-base" label="Baza Wiedzy"    icon={Brain}           desc="Pliki z godzinami normy ES"             accent="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400" />
           </CardContent>
         </Card>
 

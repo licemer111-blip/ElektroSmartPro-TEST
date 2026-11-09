@@ -231,7 +231,7 @@ export default async function CatalogPage({
                 </div>
                 <div>
                   <h4 className="text-sm font-semibold text-green-900 dark:text-green-100 mb-1">
-                    Baza ES-Engine
+                    Baza godzin ES
                   </h4>
                   <p className="text-xs text-green-800 dark:text-green-300">
                     Pozycje bazy ES: materiał i robocizna w osobnych kolumnach. Tryb przełączasz w panelu kategorii po lewej.

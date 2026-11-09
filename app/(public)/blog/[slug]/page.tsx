@@ -39,20 +39,20 @@ Problem polega na tym, że kody KNR **nie mówią nic klientowi** — potrzeba j
 ## Jak działa import KNR w ES Lab?
 
 ### Krok 1: Wgraj plik Excel
-Przeciągnij lub wybierz plik Excel (.xlsx, .xls) z przedmiarem. ES-Engine akceptuje pliki z dowolną strukturą kolumn.
+Przeciągnij lub wybierz plik Excel (.xlsx, .xls) z przedmiarem. Program czyta tabelę, nawet jeśli kolumny nazywają się inaczej.
 
-### Krok 2: ES-Engine rozpoznaje kody KNR
-System analizuje zawartość pliku i automatycznie:
-- Identyfikuje kody KNR (5-08, 5-09 i inne)
-- Rozpoznaje ilości i jednostki miary
-- Dekoduje opisy pozycji
+### Krok 2: Program czyta nazwy i ilości
+Z pliku bierze:
+- nazwę pozycji
+- ilość i jednostkę
+- cenę, jeśli już jest w pliku
 
-### Krok 3: Generuje czytelny kosztorys
-ES-Engine zamienia kody na czytelne pozycje z:
-- **Nazwa materiału** (np. "Gniazdo podtynkowe 230V")
-- **Cena materiału** (na podstawie aktualnej bazy cenowej)
-- **Cena robocizny** (na podstawie KNR)
-- **Ilość** (z przedmiaru)
+### Krok 3: Cena powstaje u Ciebie
+Program nie ma własnego cennika materiałów.
+- **Nazwa** zostaje z pliku
+- **Materiał** zostaje z pliku albo pusty, aż wpiszesz go w swoim cenniku
+- **Robocizna** to godzina normy ES × Twoja stawka
+- **Ilość** jest z przedmiaru
 
 ### Krok 4: Dodaj do projektu
 Jednym kliknięciem przenieś wyniki do projektu — pozycje są automatycznie dopasowane do katalogu ElektroSmart PRO.
@@ -72,8 +72,8 @@ Jednym kliknięciem przenieś wyniki do projektu — pozycje są automatycznie d
 
 ## Wskazówki dla najlepszych wyników
 
-1. **Sprawdź, czy plik zawiera kolumnę z kodami KNR** — ES-Engine szuka wzorców typu "KNR X-XX XXXX-XX"
-2. **Ilości powinny być w osobnej kolumnie** — ES-Engine lepiej rozpoznaje dane tabelaryczne
+1. **Nazwa i ilość w osobnych kolumnach** — wtedy odczyt jest pewniejszy
+2. **Cenę materiału zostaw w pliku tylko wtedy, gdy jest Twoja** — program jej nie poprawia na „rynkową”
 3. **Możesz dodać własne instrukcje** — np. "Zamień KNR na pozycje z cenami 2026"
 4. **Użyj szablonu "Import KNR"** w ES Lab — zoptymalizowany prompt
 

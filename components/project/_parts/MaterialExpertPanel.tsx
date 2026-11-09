@@ -479,7 +479,7 @@ export function MaterialExpertPanel({ projectId, vatRate, filterItemId, preloade
                 </div>
               </div>
               <div className="border-t border-violet-200 dark:border-violet-700/60 bg-violet-100/60 dark:bg-violet-900/20 px-3 py-2 flex justify-end">
-                <span className="text-[10px] text-violet-500 dark:text-violet-400">Sugestia Eksperta ES-Engine • Dodaj RCD/MCB poniżej</span>
+                <span className="text-[10px] text-violet-500 dark:text-violet-400">Podpowiedź • dodaj RCD albo MCB poniżej</span>
               </div>
             </div>
           );

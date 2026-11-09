@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "KB Playground — Test Bazy Wiedzy ES-Engine",
-  description: "Testuj zapytania do bazy wiedzy KNR i sprawdzaj jak ES-Engine interpretuje normy robocizny i ceny materiałów elektrycznych",
+  title: "KB Playground — test bazy godzin",
+  description: "Sprawdź, jaką godzinę norma ES przypisuje do nazwy. Cen materiałów tu nie ma.",
 };
 
 export default function KbPlaygroundLayout({ children }: { children: React.ReactNode }) {

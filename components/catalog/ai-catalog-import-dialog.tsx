@@ -295,7 +295,7 @@ export function AICatalogImportDialog({
             ES Import z Excel / CSV
           </DialogTitle>
           <DialogDescription>
-            Wgraj plik — ES-Engine automatycznie rozpozna pozycje i sformatuje je pod katalog
+            Wgraj plik. Program rozpozna nazwy i ilości. Cenę materiału wpiszesz sam.
           </DialogDescription>
         </DialogHeader>
 
@@ -363,7 +363,7 @@ export function AICatalogImportDialog({
             <div className="flex flex-col items-center justify-center py-10 gap-3">
               <Loader2 className="w-8 h-8 text-orange-500 animate-spin" />
               <div className="text-center">
-                <p className="text-sm font-semibold">ES-Engine analizuje plik...</p>
+                <p className="text-sm font-semibold">Czytam plik...</p>
                 <p className="text-xs text-muted-foreground mt-0.5">{fileName} · {rawRows.length} wierszy</p>
               </div>
             </div>

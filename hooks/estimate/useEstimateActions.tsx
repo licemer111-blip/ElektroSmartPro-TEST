@@ -170,7 +170,7 @@ export function useEstimateActions({
           .then((r) => {
             if (r.success) {
               toast({
-                title: "🧠 ES-Engine zapamiętał tę pozycję",
+                title: "Zapisano tę pozycję w Twoim cenniku",
                 description: `"${originalItem.name}" → ${originalItem.knr_code}`,
                 duration: 2500,
               });

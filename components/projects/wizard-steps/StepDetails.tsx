@@ -388,7 +388,7 @@ export function StepDetails({
         </Button>
         <Button onClick={handleGenerateItems} disabled={generating} className="bg-orange-500 hover:bg-orange-600 text-white">
           {generating ? (
-            <><Loader2 className="w-4 h-4 mr-2 animate-spin" />ES-Engine generuje kosztorys...</>
+            <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Układam listę pozycji...</>
           ) : (
             <><Sparkles className="w-4 h-4 mr-2" />Generuj kosztorys</>
           )}

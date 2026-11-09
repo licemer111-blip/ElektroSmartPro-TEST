@@ -128,7 +128,7 @@ export function KnrClient({ initialRate, initialMaterialMultiplier = 1.08, initi
 
               <SectionDivider
                 icon={BrainCog}
-                title="Inteligencja ES-Engine"
+                title="Godziny i cennik"
                 subtitle="Sposób montażu i opis obiektu. Nie zmieniają stawki ani województwa."
               />
               <KnrEngineCalibration

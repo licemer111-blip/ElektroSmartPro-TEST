@@ -321,7 +321,7 @@ Zbuduj drzewo hierarchii elektrycznej wg norm PN-EN 61439. Zwróć JSON z polami
       tree: { sectionName, feed, supply: "3~ 400V", nodes: finalNodes },
       validationNotes: [
         ...(parsed.validationNotes ?? []),
-        ...(fixes.length > 0 ? [`[AUTO-FIX] Korekcje ES-Engine: ${fixes.join("; ")}`] : []),
+        ...(fixes.length > 0 ? [`Poprawki schematu: ${fixes.join("; ")}`] : []),
         ...(auditResult.issues.map(i => `[${i.severity.toUpperCase()}] ${i.field}: ${i.message}`)),
       ],
       audited: true,

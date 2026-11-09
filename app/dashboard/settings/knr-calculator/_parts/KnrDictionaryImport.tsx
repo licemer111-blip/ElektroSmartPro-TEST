@@ -233,7 +233,7 @@ export function KnrDictionaryImport() {
       }
       toast({
         title: "✅ Import zakończony",
-        description: `Dodano ${result.inserted} pozycji do słownika ES-Engine (L1)`,
+        description: `Dodano ${result.inserted} pozycji do Twojego słownika`,
       });
       setStep("done");
       loadStats();
@@ -267,7 +267,7 @@ export function KnrDictionaryImport() {
             <FileSpreadsheet className="w-4 h-4 text-white" />
           </div>
           <div className="flex-1 min-w-0">
-            <CardTitle className="text-base">Import KNR → Słownik ES-Engine</CardTitle>
+            <CardTitle className="text-base">Import godzin do słownika</CardTitle>
             <CardDescription className="text-xs mt-0.5">
               Załaduj własne normy KNR z Excel/CSV — każda pozycja staje się wpisem <strong>L1 (Exact)</strong> dla Twojego konta
             </CardDescription>
@@ -364,7 +364,7 @@ export function KnrDictionaryImport() {
                 {isCommitting ? (
                   <><Loader2 className="w-3.5 h-3.5 animate-spin" />Importuję...</>
                 ) : (
-                  <><ArrowRight className="w-3.5 h-3.5" />Importuj {preview.totalRows} pozycji do ES-Engine</>
+                  <><ArrowRight className="w-3.5 h-3.5" />Importuj {preview.totalRows} pozycji</>
                 )}
               </Button>
             </div>

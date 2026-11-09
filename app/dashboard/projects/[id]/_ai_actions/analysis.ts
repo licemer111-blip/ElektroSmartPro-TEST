@@ -184,30 +184,11 @@ export async function fillMissingKnrCodes(projectId: string): Promise<KnrCodeRes
 
     const { object: result } = await generateObject({
       model: google(AI_MODEL_TIER2),
-      system: `Jesteś ekspertem KNR (Katalog Norm Rzeczowych) dla instalacji elektrycznych w Polsce.
-Twoim zadaniem jest znalezienie kodu KNR dla każdej pozycji robocizny.
-
-ZASADY (KRYTYCZNE — zawsze przestrzegaj):
-1. NIGDY nie zwracaj knr_code=null. Każda pozycja MUSI otrzymać kod.
-2. Jeśli znasz dokładny kod → confidence="high", format "KNR X-XX XXXX-XX".
-3. Jeśli szacujesz na podstawie podobnych pozycji → confidence="medium".
-4. Jeśli brak odpowiedniego kodu KNR → użyj kodu syntetycznego ES-Engine:
-   - Pozycje LAN/sieć/UTP/patch/RJ45/światłowód/rack → knr_code="KNR 5-06+ES"
-   - Pozycje CCTV/kamera/NVR/DVR → knr_code="KNR 5-09+ES"
-   - Pozycje alarm/SSWiN/czujka/centrala alarmowa → knr_code="KNR 5-10+ES"
-   - Pozycje SSP/pożar/ROP/detekcja → knr_code="KNR 5-11+ES"
-   - Pozycje KD/kontrola dostępu/RFID/elektrozaczep → knr_code="KNR 5-09+ES"
-   - Pozycje PV/fotowoltaika/panel solarny/falownik → knr_code="KNR AT-26+ES"
-   - Pozycje EV/ładowarka/EVSE → knr_code="KNR-ES"
-   - Wszystkie pozostałe nieznane → knr_code="KNR-ES"
-   - confidence="low" dla wszystkich syntetycznych
-5. Przykłady pewnych kodów:
-   gniazdo 230V → "KNR 5-01 0401-01" (high)
-   punkt oświetleniowy → "KNR 5-01 0301-01" (high)
-   przewód YDYp 3x2.5 → "KNR 5-04 0101-02" (high)
-   wyłącznik nadprądowy → "KNR 5-08 0201-01" (high)
-   Linia LAN/punkt LAN → "KNR 5-06+ES" (low)
-   kabel UTP/U/UTP kat.6 → "KNR 5-06+ES" (low)`,
+      system: `Szukasz godziny normy ES, nie urzędowego numeru tabeli.
+Jak znasz godzinę, podaj knr_code tylko gdy to znana pozycja normy ES, confidence="high".
+Jak nie znasz, knr_code zostaw pusty string, confidence="low". Nie wymyślaj kodów KNR-ES ani serii 5-01.
+Znane przykłady: gniazdo pojedyncze KNR 5-08 0401, łącznik KNR 5-08 0501, YDYp 3x2.5 KNR 5-08 0202.
+Ceny materiału nie podawaj.`,
       prompt: `Znajdź kody KNR dla następujących pozycji:\n\n${itemsList}`,
       schema: z.object({
         codes: z.array(z.object({

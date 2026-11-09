@@ -56,7 +56,7 @@ export function PanelAdminClient({ data }: { data: PanelAdminData }) {
         </h1>
         <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-1">
           <Clock className="w-3 h-3" />
-          {new Date(data.generatedAt).toLocaleString("pl-PL")} · ES-KNR 2026 · DIN Rail v3.0
+          {new Date(data.generatedAt).toLocaleString("pl-PL")} · norma ES · DIN Rail v3.0
         </p>
       </div>
 
@@ -230,7 +230,7 @@ export function PanelAdminClient({ data }: { data: PanelAdminData }) {
             <div className="p-2.5 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800">
               <p className="text-[10px] font-bold text-blue-700 dark:text-blue-300 mb-1">Pipeline wyceny AI</p>
               <div className="space-y-0.5 text-[9px] text-blue-600 dark:text-blue-400">
-                <p>1. Kontekst RAG (KB) — normy ES-KNR 2026</p>
+                <p>1. Pliki godzin — norma ES, nie cennik hurtowy</p>
                 <p>2. 4 poziomy pewności: verified / analog / estimated / uncertain</p>
                 <p>3. Audyt — Stage 2 weryfikacja przez Gemini</p>
                 <p>4. Separacja: Robocizna / Materiał (Iron Rules)</p>

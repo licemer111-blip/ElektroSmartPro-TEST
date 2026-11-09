@@ -260,7 +260,7 @@ export function CameraScanner({ onScanComplete, onAddToProject, isPro = true }: 
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                <span className="text-sm">ES-Engine analizuje zdjęcie...</span>
+                <span className="text-sm">Czytam zdjęcie...</span>
               </div>
               <Progress value={66} className="w-full" />
             </div>

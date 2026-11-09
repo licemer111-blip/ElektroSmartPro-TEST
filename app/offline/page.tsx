@@ -77,7 +77,7 @@ export default function OfflinePage() {
         </div>
 
         <p className="text-center text-xs text-slate-400 dark:text-slate-600 mt-4">
-          Powered by ElektroSmart PRO — ES-Engine
+          ElektroSmart PRO — godzina × Twoja stawka
         </p>
       </div>
     </div>

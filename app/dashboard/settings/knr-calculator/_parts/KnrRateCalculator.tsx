@@ -2,7 +2,7 @@
 
 // ═══════════════════════════════════════════════════════════════════
 // knr-calculator/_parts/KnrRateCalculator.tsx
-// Expert Engine pipeline: L1 (Twój katalog) → L2 (ES-KNR 2026) → L3 (ES-Engine AI on-demand)
+// Rate source: own list, then ES hours × the electrician rate. No invented material price.
 // ═══════════════════════════════════════════════════════════════════
 
 import { useTransition, useEffect } from "react";
@@ -69,7 +69,7 @@ export function KnrRateCalculator({
         setRateSaved(false);
         setSearchMode("engine");
         window.dispatchEvent(new CustomEvent("custom-mode-changed", { detail: { useCustomRates: false } }));
-        toast({ title: "ES-Engine aktywny", description: "Wyceny — normy KNR + Twoja stawka R-G" });
+        toast({ title: "Baza ES", description: "Robocizna: godzina normy ES × Twoja stawka" });
       } else {
         toast({ title: "Błąd", description: result.error, variant: "destructive" });
       }
@@ -151,7 +151,7 @@ export function KnrRateCalculator({
   const badgeLabel =
     activeMode === "own" ? "Własna Baza" :
     activeMode === "hybrid" ? "Tryb Hybrydowy" :
-    "ES-Engine";
+    "Baza ES";
 
   const iconBg =
     activeMode === "own" ? "bg-gradient-to-br from-violet-500 to-purple-600" :
@@ -182,7 +182,7 @@ export function KnrRateCalculator({
         {/* ══ Mode toggle ─ 3 cards ═══════════════════════════════════════ */}
         <div className="grid grid-cols-3 gap-2 p-1 rounded-xl bg-slate-100 dark:bg-slate-800">
 
-          {/* ES-Engine */}
+          {/* Shared hour list */}
           <button
             onClick={handleSelectEngine}
             disabled={isSwitching || activeMode === "engine"}
@@ -194,8 +194,8 @@ export function KnrRateCalculator({
           >
             {isSwitching && activeMode !== "engine" && <Loader2 className="w-3.5 h-3.5 animate-spin absolute top-1.5 right-1.5 text-slate-400" />}
             <BrainCircuit className={`w-5 h-5 ${activeMode === "engine" ? "text-orange-500" : "text-slate-400"}`} />
-            <span className="text-[11px] font-semibold leading-tight text-center">ES-Engine 2026</span>
-            <span className="text-[9px] text-slate-400 leading-tight text-center">Stawka KNR</span>
+            <span className="text-[11px] font-semibold leading-tight text-center">Baza ES</span>
+            <span className="text-[9px] text-slate-400 leading-tight text-center">Godzina × stawka</span>
             {activeMode === "engine" && <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-orange-500" />}
           </button>
 
@@ -240,7 +240,7 @@ export function KnrRateCalculator({
           <div className="flex items-start gap-2.5 p-3 rounded-lg text-xs bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-800">
             <BrainCircuit className="w-3.5 h-3.5 text-orange-500 flex-shrink-0 mt-0.5" />
             <span className="text-orange-700 dark:text-orange-300">
-              <strong>ES-Engine 2026</strong> — wyceny oparte wyłącznie na normach KNR i Twojej stawce R-G. Wyniki z bazy ES.
+              <strong>Baza ES</strong> — robocizna to godzina normy ES × Twoja stawka. Materiał pusty, dopóki nie wpiszesz go w swoim cenniku.
             </span>
           </div>
         )}

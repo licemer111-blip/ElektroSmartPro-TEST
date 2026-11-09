@@ -254,7 +254,7 @@ export const SchematView = React.memo(function SchematView({
                 <div className="flex items-center gap-1.5 mb-2">
                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">Schemat live — aktualizuje się automatycznie</span>
-                  <span className="text-[10px] text-slate-400 ml-1">Kliknij &quot;Generuj schemat&quot; aby dodać inteligentne połączenia ES-Engine</span>
+                  <span className="text-[10px] text-slate-400 ml-1">Kliknij „Generuj schemat”, żeby dorysować połączenia</span>
                 </div>
               )}
               <div key={svgKey} className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700 bg-white">

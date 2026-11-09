@@ -570,7 +570,7 @@ export function PanelConfigurator({ projectId, isPro = false, projectStatus = "d
               Konfigurator Rozdzielnicy
             </h2>
             <p className="text-[11px] text-muted-foreground mt-0.5">
-              Profesjonalny kreator tablic rozdzielczych — {DIN_MODULES_COUNT}+ modułów DIN, wizualizacja Live, ES-Engine
+              Kreator tablic — {DIN_MODULES_COUNT}+ modułów DIN. Montaż liczy Twoja stawka.
             </p>
           </div>
           {configBar}
@@ -609,7 +609,7 @@ export function PanelConfigurator({ projectId, isPro = false, projectStatus = "d
             Konfigurator rozdzielnicy
             <span className="ml-auto inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900 dark:bg-slate-700 text-[9px] font-medium text-slate-300">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              ES-Engine
+              Twoja stawka
             </span>
           </DialogTitle>
           <DialogDescription className="text-xs">

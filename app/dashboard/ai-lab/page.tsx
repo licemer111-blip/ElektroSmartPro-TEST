@@ -5,7 +5,7 @@ import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 
 export const metadata: Metadata = {
   title: "ES Import — Analiza Dokumentów",
-  description: "Wgraj PDF, Excel lub CSV → ES-Engine (Gemini Vision) wyciągnie pozycje kosztorysowe, materiały i ceny. Analiza rzutów budowlanych wg IEC 60617. Inteligentny import do projektu.",
+  description: "Wgraj PDF, Excel lub CSV. Program wypisze nazwy, ilości i jednostki. Cen materiałów nie dopisuje. Robociznę policzysz przyciskiem Wyceń.",
 };
 
 // Force dynamic rendering to always get fresh is_pro status from database

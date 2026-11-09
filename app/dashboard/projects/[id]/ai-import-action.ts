@@ -365,7 +365,7 @@ export async function aiPriceVisionItems(
     const importContext = `<import_context>
 
 Źródło: OCR (skan/zdjęcie dokumentu)
-Zadanie: WYCENA pozycji rozpoznanych przez ES-Engine 2 Vision.
+Zadanie: odczyt pozycji ze zdjęcia. Cen nie dopisuj.
 
 ZASADY:
 1. material_price = 0 i labor_price = 0. Nie szacuj cen.
