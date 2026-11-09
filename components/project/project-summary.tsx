@@ -13,7 +13,6 @@ import { toggleMaterialsOwnedByCustomer } from "@/app/dashboard/projects/[id]/ac
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { notifyDataChanged } from "@/hooks/use-synced-action";
-import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { Calculator, CheckCircle, AlertTriangle, Sparkles, TrendingUp, Percent, ChevronDown } from "lucide-react";
 import { HintTooltip } from "@/components/ui/hint-tooltip";
 import { HINTS } from "@/lib/hints/hint-content";
@@ -21,8 +20,6 @@ import { cn } from "@/lib/utils";
 import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 import type { ProjectItem, ProjectWithRelations, Profile } from "@/lib/types/database";
 import { calcNarzuty } from "@/lib/pricing-calculations";
-import { detectSmartContext } from "@/lib/ai/smart-context-mapper";
-import { expandToAssembly, detectSector } from "@/lib/ai/smart-mapping-engine";
 import { SummaryFinancialTotals } from "./_parts/summary/SummaryFinancialTotals";
 import { SummaryExportPanel } from "./_parts/summary/SummaryExportPanel";
 
@@ -76,9 +73,7 @@ export function ProjectSummary({
   const isPro = getEffectiveIsPro(profile);
   const isFinal = projectStatus === "final";
 
-  const { multiplier: knrMultiplier } = useKnrMultiplier();
-
-  // Calculate totals - assembly trigger items use template prices for consistency with table rows
+  // Totals use the price stored on each row. A real kit is summed from its own rows.
   const calculateTotals = useMemo(() => () => {
     let rawMaterialBase = 0; // pure base netto, no region, no adj
     let rawLaborBase = 0;    // pure base netto, no region, no adj
@@ -98,8 +93,6 @@ export function ProjectSummary({
     const parentIds = new Set(
       items.filter(i => i.is_assembly_child).map(i => i.parent_assembly_id).filter(Boolean)
     );
-    const sector = detectSector((project as { object_types?: { slug?: string } }).object_types?.slug);
-    const projectLaborRate = project.default_hourly_rate ?? 100;
 
     items.forEach((item) => {
       if (item.is_assembly_child) return;
@@ -107,32 +100,6 @@ export function ProjectSummary({
       const pricedRows = parentIds.has(item.id)
         ? items.filter((child) => child.parent_assembly_id === item.id)
         : [item];
-
-      // v4.0 (Phase 5): Template fires only for truly unpriced rows (confidence_level == null).
-      // Zestaw Engine v2: auto-expansion runs only when opted in per-project.
-      const hasEngineSetPrice = item.confidence_level != null;
-      const autoDetectZestawy = Boolean(
-        (project as { auto_detect_zestawy?: boolean }).auto_detect_zestawy
-      );
-      const isQuickEstimateRow = Boolean(
-        (item as { is_quick_estimate?: boolean | null }).is_quick_estimate
-      );
-      if (!parentIds.has(item.id) && autoDetectZestawy && !isQuickEstimateRow && !hasEngineSetPrice) {
-        const scm = detectSmartContext(item.name);
-        if (scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY" || scm.category === "ROZDZIELNICA") {
-          const expansion = expandToAssembly(item.name, item.quantity, sector, projectLaborRate, knrMultiplier, item.assembly_overrides ?? undefined);
-          if (expansion.triggered && (expansion.totalLaborPLN > 0 || expansion.totalMaterialPLN > 0)) {
-            // totalLaborPLN = totalRBH × stawka. Region, narzut and complexity apply once here.
-            rawLaborBase += expansion.totalLaborPLN;
-            baseLaborTotal += expansion.totalLaborPLN * regionModifier * labMarkupMult * complexityFactor;
-            if (!materialsOwnedByCustomer) {
-              rawMaterialBase += expansion.totalMaterialPLN;
-              baseMaterialTotal += expansion.totalMaterialPLN * matMarkupMult;
-            }
-            return;
-          }
-        }
-      }
 
       for (const row of pricedRows) {
         const qty = row.is_lump_sum ? 1 : row.quantity;
@@ -190,7 +157,7 @@ export function ProjectSummary({
       regionName,
       equipmentTotal: rawEquipmentBase,
     };
-  }, [items, project, regionModifier, materialsOwnedByCustomer, vatRate, knrMultiplier]);
+  }, [items, project, regionModifier, materialsOwnedByCustomer, vatRate]);
 
   const totals = calculateTotals();
 
@@ -227,7 +194,7 @@ export function ProjectSummary({
     return Array.from(sections.entries())
       .map(([name, data]) => ({ name, ...data, total: data.mat + data.lab }))
       .sort((a, b) => b.total - a.total);
-  }, [items, project, regionModifier, materialsOwnedByCustomer, knrMultiplier]);
+  }, [items, project, regionModifier, materialsOwnedByCustomer]);
 
   const unpricedCount = useMemo(() => items.filter((item) => {
     if (item.is_assembly_child) return false;

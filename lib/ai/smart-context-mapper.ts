@@ -230,13 +230,6 @@ function buildZestaw(
   if (is3Phase) assemblyDesc = "Zestaw 3-fazowy (Siła/Indukcja)";
   else if (isLED) assemblyDesc = "Zestaw oświetleniowy LED";
 
-  const ledNote = isLED
-    ? " Uwzględnij zasilacz LED i montaż profilu/mocowania."
-    : "";
-  const phaseNote = is3Phase
-    ? " Zastosuj kabel 5×2.5mm², gniazdo CEE 16A/32A, ochronę 3-fazową."
-    : "";
-
   return {
     category: "ZESTAW",
     subType,
@@ -246,13 +239,7 @@ function buildZestaw(
     defaultCableLength: cableLen,
     defaultFurrowLength: furrowLen,
     validationLabel: `${assemblyDesc} (${keyword})`,
-    promptHint: [
-      `[SCM:ZESTAW keyword="${keyword}"]`,
-      `To jest ZESTAW KOMPLETNY. NIE zwracaj jednego kodu KNR.`,
-      `Musi zawierać: kabel ${cableSpec} (~${cableLen}mb), bruzda (~${furrowLen}mb), puszka, montaż urządzenia.`,
-      phaseNote,
-      ledNote,
-    ].filter(Boolean).join(" "),
+    promptHint: "",
     suggestedUnit: "szt",
   };
 }

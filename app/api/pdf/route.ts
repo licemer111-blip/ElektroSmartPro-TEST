@@ -297,9 +297,8 @@ export async function POST(req: Request) {
     //     them duplicates bruzdowanie/cable. Default OFF for new projects.)
     //   • item.is_quick_estimate === true → never expand a Quick Estimate row
     //     even when the project flag is ON (the wizard line is canonical).
-    const autoDetectZestawy = Boolean(
-      (project as Record<string, unknown>).auto_detect_zestawy
-    );
+    // A named line is not a kit. PDF prints the price stored on the row.
+    const autoDetectZestawy = false;
     const aiExpansionMap = new Map<string, SmartExpansionResult>();
     if (autoDetectZestawy) {
       for (const item of calcItems) {

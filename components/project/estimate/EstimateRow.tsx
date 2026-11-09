@@ -7,15 +7,12 @@ import { Badge } from "@/components/ui/badge";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { CheckSquare, Square, GripVertical, Shield, Flag, ChevronDown, ChevronRight, AlertTriangle, LayoutGrid, X, Check, PenLine, Zap, Trash2 } from "lucide-react";
+import { CheckSquare, Square, GripVertical, Shield, Flag, ChevronDown, ChevronRight, AlertTriangle, LayoutGrid, X, Check, PenLine, Trash2 } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { UNIT_PRESETS } from "@/lib/validations";
 import { calcRowPrices } from "@/lib/pricing-calculations";
 import type { ProjectItem } from "@/lib/types/database";
-import { detectSmartContext } from "@/lib/ai/smart-context-mapper";
-import { SmartAssemblyPanel } from "@/components/project/estimate/_parts/SmartAssemblyPanel";
 import { expandToAssembly } from "@/lib/ai/smart-mapping-engine";
 import type { ProjectSector, AssemblyOverrides } from "@/lib/ai/smart-mapping-engine";
 import { roundPrice, useGlobalSettings } from "@/hooks/use-global-settings";
@@ -198,27 +195,9 @@ export const EstimateRow = React.memo(function EstimateRow({
 
   // Virtual expand state for AI-triggered ZESTAW rows (no real DB children)
   const [isVirtualExpanded, setIsVirtualExpanded] = useState(false);
-  // Controlled open state for Zap (SmartAssemblyPanel) popover
-  const [zapOpen, setZapOpen] = useState(false);
-  // Transition for virtual row delete
   const [isDeletePending, startDeleteTransition] = useTransition();
-  // Transition for smart assembly toggle
-  const [isSmartTogglePending, startSmartToggleTransition] = useTransition();
 
   const isSmartDisabled = !!(item.assembly_overrides as AssemblyOverrides | null)?.__smart_disable?.disabled;
-
-  function handleToggleSmartDisabled() {
-    const existing = (item.assembly_overrides ?? {}) as AssemblyOverrides;
-    startSmartToggleTransition(async () => {
-      if (isSmartDisabled) {
-        const next = { ...existing };
-        delete next["__smart_disable"];
-        await saveAssemblyOverrides(item.project_id, item.id, Object.keys(next).length > 0 ? next : null);
-      } else {
-        await saveAssemblyOverrides(item.project_id, item.id, { ...existing, "__smart_disable": { disabled: true } });
-      }
-    });
-  }
 
   function handleDeleteVirtualRow(label: string) {
     const existing = (item.assembly_overrides ?? {}) as AssemblyOverrides;
@@ -277,16 +256,6 @@ export const EstimateRow = React.memo(function EstimateRow({
   // the row matches the SmartAssemblyPanel tooltip. project-summary.tsx applies
   // the same logic, so table rows ≡ summary ≡ tooltip.
   const isManualPrice = displayItem.confidence_level === "manual";
-  // v4.0 (Phase 5): CRITICAL preview=apply parity fix.
-  // Any engine/AI-set price is ALSO protected from template override.
-  // Root cause: after "Wyceń", AI writes final_labor_price + confidence_level
-  // ("verified" / "analog" / "estimated" / "uncertain"). Template override was
-  // then replacing the AI price with `totalRBH × laborRate` computed FROM A
-  // DIFFERENT FORMULA, causing preview (33 zł/mb) vs kosztorys (147 zł/mb)
-  // divergence for every cable/zestaw item. Now template only fires when
-  // confidence_level is null (truly unpriced row) — exactly the flow for
-  // which smart assemblies were designed in the first place.
-  const hasEngineSetPrice = displayItem.confidence_level != null;
   let materialUnit = calcMaterialUnit;
   let laborUnit    = calcLaborUnit;
   let materialTotal = calcMaterialTotal;
@@ -294,25 +263,10 @@ export const EstimateRow = React.memo(function EstimateRow({
   let rowTotal      = calcRowTotal;
   let assemblyRBHPerUnit: number | null = null;
 
-  // Detect assembly-driven items once; used both in price override and in edit panel render.
-  const _scmCheck = !hasEngineSetPrice && !isAssemblyChild ? detectSmartContext(item.name) : null;
-  // Name-based detection without price/manual guards — used to simplify edit panel for ALL smart rows
-  const isSmartItem = !isAssemblyChild && detectSmartContext(item.name).category !== "NONE";
-  const _rawItemTotal = (displayItem.final_material_price ?? displayItem.material_price ?? 0)
-    + (displayItem.final_labor_price ?? displayItem.labor_price ?? 0);
-  // Zestaw Engine v2 (2026-05-04): auto-expansion now gated by project flag and per-row
-  // is_quick_estimate. Manual SmartAssemblyPanel invocation remains available regardless.
-  const isQuickEstimateRow = Boolean(
-    (item as { is_quick_estimate?: boolean | null }).is_quick_estimate
-  );
-  const isAssemblyOverride =
-    autoDetectZestawy &&
-    !isQuickEstimateRow &&
-    !!_scmCheck &&
-    !isSmartDisabled &&
-    _rawItemTotal > 0 &&
-    (_scmCheck.category === "ZESTAW" || _scmCheck.category === "BIALY_MONTAZ" ||
-     _scmCheck.category === "TRASY"  || _scmCheck.category === "ROZDZIELNICA");
+  // The word "zestaw" in a line name does not replace the stored price.
+  // A real kit is the one the electrician added: it already has its own rows.
+  void autoDetectZestawy;
+  const isAssemblyOverride = false;
 
   // Guard: only override items that have no engine/manual price (confidence_level == null).
   // Note: isEditing is intentionally NOT in this guard — display prices must not jump when the
@@ -489,64 +443,6 @@ export const EstimateRow = React.memo(function EstimateRow({
                   Wymaga doprecyzowania
                 </span>
               )}
-              {!isEditing && !isAssemblyChild && (() => {
-                const scm = detectSmartContext(item.name);
-                if (scm.category === "NONE") return null;
-                const hasExpansion = scm.category === "ZESTAW" || scm.category === "BIALY_MONTAZ" || scm.category === "TRASY";
-                const colorCls = isSmartDisabled
-                  ? "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 ring-slate-300 dark:ring-slate-600 hover:bg-slate-200 dark:hover:bg-slate-700"
-                  : "bg-cyan-100 dark:bg-cyan-900/60 text-cyan-600 dark:text-cyan-400 ring-cyan-300 dark:ring-cyan-700 hover:bg-cyan-200 dark:hover:bg-cyan-800/80";
-                const iconBtn = (
-                  <button
-                    type="button"
-                    className={`inline-flex items-center justify-center w-4 h-4 rounded-full flex-shrink-0 ring-1 transition-all duration-150 mr-1 ${colorCls} ${hasExpansion ? "cursor-pointer" : "cursor-help"}`}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Zap className="w-2.5 h-2.5" />
-                  </button>
-                );
-                const tooltipLabel = hasExpansion
-                  ? `ES-Engine: ${scm.validationLabel} — kliknij, aby zobaczyć zestaw`
-                  : `ES-Engine: ${scm.validationLabel}`;
-                if (!hasExpansion) {
-                  return (
-                    <TooltipProvider delayDuration={300}>
-                      <Tooltip>
-                        <TooltipTrigger asChild>{iconBtn}</TooltipTrigger>
-                        <TooltipContent side="bottom" className="max-w-[240px] text-xs z-50">{tooltipLabel}</TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  );
-                }
-                return (
-                  <Popover open={zapOpen} onOpenChange={setZapOpen}>
-                    <TooltipProvider delayDuration={300}>
-                      <Tooltip>
-                        <PopoverTrigger asChild>
-                          <TooltipTrigger asChild>{iconBtn}</TooltipTrigger>
-                        </PopoverTrigger>
-                        <TooltipContent side="bottom" className="max-w-[240px] text-xs z-50">{tooltipLabel}</TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                    <PopoverContent side="bottom" align="start" className="p-0 w-auto border-orange-200 dark:border-orange-800 shadow-lg">
-                      <SmartAssemblyPanel
-                        itemName={item.name}
-                        quantity={item.quantity}
-                        sector={projectSector}
-                        laborRate={projectLaborRate}
-                        knrMultiplier={knrMultiplier}
-                        itemId={item.id}
-                        projectId={item.project_id}
-                        initialOverrides={item.assembly_overrides ?? null}
-                        materialsOwnedByCustomer={materialsOwnedByCustomer}
-                        isSmartDisabled={isSmartDisabled}
-                        onToggleSmartDisabled={handleToggleSmartDisabled}
-                        isTogglePending={isSmartTogglePending}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                );
-              })()}
               {item.origin_id && (() => {
                 const ot = (item as { origin_type?: string | null }).origin_type;
                 const isAggregate = ot === "panel_consumable" || ot === "panel_busbar" || ot === "panel_assembly";
@@ -805,13 +701,6 @@ export const EstimateRow = React.memo(function EstimateRow({
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); setZapOpen(true); }}
-                    className="p-1 rounded text-slate-500 dark:text-slate-400 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/40 transition-colors"
-                    title="Edytuj składniki zestawu w panelu AI"
-                  >
-                    <PenLine className="w-3.5 h-3.5" />
-                  </button>
                 </div>
               </TableCell>
             )}
@@ -913,7 +802,7 @@ export const EstimateRow = React.memo(function EstimateRow({
               </div>
 
               {/* Row 2: Jm + Ilość (+ prices for non-zestaw rows) */}
-              {(isAssemblyOverride || editingState!.isAssemblyParent || isSmartItem) ? (
+              {editingState!.isAssemblyParent ? (
                 /* Zestaw parent (both manual and AI): only Jedn. + Ilość — no price editing */
                 <div className="grid grid-cols-[80px_90px] gap-2 items-end">
                   <div className="space-y-1">
@@ -1021,21 +910,6 @@ export const EstimateRow = React.memo(function EstimateRow({
                 </div>
               )}
 
-              {/* ── Embedded SmartAssemblyPanel for ZESTAW items ── */}
-              {isAssemblyOverride && projectSector && (
-                <div className="border-t border-orange-200 dark:border-orange-800 pt-3 mt-1">
-                  <SmartAssemblyPanel
-                    itemName={item.name}
-                    quantity={parseFloat(editingState!.quantity) || item.quantity}
-                    sector={projectSector}
-                    laborRate={projectLaborRate}
-                    knrMultiplier={knrMultiplier}
-                    itemId={item.id}
-                    projectId={item.project_id}
-                    initialOverrides={item.assembly_overrides ?? null}
-                  />
-                </div>
-              )}
             </div>
           </div>
         </TableCell>

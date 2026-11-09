@@ -50,7 +50,6 @@ import {
   getCeilingModifier, getHeightModifier,
   classifyIntent, GROOVE_FLOOR_RE, DRILL_FLOOR_RE,
 } from "@/lib/services/semantic-classifier";
-import { buildEnrichedItemListWithAssembly, detectSector, expandToAssembly } from "@/lib/ai/smart-mapping-engine";
 
 // ── Re-export types for external consumers ────────────────────────
 export type { AiPriceEstimate } from "./pricing-types";
@@ -249,7 +248,7 @@ export async function estimatePricesWithAI(
     sectorOverride?: import("@/lib/ai/smart-mapping-engine").ProjectSector;
   }
 ): Promise<AiPriceResult> {
-  const { targetItemIds, keepExistingPrices = false, bypassL1Exclusive = false, sectorOverride } = options ?? {};
+  const { targetItemIds, keepExistingPrices = false, bypassL1Exclusive = false } = options ?? {};
   try {
     const guard = await checkAuthOnly();
     if ("error" in guard) return { success: false, error: guard.error };
@@ -1149,14 +1148,9 @@ Jeśli znasz godziny — labor_price = labor_norm_rbh × ${baseRateForCalc}.
 
       for (const chunk of chunks) {
         try {
-          const objectTypeSlug = (project.object_types as { slug?: string } | null)?.slug ?? null;
-          const projectSectorL3 = sectorOverride ?? detectSector(objectTypeSlug);
-          const knrMultiplierL3 = 1.4; // display-time only — used for assembly RBH hints
-          const itemList = buildEnrichedItemListWithAssembly(
-            chunk.map((item) => ({ name: item.name, unit: item.unit, quantity: item.quantity })),
-            projectSectorL3,
-            knrMultiplierL3,
-          );
+          const itemList = chunk
+            .map((item, idx) => `${idx + 1}. "${item.name}" | jednostka: ${item.unit}`)
+            .join("\n");
           const batchPrompt = `Region: ${regionName} | Stawka bazowa: ${baseRateForCalc} PLN/rbh\n\n${itemList}`;
 
           let batchResult: z.infer<typeof l3Schema>;
@@ -1493,43 +1487,7 @@ Jeśli znasz godziny — labor_price = labor_norm_rbh × ${baseRateForCalc}.
       // NUCLEAR VETO: hardcoded PLN floors — zero runtime dependencies.
       .map(securityAuditLayer);
 
-    // ── Assembly Template Override ───────────────────────────────────────────────────────────────
-    // For ZESTAW/BIALY_MONTAZ/TRASY/ROZDZIELNICA trigger items: replace AI-estimated prices with template-
-    // derived prices. This ensures dialog preview ≡ table display ≡ summary totals.
-    // Iron Rule: store BASE prices (knrMult = 1.0). Display layers apply knrMult at render time.
-    //
-    // Zestaw Engine v2 (2026-05-04): skip this override entirely when the project has
-    // auto_detect_zestawy=false. Without the project flag the user does NOT expect template
-    // prices to silently replace AI estimates — the AI result (already benchmarked against
-    // KNR norms + L0 canonical) stands as the authoritative line price.
-    const autoDetectZestawy = Boolean(
-      (project as { auto_detect_zestawy?: boolean }).auto_detect_zestawy
-    );
-    if (!autoDetectZestawy) {
-      return { success: true, estimates };
-    }
-    const assemblySector = detectSector((project.object_types as { slug?: string } | null)?.slug);
-    const assemblyEstimates = estimates.map((e) => {
-      if (e.isAmbiguous || e.trace === "unmatched") return e;
-      // v2.6.2 L0 guard: items resolved by L0 Canonical (lib/services/canonical-knr-l0.ts)
-      // or STEP 0 direct KNR lookup are STANDALONE authoritative entries from the user's
-      // kosztorys (e.g. "Bruzdowanie w cegle" billed separately from cable laying — the
-      // user already has separate YDYp/UTP cable lines and puszka lines). Bundling them
-      // via assembly expansion (TRASY_RESIDENTIAL = bruzd 0.85 + kabel 0.13 = 0.98 rbh/mb)
-      // would (a) double-count materials/labor against the user's other line items and
-      // (b) overwrite the canonical KNR 2026 norm with a bundled total. Skip expansion.
-      const traceStr = (e.trace ?? "");
-      if (traceStr.startsWith("L0 Direct KNR") || traceStr.startsWith("L0 Canonical")) {
-        return e;
-      }
-      const qty = e.quantity || 1;
-      const expansion = expandToAssembly(e.name, qty, assemblySector, baseRateForCalc, 1.0);
-      if (!expansion.triggered) return e;
-      const labPerUnit = Math.round(expansion.totalLaborPLN / qty * 100) / 100;
-      const matPerUnit = Math.round(expansion.totalMaterialPLN / qty * 100) / 100;
-      return { ...e, suggestedLabor: labPerUnit, suggestedMaterial: matPerUnit };
-    });
-    return { success: true, estimates: assemblyEstimates };
+    return { success: true, estimates };
   } catch (error) {
     logger.error("estimatePricesWithAI error:", {}, error);
     return { success: false, error: "Wystapil blad podczas wyceny AI" };
