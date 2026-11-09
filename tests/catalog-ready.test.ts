@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { catalogNameMatches, catalogSearchRank, isLegacySizeChase } from "@/lib/catalog/catalog-search";
+import { catalogNameMatches, catalogSearchRank, isHiddenCatalogCategory, isLegacySizeChase, isOffTradeCatalogItem } from "@/lib/catalog/catalog-search";
 import { resolveCatalogHours } from "@/lib/catalog/catalog-work";
 import { findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
 import { dedupeObjectTypes, vatForObjectType } from "@/lib/projects/object-vat";
@@ -55,6 +55,18 @@ describe("catalog name search", () => {
   it("keeps cable search on the cable, including one laid in a chase", () => {
     expect(catalogNameMatches("ydyp", "Montaż YDYp 3x2.5mm² w bruździe")).toBe(true);
     expect(catalogNameMatches("ydyp 3x2.5", "Układanie przewodu YDYp 3×2.5")).toBe(true);
+  });
+
+  it("hides ventilation ducts and robot parts from the electrician catalog", () => {
+    expect(isHiddenCatalogCategory("Wentylacja i klimatyzacja")).toBe(true);
+    expect(isHiddenCatalogCategory("Robotyka i automatyka przemysłowa")).toBe(true);
+    expect(isHiddenCatalogCategory("kory")).toBe(true);
+    expect(isHiddenCatalogCategory("Oświetlenie")).toBe(false);
+    expect(isOffTradeCatalogItem("Anemostat okrągły fi 125mm")).toBe(true);
+    expect(isOffTradeCatalogItem("Klimatyzator split Daikin FTXM35R 3.5kW")).toBe(true);
+    expect(isOffTradeCatalogItem("Chwytak pneumatyczny Schunk PZN+50")).toBe(true);
+    expect(isOffTradeCatalogItem("Montaż wentylatora łazienkowego")).toBe(false);
+    expect(isOffTradeCatalogItem("Przycisk awaryjny grzybkowy czerwony")).toBe(false);
   });
 
   it("does not match a socket cable when the query is just a socket", () => {

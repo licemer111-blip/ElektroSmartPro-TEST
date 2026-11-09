@@ -31,6 +31,25 @@ function wordHits(queryWord: string, nameWord: string): boolean {
   return nameWord.startsWith(qs) || ns.startsWith(qs) || (qs.startsWith(ns) && ns.length >= 4);
 }
 
+/** Folders that are another trade, or a broken label. Rows stay in the database. */
+export function isHiddenCatalogCategory(name: string): boolean {
+  const folded = foldCatalogText(name);
+  if (folded === "kory") return true;
+  if (folded.startsWith("wentylacja i klimat")) return true;
+  if (folded.startsWith("robotyka i automatyka")) return true;
+  return false;
+}
+
+/** Brand HVAC ducts and robot parts are not an electrician's line. */
+export function isOffTradeCatalogItem(name: string): boolean {
+  const folded = foldCatalogText(name);
+  if (/\b(anemostat|tlumik akust|kratka wentyl|kanal wentyl|spiro)\b/.test(folded)) return true;
+  if (/\bklimatyzator\b/.test(folded) && /\b(daikin|mitsubishi|kaseton|przeplyw|multi)\b/.test(folded)) return true;
+  if (/\b(schunk|schmalz|igus|keyence|leuze|pilz)\b/.test(folded)) return true;
+  if (/\b(chwytak|ssawka prozni|pompa prozni|kurtyna swietlna)\b/.test(folded)) return true;
+  return false;
+}
+
 /** Old size rows ("Bruzda w cegle 20x20mm") kept a lump zł price next to Bruzdowanie. */
 export function isLegacySizeChase(name: string): boolean {
   const folded = foldCatalogText(name);

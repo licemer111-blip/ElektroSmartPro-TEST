@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { getCatalogItemsByCategory, getCatalogDataBatch } from "@/app/dashboard/projects/[id]/actions";
-import { catalogNameMatches, catalogSearchRank, isLegacySizeChase } from "@/lib/catalog/catalog-search";
+import { catalogNameMatches, catalogSearchRank, isHiddenCatalogCategory, isLegacySizeChase, isOffTradeCatalogItem } from "@/lib/catalog/catalog-search";
 import type { CatalogCategory, CatalogItem } from "@/lib/types/database";
 import type { DataSourceMode } from "@/hooks/use-search-mode";
 
@@ -144,7 +144,7 @@ export function useCatalogSearch({
 
   // ── Filter items by sourceFilter / searchMode ────────────────────────────────
   const filterItems = useCallback((items: CatalogItem[]): CatalogItem[] => {
-    const visible = items.filter((item) => !isLegacySizeChase(item.name));
+    const visible = items.filter((item) => !isLegacySizeChase(item.name) && !isOffTradeCatalogItem(item.name));
     if (searchMode === "engine") {
       return visible.filter(item => item.user_id === null);
     }
@@ -158,9 +158,11 @@ export function useCatalogSearch({
   }, [sourceFilter, searchMode]);
 
   // ── Visible categories (hide empty for personal/team) ────────────────────────
-  const visibleCategories = sourceFilter === "all"
-    ? categories
-    : categories.filter(cat => ((cat as CatalogCategory & { count?: number }).count ?? 0) > 0);
+  const visibleCategories = categories.filter((cat) => {
+    if (isHiddenCatalogCategory(cat.name)) return false;
+    if (sourceFilter === "all") return true;
+    return ((cat as CatalogCategory & { count?: number }).count ?? 0) > 0;
+  });
 
   // ── Get items for a category (search or loaded) ───────────────────────────────
   const getItemsForCategory = useCallback((categoryId: string): CatalogItem[] => {
