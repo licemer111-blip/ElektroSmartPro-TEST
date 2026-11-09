@@ -59,9 +59,7 @@ export function ProjectViewClient({
 }: ProjectViewClientProps) {
   const { multiplier: knrMultiplier } = useKnrMultiplier();
   const [colorMode, setColorMode] = useState(project.expert_coloring ?? true);
-  const [compactView, setCompactView] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth >= 640 : true
-  );
+  const [compactView, setCompactView] = useState(true);
 
   // ─── Live doc settings state (Pult 5-w-1) ────────────────────────────────
   const [liveShowKnr, setLiveShowKnr] = useState(project.show_knr ?? false);
