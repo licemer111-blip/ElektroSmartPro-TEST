@@ -9,18 +9,18 @@ export const revalidate = 86400;
 export const metadata: Metadata = {
   title: "Blog — Porady dla Elektryków | ElektroSmart PRO",
   description:
-    "Praktyczne porady dla elektryków: kosztorysowanie, normy KNR, VAT na usługi elektryczne, fakturowanie, zarządzanie firmą elektryczną. Artykuły eksperckie od ElektroSmart PRO.",
+    "Porady dla elektryka: kosztorys, godzina normy ES, Twoja stawka, VAT 8% albo 23% i PDF.",
   keywords: [
     "blog dla elektryków",
     "porady kosztorysowanie elektryczne",
-    "normy KNR elektryka",
+    "norma ES elektryk",
     "VAT usługi elektryczne",
     "zarządzanie firmą elektryczną",
   ],
   alternates: { canonical: "/blog" },
   openGraph: {
     title: "Blog — Porady dla Elektryków | ElektroSmart PRO",
-    description: "Praktyczne artykuły o kosztorysowaniu, normach KNR, VAT i zarządzaniu firmą elektryczną.",
+    description: "Artykuły o kosztorysie: godzina normy ES, Twoja stawka, VAT i PDF.",
     url: "/blog",
     type: "website",
   },
@@ -55,8 +55,7 @@ export default function BlogPage() {
             Porady dla elektryków
           </h1>
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
-            Praktyczne artykuły o kosztorysowaniu, normach KNR, VAT, fakturowaniu
-            i zarządzaniu firmą elektryczną. Pisane przez praktyków dla praktyków.
+            Jak liczyć kosztorys: godzina normy ES, Twoja stawka, VAT 8% albo 23% i PDF.
           </p>
         </div>
       </section>

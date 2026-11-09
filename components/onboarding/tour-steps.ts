@@ -111,8 +111,8 @@ export const TOUR_STEPS: TourStep[] = [
     description:
       "Zakładka \"Ustawienia PDF\" w projekcie → wybierz temat kolorystyczny, dodaj swoje logo i dane firmy. " +
       "Kliknij \"Pobierz PDF\" — otrzymasz profesjonalny dokument z kosztorysem. " +
-      "Wersja FREE: PDF z \"DEMO\" watermarkiem. " +
-      "PRO: czysty PDF bez znaku wodnego DEMO.",
+      "W Demo na PDF jest znak DEMO. " +
+      "W PRO tego znaku nie ma.",
     position: "center",
     emoji: "📄",
     color: "indigo",
