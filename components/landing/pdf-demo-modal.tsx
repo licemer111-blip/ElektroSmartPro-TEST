@@ -101,7 +101,7 @@ export function PDFDemoModal({ open, onOpenChange }: PDFDemoModalProps) {
                   Pełny kosztorys z cenami
                 </p>
                 <p className="text-xs text-emerald-700">
-                  Generujemy prawdziwy PDF w profesjonalnym szablonie ElektroSmart PRO — z rzeczywistymi cenami, sekcjami i podsumowaniem finansowym.
+                  Przykładowy PDF w szablonie ElektroSmart: robocizna i materiał osobno, sekcje i suma. To wzór wydruku, nie cennik z rynku.
                 </p>
               </div>
             </div>

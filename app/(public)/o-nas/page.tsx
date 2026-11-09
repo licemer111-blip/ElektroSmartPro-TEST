@@ -214,7 +214,7 @@ export default function ONasPage() {
                       </h3>
                       <p className="text-sm text-slate-700 dark:text-slate-300">
                         Eksport do PDF z logo firmy, czytelne tabele, podsumowanie VAT, warunki płatności. 
-                        Klient dostaje dokument, który wygląda jak z dużej firmy. <strong>First impression matters.</strong>
+                        Klient dostaje dokument z logo, NIP i podziałem na robociznę oraz materiał.
                       </p>
                     </div>
                   </div>
@@ -336,7 +336,7 @@ export default function ONasPage() {
                     🎯 Transparentność
                   </p>
                   <p className="text-xs text-blue-800 dark:text-blue-300">
-                    Nie ukrywamy cen ani funkcji. FREE to FREE, PRO to PRO.
+                    Nie ukrywamy cen ani funkcji. Demo pokazuje sumy i znak na PDF. PRO zdejmuje znak i limit jednego projektu.
                   </p>
                 </div>
 

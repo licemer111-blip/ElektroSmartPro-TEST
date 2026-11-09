@@ -242,7 +242,7 @@ function LoginPageContent() {
           </div>
           <div className="text-center p-3 rounded-xl bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
             <div className="text-lg">📐</div>
-            <div className="text-xs text-slate-600 dark:text-slate-400 font-medium">Stawki r-g / 16 Wojew.</div>
+            <div className="text-xs text-slate-600 dark:text-slate-400 font-medium">Twoja stawka × województwo</div>
           </div>
           <div className="text-center p-3 rounded-xl bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
             <div className="text-lg">🛡️</div>

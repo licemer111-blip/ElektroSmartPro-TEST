@@ -67,7 +67,7 @@ export function PricingSection({ catalogCount = 1400, dinCount = 295 }: PricingS
                   { text: "Szybka wycena z normy ES", included: true },
                   { text: "PDF i Excel ze znakiem DEMO", included: true },
                   { text: "Nielimitowane projekty", included: false },
-                  { text: "Czysty PDF bez watermarku", included: false },
+                  { text: "Czysty PDF bez znaku DEMO", included: false },
                 ].map((feature, idx) => (
                   <li key={idx} className="flex items-center gap-3">
                     <div className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center ${
@@ -122,10 +122,10 @@ export function PricingSection({ catalogCount = 1400, dinCount = 295 }: PricingS
               
               <div className="flex items-baseline gap-1">
                 <span className="text-5xl font-bold text-slate-900 dark:text-white">159</span>
-                <span className="text-slate-500 dark:text-slate-400 text-lg">PLN / miesiąc</span>
+                <span className="text-slate-500 dark:text-slate-400 text-lg">zł netto / miesiąc</span>
               </div>
               <p className="text-slate-600 dark:text-slate-400 mt-2">
-                Pełna moc dla profesjonalistów
+                Czysty PDF i więcej niż jeden projekt
               </p>
             </CardHeader>
 
@@ -139,9 +139,9 @@ export function PricingSection({ catalogCount = 1400, dinCount = 295 }: PricingS
                   { text: "Gotowe zestawy robót", included: true },
                   { text: "500 zapytań AI / miesiąc", included: true },
                   { text: "Szybka wycena z normy ES", included: true },
-                  { text: "Czysty PDF/Excel (bez watermarku)", included: true },
+                  { text: "Czysty PDF i Excel, bez znaku DEMO", included: true },
                   { text: "Szablony i własne zestawy", included: true },
-                  { text: "CRM klientów + Analityka biznesowa", included: true },
+                  { text: "Klienci i historia ofert", included: true },
                 ].map((feature, idx) => (
                   <li key={idx} className="flex items-center gap-3">
                     <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center">
@@ -162,7 +162,7 @@ export function PricingSection({ catalogCount = 1400, dinCount = 295 }: PricingS
                 </Link>
               </Button>
               <p className="text-center text-xs text-slate-500 dark:text-slate-400 mt-3">
-                7 dni za darmo • Anuluj w dowolnym momencie
+                159 zł netto. Kartę podajesz przy płatności w Stripe.
               </p>
             </CardContent>
           </Card>
@@ -175,7 +175,7 @@ export function PricingSection({ catalogCount = 1400, dinCount = 295 }: PricingS
               Nie jesteś pewien? Wypróbuj PRO przez 7 dni za darmo
             </p>
             <p className="text-xs text-indigo-600 dark:text-indigo-400">
-              Bez karty kredytowej. Po 7 dniach automatyczny powrót do planu FREE. Bez niespodzianek.
+              Bez karty. Po 7 dniach wracasz do Demo. Płatne PRO to osobny przycisk wyżej.
             </p>
           </div>
         </div>

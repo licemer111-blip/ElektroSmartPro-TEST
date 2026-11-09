@@ -100,7 +100,7 @@ function FeaturesSectionInner({ normsCount = 0 }: FeaturesProps) {
       gradient: "from-blue-600 to-blue-800",
       icon: CheckCircle,
       title: "Widoczne ceny od pierwszego dnia",
-      desc: "Na FREE widzisz pełne sumy. PDF z watermarkiem DEMO. PRO = nielimitowane projekty i czysty PDF do klienta.",
+      desc: "W Demo widać pełne sumy. Na PDF jest znak DEMO. PRO to więcej projektów i czysty PDF dla klienta.",
     },
     {
       gradient: "from-slate-500 to-slate-700",

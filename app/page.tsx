@@ -8,6 +8,7 @@ import { DIN_MODULES_COUNT } from "@/lib/data/din-modules-stats";
 import { getSystemStats } from "@/lib/actions/system-stats";
 const FeaturesSection    = dynamic(() => import("@/components/landing/FeaturesSection").then(m => ({ default: m.FeaturesSection })));
 const BentoFeaturesSection = dynamic(() => import("@/components/landing/BentoFeaturesSection").then(m => ({ default: m.BentoFeaturesSection })));
+const PricingSection    = dynamic(() => import("@/components/landing/pricing-section").then(m => ({ default: m.PricingSection })));
 const FaqSection         = dynamic(() => import("@/components/landing/FaqSection").then(m => ({ default: m.FaqSection })));
 const RoadmapSection     = dynamic(() => import("@/components/landing/RoadmapSection").then(m => ({ default: m.RoadmapSection })));
 const FooterSection      = dynamic(() => import("@/components/landing/FooterSection").then(m => ({ default: m.FooterSection })));
@@ -25,9 +26,9 @@ export const metadata: Metadata = {
     "wycena instalacji elektrycznej",
     "kosztorys elektryczny online",
     "profesjonalne wyceny elektryczne",
-    "wyceny KNR",
-    "kosztorys KNR",
-    "import KNR Excel",
+    "norma ES",
+    "kosztorys godzina razy stawka",
+    "własny cennik elektryka",
     "program do wycen elektrycznych",
     "kosztorysowanie elektryczne",
     "program do kosztorysów dla elektryków",
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
     "kosztorys instalacji elektrycznej",
     "profesjonalny kosztorys elektryczny",
     "zestawy materiałów elektrycznych",
-    "ceny instalacji elektrycznych 2026",
+    "wycena instalacji elektrycznej online",
     "VAT 8% budownictwo mieszkaniowe",
     "VAT 23% instalacje elektryczne",
     "program dla elektryków Polska",
@@ -43,10 +44,9 @@ export const metadata: Metadata = {
     "wycena punktu elektrycznego",
     "ceny robocizny elektrycznej",
     "stawki robocizny elektrycznej 2026",
-    "normy KNR 5-08 elektryka",
+    "godziny normy ES elektryk",
     "rozdzielnica elektryczna wycena",
     "kosztorys fotowoltaika",
-    "wycena instalacji elektrycznej online",
     "oprogramowanie dla elektryka",
   ],
   openGraph: {
@@ -97,6 +97,8 @@ export default async function Home() {
 
         {/* 3. Bento Features — 2x3 grid */}
         <BentoFeaturesSection catalogCount={catalogCount} />
+
+        <PricingSection catalogCount={catalogCount} dinCount={dinCount} />
 
         {/* 5. FAQ — 5 accordion items (SEO rich snippets) */}
         <FaqSection catalogCount={catalogCount} dinCount={dinCount} />

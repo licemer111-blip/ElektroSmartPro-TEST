@@ -45,7 +45,7 @@ interface ProjectPageProps {
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   await params;
   return {
-    title: "Projekt | ElektroSmart PRO",
+    title: "Kosztorys",
     description: "Zarządzanie projektem",
   };
 }

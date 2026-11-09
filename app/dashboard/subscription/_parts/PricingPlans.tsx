@@ -64,16 +64,16 @@ export function PricingPlans() {
             </div>
             <div>
               <CardTitle className="text-xl font-bold text-slate-900 dark:text-slate-100">ElektroSmart PRO</CardTitle>
-              <CardDescription className="text-sm text-slate-700 dark:text-slate-400 font-medium">159 zł/miesiąc • Anuluj kiedy chcesz</CardDescription>
+              <CardDescription className="text-sm text-slate-700 dark:text-slate-400 font-medium">159 zł netto / miesiąc • Anuluj kiedy chcesz</CardDescription>
             </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
           {[
-            { icon: Infinity, gradient: "from-blue-500 to-indigo-600", title: "Nielimitowane projekty", desc: "Twórz dowolną ilość wycen bez ograniczeń" },
+            { icon: Infinity, gradient: "from-blue-500 to-indigo-600", title: "Więcej niż jeden projekt", desc: "Demo trzyma jeden własny kosztorys. PRO zdejmuje ten limit." },
             { icon: DollarSign, gradient: "from-green-500 to-emerald-600", title: "Czysty PDF bez znaku DEMO", desc: "Oferta dla klienta bez napisu DEMO" },
             { icon: FileText, gradient: "from-amber-500 to-orange-600", title: "Profesjonalny eksport PDF", desc: "Oferty z Twoim logo i brandingiem" },
-            { icon: Headphones, gradient: "from-purple-500 to-indigo-600", title: "Wsparcie priorytetowe", desc: "Szybka pomoc dedykowana dla PRO" },
+            { icon: Headphones, gradient: "from-purple-500 to-indigo-600", title: "Pytania o program", desc: "Napiszesz z konta. Odpowiadamy o tym, jak liczy się kosztorys." },
           ].map(({ icon: Icon, gradient, title, desc }) => (
             <div key={title} className="flex items-start gap-3 p-3.5 bg-white/80 dark:bg-slate-900/60 backdrop-blur-sm rounded-xl border border-amber-100 dark:border-amber-900/40 shadow-md hover:shadow-lg transition-shadow">
               <div className="flex-shrink-0 mt-0.5">

@@ -76,7 +76,7 @@ export function ProModal() {
                   Przejdź na PRO
                 </DialogTitle>
                 <DialogDescription className="text-orange-100 text-xs mt-0.5">
-                  Odblokuj pełen potencjał systemu
+                  159 zł netto miesięcznie. Czysty PDF i więcej niż jeden projekt.
                 </DialogDescription>
               </div>
             </div>
@@ -105,7 +105,7 @@ export function ProModal() {
               }`}
             >
               <div className="text-xs text-muted-foreground">Miesięcznie</div>
-              <div className="font-bold text-base">{monthlyPrice} zł</div>
+              <div className="font-bold text-base">{monthlyPrice} zł netto</div>
             </button>
             <button
               onClick={() => setBillingCycle("yearly")}
@@ -119,7 +119,7 @@ export function ProModal() {
                 -17%
               </Badge>
               <div className="text-xs text-muted-foreground">Rocznie</div>
-              <div className="font-bold text-base">{yearlyPrice} zł</div>
+              <div className="font-bold text-base">{yearlyPrice} zł netto</div>
             </button>
           </div>
 
