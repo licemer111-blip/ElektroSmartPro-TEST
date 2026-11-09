@@ -251,6 +251,12 @@ KLIMATYZACJA / POMPY CIEPŁA (KNR AT-26 / Przylacza HVAC):
 • Podłączenie klimy split >5 kW 3-faz.          KNR AT-26 0503b  3,000 rbh/szt
 • Podłączenie pompy ciepła 3-faz. + RCD Typ B   KNR AT-26 0503p  6,000 rbh/szt`;
 
+export const KNR_CANONICAL_2026_IRON_RULES = `ZASADY:
+- Godziny poniżej to norma ES. Nie podpisuj ich jako numeru tabeli ORGBUD ani SEKOCENBUD.
+- Nie podawaj cen materiału. Pole zostaje puste, dopóki elektryk go nie wpisze.
+- Robociznę liczy program: godzina × stawka elektryka. Województwa sam nie mnożysz.
+- Jak nie znasz godziny, zostaw ją pustą. Nie zgaduj.`;
+
 /** Material shop prices are not stored here. The electrician types them. */
 export const KNR_CANONICAL_2026_MATERIAL_PRICES = `Nie podawaj cen materiałów. Cena jest pusta, dopóki elektryk jej nie wpisze.`;
 
