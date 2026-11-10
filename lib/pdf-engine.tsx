@@ -1,5 +1,6 @@
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet, Font, Image } from '@react-pdf/renderer';
+import { formatHours, formatPlQty, objectTypeForClient } from '@/lib/pdf-pricing';
 
 // ─── Font Registration ─────────────────────────────────────────────────────────
 // pdfmake Roboto TTF — full Latin Extended support (Polish: ą ć ę ł ń ó ś ź ż)
@@ -348,21 +349,19 @@ interface ColWidths {
   total: string;
 }
 
-function calcColWidths(showKnr: boolean, showRg: boolean, matOwned: boolean): ColWidths {
+function calcColWidths(_showKnr: boolean, showRg: boolean, matOwned: boolean): ColWidths {
   const base = {
-    lp: 5,
-    name: 30,
-    knr: 10,
-    unit: 5,
-    qty: 5,
-    rg: 10,
-    mat: matOwned ? 0 : 11,
-    lab: 11,
-    total: matOwned ? 24 : 13,
+    lp: 6,
+    name: 44,
+    unit: 7,
+    qty: 9,
+    rg: 12,
+    mat: matOwned ? 0 : 12,
+    lab: 13,
+    total: 14,
   };
   const activeSum =
     base.lp + base.name +
-    (showKnr ? base.knr : 0) +
     base.unit + base.qty +
     (showRg ? base.rg : 0) +
     base.mat + base.lab + base.total;
@@ -373,7 +372,6 @@ function calcColWidths(showKnr: boolean, showRg: boolean, matOwned: boolean): Co
   return {
     lp: p(base.lp),
     name: p(base.name),
-    ...(showKnr ? { knr: p(base.knr) } : {}),
     unit: p(base.unit),
     qty: p(base.qty),
     ...(showRg ? { rg: p(base.rg) } : {}),
@@ -438,9 +436,9 @@ const base = StyleSheet.create({
   projectMeta: { fontSize: 7.5, color: '#6b7280' },
   // Table
   tableHeaderRow: { flexDirection: 'row' },
-  tableHeaderCell: { paddingVertical: 6, paddingHorizontal: 5, fontSize: 7.5, fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: 0.4 },
+  tableHeaderCell: { paddingVertical: 5, paddingHorizontal: 3, fontSize: 7, fontWeight: 'bold' },
   tableRow: { flexDirection: 'row', borderBottomWidth: 0.5, borderBottomColor: '#e5e7eb' },
-  tableCell: { paddingVertical: 5, paddingHorizontal: 5, fontSize: 8 },
+  tableCell: { paddingVertical: 4, paddingHorizontal: 3, fontSize: 8 },
   // Summary
   summaryContainer: { marginTop: 10, alignItems: 'flex-end' },
   summaryBox: {
@@ -459,7 +457,7 @@ const base = StyleSheet.create({
   // Signatures
   signaturesRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 },
   signatureBlock: { width: '44%' },
-  signatureLine: { borderBottomWidth: 1, borderBottomColor: '#374151', marginBottom: 4 },
+  signatureLine: { borderBottomWidth: 1, borderBottomColor: '#374151', marginBottom: 4, marginTop: 26 },
   signatureLabel: { fontSize: 7.5, color: '#6b7280' },
   disclaimer: { fontSize: 6.5, fontStyle: 'italic', color: '#9ca3af', textAlign: 'center', marginTop: 10 },
   // Cover page
@@ -500,7 +498,7 @@ const PageFooter = ({ companyName, palette }: { companyName: string; palette: Th
   <Text
     style={[base.pageFooter, { borderTopColor: palette.borderColor, color: palette.textSecondary }]}
     render={({ pageNumber, totalPages }) =>
-      `${companyName}  ·  ElektroSmart PRO  ·  Strona ${pageNumber} z ${totalPages}`
+      `${companyName}  ·  Strona ${pageNumber} z ${totalPages}`
     }
     fixed
   />
@@ -596,13 +594,12 @@ const CoverPage = ({
 const TableHeaderRow = ({
   palette,
   cols,
-  showKnr,
   showRg,
   matOwned,
 }: {
   palette: ThemePalette;
   cols: ColWidths;
-  showKnr: boolean;
+  showKnr?: boolean;
   showRg: boolean;
   matOwned: boolean;
 }) => (
@@ -613,25 +610,20 @@ const TableHeaderRow = ({
     ]}
   >
     <View style={[base.tableHeaderCell, { width: cols.lp, color: palette.tableHeaderText }]}>
-      <Text>LP</Text>
+      <Text>Lp</Text>
     </View>
     <View style={[base.tableHeaderCell, { width: cols.name, color: palette.tableHeaderText }]}>
-      <Text>Nazwa pozycji</Text>
+      <Text>Nazwa</Text>
     </View>
-    {showKnr && cols.knr ? (
-      <View style={[base.tableHeaderCell, { width: cols.knr, color: palette.tableHeaderText, textAlign: 'center' }]}>
-        <Text>Kod KNR</Text>
-      </View>
-    ) : null}
     <View style={[base.tableHeaderCell, { width: cols.unit, color: palette.tableHeaderText, textAlign: 'center' }]}>
-      <Text>Jedn.</Text>
+      <Text>j.m.</Text>
     </View>
     <View style={[base.tableHeaderCell, { width: cols.qty, color: palette.tableHeaderText, textAlign: 'right' }]}>
       <Text>Ilość</Text>
     </View>
     {showRg && cols.rg ? (
       <View style={[base.tableHeaderCell, { width: cols.rg, color: palette.tableHeaderText, textAlign: 'right' }]}>
-        <Text>Nakł. r-g</Text>
+        <Text>r-g</Text>
       </View>
     ) : null}
     {!matOwned ? (
@@ -771,20 +763,17 @@ const TableDataRow = ({
       {/* Nazwa */}
       <View style={[cellStyle, { width: cols.name }]}>
         <Text>{row.name}</Text>
+        {showKnr && row.knrCode && !isSectionHeader && row.rowType !== 'section_subtotal' ? (
+          <Text style={{ fontSize: 6.5, color: palette.textSecondary, marginTop: 1 }}>{row.knrCode}</Text>
+        ) : null}
       </View>
-      {/* KNR (optional) */}
-      {showKnr && cols.knr ? (
-        <View style={[cellStyle, { width: cols.knr, textAlign: 'center' }]}>
-          <Text>{isSectionHeader ? '' : row.knrCode}</Text>
-        </View>
-      ) : null}
       {/* Jedn. */}
       <View style={[cellStyle, { width: cols.unit, textAlign: 'center' }]}>
-        <Text>{isSectionHeader ? '' : row.unit}</Text>
+        <Text>{isSectionHeader || row.rowType === 'section_subtotal' ? '' : row.unit}</Text>
       </View>
       {/* Ilość */}
       <View style={[cellStyle, { width: cols.qty, textAlign: 'right' }]}>
-        <Text>{isSectionHeader ? '' : (row.qty > 0 ? String(row.qty) : '')}</Text>
+        <Text>{isSectionHeader || row.rowType === 'section_subtotal' || row.qty <= 0 ? '' : formatPlQty(row.qty)}</Text>
       </View>
       {/* Nakłady r-g (optional) */}
       {showRg && cols.rg ? (
@@ -838,7 +827,12 @@ const SummarySection = ({
   return (
     <View style={base.summaryContainer}>
       <View style={[base.summaryBox, { borderColor: palette.borderColor, backgroundColor: palette.accentLight }]}>
-        {!matOwnedByClient && (
+        {matOwnedByClient ? (
+          <View style={base.summaryRow}>
+            <Text style={[base.summaryLabel, { color: palette.textSecondary }]}>Materiały:</Text>
+            <Text style={[base.summaryValue, { color: palette.textPrimary }]}>po stronie inwestora</Text>
+          </View>
+        ) : (
           <View style={base.summaryRow}>
             <Text style={[base.summaryLabel, { color: palette.textSecondary }]}>Suma materiałów ({priceLabel}):</Text>
             <Text style={[base.summaryValue, { color: palette.textPrimary }]}>{mask(totalMatSum)}</Text>
@@ -852,7 +846,7 @@ const SummarySection = ({
           <View style={base.summaryRow}>
             <Text style={[base.summaryLabel, { color: palette.textSecondary }]}>Nakłady robocizny:</Text>
             <Text style={[base.summaryValue, { color: palette.textPrimary }]}>
-              {totalLaborHours.toFixed(2)} rbh
+              {formatHours(totalLaborHours)}
             </Text>
           </View>
         )}
@@ -885,8 +879,8 @@ const SummarySection = ({
           <Text style={[base.summaryValue, { fontWeight: 'bold', color: palette.textPrimary }]}>{mask(totalNet)}</Text>
         </View>
         <View style={base.summaryRow}>
-          <Text style={[base.summaryLabel, { color: '#059669' }]}>VAT {Math.round(vatRate * 100)}%:</Text>
-          <Text style={[base.summaryValue, { color: '#059669' }]}>{mask(vatAmount)}</Text>
+          <Text style={[base.summaryLabel, { color: palette.textPrimary }]}>VAT {Math.round(vatRate * 100)}%:</Text>
+          <Text style={[base.summaryValue, { color: palette.textPrimary }]}>{mask(vatAmount)}</Text>
         </View>
         {/* Grand total */}
         <View style={[base.summaryGrossRow, { borderTopColor: palette.accentPrimary }]}>
@@ -973,7 +967,11 @@ const ContentPage = ({
           <View>
             <Text style={[base.projectName, { color: palette.textPrimary }]}>{project.name}</Text>
             <Text style={[base.projectMeta, { color: palette.textSecondary }]}>
-              {[project.object_types?.name, project.regions?.name].filter(Boolean).join(' · ')}
+              {[
+                objectTypeForClient(project.object_types?.name),
+                project.regions?.name,
+                `VAT ${Math.round((data.vatRate || 0) * 100)}%`,
+              ].filter(Boolean).join(' · ')}
             </Text>
           </View>
           {project.client_name ? (
@@ -982,6 +980,14 @@ const ContentPage = ({
               <Text style={[base.projectMeta, { fontWeight: 'bold', color: palette.textPrimary }]}>{project.client_name}</Text>
             </View>
           ) : null}
+        </View>
+      )}
+
+      {isFirstContent && matOwnedByClient && (
+        <View style={{ backgroundColor: palette.accentLight, borderRadius: 3, padding: 6, marginBottom: 8, borderLeftWidth: 3, borderLeftColor: palette.accentPrimary }}>
+          <Text style={{ fontSize: 8, color: palette.textPrimary }}>
+            Zakres: tylko robocizna. Materiały zapewnia inwestor i nie wchodzą w tę kwotę.
+          </Text>
         </View>
       )}
 

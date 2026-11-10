@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { joinOfferNotes, offerTermsLines, splitOfferNotes } from "@/lib/offer-terms";
+import { formatHours, formatPlQty, objectTypeForClient } from "@/lib/pdf-pricing";
 
 describe("offer terms", () => {
   it("keeps the marker out of the printed notes", () => {
@@ -15,6 +16,15 @@ describe("offer terms", () => {
     expect(plain.some((line) => line.includes("Zaliczka"))).toBe(false);
     const withDeposit = offerTermsLines({ validDays: 14, paymentDays: 14, depositPercent: 40 }, 1000);
     expect(withDeposit.some((line) => line.includes("400,00 zł"))).toBe(true);
+  });
+
+  it("prints hours and quantities the way a Polish invoice does", () => {
+    expect(formatHours(720)).toBe("720,00 rbh");
+    expect(formatHours(2475.87)).toContain("2");
+    expect(formatHours(2475.87).includes(".")).toBe(false);
+    expect(formatPlQty(4500)).toBe("4 500");
+    expect(formatPlQty(2.5)).toBe("2,5");
+    expect(objectTypeForClient("Biuro / Lokale (VAT 23%)")).toBe("Biuro / Lokale");
   });
 
   it("hides the deposit amount on a blind estimate", () => {

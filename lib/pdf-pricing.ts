@@ -43,6 +43,28 @@ export const fMoney = (val: number): string => {
 export const formatPln = (val: number): string =>
   fMoney(val).replace(/ zl$/, " zł");
 
+function groupPl(val: number): string {
+  const negative = val < 0;
+  const [whole, frac] = Math.abs(val).toFixed(2).split(".");
+  const grouped = whole.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  return `${negative ? "-" : ""}${grouped},${frac}`;
+}
+
+/** Quantity: 4500 → "4 500", 2.5 → "2,5". */
+export function formatPlQty(val: number): string {
+  return groupPl(val).replace(/,00$/, "").replace(/(\,\d)0$/, "$1");
+}
+
+/** Hours a client can read. 720 → "720,00 rbh", never "720.000". */
+export function formatHours(val: number): string {
+  return `${groupPl(val)} rbh`;
+}
+
+/** Object type names sometimes include "(VAT 23%)". The document must show the rate that was actually calculated. */
+export function objectTypeForClient(name: string | null | undefined): string {
+  return (name || "").replace(/\s*\(VAT\s*\d+\s*%\)/gi, "").trim();
+}
+
 /** Keep Polish letters. Drop only control characters. */
 export function pdfPlainText(text: string | null | undefined): string {
   if (!text) return "";

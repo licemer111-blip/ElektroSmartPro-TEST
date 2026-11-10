@@ -8,6 +8,7 @@ import { flattenProjectItems } from "@/lib/utils/flatten-project-items";
 import type { ProjectItem } from "@/lib/types/database";
 import {
   formatPln,
+  formatHours,
   pdfPlainText,
   getVatMultiplier,
   vatRateForPdf,
@@ -393,13 +394,13 @@ export async function POST(req: Request) {
       const knrCode = rawKnrCode ? pdfPlainText(rawKnrCode) : "";
       let name = pdfPlainText(item.name as string);
       if (isChild) {
-        name = rowType === "warning" ? `   - ${name} (BRAK CENY!)` : `   - ${name}`;
+        name = rowType === "warning" ? `   - ${name} (do wyceny)` : `   - ${name}`;
       } else if (rowType === "warning") {
-        name = `${name} (BRAK CENY!)`;
+        name = `${name} (do wyceny)`;
       }
 
       const laborNormDisplay = showRg
-        ? (item.laborNorm > 0 ? `${(item.laborNorm * item.quantity).toFixed(3)} rbh` : "—")
+        ? (item.laborNorm > 0 ? formatHours(item.laborNorm * item.quantity) : "—")
         : "";
 
       rowsRaw.push({
@@ -417,7 +418,7 @@ export async function POST(req: Request) {
           const vLab = vChild.rbhTotal * projectLaborRate * labMarkupMult * complexityFactor * adjustmentOnly * effRegion * vatMultiplier;
           const vTotal = vMat + vLab;
           const vRowType = vChild.isLabor ? "child_lab" : (vChild.materialTotal > 0 && vChild.rbhTotal > 0 ? "child_mat" : vChild.materialTotal > 0 ? "child_mat" : "child_lab");
-          const vRg = showRg && vChild.rbhTotal > 0 ? `${vChild.rbhTotal.toFixed(3)} rbh` : "";
+          const vRg = showRg && vChild.rbhTotal > 0 ? formatHours(vChild.rbhTotal) : "";
           // Virtual child inherits parent's id so semanticSectionMap lookup
           // assigns it to the same section as its parent.
           rowItemIds.push(item.id as string);
@@ -495,11 +496,11 @@ export async function POST(req: Request) {
 
         rows.push({
           index: "",
-          name: `Suma sekcji: Materiał ${formatPln(secT.mat)} | Robocizna ${formatPln(secT.lab)}`,
+          name: "Suma sekcji",
           knrCode: "", unit: "", qty: 0,
           rg: "",
-          mat: maskPrices ? "" : formatPln(secT.mat),
-          lab: maskPrices ? "" : formatPln(secT.lab),
+          mat: maskPrices || secT.mat <= 0 ? "" : formatPln(secT.mat),
+          lab: maskPrices || secT.lab <= 0 ? "" : formatPln(secT.lab),
           combined: "",
           total: maskPrices ? "" : formatPln(secTot),
           rawTotal: secTot,

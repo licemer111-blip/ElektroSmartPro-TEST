@@ -2,6 +2,8 @@ import XLSXStyle from 'xlsx-js-style';
 import type { ProjectItem, ProjectWithRelations } from '@/lib/types/database';
 import { flattenProjectItems } from '@/lib/utils/flatten-project-items';
 import { calcRowPrices } from '@/lib/pricing-calculations';
+import { objectTypeForClient } from '@/lib/pdf-pricing';
+import { splitOfferNotes } from '@/lib/offer-terms';
 
 // ─── Style helpers ─────────────────────────────────────────────────────────────
 
@@ -212,21 +214,25 @@ function buildKosztorysSheet(
   const metaLabelStyle: XlsxCellStyle = { font: font({ bold: true, color: { rgb: '334155' } }) };
   const metaValStyle:   XlsxCellStyle = { font: font({ color: { rgb: '1E293B' } }) };
 
-  const statusLabel = project.status === 'draft' ? 'Wersja robocza'
-    : project.status === 'final' ? 'Ukończony' : 'Zarchiwizowany';
-
   const r3: XlsxCell[] = Array(colCount).fill(null).map(() => ec());
   r3[0] = sc('PROJEKT:', metaLabelStyle); r3[1] = sc(project.name, metaValStyle);
-  if (colCount >= 6) { r3[Math.floor(colCount / 2)] = sc('Status:', metaLabelStyle); r3[Math.floor(colCount / 2) + 1] = sc(statusLabel, metaValStyle); }
+  if (colCount >= 6) {
+    r3[Math.floor(colCount / 2)] = sc('Data:', metaLabelStyle);
+    r3[Math.floor(colCount / 2) + 1] = sc(new Date().toLocaleDateString('pl-PL'), metaValStyle);
+  }
   rows.push(r3);
 
   const r4: XlsxCell[] = Array(colCount).fill(null).map(() => ec());
-  r4[0] = sc('Typ obiektu:', metaLabelStyle); r4[1] = sc(project.object_types?.name || '-', metaValStyle);
+  r4[0] = sc('Typ obiektu:', metaLabelStyle);
+  r4[1] = sc(objectTypeForClient(project.object_types?.name) || '-', metaValStyle);
   rows.push(r4);
 
   const r5: XlsxCell[] = Array(colCount).fill(null).map(() => ec());
   r5[0] = sc('VAT:', metaLabelStyle); r5[1] = sc(`${project.vat_rate}%`, metaValStyle);
-  if (colCount >= 6) { r5[Math.floor(colCount / 2)] = sc('Korekta:', metaLabelStyle); r5[Math.floor(colCount / 2) + 1] = sc(`${project.adjustment_percentage || 0}%`, metaValStyle); }
+  if (matOwnedByClient && colCount >= 6) {
+    r5[Math.floor(colCount / 2)] = sc('Zakres:', metaLabelStyle);
+    r5[Math.floor(colCount / 2) + 1] = sc('Tylko robocizna. Materiały zapewnia inwestor.', metaValStyle);
+  }
   rows.push(r5);
 
   // ── Row 6: empty ──
@@ -260,22 +266,18 @@ function buildKosztorysSheet(
     ...(hasKnr  ? ['Kod KNR'] : []),
     'Jm',
     'Ilość',
-    ...(hasRg  ? ['r-g (rbh)'] : []),
+    ...(hasRg  ? ['Roboczogodziny'] : []),
     ...(hasMat ? ['Cena materiału (zł)'] : []),
     'Cena robocizny (zł)',
     'Wartość netto (zł)',
   ];
 
   const headerRow: XlsxCell[] = headerLabels.map((label, ci) => {
-    let bgColor = C_HEADER_BG;
-    if (C_MAT >= 0 && ci === C_MAT) bgColor = 'D97706'; // orange accent for Material
-    if (ci === C_ROB) bgColor = '059669'; // green accent for Robocizna
-    if (C_RG >= 0 && ci === C_RG) bgColor = '0369A1'; // blue accent for r-g
-    if (C_KNR >= 0 && ci === C_KNR) bgColor = '5B21B6'; // violet accent for KNR
+    const numeric = ci >= C_IL;
     return sc(label, {
       font: font({ bold: true, color: { rgb: C_HEADER_TEXT }, sz: 9 }),
-      fill: fill(bgColor),
-      alignment: { horizontal: ci >= C_ROB ? 'right' : (ci === C_LP ? 'center' : 'left'), vertical: 'center' },
+      fill: fill(C_HEADER_BG),
+      alignment: { horizontal: numeric ? 'right' : (ci === C_LP ? 'center' : 'left'), vertical: 'center' },
       border: thinBorder(C_HEADER_BG),
     });
   });
@@ -412,12 +414,18 @@ function buildKosztorysSheet(
 
     // r-g (labor hours) — only if showRg
     if (C_RG >= 0) {
-      const rgVal = (item as unknown as Record<string, unknown>).labor_hours_total;
-      const rgStr = rgVal != null ? `${Number(rgVal).toFixed(2)} rbh` : '—';
-      dataRow[C_RG] = sc(rgStr, {
-        fill: fill('EFF6FF'), font: font({ color: { rgb: '0369A1' }, sz: 8 }), border: baseBorder,
-        alignment: { horizontal: 'right' },
-      });
+      const storedHours = Number((item as unknown as Record<string, unknown>).labor_hours_total);
+      const norm = Number(item.labor_norm ?? 0);
+      const hours = storedHours > 0 ? storedHours : (norm > 0 ? norm * Number(item.quantity || 0) : 0);
+      dataRow[C_RG] = hours > 0
+        ? sc(hours, {
+            fill: fill('F8FAFC'), font: baseFont, border: baseBorder,
+            alignment: { horizontal: 'right' }, numFmt: '#,##0.00',
+          })
+        : sc('—', {
+            fill: fill('F8FAFC'), font: baseFont, border: baseBorder,
+            alignment: { horizontal: 'right' },
+          });
     }
 
     // Cena materiału — orange accent fill (hidden if matOwnedByClient)
@@ -492,11 +500,12 @@ function buildKosztorysSheet(
     });
     sumRow[C_WAR] = typeof value === 'number'
       ? sc(value, { font: font({ bold: highlight, color: { rgb: textColor }, sz: 9 }), fill: fill(bgColor), border: thinBorder('CBD5E1'), numFmt: FMT_ACCOUNTING, alignment: { horizontal: 'right' } })
-      : sc(value as string, { font: font({ bold: highlight, color: { rgb: 'DC2626' }, sz: 9 }), fill: fill(bgColor), border: thinBorder('CBD5E1'), alignment: { horizontal: 'right' } });
+      : sc(value as string, { font: font({ bold: highlight, color: { rgb: String(value).includes('***') ? 'DC2626' : textColor }, sz: 9 }), fill: fill(bgColor), border: thinBorder('CBD5E1'), alignment: { horizontal: 'right' } });
     rows.push(sumRow);
   };
 
-  addSumRow('Suma Materiały:', isPro ? adjMat : '*** zł');
+  if (hasMat) addSumRow('Suma materiałów:', isPro ? adjMat : '*** zł');
+  else addSumRow('Materiały:', 'po stronie inwestora');
   addSumRow('Suma Robocizna:', isPro ? adjLab : '*** zł');
 
   if (project.adjustment_percentage && project.adjustment_percentage !== 0) {
@@ -541,7 +550,7 @@ function buildKosztorysSheet(
 
   // ── Uwagi block — injected LEFT of podsumowanie ──
   // Columns A–C_JM-1 (left side), rows summaryStartIdx..grandTotalIdx
-  const uwagi = (project.notes || '').trim();
+  const uwagi = splitOfferNotes(project.pdf_notes || project.notes || '').notes.trim();
   const uwagiEndCol = Math.max(0, C_JM - 1); // cols A..JM-1 (left side)
   if (uwagiEndCol >= 1) {
     // Title cell
@@ -618,7 +627,7 @@ function buildColWidths(hasOpisData: boolean, showRg: boolean, matOwnedByClient:
   if (hasOpisData)  cols.push({ wch: 22 }); // Opis
   if (showKnr)      cols.push({ wch: 18 }); // Kod KNR
   cols.push({ wch: 8 });  // Jm
-  cols.push({ wch: 7 });  // Ilość
+  cols.push({ wch: 12 });  // Ilość
   if (showRg)            cols.push({ wch: 12 }); // r-g
   if (!matOwnedByClient) cols.push({ wch: 20 }); // Cena materiału
   cols.push({ wch: 20 }); // Cena robocizny

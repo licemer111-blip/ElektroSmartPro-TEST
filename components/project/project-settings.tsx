@@ -230,10 +230,10 @@ export function ProjectSettings({ project, isPro }: ProjectSettingsProps) {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-sm">
             <Palette className="w-4 h-4 text-violet-500" />
-            Kolorystyka PDF
+            Wygląd PDF dla klienta
           </CardTitle>
           <CardDescription className="text-[11px]">
-            Wybierz schemat kolorów dla dokumentu
+            Kolor nagłówka i tabeli. Kwoty, VAT i układ pozycji zostają te same.
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-0">
