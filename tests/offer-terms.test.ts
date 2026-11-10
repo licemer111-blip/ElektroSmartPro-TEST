@@ -20,6 +20,7 @@ describe("offer terms", () => {
 
   it("prints hours and quantities the way a Polish invoice does", () => {
     expect(formatHours(720)).toBe("720,00 rbh");
+    expect(formatHours(0.16)).toBe("0,16 rbh");
     expect(formatHours(2475.87)).toContain("2");
     expect(formatHours(2475.87).includes(".")).toBe(false);
     expect(formatPlQty(4500)).toBe("4 500");

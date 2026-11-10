@@ -400,7 +400,7 @@ export async function POST(req: Request) {
       }
 
       const laborNormDisplay = showRg
-        ? (item.laborNorm > 0 ? formatHours(item.laborNorm * item.quantity) : "—")
+        ? (item.laborNorm > 0 ? formatHours(item.laborNorm) : "—")
         : "";
 
       rowsRaw.push({
@@ -418,7 +418,8 @@ export async function POST(req: Request) {
           const vLab = vChild.rbhTotal * projectLaborRate * labMarkupMult * complexityFactor * adjustmentOnly * effRegion * vatMultiplier;
           const vTotal = vMat + vLab;
           const vRowType = vChild.isLabor ? "child_lab" : (vChild.materialTotal > 0 && vChild.rbhTotal > 0 ? "child_mat" : vChild.materialTotal > 0 ? "child_mat" : "child_lab");
-          const vRg = showRg && vChild.rbhTotal > 0 ? formatHours(vChild.rbhTotal) : "";
+          const vUnitHours = vChild.quantity > 0 ? vChild.rbhTotal / vChild.quantity : vChild.rbhTotal;
+          const vRg = showRg && vUnitHours > 0 ? formatHours(vUnitHours) : "";
           // Virtual child inherits parent's id so semanticSectionMap lookup
           // assigns it to the same section as its parent.
           rowItemIds.push(item.id as string);
@@ -487,8 +488,8 @@ export async function POST(req: Request) {
           name: `${secDef.roman}. ${secDef.label}  (${secItemCount} poz.)`,
           knrCode: "", unit: "", qty: 0,
           rg: "", mat: "", lab: "", combined: "",
-          total: maskPrices ? "" : formatPln(secTot),
-          rawTotal: secTot,
+          total: "",
+          rawTotal: 0,
           rowType: "section_header", isParent: false, isChild: false,
         });
 
@@ -499,8 +500,8 @@ export async function POST(req: Request) {
           name: "Suma sekcji",
           knrCode: "", unit: "", qty: 0,
           rg: "",
-          mat: maskPrices || secT.mat <= 0 ? "" : formatPln(secT.mat),
-          lab: maskPrices || secT.lab <= 0 ? "" : formatPln(secT.lab),
+          mat: "",
+          lab: "",
           combined: "",
           total: maskPrices ? "" : formatPln(secTot),
           rawTotal: secTot,

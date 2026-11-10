@@ -288,24 +288,6 @@ function buildKosztorysSheet(
   let lastSection = '__INIT__';
   let itemNumber = 1;
 
-  // Pre-compute section subtotals
-  const sectionTotals = new Map<string, number>();
-  if (hasSections) {
-    const parentIds = new Set(flatItems.filter(i => i.is_assembly_child).map(i => i.parent_assembly_id).filter(Boolean));
-    flatItems.forEach(item => {
-      if (item.is_assembly_child) return;
-      const sec = item.section || '';
-      const prev = sectionTotals.get(sec) || 0;
-      if (parentIds.has(item.id)) {
-        const children = flatItems.filter(c => c.parent_assembly_id === item.id);
-        const childSum = children.reduce((acc, c) => acc + priceOf(c).rowTotal, 0);
-        sectionTotals.set(sec, prev + childSum);
-      } else {
-        sectionTotals.set(sec, prev + priceOf(item).rowTotal);
-      }
-    });
-  }
-
   // Identify assembly parents
   const assemblyParentIds = new Set(
     flatItems.filter(i => i.is_assembly_child).map(i => i.parent_assembly_id).filter(Boolean)
@@ -317,7 +299,6 @@ function buildKosztorysSheet(
       const currentSection = item.section || '';
       if (currentSection !== lastSection) {
         rows.push(Array(colCount).fill(null).map(() => ec()));
-        const secTotal = sectionTotals.get(currentSection) || 0;
         const sRow: XlsxCell[] = Array(colCount).fill(null).map(() =>
           sc('', { fill: fill(C_SECTION_BG), font: font({ bold: true, color: { rgb: C_SECTION_TXT } }) })
         );
@@ -325,16 +306,6 @@ function buildKosztorysSheet(
           font: font({ bold: true, color: { rgb: C_SECTION_TXT }, sz: 9 }),
           fill: fill(C_SECTION_BG),
         });
-        if (isPro) {
-          sRow[C_WAR] = sc(secTotal, {
-            font: font({ bold: true, color: { rgb: C_SECTION_TXT } }),
-            fill: fill(C_SECTION_BG),
-            numFmt: FMT_ACCOUNTING,
-            alignment: { horizontal: 'right' },
-          });
-        } else {
-          sRow[C_WAR] = sc('*** zł', { font: font({ bold: true, color: { rgb: 'DC2626' } }), fill: fill(C_SECTION_BG) });
-        }
         rows.push(sRow);
         lastSection = currentSection;
       }

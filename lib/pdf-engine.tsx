@@ -623,19 +623,19 @@ const TableHeaderRow = ({
     </View>
     {showRg && cols.rg ? (
       <View style={[base.tableHeaderCell, { width: cols.rg, color: palette.tableHeaderText, textAlign: 'right' }]}>
-        <Text>r-g</Text>
+        <Text>rbh</Text>
       </View>
     ) : null}
     {!matOwned ? (
       <View style={[base.tableHeaderCell, { width: cols.mat, color: palette.tableHeaderText, textAlign: 'right' }]}>
-        <Text>Materiał</Text>
+        <Text>Mat. jedn.</Text>
       </View>
     ) : null}
     <View style={[base.tableHeaderCell, { width: cols.lab, color: palette.tableHeaderText, textAlign: 'right' }]}>
-      <Text>Robocizna</Text>
+      <Text>{matOwned ? "Cena jedn." : "Rob. jedn."}</Text>
     </View>
     <View style={[base.tableHeaderCell, { width: cols.total, color: palette.tableHeaderText, textAlign: 'right' }]}>
-      <Text>Suma</Text>
+      <Text>Wartość</Text>
     </View>
   </View>
 );
