@@ -319,6 +319,8 @@ export interface PdfEngineData {
   pdfNarzuty?: PdfNarzutyDisplay;
   priceDisplay: string;
   notes: string;
+  /** Commercial conditions printed above the notes. Deposit line is included only when set. */
+  offerTermLines?: string[];
   pdfStructure?: PdfStructureOptions;
   /**
    * v2.0: when true (FREE tier without pay-per-export unlock), render a large
@@ -1028,6 +1030,16 @@ const ContentPage = ({
             <Text style={[base.signatureLabel, { color: palette.textSecondary }]}>Zatwierdził / Zleceniodawca</Text>
           </View>
         </View>
+
+        {data.offerTermLines && data.offerTermLines.length > 0 ? (
+          <View style={{ marginTop: 10 }}>
+            {data.offerTermLines.map((line, lineIndex) => (
+              <Text key={`term-${lineIndex}`} style={{ fontSize: 8, color: palette.textPrimary, marginBottom: 2 }}>
+                {line}
+              </Text>
+            ))}
+          </View>
+        ) : null}
 
         {data.notes ? (
           <View style={{ marginTop: 10, padding: 8, backgroundColor: palette.accentLight, borderRadius: 3, borderLeftWidth: 2, borderLeftColor: palette.accentPrimary }}>

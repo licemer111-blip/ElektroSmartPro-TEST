@@ -39,6 +39,8 @@ interface ProjectSummaryProps {
   isDownloading?: boolean;
   pdfNotes?: string;
   onPdfNotesChange?: (notes: string) => void;
+  offerTerms: import("@/lib/offer-terms").OfferTerms;
+  onOfferTermsChange: (terms: import("@/lib/offer-terms").OfferTerms) => void;
   projectStatus?: string;
   /** Live region UUID from useProjectPricing — keeps regionModifier in sync without full page refresh */
   liveRegionId?: string;
@@ -56,6 +58,8 @@ export function ProjectSummary({
   isDownloading = false,
   pdfNotes = "",
   onPdfNotesChange,
+  offerTerms,
+  onOfferTermsChange,
   projectStatus = "draft",
   liveRegionId,
   regions,
@@ -362,6 +366,8 @@ export function ProjectSummary({
           grandTotal={totals.grandTotal}
           pdfNotes={pdfNotes}
           onPdfNotesChange={onPdfNotesChange}
+          offerTerms={offerTerms}
+          onOfferTermsChange={onOfferTermsChange}
           onDownloadPDF={onDownloadPDF}
           isDownloading={isDownloading}
         />

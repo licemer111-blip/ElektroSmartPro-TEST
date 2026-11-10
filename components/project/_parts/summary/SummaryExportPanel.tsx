@@ -17,6 +17,8 @@ import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { HintTooltip } from "@/components/ui/hint-tooltip";
 import { HINTS } from "@/lib/hints/hint-content";
 import { updateProjectPdfNotes } from "@/app/dashboard/projects/[id]/_actions/project-meta";
+import { joinOfferNotes, type OfferTerms } from "@/lib/offer-terms";
+import { OfferTermsFields } from "@/components/project/offer-terms-fields";
 import type { ProjectWithRelations, ProjectItem, Profile } from "@/lib/types/database";
 
 interface SummaryExportPanelProps {
@@ -27,6 +29,8 @@ interface SummaryExportPanelProps {
   grandTotal: number;
   pdfNotes: string;
   onPdfNotesChange?: (notes: string) => void;
+  offerTerms: OfferTerms;
+  onOfferTermsChange: (terms: OfferTerms) => void;
   onDownloadPDF?: () => Promise<void>;
   isDownloading: boolean;
   onPdfNotesSaved?: (notes: string) => void;
@@ -40,6 +44,8 @@ export function SummaryExportPanel({
   grandTotal,
   pdfNotes,
   onPdfNotesChange,
+  offerTerms,
+  onOfferTermsChange,
   onDownloadPDF,
   isDownloading,
   onPdfNotesSaved,
@@ -51,14 +57,14 @@ export function SummaryExportPanel({
 
   const handleSavePdfNotes = async () => {
     setIsSavingNotes(true);
-    const result = await updateProjectPdfNotes(project.id, pdfNotes);
+    const result = await updateProjectPdfNotes(project.id, joinOfferNotes(offerTerms, pdfNotes));
     setIsSavingNotes(false);
     if (result.error) {
       toast({ title: "Błąd", description: result.error, variant: "destructive" });
     } else {
       setNotesSaved(true);
       onPdfNotesSaved?.(pdfNotes);
-      toast({ title: "✅ Zapisano", description: "Uwagi zostały zapisane" });
+      toast({ title: "Zapisano", description: "Warunki oferty i uwagi zostały zapisane" });
       setTimeout(() => setNotesSaved(false), 2000);
     }
   };
@@ -98,6 +104,13 @@ export function SummaryExportPanel({
       {/* PDF Notes */}
       <Separator />
       <div className="space-y-2">
+        <OfferTermsFields
+          idPrefix="desktop-offer"
+          terms={offerTerms}
+          onChange={onOfferTermsChange}
+          disabled={isDownloading}
+        />
+        <p className="text-xs text-muted-foreground">Zaliczka pojawi się w PDF tylko wtedy, gdy wpiszesz procent.</p>
         <Label htmlFor="pdf-notes" className="text-sm font-medium">
           Uwagi do kosztorysu (opcjonalne)
         </Label>

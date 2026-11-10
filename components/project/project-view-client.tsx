@@ -90,6 +90,9 @@ export function ProjectViewClient({
     isDownloading,
     pdfNotes,
     setPdfNotes,
+    offerTerms,
+    setOfferTerms,
+    notesForPdf,
     pdfPreviewUrl,
     pdfPreviewName,
     isIosSafari,
@@ -102,6 +105,7 @@ export function ProjectViewClient({
     adjustmentPercentage: project.adjustment_percentage || 0,
     colorMode,
     vatRate: liveVatRate,
+    initialPdfNotes: project.pdf_notes,
   });
 
   const { summaryCollapsed, toggleSummary } = useSummaryCollapse();
@@ -240,7 +244,7 @@ export function ProjectViewClient({
             projectId,
             priceModifier: project.adjustment_percentage || 0,
             showColors: colorMode,
-            notes: pdfNotes,
+            notes: notesForPdf,
             template: typeof window !== "undefined"
               ? localStorage.getItem("elektrosmart-pdf-template") || "klasyczny"
               : "klasyczny",
@@ -271,7 +275,7 @@ export function ProjectViewClient({
 
     window.addEventListener("project-finalized", handler);
     return () => window.removeEventListener("project-finalized", handler);
-  }, [projectId, project, items, isPro, colorMode, pdfNotes, knrMultiplier]);
+  }, [projectId, project, items, isPro, colorMode, notesForPdf, knrMultiplier]);
 
   // Material Brain disabled — simplification Phase 1 (AI material suggestions removed)
   const brain = useMaterialBrain(projectId, false, liveVatRate);
@@ -364,6 +368,8 @@ export function ProjectViewClient({
                 isDownloading={isDownloading}
                 pdfNotes={pdfNotes}
                 onPdfNotesChange={setPdfNotes}
+                offerTerms={offerTerms}
+                onOfferTermsChange={setOfferTerms}
                 projectStatus={project.status}
                 liveRegionId={liveRegionId}
                 regions={regions}
@@ -380,6 +386,8 @@ export function ProjectViewClient({
           isDownloading={isDownloading}
           pdfNotes={pdfNotes}
           onPdfNotesChange={setPdfNotes}
+          offerTerms={offerTerms}
+          onOfferTermsChange={setOfferTerms}
         />
       </div>
 

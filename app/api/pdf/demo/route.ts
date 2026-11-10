@@ -2,6 +2,7 @@ import React from "react";
 import { NextResponse } from "next/server";
 import { renderToBuffer, type DocumentProps } from "@react-pdf/renderer";
 import { PremiumPdfDocument, type PdfEngineData, type PdfRow } from "@/lib/pdf-engine";
+import { offerTermsLines } from "@/lib/offer-terms";
 import { findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
 import { classifyIntent } from "@/lib/services/semantic-classifier";
 
@@ -222,6 +223,7 @@ export async function POST(req: Request) {
       pdfNarzuty: undefined,
       priceDisplay: "netto",
       notes: "Wzór wyglądu PDF. Robocizna = godzina normy ES × 80 zł. Ceny materiału w tym pliku są przykładowe, nie z cennika hurtowni.",
+      offerTermLines: offerTermsLines({ validDays: 14, paymentDays: 14, depositPercent: null }, totalGross),
       pdfStructure: {
         showCoverPage: false,
         showCompanyHeader: true,

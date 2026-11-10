@@ -188,6 +188,8 @@ export interface Project {
   client_name: string | null;
   client_address: string | null;
   client_nip: string | null;
+  /** Notes printed on the PDF. May start with an [[ES1|valid|payment|deposit]] marker. */
+  pdf_notes?: string | null;
   rate_source: RateSource; // Labor rate source: 'engine' = ES-Engine 2026 | 'manual' = Własna Baza
   deadline: string | null; // Project completion deadline
   // Narzuty system (Polish construction surcharges)

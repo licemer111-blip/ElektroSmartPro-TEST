@@ -20,6 +20,7 @@ import { getKnrMultiplier } from "@/lib/global-benchmarks";
 import { classifyIntent } from "@/lib/services/semantic-classifier";
 import { renderToBuffer, type DocumentProps } from "@react-pdf/renderer";
 import { PremiumPdfDocument, type PdfEngineData, type ThemeName, type PdfStructureOptions } from "@/lib/pdf-engine";
+import { offerTermsLines, splitOfferNotes } from "@/lib/offer-terms";
 import {
   expandToAssembly, detectSector,
   type ProjectSector, type SmartExpansionResult, type AssemblyOverrides,
@@ -566,6 +567,9 @@ export async function POST(req: Request) {
     // ─── Build PDF ────────────────────────────────────────────────────────────
 
     const logoBase64 = profile?.logo_url ? await fetchImage(profile.logo_url) : null;
+    const parsedNotes = splitOfferNotes(typeof notes === "string" ? notes : "");
+    const pdfHumanNotes = parsedNotes.notes;
+    const pdfOfferTerms = parsedNotes.terms;
 
     // ─── Assemble PdfEngineData & render ──────────────────────────────────────
 
@@ -600,8 +604,9 @@ export async function POST(req: Request) {
       pdfNarzuty: pdfNarzuty as PdfNarzutyDisplay | undefined,
       priceDisplay: priceDisplay as string,
       notes: isDemoProject
-        ? `[DOKUMENT DEMONSTRACYJNY — CENY PRZYKŁADOWE — NIE DO UŻYTKU KOMERCYJNEGO]\n${notes as string}`
-        : notes as string,
+        ? `[DOKUMENT DEMONSTRACYJNY — CENY PRZYKŁADOWE — NIE DO UŻYTKU KOMERCYJNEGO]\n${pdfHumanNotes}`
+        : pdfHumanNotes,
+      offerTermLines: offerTermsLines(pdfOfferTerms, totalGross, maskPrices),
       showDemoWatermark,
       showColors: Boolean(showColors),
       monochrome: Boolean(monochrome),

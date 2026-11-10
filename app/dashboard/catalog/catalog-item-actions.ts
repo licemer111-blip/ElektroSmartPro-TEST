@@ -6,6 +6,63 @@ import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import type { CatalogItem } from "./catalog-search-actions";
 
+async function syncOpenEstimateMaterialPrice(
+  supabase: NonNullable<Awaited<ReturnType<typeof tryAuth>>["supabase"]>,
+  userId: string,
+  catalogItemId: string,
+  oldPrice: number,
+  newPrice: number,
+): Promise<number> {
+  if (Math.abs(oldPrice - newPrice) < 0.005) return 0;
+
+  const { data: openProjects, error: projectError } = await supabase
+    .from("projects")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("status", "draft");
+
+  if (projectError || !openProjects?.length) return 0;
+
+  const projectIds = openProjects.map((row) => row.id);
+  const { data: rows, error: rowError } = await supabase
+    .from("project_items")
+    .select("id, project_id, final_material_price, material_price")
+    .eq("catalog_item_id", catalogItemId)
+    .in("project_id", projectIds);
+
+  if (rowError || !rows?.length) return 0;
+
+  const matching = rows.filter((row) => {
+    const shown = Number(row.final_material_price ?? row.material_price ?? 0);
+    return Math.abs(shown - oldPrice) < 0.02;
+  });
+  if (matching.length === 0) return 0;
+
+  const touchedProjects = new Set<string>();
+  let updated = 0;
+  for (let i = 0; i < matching.length; i += 80) {
+    const chunk = matching.slice(i, i + 80);
+    const { error } = await supabase
+      .from("project_items")
+      .update({
+        final_material_price: newPrice,
+        material_price: newPrice,
+      })
+      .in("id", chunk.map((row) => row.id));
+    if (error) {
+      logger.error("Error updating open estimate material price", { catalogItemId }, error);
+      break;
+    }
+    updated += chunk.length;
+    chunk.forEach((row) => touchedProjects.add(row.project_id));
+  }
+
+  touchedProjects.forEach((projectId) => {
+    revalidatePath(`/dashboard/projects/${projectId}`);
+  });
+  return updated;
+}
+
 export async function createCatalogItem(formData: {
   name: string;
   unit: string;
@@ -85,7 +142,7 @@ export async function updateCatalogItem(
       throw new Error("Failed to create personal copy");
     }
     revalidatePath("/dashboard/catalog");
-    return { success: true, message: "Utworzono osobistą kopię globalnej pozycji" };
+    return { success: true, message: "Utworzono osobistą kopię globalnej pozycji", updatedEstimates: 0 };
   }
 
   const { error } = await supabase
@@ -105,8 +162,18 @@ export async function updateCatalogItem(
     throw new Error("Failed to update catalog item");
   }
 
+  const updatedEstimates = existingItem.user_id === user.id
+    ? await syncOpenEstimateMaterialPrice(
+        supabase,
+        user.id,
+        id,
+        Number(existingItem.base_material_price) || 0,
+        Number(formData.base_material_price) || 0,
+      )
+    : 0;
+
   revalidatePath("/dashboard/catalog");
-  return { success: true };
+  return { success: true, updatedEstimates };
 }
 
 export async function deleteCatalogItem(id: string): Promise<{ success: boolean; error?: string; usedInProjects?: string[] }> {

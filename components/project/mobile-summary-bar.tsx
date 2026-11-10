@@ -28,6 +28,9 @@ import {
   LayoutGrid,
 } from "lucide-react";
 import { toggleMaterialsOwnedByCustomer } from "@/app/dashboard/projects/[id]/actions";
+import { updateProjectPdfNotes } from "@/app/dashboard/projects/[id]/_actions/project-meta";
+import { joinOfferNotes, type OfferTerms } from "@/lib/offer-terms";
+import { OfferTermsFields } from "@/components/project/offer-terms-fields";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { notifyDataChanged } from "@/hooks/use-synced-action";
@@ -43,6 +46,8 @@ interface MobileSummaryBarProps {
   isDownloading?: boolean;
   pdfNotes?: string;
   onPdfNotesChange?: (notes: string) => void;
+  offerTerms: OfferTerms;
+  onOfferTermsChange: (terms: OfferTerms) => void;
 }
 
 export function MobileSummaryBar({
@@ -53,8 +58,11 @@ export function MobileSummaryBar({
   isDownloading = false,
   pdfNotes = "",
   onPdfNotesChange,
+  offerTerms,
+  onOfferTermsChange,
 }: MobileSummaryBarProps) {
   const [open, setOpen] = useState(false);
+  const [isSavingNotes, setIsSavingNotes] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
   const isPro = getEffectiveIsPro(profile);
@@ -304,6 +312,12 @@ export function MobileSummaryBar({
 
             {/* PDF Notes */}
             <div className="space-y-2">
+              <OfferTermsFields
+                idPrefix="mobile-offer"
+                terms={offerTerms}
+                onChange={onOfferTermsChange}
+                disabled={isDownloading}
+              />
               <Label htmlFor="summary-mobile-remarks" className="text-sm">Uwagi do kosztorysu</Label>
               <Textarea
                 id="summary-mobile-remarks"
@@ -314,6 +328,24 @@ export function MobileSummaryBar({
                 className="min-h-[60px] text-sm"
                 disabled={isDownloading}
               />
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                disabled={isSavingNotes}
+                onClick={async () => {
+                  setIsSavingNotes(true);
+                  const result = await updateProjectPdfNotes(project.id, joinOfferNotes(offerTerms, pdfNotes));
+                  setIsSavingNotes(false);
+                  if (result.error) {
+                    toast({ title: "Błąd", description: result.error, variant: "destructive" });
+                  } else {
+                    toast({ title: "Zapisano", description: "Warunki oferty i uwagi zostały zapisane" });
+                  }
+                }}
+              >
+                {isSavingNotes ? "Zapisuję..." : "Zapisz warunki"}
+              </Button>
             </div>
 
             {/* Profitability */}

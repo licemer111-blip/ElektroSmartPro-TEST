@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useGlobalSettings } from "@/hooks/use-global-settings";
+import { joinOfferNotes, splitOfferNotes, type OfferTerms } from "@/lib/offer-terms";
 
 interface UseProjectPdfDownloadOptions {
   projectId: string;
@@ -10,6 +11,7 @@ interface UseProjectPdfDownloadOptions {
   adjustmentPercentage: number;
   colorMode: boolean;
   vatRate: number;
+  initialPdfNotes?: string | null;
 }
 
 export function useProjectPdfDownload({
@@ -18,12 +20,16 @@ export function useProjectPdfDownload({
   adjustmentPercentage,
   colorMode,
   vatRate,
+  initialPdfNotes,
 }: UseProjectPdfDownloadOptions) {
   const { toast } = useToast();
   const { priceDisplay, pdfStructure } = useGlobalSettings();
+  const initial = splitOfferNotes(initialPdfNotes);
 
   const [isDownloading, setIsDownloading] = useState(false);
-  const [pdfNotes, setPdfNotes] = useState("");
+  const [pdfNotes, setPdfNotes] = useState(initial.notes);
+  const [offerTerms, setOfferTerms] = useState<OfferTerms>(initial.terms);
+  const notesForPdf = useMemo(() => joinOfferNotes(offerTerms, pdfNotes), [offerTerms, pdfNotes]);
   const [pdfPreviewUrl, setPdfPreviewUrl] = useState<string | null>(null);
   const [pdfPreviewName, setPdfPreviewName] = useState("");
   const [isIosSafari, setIsIosSafari] = useState(false);
@@ -43,7 +49,7 @@ export function useProjectPdfDownload({
           projectId,
           priceModifier: adjustmentPercentage,
           showColors: colorMode,
-          notes: pdfNotes,
+          notes: notesForPdf,
           template:
             typeof window !== "undefined"
               ? localStorage.getItem("elektrosmart-pdf-template") || "klasyczny"
@@ -95,6 +101,9 @@ export function useProjectPdfDownload({
     isDownloading,
     pdfNotes,
     setPdfNotes,
+    offerTerms,
+    setOfferTerms,
+    notesForPdf,
     pdfPreviewUrl,
     pdfPreviewName,
     isIosSafari,

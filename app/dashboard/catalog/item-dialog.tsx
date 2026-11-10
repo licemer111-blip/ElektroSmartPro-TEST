@@ -137,10 +137,13 @@ export function ItemDialog({
 
       if (item) {
         // Update existing item
-        await updateCatalogItem(item.id, submitData);
+        const result = await updateCatalogItem(item.id, submitData);
+        const updated = "updatedEstimates" in result ? result.updatedEstimates : 0;
         toast({
           title: "Sukces",
-          description: "Pozycja została zaktualizowana",
+          description: updated
+            ? `Cena materiału zaktualizowana w ${updated} pozycjach otwartych kosztorysów.`
+            : "Pozycja została zaktualizowana",
         });
       } else {
         // Create new item

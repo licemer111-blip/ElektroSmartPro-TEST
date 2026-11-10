@@ -188,8 +188,9 @@ export function CatalogSidebar({ projectId, categories: initialCategories, catal
     if (!editItemId || !editItemName.trim()) { toast({ title: "Błąd", description: "Nazwa pozycji jest wymagana", variant: "destructive" }); return; }
     setIsEditing(true);
     try {
-      await updateCatalogItem(editItemId, { name: editItemName.trim(), unit: editItemUnit, base_material_price: parseFloat(editItemMaterial) || 0, base_labor_price: parseFloat(editItemLabor) || 0, category_id: editItemCategory || undefined });
-      toast({ title: "Sukces", description: "Pozycja została zaktualizowana" }); setIsEditDialogOpen(false); notifyDataChanged("catalog-item-updated"); router.refresh();
+      const result = await updateCatalogItem(editItemId, { name: editItemName.trim(), unit: editItemUnit, base_material_price: parseFloat(editItemMaterial) || 0, base_labor_price: parseFloat(editItemLabor) || 0, category_id: editItemCategory || undefined });
+      const updated = result.updatedEstimates ?? 0;
+      toast({ title: "Sukces", description: updated ? `Cena materiału zaktualizowana w ${updated} pozycjach otwartych kosztorysów.` : "Pozycja została zaktualizowana" }); setIsEditDialogOpen(false); notifyDataChanged("catalog-item-updated"); router.refresh();
     } catch (error) { toast({ title: "Błąd", description: error instanceof Error ? error.message : "Nie udało się zaktualizować pozycji", variant: "destructive" }); }
     setIsEditing(false);
   };
