@@ -13,15 +13,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, TrendingUp, TrendingDown, ArrowRight, Shield, ShieldCheck, ShieldAlert, Edit, Activity, Loader2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Search, TrendingUp, TrendingDown, ArrowRight, Shield, ShieldCheck, ShieldAlert, Edit } from "lucide-react";
 import { normalizePolish } from "@/lib/utils";
 import type { AdminMarketItem } from "./actions";
-import { simulateMarketMovement } from "./actions";
 import { MarketItemEditor } from "./market-item-editor";
 import { ImportItemsDialog } from "./import-items-dialog";
-import { AiGenerateDialog } from "./ai-generate-dialog";
-import { AiValidateDialog } from "./ai-validate-dialog";
 
 interface AdminMarketTableProps {
   items: AdminMarketItem[];
@@ -32,9 +28,6 @@ export function AdminMarketTable({ items, total }: AdminMarketTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedItem, setSelectedItem] = useState<AdminMarketItem | null>(null);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
-  const [isSimulating, setIsSimulating] = useState(false);
-  const { toast } = useToast();
-
   // Filter items by search term
   const filteredItems = items.filter((item) => {
     if (!searchTerm) return true;
@@ -108,74 +101,19 @@ export function AdminMarketTable({ items, total }: AdminMarketTableProps) {
     setIsEditorOpen(true);
   };
 
-  const handleSimulateMarket = async () => {
-    setIsSimulating(true);
-    try {
-      const result = await simulateMarketMovement();
-      
-      if (result.success) {
-        toast({
-          title: "✅ Cały rynek zaktualizowany!",
-          description: `Pomyślnie zaktualizowano ${result.updated} pozycji globalnych. Wszystkie ceny i trendy zostały odświeżone.`,
-        });
-        
-        // Reload the page to show updated data
-        window.location.reload();
-      } else {
-        toast({
-          title: "❌ Błąd symulacji",
-          description: result.error || "Nie udało się zaktualizować rynku",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      console.error("Error simulating market:", error);
-      toast({
-        title: "❌ Błąd",
-        description: "Wystąpił nieoczekiwany błąd podczas symulacji",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSimulating(false);
-    }
-  };
-
   return (
     <>
       <Card>
         <CardHeader>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
             <CardTitle className="text-base sm:text-lg">
-              Pozycje katalogowe - Market Intelligence
+              Pozycje wspólnej bazy
             </CardTitle>
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
               <Badge variant="outline" className="text-xs sm:text-sm">
-                {total} pozycji globalnych
+                {total} pozycji
               </Badge>
               <ImportItemsDialog />
-              <AiGenerateDialog />
-              <AiValidateDialog />
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleSimulateMarket}
-                disabled={isSimulating}
-                className="gap-2 border-purple-300 text-purple-700 hover:bg-purple-50 dark:border-purple-700 dark:text-purple-400 dark:hover:bg-purple-950/30 text-xs sm:text-sm"
-              >
-                {isSimulating ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span className="hidden sm:inline">Symulacja...</span>
-                    <span className="sm:hidden">...</span>
-                  </>
-                ) : (
-                  <>
-                    <Activity className="w-4 h-4" />
-                    <span className="hidden sm:inline">Symuluj Ruch Rynku</span>
-                    <span className="sm:hidden">Symuluj</span>
-                  </>
-                )}
-              </Button>
             </div>
           </div>
 

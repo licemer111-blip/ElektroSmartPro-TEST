@@ -134,7 +134,7 @@ export function AuditLogsClient({ initialLogs, total, stats }: AuditLogsClientPr
           <Shield className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">Audit Log — Katalog</h1>
+          <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">Dziennik zmian katalogu</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400">Historia zmian pozycji katalogu globalnego</p>
         </div>
       </div>

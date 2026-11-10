@@ -23,11 +23,10 @@ export default async function CanonicalL0AdminPage() {
           </div>
           <div>
             <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-              L0 Canonical KNR — overrides
+              Stałe godziny
             </h1>
             <p className="text-xs text-slate-500 mt-0.5">
-              Edycja norm robocizny / cen materiałowych dla{" "}
-              <strong>{entries.length}</strong> pozycji canonical bez deploya
+              {entries.length} nazw, które Wyceń rozpoznaje od razu. Tu zmienisz godzinę bez nowej wersji programu. Ceny materiału nie dopisuj, jeśli elektryk ma wpisać ją sam.
             </p>
           </div>
         </div>
@@ -52,21 +51,7 @@ export default async function CanonicalL0AdminPage() {
       <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
         <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800">
           <p className="text-[11px] text-slate-500 leading-relaxed">
-            <strong className="text-slate-700 dark:text-slate-300">
-              Jak to działa:
-            </strong>{" "}
-            tabela bazowa pochodzi z{" "}
-            <code className="text-[10px] bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">
-              lib/services/canonical-knr-l0.ts
-            </code>{" "}
-            (regex + KNR + norma). Override zapisywane są w tabeli{" "}
-            <code className="text-[10px] bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">
-              canonical_l0_overrides
-            </code>{" "}
-            i nakładane na bazę przy starcie pipeline. Puste pola = wartość
-            hardcoded. Disabled = pozycja pomijana, kontekst spada do L1/L2/L3.
-            Cache 60s — zmiana będzie widoczna po max 60 sek (lub natychmiast po
-            kolejnym Wyceń).
+            Puste pole zostawia godzinę z programu. Wyłączenie pozycji znaczy, że Wyceń jej nie pozna po nazwie i poszuka w słowniku. Zmiana wchodzi w następną wycenę, najpóźniej po minucie.
           </p>
         </div>
         <CanonicalL0Table entries={entries} />

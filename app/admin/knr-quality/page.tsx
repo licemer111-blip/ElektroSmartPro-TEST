@@ -28,9 +28,9 @@ export default async function KnrQualityHubPage() {
             <FlaskConical className="w-5 h-5 text-violet-600 dark:text-violet-400" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">KNR Quality Hub</h1>
+            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">Dopasowanie nazw</h1>
             <p className="text-xs text-slate-500 mt-0.5">
-              Jakość dopasowania nazw do godzin normy ES
+              Które nazwy ze smet nie dostały godziny. Stąd widać, czego brakuje w słowniku.
             </p>
           </div>
         </div>

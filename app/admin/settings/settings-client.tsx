@@ -34,14 +34,14 @@ export function SettingsClient() {
             <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-3 space-y-2">
               <div className="flex items-center gap-2">
                 <Users className="w-4 h-4 text-slate-500" />
-                <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">FREE</span>
+                <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Demo</span>
                 <Badge variant="outline" className="text-[9px] ml-auto">0 PLN</Badge>
               </div>
               <div className="space-y-1 text-[11px] text-slate-500">
                 <div className="flex justify-between"><span>Max projektów:</span><span className="font-mono font-bold text-slate-700 dark:text-slate-300">{FREE_TIER_MAX_PROJECTS}</span></div>
                 <div className="flex justify-between"><span>AI requests/mies.:</span><span className="font-mono font-bold text-slate-700 dark:text-slate-300">{DEMO_AI_LIMIT}</span></div>
                 <div className="flex justify-between"><span>Sumy widoczne:</span><span className="font-bold text-green-600">TAK</span></div>
-                <div className="flex justify-between"><span>PDF watermark:</span><span className="font-bold text-orange-500">DEMO</span></div>
+                <div className="flex justify-between"><span>Znak na PDF:</span><span className="font-bold text-orange-500">DEMO</span></div>
                 <div className="flex justify-between"><span>Czysty PDF:</span><span className="font-bold text-red-500">NIE</span></div>
               </div>
             </div>
@@ -57,7 +57,7 @@ export function SettingsClient() {
                 <div className="flex justify-between"><span>Max projektów:</span><span className="font-mono font-bold text-slate-700 dark:text-slate-300">∞</span></div>
                 <div className="flex justify-between"><span>AI requests/mies.:</span><span className="font-mono font-bold text-slate-700 dark:text-slate-300">{PRO_AI_LIMIT}</span></div>
                 <div className="flex justify-between"><span>Sumy widoczne:</span><span className="font-bold text-green-600">TAK</span></div>
-                <div className="flex justify-between"><span>PDF watermark:</span><span className="font-bold text-green-600">BRAK</span></div>
+                <div className="flex justify-between"><span>Znak na PDF:</span><span className="font-bold text-green-600">brak</span></div>
                 <div className="flex justify-between"><span>One-shot:</span><span className="font-bold text-orange-500">1× / email</span></div>
               </div>
             </div>
@@ -67,13 +67,13 @@ export function SettingsClient() {
               <div className="flex items-center gap-2">
                 <Crown className="w-4 h-4 text-amber-500" />
                 <span className="text-sm font-semibold text-amber-700 dark:text-amber-300">PRO</span>
-                <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300 text-[9px] ml-auto">159 PLN/mies.</Badge>
+                <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300 text-[9px] ml-auto">159 zł netto</Badge>
               </div>
               <div className="space-y-1 text-[11px] text-slate-500">
                 <div className="flex justify-between"><span>Max projektów:</span><span className="font-mono font-bold text-slate-700 dark:text-slate-300">∞</span></div>
                 <div className="flex justify-between"><span>AI requests/mies.:</span><span className="font-mono font-bold text-slate-700 dark:text-slate-300">{PRO_AI_LIMIT}</span></div>
                 <div className="flex justify-between"><span>Sumy widoczne:</span><span className="font-bold text-green-600">TAK</span></div>
-                <div className="flex justify-between"><span>PDF watermark:</span><span className="font-bold text-green-600">BRAK</span></div>
+                <div className="flex justify-between"><span>Znak na PDF:</span><span className="font-bold text-green-600">brak</span></div>
                 <div className="flex justify-between"><span>Czysty PDF:</span><span className="font-bold text-green-600">TAK</span></div>
               </div>
             </div>
@@ -86,7 +86,7 @@ export function SettingsClient() {
               Anti-abuse mechanizmy
             </p>
             <ul className="text-[11px] text-slate-500 space-y-0.5 ml-5 list-disc">
-              <li>FREE widzi sumy. PDF ma znak wodny DEMO.</li>
+              <li>Demo widzi sumy. PDF ma znak DEMO.</li>
               <li>Drugi własny projekt jest zablokowany. Projekt DEMO i archiwum się nie liczą.</li>
               <li>Trial = one-shot per email (nie per account re-creation)</li>
               <li>Pojedynczy czysty PDF za 29 zł: {PAY_PER_EXPORT_ENABLED ? "włączony" : "wyłączony w kasie"}</li>
@@ -123,7 +123,7 @@ export function SettingsClient() {
               <p className="font-bold text-slate-700 dark:text-slate-300">Next.js 16</p>
             </div>
             <div className="rounded-lg bg-slate-50 dark:bg-slate-800/50 p-2.5 text-center">
-              <p className="text-slate-400 mb-0.5">L0 Entries</p>
+              <p className="text-slate-400 mb-0.5">Stałe godziny</p>
               <p className="font-bold text-slate-700 dark:text-slate-300">169</p>
             </div>
             <div className="rounded-lg bg-slate-50 dark:bg-slate-800/50 p-2.5 text-center">

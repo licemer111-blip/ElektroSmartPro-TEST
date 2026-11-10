@@ -130,6 +130,7 @@ async function getPanelAdminData(): Promise<PanelAdminData> {
 }
 
 export default async function PanelAdminPage() {
+  redirect("/admin/dashboard");
   const admin = await isAdmin();
   if (!admin) redirect("/dashboard");
 

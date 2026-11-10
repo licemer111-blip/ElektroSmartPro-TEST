@@ -15,41 +15,35 @@ const NAV_GROUPS = [
     label: "Przegląd",
     color: "text-blue-500",
     items: [
-      { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
+      { href: "/admin/dashboard", label: "Pulpit", icon: LayoutDashboard },
     ],
   },
   {
-    label: "Użytkownicy",
+    label: "Konta",
     color: "text-violet-500",
     items: [
-      { href: "/admin/users",     label: "Użytkownicy", icon: Users          },
-      { href: "/admin/analytics", label: "Analityka",   icon: BarChart3      },
-      { href: "/admin/feedback",  label: "Opinie",      icon: MessageSquare  },
+      { href: "/admin/users", label: "Konta", icon: Users },
+      { href: "/admin/analytics", label: "Aktywność", icon: BarChart3 },
+      { href: "/admin/feedback", label: "Opinie", icon: MessageSquare },
     ],
   },
   {
-    label: "Katalog i Ceny",
+    label: "Godziny i katalog",
     color: "text-amber-500",
     items: [
-      { href: "/admin/market",         label: "Ceny Katalogowe", icon: TrendingUp       },
-      { href: "/admin/canonical-l0",   label: "L0 Canonical",   icon: SlidersHorizontal },
-      { href: "/admin/knowledge-base", label: "Baza Wiedzy",    icon: Brain             },
-    ],
-  },
-  {
-    label: "Godziny",
-    color: "text-emerald-500",
-    items: [
-      { href: "/admin/knr-quality", label: "Jakość norm ES", icon: FlaskConical },
-      { href: "/admin/monitoring",  label: "Monitoring",      icon: MonitorDot  },
-      { href: "/admin/audit",       label: "Audit Log",       icon: Shield      },
+      { href: "/admin/knr-quality", label: "Dopasowanie nazw", icon: FlaskConical },
+      { href: "/admin/canonical-l0", label: "Stałe godziny", icon: SlidersHorizontal },
+      { href: "/admin/knowledge-base", label: "Pliki godzin", icon: Brain },
+      { href: "/admin/market", label: "Katalog", icon: TrendingUp },
     ],
   },
   {
     label: "System",
-    color: "text-slate-400",
+    color: "text-emerald-500",
     items: [
-      { href: "/admin/settings", label: "Ustawienia", icon: Settings },
+      { href: "/admin/monitoring", label: "Płatności i błędy", icon: MonitorDot },
+      { href: "/admin/audit", label: "Dziennik zmian", icon: Shield },
+      { href: "/admin/settings", label: "Zasady kont", icon: Settings },
     ],
   },
 ];
@@ -140,5 +134,34 @@ export function AdminSidebar() {
         </Link>
       </div>
     </aside>
+  );
+}
+
+export function AdminMobileNav() {
+  const pathname = usePathname();
+  const items = NAV_GROUPS.flatMap((group) => group.items);
+
+  return (
+    <div className="lg:hidden sticky top-0 z-30 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95">
+      <div className="flex gap-1 overflow-x-auto px-3 py-2">
+        {items.map(({ href, label }) => {
+          const isActive = pathname === href || (href !== "/admin/dashboard" && pathname.startsWith(href));
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={cn(
+                "shrink-0 rounded-full px-3 py-1 text-xs font-medium",
+                isActive
+                  ? "bg-blue-600 text-white"
+                  : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+              )}
+            >
+              {label}
+            </Link>
+          );
+        })}
+      </div>
+    </div>
   );
 }

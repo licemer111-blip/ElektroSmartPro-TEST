@@ -21,10 +21,10 @@ export default async function AdminMarketPage() {
     <div className="container mx-auto py-4 sm:py-8 px-2 sm:px-4">
       <div className="mb-6 sm:mb-8">
         <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">
-          Admin Panel - Market Intelligence
+          Katalog wspólny
         </h1>
         <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
-          Zarządzaj cenami rynkowymi, trendami i komentarzami dla wszystkich pozycji globalnych
+          Pozycje, które widzi każdy elektryk w Bazie. Godzina albo złotówka, którą tu zapiszesz, wchodzi do kosztorysu. Program sam nie wymyśla ceny materiału.
         </p>
       </div>
 

@@ -178,7 +178,7 @@ export function AdminDashboardClient({ kpi, voivodeships, assemblies, errors }: 
                 sub={`+${kpi.newProLast30d} w ost. 30 dni`}
                 icon={Crown} iconBg="bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400"
               />
-              <KpiCard label="Free" value={kpi.freeUsers}
+              <KpiCard label="Demo" value={kpi.freeUsers}
                 sub="Do konwersji"
                 icon={Users} iconBg="bg-slate-100 dark:bg-slate-800 text-slate-500"
                 trend={{ label: `${kpi.trialNeverUsedCount} bez triala`, positive: false }}
@@ -228,7 +228,7 @@ export function AdminDashboardClient({ kpi, voivodeships, assemblies, errors }: 
 
           {/* ── Conversion Funnel ── */}
           <section>
-            <SectionLabel>Lejek konwersji</SectionLabel>
+            <SectionLabel>Kliknięcia w PRO</SectionLabel>
             <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
               <CardContent className="p-5">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-5">
@@ -237,9 +237,9 @@ export function AdminDashboardClient({ kpi, voivodeships, assemblies, errors }: 
                       <Eye className="w-5 h-5 text-orange-600 dark:text-orange-400" />
                     </div>
                     <div>
-                      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Blur Views</p>
+                      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Stary licznik</p>
                       <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{kpi.blurViews}</p>
-                      <p className="text-[10px] text-slate-400">wyświetleń cen z blur</p>
+                      <p className="text-[10px] text-slate-400">z czasu zamazanych sum. Teraz sumy widać.</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
@@ -247,9 +247,9 @@ export function AdminDashboardClient({ kpi, voivodeships, assemblies, errors }: 
                       <MousePointerClick className="w-5 h-5 text-rose-600 dark:text-rose-400" />
                     </div>
                     <div>
-                      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Upgrade Clicks</p>
+                      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Kliknięcia PRO</p>
                       <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{kpi.upgradeClicks}</p>
-                      <p className="text-[10px] text-slate-400">kliknięć w upgrade</p>
+                      <p className="text-[10px] text-slate-400">otwarć płatności</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
@@ -257,7 +257,7 @@ export function AdminDashboardClient({ kpi, voivodeships, assemblies, errors }: 
                       <TrendingUp className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                     </div>
                     <div>
-                      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Blur → Klik</p>
+                      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Klik / licznik</p>
                       <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{kpi.blurConversionRate}%</p>
                       <p className="text-[10px] text-slate-400">skuteczność lejka</p>
                     </div>
@@ -266,18 +266,18 @@ export function AdminDashboardClient({ kpi, voivodeships, assemblies, errors }: 
                 <div className="border-t border-slate-100 dark:border-slate-800 pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <div className="flex justify-between items-center mb-1.5">
-                      <span className="text-xs text-slate-500 font-medium">Free → PRO</span>
+                      <span className="text-xs text-slate-500 font-medium">Demo → PRO</span>
                       <span className="text-xs font-bold text-emerald-600">{kpi.conversionRate}%</span>
                     </div>
                     <Progress value={kpi.conversionRate} className="h-2" />
                     <div className="flex justify-between text-[10px] text-slate-400 mt-1">
-                      <span>{kpi.freeUsers} Free</span>
+                      <span>{kpi.freeUsers} Demo</span>
                       <span>{kpi.proUsers} PRO</span>
                     </div>
                   </div>
                   <div>
                     <div className="flex justify-between items-center mb-1.5">
-                      <span className="text-xs text-slate-500 font-medium">Blur → Upgrade</span>
+                      <span className="text-xs text-slate-500 font-medium">Licznik → klik</span>
                       <span className="text-xs font-bold text-rose-600">{kpi.blurConversionRate}%</span>
                     </div>
                     <Progress value={kpi.blurConversionRate} className="h-2" />
@@ -365,12 +365,12 @@ export function AdminDashboardClient({ kpi, voivodeships, assemblies, errors }: 
             </CardTitle>
           </CardHeader>
           <CardContent className="px-2 pb-3">
-            <NavCard href="/admin/users"          label="Użytkownicy"    icon={Users}          desc="Zarządzanie kontami & PRO override" accent="bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400" />
-            <NavCard href="/admin/market"         label="Ceny Katalogowe" icon={TrendingUp}      desc="Globalna baza materiałów i robocizny" accent="bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400" />
-            <NavCard href="/admin/knr-quality"  label="Jakość norm ES" icon={FlaskConical} desc="Dopasowania normy ES, nie stary panel DIN" accent="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400" />
-            <NavCard href="/admin/canonical-l0"   label="L0 Canonical"   icon={SlidersHorizontal} desc="Overrides bazy KNR L0"             accent="bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400" />
-            <NavCard href="/admin/analytics"      label="Analityka"       icon={BarChart3}       desc="Aktywność użytkowników & odchylenia" accent="bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400" />
-            <NavCard href="/admin/knowledge-base" label="Baza Wiedzy"    icon={Brain}           desc="Pliki z godzinami normy ES"             accent="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400" />
+            <NavCard href="/admin/users" label="Konta" icon={Users} desc="Demo, trial i PRO" accent="bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400" />
+            <NavCard href="/admin/market" label="Katalog" icon={TrendingUp} desc="Wspólne pozycje i ich złotówki" accent="bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400" />
+            <NavCard href="/admin/knr-quality" label="Dopasowanie nazw" icon={FlaskConical} desc="Nazwy bez godziny" accent="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400" />
+            <NavCard href="/admin/canonical-l0" label="Stałe godziny" icon={SlidersHorizontal} desc="Nazwy, które Wyceń zna od razu" accent="bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400" />
+            <NavCard href="/admin/analytics" label="Aktywność" icon={BarChart3} desc="Kto liczy i co dopisuje" accent="bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400" />
+            <NavCard href="/admin/knowledge-base" label="Pliki godzin" icon={Brain} desc="JSON z godzinami normy ES" accent="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400" />
           </CardContent>
         </Card>
 

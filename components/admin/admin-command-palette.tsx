@@ -113,9 +113,9 @@ export function AdminCommandPalette() {
             <div className="px-4 py-6 space-y-3">
               <p className="text-[10px] uppercase tracking-widest text-slate-400 font-semibold px-1">Szybkie skróty</p>
               {[
-                { label: "Normy KNR Quality Hub", href: "/admin/knr-quality", icon: Zap, sub: "L0 miss analysis, awanse" },
-                { label: "Użytkownicy", href: "/admin/users", icon: Users, sub: "Zarządzaj kontami" },
-                { label: "Baza wiedzy", href: "/admin/knowledge-base", icon: Database, sub: "es_dictionary, knr_norms" },
+                { label: "Dopasowanie nazw", href: "/admin/knr-quality", icon: Zap, sub: "Nazwy bez godziny" },
+                { label: "Konta", href: "/admin/users", icon: Users, sub: "Demo, trial i PRO" },
+                { label: "Pliki godzin", href: "/admin/knowledge-base", icon: Database, sub: "JSON z godzinami normy ES" },
               ].map(({ label, href, icon: Icon, sub }) => (
                 <button
                   key={href}

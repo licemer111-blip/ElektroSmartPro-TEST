@@ -99,7 +99,7 @@ export function MonitoringClient({ data }: { data: MonitoringData }) {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-            Monitoring Systemu
+            Płatności, konta i błędy
           </h1>
           <p className="text-sm text-slate-500 mt-0.5 flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5" />
