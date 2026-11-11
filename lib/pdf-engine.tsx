@@ -513,7 +513,7 @@ const CoverPage = ({
   data: PdfEngineData;
   palette: ThemePalette;
 }) => {
-  const { profile, project, logoBase64, totalGross, maskPrices } = data;
+  const { profile, project, logoBase64, maskPrices } = data;
   const companyName = profile?.company_name || 'ElektroSmart PRO';
   const companyLine = [
     profile?.street || profile?.address,
@@ -572,10 +572,10 @@ const CoverPage = ({
         {/* Grand Total Box */}
         <View style={[base.coverTotalBox, { backgroundColor: palette.accentPrimary }]}>
           <Text style={[base.coverTotalLabel, { color: 'rgba(255,255,255,0.8)' }]}>
-            WARTOŚĆ BRUTTO KOSZTORYSU
+            {data.priceDisplay === 'brutto' ? 'WARTOŚĆ BRUTTO KOSZTORYSU' : 'WARTOŚĆ NETTO KOSZTORYSU'}
           </Text>
           <Text style={[base.coverTotalAmount, { color: '#ffffff' }]}>
-            {maskPrices ? '*** zł' : fMoney(totalGross)}
+            {maskPrices ? '*** zł' : fMoney(data.priceDisplay === 'brutto' ? totalGross : data.totalNet)}
           </Text>
         </View>
       </View>
@@ -822,7 +822,12 @@ const SummarySection = ({
   } = data;
 
   const mask = (v: number) => maskPrices ? '*** zł' : fMoney(v);
-  const priceLabel = priceDisplay === 'brutto' ? 'Ceny BRUTTO' : 'Ceny NETTO';
+  const isBrutto = priceDisplay === 'brutto';
+  const priceLabel = isBrutto ? 'Ceny BRUTTO' : 'Ceny NETTO';
+  const nominalVat = Number(data.project.vat_rate) || Math.round(vatRate * 100);
+  const includedVat = isBrutto && nominalVat > 0
+    ? Math.round((totalGross - totalGross / (1 + nominalVat / 100)) * 100) / 100
+    : vatAmount;
 
   return (
     <View style={base.summaryContainer}>
@@ -874,18 +879,24 @@ const SummarySection = ({
             <Text style={[base.summaryValue, { color: palette.textPrimary }]}>{mask(pdfNarzuty.kzAmount)}</Text>
           </View>
         )}
-        <View style={[base.summaryRow, { borderTopWidth: 0.5, borderTopColor: palette.borderColor, paddingTop: 4, marginTop: 2 }]}>
-          <Text style={[base.summaryLabel, { fontWeight: 'bold', color: palette.textPrimary }]}>RAZEM NETTO:</Text>
-          <Text style={[base.summaryValue, { fontWeight: 'bold', color: palette.textPrimary }]}>{mask(totalNet)}</Text>
-        </View>
-        <View style={base.summaryRow}>
-          <Text style={[base.summaryLabel, { color: palette.textPrimary }]}>VAT {Math.round(vatRate * 100)}%:</Text>
-          <Text style={[base.summaryValue, { color: palette.textPrimary }]}>{mask(vatAmount)}</Text>
-        </View>
-        {/* Grand total */}
+        {isBrutto ? (
+          <View style={base.summaryRow}>
+            <Text style={[base.summaryLabel, { color: palette.textSecondary }]}>w tym VAT {nominalVat}%:</Text>
+            <Text style={[base.summaryValue, { color: palette.textPrimary }]}>{mask(includedVat)}</Text>
+          </View>
+        ) : (
+          <View style={base.summaryRow}>
+            <Text style={[base.summaryLabel, { color: palette.textSecondary }]}>VAT {nominalVat}% nie wliczony:</Text>
+            <Text style={[base.summaryValue, { color: palette.textPrimary }]}>{mask(includedVat)}</Text>
+          </View>
+        )}
         <View style={[base.summaryGrossRow, { borderTopColor: palette.accentPrimary }]}>
-          <Text style={[base.summaryGrossLabel, { color: palette.accentPrimary }]}>RAZEM BRUTTO:</Text>
-          <Text style={[base.summaryGrossValue, { color: palette.accentPrimary }]}>{mask(totalGross)}</Text>
+          <Text style={[base.summaryGrossLabel, { color: palette.accentPrimary }]}>
+            {isBrutto ? 'RAZEM BRUTTO:' : 'RAZEM NETTO:'}
+          </Text>
+          <Text style={[base.summaryGrossValue, { color: palette.accentPrimary }]}>
+            {mask(isBrutto ? totalGross : totalNet)}
+          </Text>
         </View>
       </View>
     </View>
@@ -970,7 +981,8 @@ const ContentPage = ({
               {[
                 objectTypeForClient(project.object_types?.name),
                 project.regions?.name,
-                `VAT ${Math.round((data.vatRate || 0) * 100)}%`,
+                `VAT ${Number(project.vat_rate) || Math.round((data.vatRate || 0) * 100)}%`,
+                data.priceDisplay === 'brutto' ? 'ceny brutto' : 'ceny netto',
               ].filter(Boolean).join(' · ')}
             </Text>
           </View>

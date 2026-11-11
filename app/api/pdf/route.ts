@@ -112,6 +112,7 @@ export async function POST(req: Request) {
       template = "klasyczny",
       vatMode = 23,
       priceDisplay = "netto",
+      bruttoMode: requestedBrutto,
       blindMode = false,      // v3.0: Kosztorys ślepy — hide all prices
       // Accept both: `monochrome` (explicit) and `showColors` (inverse legacy).
       showColors = true,
@@ -155,8 +156,12 @@ export async function POST(req: Request) {
     }
 
     const vatForDocument = vatRateForPdf((project as { vat_rate?: number | null }).vat_rate, vatMode);
-    pricingParams = { ...pricingParams, vatMode: vatForDocument };
-    vatMultiplier = getVatMultiplier(pricingParams.priceDisplay, vatForDocument);
+    const documentPriceDisplay: PriceDisplay =
+      typeof requestedBrutto === "boolean"
+        ? (requestedBrutto ? "brutto" : "netto")
+        : ((project as { brutto_mode?: boolean }).brutto_mode ? "brutto" : "netto");
+    pricingParams = { vatMode: vatForDocument, priceDisplay: documentPriceDisplay };
+    vatMultiplier = getVatMultiplier(documentPriceDisplay, vatForDocument);
 
     // Flatten so every child item appears immediately after its parent
     const flatItems = flattenProjectItems(items as unknown as ProjectItem[]) as typeof items;
@@ -604,11 +609,16 @@ export async function POST(req: Request) {
       vatAmount,
       totalGross,
       pdfNarzuty: pdfNarzuty as PdfNarzutyDisplay | undefined,
-      priceDisplay: priceDisplay as string,
+      priceDisplay: documentPriceDisplay,
       notes: isDemoProject
         ? `[DOKUMENT DEMONSTRACYJNY — CENY PRZYKŁADOWE — NIE DO UŻYTKU KOMERCYJNEGO]\n${pdfHumanNotes}`
         : pdfHumanNotes,
-      offerTermLines: offerTermsLines(pdfOfferTerms, totalGross, maskPrices),
+      offerTermLines: offerTermsLines(
+        pdfOfferTerms,
+        documentPriceDisplay === "brutto" ? totalGross : totalNet,
+        maskPrices,
+        documentPriceDisplay === "brutto" ? "brutto" : "netto",
+      ),
       showDemoWatermark,
       showColors: Boolean(showColors),
       monochrome: Boolean(monochrome),

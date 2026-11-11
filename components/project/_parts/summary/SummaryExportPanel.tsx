@@ -33,6 +33,7 @@ interface SummaryExportPanelProps {
   onOfferTermsChange: (terms: OfferTerms) => void;
   onDownloadPDF?: () => Promise<void>;
   isDownloading: boolean;
+  pricesAreBrutto?: boolean;
   onPdfNotesSaved?: (notes: string) => void;
 }
 
@@ -48,6 +49,7 @@ export function SummaryExportPanel({
   onOfferTermsChange,
   onDownloadPDF,
   isDownloading,
+  pricesAreBrutto,
   onPdfNotesSaved,
 }: SummaryExportPanelProps) {
   const { toast } = useToast();
@@ -80,7 +82,12 @@ export function SummaryExportPanel({
   const handleExportExcel = async () => {
     try {
       const { exportProjectToExcel } = await import("@/lib/utils/excel-export");
-      const result = exportProjectToExcel(project, items, isPro, knrMultiplier);
+      const result = exportProjectToExcel(
+        { ...project, brutto_mode: pricesAreBrutto ?? project.brutto_mode },
+        items,
+        isPro,
+        knrMultiplier,
+      );
       if (result?.buffer) {
         try {
           const base64 = btoa(String.fromCharCode(...new Uint8Array(result.buffer)));

@@ -105,6 +105,7 @@ export function ProjectViewClient({
     adjustmentPercentage: project.adjustment_percentage || 0,
     colorMode,
     vatRate: liveVatRate,
+    bruttoMode: liveBruttoMode,
     initialPdfNotes: project.pdf_notes,
   });
 
@@ -222,7 +223,7 @@ export function ProjectViewClient({
       // ── Excel ──────────────────────────────────────────────────────────────
       try {
         const { buildExcelBuffer } = await import("@/lib/utils/excel-export");
-        const result = buildExcelBuffer(project, items, isPro, knrMultiplier);
+        const result = buildExcelBuffer({ ...project, brutto_mode: liveBruttoMode }, items, isPro, knrMultiplier);
         if (result?.buffer) {
           const base64 = btoa(String.fromCharCode(...new Uint8Array(result.buffer)));
           const { saveGeneratedDocumentToProject } = await import("@/app/dashboard/projects/[id]/document-actions");
@@ -249,7 +250,7 @@ export function ProjectViewClient({
               ? localStorage.getItem("elektrosmart-pdf-template") || "klasyczny"
               : "klasyczny",
             vatMode: project.vat_rate ?? 23,
-            priceDisplay: "both",
+            bruttoMode: liveBruttoMode,
           }),
         });
         if (res.ok) {
@@ -275,7 +276,7 @@ export function ProjectViewClient({
 
     window.addEventListener("project-finalized", handler);
     return () => window.removeEventListener("project-finalized", handler);
-  }, [projectId, project, items, isPro, colorMode, notesForPdf, knrMultiplier]);
+  }, [projectId, project, items, isPro, colorMode, notesForPdf, knrMultiplier, liveBruttoMode]);
 
   // Material Brain disabled — simplification Phase 1 (AI material suggestions removed)
   const brain = useMaterialBrain(projectId, false, liveVatRate);
@@ -388,6 +389,7 @@ export function ProjectViewClient({
           onPdfNotesChange={setPdfNotes}
           offerTerms={offerTerms}
           onOfferTermsChange={setOfferTerms}
+          pricesAreBrutto={liveBruttoMode}
         />
       </div>
 

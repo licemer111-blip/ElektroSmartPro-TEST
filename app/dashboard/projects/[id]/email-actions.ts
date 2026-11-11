@@ -243,7 +243,7 @@ export async function sendProjectEmail(input: SendProjectEmailInput) {
               showColors: false,
               notes: project.pdf_notes || "",
               vatMode: project.vat_rate ?? 23,
-              priceDisplay: "netto",
+              bruttoMode: Boolean(project.brutto_mode),
             }),
           });
           

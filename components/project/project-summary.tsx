@@ -370,6 +370,7 @@ export function ProjectSummary({
           onOfferTermsChange={onOfferTermsChange}
           onDownloadPDF={onDownloadPDF}
           isDownloading={isDownloading}
+          pricesAreBrutto={bruttoMode}
         />
       </CardContent>
     </Card>

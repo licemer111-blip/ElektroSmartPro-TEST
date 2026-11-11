@@ -42,7 +42,12 @@ export function joinOfferNotes(terms: OfferTerms, notes: string): string {
   return `[[ES1|${validDays}|${paymentDays}|${deposit}]]\n${notes ?? ""}`;
 }
 
-export function offerTermsLines(terms: OfferTerms, gross: number, hideAmount = false): string[] {
+export function offerTermsLines(
+  terms: OfferTerms,
+  gross: number,
+  hideAmount = false,
+  amountKind: "netto" | "brutto" = "brutto",
+): string[] {
   const lines = [
     `Oferta ważna ${clamp(terms.validDays, 1, 365)} dni od daty wystawienia.`,
     `Termin płatności: ${clamp(terms.paymentDays, 0, 365)} dni.`,
@@ -55,7 +60,7 @@ export function offerTermsLines(terms: OfferTerms, gross: number, hideAmount = f
     } else {
       const [whole, frac] = amount.toFixed(2).split(".");
       const grouped = whole.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-      lines.push(`Zaliczka ${pct}% (${grouped},${frac} zł brutto) przed rozpoczęciem prac. Reszta po odbiorze.`);
+      lines.push(`Zaliczka ${pct}% (${grouped},${frac} zł ${amountKind}) przed rozpoczęciem prac. Reszta po odbiorze.`);
     }
   }
   return lines;

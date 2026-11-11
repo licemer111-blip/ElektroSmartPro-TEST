@@ -48,6 +48,7 @@ interface MobileSummaryBarProps {
   onPdfNotesChange?: (notes: string) => void;
   offerTerms: OfferTerms;
   onOfferTermsChange: (terms: OfferTerms) => void;
+  pricesAreBrutto?: boolean;
 }
 
 export function MobileSummaryBar({
@@ -60,6 +61,7 @@ export function MobileSummaryBar({
   onPdfNotesChange,
   offerTerms,
   onOfferTermsChange,
+  pricesAreBrutto,
 }: MobileSummaryBarProps) {
   const [open, setOpen] = useState(false);
   const [isSavingNotes, setIsSavingNotes] = useState(false);
@@ -99,6 +101,9 @@ export function MobileSummaryBar({
   const subtotal = subtotalWithNarzuty + contingencyAmount;
   const vatAmount = (subtotal * vatRate) / 100;
   const grandTotal = subtotal + vatAmount;
+  const showBrutto = pricesAreBrutto ?? Boolean(project.brutto_mode);
+  const headlineTotal = showBrutto ? grandTotal : subtotal;
+  const headlineLabel = showBrutto ? "Suma brutto" : "Suma netto";
 
   const handleToggleMaterials = async (enabled: boolean) => {
     const result = await toggleMaterialsOwnedByCustomer(project.id, enabled);
@@ -117,7 +122,12 @@ export function MobileSummaryBar({
   const handleExportExcel = async () => {
     try {
       const { exportProjectToExcel } = await import("@/lib/utils/excel-export");
-      const result = exportProjectToExcel(project, items, isPro, knrMultiplier);
+      const result = exportProjectToExcel(
+        { ...project, brutto_mode: pricesAreBrutto ?? project.brutto_mode },
+        items,
+        isPro,
+        knrMultiplier,
+      );
 
       // Save copy to project storage for client portal
       if (result?.buffer) {
@@ -178,9 +188,9 @@ export function MobileSummaryBar({
                 <Calculator className="w-4 h-4 text-white" />
               </div>
               <div className="text-left">
-                <p className="text-[10px] text-muted-foreground leading-none mb-0.5">{isPro ? "Suma brutto" : "Suma brutto · PDF ze znakiem DEMO"}</p>
+                <p className="text-[10px] text-muted-foreground leading-none mb-0.5">{isPro ? headlineLabel : `${headlineLabel} · PDF ze znakiem DEMO`}</p>
                 <p className="text-xl font-extrabold text-blue-600 dark:text-blue-400 leading-none tracking-tight">
-                  <BlurredPrice value={grandTotal} isPro={isPro} />
+                  <BlurredPrice value={headlineTotal} isPro={isPro} />
                 </p>
               </div>
             </div>
@@ -298,14 +308,14 @@ export function MobileSummaryBar({
                 </div>
               )}
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">VAT ({vatRate}%)</span>
+                <span className="text-muted-foreground">{showBrutto ? `VAT (${vatRate}%)` : `VAT (${vatRate}%) nie wliczony`}</span>
                 <span className="font-medium"><BlurredPrice value={vatAmount} isPro={isPro} /></span>
               </div>
               <Separator />
               <div className="flex justify-between items-center pt-1">
-                <span className="font-bold">Suma brutto</span>
+                <span className="font-bold">{headlineLabel}</span>
                 <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
-                  <BlurredPrice value={grandTotal} isPro={isPro} className="text-xl" />
+                  <BlurredPrice value={headlineTotal} isPro={isPro} className="text-xl" />
                 </span>
               </div>
             </div>

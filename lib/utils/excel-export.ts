@@ -136,6 +136,9 @@ function buildKosztorysSheet(
   const parentIds = new Set(
     flatItems.filter(i => i.is_assembly_child).map(i => i.parent_assembly_id).filter(Boolean)
   );
+  const pricesAreBrutto = Boolean(project.brutto_mode);
+  const vatPct = Number(project.vat_rate) || 0;
+  const vatMult = pricesAreBrutto ? 1 + vatPct / 100 : 1;
 
   // ── Totals: parents with children are not added again ──
   let materialTotal = 0;
@@ -143,8 +146,8 @@ function buildKosztorysSheet(
   for (const item of flatItems) {
     if (parentIds.has(item.id)) continue;
     const priced = priceOf(item);
-    materialTotal += priced.materialTotal;
-    laborTotal += priced.laborTotal;
+    materialTotal += priced.materialTotal * vatMult;
+    laborTotal += priced.laborTotal * vatMult;
   }
   const subtotal = materialTotal + laborTotal;
   const adjustedSubtotal = subtotal;
@@ -158,8 +161,10 @@ function buildKosztorysSheet(
   const kzAmt = adjMat * (kzPct / 100);
   const totalNarzuty = kpAmt + zAmt + kzAmt;
   const subtotalWithNarzuty = adjustedSubtotal + totalNarzuty;
-  const vatAmount = (subtotalWithNarzuty * project.vat_rate) / 100;
-  const grandTotal = subtotalWithNarzuty + vatAmount;
+  const vatAmount = pricesAreBrutto
+    ? subtotalWithNarzuty - subtotalWithNarzuty / vatMult
+    : (subtotalWithNarzuty * vatPct) / 100;
+  const grandTotal = pricesAreBrutto ? subtotalWithNarzuty : adjustedSubtotal + totalNarzuty;
 
   // ── Detect if Opis column has any data ──
   const hasOpisData = flatItems.some(i => !!(i.description || i.notes));
@@ -228,7 +233,7 @@ function buildKosztorysSheet(
   rows.push(r4);
 
   const r5: XlsxCell[] = Array(colCount).fill(null).map(() => ec());
-  r5[0] = sc('VAT:', metaLabelStyle); r5[1] = sc(`${project.vat_rate}%`, metaValStyle);
+  r5[0] = sc('VAT:', metaLabelStyle); r5[1] = sc(`${project.vat_rate}% · ${pricesAreBrutto ? 'ceny brutto' : 'ceny netto'}`, metaValStyle);
   if (matOwnedByClient && colCount >= 6) {
     r5[Math.floor(colCount / 2)] = sc('Zakres:', metaLabelStyle);
     r5[Math.floor(colCount / 2) + 1] = sc('Tylko robocizna. Materiały zapewnia inwestor.', metaValStyle);
@@ -269,7 +274,7 @@ function buildKosztorysSheet(
     ...(hasRg  ? ['Roboczogodziny'] : []),
     ...(hasMat ? ['Cena materiału (zł)'] : []),
     'Cena robocizny (zł)',
-    'Wartość netto (zł)',
+    pricesAreBrutto ? 'Wartość brutto (zł)' : 'Wartość netto (zł)',
   ];
 
   const headerRow: XlsxCell[] = headerLabels.map((label, ci) => {
@@ -312,14 +317,14 @@ function buildKosztorysSheet(
     }
 
     const priced = priceOf(item);
-    const matPrice = priced.materialUnit;
-    const labPrice = priced.laborUnit;
+    const matPrice = priced.materialUnit * vatMult;
+    const labPrice = priced.laborUnit * vatMult;
     const isChild   = item.is_assembly_child === true;
     const isZestaw  = assemblyParentIds.has(item.id);
 
-    const totalPrice = isZestaw
+    const totalPrice = (isZestaw
       ? flatItems.filter(c => c.parent_assembly_id === item.id).reduce((acc, c) => acc + priceOf(c).rowTotal, 0)
-      : priced.rowTotal;
+      : priced.rowTotal) * vatMult;
 
     // Row style selection
     const rowBg     = isZestaw ? C_ZESTAW_BG : (isChild ? C_CHILD_BG : 'FFFFFF');
@@ -493,15 +498,17 @@ function buildKosztorysSheet(
     if (kzAmt > 0) addSumRow(`Kz (${kzPct}%):`, isPro ? kzAmt : '*** zł');
   }
 
-  addSumRow('Suma Netto:', isPro ? subtotalWithNarzuty : '*** zł');
-  addSumRow(`VAT (${project.vat_rate}%):`, isPro ? vatAmount : '*** zł');
+  addSumRow(
+    pricesAreBrutto ? `w tym VAT (${vatPct}%):` : `VAT (${vatPct}%) nie wliczony:`,
+    isPro ? vatAmount : '*** zł',
+  );
 
   // Grand total row — dark background (no empty separator — cleaner look)
   const grandTotalIdx = rows.length;
   const gtRow: XlsxCell[] = Array(colCount).fill(null).map(() =>
     sc('', { fill: fill(C_TOTAL_BG), border: thinBorder(C_TOTAL_BG) })
   );
-  gtRow[C_WAR - 1] = sc('RAZEM BRUTTO:', {
+  gtRow[C_WAR - 1] = sc(pricesAreBrutto ? 'RAZEM BRUTTO:' : 'RAZEM NETTO:', {
     font: font({ bold: true, sz: 11, color: { rgb: C_TOTAL_TEXT } }),
     fill: fill(C_TOTAL_BG), border: thinBorder(C_TOTAL_BG),
     alignment: { horizontal: 'right', vertical: 'center' },
