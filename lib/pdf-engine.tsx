@@ -575,7 +575,7 @@ const CoverPage = ({
             {data.priceDisplay === 'brutto' ? 'WARTOŚĆ BRUTTO KOSZTORYSU' : 'WARTOŚĆ NETTO KOSZTORYSU'}
           </Text>
           <Text style={[base.coverTotalAmount, { color: '#ffffff' }]}>
-            {maskPrices ? '*** zł' : fMoney(data.priceDisplay === 'brutto' ? totalGross : data.totalNet)}
+            {maskPrices ? '*** zł' : fMoney(data.priceDisplay === 'brutto' ? data.totalGross : data.totalNet)}
           </Text>
         </View>
       </View>
