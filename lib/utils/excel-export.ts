@@ -174,8 +174,9 @@ function buildKosztorysSheet(
   const hasRg  = showRg;
   const hasMat = !matOwnedByClient;
   const hasKnr = showKnr;
-  // 4 fixed (Lp+Pozycja+Jm+Ilo) + [Opis] + [KNR] + [r-g] + [Mat] + Rob + War
-  const baseCount = 4 + (hasOpisData ? 1 : 0) + (hasKnr ? 1 : 0) + (hasRg ? 1 : 0) + (hasMat ? 1 : 0) + 2;
+  // 4 fixed (Lp+Pozycja+Jm+Ilo) + [Opis] + [KNR] + [rbh/j.m. + rbh razem] + [Mat] + Rob + War
+  const rgCols = hasRg ? 2 : 0;
+  const baseCount = 4 + (hasOpisData ? 1 : 0) + (hasKnr ? 1 : 0) + rgCols + (hasMat ? 1 : 0) + 2;
   const colCount = baseCount;
   // Column indices (0-based), computed sequentially
   const C_LP   = 0;
@@ -187,7 +188,8 @@ function buildKosztorysSheet(
   const C_JM   = 2 + opisOff + knrOff;
   const C_IL   = 3 + opisOff + knrOff;
   const C_RG   = hasRg  ? (4 + opisOff + knrOff) : -1;
-  const rgOff  = hasRg  ? 1 : 0;
+  const C_RG_SUM = hasRg ? C_RG + 1 : -1;
+  const rgOff  = rgCols;
   const C_MAT  = hasMat ? (4 + opisOff + knrOff + rgOff) : -1;
   const matOff = hasMat ? 1 : 0;
   const C_ROB  = 4 + opisOff + knrOff + rgOff + matOff;
@@ -271,7 +273,7 @@ function buildKosztorysSheet(
     ...(hasKnr  ? ['Kod KNR'] : []),
     'Jm',
     'Ilość',
-    ...(hasRg  ? ['Roboczogodziny'] : []),
+    ...(hasRg  ? ['rbh/j.m.', 'rbh razem'] : []),
     ...(hasMat ? ['Cena materiału (zł)'] : []),
     'Cena robocizny (zł)',
     pricesAreBrutto ? 'Wartość brutto (zł)' : 'Wartość netto (zł)',
@@ -389,12 +391,14 @@ function buildKosztorysSheet(
     });
 
     // r-g (labor hours) — only if showRg
-    if (C_RG >= 0) {
-      const storedHours = Number((item as unknown as Record<string, unknown>).labor_hours_total);
+    if (C_RG >= 0 && C_RG_SUM >= 0) {
+      const qty = Number(item.quantity || 0);
       const norm = Number(item.labor_norm ?? 0);
-      const hours = storedHours > 0 ? storedHours : (norm > 0 ? norm * Number(item.quantity || 0) : 0);
-      dataRow[C_RG] = hours > 0
-        ? sc(hours, {
+      const storedTotal = Number((item as unknown as Record<string, unknown>).labor_hours_total ?? 0);
+      const perUnit = norm > 0 ? norm : (qty > 0 && storedTotal > 0 ? storedTotal / qty : 0);
+      const lineHours = norm > 0 && qty > 0 ? norm * qty : storedTotal;
+      const hourCell = (value: number) => value > 0
+        ? sc(value, {
             fill: fill('F8FAFC'), font: baseFont, border: baseBorder,
             alignment: { horizontal: 'right' }, numFmt: '#,##0.00',
           })
@@ -402,6 +406,8 @@ function buildKosztorysSheet(
             fill: fill('F8FAFC'), font: baseFont, border: baseBorder,
             alignment: { horizontal: 'right' },
           });
+      dataRow[C_RG] = hourCell(perUnit);
+      dataRow[C_RG_SUM] = hourCell(lineHours);
     }
 
     // Cena materiału — orange accent fill (hidden if matOwnedByClient)
@@ -606,7 +612,10 @@ function buildColWidths(hasOpisData: boolean, showRg: boolean, matOwnedByClient:
   if (showKnr)      cols.push({ wch: 18 }); // Kod KNR
   cols.push({ wch: 8 });  // Jm
   cols.push({ wch: 12 });  // Ilość
-  if (showRg)            cols.push({ wch: 12 }); // r-g
+  if (showRg) {
+    cols.push({ wch: 12 }); // rbh/j.m.
+    cols.push({ wch: 12 }); // rbh razem
+  }
   if (!matOwnedByClient) cols.push({ wch: 20 }); // Cena materiału
   cols.push({ wch: 20 }); // Cena robocizny
   cols.push({ wch: 20 }); // Wartość netto

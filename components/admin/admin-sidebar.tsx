@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
-  LayoutDashboard, Users, BarChart3, MessageSquare, TrendingUp,
+  LayoutDashboard, Users, BarChart3, MessageSquare, TrendingUp, Activity,
   Brain, ShieldCheck, Home, Shield, Zap, MonitorDot,
   FlaskConical, SlidersHorizontal, Search, Settings,
   ChevronRight,
@@ -35,6 +35,7 @@ const NAV_GROUPS = [
       { href: "/admin/canonical-l0", label: "Stałe godziny", icon: SlidersHorizontal },
       { href: "/admin/knowledge-base", label: "Pliki godzin", icon: Brain },
       { href: "/admin/market", label: "Katalog", icon: TrendingUp },
+      { href: "/admin/health", label: "Stan katalogu", icon: Activity },
     ],
   },
   {

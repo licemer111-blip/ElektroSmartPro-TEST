@@ -104,6 +104,37 @@ export async function checkAndIncrementAiUsage(userId: string, functionName?: st
   };
 }
 
+/** Give back one request when the model never answered. Does not go below zero. */
+export async function refundAiUsage(userId: string, functionName?: string): Promise<void> {
+  const { data: profile } = await supabaseAdmin
+    .from("profiles")
+    .select("ai_usage_count")
+    .eq("id", userId)
+    .single();
+  const current = Number((profile as { ai_usage_count?: number | null } | null)?.ai_usage_count ?? 0);
+  if (current > 0) {
+    await supabaseAdmin
+      .from("profiles")
+      .update({ ai_usage_count: current - 1 })
+      .eq("id", userId);
+  }
+  if (!functionName) return;
+  const { data: stat } = await supabaseAdmin
+    .from("ai_usage_stats")
+    .select("usage_count")
+    .eq("user_id", userId)
+    .eq("function_name", functionName)
+    .maybeSingle();
+  const fnCount = Number(stat?.usage_count ?? 0);
+  if (fnCount > 0) {
+    await supabaseAdmin
+      .from("ai_usage_stats")
+      .update({ usage_count: fnCount - 1 })
+      .eq("user_id", userId)
+      .eq("function_name", functionName);
+  }
+}
+
 /**
  * Get current AI usage info without incrementing.
  */

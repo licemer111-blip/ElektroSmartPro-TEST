@@ -1,7 +1,7 @@
 import { logger } from "@/lib/logger";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
-import { checkAndIncrementAiUsage } from "@/lib/ai-usage";
+import { checkAndIncrementAiUsage, refundAiUsage } from "@/lib/ai-usage";
 import { AI_FUNCTION_NAMES } from "@/lib/ai-quota-config";
 import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 import { generateExpertResponse } from "@/server/services/hybrid-ai.service";
@@ -13,12 +13,6 @@ export async function POST(req: NextRequest) {
     
     if (!user) {
       return NextResponse.json({ error: "Musisz być zalogowany" }, { status: 401 });
-    }
-
-    // AI usage limit: DEMO=5/mies., PRO=80/mies. (global quota)
-    const aiCheck = await checkAndIncrementAiUsage(user.id, AI_FUNCTION_NAMES.chatbot);
-    if (!aiCheck.allowed) {
-      return NextResponse.json({ error: aiCheck.error || "Limit AI wyczerpany" }, { status: 403 });
     }
 
     const { messages } = await req.json();
@@ -59,8 +53,32 @@ export async function POST(req: NextRequest) {
       // default to free tier on error (safe)
     }
 
-    // RAG: Supabase KB retrieval → ES-Intelligence v2.1 generation (with graceful fallback)
-    const result = await generateExpertResponse(lastMessage.content, history, user.id, { isPro });
+    const aiCheck = await checkAndIncrementAiUsage(user.id, AI_FUNCTION_NAMES.chatbot);
+    if (!aiCheck.allowed) {
+      return NextResponse.json({ error: aiCheck.error || "Limit AI wyczerpany" }, { status: 403 });
+    }
+
+    let result;
+    try {
+      result = await generateExpertResponse(lastMessage.content, history, user.id, { isPro });
+    } catch (error) {
+      await refundAiUsage(user.id, AI_FUNCTION_NAMES.chatbot);
+      logger.error("[AI Helper] Error:", {}, error);
+      return NextResponse.json(
+        { error: "Asystent jest chwilowo niedostępny. To pytanie nie zostało policzone." },
+        { status: 503 },
+      );
+    }
+
+    const modelFailed = result.modelUsed === "unavailable"
+      || result.reply.startsWith("Przepraszam, nie udało się");
+    if (modelFailed) {
+      await refundAiUsage(user.id, AI_FUNCTION_NAMES.chatbot);
+      return NextResponse.json(
+        { error: "Asystent jest chwilowo niedostępny. To pytanie nie zostało policzone." },
+        { status: 503 },
+      );
+    }
 
     return NextResponse.json({
       reply: result.reply,
