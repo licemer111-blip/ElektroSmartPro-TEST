@@ -122,6 +122,9 @@ export function HeaderMobileMenu({ isAuthenticated, isPro }: HeaderMobileMenuPro
               <MobileNavLink href="/#features" icon="Zap">
                 Funkcje
               </MobileNavLink>
+              <MobileNavLink href="/porownanie" icon="Scale">
+                Porównanie
+              </MobileNavLink>
               <MobileNavLink href="/blog" icon="FileText">
                 Blog
               </MobileNavLink>

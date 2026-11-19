@@ -48,6 +48,7 @@ function FooterSectionInner() {
             <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Firma</h3>
             <ul className="space-y-3 text-sm">
               {[
+                { href: "/porownanie", label: "Porównanie" },
                 { href: "/o-nas", label: "O nas" },
                 { href: "/kontakt", label: "Kontakt" },
                 { href: "/login?tab=signup", label: "Utwórz konto" },

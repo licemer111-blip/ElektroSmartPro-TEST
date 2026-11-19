@@ -638,6 +638,93 @@ function buildRowHeights(rowCount: number, headerRowIdx: number, grandTotalIdx: 
 /**
  * Export project to styled Excel file — ElektroSmart Unified v1.0
  */
+function appendMaterialSheet(
+  workbook: ReturnType<typeof XLSXStyle.utils.book_new>,
+  project: ProjectWithRelations,
+  items: ProjectItem[],
+) {
+  const flatItems = flattenProjectItems(items);
+  const parentIds = new Set(
+    flatItems.filter((item) => item.is_assembly_child).map((item) => item.parent_assembly_id).filter(Boolean),
+  );
+  const matOwned = Boolean(project.materials_owned_by_customer);
+  const vatMult = project.brutto_mode ? 1 + (Number(project.vat_rate) || 0) / 100 : 1;
+  const regionModifier = project.regions?.price_modifier ?? 1;
+  const adjustmentMult = 1 + (project.adjustment_percentage || 0) / 100;
+  const priceOf = (item: ProjectItem) => calcRowPrices(
+    item,
+    adjustmentMult,
+    matOwned,
+    "all",
+    regionModifier,
+    1 + (Number(project.mat_markup_pct) || 0) / 100,
+    1 + (Number(project.lab_markup_pct) || 0) / 100,
+    Number(project.complexity_factor) || 1,
+    1,
+  );
+
+  const grouped = new Map<string, { name: string; unit: string; qty: number; value: number }>();
+  for (const item of flatItems) {
+    if (parentIds.has(item.id)) continue;
+    const qty = Number(item.quantity) || 0;
+    if (qty <= 0) continue;
+    const key = `${item.name.trim().toLowerCase()}|${item.unit}`;
+    const current = grouped.get(key) ?? { name: item.name, unit: item.unit, qty: 0, value: 0 };
+    current.qty += qty;
+    current.value += priceOf(item).materialTotal * vatMult;
+    grouped.set(key, current);
+  }
+
+  const headerStyle: XlsxCellStyle = {
+    font: font({ bold: true, color: { rgb: "FFFFFF" }, sz: 10 }),
+    fill: fill("1E2937"),
+    alignment: { horizontal: "left", vertical: "center" },
+  };
+  const rows: XlsxCell[][] = [[
+    sc("Lp", headerStyle),
+    sc("Materiał", headerStyle),
+    sc("j.m.", headerStyle),
+    sc("Ilość", headerStyle),
+    sc(matOwned ? "Kto kupuje" : "Cena jedn.", headerStyle),
+    sc(matOwned ? "Uwaga" : (project.brutto_mode ? "Wartość brutto" : "Wartość netto"), headerStyle),
+  ]];
+
+  let index = 1;
+  for (const row of grouped.values()) {
+    const unitPrice = row.qty > 0 ? row.value / row.qty : 0;
+    rows.push([
+      sc(index++, { alignment: { horizontal: "center" } }),
+      sc(row.name, {}),
+      sc(row.unit, { alignment: { horizontal: "center" } }),
+      sc(row.qty, { alignment: { horizontal: "right" }, numFmt: "0.##" }),
+      matOwned
+        ? sc("Inwestor", {})
+        : (unitPrice > 0
+          ? sc(unitPrice, { alignment: { horizontal: "right" }, numFmt: FMT_ACCOUNTING })
+          : sc("Dopisz z hurtowni", {})),
+      matOwned
+        ? sc("Ilość do zamówienia, bez naszej ceny", {})
+        : (row.value > 0
+          ? sc(row.value, { alignment: { horizontal: "right" }, numFmt: FMT_ACCOUNTING })
+          : sc("—", {})),
+    ]);
+  }
+
+  if (grouped.size === 0) {
+    rows.push([sc("", {}), sc("Brak pozycji do zamówienia", {}), sc("", {}), sc("", {}), sc("", {}), sc("", {})]);
+  }
+
+  const ws: XlsxWorksheet = {};
+  rows.forEach((row, r) => {
+    row.forEach((cell, c) => {
+      ws[`${colLetter(c)}${r + 1}`] = cell;
+    });
+  });
+  ws["!ref"] = `A1:F${rows.length}`;
+  ws["!cols"] = [{ wch: 6 }, { wch: 42 }, { wch: 8 }, { wch: 12 }, { wch: 22 }, { wch: 24 }];
+  XLSXStyle.utils.book_append_sheet(workbook, ws as never, "Materiały");
+}
+
 export function exportProjectToExcel(
   project: ProjectWithRelations,
   items: ProjectItem[],
@@ -655,6 +742,7 @@ export function exportProjectToExcel(
   ws['!rows'] = buildRowHeights(rowCount, headerRowIdx, grandTotalIdx);
 
   XLSXStyle.utils.book_append_sheet(workbook, ws as never, 'Kosztorys');
+  appendMaterialSheet(workbook, project, items);
 
   const now = new Date();
   const dateStr = now.toISOString().split('T')[0];
@@ -694,6 +782,7 @@ export function buildExcelBuffer(
     ws['!rows'] = buildRowHeights(rowCount, headerRowIdx, grandTotalIdx);
 
     XLSXStyle.utils.book_append_sheet(workbook, ws as never, 'Kosztorys');
+    appendMaterialSheet(workbook, project, items);
 
     const buffer = XLSXStyle.write(workbook as never, { type: 'array', bookType: 'xlsx' }) as ArrayBuffer;
     const safeName = project.name.replace(/[^a-zA-Z0-9]/g, '_');

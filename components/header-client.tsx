@@ -125,6 +125,10 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                                 Katalog
                             </NavLink>
 
+                            <NavLink href="/porownanie" icon="Scale">
+                                Porównanie
+                            </NavLink>
+
                             <NavLink href="/blog" icon="FileText">
                                 Blog
                             </NavLink>
