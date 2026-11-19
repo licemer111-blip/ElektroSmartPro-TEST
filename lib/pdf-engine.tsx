@@ -1037,18 +1037,6 @@ const ContentPage = ({
         {/* Summary block — controlled by showSummaryBlock */}
         {s.showSummaryBlock && <SummarySection data={data} palette={palette} />}
 
-        {/* Signatures */}
-        <View style={base.signaturesRow}>
-          <View style={base.signatureBlock}>
-            <View style={[base.signatureLine, { borderBottomColor: palette.accentPrimary }]} />
-            <Text style={[base.signatureLabel, { color: palette.textSecondary }]}>Sporządził / Wykonawca</Text>
-          </View>
-          <View style={base.signatureBlock}>
-            <View style={[base.signatureLine, { borderBottomColor: palette.accentPrimary }]} />
-            <Text style={[base.signatureLabel, { color: palette.textSecondary }]}>Zatwierdził / Zleceniodawca</Text>
-          </View>
-        </View>
-
         {data.offerTermLines && data.offerTermLines.length > 0 ? (
           <View style={{ marginTop: 10 }}>
             {data.offerTermLines.map((line, lineIndex) => (
@@ -1068,8 +1056,19 @@ const ContentPage = ({
         ) : null}
 
         <Text style={[base.disclaimer, { color: palette.textSecondary }]}>
-          Niniejszy kosztorys ma charakter informacyjny i nie stanowi oferty handlowej w rozumieniu art. 66 Kodeksu Cywilnego.
+          Kwota obejmuje tylko pozycje z tego wykazu. Prace spoza listy wymagają osobnej wyceny. Podpis zleceniodawcy oznacza przyjęcie tych warunków.
         </Text>
+
+        <View style={base.signaturesRow}>
+          <View style={base.signatureBlock}>
+            <View style={[base.signatureLine, { borderBottomColor: palette.accentPrimary }]} />
+            <Text style={[base.signatureLabel, { color: palette.textSecondary }]}>Sporządził / Wykonawca</Text>
+          </View>
+          <View style={base.signatureBlock}>
+            <View style={[base.signatureLine, { borderBottomColor: palette.accentPrimary }]} />
+            <Text style={[base.signatureLabel, { color: palette.textSecondary }]}>Przyjął / Zleceniodawca</Text>
+          </View>
+        </View>
       </View>
 
       <PageFooter companyName={companyName} palette={palette} />
