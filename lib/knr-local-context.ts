@@ -102,6 +102,8 @@ export interface KnrMatch {
   /** Labor norm already adjusted by unit_factor (per 1 unit) */
   laborNorm: number;
   unit: string;
+  /** Industrial file row. The hour is a norma ES estimate, not a measured flat job. */
+  estimated: boolean;
 }
 
 const CORE_KNR_SOURCES: unknown[] = [
@@ -482,6 +484,46 @@ function scoreCandidate(needleTokens: string[], candidate: string): number {
  *
  * Returns best match or null when no entry passes the recall threshold.
  */
+function normUnitFamily(unit: string): string {
+  const u = unit.toLowerCase().replace(/\./g, "");
+  if (u === "m" || u === "mb") return "m";
+  if (u === "szt" || u === "kpl") return "szt";
+  return u;
+}
+
+function roundHour(n: number): number {
+  return Math.round(n * 10000) / 10000;
+}
+
+/**
+ * One hour for a name when every matching file row agrees,
+ * or when the ordinary (non-industrial) rows agree.
+ * Returns null when two ordinary jobs still disagree — that hour is not invented.
+ */
+export function preferredNormHour(label: string, unit: string): number | null {
+  const key = normalize(label);
+  if (key.length < 6) return null;
+  if (/zamurow|zatynk|zasyp|demont|rozbiork/.test(key)) return null;
+  const fam = normUnitFamily(unit);
+  const hits: { hour: number; industrial: boolean }[] = [];
+  for (const entry of getAllEntries()) {
+    if (normUnitFamily(entry.unit) !== fam) continue;
+    const labels = [entry.description, ...(entry.synonyms ?? [])];
+    if (!labels.some((item) => normalize(item) === key)) continue;
+    hits.push({
+      hour: roundHour(entry.labor_norm * (entry.unit_factor ?? 1)),
+      industrial: entry.is_industrial === true,
+    });
+  }
+  const unique = (rows: { hour: number }[]) => [...new Set(rows.map((row) => row.hour))];
+  const all = unique(hits);
+  const chosen = all.length === 1 ? all[0] : unique(hits.filter((row) => !row.industrial));
+  const hour = Array.isArray(chosen) ? (chosen.length === 1 ? chosen[0] : null) : chosen;
+  if (hour == null) return null;
+  if (fam === "m" && hour > 2.5 && !key.includes("bruzd")) return null;
+  return hour;
+}
+
 export function lookupKnrByName(itemName: string, preferResidential = true): KnrMatch | null {
   const baseNeedle = normalize(itemName);
   // Detect action and substrate ON THE RAW item name (before slang noise pollutes them)
@@ -516,6 +558,9 @@ export function lookupKnrByName(itemName: string, preferResidential = true): Knr
       rawScore = Math.max(rawScore, scoreCandidate(needleTokens, candidate));
     }
     if (rawScore === 0) continue;
+    const hour = entry.labor_norm * (entry.unit_factor ?? 1);
+    const unitFamily = normUnitFamily(entry.unit);
+    if (unitFamily === "m" && hour > 2.5 && !descNorm.includes("bruzd")) continue;
 
     const head = headNoun(baseNeedle);
     if (head && !descNorm.includes(head)) continue;
@@ -565,10 +610,15 @@ export function lookupKnrByName(itemName: string, preferResidential = true): Knr
       .map((unit) => findCanonicalL0(itemName, unit))
       .find((hit) => hit != null);
     if (canonical) {
-      return { code: canonical.knrCode, laborNorm: canonical.laborNorm, unit: canonical.unit };
+      return { code: canonical.knrCode, laborNorm: canonical.laborNorm, unit: canonical.unit, estimated: false };
     }
     const adjustedNorm = bestEntry.labor_norm * (bestEntry.unit_factor ?? 1.0);
-    return { code: displayCode(bestEntry), laborNorm: adjustedNorm, unit: bestEntry.unit };
+    return {
+      code: displayCode(bestEntry),
+      laborNorm: adjustedNorm,
+      unit: bestEntry.unit,
+      estimated: bestEntry.is_industrial === true,
+    };
   }
   return null;
 }

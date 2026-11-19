@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { catalogNameMatches, catalogSearchRank, isHiddenCatalogCategory, isLegacySizeChase, isOffTradeCatalogItem } from "@/lib/catalog/catalog-search";
 import { resolveCatalogHours } from "@/lib/catalog/catalog-work";
 import { findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
+import { lookupKnrByName, preferredNormHour } from "@/lib/knr-local-context";
 import { dedupeObjectTypes, vatForObjectType } from "@/lib/projects/object-vat";
 import { STARTER_KITS, resolveStarterLine } from "@/lib/assemblies/starter-kits";
 
@@ -127,6 +128,17 @@ describe("the same work has one hour in a flat, office, shop or hall", () => {
 
   it.each(rows)("%s is %s h", (name, unit, hours) => {
     expect(findCanonicalL0(name, unit)?.laborNorm).toBe(hours);
+  });
+
+  it("does not price filling a chase as cutting one", () => {
+    expect(findCanonicalL0("Zamurowanie bruzdy w cegle", "mb")?.laborNorm).not.toBe(0.85);
+    expect(findCanonicalL0("Zamurowanie bruzdy w cegle", "mb")?.laborNorm ?? 0).toBeLessThan(0.5);
+  });
+
+  it("does not sell four hours per metre of ordinary cable", () => {
+    const hit = lookupKnrByName("układanie kabla YKY 5x2.5");
+    if (hit) expect(hit.laborNorm).toBeLessThanOrEqual(2.5);
+    expect(preferredNormHour("gniazdo pojedyncze", "szt")).toBe(0.68);
   });
 });
 
