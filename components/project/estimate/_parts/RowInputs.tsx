@@ -12,6 +12,7 @@ import { UNIT_PRESETS } from "@/lib/validations";
 import type { ProjectItem } from "@/lib/types/database";
 import type { EditingState } from "@/components/project/estimate/EstimateRow";
 import { useGlobalSettings } from "@/hooks/use-global-settings";
+import { laborDiffersFromHours } from "@/lib/estimate/offer-readiness";
 import { Search, Loader2, ShieldCheck, Info, RotateCcw, Building2, X } from "lucide-react";
 import { updateProjectItem } from "@/app/dashboard/projects/[id]/_actions/project-items";
 import { resetItemNormToKnr } from "@/app/dashboard/projects/[id]/_actions/project-items-labor";
@@ -371,10 +372,11 @@ export function RowMaterialCell({
 export function RowLaborCell({
   item, editingState, isEditing, isPro, compactView, colorMode,
   laborUnit, laborUnitBase, laborTotal, onEditingChange, onKeyDown, dp, adjustmentMultiplier,
-  bruttoMode = false, vatRate = 23,
-}: Omit<RowInputsProps, "showMaterialsColumn" | "showLaborColumn" | "showRgCol" | "materialUnit" | "materialTotal" | "materialsOwnedByCustomer" | "materialUnitBase" | "laborUnit"> & { laborUnit: number }) {
+  bruttoMode = false, vatRate = 23, hourlyRate,
+}: Omit<RowInputsProps, "showMaterialsColumn" | "showLaborColumn" | "showRgCol" | "materialUnit" | "materialTotal" | "materialsOwnedByCustomer" | "materialUnitBase" | "laborUnit"> & { laborUnit: number; hourlyRate?: number }) {
   const showPrices = isPro;
   const bMult = bruttoMode ? (1 + vatRate / 100) : 1;
+  const offHours = hourlyRate != null && laborDiffersFromHours(item, hourlyRate);
   const labUnitDisp = dp(laborUnit * bMult);
   const labTotalDisp = dp(laborTotal * bMult);
 
@@ -479,6 +481,11 @@ export function RowLaborCell({
           )}
         </div>
       )}
+      {offHours ? (
+        <div className="text-[9px] text-right text-amber-700 dark:text-amber-400" title="Zapisane złote nie są równe godzinie normy razy Twojej stawce">
+          nie z rbh
+        </div>
+      ) : null}
     </TableCell>
   );
 }

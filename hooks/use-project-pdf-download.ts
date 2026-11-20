@@ -13,6 +13,7 @@ interface UseProjectPdfDownloadOptions {
   vatRate: number;
   bruttoMode: boolean;
   initialPdfNotes?: string | null;
+  beforeDownload?: () => string | null;
 }
 
 export function useProjectPdfDownload({
@@ -23,6 +24,7 @@ export function useProjectPdfDownload({
   vatRate,
   bruttoMode,
   initialPdfNotes,
+  beforeDownload,
 }: UseProjectPdfDownloadOptions) {
   const { toast } = useToast();
   const { pdfStructure } = useGlobalSettings();
@@ -42,6 +44,11 @@ export function useProjectPdfDownload({
   }, []);
 
   const handleDownloadPDF = async () => {
+    const blocked = beforeDownload?.();
+    if (blocked) {
+      toast({ title: "Uzupełnij materiał", description: blocked, variant: "destructive" });
+      return;
+    }
     try {
       setIsDownloading(true);
       const response = await fetch("/api/pdf", {

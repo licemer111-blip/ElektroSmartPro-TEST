@@ -19,6 +19,8 @@ import { HINTS } from "@/lib/hints/hint-content";
 import { updateProjectPdfNotes } from "@/app/dashboard/projects/[id]/_actions/project-meta";
 import { joinOfferNotes, type OfferTerms } from "@/lib/offer-terms";
 import { OfferTermsFields } from "@/components/project/offer-terms-fields";
+import { ShoppingListDialog } from "@/components/project/shopping-list-dialog";
+import { OfferStatusLine } from "@/components/project/offer-status-line";
 import type { ProjectWithRelations, ProjectItem, Profile } from "@/lib/types/database";
 
 interface SummaryExportPanelProps {
@@ -110,6 +112,12 @@ export function SummaryExportPanel({
     <>
       {/* PDF Notes */}
       <Separator />
+      <OfferStatusLine projectId={project.id} />
+      <ShoppingListDialog
+        projectId={project.id}
+        items={items}
+        materialsOwnedByCustomer={project.materials_owned_by_customer}
+      />
       <div className="space-y-2">
         <OfferTermsFields
           idPrefix="desktop-offer"

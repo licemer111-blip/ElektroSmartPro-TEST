@@ -248,6 +248,33 @@ export async function updateItemQuantity(projectId: string, itemId: string, quan
   return updateProjectItem(projectId, itemId, { quantity });
 }
 
+export async function applyOwnMaterialPrice(projectId: string, itemId: string) {
+  const { user, supabase } = await tryAuth();
+  if (!user || !supabase) return { error: "Musisz być zalogowany" };
+
+  const { data: item } = await supabase
+    .from("project_items")
+    .select("id, name")
+    .eq("id", itemId)
+    .eq("project_id", projectId)
+    .single();
+  if (!item) return { error: "Nie znaleziono pozycji" };
+
+  const { data: catalog } = await supabase
+    .from("catalog_items")
+    .select("name, base_material_price")
+    .eq("user_id", user.id)
+    .ilike("name", item.name)
+    .limit(5);
+
+  const match = (catalog ?? []).find((row) => Number(row.base_material_price) > 0);
+  if (!match) return { error: "Nie ma tej pozycji z ceną materiału w Twoim cenniku" };
+
+  return updateProjectItem(projectId, itemId, {
+    final_material_price: Number(match.base_material_price),
+  });
+}
+
 // Update project item (full editing support)
 export async function updateProjectItem(
   projectId: string,

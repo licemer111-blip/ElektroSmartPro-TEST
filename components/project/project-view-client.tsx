@@ -16,6 +16,7 @@ import { useSummaryCollapse } from "@/hooks/use-summary-collapse";
 import { useProjectTabSync } from "@/hooks/useProjectTabSync";
 import { ProjectTabContainer } from "./_parts/ProjectTabContainer";
 import { MaterialBrainProvider } from "./_parts/MaterialBrainContext";
+import { materialGaps } from "@/lib/estimate/offer-readiness";
 
 export type ProjectTab = "estimate" | "materials" | "notes" | "settings";
 
@@ -107,6 +108,11 @@ export function ProjectViewClient({
     vatRate: liveVatRate,
     bruttoMode: liveBruttoMode,
     initialPdfNotes: project.pdf_notes,
+    beforeDownload: () => {
+      const gaps = materialGaps(items, project.materials_owned_by_customer);
+      if (gaps.length === 0) return null;
+      return `${gaps.length} poz. bez ceny materiału. Otwórz listę zakupów albo wpisz cenę.`;
+    },
   });
 
   const { summaryCollapsed, toggleSummary } = useSummaryCollapse();

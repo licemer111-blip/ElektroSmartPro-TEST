@@ -524,6 +524,7 @@ export const EstimateRow = React.memo(function EstimateRow({
           laborUnitBase={laborUnitBase}
           adjustmentMultiplier={adjustmentMultiplier}
           bruttoMode={bruttoMode} vatRate={vatRate}
+          hourlyRate={projectLaborRate}
           onEditingChange={onEditingChange} onKeyDown={handleKeyDown} dp={roundPrice}
         />
       )}

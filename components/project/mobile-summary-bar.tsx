@@ -31,6 +31,8 @@ import { toggleMaterialsOwnedByCustomer } from "@/app/dashboard/projects/[id]/ac
 import { updateProjectPdfNotes } from "@/app/dashboard/projects/[id]/_actions/project-meta";
 import { joinOfferNotes, type OfferTerms } from "@/lib/offer-terms";
 import { OfferTermsFields } from "@/components/project/offer-terms-fields";
+import { ShoppingListDialog } from "@/components/project/shopping-list-dialog";
+import { OfferStatusLine } from "@/components/project/offer-status-line";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { notifyDataChanged } from "@/hooks/use-synced-action";
@@ -322,6 +324,17 @@ export function MobileSummaryBar({
 
             {/* PDF Notes */}
             <div className="space-y-2">
+              <p className="text-[11px] text-slate-500">
+                {offerTerms.depositPercent
+                  ? `Zaliczka ${offerTerms.depositPercent}% · ${((headlineTotal * offerTerms.depositPercent) / 100).toFixed(2)} zł · ważna ${offerTerms.validDays} dni`
+                  : `Oferta ważna ${offerTerms.validDays} dni`}
+              </p>
+              <OfferStatusLine projectId={project.id} />
+              <ShoppingListDialog
+                projectId={project.id}
+                items={items}
+                materialsOwnedByCustomer={materialsOwnedByCustomer}
+              />
               <OfferTermsFields
                 idPrefix="mobile-offer"
                 terms={offerTerms}
