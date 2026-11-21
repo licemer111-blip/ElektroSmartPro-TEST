@@ -69,15 +69,6 @@ export function AssemblyCard({
                   <span className="hidden sm:inline">AI</span>
                 </span>
               )}
-              {assembly.visibility === "team" && assembly.team_id && (
-                <span
-                  className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 flex-shrink-0"
-                  title="Zestaw udostępniony zespołowi"
-                >
-                  <Users className="w-2.5 h-2.5" />
-                  <span className="hidden sm:inline">Zespół</span>
-                </span>
-              )}
             </div>
             {assembly.description && (
               <CardDescription className="text-xs line-clamp-2">{assembly.description}</CardDescription>
@@ -160,33 +151,6 @@ export function AssemblyCard({
                 </div>
                 <span className="font-medium">Przenieś</span>
               </DropdownMenuItem>
-
-              {userTeam && (
-                <>
-                  <DropdownMenuSeparator className="my-1.5 bg-slate-100 dark:bg-slate-800" />
-                  {assembly.visibility === "team" ? (
-                    <DropdownMenuItem
-                      onClick={() => onShareToggle(assembly, "personal")}
-                      className="rounded-lg focus:bg-amber-50 focus:text-amber-700 dark:focus:bg-amber-900/20 dark:focus:text-amber-300 transition-colors cursor-pointer py-2"
-                    >
-                      <div className="p-1 rounded-md bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm mr-2.5">
-                        <UserMinus className="h-3.5 w-3.5 text-amber-500" />
-                      </div>
-                      <span className="font-medium">Usuń z zespołu</span>
-                    </DropdownMenuItem>
-                  ) : (
-                    <DropdownMenuItem
-                      onClick={() => onShareToggle(assembly, "team")}
-                      className="rounded-lg focus:bg-blue-50 focus:text-blue-700 dark:focus:bg-blue-900/20 dark:focus:text-blue-300 transition-colors cursor-pointer py-2"
-                    >
-                      <div className="p-1 rounded-md bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm mr-2.5">
-                        <Share2 className="h-3.5 w-3.5 text-blue-500" />
-                      </div>
-                      <span className="font-medium text-blue-600 dark:text-blue-400">Udostępnij</span>
-                    </DropdownMenuItem>
-                  )}
-                </>
-              )}
 
               <DropdownMenuSeparator className="my-1.5 bg-slate-100 dark:bg-slate-800" />
               <DropdownMenuItem

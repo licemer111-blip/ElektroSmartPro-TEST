@@ -216,45 +216,6 @@ export function AssemblyList({ onSelect, selectedAssemblyId, refreshTrigger = 0,
             className="pl-9"
           />
         </div>
-        
-        {/* Filter Tabs - only show if there are team assemblies */}
-        {hasTeamAssemblies && (
-          <div className="flex gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
-            <button
-              onClick={() => setSourceFilter("all")}
-              className={`flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-all ${
-                sourceFilter === "all"
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
-              }`}
-            >
-              <Globe className="w-3 h-3" />
-              Wszystko
-            </button>
-            <button
-              onClick={() => setSourceFilter("personal")}
-              className={`flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-all ${
-                sourceFilter === "personal"
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
-              }`}
-            >
-              <User className="w-3 h-3" />
-              Moje
-            </button>
-            <button
-              onClick={() => setSourceFilter("team")}
-              className={`flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-all ${
-                sourceFilter === "team"
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
-              }`}
-            >
-              <Users className="w-3 h-3" />
-              Zespół
-            </button>
-          </div>
-        )}
       </div>
 
       {filteredAssemblies.length === 0 ? (
@@ -288,12 +249,6 @@ export function AssemblyList({ onSelect, selectedAssemblyId, refreshTrigger = 0,
                     <CardTitle className="text-base flex items-center gap-2 flex-wrap">
                       <span className="truncate">{assembly.name}</span>
                       {isSelected && <CheckCircle2 className="w-5 h-5 text-blue-500 shrink-0" />}
-                      {assembly.visibility === "team" && assembly.team_id && (
-                        <Badge className="text-[10px] px-1.5 py-0 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 shrink-0">
-                          <Users className="w-2.5 h-2.5 mr-0.5" />
-                          Zespół
-                        </Badge>
-                      )}
                     </CardTitle>
                     {assembly.description && (
                       <CardDescription className="text-sm mt-1 line-clamp-2">

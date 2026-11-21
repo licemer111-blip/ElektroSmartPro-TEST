@@ -149,14 +149,6 @@ export function AssemblyListView({
                               <Sparkles className="w-2.5 h-2.5" />
                             </span>
                           )}
-                          {assembly.visibility === "team" && assembly.team_id && (
-                            <span 
-                              className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 flex-shrink-0"
-                              title="Zestaw udostępniony zespołowi"
-                            >
-                              <Users className="w-2.5 h-2.5" />
-                            </span>
-                          )}
                         </div>
                         {assembly.description && (
                           <div className="text-sm text-slate-500 dark:text-slate-400 truncate max-w-md">
@@ -210,58 +202,6 @@ export function AssemblyListView({
                             <Copy className="w-4 h-4 mr-2" />
                             Duplikuj
                           </DropdownMenuItem>
-                          
-                          {/* Team sharing */}
-                          {userTeam && (
-                            <>
-                              <DropdownMenuSeparator />
-                              {assembly.visibility === "team" ? (
-                                <DropdownMenuItem
-                                  onClick={async () => {
-                                    const result = await updateAssemblyVisibility(assembly.id, "personal");
-                                    if (result.error) {
-                                      toast({
-                                        title: "Błąd",
-                                        description: result.error,
-                                        variant: "destructive",
-                                      });
-                                    } else {
-                                      toast({
-                                        title: "Sukces",
-                                        description: "Zestaw jest teraz prywatny",
-                                      });
-                                      router.refresh();
-                                    }
-                                  }}
-                                >
-                                  <UserMinus className="w-4 h-4 mr-2" />
-                                  Usuń z zespołu
-                                </DropdownMenuItem>
-                              ) : (
-                                <DropdownMenuItem
-                                  onClick={async () => {
-                                    const result = await updateAssemblyVisibility(assembly.id, "team", userTeam.id);
-                                    if (result.error) {
-                                      toast({
-                                        title: "Błąd",
-                                        description: result.error,
-                                        variant: "destructive",
-                                      });
-                                    } else {
-                                      toast({
-                                        title: "Sukces",
-                                        description: "Zestaw udostępniony zespołowi",
-                                      });
-                                      router.refresh();
-                                    }
-                                  }}
-                                >
-                                  <Share2 className="w-4 h-4 mr-2 text-blue-600" />
-                                  <span className="text-blue-600">Udostępnij zespołowi</span>
-                                </DropdownMenuItem>
-                              )}
-                            </>
-                          )}
                           
                           <DropdownMenuSeparator />
                           <DeleteAssemblyButton

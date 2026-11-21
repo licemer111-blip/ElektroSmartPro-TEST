@@ -362,46 +362,6 @@ export function ItemDialog({
               />
             </div>
 
-            {/* Team Visibility Toggle - only show if user is in a team */}
-            {userTeam && (
-              <div className="grid gap-2 pt-2 border-t">
-                <Label className="flex items-center gap-2">
-                  <Users className="w-4 h-4" />
-                  Udostępnij zespołowi
-                </Label>
-                <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-                  <div className="flex items-center gap-2">
-                    {formData.visibility === "team" ? (
-                      <>
-                        <Users className="w-4 h-4 text-blue-500" />
-                        <span className="text-sm">
-                          Widoczne dla: <strong>{userTeam.name}</strong>
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <Lock className="w-4 h-4 text-slate-500" />
-                        <span className="text-sm text-slate-600 dark:text-slate-400">
-                          Tylko dla mnie
-                        </span>
-                      </>
-                    )}
-                  </div>
-                  <Switch
-                    id="item-visibility-toggle"
-                    name="item-visibility-toggle"
-                    aria-label="Udostępnij zespółowi"
-                    checked={formData.visibility === "team"}
-                    onCheckedChange={(checked) =>
-                      setFormData({
-                        ...formData,
-                        visibility: checked ? "team" : "personal",
-                      })
-                    }
-                  />
-                </div>
-              </div>
-            )}
           </div>
 
           <DialogFooter>

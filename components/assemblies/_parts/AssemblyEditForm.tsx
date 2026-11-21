@@ -103,38 +103,6 @@ export function AssemblyEditForm({
         />
       </div>
 
-      {userTeam && (
-        <div className="pt-2 border-t">
-          <Label htmlFor="assembly-visibility" className="flex items-center gap-2 mb-2">
-            <Users className="w-4 h-4" />
-            Udostępnij zespółowi
-          </Label>
-          <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-            <div className="flex items-center gap-2">
-              {visibility === "team" ? (
-                <>
-                  <Users className="w-4 h-4 text-blue-500" />
-                  <span className="text-sm">
-                    Widoczne dla: <strong>{userTeam.name}</strong>
-                  </span>
-                </>
-              ) : (
-                <>
-                  <Lock className="w-4 h-4 text-slate-500" />
-                  <span className="text-sm text-slate-600 dark:text-slate-400">Tylko dla mnie</span>
-                </>
-              )}
-            </div>
-            <Switch
-              id="assembly-visibility"
-              name="assembly-visibility"
-              aria-label="Udostępnij zespółowi"
-              checked={visibility === "team"}
-              onCheckedChange={(checked) => onVisibilityChange(checked ? "team" : "personal")}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 }

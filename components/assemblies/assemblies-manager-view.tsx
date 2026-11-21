@@ -312,20 +312,6 @@ export function AssembliesManagerView({
         isPro={isPro}
         userTeam={userTeam}
       />
-      <AlertDialog open={!!pendingShareCategory} onOpenChange={(open) => !open && setPendingShareCategory(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Udostępnij kategorię</AlertDialogTitle>
-            <AlertDialogDescription>
-              Czy na pewno chcesz udostępnić wszystkie zestawy z kategorii <strong>"{pendingShareCategory?.name}"</strong> zespołowi <strong>{userTeam?.name}</strong>?
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Anuluj</AlertDialogCancel>
-            <AlertDialogAction onClick={executeShareCategory} className="bg-blue-600 hover:bg-blue-700 text-white">Udostępnij</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </>
   );
 }

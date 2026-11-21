@@ -395,22 +395,6 @@ export function AICatalogImportDialog({
                 </Button>
               </div>
 
-              {/* Team sharing toggle */}
-              {userTeam && (
-                <div className="flex items-center justify-between p-3 rounded-lg bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/40">
-                  <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-blue-600" />
-                    <Label htmlFor="ai-import-share-team" className="text-xs font-medium">Udostępnij zespółowi</Label>
-                  </div>
-                  <Switch
-                    id="ai-import-share-team"
-                    name="ai-import-share-team"
-                    checked={shareWithTeam}
-                    onCheckedChange={setShareWithTeam}
-                  />
-                </div>
-              )}
-
               {/* Items list */}
               <ScrollArea className="max-h-[40vh]">
                 <div className="space-y-1.5 pr-3">

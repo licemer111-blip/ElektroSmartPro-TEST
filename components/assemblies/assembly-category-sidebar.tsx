@@ -208,24 +208,6 @@ export function AssemblyCategorySidebar({
                           Edytuj nazwę
                         </DropdownMenuItem>
                         
-                        {/* Share with team - if user has team */}
-                        {userTeam && onShareCategory && count > 0 && (
-                          <>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleShareCategory(category);
-                              }}
-                            >
-                              <Share2 className="w-4 h-4 mr-2 text-blue-600" />
-                              <span className="text-blue-600">
-                                Udostępnij zespołowi ({count})
-                              </span>
-                            </DropdownMenuItem>
-                          </>
-                        )}
-                        
                         <DropdownMenuSeparator />
                         
                         {/* Delete */}
