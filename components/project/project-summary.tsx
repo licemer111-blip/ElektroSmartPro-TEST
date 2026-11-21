@@ -60,7 +60,7 @@ export function ProjectSummary({
   onPdfNotesChange,
   offerTerms,
   onOfferTermsChange,
-  projectStatus = "draft",
+  projectStatus: _projectStatus = "draft",
   liveRegionId,
   regions,
 }: ProjectSummaryProps) {
@@ -75,7 +75,7 @@ export function ProjectSummary({
   const regionModifier = liveRegionData?.price_modifier ?? project.regions?.price_modifier ?? 1.0;
   const regionName = liveRegionData?.name ?? project.regions?.name ?? "Brak regionu";
   const isPro = getEffectiveIsPro(profile);
-  const isFinal = projectStatus === "final";
+  const isFinal = false;
 
   // Totals use the price stored on each row. A real kit is summed from its own rows.
   const calculateTotals = useMemo(() => () => {

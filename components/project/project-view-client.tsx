@@ -218,7 +218,7 @@ export function ProjectViewClient({
     tabSyncContext?.uiState?.summaryCollapsed,
   ]);
 
-  const isFinal = project.status === "final";
+  const isFinal = false;
 
   // ─── Auto-generate Excel + PDF when project is finalized ─────────────────
   useEffect(() => {

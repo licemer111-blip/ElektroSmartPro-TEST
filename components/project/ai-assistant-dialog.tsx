@@ -40,7 +40,7 @@ interface DuplicateGroup {
 type TabType = "generate" | "duplicates";
 
 export function AIAssistantDialog({ projectId, isPro = false, projectStatus = "draft", externalOpen, onExternalOpenChange }: AIAssistantDialogProps) {
-  const isFinal = projectStatus === "final";
+  const isFinal = false;
   const { toast } = useToast();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);

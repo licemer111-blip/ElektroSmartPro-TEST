@@ -66,12 +66,11 @@ export function MobileSummaryBar({
   pricesAreBrutto,
 }: MobileSummaryBarProps) {
   const [open, setOpen] = useState(false);
-  const [isSavingNotes, setIsSavingNotes] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
   const isPro = getEffectiveIsPro(profile);
   const { multiplier: knrMultiplier } = useKnrMultiplier();
-  const isFinal = project.status === "final";
+  const isFinal = false;
   const vatRate = project.vat_rate;
   const materialsOwnedByCustomer = project.materials_owned_by_customer;
   const regionName = project.regions?.name || "Brak";
@@ -340,35 +339,19 @@ export function MobileSummaryBar({
                 terms={offerTerms}
                 onChange={onOfferTermsChange}
                 disabled={isDownloading}
+                onBlur={() => { void updateProjectPdfNotes(project.id, joinOfferNotes(offerTerms, pdfNotes)); }}
               />
               <Label htmlFor="summary-mobile-remarks" className="text-sm">Uwagi do kosztorysu</Label>
               <Textarea
                 id="summary-mobile-remarks"
                 name="summary-mobile-remarks"
-                placeholder="Np. Oferta ważna 14 dni..."
+                placeholder="Np. Cena nie zawiera robót przygotowawczych..."
                 value={pdfNotes}
                 onChange={(e) => onPdfNotesChange?.(e.target.value)}
+                onBlur={() => { void updateProjectPdfNotes(project.id, joinOfferNotes(offerTerms, pdfNotes)); }}
                 className="min-h-[60px] text-sm"
                 disabled={isDownloading}
               />
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                disabled={isSavingNotes}
-                onClick={async () => {
-                  setIsSavingNotes(true);
-                  const result = await updateProjectPdfNotes(project.id, joinOfferNotes(offerTerms, pdfNotes));
-                  setIsSavingNotes(false);
-                  if (result.error) {
-                    toast({ title: "Błąd", description: result.error, variant: "destructive" });
-                  } else {
-                    toast({ title: "Zapisano", description: "Warunki oferty i uwagi zostały zapisane" });
-                  }
-                }}
-              >
-                {isSavingNotes ? "Zapisuję..." : "Zapisz warunki"}
-              </Button>
             </div>
 
             {/* Profitability */}

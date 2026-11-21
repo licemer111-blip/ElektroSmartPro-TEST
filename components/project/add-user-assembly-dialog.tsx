@@ -40,7 +40,7 @@ interface AddUserAssemblyDialogProps {
 type ViewMode = "list" | "create";
 
 export function AddUserAssemblyDialog({ projectId, isPro = false, currentAssemblyCount = 0, className, projectStatus = "draft", showOnboardingPulse = false }: AddUserAssemblyDialogProps) {
-  const isFinal = projectStatus === "final";
+  const isFinal = false;
   const router = useRouter();
   const [open, setOpen] = useState(false);
   

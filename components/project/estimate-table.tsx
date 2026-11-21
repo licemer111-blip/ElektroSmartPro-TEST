@@ -91,7 +91,7 @@ export function EstimateTable({
   autoDetectZestawy = false,
 }: EstimateTableProps) {
   const projectSector: ProjectSector = detectSector(objectTypeSlug);
-  const isFinal = projectStatus === "final" || isReadOnly;
+  const isFinal = isReadOnly;
   const { toast } = useToast();
   const dndId = useId();
 

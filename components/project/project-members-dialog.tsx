@@ -28,7 +28,7 @@ interface ProjectMembersDialogProps {
 }
 
 export function ProjectMembersDialog({ projectId, isOwner, onCoPilotClick, onLiveChatClick, projectStatus = "draft", externalOpen, onExternalOpenChange }: ProjectMembersDialogProps) {
-  const isFinal = projectStatus === "final";
+  const isFinal = false;
   const [open, setOpen] = useState(false);
 
   // Sync with external (viewer) open state

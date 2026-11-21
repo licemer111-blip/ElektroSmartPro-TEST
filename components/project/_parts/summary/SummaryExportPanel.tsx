@@ -4,14 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { Download, FileSpreadsheet, Save, Check, Lock } from "lucide-react";
-import { DocumentationDialog } from "@/components/project/project-documentation-tab";
+import { Download, FileSpreadsheet, Lock } from "lucide-react";
 import { UnlockPdfButton } from "@/components/billing/unlock-pdf-button";
 import { StartTrialButton } from "@/components/billing/start-trial-button";
 import { TrialStatusBadge } from "@/components/billing/trial-status-badge";
 import { hasUsedTrial, isTrialActive, TRIAL_DURATION_DAYS } from "@/lib/auth/entitlements";
 import { PAY_PER_EXPORT_ENABLED } from "@/lib/config/tier-limits";
-import { useState as useLocalState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { HintTooltip } from "@/components/ui/hint-tooltip";
@@ -56,20 +54,12 @@ export function SummaryExportPanel({
 }: SummaryExportPanelProps) {
   const { toast } = useToast();
   const { multiplier: knrMultiplier } = useKnrMultiplier();
-  const [isSavingNotes, setIsSavingNotes] = useLocalState(false);
-  const [notesSaved, setNotesSaved] = useLocalState(false);
-
   const handleSavePdfNotes = async () => {
-    setIsSavingNotes(true);
     const result = await updateProjectPdfNotes(project.id, joinOfferNotes(offerTerms, pdfNotes));
-    setIsSavingNotes(false);
     if (result.error) {
       toast({ title: "Błąd", description: result.error, variant: "destructive" });
     } else {
-      setNotesSaved(true);
       onPdfNotesSaved?.(pdfNotes);
-      toast({ title: "Zapisano", description: "Warunki oferty i uwagi zostały zapisane" });
-      setTimeout(() => setNotesSaved(false), 2000);
     }
   };
 
@@ -123,9 +113,9 @@ export function SummaryExportPanel({
           idPrefix="desktop-offer"
           terms={offerTerms}
           onChange={onOfferTermsChange}
+          onBlur={() => { void handleSavePdfNotes(); }}
           disabled={isDownloading}
         />
-        <p className="text-xs text-muted-foreground">Zaliczka pojawi się w PDF tylko wtedy, gdy wpiszesz procent.</p>
         <Label htmlFor="pdf-notes" className="text-sm font-medium">
           Uwagi do kosztorysu (opcjonalne)
         </Label>
@@ -135,38 +125,11 @@ export function SummaryExportPanel({
           placeholder="Np. Oferta ważna 14 dni. Cena nie zawiera robót przygotowawczych..."
           value={pdfNotes}
           onChange={(e) => onPdfNotesChange?.(e.target.value)}
+          onBlur={() => { void handleSavePdfNotes(); }}
           className="bg-white dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 min-h-[80px] text-sm"
           disabled={isDownloading}
         />
-        <p className="text-xs text-muted-foreground">Tekst pojawi się na końcu dokumentu PDF</p>
-        <div className="flex justify-end">
-          <Button
-            size="sm"
-            onClick={handleSavePdfNotes}
-            disabled={isSavingNotes}
-            className="h-7 px-3 text-xs gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white border-0"
-          >
-            {notesSaved ? (
-              <><Check className="h-3.5 w-3.5 text-green-500" /><span className="text-green-600">Zapisano</span></>
-            ) : isSavingNotes ? (
-              <><span className="animate-spin text-xs">⏳</span><span>Zapisuję...</span></>
-            ) : (
-              <><Save className="h-3.5 w-3.5" /><span>Zapisz</span></>
-            )}
-          </Button>
-        </div>
-      </div>
-
-      {/* Dokumentacja */}
-      <div className="relative w-full">
-        <div className="[&>button]:w-full [&>button]:h-9 [&>button]:text-sm">
-          <DocumentationDialog
-            projectId={project.id}
-            projectStatus={project.status as string}
-            projectName={project.name}
-            itemCount={items.length}
-          />
-        </div>
+        <p className="text-xs text-muted-foreground">Tekst pojawi się na końcu dokumentu PDF. Zapisuje się po wyjściu z pola.</p>
       </div>
 
       {/* Export buttons — v2.0: FREE tier może eksportować, PDF dostaje watermark DEMO */}

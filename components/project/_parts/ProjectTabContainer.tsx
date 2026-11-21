@@ -246,7 +246,7 @@ export function ProjectTabContainer({
       <PriceAlertBanner
         projectId={project.id}
         projectUpdatedAt={project.updated_at ?? project.created_at}
-        isFinal={project.status === "final"}
+        isFinal={false}
         isReadOnly={isReadOnly}
       />
       <ProjectControlPanel

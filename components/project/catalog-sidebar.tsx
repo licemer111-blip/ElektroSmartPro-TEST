@@ -42,9 +42,9 @@ interface CatalogSidebarProps {
 
 type RecentItem = { id: string; name: string; unit: string; base_material_price: number; base_labor_price: number; useCount: number; lastUsed: number };
 
-export function CatalogSidebar({ projectId, categories: initialCategories, catalogItemsByCategory, isPro, userTeam, projectStatus = "draft", onCollapse }: CatalogSidebarProps) {
+export function CatalogSidebar({ projectId, categories: initialCategories, catalogItemsByCategory, isPro, userTeam, projectStatus: _projectStatus = "draft", onCollapse }: CatalogSidebarProps) {
   const searchId = useId();
-  const isFinal = projectStatus === "final";
+  const isFinal = false;
   const { toast } = useToast();
   const router = useRouter();
 

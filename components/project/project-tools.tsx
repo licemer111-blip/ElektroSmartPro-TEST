@@ -51,7 +51,7 @@ export function ProjectTools({
   lastHistoryUpdate,
   projectStatus = "draft"
 }: ProjectToolsProps) {
-  const isFinal = projectStatus === "final";
+  const isFinal = false;
   const { toast } = useToast();
   const [isExpanded, setIsExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState<'history' | 'notes' | 'photos'>('history');

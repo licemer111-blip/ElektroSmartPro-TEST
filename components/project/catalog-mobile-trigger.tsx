@@ -33,7 +33,7 @@ export function CatalogMobileTrigger({
   className,
   projectStatus = "draft",
 }: CatalogMobileTriggerProps) {
-  const isFinal = projectStatus === "final";
+  const isFinal = false;
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
   

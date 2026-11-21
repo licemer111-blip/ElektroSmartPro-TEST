@@ -46,7 +46,7 @@ export function QuickItemDialog({
   const [materialPrice, setMaterialPrice] = useState("");
   const [laborPrice, setLaborPrice] = useState("");
 
-  const isFinal = projectStatus === "final";
+  const isFinal = false;
 
   const resetForm = () => {
     setName("");

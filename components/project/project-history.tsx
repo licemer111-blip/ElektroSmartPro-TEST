@@ -43,7 +43,7 @@ interface ProjectHistoryProps {
 }
 
 export function ProjectHistory({ projectId, projectStatus = "draft" }: ProjectHistoryProps) {
-  const isFinal = projectStatus === "final";
+  const isFinal = false;
   const [snapshots, setSnapshots] = useState<SnapshotMeta[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);

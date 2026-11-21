@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import {
-  ArrowLeft, Save, MoreVertical, Edit, Loader2, CheckCircle,
+  ArrowLeft, MoreVertical, Edit, Loader2,
   User, Copy, FileBox, Archive, ArchiveRestore, UserCog,
   GitCompareArrows, PiggyBank, FileSpreadsheet, Info,
   Sparkles, CircleDollarSign,
@@ -116,7 +116,8 @@ export function ProjectHeaderToolbar({
   onAIImportClick,
 }: ProjectHeaderToolbarProps) {
   const { toast } = useToast();
-  const isFinal = projectStatus === "final";
+  const isFinal = false;
+  void onToggleStatus;
 
   const [esAssistOpen, setEsAssistOpen] = useState(false);
   const [esWycenaOpen, setEsWycenaOpen] = useState(false);
@@ -335,37 +336,6 @@ export function ProjectHeaderToolbar({
 
               </div>
 
-              <div className="hidden lg:block w-px h-5 bg-slate-200 dark:bg-slate-700 mx-0.5 flex-shrink-0 self-center" />
-
-              {/* Group 2: Zapisz */}
-              <div className="flex items-center gap-1 overflow-x-auto flex-nowrap no-scrollbar flex-wrap sm:flex-nowrap">
-                <HintTooltip content={HINTS.projectFinal} side="bottom" iconOnly />
-                <Button
-                  onClick={onToggleStatus}
-                  disabled={isSaving}
-                  size="sm"
-                  className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 flex-shrink-0 rounded-md ${
-                    projectStatus === "final"
-                      ? "bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800"
-                      : "bg-emerald-600 hover:bg-emerald-700"
-                  } text-white transition-colors`}
-                  data-save-project
-                  title={
-                    projectStatus === "final"
-                      ? "Wróć do edycji kosztorysu"
-                      : "Zablokuj edycję oferty. PDF i Excel działają też przed zatwierdzeniem."
-                  }
-                >
-                  {isSaving ? (
-                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  ) : projectStatus === "final" ? (
-                    <CheckCircle className="h-3.5 w-3.5" />
-                  ) : (
-                    <Save className="h-3.5 w-3.5" />
-                  )}
-                  {projectStatus === "final" ? "Odblokuj" : "Zatwierdź"}
-                </Button>
-              </div>
             </div>
           )}
         </div>
