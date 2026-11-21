@@ -29,7 +29,7 @@ import {
   resolveImportedRows,
   type MatchResult,
 } from "@/lib/services/matching-engine";
-import { buildLocalKnrContext, lookupKnrByName, preferredNormHour } from "@/lib/knr-local-context";
+import { buildLocalKnrContext, lookupKnrByName, preferredNormHour, normHoursConflict } from "@/lib/knr-local-context";
 import { validateAgainstCanonicalL0, findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
 import { wholeSystem } from "@/lib/estimate/system-scope";
 import { findCanonicalL0WithOverrides } from "@/lib/services/canonical-l0-overrides";
@@ -332,14 +332,10 @@ export async function estimatePricesWithAI(
       // No selection: reprice only blank items (or when keepExistingPrices=false)
       if (keepExistingPrices) {
         if (mode === "material") return effectiveMat(item) === 0;
-        if (mode === "labor") return effectiveLab(item) === 0;
-        // mode="all": reprice if EITHER component is missing (not just when both are 0)
-        return effectiveMat(item) === 0 || effectiveLab(item) === 0;
+        return effectiveLab(item) === 0;
       }
       if (mode === "material") return effectiveMat(item) === 0;
-      if (mode === "labor") return effectiveLab(item) === 0;
-      // mode="all": reprice if EITHER component is missing
-      return effectiveMat(item) === 0 || effectiveLab(item) === 0;
+      return effectiveLab(item) === 0;
     });
 
     if (itemsToPrice.length === 0) {
@@ -801,7 +797,29 @@ export async function estimatePricesWithAI(
 
       // ── L2 HIT: es_dictionary found a match (L1 exact or L2 fuzzy) ──────────
       if (esRow && esRow.knr_code && m && (m.confidence_level === "L1" || m.confidence_level === "L2")) {
-        const agreed = preferredNormHour(m.matched_keyword ?? item.name, String(esRow.unit ?? item.unit ?? ""));
+        const keyword = m.matched_keyword ?? item.name;
+        const hourUnit = String(esRow.unit ?? item.unit ?? "");
+        if (normHoursConflict(keyword, hourUnit) || normHoursConflict(item.name, hourUnit)) {
+          return {
+            itemId: item.id,
+            name: item.name,
+            unit: originalItem?.unit ?? item.unit,
+            quantity: item.quantity,
+            currentMaterial: item.material_price || 0,
+            currentLabor: item.labor_price || 0,
+            suggestedMaterial: 0,
+            suggestedLabor: 0,
+            confidence: "low" as const,
+            note: "Dwie różne godziny w normie ES. Program jej nie wybiera. Wpisz swoją.",
+            knrCode: null,
+            knrSource: null,
+            laborNorm: null,
+            suggestedNorm: null,
+            isAmbiguous: true,
+            trace: "L2 Skip: conflicting hours",
+          };
+        }
+        const agreed = preferredNormHour(keyword, hourUnit);
         const laborNorm = agreed ?? esRow.labor_norm_rbh ?? null;
         const isL1Hit = m.confidence_level === "L1";
         const isRegexExact = m.match_method === "regex_cable" || m.match_method === "regex_pipe";
@@ -1018,7 +1036,7 @@ export async function estimatePricesWithAI(
           suggestedLabor: mode === "material" ? (item.labor_price || 0) : sugLab25,
           laborHoursTotal: laborHoursTotal25,
           regionModifier: rateResult.regionModifier,
-          confidence: "medium" as const,
+          confidence: l25Match.estimated ? "low" as const : "medium" as const,
           note: `L2.5 Name-match: "${item.name}" → ${l25Match.code} | norma: ${normWithFloor25.toFixed(4)} rbh/${itemUnitForScale25} × ${localMod25.toFixed(2)}(local) × ${baseRateForCalc.toFixed(1)}PLN/h = ${sugLab25.toFixed(2)} PLN${regionHint25}${l25Match.estimated ? " | godzina szacunkowa, sprawdź przed ofertą" : ""}`,
           knrCode: l25Match.code,
           knrSource: isOfficialKnr(l25Match.code) ? ("official" as const) : ("es-synthetic" as const),

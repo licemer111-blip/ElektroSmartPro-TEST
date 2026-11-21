@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { catalogNameMatches, catalogSearchRank, isHiddenCatalogCategory, isLegacySizeChase, isOffTradeCatalogItem } from "@/lib/catalog/catalog-search";
 import { resolveCatalogHours } from "@/lib/catalog/catalog-work";
 import { findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
-import { lookupKnrByName, preferredNormHour } from "@/lib/knr-local-context";
+import { lookupKnrByName, preferredNormHour, normHoursConflict } from "@/lib/knr-local-context";
 import { dedupeObjectTypes, vatForObjectType } from "@/lib/projects/object-vat";
 import { STARTER_KITS, resolveStarterLine } from "@/lib/assemblies/starter-kits";
 
@@ -139,6 +139,7 @@ describe("the same work has one hour in a flat, office, shop or hall", () => {
     const hit = lookupKnrByName("układanie kabla YKY 5x2.5");
     if (hit) expect(hit.laborNorm).toBeLessThanOrEqual(2.5);
     expect(preferredNormHour("gniazdo pojedyncze", "szt")).toBe(0.68);
+    expect(normHoursConflict("gniazdo pojedyncze", "szt")).toBe(false);
   });
 });
 

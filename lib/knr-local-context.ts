@@ -496,12 +496,7 @@ function roundHour(n: number): number {
   return Math.round(n * 10000) / 10000;
 }
 
-/**
- * One hour for a name when every matching file row agrees,
- * or when the ordinary (non-industrial) rows agree.
- * Returns null when two ordinary jobs still disagree — that hour is not invented.
- */
-export function preferredNormHour(label: string, unit: string): number | null {
+function matchingNormHits(label: string, unit: string): { hour: number; industrial: boolean }[] | null {
   const key = normalize(label);
   if (key.length < 6) return null;
   if (/zamurow|zatynk|zasyp|demont|rozbiork/.test(key)) return null;
@@ -516,12 +511,37 @@ export function preferredNormHour(label: string, unit: string): number | null {
       industrial: entry.is_industrial === true,
     });
   }
+  return hits;
+}
+
+function agreedHour(hits: { hour: number; industrial: boolean }[]): number | null {
   const unique = (rows: { hour: number }[]) => [...new Set(rows.map((row) => row.hour))];
   const all = unique(hits);
   const chosen = all.length === 1 ? all[0] : unique(hits.filter((row) => !row.industrial));
-  const hour = Array.isArray(chosen) ? (chosen.length === 1 ? chosen[0] : null) : chosen;
+  return Array.isArray(chosen) ? (chosen.length === 1 ? chosen[0] : null) : chosen;
+}
+
+/** True only when two ordinary hours disagree. One stored hour is not a conflict. */
+export function normHoursConflict(label: string, unit: string): boolean {
+  const hits = matchingNormHits(label, unit);
+  if (!hits || hits.length === 0) return false;
+  const ordinary = hits.filter((row) => !row.industrial);
+  const pool = ordinary.length > 0 ? ordinary : hits;
+  return new Set(pool.map((row) => row.hour)).size > 1;
+}
+
+/**
+ * One hour for a name when every matching file row agrees,
+ * or when the ordinary (non-industrial) rows agree.
+ * Returns null when two ordinary jobs still disagree — that hour is not invented.
+ */
+export function preferredNormHour(label: string, unit: string): number | null {
+  const key = normalize(label);
+  const hits = matchingNormHits(label, unit);
+  if (!hits) return null;
+  const hour = agreedHour(hits);
   if (hour == null) return null;
-  if (fam === "m" && hour > 2.5 && !key.includes("bruzd")) return null;
+  if (normUnitFamily(unit) === "m" && hour > 2.5 && !key.includes("bruzd")) return null;
   return hour;
 }
 

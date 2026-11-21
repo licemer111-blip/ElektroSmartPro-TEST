@@ -86,7 +86,7 @@ const CONFIG: Record<ConfidenceLevel, ConfidenceConfig> = {
     dot: "bg-amber-400",
     bar: "bg-amber-400",
     label: "Szacunek",
-    tooltip: "Brak pozycji w bazie ES. Cena jest szacunkiem. Sprawdź ją przed ofertą.",
+    tooltip: "Godzina szacunkowa ElektroSmart. To nie jest urzędowy KNR i nie jest cena Sekocenbud. Sprawdź ją przed ofertą.",
   },
   uncertain: {
     dot: "bg-red-500",

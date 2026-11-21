@@ -1056,7 +1056,7 @@ const ContentPage = ({
         ) : null}
 
         <Text style={[base.disclaimer, { color: palette.textSecondary }]}>
-          Kwota obejmuje tylko pozycje z tego wykazu. Prace spoza listy wymagają osobnej wyceny. Podpis zleceniodawcy oznacza przyjęcie tych warunków.
+          Kwota obejmuje tylko pozycje z tego wykazu. Prace spoza listy wymagają osobnej wyceny. Godziny to norma ES, nie urzędowy KNR i nie cennik Sekocenbud. Podpis zleceniodawcy oznacza przyjęcie tych warunków.
         </Text>
 
         <View style={base.signaturesRow}>
