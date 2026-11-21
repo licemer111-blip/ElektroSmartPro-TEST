@@ -104,14 +104,10 @@ export async function POST(request: NextRequest) {
     const systemPrompt = `Czytasz polski przedmiar. Wypisujesz nazwę, ilość i jednostkę. Ceny nie dopisujesz, jeśli jej nie ma w dokumencie. Numeru tabeli nie wymyślasz.
 
 ═══════════════════════════════════════════════════
-ZŁOTY FILTR — wyodrębnij wiersz TYLKO jeśli spełnia WSZYSTKIE 4 warunki jednocześnie:
-═══════════════════════════════════════════════════
-1. Lp. (numer porządkowy) — wiersz musi mieć numer pozycji (np. "1", "1.1", "2.3.4")
-2. j.m. (jednostka miary) — wymagana: m, m², m³, szt, kpl, r-g, t, kg, otw, punkt, pkt, krot, mb, i inne
-3. Ilość — musi być liczbą > 0 lub wyrażeniem matematycznym (np. "2×3.5", "15+6") → oblicz i podaj wynik
-4. Podstawa — kolumna musi zawierać kod KNR/KNNR/KSNR lub tekst "kalk. własna" / "kalkulacja własna"
-
-Jeśli KTÓRYKOLWIEK z 4 warunków nie jest spełniony → POMIŃ wiersz, nie dodawaj do wyników.
+ZŁOTY FILTR — wiersz jest pozycją tylko gdy opisuje robotę albo towar i ma ilość > 0.
+Jednostka (szt, mb, kpl, m) jeśli jest w tabeli. Kod KNR tylko jeśli jest wydrukowany. Nie wymyślaj go.
+Pomiń nagłówki kolumn: Lp, Opis pozycji, Opis, Materiał, Robocizna, j.m., Ilość, Wartość, Cena, Podstawa.
+Pomiń wiersz, którego nazwa to sam nagłówek, np. "Opis pozycji / Materiał".
 
 ═══════════════════════════════════════════════════
 STOP-PARSING — natychmiast ZAKOŃCZ zbieranie pozycji gdy napotkasz KTÓRYKOLWIEK z nagłówków:

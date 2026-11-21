@@ -19,6 +19,8 @@ import {
   parseCSVFile,
   parseRawGrid,
   smartParseExcel,
+  splitImportGrid,
+  isColumnLabel,
   applyColumnMap,
   parsePrzedmiarText,
   parseTableOrText,
@@ -93,8 +95,7 @@ export function useProjectImport({ projectId, onImport }: UseProjectImportOption
         return;
       }
 
-      const hdrs = json[0].map(String);
-      const rawData = json.slice(1).filter(row => row.some(cell => String(cell).trim() !== ""));
+      const { headers: hdrs, data: rawData } = splitImportGrid(json);
 
       dispatch({ type: "SET_EXCEL_ANALYZING", payload: true });
       let aiMap = null;
@@ -102,7 +103,7 @@ export function useProjectImport({ projectId, onImport }: UseProjectImportOption
       dispatch({ type: "SET_EXCEL_ANALYZING", payload: false });
 
       const data = (aiMap && !aiMap.hasHeaders)
-        ? json.filter(row => row.some(cell => String(cell).trim() !== ""))
+        ? json.filter(row => row.some(cell => String(cell).trim() !== "") && !row.every(cell => isColumnLabel(String(cell))))
         : rawData;
 
       let parsed: ExcelRow[];
@@ -229,7 +230,9 @@ export function useProjectImport({ projectId, onImport }: UseProjectImportOption
             }
             const result = await res.json();
             if (result.success && result.materials?.length > 0) {
-              allOcrItems.push(...result.materials.map((m: { name: string; unit: string; quantity: number; knr_code?: string | null }) => ({
+              allOcrItems.push(...result.materials
+                .filter((m: { name: string }) => m.name && !isColumnLabel(m.name))
+                .map((m: { name: string; unit: string; quantity: number; knr_code?: string | null }) => ({
                 name: m.name, unit: m.unit || "szt", quantity: m.quantity || 1,
                 material_price: 0, labor_price: 0,
                 knr_code: m.knr_code || null,
@@ -337,8 +340,7 @@ export function useProjectImport({ projectId, onImport }: UseProjectImportOption
         const json = await parseRawGrid(file);
         if (json.length < 1) { toast.error("Plik jest pusty"); return; }
 
-        const hdrs = json[0].map(String);
-        const rawData = json.slice(1).filter(row => row.some(cell => String(cell).trim() !== ""));
+        const { headers: hdrs, data: rawData } = splitImportGrid(json);
 
         dispatch({ type: "SET_EXCEL_ANALYZING", payload: true });
         let aiMap = null;
@@ -401,8 +403,7 @@ export function useProjectImport({ projectId, onImport }: UseProjectImportOption
       const json = await parseRawGrid(file);
       if (json.length < 2) { toast.error("Plik jest pusty lub zawiera tylko nagłówki"); return; }
 
-      const hdrs = json[0].map(String);
-      const rawData = json.slice(1).filter(row => row.some(cell => String(cell).trim() !== ""));
+      const { headers: hdrs, data: rawData } = splitImportGrid(json);
       dispatch({ type: "SET_EXCEL_HEADERS", payload: hdrs });
 
       dispatch({ type: "SET_EXCEL_ANALYZING", payload: true });
@@ -411,7 +412,7 @@ export function useProjectImport({ projectId, onImport }: UseProjectImportOption
       dispatch({ type: "SET_EXCEL_ANALYZING", payload: false });
 
       const data = (aiMap && !aiMap.hasHeaders)
-        ? json.filter(row => row.some(cell => String(cell).trim() !== ""))
+        ? json.filter(row => row.some(cell => String(cell).trim() !== "") && !row.every(cell => isColumnLabel(String(cell))))
         : rawData;
 
       let parsed: ExcelRow[];

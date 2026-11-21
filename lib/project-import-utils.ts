@@ -51,6 +51,33 @@ export function isNumericValue(v: string): boolean {
   return s !== "" && !isNaN(parseFloat(s)) && isFinite(Number(s));
 }
 
+const COLUMN_LABELS = new Set([
+  "lp", "l p", "opis", "opis pozycji", "opis prac", "opis prac i materialow",
+  "nazwa", "nazwa pozycji", "pozycja", "material", "materialy", "robocizna",
+  "jednostka", "jm", "j m", "ilosc", "ilosc", "wartosc", "cena", "kod", "knr",
+  "podstawa", "uwagi", "nr", "numer",
+]);
+
+function foldLabel(raw: string): string {
+  return raw
+    .trim()
+    .toLowerCase()
+    .replace(/[ąà]/g, "a").replace(/[ćç]/g, "c").replace(/[ęè]/g, "e")
+    .replace(/ł/g, "l").replace(/ń/g, "n").replace(/[óò]/g, "o")
+    .replace(/[śş]/g, "s").replace(/[źż]/g, "z")
+    .replace(/[./]/g, " ")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Column titles such as "Opis pozycji / Materiał" are not work items. */
+export function isColumnLabel(raw: string): boolean {
+  const parts = raw.split(/[/|]/).map(foldLabel).filter(Boolean);
+  if (parts.length === 0) return true;
+  return parts.every((part) => COLUMN_LABELS.has(part));
+}
+
 export function detectUnitColumn(data: string[][], colCount: number, excludeIdx: number): number {
   const scores = Array(colCount).fill(0);
   const sample = data.slice(0, Math.min(20, data.length));
@@ -86,7 +113,7 @@ export function detectQtyColumn(data: string[][], colCount: number, excludeIdxs:
 export function smartParseExcel(headers: string[], data: string[][]): ExcelRow[] {
   const find = (kws: string[]) => headers.findIndex(h => kws.some(k => h.toLowerCase().includes(k)));
 
-  let nameIdx = find(["nazw", "opis", "name", "pozycj", "item", "lp", "l.p"]);
+  let nameIdx = find(["nazw", "opis", "name", "pozycj", "item"]);
   let unitIdx = find(["jedn", "unit", "jm", "j.m", "jm.", "jednostk"]);
   let qtyIdx  = find(["ilo", "qty", "quantity", "liczba", "ilosc"]);
   const matIdx   = find(["mater", "mat.", "cena mat", "material"]);
@@ -145,7 +172,7 @@ export function smartParseExcel(headers: string[], data: string[][]): ExcelRow[]
         name = anyCell ? String(anyCell).trim() : "";
       }
     }
-    if (!name) return null;
+    if (!name || isColumnLabel(name)) return null;
 
     const rawUnit = String(row[unitIdx] ?? "").trim();
     const unit = smartCorrectUnit(name, normalizeUnit(rawUnit || "kpl"));
@@ -202,7 +229,7 @@ export function applyColumnMap(map: ExcelColumnMap, data: string[][]): ExcelRow[
         name = anyCell ? String(anyCell).trim() : "";
       }
     }
-    if (!name) return null;
+    if (!name || isColumnLabel(name)) return null;
 
     const rawUnit = map.unitIdx >= 0 ? String(row[map.unitIdx] ?? "").trim() : "";
     const unit = smartCorrectUnit(name, normalizeUnit(rawUnit || "kpl"));
@@ -317,6 +344,7 @@ export function parsePrzedmiarText(text: string): AIProjectItem[] {
     if (/^\d{8}-\d[\s\t]/.test(s)) return true;
     // Generic noise keywords
     if (NOISE_KEYWORDS_RE.test(s)) return true;
+    if (isColumnLabel(s)) return true;
     // Table-of-contents entry: "N Text... PageNum" where line ends with 1–3 digit page nr
     // Heuristic: starts with single/double digit + space + long text + ends with number ≤999
     // AND contains no unit token (actual items would have szt/mb/kpl etc.)
@@ -587,7 +615,7 @@ export function parseStructuredTable(text: string): AIProjectItem[] | null {
     if (cols.length < 2) continue;
 
     const name = cols[nameIdx]?.trim();
-    if (!name || name.length < 2) continue;
+    if (!name || name.length < 2 || isColumnLabel(name)) continue;
 
     const rawQty = cols[qtyIdx]?.replace(",", ".") ?? "0";
     const qty = parseFloat(rawQty);
@@ -664,6 +692,26 @@ export async function parseCSVFile(file: File): Promise<{ headers: string[]; row
   });
 
   return { headers, rows };
+}
+
+/** Pick the row that is actually the column titles, not a sheet title above it. */
+export function splitImportGrid(grid: string[][]): { headers: string[]; data: string[][] } {
+  const limit = Math.min(grid.length, 12);
+  let headerAt = 0;
+  for (let i = 0; i < limit; i++) {
+    const cells = grid[i].map((cell) => String(cell ?? "").trim()).filter(Boolean);
+    const labels = cells.filter(isColumnLabel);
+    if (cells.length >= 2 && labels.length >= 2 && labels.length >= cells.length - 1) {
+      headerAt = i;
+      break;
+    }
+  }
+  const headers = (grid[headerAt] ?? []).map((cell) => String(cell ?? "").trim());
+  const data = grid.slice(headerAt + 1).filter((row) => {
+    const cells = row.map((cell) => String(cell ?? "").trim()).filter(Boolean);
+    return cells.length > 0 && !cells.every(isColumnLabel);
+  });
+  return { headers, data };
 }
 
 export async function parseRawGrid(file: File): Promise<string[][]> {
