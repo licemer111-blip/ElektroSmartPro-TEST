@@ -31,6 +31,7 @@ import {
 } from "@/lib/services/matching-engine";
 import { buildLocalKnrContext, lookupKnrByName, preferredNormHour } from "@/lib/knr-local-context";
 import { validateAgainstCanonicalL0, findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
+import { wholeSystem } from "@/lib/estimate/system-scope";
 import { findCanonicalL0WithOverrides } from "@/lib/services/canonical-l0-overrides";
 import { scaleLaborNorm, getUnitBaseSize } from "@/lib/labor-time";
 import { getPricingCacheName, CACHE_MODEL_ID } from "@/lib/services/ai/gemini-context-cache";
@@ -446,6 +447,7 @@ export async function estimatePricesWithAI(
       }
 
       for (const item of itemsWithKnr) {
+        if (wholeSystem(item.name)) continue;
         const code = normalizeKnrCode((item as typeof item & { knr_code: string }).knr_code);
         const knrEntry = knrMap.get(code);
         if (knrEntry != null) {
@@ -553,6 +555,7 @@ export async function estimatePricesWithAI(
       (it) => !l0ResolvedIds.has(it.id),
     );
     for (const item of canonicalCandidates) {
+      if (wholeSystem(item.name)) continue;
       const canonical = await findCanonicalL0WithOverrides(item.name, item.unit);
       if (!canonical) continue;
       const itemUnit = (item.unit ?? "").toLowerCase().trim();
@@ -650,6 +653,7 @@ export async function estimatePricesWithAI(
       const keywordMisses: NotInCatalogEntry[] = [];
 
       for (const item of itemsToPrice) {
+        if (wholeSystem(item.name)) continue;
         if (l0ResolvedIds.has(item.id)) continue; // L0: already priced via direct KNR lookup
         if (detectAmbiguity(item.name)) {
           l1ResolvedIds.add(item.id);

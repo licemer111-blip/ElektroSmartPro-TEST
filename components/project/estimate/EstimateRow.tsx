@@ -24,6 +24,8 @@ import { saveAssemblyOverrides } from "@/app/dashboard/projects/[id]/_actions/pr
 import { RowUnitCell, RowQuantityCell, RowMaterialCell, RowLaborCell, RowRgCell } from "@/components/project/estimate/_parts/RowInputs";
 import { RowKnrCell } from "@/components/project/estimate/_parts/RowKnrCell";
 import { RowTotalCell } from "@/components/project/estimate/_parts/RowTotalCell";
+import { SystemScopeBar } from "@/components/project/estimate/SystemScopeBar";
+import { wholeSystem } from "@/lib/estimate/system-scope";
 
 // Ambiguity detector (client-side mirror of server-side pricing.ts)
 const AMBIGUITY_KW = ["pomocnicze","dodatkowe","inne","pozostałe","materiały pomocnicze","różne","drobnica","nieprzewidziane","rezerwa","itp","itd"];
@@ -292,6 +294,9 @@ export const EstimateRow = React.memo(function EstimateRow({
   ) === 0;
 
   const isAmbiguous = isAmbiguousItem(item.name) && !isManualPrice;
+  const systemQuestion = !isEditing && !isAssemblyChild && item.confidence_level !== "manual"
+    ? wholeSystem(item.name)
+    : null;
   // kpl with high qty is suspicious — warn user (disabled in manual mode)
   const isKplWarning = !isManualPrice &&
     item.unit === "kpl" &&
@@ -453,6 +458,14 @@ export const EstimateRow = React.memo(function EstimateRow({
               })()}
               {highlightText(isEditing ? editingState!.name : item.name)}
             </div>
+            {systemQuestion && (
+              <SystemScopeBar
+                projectId={item.project_id}
+                itemId={item.id}
+                system={systemQuestion}
+                hourlyRate={projectLaborRate}
+              />
+            )}
             {(isEditing ? editingState!.section : item.section) && !isAssemblyChild && (
               <span className="inline-block mt-0.5 px-1.5 py-0 rounded text-[9px] font-medium bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">
                 {isEditing ? editingState!.section : item.section}

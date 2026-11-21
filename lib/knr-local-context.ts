@@ -7,6 +7,7 @@
 import instalacjaPodstawowa from "@/data/knr/fixed_norms/es_knr_instalacja_podstawowa.json";
 import { getModernizationFactor, classifyIntent, isMetal } from "@/lib/services/semantic-classifier";
 import { findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
+import { wholeSystem } from "@/lib/estimate/system-scope";
 import gniazda from "@/data/knr/fixed_norms/es_knr_gniazda_wylaczniki_oprawy.json";
 import trasyPvc from "@/data/knr/fixed_norms/es_knr_trasy_kablowe_pvc.json";
 import pomiary from "@/data/knr/fixed_norms/es_knr_pomiary_odbiory_2026.json";
@@ -525,6 +526,7 @@ export function preferredNormHour(label: string, unit: string): number | null {
 }
 
 export function lookupKnrByName(itemName: string, preferResidential = true): KnrMatch | null {
+  if (wholeSystem(itemName)) return null;
   const baseNeedle = normalize(itemName);
   // Detect action and substrate ON THE RAW item name (before slang noise pollutes them)
   const actionGroup = detectActionGroup(baseNeedle);
