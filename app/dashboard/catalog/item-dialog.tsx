@@ -105,20 +105,25 @@ export function ItemDialog({
     if (!open || !item?.id) return;
     let cancelled = false;
     const supabase = createClient();
-    supabase
-      .from("catalog_items")
-      .select("labor_norm_rbh, knr_code")
-      .eq("id", item.id)
-      .maybeSingle()
-      .then(({ data }) => {
+    const itemId = item.id;
+    void (async () => {
+      try {
+        const { data } = await supabase
+          .from("catalog_items")
+          .select("labor_norm_rbh, knr_code")
+          .eq("id", itemId)
+          .maybeSingle();
         if (cancelled || !data) return;
+        const row = data as { labor_norm_rbh?: number | null; knr_code?: string | null };
         setFormData((prev) => ({
           ...prev,
-          labor_norm_rbh: data.labor_norm_rbh ?? "",
-          knr_code: data.knr_code ?? "",
+          labor_norm_rbh: row.labor_norm_rbh ?? "",
+          knr_code: row.knr_code ?? "",
         }));
-      })
-      .catch(() => {});
+      } catch {
+        // The form still has the hours loaded with the list.
+      }
+    })();
     return () => {
       cancelled = true;
     };
