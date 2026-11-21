@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import { useMaterialBrain } from "@/hooks/useMaterialBrain";
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { ProjectSummary } from "./project-summary";
 import { useTabSyncOptional } from "./tab-sync-context";
@@ -15,7 +14,6 @@ import { useProjectPdfDownload } from "@/hooks/use-project-pdf-download";
 import { useSummaryCollapse } from "@/hooks/use-summary-collapse";
 import { useProjectTabSync } from "@/hooks/useProjectTabSync";
 import { ProjectTabContainer } from "./_parts/ProjectTabContainer";
-import { MaterialBrainProvider } from "./_parts/MaterialBrainContext";
 import { materialGaps } from "@/lib/estimate/offer-readiness";
 
 export type ProjectTab = "estimate" | "materials" | "notes" | "settings";
@@ -284,17 +282,7 @@ export function ProjectViewClient({
     return () => window.removeEventListener("project-finalized", handler);
   }, [projectId, project, items, isPro, colorMode, notesForPdf, knrMultiplier, liveBruttoMode]);
 
-  // Material Brain disabled — simplification Phase 1 (AI material suggestions removed)
-  const brain = useMaterialBrain(projectId, false, liveVatRate);
-
   return (
-    <MaterialBrainProvider
-      projectId={projectId}
-      vatRate={project.vat_rate ?? 23}
-      bills={brain.bills}
-      isLoading={brain.isLoading}
-      refreshBrain={brain.refresh}
-    >
     <div className="flex flex-col pb-36 lg:pb-0">
       <div className={`grid grid-cols-1 ${summaryCollapsed ? "" : "lg:grid-cols-[1fr_minmax(0,280px)]"} gap-4 lg:gap-6 items-start`}>
         {/* Main content — all tabs via _parts/ProjectTabContainer */}
@@ -456,6 +444,5 @@ export function ProjectViewClient({
         </DialogContent>
       </Dialog>
     </div>
-    </MaterialBrainProvider>
   );
 }

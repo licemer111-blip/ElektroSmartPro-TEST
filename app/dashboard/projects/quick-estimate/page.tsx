@@ -1,49 +1,11 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { createClient } from "@/utils/supabase/server";
-import { PageContainer } from "@/components/layout/page-container";
-import { getRegions, getObjectTypes } from "@/app/dashboard/actions";
-import { QuickEstimateWizard } from "@/components/projects/quick-estimate-wizard";
-import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 
 export const metadata: Metadata = {
-  title: "Szybka Wycena — Kosztorys w 5 Minut",
-  description: "Kreator ekspresowej wyceny instalacji elektrycznej — wybierz obiekt, dodaj pozycje i wyślij ofertę PDF klientowi w 5 minut",
+  title: "Kosztorys",
+  description: "Nowy kosztorys zaczyna się od Twoich pozycji, nie od listy ułożonej z metrażu.",
 };
 
-export const dynamic = "force-dynamic";
-export const maxDuration = 60;
-
-export default async function QuickEstimatePage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  // Check PRO status (trial-aware)
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("is_pro, trial_started_at, trial_ends_at, default_region_id")
-    .eq("id", user.id)
-    .single();
-
-  const isPro = getEffectiveIsPro(profile);
-
-  const [regions, objectTypes] = await Promise.all([
-    getRegions(),
-    getObjectTypes(),
-  ]);
-
-  return (
-    <PageContainer>
-      <QuickEstimateWizard
-        regions={regions.map(r => ({ id: r.id, name: r.name, price_modifier: r.price_modifier }))}
-        defaultRegionId={(profile as { default_region_id?: string | null } | null)?.default_region_id ?? null}
-        objectTypes={objectTypes.map(ot => ({ id: ot.id, name: ot.name, default_vat_rate: ot.default_vat_rate }))}
-        isPro={isPro}
-      />
-    </PageContainer>
-  );
+export default function QuickEstimatePage() {
+  redirect("/dashboard");
 }

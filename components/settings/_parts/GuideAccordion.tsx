@@ -19,7 +19,7 @@ export function GuideAccordion() {
           <ol className="ml-4 space-y-2 list-decimal">
             <li>W <strong>Finansach</strong> ustaw stawkę rbh i województwo. Województwo mnoży tylko robociznę.</li>
             <li>W <strong>Profilu firmy</strong> wpisz NIP i logo — trafią na PDF.</li>
-            <li><strong>Szybka wycena</strong> liczy listę z metrażu. Suma na ekranie jest tą samą sumą w projekcie.</li>
+            <li>Nowy projekt, potem pozycje z katalogu albo własny zestaw. Program nie układa listy z metrażu.</li>
             <li>W projekcie dopisujesz pozycje z katalogu albo zestaw (gniazdo, puszka, kabel, bruzda).</li>
             <li>PDF: w DEMO jest znak wodny. Czysty wydruk jest w PRO.</li>
           </ol>
@@ -75,12 +75,12 @@ export function GuideAccordion() {
         <AccordionTrigger className="hover:no-underline">
           <div className="flex items-center gap-3 text-left">
             <Rocket className="w-5 h-5 text-orange-600 dark:text-orange-400 flex-shrink-0" />
-            <span className="font-semibold text-slate-900 dark:text-slate-100">Szybka wycena</span>
+            <span className="font-semibold text-slate-900 dark:text-slate-100">Czego program nie zgaduje</span>
           </div>
         </AccordionTrigger>
         <AccordionContent className="text-slate-700 dark:text-slate-300 leading-relaxed pt-4 text-sm">
-          <p>Typ obiektu, metraż, liczba pomieszczeń, standard. Lista powstaje z tych danych.</p>
-          <p className="mt-2">Suma na ostatnim kroku już zawiera województwo. Po utworzeniu projektu ta sama robocizna nie jest liczona drugi raz.</p>
+          <p>Program nie składa kompletu materiałów do pozycji i nie liczy instalacji z metrażu. Do takiego układu nie ma jednej listy, która pasuje do każdej budowy.</p>
+          <p className="mt-2">Materiał dopisujesz z cennika albo kwotą w wierszu. Robociznę znanej pracy liczy godzina normy ES razy Twoja stawka.</p>
         </AccordionContent>
       </AccordionItem>
 

@@ -12,7 +12,7 @@ import {
   Collapsible, CollapsibleContent, CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
-  CheckCircle2, XCircle, Download, FolderPlus, Zap, ChevronDown, ChevronUp,
+  CheckCircle2, XCircle, Download, FolderPlus, ChevronDown, ChevronUp,
   CheckSquare, Square, Save,
 } from "lucide-react";
 import type { ExtractedMaterial } from "@/app/dashboard/ai-lab/actions";
@@ -30,7 +30,6 @@ export interface AnalysisResultsProps {
   onToggleSelectAll: () => void;
   onExportToExcel: () => void;
   onAddToProject: () => void;
-  onOpenQuickEstimate: () => void;
   onClear: () => void;
 }
 
@@ -47,7 +46,6 @@ export const AnalysisResults = React.memo(function AnalysisResults({
   onToggleSelectAll,
   onExportToExcel,
   onAddToProject,
-  onOpenQuickEstimate,
   onClear,
 }: AnalysisResultsProps) {
   const allSelected = useMemo(
@@ -102,10 +100,6 @@ export const AnalysisResults = React.memo(function AnalysisResults({
               <Button onClick={onAddToProject} variant="default" size="sm" className="gap-2 bg-blue-600 hover:bg-blue-700 text-white" disabled={selectedMaterials.size === 0}>
                 <FolderPlus className="w-4 h-4" />
                 Dodaj do Projektu ({selectedMaterials.size})
-              </Button>
-              <Button onClick={onOpenQuickEstimate} variant="default" size="sm" className="gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white">
-                <Zap className="w-4 h-4" />
-                Szybka Wycena
               </Button>
               <Button onClick={onClear} variant="ghost" size="sm" className="gap-2 text-slate-600 hover:text-red-600">
                 <XCircle className="w-4 h-4" />

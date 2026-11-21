@@ -70,7 +70,7 @@ export function MobileBottomNav() {
             return (
               <div key="new" className="flex flex-col items-center justify-end pb-1">
                 <button
-                  onClick={() => window.location.href = "/dashboard/projects/quick-estimate"}
+                  onClick={() => window.location.href = "/dashboard"}
                   aria-label="Nowy kosztorys"
                   className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full w-11 h-11 -mt-3 flex items-center justify-center shadow-lg shadow-blue-500/25 active:scale-95 transition-transform"
                 >

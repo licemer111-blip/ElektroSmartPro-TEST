@@ -88,10 +88,6 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="start" className="w-52">
-                                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onSelect={() => openMore("/dashboard/projects/quick-estimate")}>
-                                        <Zap className="w-4 h-4" />
-                                        Szybka Wycena
-                                    </DropdownMenuItem>
                                     <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onSelect={() => openMore("/dashboard/tools")}>
                                         <Wrench className="w-4 h-4" />
                                         Kalkulatory

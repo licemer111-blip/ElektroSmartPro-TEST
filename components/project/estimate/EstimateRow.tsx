@@ -15,11 +15,10 @@ import { calcRowPrices } from "@/lib/pricing-calculations";
 import type { ProjectItem } from "@/lib/types/database";
 import { expandToAssembly } from "@/lib/ai/smart-mapping-engine";
 import type { ProjectSector, AssemblyOverrides } from "@/lib/ai/smart-mapping-engine";
-import { roundPrice, useGlobalSettings } from "@/hooks/use-global-settings";
+import { roundPrice } from "@/hooks/use-global-settings";
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { ConfidenceDot, UncertainPriceWarning } from "@/components/project/estimate/ConfidenceBadge";
 import { BlurredPrice } from "@/components/ui/blurred-price";
-import { useMaterialBrainCtx } from "@/components/project/_parts/MaterialBrainContext";
 import { RowActions } from "@/components/project/estimate/_parts/RowActions";
 import { saveAssemblyOverrides } from "@/app/dashboard/projects/[id]/_actions/project-items";
 import { RowUnitCell, RowQuantityCell, RowMaterialCell, RowLaborCell, RowRgCell } from "@/components/project/estimate/_parts/RowInputs";
@@ -223,9 +222,6 @@ export const EstimateRow = React.memo(function EstimateRow({
       }
     : item;
 
-  const brainCtx  = useMaterialBrainCtx();
-  const brainBill  = brainCtx?.bills.get(item.id);
-  const { showHints } = useGlobalSettings();
   const { multiplier: knrMultiplier } = useKnrMultiplier();
 
   // ── Self-filter: hide material DB-children when "Tylko Robocizna" is ON ──
@@ -461,16 +457,6 @@ export const EstimateRow = React.memo(function EstimateRow({
               <span className="inline-block mt-0.5 px-1.5 py-0 rounded text-[9px] font-medium bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">
                 {isEditing ? editingState!.section : item.section}
               </span>
-            )}
-            {!isEditing && brainBill && brainCtx && !isAssemblyChild && showHints && (
-              <button
-                type="button"
-                onClick={(e) => { e.stopPropagation(); brainCtx.openForItem(item.id); }}
-                title="Material Brain: kliknij, aby zobaczyć sugestie materiałów"
-                className="inline-flex items-center gap-0.5 mt-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 border border-amber-300 dark:border-amber-700 hover:bg-amber-200 dark:hover:bg-amber-800/50 transition-colors cursor-pointer"
-              >
-                ✨ {brainBill.bill.items.length} mat.
-              </button>
             )}
             {!isEditing && isKplWarning && !compactView && (
               <div className="mt-0.5 text-[9px] text-amber-600 dark:text-amber-400 font-medium flex items-center gap-0.5">

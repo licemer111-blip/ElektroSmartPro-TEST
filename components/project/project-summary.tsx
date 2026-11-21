@@ -214,7 +214,7 @@ export function ProjectSummary({
     } else {
       toast({
         title: enabled ? "Tryb: Tylko Robocizna" : "Tryb: Robocizna + Materiały",
-        description: enabled ? "Materiały = 0,00 zł · Brain nieaktywny" : "Brain aktywny · Sugestie materiałów dostępne",
+        description: enabled ? "Materiały nie wchodzą do sumy" : "Do sumy wchodzi materiał wpisany w pozycjach",
       });
       notifyDataChanged("materials-toggle");
       router.refresh();

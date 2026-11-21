@@ -20,7 +20,6 @@ import {
   CalendarDays,
   ChevronRight,
   ExternalLink,
-  Zap,
   Wrench,
   TrendingUp,
   Calculator,
@@ -114,7 +113,6 @@ export function ProfileView({ data }: ProfileViewProps) {
 
       {/* ───── QUICK ACTIONS — horizontal strip ───── */}
       <div className="flex flex-wrap gap-2 pb-0.5">
-        <QuickAction href="/dashboard/projects/quick-estimate" icon={<Zap className="w-3.5 h-3.5" />} label="Szybka wycena" color="orange" />
         <QuickAction href="/dashboard/settings?tab=knr" icon={<Calculator className="w-3.5 h-3.5" />} label="Stawka" color="amber" />
         <QuickAction href="/dashboard/tools" icon={<Wrench className="w-3.5 h-3.5" />} label="Kalkulatory" color="emerald" />
         <QuickAction href="/dashboard/assemblies" icon={<Boxes className="w-3.5 h-3.5" />} label="Zestawy" color="orange" />

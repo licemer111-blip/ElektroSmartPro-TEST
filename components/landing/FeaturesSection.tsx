@@ -93,8 +93,8 @@ function FeaturesSectionInner({ normsCount = 0 }: FeaturesProps) {
     {
       gradient: "from-slate-500 to-slate-700",
       icon: Sparkles,
-      title: "Kreator i szybka wycena",
-      desc: "Szybka wycena bierze metraż i liczbę pomieszczeń. Suma na ekranie jest tą samą sumą w projekcie.",
+      title: "Twoja lista, nie zgadywany komplet",
+      desc: "Pozycje bierzesz z cennika albo ze swojego zestawu. Program nie dokłada materiałów, których nie wpisałeś.",
     },
     {
       gradient: "from-blue-600 to-blue-800",

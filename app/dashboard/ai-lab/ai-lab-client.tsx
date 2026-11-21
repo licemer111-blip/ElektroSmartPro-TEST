@@ -396,7 +396,7 @@ export function AiLabClient({ isPro }: AiLabClientProps) {
             </CardContent>
           </Card>
         </div>
-        <AnalysisResults materials={materials} selectedMaterials={selectedMaterials} rawText={rawText} error={error} isRawOpen={isRawOpen} onToggleRaw={setIsRawOpen} onToggleSelect={toggleMaterialSelection} onToggleSelectAll={toggleSelectAll} onExportToExcel={handleExportToExcel} onAddToProject={handleAddToProject} onOpenQuickEstimate={handleOpenQuickEstimate} onClear={handleClearResults} />
+        <AnalysisResults materials={materials} selectedMaterials={selectedMaterials} rawText={rawText} error={error} isRawOpen={isRawOpen} onToggleRaw={setIsRawOpen} onToggleSelect={toggleMaterialSelection} onToggleSelectAll={toggleSelectAll} onExportToExcel={handleExportToExcel} onAddToProject={handleAddToProject} onClear={handleClearResults} />
         <Card className="mt-4 border-green-300 bg-green-50/50 dark:bg-green-950/20">
           <CardContent className="p-4 flex items-start gap-2">
             <CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />

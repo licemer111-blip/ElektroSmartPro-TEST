@@ -14,8 +14,6 @@ import {
 } from "@/components/ui/sheet";
 import { HeaderMobileNavItem } from "@/components/header-mobile-nav-item";
 import { MobileNavLink } from "@/components/mobile-nav-link";
-import { SzybkaWycenaNavLink } from "@/components/szybka-wycena-nav-link";
-
 interface HeaderMobileMenuProps {
   isAuthenticated: boolean;
   isPro: boolean;
@@ -62,11 +60,6 @@ export function HeaderMobileMenu({ isAuthenticated, isPro }: HeaderMobileMenuPro
                 <HeaderMobileNavItem href="/dashboard/projects" icon="PenTool" variant="glow-blue" desc="Kosztorys elektryczny — ostatni edytowany projekt">
                   Kosztorys
                 </HeaderMobileNavItem>
-                <SheetClose asChild>
-                  <div className="px-0">
-                    <SzybkaWycenaNavLink className="w-full justify-start" />
-                  </div>
-                </SheetClose>
                 <HeaderMobileNavItem href="/dashboard" icon="FolderKanban">
                   Projekty
                 </HeaderMobileNavItem>

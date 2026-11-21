@@ -47,6 +47,8 @@ export interface MaterialBrainResult {
 export async function getMaterialBillForProject(
   projectId: string
 ): Promise<MaterialBrainResult> {
+  void projectId;
+  return { bills: [], totalNet: 0, totalGross: 0 };
   const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { bills: [], totalNet: 0, totalGross: 0, error: "Musisz być zalogowany" };
 
@@ -177,6 +179,10 @@ export async function saveProjectMaterials(
   laborItemId: string,
   items: SaveMaterialItem[]
 ): Promise<SaveMaterialsResult> {
+  void projectId;
+  void laborItemId;
+  void items;
+  return { success: false, saved: 0, error: "Automatyczny komplet materiałów jest wyłączony. Dopisz pozycję z cennika." };
   const { user, supabase } = await tryAuth();
   if (!user || !supabase) return { success: false, saved: 0, error: "Musisz być zalogowany" };
   if (items.length === 0) return { success: false, saved: 0, error: "Brak wybranych materiałów" };

@@ -7,8 +7,6 @@ import {
   updateProjectDocSettings,
 } from "@/app/dashboard/projects/[id]/actions";
 import { notifyDataChanged } from "@/hooks/use-synced-action";
-import { useMaterialBrainCtx } from "@/components/project/_parts/MaterialBrainContext";
-
 interface ProjectControlPanelProps {
   projectId: string;
   vatRate: number;
@@ -48,8 +46,6 @@ export function ProjectControlPanel({
 }: ProjectControlPanelProps) {
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
-  const brainCtx = useMaterialBrainCtx();
-
   // ─── Local optimistic state ───────────────────────────────────────────────
   const [localVat, setLocalVat] = useState(vatRate);
 
@@ -82,7 +78,6 @@ export function ProjectControlPanel({
         onVatRateChange?.(localVat);
       } else {
         notifyDataChanged("vat-changed");
-        brainCtx?.refreshBrain();
         toast({ title: `✅ VAT zmieniony na ${newVat}%`, description: newVat === 8 ? "Stawka mieszkaniowa 8%" : "Stawka komercyjna 23%" });
       }
     });

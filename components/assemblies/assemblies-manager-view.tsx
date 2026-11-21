@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { LayoutGrid, List, Plus, Search, Filter } from "lucide-react";
-import { AIAssemblyGeneratorDialog } from "./ai-assembly-generator-dialog";
 import { AssemblyCategorySidebar } from "./assembly-category-sidebar";
 import { AssemblyListView } from "./assembly-list-view";
 import { AssembliesWithTabs } from "./assemblies-with-tabs";
@@ -171,10 +170,6 @@ export function AssembliesManagerView({
                 <Plus className="w-3.5 h-3.5 mr-1.5" />
                 Dodaj Zestaw
               </Button>
-              <AIAssemblyGeneratorDialog
-                isPro={isPro}
-                userTeam={userTeam}
-              />
             </div>
             <span className="text-xs text-slate-500 dark:text-slate-400 hidden md:block">
               {assemblies.length} zestawów

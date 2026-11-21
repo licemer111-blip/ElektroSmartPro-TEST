@@ -111,8 +111,8 @@ export function ProjectsWithTemplatesClient({
                         <Zap className="w-4 h-4 text-white" />
                       </div>
                       <div>
-                        <p className="text-xs font-semibold text-orange-800 dark:text-orange-300">Szybka Wycena</p>
-                        <p className="text-[11px] text-orange-700/70 dark:text-orange-400/70">Metraż, potem ta sama suma w projekcie</p>
+                        <p className="text-xs font-semibold text-orange-800 dark:text-orange-300">Własny zestaw</p>
+                        <p className="text-[11px] text-orange-700/70 dark:text-orange-400/70">Punkt, który sam ułożyłeś: puszka, kabel, robocizna</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3 bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-800/50 rounded-lg p-3">
