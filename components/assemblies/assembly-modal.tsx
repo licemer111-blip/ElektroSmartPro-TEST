@@ -12,6 +12,8 @@ import { type AutocompleteOption } from "@/components/ui/autocomplete-input";
 import { getCatalogItems } from "@/app/dashboard/catalog/actions";
 import { AssemblyItemsList, type AssemblyItemInput } from "@/components/assemblies/AssemblyItemsList";
 import { AssemblyEditForm } from "@/components/assemblies/_parts/AssemblyEditForm";
+import { linesFromCatalogPick } from "@/lib/assemblies/line-quantity";
+import type { KnrSelectedItem } from "@/components/catalog/autocomplete-item-input";
 
 interface AssemblyModalProps {
   isOpen: boolean;
@@ -45,6 +47,8 @@ export function AssemblyModal({ isOpen, onClose, mode, assembly, categories = []
   const [newItemType, setNewItemType] = useState<"material" | "labor">("material");
   const [newItemPrice, setNewItemPrice] = useState("");
   const [newItemQuantity, setNewItemQuantity] = useState("1");
+  const [newItemHours, setNewItemHours] = useState("");
+  const [newItemKnr, setNewItemKnr] = useState<string | null>(null);
   
   // Catalog items for autocomplete
   const [catalogOptions, setCatalogOptions] = useState<AutocompleteOption[]>([]);
@@ -64,6 +68,8 @@ export function AssemblyModal({ isOpen, onClose, mode, assembly, categories = []
               materialPrice: item.base_material_price,
               laborPrice: item.base_labor_price,
               category: item.category_name,
+              laborNorm: item.labor_norm_rbh ?? null,
+              knrCode: item.knr_code ?? item.knr_ref ?? null,
             },
           }));
           setCatalogOptions(options);
@@ -99,6 +105,8 @@ export function AssemblyModal({ isOpen, onClose, mode, assembly, categories = []
           price: item.price,
           quantity: item.quantity,
           sort_order: item.sort_order,
+          laborNorm: item.labor_norm_rbh ?? null,
+          knrCode: item.knr_code ?? null,
         }))
       );
     } else if (isOpen && mode === "create") {
@@ -112,15 +120,67 @@ export function AssemblyModal({ isOpen, onClose, mode, assembly, categories = []
     }
   }, [isOpen, assembly, mode]);
 
+  const resetItemDraft = () => {
+    setNewItemName("");
+    setNewItemPrice("");
+    setNewItemQuantity("1");
+    setNewItemHours("");
+    setNewItemKnr(null);
+    setNewItemType("material");
+    setNewItemUnit("szt");
+  };
+
+  const fillDraft = (line: { name: string; unit: string; type: "material" | "labor"; price: number; laborNorm: number | null; knrCode: string | null }) => {
+    setNewItemName(line.name);
+    setNewItemUnit(line.unit as UnitType);
+    setNewItemType(line.type);
+    setNewItemPrice(line.price > 0 ? line.price.toFixed(2) : "");
+    setNewItemHours(line.laborNorm != null && line.laborNorm > 0 ? String(line.laborNorm) : "");
+    setNewItemKnr(line.knrCode);
+  };
+
+  const handleNormSelect = (picked: KnrSelectedItem) => {
+    setNewItemName(picked.name);
+    if (picked.unit) setNewItemUnit(picked.unit as UnitType);
+    if (picked.laborNormRbh != null && picked.laborNormRbh > 0 && (newItemType === "labor" || !newItemPrice)) {
+      setNewItemType("labor");
+      setNewItemHours(String(picked.laborNormRbh));
+      setNewItemKnr(picked.knrRef);
+    }
+  };
+
   const handleCatalogItemSelect = (option: AutocompleteOption) => {
     const metadata = option.metadata;
     if (!metadata) return;
-    setNewItemName(option.label);
-    setNewItemUnit(metadata.unit as UnitType);
-    
-    // Set price based on type
-    const price = Number(newItemType === "material" ? metadata.materialPrice : metadata.laborPrice) || 0;
-    setNewItemPrice(price.toFixed(2));
+    const lines = linesFromCatalogPick({
+      name: option.label,
+      unit: String(metadata.unit || "szt"),
+      materialPrice: Number(metadata.materialPrice) || 0,
+      laborPrice: Number(metadata.laborPrice) || 0,
+      hours: metadata.laborNorm != null ? Number(metadata.laborNorm) : null,
+      knrCode: metadata.knrCode != null ? String(metadata.knrCode) : null,
+    });
+    if (editingIndex === null && lines.length > 1) {
+      setItems([
+        ...items,
+        ...lines.map((line, index) => ({
+          name: line.name,
+          unit: line.unit as UnitType,
+          type: line.type,
+          price: line.price,
+          quantity: line.quantity,
+          laborNorm: line.laborNorm,
+          knrCode: line.knrCode,
+          sort_order: items.length + index,
+        })),
+      ]);
+      resetItemDraft();
+      setShowItemForm(false);
+      toast({ title: "Dodano", description: "Materiał i robocizna weszły jako dwie pozycje" });
+      return;
+    }
+    const line = lines.find((entry) => entry.type === newItemType) ?? lines[0];
+    fillDraft(line);
   };
 
   const handleStartEdit = (index: number) => {
@@ -131,6 +191,8 @@ export function AssemblyModal({ isOpen, onClose, mode, assembly, categories = []
     setNewItemType(item.type);
     setNewItemPrice(item.price.toString());
     setNewItemQuantity(item.quantity.toString());
+    setNewItemHours(item.laborNorm != null && item.laborNorm > 0 ? String(item.laborNorm) : "");
+    setNewItemKnr(item.knrCode ?? null);
     setShowItemForm(true);
   };
 
@@ -146,6 +208,7 @@ export function AssemblyModal({ isOpen, onClose, mode, assembly, categories = []
 
     const price = parseFloat(newItemPrice) || 0;
     const quantity = parseFloat(newItemQuantity) || 1;
+    const hours = newItemType === "labor" && newItemHours.trim() !== "" ? parseFloat(newItemHours) : null;
 
     if (price < 0) {
       toast({
@@ -165,12 +228,19 @@ export function AssemblyModal({ isOpen, onClose, mode, assembly, categories = []
       return;
     }
 
+    if (hours != null && (Number.isNaN(hours) || hours < 0)) {
+      toast({ title: "Błąd", description: "Godziny nie mogą być ujemne", variant: "destructive" });
+      return;
+    }
+
     const itemData: AssemblyItemInput = {
       name: newItemName.trim(),
       unit: newItemUnit,
       type: newItemType,
       price,
       quantity,
+      laborNorm: hours != null && hours > 0 ? hours : null,
+      knrCode: hours != null && hours > 0 ? newItemKnr : null,
       sort_order: editingIndex !== null ? items[editingIndex].sort_order : items.length,
     };
 
@@ -193,17 +263,13 @@ export function AssemblyModal({ isOpen, onClose, mode, assembly, categories = []
     }
     
     // Reset form
-    setNewItemName("");
-    setNewItemPrice("");
-    setNewItemQuantity("1");
+    resetItemDraft();
     setShowItemForm(false);
     setEditingIndex(null);
   };
 
   const handleCancelEdit = () => {
-    setNewItemName("");
-    setNewItemPrice("");
-    setNewItemQuantity("1");
+    resetItemDraft();
     setShowItemForm(false);
     setEditingIndex(null);
   };
@@ -254,6 +320,8 @@ export function AssemblyModal({ isOpen, onClose, mode, assembly, categories = []
             type: item.type,
             price: item.price,
             quantity: item.quantity,
+            laborNorm: item.laborNorm ?? null,
+            knrCode: item.knrCode ?? null,
             sort_order: index,
           })),
         });
@@ -271,6 +339,8 @@ export function AssemblyModal({ isOpen, onClose, mode, assembly, categories = []
             type: item.type,
             price: item.price,
             quantity: item.quantity,
+            laborNorm: item.laborNorm ?? null,
+            knrCode: item.knrCode ?? null,
             sort_order: index,
           })),
         });
@@ -356,18 +426,16 @@ export function AssemblyModal({ isOpen, onClose, mode, assembly, categories = []
             newItemUnit={newItemUnit} setNewItemUnit={setNewItemUnit}
             newItemPrice={newItemPrice} setNewItemPrice={setNewItemPrice}
             newItemQuantity={newItemQuantity} setNewItemQuantity={setNewItemQuantity}
+            newItemHours={newItemHours} setNewItemHours={setNewItemHours}
             catalogOptions={catalogOptions}
             isLoadingCatalog={isLoadingCatalog}
             onShowAddForm={() => {
               setShowItemForm(true);
               setEditingIndex(null);
-              setNewItemName("");
-              setNewItemPrice("");
-              setNewItemQuantity("1");
-              setNewItemType("material");
-              setNewItemUnit("szt");
+              resetItemDraft();
             }}
             onCatalogItemSelect={handleCatalogItemSelect}
+            onNormSelect={handleNormSelect}
             onAddItem={handleAddItem}
             onCancelEdit={handleCancelEdit}
             onStartEdit={handleStartEdit}

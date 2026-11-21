@@ -14,6 +14,31 @@ import type {
 } from "@/lib/types/database";
 import { STARTER_KITS, resolveStarterLine } from "@/lib/assemblies/starter-kits";
 
+function storedAssemblyLine(
+  assemblyId: string,
+  item: CreateAssemblyItemInput,
+  index: number,
+  hourlyRate: number,
+) {
+  const hours = item.type === "labor" && item.laborNorm != null && item.laborNorm > 0
+    ? item.laborNorm
+    : null;
+  const price = hours != null && hourlyRate >= 1
+    ? Math.round(hours * hourlyRate * 100) / 100
+    : item.price;
+  return {
+    assembly_id: assemblyId,
+    name: item.name.trim(),
+    unit: item.unit,
+    type: item.type,
+    price,
+    quantity: item.quantity,
+    sort_order: item.sort_order ?? index,
+    labor_norm_rbh: hours,
+    knr_code: hours != null ? (item.knrCode ?? null) : null,
+  };
+}
+
 export interface CreateAssemblyItemInput {
   name: string;
   unit: UnitType;
@@ -21,6 +46,8 @@ export interface CreateAssemblyItemInput {
   price: number;
   quantity: number;
   sort_order?: number;
+  laborNorm?: number | null;
+  knrCode?: string | null;
 }
 
 export interface CreateAssemblyInput {
@@ -236,15 +263,16 @@ export async function createUserAssembly(input: CreateAssemblyInput) {
       return { error: `Błąd podczas tworzenia zestawu: ${assemblyError.message}` };
     }
 
-    const itemsToInsert = input.items.map((item, index) => ({
-      assembly_id: assembly.id,
-      name: item.name.trim(),
-      unit: item.unit,
-      type: item.type,
-      price: item.price,
-      quantity: item.quantity,
-      sort_order: item.sort_order ?? index,
-    }));
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("hourly_rate")
+      .eq("id", user.id)
+      .maybeSingle();
+    const hourlyRate = Number(profile?.hourly_rate) || 0;
+
+    const itemsToInsert = input.items.map((item, index) =>
+      storedAssemblyLine(assembly.id, item, index, hourlyRate),
+    );
 
     const { error: itemsError } = await supabase.from("user_assembly_items").insert(itemsToInsert);
     if (itemsError) {
@@ -295,15 +323,16 @@ export async function updateUserAssembly(assemblyId: string, input: UpdateAssemb
       const { error: deleteError } = await supabase.from("user_assembly_items").delete().eq("assembly_id", assemblyId);
       if (deleteError) return { error: "Błąd podczas usuwania starych elementów" };
 
-      const itemsToInsert = input.items.map((item, index) => ({
-        assembly_id: assemblyId,
-        name: item.name.trim(),
-        unit: item.unit,
-        type: item.type,
-        price: item.price,
-        quantity: item.quantity,
-        sort_order: item.sort_order ?? index,
-      }));
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("hourly_rate")
+        .eq("id", user.id)
+        .maybeSingle();
+      const hourlyRate = Number(profile?.hourly_rate) || 0;
+
+      const itemsToInsert = input.items.map((item, index) =>
+        storedAssemblyLine(assemblyId, item, index, hourlyRate),
+      );
 
       const { error: insertError } = await supabase.from("user_assembly_items").insert(itemsToInsert);
       if (insertError) return { error: `Błąd podczas dodawania nowych elementów: ${insertError.message}` };

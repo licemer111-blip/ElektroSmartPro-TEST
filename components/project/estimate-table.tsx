@@ -138,7 +138,7 @@ export function EstimateTable({
     projectId, items, adjustmentPercentage,
     showLaborHoursInPdf, showKnrInPdf, materialsOwnedByCustomer, isFinal, isReadOnly, regionModifier,
     compactViewControlled, onCompactViewChange, onSelectedIdsChange,
-    onColorModeChange, colorMode,
+    onColorModeChange, colorMode, projectLaborRate,
   });
 
   const [fallbackLoadingIds, setFallbackLoadingIds] = useState<Set<string>>(new Set());

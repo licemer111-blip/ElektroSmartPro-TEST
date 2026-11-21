@@ -29,6 +29,7 @@ export interface UseEstimateActionsParams {
   localItems: ProjectItem[];
   setLocalItems: React.Dispatch<React.SetStateAction<ProjectItem[]>>;
   isFinal: boolean;
+  projectLaborRate?: number;
 }
 
 export function useEstimateActions({
@@ -36,6 +37,7 @@ export function useEstimateActions({
   localItems,
   setLocalItems,
   isFinal,
+  projectLaborRate = 0,
 }: UseEstimateActionsParams) {
   const { toast } = useToast();
   const router = useRouter();
@@ -76,6 +78,7 @@ export function useEstimateActions({
       unit: item.unit,
       materialPrice: String(round2(rawMat)),
       laborPrice: String(round2(rawLab)),
+      laborHours: item.labor_norm != null && item.labor_norm > 0 ? String(item.labor_norm) : "",
       section: item.section || "",
       isAssemblyParent: li.some((i) => i.parent_assembly_id === item.id),
     });
@@ -115,8 +118,28 @@ export function useEstimateActions({
     }
     const sectionValue = editingState.section.trim() || null;
     const unitValue = editingState.unit.trim() as UnitType;
-    // Detect manual price entry: if user changed price to non-zero value
-    const hasNonZeroPrice = materialPrice > 0 || laborPrice > 0;
+    const original = localItemsRef.current.find((row) => row.id === editingState.itemId);
+    const origLabor = Math.round(((original?.final_labor_price ?? original?.labor_price ?? 0) as number) * 100) / 100;
+    const origHours = original?.labor_norm != null && original.labor_norm > 0 ? original.labor_norm : null;
+    const parsedHours = editingState.laborHours.trim() === "" ? null : parseFloat(editingState.laborHours);
+    const hours = parsedHours != null && !Number.isNaN(parsedHours) && parsedHours > 0 ? parsedHours : null;
+    const hoursChanged = hours == null
+      ? origHours != null
+      : origHours == null || Math.abs(hours - origHours) > 0.0001;
+    const laborChanged = Math.abs(laborPrice - origLabor) > 0.009;
+    let nextLabor = laborPrice;
+    const laborMeta: {
+      labor_norm?: number | null;
+      confidence_level?: "manual" | null;
+    } = {};
+    if (!editingState.isAssemblyParent && hoursChanged && hours != null) {
+      if (projectLaborRate >= 1) nextLabor = Math.round(hours * projectLaborRate * 100) / 100;
+      laborMeta.labor_norm = hours;
+      laborMeta.confidence_level = null;
+    } else if (!editingState.isAssemblyParent && (hoursChanged || laborChanged)) {
+      laborMeta.labor_norm = null;
+      if (nextLabor > 0 || materialPrice > 0) laborMeta.confidence_level = "manual";
+    }
     const updates = editingState.isAssemblyParent
       ? { name: editingState.name.trim(), quantity, unit: unitValue, section: sectionValue }
       : {
@@ -124,9 +147,9 @@ export function useEstimateActions({
           quantity,
           unit: unitValue,
           final_material_price: materialPrice,
-          final_labor_price: laborPrice,
+          final_labor_price: nextLabor,
           section: sectionValue,
-          ...(hasNonZeroPrice ? { confidence_level: "manual" as const, labor_norm: null } : {}),
+          ...laborMeta,
         };
     const sli = setLocalItemsRef.current;
     const snapshot = [...localItemsRef.current];
@@ -179,7 +202,7 @@ export function useEstimateActions({
           .catch(() => { /* silent — learning is non-critical */ });
       }
     }
-  }, [projectId, toast]);
+  }, [projectId, projectLaborRate, toast]);
 
   // ─── Mobile save ──────────────────────────────────────────────────────────
   const handleMobileSaveEdit = useCallback((

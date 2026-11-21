@@ -61,6 +61,7 @@ export interface EditingState {
   unit: string;
   materialPrice: string;
   laborPrice: string;
+  laborHours: string;
   section: string;
   isAssemblyParent?: boolean;
 }
@@ -892,6 +893,22 @@ export const EstimateRow = React.memo(function EstimateRow({
                             onChange={(e) => onEditingChange({ ...editingState!, laborPrice: e.target.value })}
                             className="h-9 text-sm text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
                             placeholder="0.00" onKeyDown={handleKeyDown}
+                          />
+                          <Input type="number" step="0.01" min="0"
+                            value={editingState!.laborHours}
+                            onChange={(e) => {
+                              const laborHours = e.target.value;
+                              const hours = parseFloat(laborHours);
+                              const next = { ...editingState!, laborHours };
+                              if (!Number.isNaN(hours) && hours > 0 && projectLaborRate >= 1) {
+                                next.laborPrice = String(Math.round(hours * projectLaborRate * 100) / 100);
+                              }
+                              onEditingChange(next);
+                            }}
+                            className="h-7 text-[11px] text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                            placeholder="rbh/jm"
+                            title="Godziny na jednostkę. Kwota robocizny = godziny × stawka projektu."
+                            onKeyDown={handleKeyDown}
                           />
                           {(() => {
                             const u = parseFloat(editingState!.laborPrice) || 0;

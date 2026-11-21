@@ -119,6 +119,8 @@ export const catalogItemSchema = z.object({
   category_id: z.string().optional(),
   visibility: z.enum(["personal", "team"]).optional(),
   team_id: uuidSchema.optional(),
+  labor_norm_rbh: z.number().min(0).max(500).nullable().optional(),
+  knr_code: z.string().max(80).nullable().optional(),
 });
 
 export const catalogItemUpdateSchema = z.object({
@@ -127,6 +129,8 @@ export const catalogItemUpdateSchema = z.object({
   base_labor_price: priceSchema,
   base_material_price: priceSchema,
   category_id: z.string().optional(),
+  labor_norm_rbh: z.number().min(0).max(500).nullable().optional(),
+  knr_code: z.string().max(80).nullable().optional(),
 });
 
 // ============================================
@@ -139,6 +143,8 @@ export const assemblyItemSchema = z.object({
   type: z.enum(["material", "labor"]),
   price: priceSchema,
   quantity: quantitySchema,
+  laborNorm: z.number().min(0).max(500).nullable().optional(),
+  knrCode: z.string().max(80).nullable().optional(),
 });
 
 export const createAssemblySchema = z.object({

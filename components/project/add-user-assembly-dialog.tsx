@@ -27,6 +27,7 @@ import { useModalStore } from "@/hooks/use-modal-store";
 import { cn } from "@/lib/utils";
 import { useTabSyncOptional } from "./tab-sync-context";
 import { notifyDataChanged } from "@/hooks/use-synced-action";
+import { assemblyLineQuantity, isCableUnit } from "@/lib/assemblies/line-quantity";
 
 interface AddUserAssemblyDialogProps {
   projectId: string;
@@ -185,9 +186,8 @@ export function AddUserAssemblyDialog({ projectId, isPro = false, currentAssembl
   const calculateAssemblyTotal = (assembly: UserAssemblyWithItems, qty: number, cable?: number | null) => {
     if (!assembly.user_assembly_items) return 0;
     return assembly.user_assembly_items.reduce((sum, item) => {
-      const isCable = item.unit === "mb" || item.unit === "m";
-      const baseQty = (isCable && cable && cable > 0) ? cable * item.quantity : item.quantity;
-      return sum + item.price * baseQty * qty;
+      const finalQty = assemblyLineQuantity(item.quantity, item.unit, qty, cable);
+      return sum + item.price * finalQty;
     }, 0);
   };
 
@@ -315,7 +315,7 @@ export function AddUserAssemblyDialog({ projectId, isPro = false, currentAssembl
 
                     {/* Cable Length Input — shown when assembly has cable items */}
                     {selectedAssembly.user_assembly_items?.some(
-                      (item) => item.unit === "mb" || item.unit === "m"
+                      (item) => isCableUnit(item.unit)
                     ) && (
                       <div className="flex items-center gap-4 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800">
                         <Cable className="w-5 h-5 text-amber-600 flex-shrink-0" />
@@ -324,7 +324,7 @@ export function AddUserAssemblyDialog({ projectId, isPro = false, currentAssembl
                             Długość trasy kablowej (mb)
                           </Label>
                           <p className="text-xs text-amber-600 dark:text-amber-400 mt-0.5">
-                            Ilość metrów przewodu zostanie przeliczona automatycznie
+                            Wpisane metry zastąpią ilość w liniach mb. Liczba zestawów nadal je mnoży.
                           </p>
                         </div>
                         <Input
@@ -350,11 +350,8 @@ export function AddUserAssemblyDialog({ projectId, isPro = false, currentAssembl
                       <p className="text-sm font-medium mb-2">Zostanie dodane:</p>
                       <div className="space-y-1 text-sm text-muted-foreground max-h-40 overflow-y-auto">
                         {selectedAssembly.user_assembly_items?.map((item) => {
-                          const isCable = item.unit === "mb" || item.unit === "m";
-                          const baseQty = (isCable && cableLength && cableLength > 0)
-                            ? cableLength * item.quantity
-                            : item.quantity;
-                          const finalQty = quantity * baseQty;
+                          const isCable = isCableUnit(item.unit);
+                          const finalQty = assemblyLineQuantity(item.quantity, item.unit, quantity, cableLength);
                           return (
                             <div key={item.id} className="flex justify-between">
                               <span>
@@ -376,6 +373,12 @@ export function AddUserAssemblyDialog({ projectId, isPro = false, currentAssembl
                         })}
                       </div>
                     </div>
+
+                    {selectedAssembly.user_assembly_items?.some((item) => item.type === "labor" && (item.labor_norm_rbh ?? 0) > 0) && (
+                      <p className="text-xs text-muted-foreground">
+                        Robocizna z godzinami w kosztorysie liczy się stawką tego projektu. Województwo dolicza ekran.
+                      </p>
+                    )}
 
                     {/* Total */}
                     <div className="flex justify-between items-center pt-4 border-t">

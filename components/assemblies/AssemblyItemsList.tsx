@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BlurredPrice } from "@/components/ui/blurred-price";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Plus, Package, Wrench, Edit, Trash2 } from "lucide-react";
 import { AutocompleteInput, type AutocompleteOption } from "@/components/ui/autocomplete-input";
+import { AutocompleteItemInput, type KnrSelectedItem } from "@/components/catalog/autocomplete-item-input";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -25,6 +27,8 @@ interface AssemblyItemInput {
   price: number;
   quantity: number;
   sort_order?: number;
+  laborNorm?: number | null;
+  knrCode?: string | null;
 }
 
 interface ItemEditFormProps {
@@ -33,8 +37,10 @@ interface ItemEditFormProps {
   newItemUnit: UnitType; setNewItemUnit: (v: UnitType) => void;
   newItemPrice: string; setNewItemPrice: (v: string) => void;
   newItemQuantity: string; setNewItemQuantity: (v: string) => void;
+  newItemHours: string; setNewItemHours: (v: string) => void;
   catalogOptions: AutocompleteOption[]; isLoadingCatalog: boolean;
   handleCatalogItemSelect: (option: AutocompleteOption) => void;
+  handleNormSelect: (item: KnrSelectedItem) => void;
   handleAddItem: () => void; handleCancelEdit: () => void;
   isEditing: boolean;
 }
@@ -45,27 +51,40 @@ function ItemEditForm({
   newItemUnit, setNewItemUnit,
   newItemPrice, setNewItemPrice,
   newItemQuantity, setNewItemQuantity,
+  newItemHours, setNewItemHours,
   catalogOptions, isLoadingCatalog,
-  handleCatalogItemSelect, handleAddItem, handleCancelEdit,
+  handleCatalogItemSelect, handleNormSelect, handleAddItem, handleCancelEdit,
   isEditing,
 }: ItemEditFormProps) {
+  const [catalogQuery, setCatalogQuery] = useState("");
   return (
     <Card className="bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
       <CardContent className="pt-4 space-y-3">
         <div className="grid grid-cols-2 gap-3">
           <div className="col-span-2">
             <Label htmlFor="newItemName">Nazwa pozycji</Label>
-            <AutocompleteInput
+            <AutocompleteItemInput
               id="newItemName"
               value={newItemName}
-              onChange={(e) => setNewItemName(e.target.value)}
+              onChange={setNewItemName}
+              onItemSelect={handleNormSelect}
+              placeholder="np. Gniazdo podtynkowe"
+              className="mt-1"
+            />
+            <AutocompleteInput
+              id="newItemCatalog"
+              value={catalogQuery}
+              onChange={(e) => setCatalogQuery(e.target.value)}
               options={catalogOptions}
-              onSelect={handleCatalogItemSelect}
-              placeholder="np. Puszka podtynkowa"
-              emptyText="Nie znaleziono w katalogu"
+              onSelect={(option) => {
+                setCatalogQuery("");
+                handleCatalogItemSelect(option);
+              }}
+              placeholder="Wstaw z cennika — ceny i godziny"
+              emptyText="Nie znaleziono w cenniku"
               minChars={2}
               maxResults={10}
-              className="mt-1"
+              className="mt-2"
               disabled={isLoadingCatalog}
             />
           </div>
@@ -92,8 +111,29 @@ function ItemEditForm({
               </SelectContent>
             </Select>
           </div>
+          {newItemType === "labor" && (
+            <div className="col-span-2">
+              <Label htmlFor="newItemHours">Godziny (rbh / j.m.)</Label>
+              <Input
+                id="newItemHours"
+                name="newItemHours"
+                type="text"
+                inputMode="decimal"
+                value={newItemHours}
+                onChange={(e) => {
+                  const value = e.target.value.replace(",", ".");
+                  if (value === "" || /^\d*\.?\d*$/.test(value)) setNewItemHours(value);
+                }}
+                placeholder="np. 0.68 — puste zostawia wpisaną kwotę"
+                className="mt-1"
+              />
+              <p className="text-xs text-slate-500 mt-1">
+                Z godzinami robocizna w kosztorysie to godziny razy stawka. Bez godzin zostaje wpisana kwota, bez województwa.
+              </p>
+            </div>
+          )}
           <div>
-            <Label htmlFor="newItemPrice">Cena (PLN)</Label>
+            <Label htmlFor="newItemPrice">{newItemType === "labor" ? "Kwota, gdy nie ma godzin (PLN)" : "Cena (PLN)"}</Label>
             <Input
               id="newItemPrice"
               name="newItemPrice"
@@ -154,10 +194,12 @@ interface AssemblyItemsListProps {
   newItemUnit: UnitType; setNewItemUnit: (v: UnitType) => void;
   newItemPrice: string; setNewItemPrice: (v: string) => void;
   newItemQuantity: string; setNewItemQuantity: (v: string) => void;
+  newItemHours: string; setNewItemHours: (v: string) => void;
   catalogOptions: AutocompleteOption[];
   isLoadingCatalog: boolean;
   onShowAddForm: () => void;
   onCatalogItemSelect: (option: AutocompleteOption) => void;
+  onNormSelect: (item: KnrSelectedItem) => void;
   onAddItem: () => void;
   onCancelEdit: () => void;
   onStartEdit: (index: number) => void;
@@ -167,10 +209,11 @@ interface AssemblyItemsListProps {
 export function AssemblyItemsList({
   items, isPro, showItemForm, editingIndex,
   newItemName, setNewItemName, newItemType, setNewItemType,
-  newItemUnit, setNewItemUnit, newItemPrice, setNewItemPrice,
+  newItemUnit, setNewItemUnit,   newItemPrice, setNewItemPrice,
   newItemQuantity, setNewItemQuantity,
+  newItemHours, setNewItemHours,
   catalogOptions, isLoadingCatalog,
-  onShowAddForm, onCatalogItemSelect, onAddItem, onCancelEdit,
+  onShowAddForm, onCatalogItemSelect, onNormSelect, onAddItem, onCancelEdit,
   onStartEdit, onRemoveItem,
 }: AssemblyItemsListProps) {
   return (
@@ -197,8 +240,10 @@ export function AssemblyItemsList({
           newItemUnit={newItemUnit} setNewItemUnit={setNewItemUnit}
           newItemPrice={newItemPrice} setNewItemPrice={setNewItemPrice}
           newItemQuantity={newItemQuantity} setNewItemQuantity={setNewItemQuantity}
+          newItemHours={newItemHours} setNewItemHours={setNewItemHours}
           catalogOptions={catalogOptions} isLoadingCatalog={isLoadingCatalog}
           handleCatalogItemSelect={onCatalogItemSelect}
+          handleNormSelect={onNormSelect}
           handleAddItem={onAddItem} handleCancelEdit={onCancelEdit}
           isEditing={false}
         />
@@ -230,7 +275,10 @@ export function AssemblyItemsList({
                         </Badge>
                       </div>
                       <div className="text-sm text-slate-600 dark:text-slate-400">
-                        {item.quantity} {item.unit} × <BlurredPrice value={item.price} isPro={isPro} showBadge={!isPro} className="inline" /> ={" "}
+                        {item.quantity} {item.unit}
+                        {item.type === "labor" && item.laborNorm ? ` · ${item.laborNorm} rbh/${item.unit}` : ""}
+                        {" × "}
+                        <BlurredPrice value={item.price} isPro={isPro} showBadge={!isPro} className="inline" /> ={" "}
                         <span className="font-medium text-slate-900 dark:text-slate-100">
                           <BlurredPrice value={item.quantity * item.price} isPro={isPro} showBadge={!isPro} className="font-medium" />
                         </span>
@@ -268,8 +316,10 @@ export function AssemblyItemsList({
                   newItemUnit={newItemUnit} setNewItemUnit={setNewItemUnit}
                   newItemPrice={newItemPrice} setNewItemPrice={setNewItemPrice}
                   newItemQuantity={newItemQuantity} setNewItemQuantity={setNewItemQuantity}
+                  newItemHours={newItemHours} setNewItemHours={setNewItemHours}
                   catalogOptions={catalogOptions} isLoadingCatalog={isLoadingCatalog}
                   handleCatalogItemSelect={onCatalogItemSelect}
+                  handleNormSelect={onNormSelect}
                   handleAddItem={onAddItem} handleCancelEdit={onCancelEdit}
                   isEditing={true}
                 />

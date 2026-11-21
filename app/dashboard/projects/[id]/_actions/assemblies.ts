@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { tryAuth } from "@/lib/auth";
 import { logger } from "@/lib/logger";
 import { getUserAssemblyById } from "@/app/dashboard/assemblies/actions";
+import { assemblyLineQuantity, assemblyPricesForEstimate } from "@/lib/assemblies/line-quantity";
 import { canUserEditProject, revalidateProject } from "./utils";
 
 // Add custom child item to an existing assembly (zestaw)
@@ -109,11 +110,21 @@ export async function addUserAssemblyToProject(
 
     const { data: project } = await supabase
       .from("projects")
-      .select("id, status")
+      .select("id, status, default_hourly_rate")
       .eq("id", projectId)
       .single();
 
     if (!project) return { success: false, error: "Projekt nie został znaleziony" };
+
+    let hourlyRate = Number(project.default_hourly_rate) || 0;
+    if (hourlyRate < 1) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("hourly_rate")
+        .eq("id", user.id)
+        .maybeSingle();
+      hourlyRate = Number(profile?.hourly_rate) || 0;
+    }
 
     const assembly = await getUserAssemblyById(assemblyId);
 
@@ -158,18 +169,17 @@ export async function addUserAssemblyToProject(
     }
 
     const projectItems = assembly.user_assembly_items.map((item) => {
-      const isCableItem = item.unit === "mb" || item.unit === "m";
-      const baseQuantity = (isCableItem && cableLength && cableLength > 0)
-        ? cableLength * item.quantity
-        : item.quantity;
-      const finalQuantity = quantity * baseQuantity;
-
-      const finalMaterialPrice = item.type === "material" ? item.price : 0;
-      // Hours × the electrician's rate, without the voivodeship. The estimate screen adds the region once.
-      const finalLaborPrice = item.type === "labor" ? item.price : 0;
+      const finalQuantity = assemblyLineQuantity(item.quantity, item.unit, quantity, cableLength);
+      const priced = assemblyPricesForEstimate({
+        type: item.type,
+        price: item.price,
+        hours: item.labor_norm_rbh ?? null,
+        hourlyRate,
+        knrCode: item.knr_code ?? null,
+      });
 
       const calculationInfo = quantity > 1
-        ? ` (${item.quantity} ${item.unit} × ${quantity} = ${finalQuantity} ${item.unit})`
+        ? ` (${finalQuantity} ${item.unit})`
         : "";
 
       return {
@@ -179,12 +189,13 @@ export async function addUserAssemblyToProject(
         description: `Z zestawu: ${assembly.name}${calculationInfo}`,
         unit: item.unit,
         quantity: finalQuantity,
-        material_price: finalMaterialPrice,
-        labor_price: finalLaborPrice,
-        final_material_price: finalMaterialPrice,
-        final_labor_price: finalLaborPrice,
-        labor_norm: item.labor_norm_rbh ?? null,
-        knr_code: item.knr_code ?? null,
+        material_price: priced.material,
+        labor_price: priced.labor,
+        final_material_price: priced.material,
+        final_labor_price: priced.labor,
+        labor_norm: priced.hours,
+        knr_code: priced.knrCode,
+        ...(priced.manual ? { confidence_level: "manual" as const } : {}),
         is_custom: false,
         is_assembly_child: true,
         parent_assembly_id: headerItem.id,

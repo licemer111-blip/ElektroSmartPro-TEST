@@ -63,6 +63,19 @@ async function syncOpenEstimateMaterialPrice(
   return updated;
 }
 
+async function laborZl(
+  supabase: NonNullable<Awaited<ReturnType<typeof tryAuth>>["supabase"]>,
+  userId: string,
+  price: number,
+  hours: number | null | undefined,
+): Promise<number> {
+  if (price > 0 || hours == null || hours <= 0) return price;
+  const { data } = await supabase.from("profiles").select("hourly_rate").eq("id", userId).maybeSingle();
+  const rate = Number(data?.hourly_rate) || 0;
+  if (rate < 1) return price;
+  return Math.round(hours * rate * 100) / 100;
+}
+
 export async function createCatalogItem(formData: {
   name: string;
   unit: string;
@@ -71,6 +84,8 @@ export async function createCatalogItem(formData: {
   category_id?: string;
   visibility?: "personal" | "team";
   team_id?: string;
+  labor_norm_rbh?: number | null;
+  knr_code?: string | null;
 }) {
   const { error: validationError } = validate(catalogItemSchema, formData);
   if (validationError) throw new Error(validationError);
@@ -78,14 +93,21 @@ export async function createCatalogItem(formData: {
   const { user, supabase } = await tryAuth();
   if (!user || !supabase) throw new Error("Unauthorized");
 
+  const hours = formData.labor_norm_rbh != null && formData.labor_norm_rbh > 0
+    ? formData.labor_norm_rbh
+    : null;
+  const laborPrice = await laborZl(supabase, user.id, formData.base_labor_price, hours);
+
   const insertData: Record<string, string | number | null> = {
     user_id: user.id,
     name: formData.name,
     unit: formData.unit,
-    base_labor_price: formData.base_labor_price,
+    base_labor_price: laborPrice,
     base_material_price: formData.base_material_price,
     category_id: formData.category_id || null,
     visibility: formData.visibility || "personal",
+    labor_norm_rbh: hours,
+    knr_code: formData.knr_code || null,
   };
 
   if (formData.visibility === "team" && formData.team_id) {
@@ -110,6 +132,8 @@ export async function updateCatalogItem(
     base_labor_price: number;
     base_material_price: number;
     category_id?: string;
+    labor_norm_rbh?: number | null;
+    knr_code?: string | null;
   }
 ) {
   const { user, supabase } = await tryAuth();
@@ -127,15 +151,22 @@ export async function updateCatalogItem(
   }
 
   // 🔒 COPY-ON-EDIT PROTECTION for GLOBAL items
+  const hours = formData.labor_norm_rbh != null && formData.labor_norm_rbh > 0
+    ? formData.labor_norm_rbh
+    : null;
+  const laborPrice = await laborZl(supabase, user.id, formData.base_labor_price, hours);
+
   if (existingItem.user_id === null) {
     const copyName = formData.name.includes("(Moja)") ? formData.name : `${formData.name} (Moja)`;
     const { error: createError } = await supabase.from("catalog_items").insert({
       user_id: user.id,
       name: copyName,
       unit: formData.unit,
-      base_labor_price: formData.base_labor_price,
+      base_labor_price: laborPrice,
       base_material_price: formData.base_material_price,
       category_id: formData.category_id || null,
+      labor_norm_rbh: hours,
+      knr_code: formData.knr_code || null,
     });
     if (createError) {
       logger.error("Error creating user copy of global item", { itemId: id }, createError);
@@ -150,9 +181,11 @@ export async function updateCatalogItem(
     .update({
       name: formData.name,
       unit: formData.unit,
-      base_labor_price: formData.base_labor_price,
+      base_labor_price: laborPrice,
       base_material_price: formData.base_material_price,
       category_id: formData.category_id || null,
+      labor_norm_rbh: hours,
+      knr_code: formData.knr_code || null,
     })
     .eq("id", id)
     .eq("user_id", user.id);

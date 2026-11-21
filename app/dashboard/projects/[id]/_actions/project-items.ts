@@ -90,16 +90,18 @@ export async function addCatalogItemToProject(
     knr_code: catalogItem.knr_code,
   });
   // Own rows keep the electrician's zł. Shared rows: hours × rate, material empty.
+  const ownHours = Number(catalogItem.labor_norm_rbh) || 0;
+  const ownLabor = Number(catalogItem.base_labor_price) || 0;
   const finalLaborPrice = isOwnRow
-    ? catalogItem.base_labor_price
+    ? (ownLabor > 0 ? ownLabor : laborFromHours(ownHours, hourlyRate))
     : laborFromHours(resolved.hours, hourlyRate);
   const finalMaterialPrice = isOwnRow ? catalogItem.base_material_price : 0;
   const knrCode = isOwnRow
     ? (catalogItem.knr_code ?? null)
     : resolved.code;
-  const laborNorm = !isOwnRow && resolved.hours > 0
-    ? resolved.hours
-    : (isOwnRow ? catalogItem.labor_norm_rbh ?? null : null);
+  const laborNorm = isOwnRow
+    ? (ownHours > 0 ? ownHours : null)
+    : (resolved.hours > 0 ? resolved.hours : null);
 
   const { data: maxSortData } = await supabase
     .from("project_items")
@@ -211,7 +213,11 @@ async function expandAssembly(
     const item = Array.isArray(child.catalog_items) ? child.catalog_items[0] : child.catalog_items;
     const isOwnRow = item.user_id != null;
     const resolved = resolveCatalogHours(item);
-    const hours = !isOwnRow && resolved.hours > 0 ? resolved.hours : null;
+    const ownHours = Number(item.labor_norm_rbh) || 0;
+    const ownLabor = Number(item.base_labor_price) || 0;
+    const hours = isOwnRow
+      ? (ownHours > 0 ? ownHours : null)
+      : (resolved.hours > 0 ? resolved.hours : null);
     return {
       project_id: projectId,
       catalog_item_id: item.id,
@@ -220,7 +226,9 @@ async function expandAssembly(
       unit: item.unit,
       quantity: child.quantity,
       final_material_price: isOwnRow ? item.base_material_price : 0,
-      final_labor_price: isOwnRow ? item.base_labor_price : laborFromHours(resolved.hours, hourlyRate),
+      final_labor_price: isOwnRow
+        ? (ownLabor > 0 ? ownLabor : laborFromHours(ownHours, hourlyRate))
+        : laborFromHours(resolved.hours, hourlyRate),
       price_min: isOwnRow ? item.price_min : null,
       price_max: isOwnRow ? item.price_max : null,
       labor_norm: hours,

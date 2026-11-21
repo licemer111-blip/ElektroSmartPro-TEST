@@ -24,6 +24,7 @@ interface UseEstimateTableParams {
   onSelectedIdsChange?: (ids: Set<string>) => void;
   onColorModeChange?: (v: boolean) => void;
   colorMode: boolean;
+  projectLaborRate?: number;
 }
 
 export function useEstimateTable({
@@ -39,6 +40,7 @@ export function useEstimateTable({
   onCompactViewChange,
   onSelectedIdsChange,
   colorMode: _colorMode,
+  projectLaborRate = 0,
 }: UseEstimateTableParams) {
 
   // ─── Interaction (filters, search, DnD, selection) ────────────────────────
@@ -94,6 +96,7 @@ export function useEstimateTable({
     localItems: data.localItems,
     setLocalItems: data.setLocalItems,
     isFinal,
+    projectLaborRate,
   });
 
   const handleMobileSaveEdit = (

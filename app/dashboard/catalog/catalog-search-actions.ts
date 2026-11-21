@@ -27,6 +27,8 @@ export interface CatalogItem {
   last_verified_at?: string | null;
   isAiSuggestion?: boolean;
   knr_ref?: string;
+  labor_norm_rbh?: number | null;
+  knr_code?: string | null;
 }
 
 export interface CatalogItemsResult {
@@ -99,7 +101,7 @@ export async function getCatalogItems(params: {
     .select(
       `
       id, name, unit, base_labor_price, base_material_price,
-      category_id, user_id, team_id, visibility, knr_code,
+      category_id, user_id, team_id, visibility, knr_code, labor_norm_rbh,
       price_min, price_max, price_trend, confidence_level,
       confidence_reason, market_comment, market_comment_type, last_verified_at,
       catalog_categories ( name )
@@ -261,6 +263,8 @@ export async function getCatalogItems(params: {
           : (item.catalog_categories as { name: string } | null)?.name) || "Bez kategorii",
       market_comment: item.market_comment,
       knr_ref: (item as Record<string, unknown>).knr_code as string | undefined ?? undefined,
+      knr_code: ((item as Record<string, unknown>).knr_code as string | null) ?? null,
+      labor_norm_rbh: ((item as Record<string, unknown>).labor_norm_rbh as number | null) ?? null,
     }));
 
   const total = count || allItems.length;

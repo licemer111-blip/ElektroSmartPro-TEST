@@ -24,6 +24,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { createCatalogItem, updateCatalogItem } from "./actions";
+import { createClient } from "@/utils/supabase/client";
 import type { CatalogItem } from "./actions";
 import { AutocompleteItemInput } from "@/components/catalog/autocomplete-item-input";
 import type { KnrSelectedItem } from "@/components/catalog/autocomplete-item-input";
@@ -60,6 +61,8 @@ export function ItemDialog({
     base_material_price: string | number;
     category_id: string;
     visibility: "personal" | "team";
+    labor_norm_rbh: string | number;
+    knr_code: string;
   }>({
     name: item?.name || "",
     unit: item?.unit || "szt",
@@ -67,6 +70,8 @@ export function ItemDialog({
     base_material_price: roundPrice(item?.base_material_price),
     category_id: item?.category_id || "",
     visibility: (item?.visibility as "personal" | "team") || "personal",
+    labor_norm_rbh: item?.labor_norm_rbh ?? "",
+    knr_code: item?.knr_code || item?.knr_ref || "",
   });
 
   // Update form when item changes
@@ -79,6 +84,8 @@ export function ItemDialog({
         base_material_price: roundPrice(item.base_material_price),
         category_id: item.category_id || "",
         visibility: (item.visibility as "personal" | "team") || "personal",
+        labor_norm_rbh: item.labor_norm_rbh ?? "",
+        knr_code: item.knr_code || item.knr_ref || "",
       });
     } else {
       setFormData({
@@ -88,9 +95,34 @@ export function ItemDialog({
         base_material_price: "",
         category_id: "",
         visibility: "personal",
+        labor_norm_rbh: "",
+        knr_code: "",
       });
     }
   }, [item]); // Re-run when item changes
+
+  useEffect(() => {
+    if (!open || !item?.id) return;
+    let cancelled = false;
+    const supabase = createClient();
+    supabase
+      .from("catalog_items")
+      .select("labor_norm_rbh, knr_code")
+      .eq("id", item.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (cancelled || !data) return;
+        setFormData((prev) => ({
+          ...prev,
+          labor_norm_rbh: data.labor_norm_rbh ?? "",
+          knr_code: data.knr_code ?? "",
+        }));
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [open, item?.id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,6 +149,8 @@ export function ItemDialog({
         category_id: string;
         visibility?: "personal" | "team";
         team_id?: string;
+        labor_norm_rbh?: number | null;
+        knr_code?: string | null;
       } = {
         name: formData.name,
         unit: formData.unit,
@@ -128,6 +162,10 @@ export function ItemDialog({
           : formData.base_material_price,
         category_id: formData.category_id,
         visibility: formData.visibility,
+        labor_norm_rbh: formData.labor_norm_rbh === ""
+          ? null
+          : Number(formData.labor_norm_rbh) || null,
+        knr_code: formData.knr_code.trim() || null,
       };
 
       // Add team_id if team visibility
@@ -197,14 +235,16 @@ export function ItemDialog({
                   setFormData({
                     ...formData,
                     name: selectedItem.name,
-                    unit: selectedItem.unit,
+                    unit: selectedItem.unit || formData.unit,
+                    labor_norm_rbh: selectedItem.laborNormRbh ?? "",
+                    knr_code: selectedItem.knrRef ?? "",
                   });
                 }}
                 placeholder="np. Gniazdo wtyczkowe 230V"
                 disabled={isSubmitting}
               />
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Zacznij pisać, aby zobaczyć podpowiedzi z Bazy KNR
+                Podpowiedź z normy ES wpisuje nazwę, jednostkę i godziny. Ceny materiału nie wymyśla.
               </p>
             </div>
 
@@ -253,6 +293,26 @@ export function ItemDialog({
                   <SelectItem value="godz">godz (godzina)</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="labor_hours">Godziny robocizny (rbh / j.m.)</Label>
+              <Input
+                id="labor_hours"
+                name="labor_hours"
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.labor_norm_rbh}
+                onChange={(e) => {
+                  setFormData({ ...formData, labor_norm_rbh: e.target.value });
+                }}
+                placeholder="np. 0.68"
+                onFocus={(e) => e.target.select()}
+              />
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Pusta cena robocizny policzy się tymi godzinami razy Twoja stawka. Województwo dolicza dopiero kosztorys.
+              </p>
             </div>
 
             {/* Labor Price */}
