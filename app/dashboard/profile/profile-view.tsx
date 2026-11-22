@@ -146,7 +146,6 @@ export function ProfileView({ data }: ProfileViewProps) {
         <Section title="Konto i pomoc">
           <Row href="/dashboard/settings" icon={<Settings className="w-4 h-4 text-slate-500" />} label="Ustawienia" desc="Dane firmy, region, stawka" />
           <Row href="/dashboard/settings?tab=subscription" icon={<Crown className="w-4 h-4 text-amber-500" />} label="Subskrypcja" desc={profile.isPro ? "Plan PRO aktywny" : "Przejdź na PRO"} />
-          <Row href="/dashboard/settings?tab=invoicing" icon={<FileText className="w-4 h-4 text-indigo-500" />} label="Faktury InFakt" desc="Klucz API do faktur dla klientów" />
           <Row href="/dashboard/feedback" icon={<Mail className="w-4 h-4 text-orange-500" />} label="Opinie" desc="Zgłoś błąd lub sugestie" />
         </Section>
       </div>

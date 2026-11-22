@@ -9,7 +9,6 @@ import { AIContentManager } from "@/components/settings/ai-content-manager";
 import { PWAInstallButton } from "@/components/settings/pwa-install-button";
 import { GuideSection } from "@/components/settings/guide-section";
 import { SubscriptionPanel } from "@/components/settings/subscription-panel";
-import { InFaktSettingsPanel } from "@/components/settings/infakt-settings-panel";
 import { HiddenItemsPanel } from "@/components/settings/hidden-items-panel";
 import type { CatalogItem } from "@/app/dashboard/catalog/actions";
 import { ProfileView } from "@/app/dashboard/profile/profile-view";
@@ -51,7 +50,7 @@ interface SettingsContentProps {
   regions?: Region[];
 }
 
-type Tab = "guide" | "knr" | "profile" | "invoicing" | "database" | "subscription" | "konto" | "admin";
+type Tab = "guide" | "knr" | "profile" | "database" | "subscription" | "konto" | "admin";
 
 export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems = [], activeTab: initialTab, profileData = null, initialCatalogStats, regions = [] }: SettingsContentProps) {
   const router = useRouter();
@@ -76,12 +75,6 @@ export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems
       label: "Profil Firmy",
       icon: Building2,
       color: "blue",
-    },
-    {
-      id: "invoicing" as Tab,
-      label: "Faktury",
-      icon: FileText,
-      color: "indigo",
     },
     {
       id: "database" as Tab,
@@ -255,9 +248,6 @@ export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems
                   {activeTab === "profile" && (
                     <p>Dane firmy pojawią się na wszystkich dokumentach PDF.</p>
                   )}
-                  {activeTab === "invoicing" && (
-                    <p>Własny klucz InFakt służy do faktur dla Twoich klientów. Faktura za subskrypcję PRO przychodzi osobno ze Stripe.</p>
-                  )}
                   {activeTab === "knr" && (
                     <p>Ustaw stawkę roboczogodziny i województwo — to podstawa wszystkich wycen kosztorysowych.</p>
                   )}
@@ -341,10 +331,6 @@ export function SettingsContentV2({ initialProfile, isAdmin = false, hiddenItems
                     </CardContent>
                   </Card>
               </div>
-            )}
-
-            {activeTab === "invoicing" && (
-              <InFaktSettingsPanel initialApiKey={initialProfile?.infakt_api_key ?? null} />
             )}
 
             {/* Database Tab */}
