@@ -85,7 +85,7 @@ export function EstimateTableHeader({
                 <span className="font-semibold">Materiał{materialsOwnedByCustomer && <span className="ml-0.5 text-[9px] opacity-75">(Klient)</span>}</span>
                 <HintTooltip content={HINTS.columnMaterial} side="bottom" iconOnly />
               </div>
-              <span className={`text-[10px] font-normal opacity-70`}>(jedn. / suma)</span>
+              <span className={`text-[10px] font-normal opacity-70`}>(zł/jm i suma)</span>
             </div>
           </TableHead>
         )}
@@ -98,7 +98,7 @@ export function EstimateTableHeader({
                 <span className="font-semibold">Robocizna (r-g)</span>
                 <HintTooltip content={HINTS.columnLabor} side="bottom" iconOnly />
               </div>
-              <span className="text-[10px] font-normal opacity-70">(jedn. / suma)</span>
+              <span className="text-[10px] font-normal opacity-70">(zł/jm i suma)</span>
             </div>
           </TableHead>
         )}
@@ -117,14 +117,14 @@ export function EstimateTableHeader({
         )}
 
         {showRgCol && (
-          <TableHead className={`text-center min-w-[90px] w-[90px] text-xs border-r border-slate-200 dark:border-slate-700 ${colorMode ? "bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300" : "bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400"}`}>
+          <TableHead className={`text-center min-w-[112px] w-[112px] text-xs border-r border-slate-200 dark:border-slate-700 ${colorMode ? "bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300" : "bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400"}`}>
             <div className="flex flex-col items-center gap-0.5">
               <span>⏱</span>
               <div className="flex items-center gap-1">
                 <span className="font-semibold">rbh</span>
                 <HintTooltip content={HINTS.columnTime} side="bottom" iconOnly />
               </div>
-              <span className="text-[10px] font-normal opacity-70">(na jednostkę)</span>
+              <span className="text-[10px] font-normal opacity-70">(rbh i zł / jm)</span>
             </div>
           </TableHead>
         )}

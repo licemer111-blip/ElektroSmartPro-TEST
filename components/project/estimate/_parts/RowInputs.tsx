@@ -295,7 +295,8 @@ export function RowMaterialCell({
             ) : (
               <div className="flex flex-col items-end leading-tight">
                 <span className="text-[10px] text-muted-foreground">
-                  <BlurredPrice value={matUnitDisp} isPro={showPrices} showBadge={!showPrices} /> /
+                  <BlurredPrice value={matUnitDisp} isPro={showPrices} showBadge={!showPrices} />
+                  <span className="ml-0.5">zł/{item.unit ?? "szt"}</span>
                 </span>
                 <span className="text-xs font-semibold">
                   <BlurredPrice value={matTotalDisp} isPro={showPrices} showBadge={!showPrices} />
@@ -332,7 +333,8 @@ export function RowMaterialCell({
                     className="mt-px"
                   />
                 )}
-                <BlurredPrice value={matUnitDisp} isPro={showPrices} showBadge={!showPrices} /> /
+                <BlurredPrice value={matUnitDisp} isPro={showPrices} showBadge={!showPrices} />
+                <span className="ml-0.5 whitespace-nowrap">zł/{item.unit ?? "szt"}</span>
               </div>
               {/* Base price indicator when negocjacje are active */}
               {materialUnitBase !== undefined && Math.abs(materialUnit - materialUnitBase) >= 0.01 && (
@@ -419,7 +421,8 @@ export function RowLaborCell({
           )}
           <div className="flex flex-col items-end leading-tight">
             <span className="text-[10px] text-muted-foreground">
-              <BlurredPrice value={labUnitDisp} isPro={showPrices} showBadge={!showPrices} /> /
+              <BlurredPrice value={labUnitDisp} isPro={showPrices} showBadge={!showPrices} />
+              <span className="ml-0.5">zł/{item.unit ?? "szt"}</span>
             </span>
             <span className="text-xs font-semibold">
               <BlurredPrice value={labTotalDisp} isPro={showPrices} showBadge={!showPrices} />
@@ -462,7 +465,8 @@ export function RowLaborCell({
                 className="mt-px"
               />
             )}
-            <BlurredPrice value={labUnitDisp} isPro={showPrices} showBadge={!showPrices} /> /
+            <BlurredPrice value={labUnitDisp} isPro={showPrices} showBadge={!showPrices} />
+            <span className="ml-0.5 whitespace-nowrap">zł/{item.unit ?? "szt"}</span>
           </div>
           {/* Base price indicator when negocjacje are active */}
           {laborUnitBase !== undefined && Math.abs(laborUnit - laborUnitBase) >= 0.01 && (
@@ -491,8 +495,8 @@ export function RowLaborCell({
 }
 
 export function RowRgCell({
-  item, colorMode, onGlobalFallbackAction, isLoading, assemblyNorm, laborRate = 0,
-}: { item: ProjectItem; colorMode: boolean; onGlobalFallbackAction?: (id: string) => void; isLoading?: boolean; assemblyNorm?: number | null; laborRate?: number }) {
+  item, colorMode, onGlobalFallbackAction, isLoading, assemblyNorm, laborRate = 0, laborUnitZl = 0,
+}: { item: ProjectItem; colorMode: boolean; onGlobalFallbackAction?: (id: string) => void; isLoading?: boolean; assemblyNorm?: number | null; laborRate?: number; laborUnitZl?: number }) {
   const [isPending, startTransition] = useTransition();
   const [confirmReset, setConfirmReset] = useState(false);
 
@@ -510,7 +514,7 @@ export function RowRgCell({
   const showResetBtn = item.norm_protected || isDivergent;
 
   return (
-    <TableCell className={`text-right min-w-[90px] w-[90px] ${singleCellBorderClass} ${colorMode ? "bg-blue-50/40 dark:bg-blue-950/10" : ""}`}>
+    <TableCell className={`text-right min-w-[112px] w-[112px] ${singleCellBorderClass} ${colorMode ? "bg-blue-50/40 dark:bg-blue-950/10" : ""}`}>
       {item.confidence_level !== "manual" && (assemblyNorm != null ? assemblyNorm > 0 : (item.labor_norm != null && item.labor_norm > 0)) ? (
         <div className="space-y-0.5">
           <div className="flex items-center gap-1">
@@ -571,6 +575,11 @@ export function RowRgCell({
               );
             })()}
           </div>
+          {laborUnitZl > 0 && (
+            <div className="text-[10px] font-semibold text-right text-emerald-600 dark:text-emerald-400" title="Złote robocizny za jedną jednostkę. Suma wiersza to ta cena razy ilość.">
+              {laborUnitZl.toFixed(2).replace(".", ",")} zł/{item.unit ?? "szt"}
+            </div>
+          )}
           {item.labor_hours_total != null && (
             <div className={`text-[10px] ${colorMode ? "text-blue-500 dark:text-blue-500" : "text-slate-400 dark:text-slate-500"}`}>
               Σ {item.labor_hours_total.toFixed(2)} rbh
