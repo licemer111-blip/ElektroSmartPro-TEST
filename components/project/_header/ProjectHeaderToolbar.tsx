@@ -307,15 +307,15 @@ export function ProjectHeaderToolbar({
                 <Button
                   size="sm"
                   disabled={isFinal}
-                  title="Wklej listę, Excel albo PDF. Ceny policzysz przyciskiem Wyceń."
+                  title="Wklej ofertę, listę, Excel albo PDF. Ceny policzysz przyciskiem Wyceń."
                   onClick={() => {
                     if (isFinal) { toast({ title: "Projekt zablokowany", description: "Odblokuj projekt, aby importować", variant: "destructive" }); return; }
                     onAIImportClick();
                   }}
-                  className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white flex-shrink-0 ${isFinal ? "opacity-50" : ""}`}
+                  className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white flex-shrink-0 ${isFinal ? "opacity-50" : ""}`}
                 >
                   <FileSpreadsheet className="h-3.5 w-3.5" />
-                  Wczytaj
+                  Wczytaj ofertę
                 </Button>
                 <Button
                   size="sm"

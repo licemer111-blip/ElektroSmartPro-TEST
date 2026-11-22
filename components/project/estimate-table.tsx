@@ -328,10 +328,10 @@ export function EstimateTable({
           </div>
           <h3 className="text-base font-semibold text-slate-700 dark:text-slate-200 mb-1">Kosztorys jest pusty</h3>
           <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 max-w-xs mx-auto">
-            Dodaj z katalogu po lewej albo kliknij Wczytaj. Potem Wyceń policzy robociznę.
+            Dodaj z katalogu po lewej albo kliknij Wczytaj ofertę. Potem Wyceń policzy robociznę.
           </p>
           <div className="flex flex-wrap gap-2 justify-center text-[10px] text-slate-400 dark:text-slate-500">
-            {["Katalog", "Wyceń", "Wczytaj", "Zestawy"].map(label => (
+            {["Katalog", "Wyceń", "Wczytaj ofertę", "Zestawy"].map(label => (
               <span key={label} className="px-2 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">{label}</span>
             ))}
           </div>

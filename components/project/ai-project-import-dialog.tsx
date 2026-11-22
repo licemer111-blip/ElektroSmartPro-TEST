@@ -94,7 +94,7 @@ export function AIProjectImportDialog({
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg shadow-orange-500/20">
               {importMode === "plik" ? <Table2 className="w-4 h-4 text-white" /> : importMode === "pdf" ? <ScanText className="w-4 h-4 text-white" /> : <FileText className="w-4 h-4 text-white" />}
             </div>
-            Wczytaj pozycje
+            Wczytaj ofertę
             {importMode === "pdf" && <QuotaBadge info={visionQuotaInfo} className="ml-auto" />}
           </DialogTitle>
           <DialogDescription>
