@@ -4,6 +4,7 @@ import { flattenProjectItems } from '@/lib/utils/flatten-project-items';
 import { calcRowPrices } from '@/lib/pricing-calculations';
 import { objectTypeForClient } from '@/lib/pdf-pricing';
 import { splitOfferNotes } from '@/lib/offer-terms';
+import { awaitsContractSum } from '@/lib/estimate/system-scope';
 
 // ─── Style helpers ─────────────────────────────────────────────────────────────
 
@@ -145,6 +146,7 @@ function buildKosztorysSheet(
   let laborTotal = 0;
   for (const item of flatItems) {
     if (parentIds.has(item.id)) continue;
+    if (awaitsContractSum(item.name, item.confidence_level)) continue;
     const priced = priceOf(item);
     materialTotal += priced.materialTotal * vatMult;
     laborTotal += priced.laborTotal * vatMult;
@@ -318,7 +320,11 @@ function buildKosztorysSheet(
       }
     }
 
-    const priced = priceOf(item);
+    const holdContract = awaitsContractSum(item.name, item.confidence_level);
+    const pricedRaw = priceOf(item);
+    const priced = holdContract
+      ? { ...pricedRaw, materialUnit: 0, laborUnit: 0, materialTotal: 0, laborTotal: 0, rowTotal: 0 }
+      : pricedRaw;
     const matPrice = priced.materialUnit * vatMult;
     const labPrice = priced.laborUnit * vatMult;
     const isChild   = item.is_assembly_child === true;
@@ -393,8 +399,8 @@ function buildKosztorysSheet(
     // r-g (labor hours) — only if showRg
     if (C_RG >= 0 && C_RG_SUM >= 0) {
       const qty = Number(item.quantity || 0);
-      const norm = Number(item.labor_norm ?? 0);
-      const storedTotal = Number((item as unknown as Record<string, unknown>).labor_hours_total ?? 0);
+      const norm = holdContract ? 0 : Number(item.labor_norm ?? 0);
+      const storedTotal = holdContract ? 0 : Number((item as unknown as Record<string, unknown>).labor_hours_total ?? 0);
       const perUnit = norm > 0 ? norm : (qty > 0 && storedTotal > 0 ? storedTotal / qty : 0);
       const lineHours = norm > 0 && qty > 0 ? norm * qty : storedTotal;
       const hourCell = (value: number) => value > 0
@@ -666,6 +672,7 @@ function appendMaterialSheet(
   const grouped = new Map<string, { name: string; unit: string; qty: number; value: number }>();
   for (const item of flatItems) {
     if (parentIds.has(item.id)) continue;
+    if (awaitsContractSum(item.name, item.confidence_level)) continue;
     const qty = Number(item.quantity) || 0;
     if (qty <= 0) continue;
     const key = `${item.name.trim().toLowerCase()}|${item.unit}`;

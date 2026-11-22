@@ -1,5 +1,6 @@
 "use server";
 
+import { awaitsContractSum } from "@/lib/estimate/system-scope";
 import { logger } from "@/lib/logger";
 // UnitGuard removed — units are preserved as-is from the user's estimate
 // ═══════════════════════════════════════════════════════════════════
@@ -266,7 +267,7 @@ export async function estimatePricesWithAI(
 
     const { data: items, error: itemsError } = await supabase
       .from("project_items")
-      .select("id, name, unit, quantity, material_price, labor_price, final_material_price, final_labor_price, section, description, parent_assembly_id, knr_code, is_assembly_child")
+      .select("id, name, unit, quantity, material_price, labor_price, final_material_price, final_labor_price, section, description, parent_assembly_id, knr_code, is_assembly_child, confidence_level")
       .eq("project_id", projectId)
       .order("sort_order");
 
@@ -275,7 +276,7 @@ export async function estimatePricesWithAI(
       return { success: false, error: "Blad pobierania pozycji z bazy danych" };
     }
 
-    type PricingItem = { id: string; name: string; unit: string; quantity: number; material_price: number | null; labor_price: number | null; final_material_price: number | null; final_labor_price: number | null; section: string | null; description: string | null; parent_assembly_id: string | null; knr_code: string | null; is_assembly_child: boolean | null };
+    type PricingItem = { id: string; name: string; unit: string; quantity: number; material_price: number | null; labor_price: number | null; final_material_price: number | null; final_labor_price: number | null; section: string | null; description: string | null; parent_assembly_id: string | null; knr_code: string | null; is_assembly_child: boolean | null; confidence_level: string | null };
     const allItems = (items || []) as PricingItem[];
     
     // Assembly expansion: if targetItemIds contains assembly parents, expand to their children
@@ -319,6 +320,7 @@ export async function estimatePricesWithAI(
     const userSelectedItems = !!(targetItemIds && targetItemIds.length > 0);
 
     const itemsToPrice = itemsForPricing.filter((item) => {
+      if (awaitsContractSum(item.name, item.confidence_level)) return false;
       // Explicit selection = always reprice (user command overrides everything)
       if (userSelectedItems) return true;
 

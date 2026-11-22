@@ -25,7 +25,7 @@ import { RowUnitCell, RowQuantityCell, RowMaterialCell, RowLaborCell, RowRgCell 
 import { RowKnrCell } from "@/components/project/estimate/_parts/RowKnrCell";
 import { RowTotalCell } from "@/components/project/estimate/_parts/RowTotalCell";
 import { SystemScopeBar } from "@/components/project/estimate/SystemScopeBar";
-import { wholeSystem } from "@/lib/estimate/system-scope";
+import { awaitsContractSum, wholeSystem } from "@/lib/estimate/system-scope";
 
 // Ambiguity detector (client-side mirror of server-side pricing.ts)
 const AMBIGUITY_KW = ["pomocnicze","dodatkowe","inne","pozostałe","materiały pomocnicze","różne","drobnica","nieprzewidziane","rezerwa","itp","itd"];
@@ -231,6 +231,20 @@ export const EstimateRow = React.memo(function EstimateRow({
     return null;
   }
 
+  const awaitingContract = !isAssemblyChild && item.confidence_level !== "manual" && awaitsContractSum(item.name, item.confidence_level);
+  const priceSource: ProjectItem = awaitingContract
+    ? {
+        ...displayItem,
+        labor_norm: null,
+        labor_hours_total: null,
+        labor_price: 0,
+        material_price: 0,
+        final_labor_price: 0,
+        final_material_price: 0,
+        knr_code: null,
+      }
+    : displayItem;
+
   const {
     materialUnitBase, laborUnitBase, materialTotalBase, laborTotalBase,
     materialUnit: calcMaterialUnit,
@@ -239,7 +253,7 @@ export const EstimateRow = React.memo(function EstimateRow({
     laborTotal: calcLaborTotal,
     rowTotal: calcRowTotal,
   } = calcRowPrices(
-    displayItem,
+    priceSource,
     adjustmentMultiplier,
     materialsOwnedByCustomer,
     filterType,
@@ -499,7 +513,7 @@ export const EstimateRow = React.memo(function EstimateRow({
       {/* Material price — display with displayItem */}
       {showMaterialsColumn && (
         <RowMaterialCell
-          item={displayItem} editingState={editingState} isEditing={false}
+          item={priceSource} editingState={editingState} isEditing={false}
           isPro={showPrices} compactView={compactView} colorMode={colorMode}
           materialsOwnedByCustomer={materialsOwnedByCustomer}
           materialUnit={materialUnit} materialTotal={materialTotal}
@@ -518,7 +532,7 @@ export const EstimateRow = React.memo(function EstimateRow({
       {/* Labor price — display with displayItem */}
       {showLaborColumn && (
         <RowLaborCell
-          item={displayItem} editingState={editingState} isEditing={false}
+          item={priceSource} editingState={editingState} isEditing={false}
           isPro={showPrices} compactView={compactView} colorMode={colorMode}
           laborUnit={laborUnit} laborTotal={laborTotal}
           laborUnitBase={laborUnitBase}
@@ -535,7 +549,7 @@ export const EstimateRow = React.memo(function EstimateRow({
       {/* R-G column — _parts/RowInputs */}
       {showRgCol && (
         <RowRgCell
-          item={item}
+          item={priceSource}
           colorMode={colorMode}
           onGlobalFallbackAction={(!isFinal && !isReadOnly) ? onGlobalFallbackAction : undefined}
           isLoading={fallbackLoadingIds?.has(item.id)}

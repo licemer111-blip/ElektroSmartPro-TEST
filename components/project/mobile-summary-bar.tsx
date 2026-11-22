@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { BlurredPrice } from "@/components/ui/blurred-price";
 import { getEffectiveIsPro } from "@/lib/auth/entitlements";
+import { awaitsContractSum } from "@/lib/estimate/system-scope";
 import { calcNarzuty } from "@/lib/pricing-calculations";
 import { PriceAdjuster } from "@/components/project/price-adjuster";
 import {
@@ -94,6 +95,7 @@ export function MobileSummaryBar({
       ? items.filter((child) => child.parent_assembly_id === item.id)
       : [item];
     for (const row of pricedRows) {
+      if (awaitsContractSum(row.name, row.confidence_level)) continue;
       const qty = row.is_lump_sum ? 1 : row.quantity;
       const effectiveRegion = row.confidence_level === "manual" ? 1 : regionModifier;
       const matPrice = row.final_material_price ?? row.material_price ?? 0;

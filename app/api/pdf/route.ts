@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { getEffectiveIsPro } from "@/lib/auth/entitlements";
+import { awaitsContractSum } from "@/lib/estimate/system-scope";
 import { flattenProjectItems } from "@/lib/utils/flatten-project-items";
 import type { ProjectItem } from "@/lib/types/database";
 import {
@@ -273,6 +274,10 @@ export async function POST(req: Request) {
     const calcItems = flatItems.map(item => {
       const isManualItem = (item as Record<string, unknown>).confidence_level === "manual";
       const isInvestorMat = Boolean((item as Record<string, unknown>).is_investor_material);
+      const holdForContract = awaitsContractSum(
+        String((item as { name?: string }).name ?? ""),
+        (item as { confidence_level?: string | null }).confidence_level,
+      );
       // Iron Rule: regionModifier ONLY on labor — material is sovereign
       // Material: base × matMarkupMult × adjustmentOnly (no regionModifier)
       // Labor: base × labMarkupMult × complexityFactor × adjustmentOnly × regionModifier (manual skips region)
@@ -280,9 +285,9 @@ export async function POST(req: Request) {
       return {
         ...item,
         // matOwnedByClient or isInvestorMat: zero out material prices
-        finalMat: (matOwnedByClient || isInvestorMat) ? 0 : getPrice(item, "mat") * matMarkupMult * adjustmentOnly * vatMultiplier,
-        finalLab: getPrice(item, "lab") * labMarkupMult * complexityFactor * adjustmentOnly * effectiveRegion * vatMultiplier,
-        laborNorm: Number((item as Record<string, unknown>).labor_norm ?? 0),
+        finalMat: holdForContract || matOwnedByClient || isInvestorMat ? 0 : getPrice(item, "mat") * matMarkupMult * adjustmentOnly * vatMultiplier,
+        finalLab: holdForContract ? 0 : getPrice(item, "lab") * labMarkupMult * complexityFactor * adjustmentOnly * effectiveRegion * vatMultiplier,
+        laborNorm: holdForContract ? 0 : Number((item as Record<string, unknown>).labor_norm ?? 0),
         isInvestorMat,
       };
     });

@@ -18,6 +18,7 @@ import { HintTooltip } from "@/components/ui/hint-tooltip";
 import { HINTS } from "@/lib/hints/hint-content";
 import { cn } from "@/lib/utils";
 import { getEffectiveIsPro } from "@/lib/auth/entitlements";
+import { awaitsContractSum } from "@/lib/estimate/system-scope";
 import type { ProjectItem, ProjectWithRelations, Profile } from "@/lib/types/database";
 import { calcNarzuty } from "@/lib/pricing-calculations";
 import { SummaryFinancialTotals } from "./_parts/summary/SummaryFinancialTotals";
@@ -109,6 +110,7 @@ export function ProjectSummary({
         : [item];
 
       for (const row of pricedRows) {
+        if (awaitsContractSum(row.name, row.confidence_level)) continue;
         const qty = row.is_lump_sum ? 1 : row.quantity;
         const isManual = row.confidence_level === "manual";
         const effectiveRegion = isManual ? 1.0 : regionModifier;

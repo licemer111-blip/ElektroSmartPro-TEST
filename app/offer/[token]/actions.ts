@@ -3,6 +3,7 @@
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { logger } from "@/lib/logger";
 import { Resend } from "resend";
+import { awaitsContractSum } from "@/lib/estimate/system-scope";
 // ============================================
 // SUPABASE JOIN TYPES
 // ============================================
@@ -251,8 +252,11 @@ export async function getOfferByToken(token: string): Promise<{ offer?: OfferDat
 
     // For assembly parents: show sum of children as their displayed price
     // v10.5: Material × matMarkupMult × adjMult | Labor × labMarkupMult × complexity × adjMult × region
-    const displayMat = isParent ? (childSums.get(i.id)?.mat ?? 0) : effectiveMat * i.quantity * matMarkupMult * adjMult;
-    const displayLab = isParent ? (childSums.get(i.id)?.lab ?? 0) : lab * i.quantity * labMarkupMult * complexityFactor * adjMult * effRegion;
+    const displayMatRaw = isParent ? (childSums.get(i.id)?.mat ?? 0) : effectiveMat * i.quantity * matMarkupMult * adjMult;
+    const displayLabRaw = isParent ? (childSums.get(i.id)?.lab ?? 0) : lab * i.quantity * labMarkupMult * complexityFactor * adjMult * effRegion;
+    const holdContract = awaitsContractSum(i.name, (i as { confidence_level?: string | null }).confidence_level);
+    const displayMat = holdContract ? 0 : displayMatRaw;
+    const displayLab = holdContract ? 0 : displayLabRaw;
     const displayTotal = displayMat + displayLab;
 
     return {

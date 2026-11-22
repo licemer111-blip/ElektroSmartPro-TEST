@@ -206,3 +206,8 @@ export function wholeSystem(name: string): WholeSystem | null {
     devices: family.devices,
   };
 }
+
+/** A whole system stays unpriced until the electrician saves a contract sum. */
+export function awaitsContractSum(name: string, confidence: string | null | undefined): boolean {
+  return confidence !== "manual" && wholeSystem(name) != null;
+}
