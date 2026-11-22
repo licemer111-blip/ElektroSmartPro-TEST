@@ -295,8 +295,8 @@ export function RowMaterialCell({
             ) : (
               <div className="flex flex-col items-end leading-tight">
                 <span className="text-[10px] text-muted-foreground">
-                  <BlurredPrice value={matUnitDisp} isPro={showPrices} showBadge={!showPrices} />
-                  <span className="ml-0.5">zł/{item.unit ?? "szt"}</span>
+                  <BlurredPrice value={matUnitDisp} isPro={showPrices} showBadge={!showPrices} unit="" />
+                  <span className="ml-0.5">zł/{item.unit ?? "szt"}{bruttoMode ? " brutto" : ""}</span>
                 </span>
                 <span className="text-xs font-semibold">
                   <BlurredPrice value={matTotalDisp} isPro={showPrices} showBadge={!showPrices} />
@@ -333,8 +333,8 @@ export function RowMaterialCell({
                     className="mt-px"
                   />
                 )}
-                <BlurredPrice value={matUnitDisp} isPro={showPrices} showBadge={!showPrices} />
-                <span className="ml-0.5 whitespace-nowrap">zł/{item.unit ?? "szt"}</span>
+                <BlurredPrice value={matUnitDisp} isPro={showPrices} showBadge={!showPrices} unit="" />
+                <span className="ml-0.5 whitespace-nowrap">zł/{item.unit ?? "szt"}{bruttoMode ? " brutto" : ""}</span>
               </div>
               {/* Base price indicator when negocjacje are active */}
               {materialUnitBase !== undefined && Math.abs(materialUnit - materialUnitBase) >= 0.01 && (
@@ -421,8 +421,8 @@ export function RowLaborCell({
           )}
           <div className="flex flex-col items-end leading-tight">
             <span className="text-[10px] text-muted-foreground">
-              <BlurredPrice value={labUnitDisp} isPro={showPrices} showBadge={!showPrices} />
-              <span className="ml-0.5">zł/{item.unit ?? "szt"}</span>
+              <BlurredPrice value={labUnitDisp} isPro={showPrices} showBadge={!showPrices} unit="" />
+              <span className="ml-0.5">zł/{item.unit ?? "szt"}{bruttoMode ? " brutto" : ""}</span>
             </span>
             <span className="text-xs font-semibold">
               <BlurredPrice value={labTotalDisp} isPro={showPrices} showBadge={!showPrices} />
@@ -443,8 +443,8 @@ export function RowLaborCell({
               />
             )}
             <span className="text-xs font-semibold">
-              <BlurredPrice value={labUnitDisp} isPro={showPrices} showBadge={!showPrices} />
-              <span className="text-[9px] font-normal text-slate-400 dark:text-slate-500 ml-0.5">zł/{item.unit ?? "szt"}</span>
+              <BlurredPrice value={labUnitDisp} isPro={showPrices} showBadge={!showPrices} unit="" />
+              <span className="text-[9px] font-normal text-slate-400 dark:text-slate-500 ml-0.5">zł/{item.unit ?? "szt"}{bruttoMode ? " brutto" : ""}</span>
             </span>
           </div>
           {/* Total — smaller */}
@@ -465,8 +465,8 @@ export function RowLaborCell({
                 className="mt-px"
               />
             )}
-            <BlurredPrice value={labUnitDisp} isPro={showPrices} showBadge={!showPrices} />
-            <span className="ml-0.5 whitespace-nowrap">zł/{item.unit ?? "szt"}</span>
+            <BlurredPrice value={labUnitDisp} isPro={showPrices} showBadge={!showPrices} unit="" />
+            <span className="ml-0.5 whitespace-nowrap">zł/{item.unit ?? "szt"}{bruttoMode ? " brutto" : ""}</span>
           </div>
           {/* Base price indicator when negocjacje are active */}
           {laborUnitBase !== undefined && Math.abs(laborUnit - laborUnitBase) >= 0.01 && (
@@ -495,8 +495,8 @@ export function RowLaborCell({
 }
 
 export function RowRgCell({
-  item, colorMode, onGlobalFallbackAction, isLoading, assemblyNorm, laborRate = 0, laborUnitZl = 0,
-}: { item: ProjectItem; colorMode: boolean; onGlobalFallbackAction?: (id: string) => void; isLoading?: boolean; assemblyNorm?: number | null; laborRate?: number; laborUnitZl?: number }) {
+  item, colorMode, onGlobalFallbackAction, isLoading, assemblyNorm, laborRate = 0, laborUnitZl = 0, bruttoMode = false,
+}: { item: ProjectItem; colorMode: boolean; onGlobalFallbackAction?: (id: string) => void; isLoading?: boolean; assemblyNorm?: number | null; laborRate?: number; laborUnitZl?: number; bruttoMode?: boolean }) {
   const [isPending, startTransition] = useTransition();
   const [confirmReset, setConfirmReset] = useState(false);
 
@@ -577,7 +577,7 @@ export function RowRgCell({
           </div>
           {laborUnitZl > 0 && (
             <div className="text-[10px] font-semibold text-right text-emerald-600 dark:text-emerald-400" title="Złote robocizny za jedną jednostkę. Suma wiersza to ta cena razy ilość.">
-              {laborUnitZl.toFixed(2).replace(".", ",")} zł/{item.unit ?? "szt"}
+              {laborUnitZl.toFixed(2).replace(".", ",")} zł/{item.unit ?? "szt"}{bruttoMode ? " brutto" : ""}
             </div>
           )}
           {item.labor_hours_total != null && (

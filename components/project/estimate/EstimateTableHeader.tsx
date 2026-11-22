@@ -22,6 +22,8 @@ interface EstimateTableHeaderProps {
   selectedCount: number;
   filteredCount: number;
   materialsOwnedByCustomer: boolean;
+  bruttoMode?: boolean;
+  vatRate?: number;
   onToggleSelectAll: () => void;
   onFillNorms: () => void;
   onFillKnrCodes: () => void;
@@ -32,9 +34,11 @@ export function EstimateTableHeader({
   isFinal, isReadOnly, isDndEnabled, colorMode, filterType,
   showMaterialsColumn, showLaborColumn, showRgCol,
   showKnrCol, hasAnyLaborNorm, hasAnyKnrCode, selectedCount, filteredCount, materialsOwnedByCustomer,
+  bruttoMode = false, vatRate = 23,
   onToggleSelectAll, onFillNorms, onFillKnrCodes, isFillKnrCodesPending,
 }: EstimateTableHeaderProps) {
   const [isFillNormsPending, startFillNormsTransition] = useTransition();
+  const moneyTag = bruttoMode ? `brutto +${vatRate}% VAT` : "netto";
 
   const handleFillNorms = () => {
     startFillNormsTransition(() => {
@@ -85,7 +89,7 @@ export function EstimateTableHeader({
                 <span className="font-semibold">Materiał{materialsOwnedByCustomer && <span className="ml-0.5 text-[9px] opacity-75">(Klient)</span>}</span>
                 <HintTooltip content={HINTS.columnMaterial} side="bottom" iconOnly />
               </div>
-              <span className={`text-[10px] font-normal opacity-70`}>(zł/jm i suma)</span>
+              <span className={`text-[10px] font-normal opacity-70`}>({moneyTag})</span>
             </div>
           </TableHead>
         )}
@@ -98,7 +102,7 @@ export function EstimateTableHeader({
                 <span className="font-semibold">Robocizna (r-g)</span>
                 <HintTooltip content={HINTS.columnLabor} side="bottom" iconOnly />
               </div>
-              <span className="text-[10px] font-normal opacity-70">(zł/jm i suma)</span>
+              <span className="text-[10px] font-normal opacity-70">({moneyTag})</span>
             </div>
           </TableHead>
         )}
@@ -124,7 +128,7 @@ export function EstimateTableHeader({
                 <span className="font-semibold">rbh</span>
                 <HintTooltip content={HINTS.columnTime} side="bottom" iconOnly />
               </div>
-              <span className="text-[10px] font-normal opacity-70">(rbh i zł / jm)</span>
+              <span className="text-[10px] font-normal opacity-70">(rbh, zł {moneyTag})</span>
             </div>
           </TableHead>
         )}
@@ -141,6 +145,7 @@ export function EstimateTableHeader({
             <span className="font-semibold">{filterType === "materials" ? "Suma mat." : filterType === "labor" ? "Suma rob." : "Suma"}</span>
             <HintTooltip content={HINTS.columnSum} side="bottom" iconOnly />
           </div>
+            <span className="text-[10px] font-normal opacity-70">({moneyTag})</span>
           </div>
         </TableHead>
 

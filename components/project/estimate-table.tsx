@@ -377,6 +377,8 @@ export function EstimateTable({
                 hasAnyKnrCode={hasAnyKnrCode}
                 onFillKnrCodes={handleFillKnrCodes}
                 isFillKnrCodesPending={isFillKnrCodesPending}
+                bruttoMode={bruttoMode}
+                vatRate={vatRate}
               />
               <SortableContext items={topLevelIds} strategy={verticalListSortingStrategy}>
                 <TableBody>

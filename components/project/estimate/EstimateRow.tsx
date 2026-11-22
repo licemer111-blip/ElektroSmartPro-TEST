@@ -555,7 +555,8 @@ export const EstimateRow = React.memo(function EstimateRow({
           isLoading={fallbackLoadingIds?.has(item.id)}
           assemblyNorm={assemblyRBHPerUnit}
           laborRate={projectLaborRate}
-          laborUnitZl={laborUnit}
+          laborUnitZl={roundPrice(laborUnit * (bruttoMode ? 1 + vatRate / 100 : 1))}
+          bruttoMode={bruttoMode}
         />
       )}
 
