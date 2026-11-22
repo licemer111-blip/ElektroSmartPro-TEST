@@ -582,7 +582,10 @@ export function lookupKnrByName(itemName: string, preferResidential = true): Knr
     if (rawScore === 0) continue;
     const hour = entry.labor_norm * (entry.unit_factor ?? 1);
     const unitFamily = normUnitFamily(entry.unit);
-    if (unitFamily === "m" && hour > 2.5 && !descNorm.includes("bruzd")) continue;
+    // Everyday cable in the locked norm is 0.11–1.70 rbh per meter.
+    // A dictionary row of 2 rbh/m or more is not a normal laying hour.
+    // Chase cutting stays: those descriptions contain "bruzd".
+    if (unitFamily === "m" && hour >= 2 && !descNorm.includes("bruzd")) continue;
 
     const head = headNoun(baseNeedle);
     if (head && !descNorm.includes(head)) continue;
