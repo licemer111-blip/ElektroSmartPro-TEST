@@ -129,8 +129,8 @@ export function ProjectEditSettingsDialog({ open, onOpenChange, project }: Proje
               <Select value={editVatRate} onValueChange={setEditVatRate}>
                 <SelectTrigger id="editVat"><SelectValue placeholder="Wybierz stawkę VAT" /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="8">8% (Mieszkanie)</SelectItem>
-                  <SelectItem value="23">23% (Biuro / Komercja)</SelectItem>
+                  <SelectItem value="8">8%</SelectItem>
+                  <SelectItem value="23">23%</SelectItem>
                 </SelectContent>
               </Select>
             </div>

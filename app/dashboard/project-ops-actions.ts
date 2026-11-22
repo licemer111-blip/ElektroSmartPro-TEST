@@ -208,9 +208,9 @@ export async function createProject(formData: FormData) {
     .select("name, default_vat_rate")
     .eq("id", object_type_id)
     .maybeSingle();
-  const vat_rate = objectType
-    ? vatForObjectType(objectType.name, objectType.default_vat_rate)
-    : (requestedVat === 23 ? 23 : 8);
+  const vat_rate = requestedVat === 8 || requestedVat === 23
+    ? requestedVat
+    : (objectType ? vatForObjectType(objectType.name, objectType.default_vat_rate) : 23);
 
   const { data, error } = await supabase
     .from("projects")

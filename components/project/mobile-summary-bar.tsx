@@ -51,6 +51,7 @@ interface MobileSummaryBarProps {
   offerTerms: OfferTerms;
   onOfferTermsChange: (terms: OfferTerms) => void;
   pricesAreBrutto?: boolean;
+  vatRate?: number;
 }
 
 export function MobileSummaryBar({
@@ -64,6 +65,7 @@ export function MobileSummaryBar({
   offerTerms,
   onOfferTermsChange,
   pricesAreBrutto,
+  vatRate: vatRateProp,
 }: MobileSummaryBarProps) {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
@@ -71,7 +73,7 @@ export function MobileSummaryBar({
   const isPro = getEffectiveIsPro(profile);
   const { multiplier: knrMultiplier } = useKnrMultiplier();
   const isFinal = false;
-  const vatRate = project.vat_rate;
+  const vatRate = vatRateProp ?? project.vat_rate;
   const materialsOwnedByCustomer = project.materials_owned_by_customer;
   const regionName = project.regions?.name || "Brak";
   const regionModifier = project.regions?.price_modifier || 1.0;

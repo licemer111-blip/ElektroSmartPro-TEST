@@ -284,7 +284,7 @@ export function ProjectTabContainer({
               showLaborHoursInPdf={liveShowLaborHours}
               showKnrInPdf={liveShowKnr}
               bruttoMode={liveBruttoMode}
-              vatRate={project.vat_rate}
+              vatRate={liveVatRate}
               isReadOnly={isReadOnly}
               onSelectedIdsChange={onSelectedIdsChange}
               regionModifier={currentRegion?.price_modifier ?? 1.0}

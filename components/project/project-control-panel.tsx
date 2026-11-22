@@ -133,15 +133,15 @@ export function ProjectControlPanel({
       <div className="flex items-center gap-2">
         <span className="text-xs font-medium text-slate-500 dark:text-slate-400">VAT</span>
         <div className="inline-flex items-center gap-0.5 rounded-md border border-slate-200 dark:border-slate-700 p-0.5">
-          <button type="button" onClick={() => handleVatToggle(8)} disabled={disabled} className={seg(localVat === 8)} title="8% — mieszkanie">
+          <button type="button" onClick={() => handleVatToggle(8)} disabled={disabled} className={seg(localVat === 8)} title="8% na całym dokumencie">
             8%
           </button>
-          <button type="button" onClick={() => handleVatToggle(23)} disabled={disabled} className={seg(localVat === 23)} title="23% — firma, biuro, lokal">
+          <button type="button" onClick={() => handleVatToggle(23)} disabled={disabled} className={seg(localVat === 23)} title="23% na całym dokumencie">
             23%
           </button>
         </div>
         <span className="text-xs text-slate-500 dark:text-slate-400">
-          {localVat === 8 ? "mieszkanie" : "firma"}
+          niezależnie od typu obiektu
         </span>
       </div>
 

@@ -254,7 +254,7 @@ export function ProjectViewClient({
             template: typeof window !== "undefined"
               ? localStorage.getItem("elektrosmart-pdf-template") || "klasyczny"
               : "klasyczny",
-            vatMode: project.vat_rate ?? 23,
+            vatMode: liveVatRate,
             bruttoMode: liveBruttoMode,
           }),
         });
@@ -372,6 +372,7 @@ export function ProjectViewClient({
                 projectStatus={project.status}
                 liveRegionId={liveRegionId}
                 regions={regions}
+                vatRate={liveVatRate}
               />
             </div>
           </div>
@@ -388,6 +389,7 @@ export function ProjectViewClient({
           offerTerms={offerTerms}
           onOfferTermsChange={setOfferTerms}
           pricesAreBrutto={liveBruttoMode}
+          vatRate={liveVatRate}
         />
       </div>
 

@@ -8,6 +8,7 @@ import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { AlertCircle, Loader2, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useModalStore } from "@/hooks/use-modal-store";
@@ -274,6 +275,29 @@ export function CreateProjectModal() {
             objectTypes={objectTypes}
             hasError={!!error}
           />
+
+          <div className="space-y-1.5">
+            <Label>VAT na dokumencie</Label>
+            <div className="inline-flex items-center gap-0.5 rounded-md border border-slate-200 dark:border-slate-700 p-0.5">
+              <button
+                type="button"
+                onClick={() => setSelectedVatRate(8)}
+                className={`h-8 px-3 text-xs font-semibold rounded-md ${selectedVatRate === 8 ? "bg-blue-600 text-white" : "text-slate-600 dark:text-slate-300"}`}
+              >
+                8%
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedVatRate(23)}
+                className={`h-8 px-3 text-xs font-semibold rounded-md ${selectedVatRate === 23 ? "bg-blue-600 text-white" : "text-slate-600 dark:text-slate-300"}`}
+              >
+                23%
+              </button>
+            </div>
+            <p className="text-[11px] text-muted-foreground">
+              Typ obiektu tylko podpowiada stawkę. Mieszkanie też może mieć 23%.
+            </p>
+          </div>
 
           {/* Submit */}
           <div className="pt-2">
