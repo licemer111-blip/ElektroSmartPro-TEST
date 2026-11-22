@@ -44,6 +44,8 @@ interface ProjectSummaryProps {
   projectStatus?: string;
   /** Live region UUID from useProjectPricing — keeps regionModifier in sync without full page refresh */
   liveRegionId?: string;
+  /** Full regions list for live regionModifier lookup */
+  regions?: RegionItem[];
   /** Live document VAT. Object type does not lock this. */
   vatRate?: number;
 }
