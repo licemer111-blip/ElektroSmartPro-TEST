@@ -48,7 +48,7 @@ export function GuideSection(_props: GuideSectionProps = {}) {
               <ol className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-indigo-800 dark:text-indigo-200">
                 <li><strong>1.</strong> Uzupełnij <strong>Profil firmy</strong> (NIP, logo) — pojawią się na PDF</li>
                 <li><strong>2.</strong> Ustaw <strong>stawkę rbh</strong> i <strong>województwo</strong> w Finansach</li>
-                <li><strong>3.</strong> Zrób <strong>szybką wycenę</strong> albo nowy projekt i dodaj pozycje z katalogu</li>
+                <li><strong>3.</strong> Otwórz projekt, dodaj pozycje z katalogu albo zestaw i kliknij <strong>Wyceń</strong></li>
                 <li><strong>4.</strong> Zestaw „punkt gniazda” wstawia gniazdo, puszkę, kabel i bruzdę</li>
                 <li><strong>5.</strong> PDF: w DEMO jest znak wodny, czysty wydruk jest w PRO</li>
               </ol>

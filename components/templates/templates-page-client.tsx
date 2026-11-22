@@ -188,7 +188,7 @@ export function TemplatesPageClient({ templates }: TemplatesPageClientProps) {
             <h3 className="text-sm font-bold text-blue-800 dark:text-blue-300">Szablony projektów — twórz szybciej!</h3>
             <p className="text-xs text-blue-700/80 dark:text-blue-400/70 mt-0.5">
               <strong>Jak to działa:</strong> (1) Utwórz projekt i dodaj pozycje. (2) Na karcie projektu kliknij menu (&hellip;) &rarr; &quot;Utwórz szablon&quot;.
-              (3) Szablon zachowa wszystkie pozycje z cenami. (4) Następnym razem &mdash; kliknij szablon i gotowy nowy projekt w sekundy!
+              (3) Szablon zachowa wszystkie pozycje z cenami. (4) Na PRO z szablonu powstaje kolejny projekt. Na DEMO drugi projekt jest zablokowany.
             </p>
           </div>
         </div>
@@ -252,7 +252,7 @@ export function TemplatesPageClient({ templates }: TemplatesPageClientProps) {
             </div>
             <h2 className="text-lg font-bold mb-2">Brak szablonów</h2>
             <p className="text-sm text-muted-foreground max-w-md mx-auto mb-6">
-              Nie masz jeszcze szablonów. Utwórz pierwszy projekt ręcznie, przez Szybką Wycenę albo przyciskiem Wczytaj,
+              Nie masz jeszcze szablonów. Zrób kosztorys z katalogu, zestawu albo przyciskiem Wczytaj,
               a następnie na karcie projektu wybierz menu (&hellip;) &rarr; &quot;Utwórz szablon&quot;. Poniżej kilka pomysłów na szablony:
             </p>
             <Button onClick={() => router.push("/dashboard")} className="bg-blue-600 hover:bg-blue-700 text-white">
@@ -285,7 +285,7 @@ export function TemplatesPageClient({ templates }: TemplatesPageClientProps) {
               ))}
             </div>
             <p className="text-xs text-muted-foreground text-center">
-              Utwórz projekt z powyższych pozycji (ręcznie lub przez Szybką Wycenę), a następnie zapisz jako szablon.
+              Zrób kosztorys z katalogu albo zestawu, a następnie zapisz go jako szablon. Drugi projekt na koncie DEMO jest w PRO.
             </p>
           </div>
         </div>
