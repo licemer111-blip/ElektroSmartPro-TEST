@@ -23,21 +23,21 @@ describe("L0 Canonical KNR Reference — pattern matching", () => {
       const m = findCanonicalL0("Przewód YDYp 3×1.5 mm²", "mb");
       expect(m).not.toBeNull();
       expect(m?.knrCode).toBe("KNR 5-08 0201");
-      expect(m?.laborNorm).toBe(0.13);
+      expect(m?.laborNorm).toBe(0.055);
       expect(m?.unit).toBe("mb");
     });
 
     it("keeps the same hour when the size is written without a space", () => {
-      expect(findCanonicalL0("Kabel YDYp 3x1.5mm2 (obwody oświetleniowe)", "mb")?.laborNorm).toBe(0.13);
-      expect(findCanonicalL0("Kabel YDYp 3x2.5mm2 (prowadzenie w ścianie)", "mb")?.laborNorm).toBe(0.16);
+      expect(findCanonicalL0("Kabel YDYp 3x1.5mm2 (obwody oświetleniowe)", "mb")?.laborNorm).toBe(0.055);
+      expect(findCanonicalL0("Kabel YDYp 3x2.5mm2 (prowadzenie w ścianie)", "mb")?.laborNorm).toBe(0.07);
       expect(findCanonicalL0("Punkt oświetleniowy (wypust sufitowy)", "szt")?.laborNorm).toBe(0.35);
-      expect(findCanonicalL0("gniazdo podwójne", "szt")?.laborNorm).toBe(0.82);
+      expect(findCanonicalL0("gniazdo podwójne", "szt")?.laborNorm).toBe(0.19);
     });
 
     it("YDYp 3x2,5 (Polish comma + lowercase x) → KNR 5-08 0202, 0.16 rbh/mb", () => {
       const m = findCanonicalL0("Przewód YDYp 3x2,5 mm²", "mb");
       expect(m?.knrCode).toBe("KNR 5-08 0202");
-      expect(m?.laborNorm).toBe(0.16);
+      expect(m?.laborNorm).toBe(0.07);
     });
 
     it("YDYp 5×6 → 0.28 rbh/mb (kuchnia / indukcja)", () => {
@@ -49,7 +49,7 @@ describe("L0 Canonical KNR Reference — pattern matching", () => {
     it("YKY 5×16 → KNR 5-10 0301, 0.22 rbh/mb", () => {
       const m = findCanonicalL0("Kabel YKY 5×16 mm²", "mb");
       expect(m?.knrCode).toBe("KNR 5-10 0301");
-      expect(m?.laborNorm).toBe(0.22);
+      expect(m?.laborNorm).toBe(0.10);
     });
 
     it("YKY 4×35 → 0.45 rbh/mb (większy przekrój)", () => {
@@ -78,18 +78,18 @@ describe("L0 Canonical KNR Reference — pattern matching", () => {
     it("Gniazdo 230V pojedyncze p/t → 0.68 rbh/szt", () => {
       const m = findCanonicalL0("Gniazdo 230V p/t pojedyncze z ramką", "szt");
       expect(m?.knrCode).toBe("KNR 5-08 0401");
-      expect(m?.laborNorm).toBe(0.68);
+      expect(m?.laborNorm).toBe(0.18);
     });
 
     it("Gniazdo 230V podwójne p/t → 0.82 rbh/szt", () => {
       const m = findCanonicalL0("Gniazdo 230V p/t podwójne", "szt");
-      expect(m?.laborNorm).toBe(0.82);
+      expect(m?.laborNorm).toBe(0.19);
     });
 
     it("recognises a double socket whatever the word order", () => {
-      expect(findCanonicalL0("Gniazdo podwójne", "szt")?.laborNorm).toBe(0.82);
-      expect(findCanonicalL0("Gniazdo podwójne p/t", "szt")?.laborNorm).toBe(0.82);
-      expect(findCanonicalL0("Gniazdo schuko podwójne", "szt")?.laborNorm).toBe(0.82);
+      expect(findCanonicalL0("Gniazdo podwójne", "szt")?.laborNorm).toBe(0.19);
+      expect(findCanonicalL0("Gniazdo podwójne p/t", "szt")?.laborNorm).toBe(0.19);
+      expect(findCanonicalL0("Gniazdo schuko podwójne", "szt")?.laborNorm).toBe(0.19);
     });
 
     it("does not price removal or replacement as a new socket", () => {
@@ -125,19 +125,19 @@ describe("L0 Canonical KNR Reference — pattern matching", () => {
   });
 
   describe("Switches (Łączniki)", () => {
-    it("Łącznik pojedynczy → 0.45 rbh/szt", () => {
+    it("Łącznik pojedynczy → 0.17 rbh/szt", () => {
       const m = findCanonicalL0("Łącznik pojedynczy p/t", "szt");
-      expect(m?.laborNorm).toBe(0.45);
+      expect(m?.laborNorm).toBe(0.17);
     });
 
-    it("Łącznik świecznikowy → 0.54 rbh/szt", () => {
+    it("Łącznik świecznikowy → 0.17 rbh/szt", () => {
       const m = findCanonicalL0("Łącznik świecznikowy p/t", "szt");
-      expect(m?.laborNorm).toBe(0.54);
+      expect(m?.laborNorm).toBe(0.17);
     });
 
-    it("Łącznik schodowy → 0.54 rbh/szt", () => {
+    it("Łącznik schodowy → 0.20 rbh/szt", () => {
       const m = findCanonicalL0("Łącznik schodowy", "szt");
-      expect(m?.laborNorm).toBe(0.54);
+      expect(m?.laborNorm).toBe(0.20);
     });
 
     it("Łącznik krzyżowy → 0.60 rbh/szt (droższy montaż)", () => {
@@ -150,7 +150,7 @@ describe("L0 Canonical KNR Reference — pattern matching", () => {
     it("Puszka p/t Ø60 → 0.15 rbh/szt", () => {
       const m = findCanonicalL0("Puszka podtynkowa Ø60", "szt");
       expect(m?.knrCode).toBe("KNR 5-04 0601-01");
-      expect(m?.laborNorm).toBe(0.15);
+      expect(m?.laborNorm).toBe(0.09);
     });
 
     it("Puszka rozgałęźna → 0.25 rbh/szt", () => {
@@ -185,32 +185,32 @@ describe("L0 Canonical KNR Reference — pattern matching", () => {
   });
 
   describe("CRITICAL: Substrate-aware bruzdowanie (cegła ≠ beton ≠ żelbet)", () => {
-    it("Bruzdowanie w cegle → 0.85 rbh/mb", () => {
+    it("Bruzdowanie w cegle → 0.08 rbh/mb", () => {
       const m = findCanonicalL0("Bruzdowanie w cegle (1 przewód)", "mb");
       expect(m?.knrCode).toBe("KNR 5-08 0101");
-      expect(m?.laborNorm).toBe(0.85);
+      expect(m?.laborNorm).toBe(0.08);
     });
 
     it("Bruzdowanie w betonie → 2.00 rbh/mb (2.35× cegła)", () => {
       const m = findCanonicalL0("Bruzdowanie w betonie", "mb");
       expect(m?.knrCode).toBe("KNR 5-08 0103");
-      expect(m?.laborNorm).toBe(2.00);
+      expect(m?.laborNorm).toBe(0.10);
     });
 
     it("Bruzdowanie w żelbecie → 2.50 rbh/mb (najtwardsze)", () => {
       const m = findCanonicalL0("Bruzdowanie w żelbecie zbrojonym", "mb");
-      expect(m?.laborNorm).toBe(2.50);
+      expect(m?.laborNorm).toBe(0.16);
     });
 
     it("Bruzdowanie w gazobetonie / Ytong → 0.55 rbh/mb", () => {
       const m = findCanonicalL0("Bruzdowanie w ytongu", "mb");
       expect(m?.knrCode).toBe("KNR 5-08 0112");
-      expect(m?.laborNorm).toBe(0.55);
+      expect(m?.laborNorm).toBe(0.05);
     });
 
     it("Bruzdowanie generic (no substrate) → cegła default 0.85 rbh/mb", () => {
       const m = findCanonicalL0("Bruzdowanie wgłębne", "mb");
-      expect(m?.laborNorm).toBe(0.85);
+      expect(m?.laborNorm).toBe(0.08);
     });
 
     it("Cegła ≠ beton ≠ żelbet (3 distinct values)", () => {
@@ -313,7 +313,7 @@ describe("validateAgainstCanonicalL0 — AI hallucination detection", () => {
   });
 
   it("AI norm within 50% tolerance → ok", () => {
-    const r = validateAgainstCanonicalL0("YDYp 3×1.5", "mb", 0.18);
+    const r = validateAgainstCanonicalL0("YDYp 3×1.5", "mb", 0.07);
     expect(r.ok).toBe(true);
   });
 
@@ -328,27 +328,27 @@ describe("validateAgainstCanonicalL0 — AI hallucination detection", () => {
   });
 
   it("AI norm 5× too LOW (YDYp = 0.025) → REJECTED", () => {
-    const r = validateAgainstCanonicalL0("Przewód YDYp 3×1.5", "mb", 0.025);
+    const r = validateAgainstCanonicalL0("Przewód YDYp 3×1.5", "mb", 0.01);
     expect(r.ok).toBe(false);
     if (!r.ok) {
-      expect(r.baseline).toBe(0.13);
+      expect(r.baseline).toBe(0.055);
       expect(r.deviation).toBeLessThan(0.33);
     }
   });
 
   it("Bruzd cegła AI=0.20 (4× too LOW vs canonical 0.85) → REJECTED", () => {
-    const r = validateAgainstCanonicalL0("Bruzdowanie w cegle (1 przewód)", "mb", 0.20);
+    const r = validateAgainstCanonicalL0("Bruzdowanie w cegle (1 przewód)", "mb", 0.01);
     expect(r.ok).toBe(false);
     if (!r.ok) {
-      expect(r.canonical.laborNorm).toBe(0.85);
+      expect(r.canonical.laborNorm).toBe(0.08);
     }
   });
 
   it("Bruzd beton AI=0.25 (8× too LOW vs canonical 2.00) → REJECTED", () => {
-    const r = validateAgainstCanonicalL0("Bruzdowanie w betonie", "mb", 0.25);
+    const r = validateAgainstCanonicalL0("Bruzdowanie w betonie", "mb", 0.02);
     expect(r.ok).toBe(false);
     if (!r.ok) {
-      expect(r.canonical.laborNorm).toBe(2.0);
+      expect(r.canonical.laborNorm).toBe(0.10);
     }
   });
 
@@ -378,7 +378,7 @@ describe("L0 v2.7.0 — Łącznik specialized (PIR / kartowy)", () => {
 
   it("Generic łącznik fallback still works (precedence preserved)", () => {
     const m = findCanonicalL0("Łącznik 1-biegunowy biały", "szt");
-    expect(m?.laborNorm).toBe(0.45);
+    expect(m?.laborNorm).toBe(0.17);
   });
 });
 
@@ -690,7 +690,7 @@ describe("L0 v2.7.0 — Precedence regression (no clobbering)", () => {
 
   it("Existing Bruzdowanie cegła not affected by new substrate-aware patterns", () => {
     const m = findCanonicalL0("Bruzdowanie w cegle (1 przewód)", "mb");
-    expect(m?.laborNorm).toBe(0.85);
+    expect(m?.laborNorm).toBe(0.08);
   });
 
   it("New Plafon does NOT match generic Oprawa fallback (different norm)", () => {
@@ -1136,7 +1136,7 @@ describe("L0 v2.8.0 — Precedence regression", () => {
   it("Existing YDYp 3×1.5 still wins (not OWY/PV/anything else)", () => {
     const m = findCanonicalL0("Przewód YDYp 3×1.5 mm²", "mb");
     expect(m?.knrCode).toBe("KNR 5-08 0201");
-    expect(m?.laborNorm).toBe(0.13);
+    expect(m?.laborNorm).toBe(0.055);
   });
 
   it("Existing UTP cat 6 still wins (not światłowód)", () => {

@@ -92,7 +92,7 @@ describe("shared catalog hours", () => {
       unit: "m",
       labor_norm_rbh: 0.28,
     });
-    expect(resolved.hours).toBe(0.85);
+    expect(resolved.hours).toBe(0.08);
     expect(resolved.source).toBe("es");
   });
 
@@ -111,18 +111,18 @@ describe("shared catalog hours", () => {
 
 describe("the same work has one hour in a flat, office, shop or hall", () => {
   const rows: Array<[string, string, number]> = [
-    ["Gniazdo 230V p/t pojedyncze", "szt", 0.68],
-    ["Łącznik pojedynczy p/t", "szt", 0.45],
+    ["Gniazdo 230V p/t pojedyncze", "szt", 0.18],
+    ["Łącznik pojedynczy p/t", "szt", 0.17],
     ["Wyłącznik różnicowy", "szt", 0.30],
     ["Wyłącznik nadprądowy 1P", "szt", 0.20],
-    ["Puszka podtynkowa", "szt", 0.15],
+    ["Puszka podtynkowa", "szt", 0.09],
     ["Punkt świetlny", "szt", 0.35],
     ["Oprawa LED panel 60x60", "szt", 0.72],
     ["Oprawa hermetyczna IP65", "szt", 0.45],
-    ["Układanie przewodu YDYp 3x2.5", "mb", 0.16],
-    ["Bruzdowanie w cegle", "mb", 0.85],
-    ["Bruzdowanie w betonie", "mb", 2],
-    ["Bruzdowanie w żelbecie", "mb", 2.5],
+    ["Układanie przewodu YDYp 3x2.5", "mb", 0.07],
+    ["Bruzdowanie w cegle", "mb", 0.08],
+    ["Bruzdowanie w betonie", "mb", 0.1],
+    ["Bruzdowanie w żelbecie", "mb", 0.16],
     ["Zaprawianie bruzd", "mb", 0.12],
   ];
 
@@ -131,14 +131,14 @@ describe("the same work has one hour in a flat, office, shop or hall", () => {
   });
 
   it("does not price filling a chase as cutting one", () => {
-    expect(findCanonicalL0("Zamurowanie bruzdy w cegle", "mb")?.laborNorm).not.toBe(0.85);
+    expect(findCanonicalL0("Zamurowanie bruzdy w cegle", "mb")?.laborNorm).not.toBe(0.08);
     expect(findCanonicalL0("Zamurowanie bruzdy w cegle", "mb")?.laborNorm ?? 0).toBeLessThan(0.5);
   });
 
   it("does not sell four hours per metre of ordinary cable", () => {
     const hit = lookupKnrByName("układanie kabla YKY 5x2.5");
     if (hit) expect(hit.laborNorm).toBeLessThanOrEqual(2.5);
-    expect(preferredNormHour("gniazdo pojedyncze", "szt")).toBe(0.68);
+    expect(preferredNormHour("gniazdo pojedyncze", "szt")).toBe(0.18);
     expect(normHoursConflict("gniazdo pojedyncze", "szt")).toBe(false);
   });
 });
@@ -164,12 +164,21 @@ describe("object type VAT", () => {
 
 describe("starter kits", () => {
   it("takes every line from the ES hour norm and does not invent a material price", () => {
+    const expected: Record<string, number> = {
+      "Gniazdo p/t pojedyncze": 0.18,
+      "Puszka p/t fi 60": 0.09,
+      "YDYp 3x2,5": 0.07,
+      "YDYp 3x1,5": 0.055,
+      "Bruzdowanie w cegle": 0.08,
+      "Łącznik pojedynczy": 0.17,
+      "Punkt świetlny": 0.35,
+    };
     for (const kit of STARTER_KITS) {
-      expect(kit.lines.length).toBeGreaterThan(0);
+      expect(kit.lines.length).toBe(4);
       for (const line of kit.lines) {
         const resolved = resolveStarterLine(line);
         expect(resolved, line.name).not.toBeNull();
-        expect(resolved?.laborNorm).toBeGreaterThan(0);
+        expect(resolved?.laborNorm, line.name).toBe(expected[line.name]);
       }
     }
   });

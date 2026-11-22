@@ -42,7 +42,7 @@
     "column_number": "03",
     "description": "Bruzdowanie ściany betonowej / żelbetowej (bruzda 1-przewodowa)",
     "unit": "m",
-    "labor_norm": 2.0,
+    "labor_norm": 2,
     "knr_category": "bruzdowanie",
     "is_industrial": false,
     "synonyms": [
@@ -132,7 +132,7 @@
     "column_number": "08",
     "description": "Ułożenie przewodu YDYp 3x1,5 mm² p/t w bruździe lub rurce",
     "unit": "m",
-    "labor_norm": 0.13,
+    "labor_norm": 0.055,
     "knr_category": "kablowanie",
     "is_industrial": false,
     "synonyms": [
@@ -151,7 +151,7 @@
     "column_number": "09",
     "description": "Ułożenie przewodu YDYp 3x2,5 mm² p/t w bruździe lub rurce",
     "unit": "m",
-    "labor_norm": 0.16,
+    "labor_norm": 0.07,
     "knr_category": "kablowanie",
     "is_industrial": false,
     "synonyms": [
@@ -170,7 +170,7 @@
     "column_number": "10",
     "description": "Ułożenie przewodu YDYp 5x2,5 mm² p/t w bruździe (3-fazowy)",
     "unit": "m",
-    "labor_norm": 0.20,
+    "labor_norm": 0.2,
     "knr_category": "kablowanie",
     "is_industrial": false,
     "synonyms": [
@@ -351,7 +351,7 @@
     "column_number": "20",
     "description": "Montaż puszki sufitowej podtynkowej (do oprawy / żyrandola) w suficie GK lub betonie",
     "unit": "szt",
-    "labor_norm": 0.15,
+    "labor_norm": 0.09,
     "knr_category": "puszki",
     "is_industrial": false,
     "synonyms": [
@@ -369,7 +369,7 @@
     "column_number": "21",
     "description": "Montaż gniazda 230V 16A pojedynczego podtynkowego (z bolcem, z uziemieniem)",
     "unit": "szt",
-    "labor_norm": 0.68,
+    "labor_norm": 0.18,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -389,7 +389,7 @@
     "column_number": "22",
     "description": "Montaż gniazda 230V 16A podwójnego podtynkowego (2x230V w jednej puszce)",
     "unit": "szt",
-    "labor_norm": 0.82,
+    "labor_norm": 0.19,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -590,7 +590,7 @@
     "column_number": "33",
     "description": "Montaż łącznika krzyżowego (do obwodów 3 i więcej punktów sterowania)",
     "unit": "szt",
-    "labor_norm": 0.60,
+    "labor_norm": 0.6,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -626,7 +626,7 @@
     "column_number": "35",
     "description": "Montaż łącznika natynkowego (na tynku, remontowy)",
     "unit": "szt",
-    "labor_norm": 0.40,
+    "labor_norm": 0.4,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -680,7 +680,7 @@
     "column_number": "38",
     "description": "Montaż gniazda RJ-45 (LAN/Data) w ramce elektrycznej podtynkowej",
     "unit": "szt",
-    "labor_norm": 0.60,
+    "labor_norm": 0.6,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
@@ -939,7 +939,7 @@
     "column_number": "52",
     "description": "Montaż bojlera elektrycznego (podgrzewacza wody) — podłączenie elektryczne",
     "unit": "szt",
-    "labor_norm": 1.0,
+    "labor_norm": 1,
     "knr_category": "osprzet_elektryczny",
     "is_industrial": false,
     "synonyms": [
