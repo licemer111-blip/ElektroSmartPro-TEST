@@ -277,11 +277,15 @@ export async function generateInvoiceFromCheckoutSession(
       isB2B,
     });
     const isTestSession = session.metadata?.isTest === "true";
+    const isPayPerExport = session.metadata?.type === "pay_per_export";
     const billingCycle = session.metadata?.billingCycle || "monthly";
     const isYearly = billingCycle === "yearly";
-    const baseProductName = isYearly
-      ? "Subskrypcja roczna ElektroSmart PRO"
-      : "Subskrypcja ElektroSmart PRO";
+    const exportName = String(session.metadata?.projectName || "kosztorys").slice(0, 80);
+    const baseProductName = isPayPerExport
+      ? `Czysty PDF kosztorysu — ${exportName}`
+      : isYearly
+        ? "Subskrypcja roczna ElektroSmart PRO"
+        : "Subskrypcja ElektroSmart PRO";
 
     const infakt = getInFaktAPI(process.env.INFAKT_API_KEY);
 
@@ -311,7 +315,9 @@ export async function generateInvoiceFromCheckoutSession(
       payment_date: today,
       seller_name: "Stanislav Vovk — ElektroSmart PRO",
       ...(process.env.INFAKT_NUMBER_SERIES_ID ? { number_series_id: Number(process.env.INFAKT_NUMBER_SERIES_ID) } : {}),
-      notes: `Zapłacono automatycznie przez Stripe\nStripe Session: ${session.id}\nPlan: ${isYearly ? "Roczny" : "Miesięczny"}${isTestSession ? "\n\n[TRANSAKCJA TESTOWA]" : ""}${!isB2B ? "\n\nFaktura dla osoby prywatnej" : ""}`,  
+      notes: isPayPerExport
+        ? `Zapłacono automatycznie przez Stripe\nStripe Session: ${session.id}\nJednorazowy czysty PDF. To nie jest subskrypcja.${isTestSession ? "\n\n[TRANSAKCJA TESTOWA]" : ""}${!isB2B ? "\n\nFaktura dla osoby prywatnej" : ""}`
+        : `Zapłacono automatycznie przez Stripe\nStripe Session: ${session.id}\nPlan: ${isYearly ? "Roczny" : "Miesięczny"}${isTestSession ? "\n\n[TRANSAKCJA TESTOWA]" : ""}${!isB2B ? "\n\nFaktura dla osoby prywatnej" : ""}`,  
       status: "sent",
     });
 

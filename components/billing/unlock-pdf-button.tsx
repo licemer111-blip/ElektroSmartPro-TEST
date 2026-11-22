@@ -108,7 +108,7 @@ export function UnlockPdfButton({ projectId, alreadyUnlocked = false, className 
       <span>
         {loading
           ? "Przekierowuję do płatności..."
-          : `Odblokuj czysty PDF — ${PAY_PER_EXPORT_PRICE_PLN} zł`}
+          : `Odblokuj czysty PDF — ${PAY_PER_EXPORT_PRICE_PLN} zł netto`}
       </span>
     </button>
   );

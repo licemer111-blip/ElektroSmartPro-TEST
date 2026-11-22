@@ -147,15 +147,10 @@ export const PAY_PER_EXPORT_PRICE_PLN = 29;
 export const PRO_SUBSCRIPTION_PRICE_PLN = 159;
 
 /**
- * v2.1 soft-launch switch — hide the "Kup czysty PDF za 29 zł" CTA in UI
- * while the Stripe one-time product + Stripe Tax config are still being
- * validated. The /api/billing/pay-per-export endpoint stays functional
- * (webhook handler + unlock flow) so existing checkout links keep working.
- *
- * Flip to `true` once Stripe Tax is active + BLIK/P24 enabled (see
- * Stripe Dashboard → Payment methods) + one test purchase has succeeded.
+ * One clean PDF for a single estimate: 29 zł netto. Stripe adds VAT.
+ * The button sits next to PDF export. It does not start a subscription.
  */
-export const PAY_PER_EXPORT_ENABLED = false;
+export const PAY_PER_EXPORT_ENABLED = true;
 
 /**
  * Próg ROI: od ilu eksportów w miesiącu subskrypcja PRO się opłaca.

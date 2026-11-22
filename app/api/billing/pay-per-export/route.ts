@@ -144,6 +144,7 @@ export async function POST(request: NextRequest) {
         userEmail: user.email || "",
         projectId: project.id,
         projectName: projectNameSafe,
+        vatRate: "23",
       },
       payment_intent_data: {
         metadata: {
