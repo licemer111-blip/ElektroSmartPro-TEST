@@ -71,7 +71,7 @@ export function SystemScopeBar({ projectId, itemId, system, hourlyRate }: System
 
   return (
     <div
-      className="mt-1.5 max-w-xl rounded-md border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/40 px-2.5 py-2 space-y-2"
+      className="mt-1.5 max-w-md rounded-md border border-amber-300 bg-amber-50 px-3 py-2.5 space-y-2 dark:border-amber-700 dark:bg-amber-950/40"
       onClick={(event) => event.stopPropagation()}
     >
       <p className="text-[11px] leading-snug text-amber-950 dark:text-amber-100">
@@ -80,12 +80,12 @@ export function SystemScopeBar({ projectId, itemId, system, hourlyRate }: System
       </p>
 
       {mode === "ask" && (
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-col gap-1.5">
           <button
             type="button"
             disabled={pending}
             onClick={() => setMode("device")}
-            className="h-7 px-2.5 rounded-md bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-[11px] font-medium text-slate-800 dark:text-slate-100"
+            className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-left text-xs font-medium leading-tight text-slate-800 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
           >
             Jedno urządzenie
           </button>
@@ -93,27 +93,31 @@ export function SystemScopeBar({ projectId, itemId, system, hourlyRate }: System
             type="button"
             disabled={pending}
             onClick={() => setMode("lump")}
-            className="h-7 px-2.5 rounded-md bg-blue-600 text-white text-[11px] font-medium"
+            className="w-full rounded-md bg-blue-600 px-3 py-2 text-left text-white"
           >
-            Cały układ — kwota umowna
+            <span className="block text-xs font-semibold leading-tight">Cały układ</span>
+            <span className="mt-0.5 block text-[11px] font-normal leading-tight text-blue-100">kwota umowna</span>
           </button>
         </div>
       )}
 
       {mode === "device" && (
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-col gap-1.5">
           {system.devices.map((device) => (
             <button
               key={device.id}
               type="button"
               disabled={pending}
               onClick={() => pickDevice(device)}
-              className="h-7 px-2.5 rounded-md bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-[11px] font-medium text-slate-800 dark:text-slate-100"
+              className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-left text-xs font-medium leading-tight text-slate-800 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
             >
-              {device.label} · {device.hours.toLocaleString("pl-PL")} rbh
+              {device.label}
+              <span className="mt-0.5 block text-[11px] font-normal text-slate-500 dark:text-slate-400">
+                {device.hours.toLocaleString("pl-PL")} rbh
+              </span>
             </button>
           ))}
-          <button type="button" onClick={() => setMode("lump")} className="h-7 px-2 text-[11px] text-slate-500 underline">
+          <button type="button" onClick={() => setMode("lump")} className="px-3 py-1.5 text-left text-[11px] text-slate-500 underline">
             To jednak cały układ
           </button>
         </div>
@@ -145,7 +149,7 @@ export function SystemScopeBar({ projectId, itemId, system, hourlyRate }: System
             type="button"
             disabled={pending}
             onClick={saveLump}
-            className="h-7 px-2.5 rounded-md bg-blue-600 text-white text-[11px] font-medium"
+            className="rounded-md bg-blue-600 px-3 py-2 text-xs font-medium text-white"
           >
             Zapisz
           </button>
