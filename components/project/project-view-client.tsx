@@ -15,6 +15,7 @@ import { useSummaryCollapse } from "@/hooks/use-summary-collapse";
 import { useProjectTabSync } from "@/hooks/useProjectTabSync";
 import { ProjectTabContainer } from "./_parts/ProjectTabContainer";
 import { materialGaps } from "@/lib/estimate/offer-readiness";
+import { EstimateTour } from "@/components/project/estimate-tour";
 
 export type ProjectTab = "estimate" | "materials" | "notes" | "settings";
 
@@ -334,6 +335,7 @@ export function ProjectViewClient({
         {summaryCollapsed && (
           <button
             onClick={toggleSummary}
+            data-tour="tour-summary"
             className="hidden lg:flex fixed right-0 top-1/3 z-30 items-center gap-1.5 px-2.5 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-l-xl shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:shadow-[0_0_25px_rgba(59,130,246,0.7)] transition-all animate-pulse"
             title="Poka\u017c podsumowanie"
             style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
@@ -348,10 +350,12 @@ export function ProjectViewClient({
             <div className="relative">
               <button
                 onClick={toggleSummary}
-                className="absolute top-2 right-2 z-10 p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/60 shadow-sm ring-2 ring-blue-300/50 dark:ring-blue-600/30 animate-pulse hover:animate-none transition-colors"
-                title="Ukryj podsumowanie"
+                className="absolute top-2 right-2 z-10 p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/60 shadow-sm ring-2 ring-blue-300/50 dark:ring-blue-600/30 animate-pulse hover:animate-none transition-colors inline-flex items-center gap-1"
+                data-tour="tour-summary"
+                title="Ukryj podsumowanie, żeby poszerzyć tabelę"
               >
                 <PanelRightClose className="w-4 h-4" />
+                <span className="text-[10px] font-semibold pr-0.5">Ukryj</span>
               </button>
               <ProjectSummary
                 project={project}
@@ -443,6 +447,7 @@ export function ProjectViewClient({
           </div>
         </DialogContent>
       </Dialog>
+      <EstimateTour />
     </div>
   );
 }

@@ -214,6 +214,7 @@ export function AddUserAssemblyDialog({ projectId, isPro = false, currentAssembl
     <Dialog open={open} onOpenChange={handleDialogChange}>
         <div
           className={cn("relative inline-flex", showOnboardingPulse && "after:absolute after:inset-0 after:rounded-md after:ring-2 after:ring-blue-400 after:animate-ping after:opacity-60")}
+          data-tour="tour-zestaw"
           title={showOnboardingPulse ? "Zacznij tutaj: dodaj gotowy zestaw (gniazdko, kabel, montaż) jednym kliknięciem!" : "Gotowe pakiety montażowe (np. puszka + kabel + gniazdo). Przyspieszają dodawanie pozycji do kosztorysu."}
           onClick={() => { if (!isFinal) setOpen(true); }}
         >

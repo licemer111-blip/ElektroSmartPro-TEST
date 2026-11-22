@@ -243,10 +243,12 @@ export function CatalogSidebar({ projectId, categories: initialCategories, catal
             {onCollapse && (
               <button
                 onClick={onCollapse}
-                className="p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/60 shadow-sm ring-2 ring-blue-300/50 dark:ring-blue-600/30 animate-pulse hover:animate-none transition-colors flex-shrink-0"
-                title="Ukryj katalog"
+                data-tour="tour-catalog"
+                className="p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/60 shadow-sm ring-2 ring-blue-300/50 dark:ring-blue-600/30 animate-pulse hover:animate-none transition-colors flex-shrink-0 inline-flex items-center gap-1"
+                title="Ukryj katalog, żeby poszerzyć tabelę"
               >
                 <PanelLeftClose className="w-4 h-4" />
+                <span className="text-[10px] font-semibold pr-0.5">Ukryj</span>
               </button>
             )}
             <CardTitle className="flex items-center gap-2 text-sm">

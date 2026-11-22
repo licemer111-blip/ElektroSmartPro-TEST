@@ -15,8 +15,9 @@ import {
   ArrowLeft, MoreVertical, Edit, Loader2,
   User, Copy, FileBox, Archive, ArchiveRestore, UserCog,
   GitCompareArrows, PiggyBank, FileSpreadsheet, Info,
-  Sparkles, CircleDollarSign,
+  Sparkles, CircleDollarSign, CircleHelp,
 } from "lucide-react";
+import { ESTIMATE_TOUR_EVENT } from "@/components/project/estimate-tour";
 import { useToast } from "@/hooks/use-toast";
 import type { ProjectItem } from "@/lib/types/database";
 import { AIAssistantDialog } from "@/components/project/ai-assistant-dialog";
@@ -299,6 +300,7 @@ export function ProjectHeaderToolbar({
                     setEsWycenaOpen(true);
                     onBroadcastDialog("headerAiPricerOpen", true);
                   }}
+                  data-tour="tour-wycen"
                   className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 bg-orange-500 hover:bg-orange-600 text-white flex-shrink-0 ${isFinal ? "opacity-50" : ""}`}
                 >
                   <CircleDollarSign className="h-3.5 w-3.5" />
@@ -313,6 +315,7 @@ export function ProjectHeaderToolbar({
                     onAIImportClick();
                   }}
                   className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white flex-shrink-0 ${isFinal ? "opacity-50" : ""}`}
+                  data-tour="tour-import"
                 >
                   <FileSpreadsheet className="h-3.5 w-3.5" />
                   Wczytaj ofertę
@@ -326,12 +329,23 @@ export function ProjectHeaderToolbar({
                     setEsAssistOpen(true);
                     onBroadcastDialog("headerAiAssistantOpen", true);
                   }}
+                  data-tour="tour-assistant"
                   className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 bg-orange-500 hover:bg-orange-600 text-white flex-shrink-0 ${isFinal ? "opacity-50" : ""}`}
                 >
                   <Sparkles className="h-3.5 w-3.5" />
                   Asystent
                 </Button>
                 <HintTooltip content={HINTS.aiPricing} side="bottom" iconOnly iconClassName="!bg-amber-100 dark:!bg-amber-900/60 !text-amber-600 dark:!text-amber-400 !ring-amber-300 dark:!ring-amber-700 hover:!bg-amber-200 hover:!shadow-[0_0_8px_rgba(245,158,11,0.55)]" />
+                <Button
+                  size="sm"
+                  variant="outline"
+                  title="Pokaż, co robi każdy przycisk w kosztorysie"
+                  onClick={() => window.dispatchEvent(new Event(ESTIMATE_TOUR_EVENT))}
+                  className="h-7 sm:h-8 text-[11px] sm:text-xs gap-1 flex-shrink-0"
+                >
+                  <CircleHelp className="h-3.5 w-3.5" />
+                  Pomoc
+                </Button>
                 </div>
 
               </div>

@@ -49,6 +49,7 @@ export function ProjectLayoutToggle({
         <button
           onClick={toggleCatalog}
           className="hidden lg:flex fixed left-0 top-1/3 z-30 items-center gap-1.5 px-2.5 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-r-xl shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:shadow-[0_0_25px_rgba(59,130,246,0.7)] transition-all animate-pulse"
+          data-tour="tour-catalog"
           title="Pokaż katalog pozycji"
           style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
         >

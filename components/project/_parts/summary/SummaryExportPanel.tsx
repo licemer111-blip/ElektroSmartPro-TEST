@@ -180,7 +180,7 @@ export function SummaryExportPanel({
         )}
 
         {/* PDF + Excel buttons */}
-        <div className="relative w-full">
+        <div className="relative w-full" data-tour="tour-export">
           <div className="flex w-full rounded-lg overflow-hidden shadow-lg border-2 border-red-400/50">
             <button
               onClick={handleExportPDF}
