@@ -33,9 +33,10 @@ interface CreateInvoiceDialogProps {
   projectName: string;
   disabled?: boolean;
   userHasInFaktKey?: boolean;
+  defaultVatRate?: number;
 }
 
-export function CreateInvoiceDialog({ projectId, projectName, disabled = false, userHasInFaktKey = false }: CreateInvoiceDialogProps) {
+export function CreateInvoiceDialog({ projectId, projectName, disabled = false, userHasInFaktKey = false, defaultVatRate = 23 }: CreateInvoiceDialogProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -55,7 +56,7 @@ export function CreateInvoiceDialog({ projectId, projectName, disabled = false, 
     paymentDays: "14",
     paymentMethod: "transfer",
     notes: "",
-    vatRate: "23",
+    vatRate: defaultVatRate === 8 ? "8" : "23",
   });
 
   // Load next invoice number when dialog opens

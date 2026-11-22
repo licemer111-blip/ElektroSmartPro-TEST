@@ -26,8 +26,15 @@ interface ProjectItemRow {
   name: string;
   quantity: number;
   unit: string;
-  final_material_price: number;
-  final_labor_price: number;
+  final_material_price?: number | null;
+  final_labor_price?: number | null;
+  material_price?: number | null;
+  labor_price?: number | null;
+  is_lump_sum?: boolean | null;
+  is_assembly_child?: boolean | null;
+  parent_assembly_id?: string | null;
+  confidence_level?: string | null;
+  is_investor_material?: boolean | null;
 }
 
 export async function createProjectInvoice(input: CreateProjectInvoiceInput) {
@@ -40,7 +47,7 @@ export async function createProjectInvoice(input: CreateProjectInvoiceInput) {
 
     const { data: project, error: projectError } = await supabase
       .from("projects")
-      .select(`*, project_items ( id, name, quantity, unit, final_material_price, final_labor_price )`)
+      .select(`*, regions(price_modifier), project_items ( id, name, quantity, unit, material_price, labor_price, final_material_price, final_labor_price, is_lump_sum, is_assembly_child, parent_assembly_id, confidence_level, is_investor_material )`)
       .eq("id", input.projectId)
       .eq("user_id", user.id)
       .single();
@@ -60,20 +67,58 @@ export async function createProjectInvoice(input: CreateProjectInvoiceInput) {
       return { success: false, error: "Skonfiguruj swój klucz API InFakt w Ustawieniach → Faktury" };
     }
 
-    const vatRate = input.vatRate || 23;
-    let totalNet = 0;
+    const priced = project as {
+      vat_rate?: number | null;
+      adjustment_percentage?: number | null;
+      mat_markup_pct?: number | null;
+      lab_markup_pct?: number | null;
+      complexity_factor?: number | null;
+      materials_owned_by_customer?: boolean | null;
+      regions?: { price_modifier?: number | null } | { price_modifier?: number | null }[] | null;
+      project_items?: ProjectItemRow[] | null;
+    };
+    const vatRate = input.vatRate === 8 || input.vatRate === 23
+      ? input.vatRate
+      : (Number(priced.vat_rate) === 8 ? 8 : 23);
+    const regionJoin = priced.regions;
+    const regionModifier = Number(Array.isArray(regionJoin) ? regionJoin[0]?.price_modifier : regionJoin?.price_modifier) || 1;
+    const adjustment = 1 + (Number(priced.adjustment_percentage) || 0) / 100;
+    const matMarkup = 1 + (Number(priced.mat_markup_pct) || 0) / 100;
+    const labMarkup = 1 + (Number(priced.lab_markup_pct) || 0) / 100;
+    const complexity = Number(priced.complexity_factor) || 1;
+    const materialsOwned = priced.materials_owned_by_customer === true;
+    const rows = priced.project_items || [];
+    const parentIds = new Set(
+      rows.filter((row) => row.is_assembly_child).map((row) => row.parent_assembly_id).filter(Boolean),
+    );
 
-    const invoiceItems = project.project_items.map((item: ProjectItemRow) => {
-      const itemNet = (item.final_material_price + item.final_labor_price) * item.quantity;
-      totalNet += itemNet;
-      return {
+    let totalNet = 0;
+    const invoiceItems = rows.flatMap((item) => {
+      if (parentIds.has(item.id)) return [];
+      const qty = item.is_lump_sum ? 1 : Number(item.quantity) || 0;
+      if (qty <= 0) return [];
+      const manual = item.confidence_level === "manual";
+      const region = manual ? 1 : regionModifier;
+      const material = materialsOwned || item.is_investor_material
+        ? 0
+        : Number(item.final_material_price ?? item.material_price) || 0;
+      const labor = Number(item.final_labor_price ?? item.labor_price) || 0;
+      const unitNet = material * matMarkup * adjustment + labor * region * labMarkup * complexity * adjustment;
+      const lineNet = Math.round(unitNet * qty * 100) / 100;
+      if (lineNet <= 0) return [];
+      totalNet += lineNet;
+      return [{
         name: item.name,
-        quantity: item.quantity,
+        quantity: qty,
         unit: item.unit,
-        net_price: item.final_material_price + item.final_labor_price,
+        net_price: Math.round((lineNet / qty) * 100) / 100,
         tax_rate: vatRate,
-      };
+      }];
     });
+
+    if (invoiceItems.length === 0) {
+      return { success: false, error: "Kosztorys nie ma pozycji z kwotą. Najpierw wycen projekt." };
+    }
 
     const totalVat = calculateVAT(totalNet, vatRate);
     const totalGross = calculateGross(totalNet, vatRate);
