@@ -34,10 +34,10 @@ export default function manifest(): MetadataRoute.Manifest {
         icons: [{ src: '/icons/icon-192x192.png', sizes: '192x192' }],
       },
       {
-        name: 'Szybka Wycena',
-        short_name: 'Wycena',
-        description: 'Kosztorys wstępny w 60 sekund',
-        url: '/dashboard/projects/quick-estimate',
+        name: 'Zestawy',
+        short_name: 'Zestawy',
+        description: 'Punkt gniazda, punkt świetlny i łącznik z normy ES',
+        url: '/dashboard/assemblies',
         icons: [{ src: '/icons/icon-192x192.png', sizes: '192x192' }],
       },
       {

@@ -13,14 +13,11 @@ import { submitSurvey, shouldShowSurvey } from "@/app/dashboard/feedback/survey-
 import { cn } from "@/lib/utils";
 
 const FEATURE_OPTIONS = [
-  "Kreator",
-  "ES Import",
-  "Szybka Wycena",
-  "Kalkulatory",
+  "Kosztorys",
   "Katalog",
   "Zestawy",
-  "Szablony",
-  "Zespół",
+  "Kalkulatory",
+  "PDF",
   "Inne",
 ];
 

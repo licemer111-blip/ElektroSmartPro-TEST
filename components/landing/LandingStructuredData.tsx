@@ -64,7 +64,7 @@ export function LandingStructuredData({ catalogCount }: LandingStructuredDataPro
         name: "Jak zrobić wycenę i kosztorys instalacji elektrycznej online?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Trzy kroki: województwo i typ obiektu (VAT 8% albo 23%), pozycje z katalogu lub szybka wycena z metrażu, PDF z logo. Robocizna to godziny normy ES razy stawka razy województwo. Materiał bez tej korekty. W DEMO na PDF jest znak wodny.",
+          text: "Trzy kroki: województwo i typ obiektu (VAT 8% albo 23%), pozycje z katalogu albo zestaw, PDF z logo. Robocizna to godziny normy ES razy stawka razy województwo. Materiał bez tej korekty. Program nie układa listy z metrażu. W DEMO na PDF jest znak wodny.",
         },
       },
       {
