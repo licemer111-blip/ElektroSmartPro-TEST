@@ -149,7 +149,6 @@ export async function fillMissingKnrCodes(projectId: string): Promise<KnrCodeRes
       .single();
 
     if (!project) return { success: false, error: "Nie masz uprawnien do tego projektu" };
-    if (project.status === "final") return { success: false, error: "Projekt jest zablokowany" };
 
     const { data: items } = await supabase
       .from("project_items")
@@ -250,7 +249,6 @@ export async function fillMissingRbhNorms(projectId: string): Promise<RbhNormRes
       .single();
 
     if (!project) return { success: false, error: "Nie masz uprawnien do tego projektu" };
-    if (project.status === "final") return { success: false, error: "Projekt jest zablokowany" };
 
     const { data: items } = await supabase
       .from("project_items")

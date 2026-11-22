@@ -87,10 +87,6 @@ export async function restoreSnapshot(
     return { error: "Brak uprawnień" };
   }
 
-  if (project.status === "final") {
-    return { error: "Odblokuj projekt przed przywracaniem wersji" };
-  }
-
   // Download snapshot
   const { data: blob, error: dlError } = await supabase.storage
     .from("project-documents")

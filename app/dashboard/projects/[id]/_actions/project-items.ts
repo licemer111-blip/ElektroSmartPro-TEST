@@ -58,7 +58,6 @@ export async function addCatalogItemToProject(
     .single();
 
   if (!project) return { error: "Projekt nie został znaleziony" };
-  if (project.status === "final") return { error: "Projekt jest zablokowany. Odblokuj go, aby dodawać pozycje." };
 
   const { data: catalogItem } = await supabase
     .from("catalog_items")

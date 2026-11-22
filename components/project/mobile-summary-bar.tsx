@@ -82,14 +82,26 @@ export function MobileSummaryBar({
   const complexityFactor = project.complexity_factor || 1.0;
 
   // Same factors as Podsumowanie: stawka is already in the stored labor, region once.
+  // A kit header is not added on top of its lines. A lump sum is one piece.
+  const parentIds = new Set(
+    items.filter((item) => item.is_assembly_child).map((item) => item.parent_assembly_id).filter(Boolean),
+  );
   let baseMaterialTotal = 0;
   let baseLaborTotal = 0;
   items.forEach((item) => {
-    const matPrice = item.final_material_price ?? item.material_price ?? 0;
-    const labPrice = item.final_labor_price ?? item.labor_price ?? 0;
-    const effectiveRegion = item.confidence_level === "manual" ? 1 : regionModifier;
-    if (!materialsOwnedByCustomer) baseMaterialTotal += matPrice * item.quantity * matMarkupMult;
-    baseLaborTotal += labPrice * item.quantity * effectiveRegion * labMarkupMult * complexityFactor;
+    if (item.is_assembly_child) return;
+    const pricedRows = parentIds.has(item.id)
+      ? items.filter((child) => child.parent_assembly_id === item.id)
+      : [item];
+    for (const row of pricedRows) {
+      const qty = row.is_lump_sum ? 1 : row.quantity;
+      const effectiveRegion = row.confidence_level === "manual" ? 1 : regionModifier;
+      const matPrice = row.final_material_price ?? row.material_price ?? 0;
+      const labPrice = row.final_labor_price ?? row.labor_price ?? 0;
+      const suppressMaterial = materialsOwnedByCustomer || row.is_investor_material === true;
+      if (!suppressMaterial) baseMaterialTotal += matPrice * qty * matMarkupMult;
+      baseLaborTotal += labPrice * qty * effectiveRegion * labMarkupMult * complexityFactor;
+    }
   });
   const adj = 1 + (project.adjustment_percentage || 0) / 100;
   const materialTotal = baseMaterialTotal * adj;

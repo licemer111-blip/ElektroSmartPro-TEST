@@ -222,9 +222,6 @@ export async function importItemsToProject(
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
   if (!canEdit) return { error: "Nie masz uprawnień do edycji tego projektu" };
 
-  const { data: proj } = await supabase.from("projects").select("status").eq("id", projectId).single();
-  if (proj?.status === "final") return { error: "Projekt jest zablokowany. Odblokuj go, aby importować pozycje." };
-
   const { data: existingItems } = await supabase
     .from("project_items").select("sort_order").eq("project_id", projectId)
     .order("sort_order", { ascending: false }).limit(1);
@@ -273,9 +270,6 @@ export async function importItemsFromExcel(
 
   const canEdit = await canUserEditProject(supabase, projectId, user.id);
   if (!canEdit) return { error: "Nie masz uprawnień do edycji tego projektu" };
-
-  const { data: proj } = await supabase.from("projects").select("status").eq("id", projectId).single();
-  if (proj?.status === "final") return { error: "Projekt jest zablokowany. Odblokuj go, aby importować pozycje." };
 
   if (!items || items.length === 0) return { error: "Brak pozycji do importu" };
   if (items.length > 500) return { error: "Maksymalnie 500 pozycji na raz" };

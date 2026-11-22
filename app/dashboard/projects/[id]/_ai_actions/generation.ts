@@ -354,7 +354,6 @@ export async function generateProjectItemsWithAI(
       .single();
 
     if (!project) return { success: false, error: "Nie masz uprawnien do edycji tego projektu" };
-    if (project.status === "final") return { success: false, error: "Projekt jest zablokowany. Odblokuj go, aby generowac pozycje za pomoca AI." };
 
     const { data: profilePrefs } = await supabase
       .from("profiles")

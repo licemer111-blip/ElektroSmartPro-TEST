@@ -8,7 +8,6 @@ import Link from "next/link";
 import { PageContainer } from "@/components/layout/page-container";
 import { PageHeader } from "@/components/layout/page-header";
 import { getUserProfile } from "../actions";
-import { getUserTeam } from "../team/actions";
 import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 
 // Force dynamic rendering to always get fresh data
@@ -42,13 +41,12 @@ export default async function CatalogPage({
 
   const profile = await getUserProfile();
 
-  const [catalogData, categories, itemCounts, totalCount, favoriteIds, userTeam, userCategoriesCount, ownItemsCount] = await Promise.all([
+  const [catalogData, categories, itemCounts, totalCount, favoriteIds, userCategoriesCount, ownItemsCount] = await Promise.all([
     getCatalogItems({ search, categoryId, type, page, pageSize: 20, favoritesOnly: showFavorites, viewMode: effectiveViewMode }).catch(() => ({ items: [], total: 0, page: 1, pageSize: 20, totalPages: 0 })),
     getCatalogCategories().catch(() => []),
     getCategoryItemCounts(effectiveViewMode).catch(() => ({})),
     getTotalCatalogCount(effectiveViewMode).catch(() => 0),
     getFavoriteCatalogItemIds().catch(() => []),
-    getUserTeam().catch(() => null),
     getUserCategoriesCount().catch(() => 0),
     getTotalCatalogCount("own").catch(() => 0),
   ]);
@@ -217,7 +215,7 @@ export default async function CatalogPage({
           totalCatalogCount={totalCount}
           favoriteIds={favoriteIds}
           showFavorites={showFavorites}
-          userTeam={userTeam}
+          userTeam={null}
           currentView={effectiveViewMode}
         />
 

@@ -115,7 +115,7 @@ export function ProjectMaterialsList({
                 {materialsOwnedByCustomer ? (
                   <>
                     <p className="text-lg font-bold text-muted-foreground">Materiały klienta</p>
-                    <p className="text-xs text-muted-foreground">Ceny ukryte</p>
+                    <p className="text-xs text-muted-foreground">Nie wchodzą w kwotę oferty</p>
                   </>
                 ) : (
                   <>

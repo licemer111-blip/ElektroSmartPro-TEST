@@ -263,7 +263,6 @@ export async function estimatePricesWithAI(
       .single();
 
     if (!project) return { success: false, error: "Projekt nie znaleziony" };
-    if (project.status === "final") return { success: false, error: "Projekt jest zablokowany. Odblokuj go, aby wyceniac pozycje." };
 
     const { data: items, error: itemsError } = await supabase
       .from("project_items")
@@ -1863,7 +1862,6 @@ export async function applyAiPrices(
       .single();
 
     if (!project) return { success: false, updatedCount: 0, error: "Projekt nie znaleziony" };
-    if (project.status === "final") return { success: false, updatedCount: 0, error: "Projekt zablokowany" };
 
     const adminClient = createAdminClient();
     const now = new Date().toISOString();
@@ -2034,7 +2032,6 @@ export async function triggerL3Estimation(
       .single();
 
     if (!project) return { success: false, price_labor: 0, price_material: 0, justification: "", match_trace: "", knr_code: null, labor_norm: null, error: "Brak uprawnień do projektu" };
-    if (project.status === "final") return { success: false, price_labor: 0, price_material: 0, justification: "", match_trace: "", knr_code: null, labor_norm: null, error: "Projekt jest zablokowany" };
 
     const projectLaborRateL3 = (project.default_hourly_rate as number | null) ?? 0;
     const regionName = (project.regions as { name: string; price_modifier: number } | null)?.name || voivodeship || "Polska";

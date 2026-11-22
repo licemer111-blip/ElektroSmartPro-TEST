@@ -60,7 +60,7 @@ export function useProjectHeaderActions({
       if (result.error) {
         toast({ title: "Błąd", description: result.error, variant: "destructive" });
       } else {
-        toast({ title: "Sukces!", description: "Województwo zostało zmienione. Ceny zostały przeliczone." });
+        toast({ title: "Sukces!", description: "Województwo zmienione. Robocizna na kosztorysie liczy się z nowym mnożnikiem. Zapisane ceny pozycji zostały bez zmian." });
         notifyDataChanged("region-changed");
         router.refresh();
       }
