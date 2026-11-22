@@ -190,7 +190,7 @@ export async function POST(req: Request) {
     } | null);
     const isDemoProject = Boolean((project as Record<string, unknown>).is_demo_project);
 
-    // v2.0 Pay-per-Export: one-time unlock (29 zł) lets FREE user export ONE
+    // v2.0 Pay-per-Export: one-time unlock (49 zł netto) lets FREE user export ONE
     // clean PDF for THIS project. Only the project owner can consume it —
     // otherwise team members could drain an unlock bought by someone else.
     const paidExportUnlockedAt = (project as Record<string, unknown>).paid_export_unlocked_at as string | null | undefined;

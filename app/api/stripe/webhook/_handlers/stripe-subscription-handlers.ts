@@ -62,7 +62,7 @@ export async function handleCheckoutCompleted(
       });
     }
 
-    // Generate InFakt invoice for the 29 PLN charge (no PRO activation).
+    // Generate InFakt invoice for the 49 PLN netto charge (no PRO activation).
     await generateInvoiceFn(userId, session);
     return;
   }

@@ -143,7 +143,7 @@ export function SubscriptionPanel({ profile }: SubscriptionPanelProps) {
                     Robisz wyceny tylko sporadycznie?
                   </p>
                   <p className="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5">
-                    <strong>29 zł netto</strong> za jeden czysty PDF tej konkretnej wyceny.
+                    <strong>49 zł netto</strong> za jeden czysty PDF tej konkretnej wyceny.
                     Bez subskrypcji. Przycisk jest przy eksporcie PDF w kosztorysie. Podatek dolicza Stripe.
                   </p>
                 </div>

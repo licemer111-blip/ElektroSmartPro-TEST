@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Settings, Crown, Users, Rocket, Shield, Lock, FileText,
 } from "lucide-react";
-import { FREE_TIER_MAX_PROJECTS, PAY_PER_EXPORT_ENABLED } from "@/lib/config/tier-limits";
+import { FREE_TIER_MAX_PROJECTS, PAY_PER_EXPORT_ENABLED, PAY_PER_EXPORT_PRICE_PLN } from "@/lib/config/tier-limits";
 import { TRIAL_DURATION_DAYS } from "@/lib/auth/entitlements";
 import { DEMO_AI_LIMIT, PRO_AI_LIMIT } from "@/lib/ai-quota-config";
 
@@ -89,7 +89,7 @@ export function SettingsClient() {
               <li>Demo widzi sumy. PDF ma znak DEMO.</li>
               <li>Drugi własny projekt jest zablokowany. Projekt DEMO i archiwum się nie liczą.</li>
               <li>Trial = one-shot per email (nie per account re-creation)</li>
-              <li>Pojedynczy czysty PDF za 29 zł: {PAY_PER_EXPORT_ENABLED ? "włączony" : "wyłączony w kasie"}</li>
+              <li>Pojedynczy czysty PDF za {PAY_PER_EXPORT_PRICE_PLN} zł: {PAY_PER_EXPORT_ENABLED ? "włączony" : "wyłączony w kasie"}</li>
             </ul>
           </div>
         </CardContent>
@@ -128,7 +128,7 @@ export function SettingsClient() {
             </div>
             <div className="rounded-lg bg-slate-50 dark:bg-slate-800/50 p-2.5 text-center">
               <p className="text-slate-400 mb-0.5">Pay-per-Export</p>
-              <p className="font-bold text-slate-700 dark:text-slate-300">{PAY_PER_EXPORT_ENABLED ? "29 PLN" : "wył."}</p>
+              <p className="font-bold text-slate-700 dark:text-slate-300">{PAY_PER_EXPORT_ENABLED ? `${PAY_PER_EXPORT_PRICE_PLN} PLN` : "wył."}</p>
             </div>
           </div>
         </CardContent>

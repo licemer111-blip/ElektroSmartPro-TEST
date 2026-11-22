@@ -10,7 +10,7 @@
  *     ✓ Max 3 active projects
  *     ✓ AI = 5 requests/month (existing `ai_usage_count` counter)
  *     ✓ PDF/Excel export WITH "DEMO" watermark
- *     ✓ Pay-per-Export (29 PLN) for one-shot clean PDF
+ *     ✓ Pay-per-Export (49 PLN) for one-shot clean PDF
  *     ✗ AI beyond 5/mo, clean PDF, Portal Klienta, branding → PRO
  *
  *   7-DAY FREE TRIAL (no card, one-shot per account)

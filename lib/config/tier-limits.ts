@@ -11,7 +11,7 @@
  *     ✓ Paywall dnia 1: 2. projekt + czysty PDF (eksport ma znak DEMO)
  *     ✓ AI = 10 requests/month (one pool: import, assistant, photo, panel)
  *     ✓ PDF/Excel export WITH "DEMO" watermark (still sendable for own use)
- *     ✓ Pay-per-Export (29 zł) → one-shot clean PDF for a specific project
+ *     ✓ Pay-per-Export (49 zł) → one-shot clean PDF for a specific project
  *     ✓ Demo project (seeded) — showcase, exports WITH watermark
  *     ✗ AI beyond 10/mo, clean PDF, Portal Klienta, branding → PRO
  *
@@ -30,7 +30,7 @@
  *     ✓ Team collaboration + Offline mode
  *     ✓ Priorytetowe wsparcie
  *
- *   PAY-PER-EXPORT (29 zł per clean PDF)
+ *   PAY-PER-EXPORT (49 zł per clean PDF)
  *     For electricians who do 1–2 estimates/year and don't need subscription.
  *
  * DLACZEGO TAK:
@@ -143,17 +143,17 @@ export const PDF_DEMO_WATERMARK = {
 
 // ─── Pay-per-export pricing ────────────────────────────────────────────────
 
-export const PAY_PER_EXPORT_PRICE_PLN = 29;
+export const PAY_PER_EXPORT_PRICE_PLN = 49;
 export const PRO_SUBSCRIPTION_PRICE_PLN = 159;
 
 /**
- * One clean PDF for a single estimate: 29 zł netto. Stripe adds VAT.
+ * One clean PDF for a single estimate: 49 zł netto. Stripe adds VAT.
  * The button sits next to PDF export. It does not start a subscription.
  */
 export const PAY_PER_EXPORT_ENABLED = true;
 
 /**
  * Próg ROI: od ilu eksportów w miesiącu subskrypcja PRO się opłaca.
- * Math: 159 / 29 ≈ 5.48 → już przy 6 eksportach/m-c PRO tanieje.
+ * Math: 159 / 49 ≈ 3.24 → już przy 4 eksportach/m-c PRO tanieje.
  */
 export const ROI_EXPORTS_BREAKEVEN = Math.ceil(PRO_SUBSCRIPTION_PRICE_PLN / PAY_PER_EXPORT_PRICE_PLN);

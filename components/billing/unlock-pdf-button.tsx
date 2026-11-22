@@ -15,7 +15,7 @@ interface UnlockPdfButtonProps {
 /**
  * v2.0 Pay-per-Export button.
  *
- * One-time 29 zł payment to unlock a single clean PDF for THIS project.
+ * One-time 49 zł netto payment to unlock a single clean PDF for THIS project.
  * POSTs to /api/billing/pay-per-export → Stripe Checkout → webhook flips the
  * project flag → next PDF export skips the DEMO watermark (and consumes the flag).
  *
