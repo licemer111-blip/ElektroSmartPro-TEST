@@ -230,8 +230,8 @@ export function ProjectSummary({
   const [narzutyOpen, setNarzutyOpen] = useState(false);
 
   return (
-    <Card className="h-full rounded-xl">
-      <CardHeader className="flex-shrink-0 bg-white dark:bg-slate-900 py-2.5 px-3 border-b border-slate-100 dark:border-slate-800">
+    <Card className="h-full rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+      <CardHeader className="flex-shrink-0 rounded-t-xl bg-white dark:bg-slate-900 py-2.5 px-3 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center justify-between gap-2">
           <CardTitle className="flex items-center gap-2 text-sm min-w-0">
             <Calculator className="w-4 h-4 flex-shrink-0" />
