@@ -121,11 +121,11 @@ export function EstimateTableHeader({
         )}
 
         {showRgCol && (
-          <TableHead className={`text-center min-w-[112px] w-[112px] text-xs border-r border-slate-200 dark:border-slate-700 ${colorMode ? "bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300" : "bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400"}`}>
+          <TableHead className={`text-center min-w-[112px] w-[112px] text-xs border-r border-slate-200 dark:border-slate-700 ${colorMode ? "bg-cyan-100 dark:bg-cyan-950/30 text-cyan-800 dark:text-cyan-300" : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"}`}>
             <div className="flex flex-col items-center gap-0.5">
               <span>⏱</span>
               <div className="flex items-center gap-1">
-                <span className="font-semibold">rbh</span>
+                <span className="font-semibold">Rbh</span>
                 <HintTooltip content={HINTS.columnTime} side="bottom" iconOnly />
               </div>
               <span className="text-[10px] font-normal opacity-70">(rbh, zł {moneyTag})</span>
