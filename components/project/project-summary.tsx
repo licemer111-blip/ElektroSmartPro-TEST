@@ -250,7 +250,7 @@ export function ProjectSummary({
           )}
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 pt-4">
         {/* Materials Responsibility Toggle */}
         <div
           onClick={() => {
