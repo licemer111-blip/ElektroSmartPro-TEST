@@ -452,7 +452,9 @@ export async function estimatePricesWithAI(
         if (!match) continue;
         const rawMat = Math.round((match.base_material_price ?? 0) * 100) / 100;
         const rawLab = Math.round((match.base_labor_price ?? 0) * 100) / 100;
-        if (rawMat === 0 && rawLab === 0) continue;
+        // A material price alone must not block the hour. The hour still comes
+        // from the short list or the dictionary. materialOnLine keeps the zł.
+        if (rawLab <= 0) continue;
         l1ResolvedIds.add(item.id);
         l1Estimates.push({
           itemId: item.id,
@@ -461,7 +463,9 @@ export async function estimatePricesWithAI(
           quantity: item.quantity,
           currentMaterial: item.material_price || 0,
           currentLabor: item.labor_price || 0,
-          suggestedMaterial: mode === "labor" ? (item.material_price || 0) : rawMat,
+          suggestedMaterial: mode === "labor"
+            ? (item.material_price || 0)
+            : (rawMat > 0 ? rawMat : materialOnLine(item)),
           suggestedLabor: mode === "material" ? (item.labor_price || 0) : rawLab,
           confidence: "high" as const,
           note: `Twój cennik → ${match.name}`,
@@ -572,7 +576,7 @@ export async function estimatePricesWithAI(
             ? ` → ×${regionMod.toFixed(2)}(${regionLabel}) → ${(sugLab * regionMod).toFixed(2)}PLN`
             : "";
           const capTagL0 = localModL0 >= MAX_COMBINED_MODIFIER ? ` [⚠️ cap×${MAX_COMBINED_MODIFIER}]` : "";
-          const traceL0 = `${laborNormScaled.toFixed(4)}rbh × ${localModL0.toFixed(2)}(local${capTagL0}) × ${baseRateForCalc.toFixed(1)}PLN/h${globalModTagL0} = ${sugLab.toFixed(2)}PLN${regionHintL0}`;
+          const traceL0 = `${laborNormScaled.toFixed(4)}rbh × ${baseRateForCalc.toFixed(1)}PLN/h = ${sugLab.toFixed(2)}PLN${regionHintL0}`;
           l0ResolvedIds.add(item.id);
           l0Estimates.push({
             itemId: item.id,
@@ -587,7 +591,7 @@ export async function estimatePricesWithAI(
             suggestedLabor: mode === "material" ? (item.labor_price || 0) : sugLab,
             laborHoursTotal: laborHoursTotalL0,
             confidence: "high" as const,
-            note: `L0 Przedmiar KNR: ${code}${scaleNote} | ${traceL0}${warnings}`,
+            note: `Norma ES z kodu na pozycji: ${code}${scaleNote} | ${traceL0}`,
             knrCode: code,
             knrSource: "official" as const,
             laborNorm: laborNormScaled,
@@ -1881,6 +1885,12 @@ export async function applyAiPrices(
           } else if (p.labor_norm != null && p.labor_norm > 0) {
             // Fallback: bare norm × qty (less accurate but always available)
             updatePayload.labor_hours_total = Math.round(p.labor_norm * (current?.quantity ?? 1) * 100) / 100;
+          }
+          // A catalog price is zł the electrician saved, not an hour.
+          // A leftover rbh would show "hours × rate" next to a different zł.
+          if (p.knr_source === "catalog-l1") {
+            updatePayload.labor_norm = null;
+            updatePayload.labor_hours_total = null;
           }
           if (p.suggested_norm !== undefined) updatePayload.suggested_norm = p.suggested_norm;
           // Expert Shield persistence — always save so UI can show override badge
