@@ -822,6 +822,9 @@ export const EstimateRow = React.memo(function EstimateRow({
               {/* Row 2: Jm + Ilość (+ prices for non-zestaw rows) */}
               {editingState!.isAssemblyParent ? (
                 /* Zestaw parent (both manual and AI): only Jedn. + Ilość — no price editing */
+                <p className="text-[11px] leading-snug text-slate-500 dark:text-slate-400">
+                  Ceny są w składnikach. Tu zmieniasz ilość: każdy składnik przeliczy się razem z nią.
+                </p>
                 <div className="grid grid-cols-[80px_90px] gap-2 items-end">
                   <div className="space-y-1">
                     <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block">Jedn.</label>
@@ -847,6 +850,13 @@ export const EstimateRow = React.memo(function EstimateRow({
                 </div>
               ) : (
                 /* Regular row: Jedn. + Ilość + Material + Robocizna */
+                <p className="text-[11px] leading-snug text-slate-500 dark:text-slate-400">
+                  Rbh z kolumny to godziny na 1 {editingState!.unit || "szt"}.
+                  {projectLaborRate >= 1
+                    ? ` Robocizna w zł = te godziny × ${projectLaborRate.toLocaleString("pl-PL")} zł/h.`
+                    : " Bez stawki w Finansach godziny nie zamienią się na złote."}
+                  {" "}Materiał wpisujesz sam, rbh go nie liczy. Ilość mnoży obie ceny. Województwo dolicza tylko robociznę w tabeli.
+                </p>
                 <div className="grid grid-cols-[80px_90px_1fr_1fr] gap-2 items-end">
                   <div className="space-y-1">
                     <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block">Jedn.</label>
@@ -872,7 +882,7 @@ export const EstimateRow = React.memo(function EstimateRow({
                   {showMaterialsColumn && !materialsOwnedByCustomer ? (
                     <div className="space-y-1">
                       <label className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 block">
-                        Materiał — cena/jm. netto
+                        Materiał, zł za {editingState!.unit || "jm"}
                       </label>
                       {showPrices ? (
                         <>
@@ -900,7 +910,7 @@ export const EstimateRow = React.memo(function EstimateRow({
                   {showLaborColumn ? (
                     <div className="space-y-1">
                       <label className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 block">
-                        Robocizna — stawka/jm. netto
+                        Robocizna, zł za {editingState!.unit || "jm"}
                       </label>
                       {showPrices ? (
                         <>
@@ -910,7 +920,10 @@ export const EstimateRow = React.memo(function EstimateRow({
                             className="h-9 text-sm text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
                             placeholder="0.00" onKeyDown={handleKeyDown}
                           />
-                          <Input type="number" step="0.01" min="0"
+                          <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block pt-1">
+                            Rbh na {editingState!.unit || "jm"}
+                          </label>
+                          <Input type="number" step="0.001" min="0"
                             value={editingState!.laborHours}
                             onChange={(e) => {
                               const laborHours = e.target.value;
@@ -921,19 +934,26 @@ export const EstimateRow = React.memo(function EstimateRow({
                               }
                               onEditingChange(next);
                             }}
-                            className="h-7 text-[11px] text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
-                            placeholder="rbh/jm"
-                            title="Godziny na jednostkę. Kwota robocizny = godziny × stawka projektu."
+                            className="h-8 text-sm text-right dark:bg-slate-950 dark:border-slate-700 dark:text-white"
+                            placeholder="0.000"
+                            title="Godziny na jednostkę. Kwota robocizny = godziny × stawka."
                             onKeyDown={handleKeyDown}
                           />
                           {(() => {
-                            const u = parseFloat(editingState!.laborPrice) || 0;
+                            const hours = parseFloat(editingState!.laborHours) || 0;
+                            const typed = parseFloat(editingState!.laborPrice) || 0;
                             const q = parseFloat(editingState!.quantity) || 0;
-                            return u > 0 && q > 0 ? (
-                              <div className="text-[9px] text-emerald-600 dark:text-emerald-400 text-right font-medium">
-                                {q} × {u.toFixed(2)} = <strong>{(q * u).toFixed(2)} zł</strong>
+                            const fromHours = projectLaborRate >= 1 ? Math.round(hours * projectLaborRate * 100) / 100 : 0;
+                            const follows = hours > 0 && fromHours > 0 && Math.abs(typed - fromHours) < 0.06;
+                            return (
+                              <div className="text-[10px] leading-snug text-right text-emerald-700 dark:text-emerald-400">
+                                {projectLaborRate >= 1 && hours > 0
+                                  ? `${hours.toLocaleString("pl-PL")} × ${projectLaborRate.toLocaleString("pl-PL")} zł/h = ${fromHours.toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} zł`
+                                  : "Wpisz rbh albo złote robocizny."}
+                                {follows ? "" : typed > 0 && hours > 0 ? " Wpisałeś inną kwotę, kolumna Rbh jej nie nadpisze." : ""}
+                                {q > 0 && typed > 0 ? ` Suma: ${(q * typed).toLocaleString("pl-PL", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} zł.` : ""}
                               </div>
-                            ) : null;
+                            );
                           })()}
                         </>
                       ) : (

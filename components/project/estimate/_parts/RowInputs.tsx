@@ -506,7 +506,7 @@ export function RowLaborCell({
 }
 
 export function RowRgCell({
-  item, colorMode, onGlobalFallbackAction, isLoading, assemblyNorm, laborRate = 0, laborUnitZl = 0, bruttoMode = false,
+  item, colorMode, onGlobalFallbackAction, isLoading, assemblyNorm, laborRate = 0,
 }: { item: ProjectItem; colorMode: boolean; onGlobalFallbackAction?: (id: string) => void; isLoading?: boolean; assemblyNorm?: number | null; laborRate?: number; laborUnitZl?: number; bruttoMode?: boolean }) {
   const [isPending, startTransition] = useTransition();
   const [confirmReset, setConfirmReset] = useState(false);
@@ -586,9 +586,9 @@ export function RowRgCell({
               );
             })()}
           </div>
-          {laborUnitZl > 0 && (
-            <div className="text-[10px] font-semibold text-right text-emerald-600 dark:text-emerald-400" title="Złote robocizny za jedną jednostkę. Suma wiersza to ta cena razy ilość.">
-              {laborUnitZl.toFixed(2).replace(".", ",")} zł/{item.unit ?? "szt"}{bruttoMode ? " brutto" : ""}
+          {laborRate >= 1 && (
+            <div className="text-[10px] text-right text-slate-500 dark:text-slate-400" title="Te godziny razy Twoja stawka dają złote robocizny za jednostkę. Województwo dolicza kolumna Robocizna. Materiał godzinami się nie liczy.">
+              × {laborRate.toLocaleString("pl-PL")} zł/h
             </div>
           )}
           {item.labor_hours_total != null && (
