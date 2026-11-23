@@ -29,7 +29,7 @@ import {
   resolveImportedRows,
   type MatchResult,
 } from "@/lib/services/matching-engine";
-import { buildLocalKnrContext, lookupKnrByName, preferredNormHour, normHoursConflict } from "@/lib/knr-local-context";
+import { buildLocalKnrContext, preferredNormHour, normHoursConflict } from "@/lib/knr-local-context";
 import { validateAgainstCanonicalL0, findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
 import { wholeSystem } from "@/lib/estimate/system-scope";
 import { findCanonicalL0WithOverrides } from "@/lib/services/canonical-l0-overrides";
@@ -900,7 +900,7 @@ export async function estimatePricesWithAI(
           ? ` → ×${regionModL2.toFixed(2)}(${regionLabelL2}) → ${(sugLab * regionModL2).toFixed(2)}PLN`
           : "";
         const noteFormula = normWithFloor != null
-          ? ` | norma: ${normFloorTag}${normWithFloor.toFixed(4)} rbh/${itemUnitForScale} × ${localModL2.toFixed(2)}(local${capTagL2}) × ${baseRateForCalc.toFixed(1)}PLN/h${globalModTag} = ${sugLab.toFixed(2)} PLN${regionHintL2}`
+          ? ` | ${normWithFloor.toFixed(4)} rbh × ${baseRateForCalc.toFixed(1)} zł/h = ${sugLab.toFixed(2)} zł${regionHintL2}`
           : "";
         return {
           itemId: item.id,
@@ -924,78 +924,7 @@ export async function estimatePricesWithAI(
         };
       }
 
-      // ── L2 MISS: not in personal catalog or ES-Dictionary → try L2.5 name-lookup ─
-      // v2.5 Name-Lookup Fallback: Before falling through to L3 AI (which frequently
-      // hallucinates KNR codes and norms), try local fuzzy name-matching against the
-      // 35+ KNR JSON files via lookupKnrByName(). This catches the common failure mode
-      // where Quick-Estimate AI generates wrong/fake KNR codes (e.g. "KNR 5-04 0501-01"
-      // — an outdated series that doesn't exist in knr_norms) but the item name clearly
-      // maps to a known norm (e.g. "Gniazdo pojedyncze" → KNR 5-08 0401, 0.68 rbh/szt).
-      // Without this layer, such items went to L3 AI which hallucinated labor_norm=0.33
-      // rbh (wrong) instead of the correct 0.68 rbh.
-      const normalizedItemName_miss = normalizePlName(item.name);
-      const isConnMiss = CONNECTION_RE.test(normalizedItemName_miss);
-      const isHeavyConnMiss = isConnMiss && HEAVY_APPLIANCE_RE.test(normalizedItemName_miss + " " + item.name);
-
-      const l25Match = lookupKnrByName(item.name);
-      if (l25Match) {
-        // Re-compute context + modifiers (same cascade as L2 HIT for pricing consistency)
-        const itemWithCtx25 = item as typeof item & { section?: string | null; description?: string | null };
-        const itemSectionCtx25 = `${itemWithCtx25.section ?? ""} ${itemWithCtx25.description ?? ""}`.trim();
-        const globalCtx25 = itemSectionCtx25 || projectFallback;
-        const cableMod25 = getCableComplexityModifier(item.name);
-        const autoSurfaceMod25 = getSurfaceModifier(item.name, globalCtx25);
-        let surfaceMod25 = autoSurfaceMod25 * (autoSurfaceMod25 > 1.0 ? surfaceExtraMod : 1.0);
-        if (isZelbet(item.name) || isZelbet(globalCtx25)) surfaceMod25 = Math.max(surfaceMod25, 2.25);
-        else if (/silk[aąei]|silce/i.test(item.name + " " + globalCtx25)) surfaceMod25 = Math.max(surfaceMod25, 1.75);
-        else if (/\bbeton/i.test(item.name + " " + globalCtx25)) surfaceMod25 = Math.max(surfaceMod25, 1.50);
-        const ceilingMod25 = getCeilingModifier(item.name, globalCtx25);
-        const heightMod25 = getHeightModifier(item.name, globalCtx25);
-        // Unit scaling: convert dict norm (per dict unit) to item unit (per 1 item unit)
-        const itemUnitForScale25 = (item.unit ?? originalItem?.unit ?? "");
-        const scaledNorm25 = scaleLaborNorm(l25Match.laborNorm, l25Match.unit, itemUnitForScale25);
-        // Apply connection floor (heavy appliance or general commissioning)
-        const normWithFloor25 = scaledNorm25;
-        void isHeavyConnMiss;
-        // v2.4: M-Factor REMOVED — see L0 above for rationale.
-        const _l25CableSection = isCableItem(item.name)
-          ? (() => { const _m = item.name.match(CABLE_SECTION_RE); return _m ? parseFloat(_m[2].replace(",", ".")) : null; })()
-          : null;
-        void _l25CableSection;
-        const localMod25 = 1;
-        const wymianaFactor25 = 1;
-        const sugLab25Base = Math.round(normWithFloor25 * localMod25 * baseRateForCalc * globalLaborMod * 100) / 100;
-        const sugLab25 = Math.round(sugLab25Base * wymianaFactor25 * 100) / 100;
-        const laborHoursTotal25 = baseRateForCalc > 0
-          ? Math.round(sugLab25 / baseRateForCalc * (item.quantity ?? 1) * 1000) / 1000
-          : null;
-        const regionHint25 = rateResult.regionModifier !== 1.0
-          ? ` → ×${rateResult.regionModifier.toFixed(2)}(${projectRegionName ?? ""}) → ${(sugLab25 * rateResult.regionModifier).toFixed(2)}PLN`
-          : "";
-        return {
-          itemId: item.id,
-          name: item.name,
-          unit: originalItem?.unit ?? item.unit,
-          quantity: item.quantity,
-          currentMaterial: item.material_price || 0,
-          currentLabor: item.labor_price || 0,
-          suggestedMaterial: 0, // L2.5 lookup has no material price — Task3 mat-fallback will supply
-          suggestedLabor: mode === "material" ? (item.labor_price || 0) : sugLab25,
-          laborHoursTotal: laborHoursTotal25,
-          regionModifier: rateResult.regionModifier,
-          confidence: l25Match.estimated ? "low" as const : "medium" as const,
-          note: `L2.5 Name-match: "${item.name}" → ${l25Match.code} | norma: ${normWithFloor25.toFixed(4)} rbh/${itemUnitForScale25} × ${localMod25.toFixed(2)}(local) × ${baseRateForCalc.toFixed(1)}PLN/h = ${sugLab25.toFixed(2)} PLN${regionHint25}${l25Match.estimated ? " | godzina szacunkowa, sprawdź przed ofertą" : ""}`,
-          knrCode: l25Match.code,
-          knrSource: isOfficialKnr(l25Match.code) ? ("official" as const) : ("es-synthetic" as const),
-          laborNorm: normWithFloor25,
-          suggestedNorm: normWithFloor25,
-          isAmbiguous: false,
-          trace: `L2.5 Name Lookup: "${item.name}" → ${l25Match.code} | ${normWithFloor25.toFixed(4)}rbh × ${localMod25.toFixed(2)}(local) × ${baseRateForCalc.toFixed(1)}PLN/h = ${sugLab25.toFixed(2)}PLN`,
-        };
-      }
-
-      // L2.5 also missed → existing connection floor (or full L3 AI fallback for non-connection)
-      void isConnMiss;
+      // No second hour from the JSON archive. One dictionary hour, or the row stays empty.
       return {
         itemId: item.id,
         name: item.name,
@@ -1573,47 +1502,6 @@ export async function repriceSingleItem(
       : rateResult.laborRate;
     const rateSource: RateSource = "manual";
 
-    // ── L2.5 Name-Based KNR Lookup (pre-AI) ─────────────────────────────
-    // v2.5: Before calling Gemini for single-item repricing, try fuzzy name match
-    // against local KNR JSON files. Skip when user provided extraContext
-    // (signaling they want AI to consider that context) or overrideUnit.
-    if (!opts.extraContext && !opts.overrideUnit) {
-      const l25Repr = lookupKnrByName(item.name);
-      if (l25Repr) {
-        const localModR = 1;
-        const scaledNormR = scaleLaborNorm(l25Repr.laborNorm, l25Repr.unit, effectiveUnit);
-        const isConnR = CONNECTION_RE.test(normalizePlName(item.name));
-        const isHeavyR = isConnR && HEAVY_APPLIANCE_RE.test(normalizePlName(item.name) + " " + item.name);
-        const normFloorR = scaledNormR;
-        void isHeavyR;
-        void isConnR;
-        // v2.4: M-Factor REMOVED — see L0 above for rationale.
-        const wymianaFactorR = 1;
-        const sugLabRBase = Math.round(normFloorR * localModR * baseRateForCalc * 100) / 100;
-        const sugLabR = Math.round(sugLabRBase * wymianaFactorR * 100) / 100;
-        const rawL25ReprEst: AiPriceEstimate = {
-          itemId: item.id, name: item.name, unit: item.unit, quantity: item.quantity,
-          currentMaterial: item.final_material_price ?? item.material_price ?? 0,
-          currentLabor: item.final_labor_price ?? item.labor_price ?? 0,
-          suggestedMaterial: 0, // material handled separately via benchmarks
-          suggestedLabor: sugLabR,
-          confidence: "medium" as const,
-          note: `L2.5 Name-match: ${item.name} → ${l25Repr.code} (${normFloorR.toFixed(4)} rbh/${effectiveUnit} × ${localModR.toFixed(2)} × ${baseRateForCalc} PLN/h)`,
-          knrCode: l25Repr.code,
-          knrSource: isOfficialKnr(l25Repr.code) ? "official" : "es-synthetic",
-          laborNorm: normFloorR,
-          isAmbiguous: false,
-          trace: `L2.5 reprice pre-AI match: ${l25Repr.code}`,
-        };
-        const processedReprL25 = applyPostProcessPipeline(rawL25ReprEst, baseRateForCalc, 1.0);
-        // v4.0 (Phase 3): laborOnly guard — preserve current material, never echo AI estimate
-        if (opts.laborOnly) {
-          processedReprL25.suggestedMaterial = item.final_material_price ?? item.material_price ?? 0;
-        }
-        return { success: true, estimate: processedReprL25 };
-      }
-    }
-
     const regionName = (project.regions as { name: string; price_modifier: number } | null)?.name || "Polska";
     const priceModifier = (project.regions as { name: string; price_modifier: number } | null)?.price_modifier || 1.0;
     const knrInstruction = buildRateSourceInstruction(rateSource, baseRateForCalc);
@@ -1976,53 +1864,6 @@ export async function triggerL3Estimation(
       : rateResult.laborRate;
     const rateSource: RateSource = "manual";
     const knrInstruction = buildRateSourceInstruction(rateSource, baseRateForCalc);
-
-    // ── L2.5 Name-Based KNR Lookup (pre-AI) ─────────────────────────────
-    // v2.5: Before calling Gemini for single-item L3 pricing, try fuzzy name match
-    // against local KNR JSON files. This returns a canonical 2026 norm instantly
-    // and avoids AI hallucination for common items (gniazdo, MCB, kabel, oprawa).
-    // Only skip if user explicitly wants full AI context (not applicable here —
-    // triggerL3 is always a simple position name without extra context).
-    const l25Trigger = lookupKnrByName(positionName);
-    if (l25Trigger) {
-      // Build full modifier cascade (consistent with L2 HIT and L2.5 in estimate batch)
-      const localModT = 1;
-      const scaledNormT = scaleLaborNorm(l25Trigger.laborNorm, l25Trigger.unit, unit);
-      const isConnT = CONNECTION_RE.test(normalizePlName(positionName));
-      const isHeavyT = isConnT && HEAVY_APPLIANCE_RE.test(normalizePlName(positionName) + " " + positionName);
-      const normFloorT = scaledNormT;
-      void isHeavyT;
-      void isConnT;
-      // v2.4: M-Factor REMOVED — see L0 above for rationale.
-      const wymianaFactorT = 1;
-      const sugLabTBase = Math.round(normFloorT * localModT * baseRateForCalc * 100) / 100;
-      const sugLabT = Math.round(sugLabTBase * wymianaFactorT * 100) / 100;
-      const knrCodeT = l25Trigger.code;
-      // Run through sanity + guards for consistency with full pipeline
-      const rawL25Est: AiPriceEstimate = {
-        itemId, name: positionName, unit, quantity: 1,
-        currentMaterial: 0, currentLabor: 0,
-        suggestedMaterial: 0, // material handled by separate benchmark path
-        suggestedLabor: sugLabT,
-        confidence: "medium" as const,
-        note: `L2.5 Name-match: ${positionName} → ${knrCodeT} (${normFloorT.toFixed(4)} rbh/${unit} × ${localModT.toFixed(2)} × ${baseRateForCalc} PLN/h)`,
-        knrCode: knrCodeT,
-        knrSource: isOfficialKnr(knrCodeT) ? "official" : "es-synthetic",
-        laborNorm: normFloorT,
-        isAmbiguous: false,
-        trace: `L2.5 triggerL3 pre-AI match: ${knrCodeT}`,
-      };
-      const processedT = applyPostProcessPipeline(rawL25Est, baseRateForCalc, 1.0);
-      return {
-        success: true,
-        price_labor: processedT.suggestedLabor,
-        price_material: 0,
-        justification: processedT.note ?? `L2.5: ${knrCodeT}`,
-        match_trace: processedT.trace ?? `L2.5 Name Lookup → ${knrCodeT}`,
-        knr_code: processedT.knrCode ?? knrCodeT,
-        labor_norm: processedT.laborNorm ?? normFloorT,
-      };
-    }
 
     // v10.5: Inject real material price references into L3 prompt
     const l3PriceRef = buildBenchmarkPromptContext();
