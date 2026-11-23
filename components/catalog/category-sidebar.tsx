@@ -8,6 +8,7 @@ import { CategoryDialog } from "./category-dialog";
 import { DeleteCategoryDialog } from "./delete-category-dialog";
 import { SearchModeSelector } from "./SearchModeSelector";
 import type { DataSourceMode } from "@/hooks/use-search-mode";
+import { isHiddenCatalogCategory } from "@/lib/catalog/catalog-search";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -76,9 +77,10 @@ export function CategorySidebar({
 
   // In own view: show categories that have items (AI items use global categories with user_id=null)
   // Don't filter by category.user_id — filter by whether the category has any items
-  const visibleCategories = isOwnView
+  const visibleCategories = (isOwnView
     ? categories.filter((c) => (itemsPerCategory[c.id] || 0) > 0)
-    : categories;
+    : categories
+  ).filter((c) => !isHiddenCatalogCategory(c.name));
 
   // Map currentView (core/own/all) ↔ DataSourceMode (engine/own/hybrid)
   const displayMode: DataSourceMode =

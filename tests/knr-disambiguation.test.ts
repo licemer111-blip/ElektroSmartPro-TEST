@@ -73,6 +73,13 @@ describe("lookupKnrByName — cable-laying entries", () => {
     expect(m!.laborNorm).toBeLessThanOrEqual(0.40);
   });
 
+  it("wciągnięcie do rur is pulling the cable, not laying it in plaster", () => {
+    const m = lookupKnrByName("Wciągnięcie przewodu YDY 3x1,5 do rur");
+    expect(m).not.toBeNull();
+    expect(m!.code).toMatch(/0122/);
+    expect(m!.laborNorm).toBeCloseTo(0.08, 2);
+  });
+
   it("Kabel YKY 5×16 should match copper power cable entry", () => {
     const m = lookupKnrByName("Kabel YKY 5×16 mm²");
     expect(m).not.toBeNull();

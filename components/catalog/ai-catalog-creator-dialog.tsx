@@ -67,7 +67,7 @@ export function AICatalogCreatorDialog({ isPro, triggerClassName, userTeam }: AI
 
   const exampleDescriptions = [
     "Montaż gniazd — gniazdo pojedyncze, podwójne, hermetyczne IP44, puszka podtynkowa Ø60, montaż osprzętu podtynkowego",
-    "Prace kablowe — układanie YDYp 3×1,5 i 3×2,5mm² w tynku i na tynku, kucie bruzd w cegle/betonie, zaprawianie",
+    "Prace kablowe — układanie YDYp 3×1,5 i 3×2,5mm² w tynku, na tynku, w rurze, w korycie i na drabince, kucie bruzd w cegle/betonie, zaprawianie",
     "Łączniki i sterowanie — łącznik pojedynczy, schodowy, krzyżowy, ściemniacz LED, czujnik ruchu PIR, przycisk dzwonkowy",
     "Montaż rozdzielnicy — MCB B16/B25, RCD 40A/30mA, RCBO, SPD T2, szyna N/PE, okablowanie wewnętrzne, opisy",
     "Pomiary i odbiory — rezystancja izolacji, impedancja pętli zwarcia, prąd RCD, protokół E01/E02, sprawdzenie ciągłości PE",

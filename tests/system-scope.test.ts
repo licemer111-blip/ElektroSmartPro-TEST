@@ -31,6 +31,8 @@ describe("whole system versus one device", () => {
     expect(wholeSystem("System KNX")?.id).toBe("knx");
     expect(wholeSystem("Czujnik KNX")).toBeNull();
     expect(wholeSystem("Pomiary odbiorcze")?.id).toBe("tests");
+    expect(wholeSystem("Pomiary odbiorcze instalacji elektrycznej")?.id).toBe("tests");
+    expect(wholeSystem("Pomiar rezystancji izolacji")).toBeNull();
     expect(wholeSystem("Instalacja odgromowa")?.id).toBe("lightning");
     expect(wholeSystem("Zwód poziomy")).toBeNull();
     expect(wholeSystem("Demontaż instalacji mieszkania")?.id).toBe("demo");

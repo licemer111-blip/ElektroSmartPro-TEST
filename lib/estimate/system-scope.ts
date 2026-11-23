@@ -173,7 +173,7 @@ const FAMILIES: Family[] = [
     title: "Pomiary",
     hint: "Pomiary całego obiektu to nie jeden obwód. Wpisz kwotę umowną.",
     test: /\bpomiar/,
-    bare: /^(?:wykonanie\s+)?pomiary?(?:\s+elektryczn\w*|\s+odbiorcz\w*|\s+instalacj\w*)?$/,
+    bare: /^(?:wykonanie\s+)?pomiary?(?:\s+(?:odbiorcz\w*|elektryczn\w*|instalacj\w*|obiektu?))*$/,
     devices: [],
   },
   {

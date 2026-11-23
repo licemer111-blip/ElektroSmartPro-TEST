@@ -79,8 +79,8 @@ export function FileInsightModal({ file, onClose }: FileInsightModalProps) {
         { from: "Oprawa LED panel 60x60 (oferta dostawcy)", to: "mat=145 zł/szt, rob=35 zł/szt" },
       ]
     : [
-        { from: "Montaż gniazda wtyczkowego", to: "KNR 5-08 0401 | 0.68 rbh/szt" },
-        { from: "Układanie YDYp 3×2.5", to: "KNR 5-08 0202 | 0.16 rbh/mb" },
+        { from: "Montaż gniazda wtyczkowego", to: "KNR 5-08 0401 | 0.18 rbh/szt" },
+        { from: "Układanie YDYp 3×2.5", to: "KNR 5-08 0202 | 0.07 rbh/mb" },
         { from: "Wyłącznik nadprądowy 1P", to: "KNR 5-08 1501 | 0.20 rbh/szt" },
       ];
 

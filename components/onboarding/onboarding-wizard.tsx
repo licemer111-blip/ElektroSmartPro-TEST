@@ -196,7 +196,7 @@ export function OnboardingWizard({ regions, userName, userId }: OnboardingWizard
                 </div>
 
                 <p className="text-[11px] text-slate-400 dark:text-slate-500 text-center">
-                  Przykład: gniazdo 0,68 rbh × Twoja stawka. Województwo doliczy się dopiero na kosztorysie. Stawkę zmienisz w Ustawieniach.
+                  Przykład: gniazdo 0,18 rbh × Twoja stawka. Województwo doliczy się dopiero na kosztorysie. Stawkę zmienisz w Ustawieniach.
                 </p>
               </div>
             )}

@@ -267,7 +267,7 @@ function headNoun(normalizedName: string): string | null {
  * Iron Rule: when item starts with a RESTORE verb, KNR entries describing
  * OPEN actions are HARD-BLOCKED (penalty -10) regardless of token overlap.
  */
-type ActionLabel = "OPEN" | "RESTORE" | "DEMONTAZ" | "MEASURE" | "CONNECT" | "MOUNT_LAMP";
+type ActionLabel = "OPEN" | "RESTORE" | "DEMONTAZ" | "MEASURE" | "PULL" | "CONNECT" | "MOUNT_LAMP";
 
 interface ActionGroup {
   label: ActionLabel;
@@ -309,6 +309,13 @@ const ACTION_GROUPS: ReadonlyArray<ActionGroup> = [
     label: "MEASURE",
     detect: /\bpomiar(?:y|ow)?\b/,
     required: /(pomiar|badanie|odbior|sprawdz|kontrol)/,
+  },
+  // PULL: wciąganie przewodu do istniejącej rury. Not the same job as laying YDYp in plaster.
+  {
+    label: "PULL",
+    detect: /\bwciagn/,
+    required: /(wciagan|przeciag|kanalizacj)/,
+    forbidden: /(\bp t\b|w tynku|pod tynkiem|bruzd)/,
   },
 ];
 
@@ -399,7 +406,8 @@ const NEEDLE_SLANG_MAP: ReadonlyArray<SlangRule> = [
   // pulling sockets/panels toward cable entries (cross-unit norm bugs).
   // Only fire when item name actually contains the cable abbreviation.
   // YDYp/YDY — copper PVC cable
-  { trigger: /\bydyp?\b|\bydy\b/, canonical: "ulozenie przewodu ydyp" },
+  { trigger: /\bwciagn/, canonical: "wciaganie kabla w istniejaca rure kanalizacje kablowa przeciag" },
+  { trigger: /\bydyp?\b|\bydy\b/, canonical: "ulozenie przewodu ydyp", notWhenAction: "PULL" },
   // YKY/YKYzo — copper power cable
   { trigger: /\byky(?:zo)?\b/, canonical: "ulozenie kabla yky miedziany" },
   // UTP/skrętka — must have explicit "utp" or "skretka" (NOT bare "cat 6"
@@ -587,7 +595,7 @@ export function lookupKnrByName(itemName: string, preferResidential = true): Knr
     // Chase cutting stays: those descriptions contain "bruzd".
     if (unitFamily === "m" && hour >= 2 && !descNorm.includes("bruzd")) continue;
 
-    const head = headNoun(baseNeedle);
+    const head = actionGroup?.label === "PULL" ? null : headNoun(baseNeedle);
     if (head && !descNorm.includes(head)) continue;
 
     let effectiveScore = rawScore;
@@ -631,7 +639,9 @@ export function lookupKnrByName(itemName: string, preferResidential = true): Knr
   // No score-fallback — boosts are tiebreakers among already-recalling entries,
   // not a way to admit weak matches.
   if (bestEntry && bestRawScore >= 0.5) {
-    const canonical = ["szt", "mb", "m", "kpl", "m2"]
+    const canonical = actionGroup?.label === "PULL"
+      ? null
+      : ["szt", "mb", "m", "kpl", "m2"]
       .map((unit) => findCanonicalL0(itemName, unit))
       .find((hit) => hit != null);
     if (canonical) {
