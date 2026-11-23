@@ -220,6 +220,8 @@ export async function createProject(formData: FormData) {
       region_id: resolvedRegionId,
       object_type_id,
       vat_rate,
+      brutto_mode: true,
+      expert_coloring: true,
       client_name: client_name?.trim() || null,
       client_address: client_address?.trim() || null,
       client_nip: client_nip?.trim() || null,

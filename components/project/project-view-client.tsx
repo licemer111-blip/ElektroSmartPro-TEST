@@ -63,7 +63,7 @@ export function ProjectViewClient({
 
   // ─── Live doc settings state (Pult 5-w-1) ────────────────────────────────
   const [liveShowKnr, setLiveShowKnr] = useState(project.show_knr ?? false);
-  const [liveBruttoMode, setLiveBruttoMode] = useState(project.brutto_mode ?? false);
+  const [liveBruttoMode, setLiveBruttoMode] = useState(project.brutto_mode ?? true);
   const [liveShowLaborHours, setLiveShowLaborHours] = useState(project.show_labor_hours_in_pdf ?? false);
   const [liveExpertColoring, setLiveExpertColoring] = useState(project.expert_coloring ?? true);
   // Zestaw Engine v2 (2026-05-04): per-project flag. Default FALSE (radical-OFF migration).

@@ -208,6 +208,8 @@ export async function createProjectFromTemplate(
       region_id: template.region_id,
       object_type_id: template.object_type_id,
       vat_rate: template.vat_rate,
+      brutto_mode: true,
+      expert_coloring: true,
       rate_source: template.rate_source,
       status: "draft",
       default_hourly_rate: defaultHourlyRate,
