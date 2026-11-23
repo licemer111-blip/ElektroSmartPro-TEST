@@ -250,9 +250,9 @@ export function CatalogSidebar({ projectId, categories: initialCategories, catal
                 <span className="text-[10px] font-semibold pr-0.5">Ukryj</span>
               </button>
             )}
-            <CardTitle className="flex items-center gap-2 text-sm">
-              <Package className="w-4 h-4" />
-              Katalog pozycji
+            <CardTitle className="flex items-center gap-2 text-sm whitespace-nowrap">
+              <Package className="w-4 h-4 flex-shrink-0" />
+              Katalog
             </CardTitle>
           </div>
           <div className="flex items-center gap-0.5 p-0.5 bg-slate-100 dark:bg-slate-800 rounded-md flex-shrink-0">
