@@ -185,13 +185,13 @@ export function CanonicalL0Table({ entries }: CanonicalL0TableProps) {
                 Opis pozycji
               </th>
               <th className="px-3 py-2 text-left font-medium text-slate-600 dark:text-slate-400 w-[120px]">
-                KNR
+                Kod ES
               </th>
               <th className="px-3 py-2 text-right font-medium text-slate-600 dark:text-slate-400 w-[100px]">
                 Norma rbh
               </th>
-              <th className="px-3 py-2 text-right font-medium text-slate-600 dark:text-slate-400 w-[110px]">
-                Materiał PLN
+              <th className="px-3 py-2 text-right font-medium text-slate-600 dark:text-slate-400 w-[110px]" title="Wyceń tej ceny nie wpisuje. Materiał bierze się z cennika elektryka.">
+                Materiał, nie idzie do wyceny
               </th>
               <th className="px-3 py-2 text-left font-medium text-slate-600 dark:text-slate-400 w-[60px]">
                 Jedn.

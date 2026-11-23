@@ -10,14 +10,10 @@
  * "Przewód YDYp" to KNR 5-04 0101 — bruzdowanie series — instead of the
  * cable-laying series KNR 5-08 0201).
  *
- * L0 Canonical Reference is the highest-precedence layer: it pattern-matches
- * the top ~60 most common Polish electrical positions by HIGH-PRECISION
- * regex against item.name and applies the verified KNR 2026 norm directly,
- * bypassing all fuzzy lookup. This:
- *   1. Guarantees correct labor_norm for the bulk of typical estimates
- *      (cables, sockets, switches, light fixtures, chasing, breakers)
- *   2. Eliminates the per-project manual fix burden
- *   3. Gives AI L3 a tight sanity baseline for unknown items
+ * The short list of everyday names. Wyceń reads it after the electrician's own
+ * catalog and before the dictionary. One row is one job and one unit.
+ * Brick and concrete are separate rows. The hour is not multiplied.
+ * materialPrice on a row is only a note. Wyceń does not copy that zł.
  *
  * NORM SOURCES
  * ────────────

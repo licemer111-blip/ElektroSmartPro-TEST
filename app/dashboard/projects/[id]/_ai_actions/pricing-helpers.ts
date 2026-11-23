@@ -634,11 +634,6 @@ export function applyPostProcessPipeline(
   if (isPureLaborByKeyword(result.name) && result.suggestedMaterial > 0) {
     result = { ...result, suggestedMaterial: 0, matSource: null };
   }
-  const demontazLabor = applyDemontazRule(result.suggestedLabor, result.name);
-  if (demontazLabor !== result.suggestedLabor) {
-    const suffix = (result.note ?? "").includes("KNR 4-03") ? "" : " | KNR 4-03 ×0.65";
-    result = { ...result, suggestedLabor: demontazLabor, note: (result.note ?? "") + suffix };
-  }
 
   // Step 2: Sanity check (norm thresholds, unit-mismatch detection)
   result = applySanityCheck(result, baseRateForCalc);
@@ -650,9 +645,6 @@ export function applyPostProcessPipeline(
   const rc = applyRealityCheck(result);
   result = {
     ...result,
-    suggestedLabor: rc.suggestedLabor,
-    calculationLog: rc.calculationLog || result.calculationLog,
-    note: rc.note || result.note,
     safetyNote: rc.safetyNote,
   };
 

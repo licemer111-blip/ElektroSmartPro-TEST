@@ -17,7 +17,6 @@ import { getEffectiveRate } from "@/lib/global-benchmarks";
 import {
   buildRateSourceInstruction,
   buildModeFieldRestriction,
-  buildTopCatalogCandidates,
   findBestCatalogMatchWithHint,
   type RateSource,
   PRICING_STATIC_SYSTEM_PROMPT,
@@ -65,19 +64,15 @@ import {
   isPureLaborByKeyword,
   isMaterialMandatory,
   normaliseName,
-  applyDemontazRule,
   isCableItem,
   CABLE_SECTION_RE,
   getCableComplexityModifier,
   MAX_COMBINED_MODIFIER,
-  clampLocalModifiers,
   getSurfaceModifier,
   buildModifierWarnings,
   GROOVE_ZELBET_MIN_NORM,
   DRILL_SILKA_MIN_NORM,
   DRILL_BETON_MIN_NORM,
-  WYMIANA_RE,
-  DEMONTAZ_MONTAZ_RE,
   WYMIANA_FACTOR,
   applySanityCheck,
   enforceExpertGuards,
@@ -374,13 +369,20 @@ export async function estimatePricesWithAI(
       ""
     ).trim();
 
-    const { data: userCatalogRaw } = await supabase
-      .from("catalog_items")
-      .select("name, unit, base_material_price, base_labor_price, knr_code")
-      .eq("user_id", user.id)
-      .eq("is_active", true)
-      .limit(500);
-    const userCatalog = userCatalogRaw || [];
+    // A big personal catalog must not be cut at 500 rows. Page through it.
+    const userCatalog: { name: string; unit: string; base_material_price: number | null; base_labor_price: number | null; knr_code?: string | null }[] = [];
+    const catalogPageSize = 1000;
+    for (let from = 0; ; from += catalogPageSize) {
+      const { data: catalogPage } = await supabase
+        .from("catalog_items")
+        .select("name, unit, base_material_price, base_labor_price, knr_code")
+        .eq("user_id", user.id)
+        .eq("is_active", true)
+        .range(from, from + catalogPageSize - 1);
+      if (!catalogPage || catalogPage.length === 0) break;
+      userCatalog.push(...catalogPage);
+      if (catalogPage.length < catalogPageSize) break;
+    }
     const ownCatalogRows = userCatalog.map((c: { name: string; unit: string; base_material_price: number | null; base_labor_price: number | null; knr_code?: string | null }) => ({
       id: c.name,
       name: c.name,
@@ -400,14 +402,80 @@ export async function estimatePricesWithAI(
     };
 
     const regionName = (project.regions as { name: string; price_modifier: number } | null)?.name || "Polska";
-    const priceModifier = (project.regions as { name: string; price_modifier: number } | null)?.price_modifier || 1.0;
 
-    // ─── STEP 0: Direct KNR lookup for items with pre-extracted knr_code (PDF Przedmiar) ───
-    // Items imported from PDF “Przedmiar Robót” carry knr_code from the “Podstawa” column.
-    // Skip L1/L2/L3 for these — look up labor_norm_rbh directly in es_dictionary.
+    // Order for every blank row:
+    // 1. The electrician's own catalog (his zł).
+    // 2. The short name list (norma ES, one hour, no extra coefficient).
+    // 3. A code already printed on the row, only if the name is not on that list.
+    // 4. The dictionary, only when that name has one hour.
+    // A miss stays empty. The model is not called from this button.
     const l0Estimates: AiPriceEstimate[] = [];
     const l0ResolvedIds = new Set<string>();
+    const l1Estimates: AiPriceEstimate[] = [];
+    const l1ResolvedIds = new Set<string>();
 
+    if (userCatalog.length > 0) {
+      type CatalogEntry = { name: string; unit: string; base_material_price: number | null; base_labor_price: number | null; knr_code?: string | null };
+      const catalogForMatch = userCatalog.map((c: CatalogEntry) => ({
+        id: c.name,
+        name: c.name,
+        unit: c.unit,
+        base_material_price: c.base_material_price,
+        base_labor_price: c.base_labor_price,
+        knr_code: c.knr_code ?? null,
+      }));
+
+      for (const item of itemsToPrice) {
+        if (wholeSystem(item.name)) continue;
+        if (detectAmbiguity(item.name)) {
+          l1ResolvedIds.add(item.id);
+          l1Estimates.push({
+            itemId: item.id,
+            name: item.name,
+            unit: item.unit,
+            quantity: item.quantity,
+            currentMaterial: item.material_price || 0,
+            currentLabor: item.labor_price || 0,
+            suggestedMaterial: 0,
+            suggestedLabor: 0,
+            confidence: "low" as const,
+            note: "Opis jest za ogólny. Dopisz, co montujesz.",
+            knrCode: null,
+            knrSource: null,
+            laborNorm: null,
+            isAmbiguous: true,
+            trace: "L1 Skip: ambiguity detected",
+          });
+          continue;
+        }
+        const { match, trace } = findBestCatalogMatchWithHint(item.name, catalogForMatch, true);
+        if (!match) continue;
+        const rawMat = Math.round((match.base_material_price ?? 0) * 100) / 100;
+        const rawLab = Math.round((match.base_labor_price ?? 0) * 100) / 100;
+        if (rawMat === 0 && rawLab === 0) continue;
+        l1ResolvedIds.add(item.id);
+        l1Estimates.push({
+          itemId: item.id,
+          name: item.name,
+          unit: item.unit,
+          quantity: item.quantity,
+          currentMaterial: item.material_price || 0,
+          currentLabor: item.labor_price || 0,
+          suggestedMaterial: mode === "labor" ? (item.material_price || 0) : rawMat,
+          suggestedLabor: mode === "material" ? (item.labor_price || 0) : rawLab,
+          confidence: "high" as const,
+          note: `Twój cennik → ${match.name}`,
+          knrCode: match.knr_code ?? null,
+          knrSource: "catalog-l1" as const,
+          laborNorm: null,
+          trace: `L1 Hit (${trace.method}): ${trace.detail}`,
+        });
+      }
+    }
+
+    // ─── Code on the row (przedmiar). Skipped when the name is already known. ───
+    // Items imported from PDF “Przedmiar Robót” carry knr_code from the “Podstawa” column.
+    // Skip L1/L2/L3 for these — look up labor_norm_rbh directly in es_dictionary.
     const itemsWithKnr = itemsToPrice.filter(item => {
       const code = (item as typeof item & { knr_code?: string | null }).knr_code;
       return typeof code === "string" && code.trim().length > 0;
@@ -421,10 +489,10 @@ export async function estimatePricesWithAI(
 
       // ── L0 FIX: knr_norms is the correct table (full_code + labor_norm) ──────
       // Task 3: parallel — labor norms + material benchmark prices from es_dictionary
-      const [{ data: knrRows }, { data: matL0Rows }] = await Promise.all([
-        supabase.from("knr_norms").select("full_code, labor_norm, unit").in("full_code", uniqueCodes),
-        supabase.from("es_dictionary").select("knr_ref, material_unit_price").in("knr_ref", uniqueCodes).gt("material_unit_price", 0),
-      ]);
+      const { data: knrRows } = await supabase
+        .from("knr_norms")
+        .select("full_code, labor_norm, unit")
+        .in("full_code", uniqueCodes);
 
       // knrMap stores norm normalised to per-base-unit (e.g. per mb/m/szt)
       const knrMap = new Map<string, { normBase: number; dictUnit: string }>();
@@ -436,15 +504,11 @@ export async function estimatePricesWithAI(
           knrMap.set(row.full_code, { normBase, dictUnit: rawUnit });
         }
       }
-      const matL0Map = new Map<string, number>();
-      for (const row of (matL0Rows || [])) {
-        if (row.knr_ref && row.material_unit_price && !matL0Map.has(row.knr_ref)) {
-          matL0Map.set(row.knr_ref, Number(row.material_unit_price));
-        }
-      }
-
       for (const item of itemsWithKnr) {
         if (wholeSystem(item.name)) continue;
+        if (l1ResolvedIds.has(item.id)) continue;
+        // The short name list wins over a code pasted from a PDF.
+        if (await findCanonicalL0WithOverrides(item.name, item.unit)) continue;
         const code = normalizeKnrCode((item as typeof item & { knr_code: string }).knr_code);
         const knrEntry = knrMap.get(code);
         if (knrEntry != null) {
@@ -549,7 +613,7 @@ export async function estimatePricesWithAI(
     // labor_norm is correct out of the box — eliminates the per-project manual
     // fix burden caused by L2 keyword matcher mismaps and L3 AI hallucinations.
     const canonicalCandidates = itemsToPrice.filter(
-      (it) => !l0ResolvedIds.has(it.id),
+      (it) => !l0ResolvedIds.has(it.id) && !l1ResolvedIds.has(it.id),
     );
     for (const item of canonicalCandidates) {
       if (wholeSystem(item.name)) continue;
@@ -614,114 +678,7 @@ export async function estimatePricesWithAI(
     }
     // ────────────────────────────────────────────────────────────────────────────────
 
-    // ─── STEP 1: UNIVERSAL L1 — Personal catalog ABSOLUTE PRIORITY (runs before es_dictionary) ───
-    // Rule: If item matches user's personal catalog (fuzzy ≥0.2 threshold or typo-tolerant Levenshtein),
-    // it is IMMEDIATELY resolved. Search STOPS — no es_dictionary, no AI, no region multiplier applied.
-    // Any L1 hit wins over ALL other tiers regardless of es_dictionary L1/L2 confidence scores.
-    //
-    // L1 hits are always final (added to l1Estimates, excluded via l1ResolvedIds downstream).
-    // Misses always proceed to L2/L3.
-    // bypassL1Exclusive: user clicked "Szukaj w KNR/AI" — skip L1 catalog entirely.
-
-    // Collect all L1 results here — declared before the if-block so it's available for merge later
-    const l1Estimates: AiPriceEstimate[] = [];
-    // Set of item IDs resolved by L1 — used for ID-based filtering downstream (no splice!)
-    const l1ResolvedIds = new Set<string>();
-
-    if (userCatalog.length > 0) {
-      type CatalogEntry = { name: string; unit: string; base_material_price: number | null; base_labor_price: number | null; knr_code?: string | null };
-      const catalogForMatch = userCatalog.map((c: CatalogEntry) => ({
-        id: c.name,
-        name: c.name,
-        unit: c.unit,
-        base_material_price: c.base_material_price,
-        base_labor_price: c.base_labor_price,
-        knr_code: c.knr_code ?? null,
-      }));
-
-      logger.info(`[L1-STEP1] catalog=${catalogForMatch.length} items=${itemsToPrice.length}`);
-
-      type NotInCatalogEntry = typeof itemsToPrice[number] & {
-        __catalogHint?: { name: string; score: number } | null;
-        __catalogCandidates?: Array<{ name: string; mat: number; lab: number; score: number }>;
-      };
-
-      // ── Phase A: synchronous keyword matching for ALL items ──────────────────
-      const keywordMisses: NotInCatalogEntry[] = [];
-
-      for (const item of itemsToPrice) {
-        if (wholeSystem(item.name)) continue;
-        if (l0ResolvedIds.has(item.id)) continue; // L0: already priced via direct KNR lookup
-        if (detectAmbiguity(item.name)) {
-          l1ResolvedIds.add(item.id);
-          l1Estimates.push({
-            itemId: item.id,
-            name: item.name,
-            unit: item.unit,
-            quantity: item.quantity,
-            currentMaterial: item.material_price || 0,
-            currentLabor: item.labor_price || 0,
-            suggestedMaterial: 0,
-            suggestedLabor: 0,
-            confidence: "low" as const,
-            note: "Opis jest za ogólny. Dopisz, co montujesz.",
-            knrCode: null,
-            knrSource: null,
-            laborNorm: null,
-            isAmbiguous: true,
-            trace: "L1 Skip: ambiguity detected",
-          });
-          continue;
-        }
-
-        const { match, trace, bestMiss } = findBestCatalogMatchWithHint(item.name, catalogForMatch, true);
-        if (match) {
-          // Iron Rule: material sovereign. Labor stored as BASE — calcRowPrices applies regionModifier at display
-          const rawMat = Math.round((match.base_material_price ?? 0) * 100) / 100;
-          const rawLab = Math.round((match.base_labor_price ?? 0) * 100) / 100;
-          // If catalog item has no prices set — fall through to L2/L3 for automatic pricing
-          if (rawMat === 0 && rawLab === 0) {
-            const topCandidates = buildTopCatalogCandidates(item.name, catalogForMatch);
-            keywordMisses.push({ ...item, __catalogHint: bestMiss, __catalogCandidates: topCandidates });
-            continue;
-          }
-          l1ResolvedIds.add(item.id);
-          l1Estimates.push({
-            itemId: item.id,
-            name: item.name,
-            unit: item.unit,
-            quantity: item.quantity,
-            currentMaterial: item.material_price || 0,
-            currentLabor: item.labor_price || 0,
-            suggestedMaterial: mode === "labor" ? (item.material_price || 0) : rawMat,
-            suggestedLabor: mode === "material" ? (item.labor_price || 0) : rawLab,
-            confidence: "high" as const,
-            note: `P1: Twój katalog → ${match.name}${priceModifier !== 1.0 ? ` (×${priceModifier} ${regionName})` : ""}`,
-            knrCode: match.knr_code ?? null,
-            knrSource: "catalog-l1" as const,
-            laborNorm: null,
-            trace: `L1 Hit (${trace.method}): ${trace.detail}`,
-          });
-        } else {
-          const topCandidates = buildTopCatalogCandidates(item.name, catalogForMatch);
-          keywordMisses.push({ ...item, __catalogHint: bestMiss, __catalogCandidates: topCandidates });
-        }
-      }
-
-      // Phase B (Semantic L1) removed in v10.5 — exclusiveMode was hardcoded false
-      // since One Rate Refactor (use_custom_rates eliminated). Dead code cleaned up.
-      const notInCatalog: NotInCatalogEntry[] = keywordMisses;
-
-      // Nothing left for the dictionary or AI. Keep the canonical L0 rows:
-      // they were skipped in the loop above, so returning only l1Estimates
-      // made Wyceń say "prices applied" while the estimate stayed at 0.
-      if (notInCatalog.length === 0) {
-        return { success: true, estimates: [...l0Estimates, ...l1Estimates] };
-      }
-    }
-    // ─────────────────────────────────────────────────────────────────────────
-
-    // ─── STEP 2: ES-Engine dictionary pre-resolution (L2) ──────────────────────
+    // ─── Dictionary. Catalog and the short list already took their rows. ───
     // Filter to items NOT resolved by L1 (ID-based — no splice, no index issues)
     const l2Candidates = itemsToPrice.filter((item) => !l0ResolvedIds.has(item.id) && !l1ResolvedIds.has(item.id));
 
@@ -773,21 +730,7 @@ export async function estimatePricesWithAI(
     // Map l2Candidates by ID for O(1) esResolved index lookup
     const l2IndexByItemId = new Map(l2Candidates.map((item, i) => [item.id, i]));
 
-    // Task 3: pre-fetch material benchmark prices for L2 hits (es_dictionary.material_unit_price)
-    const l2KnrCodes = [...new Set(esResolved.map(r => r.knr_code).filter((c): c is string => !!c && c.length > 0))];
-    const matL2Map = new Map<string, number>();
-    if (l2KnrCodes.length > 0) {
-      const { data: matL2Rows } = await supabase
-        .from("es_dictionary")
-        .select("knr_ref, material_unit_price")
-        .in("knr_ref", l2KnrCodes)
-        .gt("material_unit_price", 0);
-      for (const row of (matL2Rows || [])) {
-        if (row.knr_ref && row.material_unit_price && !matL2Map.has(row.knr_ref)) {
-          matL2Map.set(row.knr_ref, Number(row.material_unit_price));
-        }
-      }
-    }
+    // Dictionary hours only. Material zł on dictionary rows is not copied onto the estimate.
 
     // ─── Build L2 estimates — no AI (L3 is on-demand only via triggerL3Estimation) ───
     const l2Estimates: AiPriceEstimate[] = clearItems.map((item) => {
@@ -924,7 +867,7 @@ export async function estimatePricesWithAI(
         const isPureLaborItem = isPureLaborByKeyword(item.name);
         const effectiveSugMat = isPureLaborItem ? 0 : sugMat;
         const matNote = !isPureLaborItem && effectiveSugMat === 0 && mode !== "labor"
-          ? " · ⚠️ brak ceny mat. w KNR — dodaj do własnego katalogu"
+          ? " · Cenę materiału wpisz sam albo weź ze swojego cennika."
           : "";
         // ── Transparent trace: every multiplier named and sourced ─────────────
         // Formula: norm × 0.75(narz) × cable × autoSurface × projSurface × rate × globalLaborMod = sugLab
@@ -967,7 +910,7 @@ export async function estimatePricesWithAI(
           laborHoursTotal: laborHoursTotalL2,
           regionModifier: regionModL2,
           confidence: isL1Hit ? "high" as const : "medium" as const,
-          note: `ES-Słownik (${hitLabel}): ${m.matched_keyword ?? esRow.name} → ${esRow.knr_code}${noteFormula}${scaleNote}${warnings}${matNote}`,
+          note: `ES-Słownik (${hitLabel}): ${m.matched_keyword ?? esRow.name} → ${esRow.knr_code}${noteFormula}${scaleNote}${matNote}`,
           knrCode: esRow.knr_code,
           knrSource: "official" as const,
           laborNorm: normWithFloor ?? scaledNorm,
@@ -1015,9 +958,8 @@ export async function estimatePricesWithAI(
           ? (() => { const _m = item.name.match(CABLE_SECTION_RE); return _m ? parseFloat(_m[2].replace(",", ".")) : null; })()
           : null;
         void _l25CableSection;
-        const localMod25 = clampLocalModifiers(cableMod25, surfaceMod25, ceilingMod25, heightMod25);
-        const wymianaActive25 = WYMIANA_RE.test(item.name) || DEMONTAZ_MONTAZ_RE.test(item.name);
-        const wymianaFactor25 = wymianaActive25 ? WYMIANA_FACTOR : 1.0;
+        const localMod25 = 1;
+        const wymianaFactor25 = 1;
         const sugLab25Base = Math.round(normWithFloor25 * localMod25 * baseRateForCalc * globalLaborMod * 100) / 100;
         const sugLab25 = Math.round(sugLab25Base * wymianaFactor25 * 100) / 100;
         const laborHoursTotal25 = baseRateForCalc > 0
@@ -1082,18 +1024,9 @@ export async function estimatePricesWithAI(
       })
     );
 
+    // Unknown names stay empty. This button does not ask the model.
+    const l2MissItems: typeof clearItems = [];
     const L3_CHUNK_SIZE = 10;
-    const L3_MAX_ITEMS = 20;
-    let l2MissItems = clearItems
-      .filter(item => l2Estimates.find(e => e.itemId === item.id)?.trace === "unmatched")
-      .slice(0, L3_MAX_ITEMS);
-
-    if (l2MissItems.length > 0) {
-      const aiCheck = await checkAndIncrementAiUsage(user.id, AI_FUNCTION_NAMES.aiPricing);
-      if (!aiCheck.allowed) {
-        l2MissItems = [];
-      }
-    }
 
     if (l2MissItems.length > 0) {
       const rateSourceL3: RateSource = "manual";
@@ -1443,13 +1376,6 @@ Jeśli znasz godziny — labor_price = labor_norm_rbh × ${baseRateForCalc}.
       if (isPureLaborByKeyword(e.name) && e.suggestedMaterial > 0) {
         return { ...e, suggestedMaterial: 0, matSource: null };
       }
-      // Rule 2 (labor pass): demontaż = 65% of montaż labor norm (KNR 4-03 methodology)
-      const demontazLabor = applyDemontazRule(e.suggestedLabor, e.name);
-      if (demontazLabor !== e.suggestedLabor) {
-        const existingNote = e.note ?? "";
-        const suffix = existingNote.includes("KNR 4-03") ? "" : " | KNR 4-03 ×0.65";
-        return { ...e, suggestedLabor: demontazLabor, note: existingNote + suffix };
-      }
       if (mode === "labor") return e; // material unchanged in labor-only mode
       // v3.1: Bulk discount for large cable orders (>100 mb)
       if (e.suggestedMaterial > 0 && isMaterialMandatory(e.name)) {
@@ -1479,10 +1405,7 @@ Jeśli znasz godziny — labor_price = labor_norm_rbh × ${baseRateForCalc}.
         const rc = applyRealityCheck(e);
         return {
           ...e,
-          suggestedLabor:  rc.suggestedLabor,
-          calculationLog:  rc.calculationLog || e.calculationLog,
-          note:            rc.note || e.note,
-          safetyNote:      rc.safetyNote,
+          safetyNote: rc.safetyNote,
         };
       })
       // NUCLEAR VETO: hardcoded PLN floors — zero runtime dependencies.
@@ -1653,11 +1576,7 @@ export async function repriceSingleItem(
     if (!opts.extraContext && !opts.overrideUnit) {
       const l25Repr = lookupKnrByName(item.name);
       if (l25Repr) {
-        const cableModR = getCableComplexityModifier(item.name);
-        const surfaceModR = getSurfaceModifier(item.name, "");
-        const ceilingModR = getCeilingModifier(item.name, "");
-        const heightModR = getHeightModifier(item.name, "");
-        const localModR = clampLocalModifiers(cableModR, surfaceModR, ceilingModR, heightModR);
+        const localModR = 1;
         const scaledNormR = scaleLaborNorm(l25Repr.laborNorm, l25Repr.unit, effectiveUnit);
         const isConnR = CONNECTION_RE.test(normalizePlName(item.name));
         const isHeavyR = isConnR && HEAVY_APPLIANCE_RE.test(normalizePlName(item.name) + " " + item.name);
@@ -1665,8 +1584,7 @@ export async function repriceSingleItem(
         void isHeavyR;
         void isConnR;
         // v2.4: M-Factor REMOVED — see L0 above for rationale.
-        const wymianaActiveR = WYMIANA_RE.test(item.name) || DEMONTAZ_MONTAZ_RE.test(item.name);
-        const wymianaFactorR = wymianaActiveR ? WYMIANA_FACTOR : 1.0;
+        const wymianaFactorR = 1;
         const sugLabRBase = Math.round(normFloorR * localModR * baseRateForCalc * 100) / 100;
         const sugLabR = Math.round(sugLabRBase * wymianaFactorR * 100) / 100;
         const rawL25ReprEst: AiPriceEstimate = {
@@ -2058,12 +1976,7 @@ export async function triggerL3Estimation(
     const l25Trigger = lookupKnrByName(positionName);
     if (l25Trigger) {
       // Build full modifier cascade (consistent with L2 HIT and L2.5 in estimate batch)
-      const ctxStr = voivodeship ? `region:${voivodeship}` : "";
-      const cableModT = getCableComplexityModifier(positionName);
-      const surfaceModT = getSurfaceModifier(positionName, ctxStr);
-      const ceilingModT = getCeilingModifier(positionName, ctxStr);
-      const heightModT = getHeightModifier(positionName, ctxStr);
-      const localModT = clampLocalModifiers(cableModT, surfaceModT, ceilingModT, heightModT);
+      const localModT = 1;
       const scaledNormT = scaleLaborNorm(l25Trigger.laborNorm, l25Trigger.unit, unit);
       const isConnT = CONNECTION_RE.test(normalizePlName(positionName));
       const isHeavyT = isConnT && HEAVY_APPLIANCE_RE.test(normalizePlName(positionName) + " " + positionName);
@@ -2071,8 +1984,7 @@ export async function triggerL3Estimation(
       void isHeavyT;
       void isConnT;
       // v2.4: M-Factor REMOVED — see L0 above for rationale.
-      const wymianaActiveT = WYMIANA_RE.test(positionName) || DEMONTAZ_MONTAZ_RE.test(positionName);
-      const wymianaFactorT = wymianaActiveT ? WYMIANA_FACTOR : 1.0;
+      const wymianaFactorT = 1;
       const sugLabTBase = Math.round(normFloorT * localModT * baseRateForCalc * 100) / 100;
       const sugLabT = Math.round(sugLabTBase * wymianaFactorT * 100) / 100;
       const knrCodeT = l25Trigger.code;
