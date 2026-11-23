@@ -1,6 +1,6 @@
 import type { ProjectItem } from "@/lib/types/database";
 
-const PRODUCT_RE = /przew[oó]d|kabel|y(dyp|ky|dy)|gniazd|opraw|łącznik|lacznik|wyłącznik|wylacznik|włącznik|puszk|rur(k|a)|osprzęt|osprzet|kaset|szyn/i;
+const PRODUCT_RE = /przew[oó]d|kabel|y(dyp|ky|dy)|gniazd|opraw|łącznik|lacznik|wyłącznik|wylacznik|włącznik|puszk|rur(k|a)|peszel|osprzęt|osprzet|kaset|szyn|rozdziel|bezpiecznik|r[oó]żnic|koryt|drabink|taśm|tasm|złącz|zlaczk|dławic|dlawic|obudow|ogranicznik|stycznik|przekaźnik|przekaznik|czuj|żarów|zarow|\bled\b|listw|uchwyt|kołek|kolek|ramk/i;
 
 export function storedMaterial(item: ProjectItem): number {
   return Number(item.final_material_price ?? item.material_price ?? 0);
@@ -41,20 +41,22 @@ export interface ShoppingLine {
 }
 
 export function shoppingLines(items: ProjectItem[], materialsOwnedByCustomer: boolean): ShoppingLine[] {
+  if (materialsOwnedByCustomer) return [];
   const parents = parentIds(items);
   const grouped = new Map<string, ShoppingLine>();
   for (const item of items) {
+    if (item.is_investor_material) continue;
     if (parents.has(item.id)) continue;
     if ((Number(item.quantity) || 0) <= 0) continue;
-    if (!isSellableMaterialLine(item, false, parents) && storedMaterial(item) <= 0) continue;
+    const material = storedMaterial(item);
+    if (!isSellableMaterialLine(item, false, parents) && material <= 0) continue;
     const key = `${item.name.trim().toLowerCase()}|${item.unit}`;
     const current = grouped.get(key) ?? { name: item.name, unit: item.unit, quantity: 0, materialUnit: 0 };
     const qty = Number(item.quantity) || 0;
     const previousQty = current.quantity;
     current.quantity += qty;
-    const unit = materialsOwnedByCustomer ? 0 : storedMaterial(item);
     current.materialUnit = current.quantity > 0
-      ? ((current.materialUnit * previousQty) + (unit * qty)) / current.quantity
+      ? ((current.materialUnit * previousQty) + (material * qty)) / current.quantity
       : 0;
     grouped.set(key, current);
   }

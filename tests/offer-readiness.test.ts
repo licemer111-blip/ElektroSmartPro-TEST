@@ -38,5 +38,7 @@ describe("offer readiness", () => {
     expect(list).toHaveLength(1);
     expect(list[0].quantity).toBe(10);
     expect(list[0].materialUnit).toBeCloseTo(1.8);
+    expect(shoppingLines([line({})], true)).toHaveLength(0);
+    expect(shoppingLines([line({ is_investor_material: true, final_material_price: 4 })], false)).toHaveLength(0);
   });
 });
