@@ -232,7 +232,11 @@ export function ProjectSummary({
   return (
     <Card className="h-full rounded-xl">
       <CardHeader className="flex-shrink-0 bg-white dark:bg-slate-900 py-2.5 px-3 border-b border-slate-100 dark:border-slate-800">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center justify-between gap-2">
+          <CardTitle className="flex items-center gap-2 text-sm min-w-0">
+            <Calculator className="w-4 h-4 flex-shrink-0" />
+            <span className="truncate">Podsumowanie</span>
+          </CardTitle>
           {onCollapse && (
             <button
               type="button"
@@ -240,14 +244,10 @@ export function ProjectSummary({
               className="p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/60 shadow-sm ring-2 ring-blue-300/50 dark:ring-blue-600/30 animate-pulse hover:animate-none transition-colors flex-shrink-0 inline-flex items-center gap-1"
               title="Ukryj podsumowanie, żeby poszerzyć tabelę"
             >
+              <span className="text-[10px] font-semibold pl-0.5">Ukryj</span>
               <PanelRightClose className="w-4 h-4" />
-              <span className="text-[10px] font-semibold pr-0.5">Ukryj</span>
             </button>
           )}
-          <CardTitle className="flex items-center gap-2 text-sm">
-            <Calculator className="w-4 h-4" />
-            Podsumowanie
-          </CardTitle>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
