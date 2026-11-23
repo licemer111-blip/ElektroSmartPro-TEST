@@ -95,7 +95,7 @@ export function LoadCalculatorShell() {
               <p>Kalkulator uwzględnia <strong>współczynnik jednoczesności</strong>, <strong>współczynnik mocy</strong>, oraz <strong>współczynniki korekcyjne</strong> (temperatura, grupowanie kabli).</p>
               <p className="flex items-start gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 md:w-4 md:h-4 text-indigo-600 dark:text-indigo-400 mt-0.5 flex-shrink-0" />
-                <span>Metody prокładки: <strong>B1</strong> (w rurach w ścianach), <strong>C</strong> (na powietrzu)</span>
+                <span>Sposób ułożenia: rury w ścianie, rury pod tynkiem, na tynku lub koryto pełne, trasa kablowa (koryto perforowane albo drabinka)</span>
               </p>
               <p className="flex items-start gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 md:w-4 md:h-4 text-indigo-600 dark:text-indigo-400 mt-0.5 flex-shrink-0" />

@@ -5,7 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
 import { AddLineToProject } from "@/components/tools/add-line-to-project";
 import { CalculatorActionBar } from "@/components/tools/calculator-action-bar";
-import { LoadCalculatorResult, LoadCalculatorParams, ConductorType, Load } from "../_lib/engine";
+import { LoadCalculatorResult, LoadCalculatorParams, ConductorType, INSTALL_METHOD_LABELS, Load } from "../_lib/engine";
 
 interface Props {
   result: LoadCalculatorResult;
@@ -20,7 +20,7 @@ function buildPdfInputs(params: LoadCalculatorParams) {
   return [
     { label: "Napięcie", value: `${params.voltage} V` },
     { label: "Materiał", value: conductorLabel },
-    { label: "Metoda instalacji", value: params.installMethod },
+    { label: "Sposób ułożenia", value: INSTALL_METHOD_LABELS[params.installMethod] },
     { label: "Temperatura", value: `${params.temperature}°C` },
     { label: "Grupowanie", value: `${params.grouping} obwód(y)` },
     { label: "cos φ", value: params.powerFactor },
@@ -127,7 +127,7 @@ export function LoadCalculatorResults({ result, params, hasResult, onLoadInputs,
             Obciążalność: {result.cableCapacity.toFixed(0)} A × {result.correctionFactor.toFixed(2)} = {(result.cableCapacity * result.correctionFactor).toFixed(0)} A
           </p>
           <p className="text-[10px] md:text-xs text-slate-500 dark:text-slate-500">
-            Metoda: {params.installMethod}, Temp: {params.temperature}°C, Grupowanie: {params.grouping} obw.
+            {INSTALL_METHOD_LABELS[params.installMethod]}, temp. {params.temperature}°C, grupowanie: {params.grouping} obw.
           </p>
         </div>
 

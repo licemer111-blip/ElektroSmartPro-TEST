@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/select";
 import { Plus, Trash2 } from "lucide-react";
 import {
-  Load, ConductorType, InstallMethod, LOAD_TEMPLATES,
+  Load, ConductorType, InstallMethod, INSTALL_METHOD_LABELS, LOAD_TEMPLATES,
 } from "../_lib/engine";
 
 interface Props {
@@ -113,12 +113,13 @@ export function LoadCalculatorForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="lc-install-method" className="text-xs font-semibold">Metoda prokladki</Label>
+            <Label htmlFor="lc-install-method" className="text-xs font-semibold">Sposób ułożenia</Label>
             <Select name="lc-install-method" value={installMethod} onValueChange={(v) => onInstallMethodChange(v as InstallMethod)}>
               <SelectTrigger id="lc-install-method" className="h-8 text-xs"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="B1">B1 (w rurach w ścianach)</SelectItem>
-                <SelectItem value="C">C (na powietrzu)</SelectItem>
+                {(Object.entries(INSTALL_METHOD_LABELS) as [InstallMethod, string][]).map(([value, label]) => (
+                  <SelectItem key={value} value={value}>{label}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

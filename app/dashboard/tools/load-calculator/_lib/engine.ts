@@ -7,7 +7,7 @@ export interface Load {
 }
 
 export type ConductorType = "copper" | "aluminum";
-export type InstallMethod = "B1" | "C";
+export type InstallMethod = "B1" | "B2" | "C" | "E";
 
 // Same Cu/PVC columns as the cable calculator (PN-HD 60364-5-52, 2 loaded conductors).
 // B1 = pipes in a wall. C = clipped to a wall. Al ≈ 0.78 × Cu, same factor as the cable tool.
@@ -29,6 +29,35 @@ export const CABLE_CAPACITY_CU_C: Record<number, number> = {
 export const CABLE_CAPACITY_AL_C: Record<number, number> = {
   1.5: 14, 2.5: 19, 4: 25, 6: 32, 10: 44, 16: 59, 25: 79, 35: 98,
   50: 118, 70: 150, 95: 181, 120: 210, 150: 241, 185: 275, 240: 324, 300: 368,
+};
+
+// Same Cu/PVC columns as the cable calculator, method B2 and E.
+// Al is the same 0.78 factor already used for B1 and C.
+export const CABLE_CAPACITY_CU_B2: Record<number, number> = {
+  1.5: 15, 2.5: 20, 4: 27, 6: 34, 10: 46, 16: 62, 25: 80, 35: 99,
+  50: 118, 70: 149, 95: 179, 120: 206, 150: 233, 185: 263, 240: 306, 300: 349,
+};
+
+export const CABLE_CAPACITY_AL_B2: Record<number, number> = {
+  1.5: 12, 2.5: 16, 4: 21, 6: 27, 10: 36, 16: 48, 25: 62, 35: 77,
+  50: 92, 70: 116, 95: 140, 120: 161, 150: 182, 185: 205, 240: 239, 300: 272,
+};
+
+export const CABLE_CAPACITY_CU_E: Record<number, number> = {
+  1.5: 19.5, 2.5: 27, 4: 36, 6: 46, 10: 63, 16: 85, 25: 110, 35: 137,
+  50: 167, 70: 214, 95: 259, 120: 299, 150: 341, 185: 390, 240: 459, 300: 526,
+};
+
+export const CABLE_CAPACITY_AL_E: Record<number, number> = {
+  1.5: 15, 2.5: 21, 4: 28, 6: 36, 10: 49, 16: 66, 25: 86, 35: 107,
+  50: 130, 70: 167, 95: 202, 120: 233, 150: 266, 185: 304, 240: 358, 300: 410,
+};
+
+export const INSTALL_METHOD_LABELS: Record<InstallMethod, string> = {
+  B1: "B1 – w rurach w ścianie",
+  B2: "B2 – w rurach pod tynkiem",
+  C:  "C – na tynku lub w korycie pełnym",
+  E:  "E – trasa kablowa (koryto perforowane lub drabinka)",
 };
 
 // PN-HD 60364-5-52 Table B.52-14 — Temperature correction
@@ -81,14 +110,18 @@ export interface LoadCalculatorResult {
   utilizationPercent: number;
 }
 
+const CAPACITY: Record<InstallMethod, { copper: Record<number, number>; aluminum: Record<number, number> }> = {
+  B1: { copper: CABLE_CAPACITY_CU_B1, aluminum: CABLE_CAPACITY_AL_B1 },
+  B2: { copper: CABLE_CAPACITY_CU_B2, aluminum: CABLE_CAPACITY_AL_B2 },
+  C:  { copper: CABLE_CAPACITY_CU_C,  aluminum: CABLE_CAPACITY_AL_C },
+  E:  { copper: CABLE_CAPACITY_CU_E,  aluminum: CABLE_CAPACITY_AL_E },
+};
+
 export function getCapacityTable(
   conductor: ConductorType,
   installMethod: InstallMethod,
 ): Record<number, number> {
-  if (conductor === "copper") {
-    return installMethod === "B1" ? CABLE_CAPACITY_CU_B1 : CABLE_CAPACITY_CU_C;
-  }
-  return installMethod === "B1" ? CABLE_CAPACITY_AL_B1 : CABLE_CAPACITY_AL_C;
+  return CAPACITY[installMethod][conductor];
 }
 
 export function getCableSection(current: number, table: Record<number, number>): number {

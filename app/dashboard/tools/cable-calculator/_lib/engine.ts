@@ -41,10 +41,10 @@ export const INSTALL_METHOD_LABELS: Record<InstallMethod, string> = {
   A1: "A1 – w izolacji ściany",
   B1: "B1 – w rurach w ścianie",
   B2: "B2 – w rurach pod tynkiem",
-  C:  "C – na ścianie/suficie",
+  C:  "C – na tynku lub w korycie pełnym",
   D:  "D – w ziemi",
-  E:  "E – drabinka kablowa",
-  F:  "F – wolno w powietrzu",
+  E:  "E – trasa kablowa (koryto perforowane lub drabinka)",
+  F:  "F – pojedyncze żyły w powietrzu",
 };
 
 export const TEMP_CORRECTION: Record<string, Record<InsulationType, number>> = {
