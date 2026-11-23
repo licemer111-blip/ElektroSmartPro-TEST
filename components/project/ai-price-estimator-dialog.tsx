@@ -230,7 +230,7 @@ export function AiPriceEstimatorDialog({
               </div>
               <div className="flex items-center gap-2 text-[11px] text-slate-400">
                 <Info className="w-3.5 h-3.5 flex-shrink-0" />
-                Liczy wiersze bez robocizny. Zaznaczone wiersze liczy od nowa. Materiał bierze z Twojego cennika, a jak go nie ma — zostawia kwotę z wiersza.
+                Liczy wiersze bez robocizny. Zaznaczone wiersze liczy od nowa. Materiał bierze z Twojego cennika, a jak go nie ma — zostawia kwotę z wiersza. Godziny przejrzyj przed PDF: u innego elektryka mogą być inne.
               </div>
             </div>
           )}

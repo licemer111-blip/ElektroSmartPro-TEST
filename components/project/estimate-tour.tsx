@@ -35,7 +35,7 @@ const STEPS: Step[] = [
   {
     id: "wycen",
     title: "Wyceń",
-    description: "Liczy robociznę: godzina normy ES × Twoja stawka. Województwo dolicza tylko pracę i tylko na ekranie. Ceny materiału nie wymyśla. Bez zapisanej stawki w Finansach wyjdzie zero.",
+    description: "Liczy robociznę: godzina normy ES × Twoja stawka. Województwo dolicza tylko pracę i tylko na ekranie. Ceny materiału nie wymyśla. Za pierwszym razem przypomni, że rbh trzeba przejrzeć: u innego elektryka godzina może być inna. Bez zapisanej stawki w Finansach wyjdzie zero.",
     targets: ['[data-tour="tour-wycen"]'],
     place: "bottom",
   },

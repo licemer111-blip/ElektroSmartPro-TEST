@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +22,7 @@ import { useToast } from "@/hooks/use-toast";
 import type { ProjectItem } from "@/lib/types/database";
 import { AIAssistantDialog } from "@/components/project/ai-assistant-dialog";
 import { AiPriceEstimatorDialog } from "@/components/project/ai-price-estimator-dialog";
+import { rememberWycenCheck, wycenCheckAccepted, WycenCheckDialog } from "@/components/project/wycen-check-dialog";
 import { ProjectTagsManager } from "@/components/project/project-tags-manager";
 import { ProjectColorPicker } from "@/components/project/project-color-picker";
 import type { DialogHostAction } from "./ProjectHeaderDialogHost";
@@ -123,24 +124,36 @@ export function ProjectHeaderToolbar({
 
   const [esAssistOpen, setEsAssistOpen] = useState(false);
   const [esWycenaOpen, setEsWycenaOpen] = useState(false);
+  const [wycenCheckOpen, setWycenCheckOpen] = useState(false);
+
+  const openPricer = useCallback(() => {
+    setEsWycenaOpen(true);
+    onBroadcastDialog("headerAiPricerOpen", true);
+  }, [onBroadcastDialog]);
+
+  const requestWycena = useCallback(() => {
+    if (isFinal) {
+      toast({ title: "Projekt zablokowany", description: "Odblokuj projekt, aby wyceniać", variant: "destructive" });
+      return;
+    }
+    if (projectItems.length === 0) return;
+    if (wycenCheckAccepted()) openPricer();
+    else setWycenCheckOpen(true);
+  }, [isFinal, openPricer, projectItems.length, toast]);
 
   useEffect(() => {
     const openImport = () => {
       if (isFinal) return;
       onAIImportClick();
     };
-    const openPrice = () => {
-      if (isFinal || projectItems.length === 0) return;
-      setEsWycenaOpen(true);
-      onBroadcastDialog("headerAiPricerOpen", true);
-    };
+    const openPrice = () => requestWycena();
     window.addEventListener("es-open-import", openImport);
     window.addEventListener("es-open-price", openPrice);
     return () => {
       window.removeEventListener("es-open-import", openImport);
       window.removeEventListener("es-open-price", openPrice);
     };
-  }, [isFinal, onAIImportClick, onBroadcastDialog, projectItems.length]);
+  }, [isFinal, onAIImportClick, requestWycena]);
 
   return (
     <div className="mb-4">
@@ -154,6 +167,15 @@ export function ProjectHeaderToolbar({
         </Button>
       </div>
 
+      <WycenCheckDialog
+        open={wycenCheckOpen}
+        onCancel={() => setWycenCheckOpen(false)}
+        onConfirm={() => {
+          rememberWycenCheck();
+          setWycenCheckOpen(false);
+          openPricer();
+        }}
+      />
       <div className="flex flex-col gap-3 w-full">
         {/* Row 1: Name + Edit dropdown */}
         <div className="flex flex-col gap-2 min-w-0 lg:pl-[18px]">
@@ -314,11 +336,7 @@ export function ProjectHeaderToolbar({
                   size="sm"
                   disabled={isFinal || projectItems.length === 0}
                   title="Policz robociznę z normy ES i Twojej stawki"
-                  onClick={() => {
-                    if (isFinal) { toast({ title: "Projekt zablokowany", description: "Odblokuj projekt, aby wyceniać", variant: "destructive" }); return; }
-                    setEsWycenaOpen(true);
-                    onBroadcastDialog("headerAiPricerOpen", true);
-                  }}
+                  onClick={requestWycena}
                   data-tour="tour-wycen"
                   className={`h-7 sm:h-8 text-[11px] sm:text-xs gap-1.5 bg-orange-500 hover:bg-orange-600 text-white flex-shrink-0 ${isFinal ? "opacity-50" : ""}`}
                 >
