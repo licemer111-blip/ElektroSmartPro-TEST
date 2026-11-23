@@ -821,7 +821,7 @@ export const EstimateRow = React.memo(function EstimateRow({
 
               {/* Row 2: Jm + Ilość (+ prices for non-zestaw rows) */}
               {editingState!.isAssemblyParent ? (
-                /* Zestaw parent (both manual and AI): only Jedn. + Ilość — no price editing */
+                <>
                 <p className="text-[11px] leading-snug text-slate-500 dark:text-slate-400">
                   Ceny są w składnikach. Tu zmieniasz ilość: każdy składnik przeliczy się razem z nią.
                 </p>
@@ -848,8 +848,9 @@ export const EstimateRow = React.memo(function EstimateRow({
                     />
                   </div>
                 </div>
+                </>
               ) : (
-                /* Regular row: Jedn. + Ilość + Material + Robocizna */
+                <>
                 <p className="text-[11px] leading-snug text-slate-500 dark:text-slate-400">
                   Rbh z kolumny to godziny na 1 {editingState!.unit || "szt"}.
                   {projectLaborRate >= 1
@@ -962,6 +963,7 @@ export const EstimateRow = React.memo(function EstimateRow({
                     </div>
                   ) : <div />}
                 </div>
+                </>
               )}
 
             </div>
