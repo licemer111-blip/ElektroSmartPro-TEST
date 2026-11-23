@@ -257,6 +257,10 @@ export function ProjectTabContainer({
         onKnrChange={onKnrChange}
         onVatRateChange={onVatRateChange}
         onAutoDetectZestawyChange={onAutoDetectZestawyChange}
+        regions={regions}
+        liveRegionId={liveRegionId}
+        isRegionPending={isRegionPending}
+        onRegionChange={handleRegionChange}
       />
 
       {/* ESTIMATE TAB */}

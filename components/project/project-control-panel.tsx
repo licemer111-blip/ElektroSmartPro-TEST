@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition, useEffect } from "react";
+import { MapPin, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   updateProjectVatRate,
@@ -25,6 +26,10 @@ interface ProjectControlPanelProps {
   onKnrChange?: (enabled: boolean) => void;
   onVatRateChange?: (rate: number) => void;
   onAutoDetectZestawyChange?: (enabled: boolean) => void;
+  regions?: { id: string; name: string; price_modifier: number }[];
+  liveRegionId?: string;
+  isRegionPending?: boolean;
+  onRegionChange?: (regionId: string) => void;
 }
 
 export function ProjectControlPanel({
@@ -43,6 +48,10 @@ export function ProjectControlPanel({
   onKnrChange,
   onVatRateChange,
   onAutoDetectZestawyChange,
+  regions = [],
+  liveRegionId = "",
+  isRegionPending = false,
+  onRegionChange,
 }: ProjectControlPanelProps) {
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
@@ -189,6 +198,38 @@ export function ProjectControlPanel({
           </button>
         </div>
       </div>
+
+      {onRegionChange && (
+        <div className="relative ml-auto flex-shrink-0" title="Województwo koryguje tylko robociznę">
+          <label htmlFor="knr-region-select" className="sr-only">Wybierz województwo</label>
+          <select
+            id="knr-region-select"
+            name="knr_region_select"
+            value={liveRegionId || "__none__"}
+            onChange={(e) => {
+              if (!disabled) onRegionChange(e.target.value === "__none__" ? "" : e.target.value);
+            }}
+            disabled={disabled || isRegionPending}
+            className="appearance-none h-7 pl-6 pr-2 rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed max-w-[220px]"
+          >
+            <option value="__none__">Województwo — stawka bazowa</option>
+            {regions.map((region) => {
+              const pct = Math.round((region.price_modifier - 1) * 100);
+              const sign = pct > 0 ? "+" : "";
+              const label = pct === 0 ? "baza" : `${sign}${pct}%`;
+              return (
+                <option key={region.id} value={region.id}>
+                  {region.name} ({label})
+                </option>
+              );
+            })}
+          </select>
+          <MapPin className="absolute left-1.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
+          {isRegionPending && (
+            <Loader2 className="absolute right-1.5 top-1/2 -translate-y-1/2 h-3 w-3 animate-spin text-slate-400 pointer-events-none" />
+          )}
+        </div>
+      )}
 
       {isPending && <span className="text-xs text-slate-400">zapisuję...</span>}
     </div>
