@@ -508,6 +508,7 @@ export const EstimateRow = React.memo(function EstimateRow({
       <RowQuantityCell
         item={displayItem} editingState={editingState} isEditing={false}
         onEditingChange={onEditingChange} onKeyDown={handleKeyDown}
+        onActivate={!isFinal && !isReadOnly ? () => onStartEdit(item) : undefined}
       />
 
       {/* Material price — display with displayItem */}

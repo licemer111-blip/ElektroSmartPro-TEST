@@ -133,8 +133,8 @@ export function RowUnitCell({
 }
 
 export function RowQuantityCell({
-  item, editingState, isEditing, onEditingChange, onKeyDown,
-}: Pick<RowInputsProps, "item" | "editingState" | "isEditing" | "onEditingChange" | "onKeyDown">) {
+  item, editingState, isEditing, onEditingChange, onKeyDown, onActivate,
+}: Pick<RowInputsProps, "item" | "editingState" | "isEditing" | "onEditingChange" | "onKeyDown"> & { onActivate?: () => void }) {
   return (
     <TableCell className={`text-center min-w-[80px] w-[80px] ${singleCellBorderClass}`}>
       {isEditing ? (
@@ -148,7 +148,18 @@ export function RowQuantityCell({
           onKeyDown={onKeyDown}
         />
       ) : (
-        <div className="font-medium dark:text-slate-200">{item.quantity}</div>
+        <button
+          type="button"
+          onClick={onActivate}
+          disabled={!onActivate}
+          title={onActivate ? "Kliknij, aby zmienić ilość" : undefined}
+          className={cn(
+            "font-medium dark:text-slate-200 tabular-nums",
+            onActivate && "cursor-pointer rounded px-1.5 hover:bg-slate-100 dark:hover:bg-slate-800",
+          )}
+        >
+          {item.quantity}
+        </button>
       )}
     </TableCell>
   );
