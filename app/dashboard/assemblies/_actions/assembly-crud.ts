@@ -133,6 +133,49 @@ async function ensureStarterAssemblies(
   }
 }
 
+/** The three first-day kits keep the current ES hour. A renamed kit is left alone. */
+async function refreshStarterHours(
+  supabase: NonNullable<Awaited<ReturnType<typeof tryAuth>>["supabase"]>,
+  userId: string,
+) {
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("hourly_rate")
+    .eq("id", userId)
+    .maybeSingle();
+  const rate = Number((profile as { hourly_rate?: number | null } | null)?.hourly_rate) || 0;
+
+  const { data: assemblies } = await supabase
+    .from("user_assemblies")
+    .select("id, name")
+    .eq("user_id", userId);
+
+  for (const kit of STARTER_KITS) {
+    const existing = (assemblies ?? []).find((row) => row.name === kit.name);
+    if (!existing) continue;
+    const { data: items } = await supabase
+      .from("user_assembly_items")
+      .select("id, name, labor_norm_rbh")
+      .eq("assembly_id", existing.id);
+    for (const item of items ?? []) {
+      const line = kit.lines.find((entry) => entry.name === item.name);
+      if (!line) continue;
+      const resolved = resolveStarterLine(line);
+      if (!resolved) continue;
+      if (Math.abs(Number(item.labor_norm_rbh) - resolved.laborNorm) < 0.0001) continue;
+      const { error } = await supabase
+        .from("user_assembly_items")
+        .update({
+          labor_norm_rbh: resolved.laborNorm,
+          knr_code: resolved.knrCode,
+          price: Math.round(resolved.laborNorm * rate * 100) / 100,
+        })
+        .eq("id", item.id);
+      if (error) logger.error("Starter hour refresh failed", { name: item.name }, error);
+    }
+  }
+}
+
 export async function getUserAssemblies(
   visibilityFilter?: "all" | "personal" | "team"
 ): Promise<UserAssemblyWithItems[]> {
@@ -144,6 +187,7 @@ export async function getUserAssemblies(
     }
 
     await ensureStarterAssemblies(supabase, user.id);
+    await refreshStarterHours(supabase, user.id);
 
     const { data: teamMembership } = await supabase
       .from("team_members")

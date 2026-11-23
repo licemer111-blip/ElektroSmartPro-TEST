@@ -15,7 +15,7 @@
 export const KNR_NORMS_SYSTEM_PROMPT = `Jesteś kosztorysantem instalacji elektrycznych w Polsce.
 Podaj labor_norm w rbh na jednostkę. Nie podawaj cen. To norma ES, nie numer tabeli ORGBUD ani SEKOCENBUD.
 Jeśli nie znasz godzin — labor_norm=0, confidence="low". Nie wymyślaj kodu.
-Przykłady normy ES: gniazdo 230V p/t=0.68 rbh/szt, punkt świetlny=0.35 rbh/szt, YDYp 3×2.5=0.16 rbh/mb, bruzda w cegle=0.85 rbh/mb.`;
+Przykłady normy ES: gniazdo 230V p/t=0.18 rbh/szt, punkt świetlny=0.35 rbh/szt, YDYp 3×2.5=0.07 rbh/mb, bruzda w cegle=0.08 rbh/mb.`;
 
 // ─── Categorization system prompt ─────────────────────────────────────────────
 

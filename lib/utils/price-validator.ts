@@ -247,8 +247,8 @@ export const LABOR_NORM_CEILING: Array<{
   maxNorm: number;
   typicalNorm: number;
 }> = [
-  { keywords: ["kucie", "bruzd"], unit: "mb", maxNorm: 3.0, typicalNorm: 0.85 },
-  { keywords: ["bruzdowanie"], unit: "mb", maxNorm: 3.0, typicalNorm: 0.85 },
+  { keywords: ["kucie", "bruzd"], unit: "mb", maxNorm: 3.0, typicalNorm: 0.08 },
+  { keywords: ["bruzdowanie"], unit: "mb", maxNorm: 3.0, typicalNorm: 0.08 },
   // Heavy WLZ cables — MUST precede generic "układanie kabel/przewod" entries.
   // Heavy feeders stay above the thin-wire ceiling (YDYp 3×2.5 is 0.16 rbh/mb).
   { keywords: ["wlz"],   unit: "mb", maxNorm: 2.0, typicalNorm: 0.70 },
@@ -258,15 +258,15 @@ export const LABOR_NORM_CEILING: Array<{
   { keywords: ["nhxmh"], unit: "mb", maxNorm: 2.0, typicalNorm: 0.70 },
   { keywords: ["n2xh"],  unit: "mb", maxNorm: 2.0, typicalNorm: 0.70 },
   { keywords: ["lgyo"],  unit: "mb", maxNorm: 2.0, typicalNorm: 0.70 },
-  { keywords: ["układanie", "przewod"], unit: "mb", maxNorm: 0.45, typicalNorm: 0.16 },
-  { keywords: ["układanie", "kabel"], unit: "mb", maxNorm: 0.45, typicalNorm: 0.16 },
-  { keywords: ["układanie", "przewód"], unit: "mb", maxNorm: 0.45, typicalNorm: 0.16 },
+  { keywords: ["układanie", "przewod"], unit: "mb", maxNorm: 0.45, typicalNorm: 0.07 },
+  { keywords: ["układanie", "kabel"], unit: "mb", maxNorm: 0.45, typicalNorm: 0.07 },
+  { keywords: ["układanie", "przewód"], unit: "mb", maxNorm: 0.45, typicalNorm: 0.07 },
   { keywords: ["gniazd", "siłow"], unit: "szt", maxNorm: 2.5, typicalNorm: 1.45 },
-  { keywords: ["montaż", "puszki"], unit: "szt", maxNorm: 0.50, typicalNorm: 0.15 },
-  { keywords: ["montaż", "gniazda"], unit: "szt", maxNorm: 2.0, typicalNorm: 0.68 },
-  { keywords: ["montaż", "łącznika"], unit: "szt", maxNorm: 1.2, typicalNorm: 0.45 },
+  { keywords: ["montaż", "puszki"], unit: "szt", maxNorm: 0.50, typicalNorm: 0.09 },
+  { keywords: ["montaż", "gniazda"], unit: "szt", maxNorm: 2.0, typicalNorm: 0.18 },
+  { keywords: ["montaż", "łącznika"], unit: "szt", maxNorm: 1.2, typicalNorm: 0.17 },
   { keywords: ["montaż", "oprawy"], unit: "szt", maxNorm: 2.0, typicalNorm: 0.55 },
-  { keywords: ["montaż", "osprzętu"], unit: "szt", maxNorm: 2.0, typicalNorm: 0.68 },
+  { keywords: ["montaż", "osprzętu"], unit: "szt", maxNorm: 2.0, typicalNorm: 0.18 },
   { keywords: ["pomiar", "odbiorcz"], unit: "szt", maxNorm: 0.40, typicalNorm: 0.20 },
   { keywords: ["pomiar"], unit: "szt", maxNorm: 0.50, typicalNorm: 0.25 },
   { keywords: ["wyłącznik", "mcb"], unit: "szt", maxNorm: 0.30, typicalNorm: 0.15 },

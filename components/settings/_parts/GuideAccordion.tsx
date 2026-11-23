@@ -21,7 +21,7 @@ export function GuideAccordion() {
             <li>W <strong>Profilu firmy</strong> wpisz NIP i logo — trafią na PDF.</li>
             <li>Nowy projekt, potem pozycje z katalogu albo własny zestaw. Program nie układa listy z metrażu.</li>
             <li>W projekcie dopisujesz pozycje z katalogu albo zestaw (gniazdo, puszka, kabel, bruzda).</li>
-            <li>PDF: w DEMO jest znak wodny. Czysty wydruk jest w PRO.</li>
+            <li>Na darmowym koncie PDF ma znak DEMO. W PRO wydruk jest czysty.</li>
           </ol>
         </AccordionContent>
       </AccordionItem>

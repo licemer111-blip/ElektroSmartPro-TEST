@@ -197,18 +197,18 @@ describe("L0 Canonical KNR Reference — pattern matching", () => {
       expect(m?.laborNorm).toBe(0.10);
     });
 
-    it("Bruzdowanie w żelbecie → 2.50 rbh/mb (najtwardsze)", () => {
+    it("Bruzdowanie w żelbecie → 0.16 rbh/mb", () => {
       const m = findCanonicalL0("Bruzdowanie w żelbecie zbrojonym", "mb");
       expect(m?.laborNorm).toBe(0.16);
     });
 
-    it("Bruzdowanie w gazobetonie / Ytong → 0.55 rbh/mb", () => {
+    it("Bruzdowanie w gazobetonie / Ytong → 0.05 rbh/mb", () => {
       const m = findCanonicalL0("Bruzdowanie w ytongu", "mb");
       expect(m?.knrCode).toBe("KNR 5-08 0112");
       expect(m?.laborNorm).toBe(0.05);
     });
 
-    it("Bruzdowanie generic (no substrate) → cegła default 0.85 rbh/mb", () => {
+    it("Bruzdowanie generic (no substrate) → cegła 0.08 rbh/mb", () => {
       const m = findCanonicalL0("Bruzdowanie wgłębne", "mb");
       expect(m?.laborNorm).toBe(0.08);
     });
@@ -1075,9 +1075,17 @@ describe("L0 v2.8.0 — Pomiary rozszerzone II", () => {
 });
 
 describe("L0 v2.8.0 — Roboty pomocnicze II", () => {
-  it("Rurka karbowana / peszel → 0.18 rbh/mb", () => {
-    const m = findCanonicalL0("Rurka karbowana RVS Ø20", "mb");
-    expect(m?.laborNorm).toBe(0.18);
+  it("Rura karbowana RG to zwykły peszel, nie ognioodporny", () => {
+    const ordinary = findCanonicalL0("Rura karbowana RG 21", "mb");
+    const fire = findCanonicalL0("Rurka karbowana RVS Ø20", "mb");
+    expect(ordinary?.laborNorm).toBe(0.10);
+    expect(fire?.laborNorm).toBe(0.18);
+  });
+
+  it("Łącznik żaluzjowy nie wpada w pojedynczy", () => {
+    const m = findCanonicalL0("Łącznik żaluzjowy", "szt");
+    expect(m?.laborNorm).toBe(0.20);
+    expect(m?.description).toMatch(/żaluzj/);
   });
 
   it("Taśma ostrzegawcza → 0.05 rbh/mb", () => {

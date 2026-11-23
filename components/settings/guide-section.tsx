@@ -50,7 +50,7 @@ export function GuideSection(_props: GuideSectionProps = {}) {
                 <li><strong>2.</strong> Ustaw <strong>stawkę rbh</strong> i <strong>województwo</strong> w Finansach</li>
                 <li><strong>3.</strong> Otwórz projekt, dodaj pozycje z katalogu albo zestaw i kliknij <strong>Wyceń</strong></li>
                 <li><strong>4.</strong> Zestaw „punkt gniazda” wstawia gniazdo, puszkę, kabel i bruzdę</li>
-                <li><strong>5.</strong> PDF: w DEMO jest znak wodny, czysty wydruk jest w PRO</li>
+                <li><strong>5.</strong> Na darmowym koncie PDF ma znak DEMO. W PRO wydruk jest czysty.</li>
               </ol>
               <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-indigo-200 dark:border-indigo-800">
                 <p className="text-[10px] sm:text-xs text-indigo-700 dark:text-indigo-300">

@@ -87,7 +87,7 @@ const BIALY_INST_OSP_RE    = /instalacja\s+osprzę?tu/i;
 // by an EXPLICIT cable-action verb (układanie/prowadzenie/wciąganie/mocowanie)
 // or by a "trasa kablowa" / "linia kablowa" composite name. Bare "Bruzdowanie"
 // is NOT a TRASY trigger — standalone bruzdowanie is a separate kosztorys line
-// (KNR 5-08 0101 cegła = 0.85 rbh/mb, KNR 5-08 0103 beton = 2.0 rbh/mb).
+// (KNR 5-08 0101 cegła = 0.08 rbh/mb, KNR 5-08 beton = 0.10 rbh/mb).
 // Triggering TRASY on bare "Bruzdowanie" caused (a) double-counting against
 // the user's separate cable lines and (b) flat 0.98 rbh/mb override of the
 // L0 canonical norms (cegła vs beton differentiation lost). v2.6.3.

@@ -165,12 +165,12 @@ const PUNKT_RESIDENTIAL: AssemblyTemplate = {
   sector: "RESIDENTIAL",
   description: "Bruzda w cegle/betonie + kabel YDYp 3×2.5mm² (4mb) + puszka p/t + montaż urządzenia (~65 PLN mat.)",
   items: [
-    { label: "Bruzdowanie ściany (cegła)",         knrCode: "KNR 5-08 0101",    unit: "mb",  qtyMultiplier: 1.5, rbhPerUnit: 0.85, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Bruzdowanie ściany (cegła)",         knrCode: "KNR 5-08 0101",    unit: "mb",  qtyMultiplier: 1.5, rbhPerUnit: 0.08, isLabor: true,  materialPricePerUnit: 0.00 },
     { label: "Kabel YDYp 3×2.5mm²",              knrCode: "KNR 5-08 0202",    unit: "mb",  qtyMultiplier: 4.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 7.20 },
-    { label: "Układanie kabla YDYp 3×2.5 p/t",     knrCode: "KNR 5-08 0202",    unit: "mb",  qtyMultiplier: 4.0, rbhPerUnit: 0.16, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Układanie kabla YDYp 3×2.5 p/t",     knrCode: "KNR 5-08 0202",    unit: "mb",  qtyMultiplier: 4.0, rbhPerUnit: 0.07, isLabor: true,  materialPricePerUnit: 0.00 },
     { label: "Puszka podtynkowa Ø60mm",           knrCode: "KNR 5-08 0301",    unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.12, isLabor: false, materialPricePerUnit: 3.00 },
     { label: "Urządzenie p/t (gniazdo/wyłącznik)", knrCode: "MAT-GN-01",        unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 22.00 },
-    { label: "Montaż urządzenia p/t",             knrCode: "KNR 5-08 0401",    unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.68, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Montaż urządzenia p/t",             knrCode: "KNR 5-08 0401",    unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.18, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -218,7 +218,7 @@ const PUNKT_3PHASE_RESIDENTIAL: AssemblyTemplate = {
   sector: "RESIDENTIAL",
   description: "Bruzda + kabel YDYp 5×2.5mm² + puszka głęboka p/t + gniazdo CEE 16A",
   items: [
-    { label: "Bruzdowanie ściany (cegła)",         knrCode: "KNR 5-08 0101",    unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.85, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Bruzdowanie ściany (cegła)",         knrCode: "KNR 5-08 0101",    unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.08, isLabor: true,  materialPricePerUnit: 0.00 },
     { label: "Kabel YDYp 5×2.5mm²",               knrCode: "KNR 5-08 0203",    unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 10.50 },
     { label: "Układanie kabla 5×2.5 p/t",          knrCode: "KNR 5-08 0203",    unit: "mb",  qtyMultiplier: 4.5, rbhPerUnit: 0.20, isLabor: true,  materialPricePerUnit: 0.00 },
     { label: "Puszka podtynkowa głęboka",          knrCode: "KNR 5-08 0302",    unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.18, isLabor: false, materialPricePerUnit: 6.00 },
@@ -268,7 +268,7 @@ const BIALY_MONTAZ_RESIDENTIAL: AssemblyTemplate = {
   sector: "RESIDENTIAL",
   description: "Tylko czysta robocizna montażu mechanizmu p/t (bez kabla i bruzdy)",
   items: [
-    { label: "Montaż urządzenia p/t", knrCode: "KNR 5-08 0401", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.68, isLabor: true, materialPricePerUnit: 0.00 },
+    { label: "Montaż urządzenia p/t", knrCode: "KNR 5-08 0401", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.18, isLabor: true, materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -279,7 +279,7 @@ const BIALY_MONTAZ_COMMERCIAL: AssemblyTemplate = {
   sector: "COMMERCIAL",
   description: "Tylko czysta robocizna montażu urządzenia w zabudowie biurowej",
   items: [
-    { label: "Montaż urządzenia (biuro/G-K)", knrCode: "KNR 5-08 0401", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.68, isLabor: true, materialPricePerUnit: 0.00 },
+    { label: "Montaż urządzenia (biuro/G-K)", knrCode: "KNR 5-08 0401", unit: "szt", qtyMultiplier: 1.0, rbhPerUnit: 0.18, isLabor: true, materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -303,9 +303,9 @@ const WYPUST_RESIDENTIAL: AssemblyTemplate = {
   sector: "RESIDENTIAL",
   description: "Bruzda + kabel YDYp 3×1.5mm² p/t (bez montażu urządzenia końcowego)",
   items: [
-    { label: "Bruzdowanie ściany (cegła)",         knrCode: "KNR 5-08 0101",    unit: "mb",  qtyMultiplier: 1.5, rbhPerUnit: 0.85, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Bruzdowanie ściany (cegła)",         knrCode: "KNR 5-08 0101",    unit: "mb",  qtyMultiplier: 1.5, rbhPerUnit: 0.08, isLabor: true,  materialPricePerUnit: 0.00 },
     { label: "Kabel YDYp 3×1.5mm²",              knrCode: "KNR 5-08 0201",    unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 5.20 },
-    { label: "Układanie kabla YDYp 3×1.5 p/t",     knrCode: "KNR 5-08 0201",    unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.13, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Układanie kabla YDYp 3×1.5 p/t",     knrCode: "KNR 5-08 0201",    unit: "mb",  qtyMultiplier: 3.5, rbhPerUnit: 0.055, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -317,7 +317,7 @@ const WYPUST_COMMERCIAL: AssemblyTemplate = {
   description: "Kabel YDYp 3×1.5mm² w korytku (bez montażu urządzenia końcowego)",
   items: [
     { label: "Kabel YDYp 3×1.5mm²",      knrCode: "KNR 5-08 0201",    unit: "mb", qtyMultiplier: 3.5, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 5.20 },
-    { label: "Układanie kabla w korytku", knrCode: "KNR 5-08 0201",    unit: "mb", qtyMultiplier: 3.5, rbhPerUnit: 0.13, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Układanie kabla w korytku", knrCode: "KNR 5-08 0201",    unit: "mb", qtyMultiplier: 3.5, rbhPerUnit: 0.055, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -343,8 +343,8 @@ const TRASY_RESIDENTIAL: AssemblyTemplate = {
   sector: "RESIDENTIAL",
   description: "Bruzdowanie ściany + układanie kabli p/t (rozliczenie per mb)",
   items: [
-    { label: "Bruzdowanie ściany (cegła)",         knrCode: "KNR 5-08 0101",    unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.85, isLabor: true, materialPricePerUnit: 0.00 },
-    { label: "Układanie kabla YDYp p/t",            knrCode: "KNR 5-08 0201",    unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.13, isLabor: true, materialPricePerUnit: 0.00 },
+    { label: "Bruzdowanie ściany (cegła)",         knrCode: "KNR 5-08 0101",    unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.08, isLabor: true, materialPricePerUnit: 0.00 },
+    { label: "Układanie kabla YDYp p/t",            knrCode: "KNR 5-08 0201",    unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.055, isLabor: true, materialPricePerUnit: 0.00 },
   ],
 };
 
@@ -357,7 +357,7 @@ const TRASY_COMMERCIAL: AssemblyTemplate = {
   items: [
     { label: "Korytko kablowe PVC 60×60", knrCode: "KNR 5-08 0703c", unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.00, isLabor: false, materialPricePerUnit: 18.00 },
     { label: "Montaż korytka PVC",        knrCode: "KNR 5-08 0703c", unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.15, isLabor: true,  materialPricePerUnit: 0.00 },
-    { label: "Układanie kabla w korytku", knrCode: "KNR 5-08 0201",  unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.13, isLabor: true,  materialPricePerUnit: 0.00 },
+    { label: "Układanie kabla w korytku", knrCode: "KNR 5-08 0201",  unit: "mb", qtyMultiplier: 1.0, rbhPerUnit: 0.055, isLabor: true,  materialPricePerUnit: 0.00 },
   ],
 };
 

@@ -247,6 +247,9 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
   { pattern: /(?:^|\W)(?:łącznik|lacznik)\s+(?:świeczni|swieczn|podwójn[eyao]|podwoj)/i,
     knrCode: "KNR 5-08 0502", laborNorm: 0.17, unit: "szt",
     description: "Łącznik świecznikowy / podwójny p/t", materialPrice: 18.00 },
+  { pattern: /(?:^|\W)(?:łącznik|lacznik)\s+(?:żaluzj\w*|zaluzj\w*|rolet\w*)/i,
+    knrCode: "KNR 5-08 0503", laborNorm: 0.20, unit: "szt",
+    description: "Łącznik żaluzjowy p/t", materialPrice: 22.00 },
   { pattern: /(?:^|\W)(?:łącznik|lacznik)\s+(?:pojedyn|jednobiegun)/i,
     knrCode: "KNR 5-08 0501", laborNorm: 0.17, unit: "szt",
     description: "Łącznik pojedynczy p/t", materialPrice: 14.00 },
@@ -786,9 +789,13 @@ export const CANONICAL_L0_REFERENCE: readonly CanonicalL0Entry[] = [
     description: "Pomiar oporu izolacji 1000V (przemysł)", materialPrice: 0 },
 
   // ── ROBOTY POMOCNICZE II (rurki / taśmy) ──
-  { pattern: /\b(?:rurka|rura)\s+(?:karbowan|ognioodporn|rvs|rvks)|\bpeszel\s+(?:karbowan|ognioodporn)/i,
+  // Fire-rated conduit before the ordinary peszel row. First match wins.
+  { pattern: /\b(?:rurka|rura|peszel)\b.*(?:ognioodporn|rvs|rvks|fe180)|(?:ognioodporn|rvs|rvks).*(?:rurka|rura|peszel)/i,
     knrCode: "KNR 5-08 1310", laborNorm: 0.18, unit: "mb",
-    description: "Rurka karbowana / peszel ognioodporny", materialPrice: 8.00 },
+    description: "Rurka karbowana ognioodporna", materialPrice: 8.00 },
+  { pattern: /\b(?:rura|rurka)\s+karbowan|\bpeszel\b|\brg\s*\d{2}\b/i,
+    knrCode: "KNR 5-08 2123", laborNorm: 0.10, unit: "mb",
+    description: "Rura karbowana / peszel", materialPrice: 0 },
   { pattern: /\btaśma\s+(?:ostrzegawcz|sygnaliz|kablow\s+ostrzeg)/i,
     knrCode: "KNR 5-08 0520", laborNorm: 0.05, unit: "mb",
     description: "Taśma ostrzegawcza w wykopie", materialPrice: 1.50 },
