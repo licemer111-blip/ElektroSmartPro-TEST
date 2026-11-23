@@ -112,9 +112,9 @@ export async function POST(request: NextRequest) {
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      // Dashboard decides card / BLIK / P24. A hard-coded p24 fails the
-      // whole session when that method is not activated in Stripe.
-      automatic_payment_methods: { enabled: true },
+      // Card only. A listed method that is off in the Stripe dashboard
+      // (p24, and sometimes BLIK) rejects the whole Checkout session.
+      payment_method_types: ["card"],
       customer: stripeCustomerId,
       locale: "pl",
       line_items: [
