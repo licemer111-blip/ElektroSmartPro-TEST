@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Separator } from "@/components/ui/separator";
+import { LayoutGrid, ChevronDown, ChevronUp, Zap } from "lucide-react";
 import { BlurredPrice } from "@/components/ui/blurred-price";
-import { LayoutGrid, ChevronDown, ChevronUp, HardHat, Wrench, Home, Zap } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
 
 interface SectionBreakdownItem {
   name: string;
@@ -65,13 +63,12 @@ export function SummaryFinancialTotals({
   bruttoMode = false,
   materialsOwnedByCustomer,
   sectionBreakdown,
-  projectId,
+  projectId: _projectId,
   equipmentTotal = 0,
 }: SummaryFinancialTotalsProps) {
   // VAT breakdown: use separate rates if provided, otherwise single rate for both
   const effectiveVatMat = vatRateMaterial ?? vatRate;
   const effectiveVatLab = vatRateLabor ?? vatRate;
-  const hasSplitVat = effectiveVatMat !== effectiveVatLab;
   const vatOnMat = Math.round(totals.materialTotal * (effectiveVatMat / 100) * 100) / 100;
   const vatOnLab = Math.round(totals.laborTotal * (effectiveVatLab / 100) * 100) / 100;
   const totalVat = Math.round((vatOnMat + vatOnLab) * 100) / 100;
@@ -85,46 +82,42 @@ export function SummaryFinancialTotals({
 
   return (
     <div className="space-y-2">
-      {/* ── Droga pieniędzy (Clean Table Architecture) ── */}
+      {bruttoMode ? (
+        <div className="rounded-lg border border-amber-300 dark:border-amber-700 bg-amber-50/70 dark:bg-amber-950/20 px-3 py-2.5">
+          <div className="flex justify-between items-center">
+            <span className="text-xs font-bold text-amber-700 dark:text-amber-300 uppercase tracking-wider">
+              Razem brutto
+            </span>
+            <span className="text-xl font-extrabold text-amber-600 dark:text-amber-400">
+              <BlurredPrice value={totalBrutto} isPro={isPro} showBadge={!isPro} />
+            </span>
+          </div>
+          <div className="mt-1.5 flex justify-between items-center text-[11px] text-slate-500">
+            <span>Netto</span>
+            <BlurredPrice value={effectiveNettoBase} isPro={isPro} showBadge={!isPro} />
+          </div>
+          <div className="flex justify-between items-center text-[11px] text-slate-500">
+            <span>VAT {vatRate}%</span>
+            <BlurredPrice value={totalVat} isPro={isPro} showBadge={!isPro} />
+          </div>
+        </div>
+      ) : (
+        <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50/70 dark:bg-blue-950/20 px-3 py-2.5">
+          <div className="flex justify-between items-center">
+            <span className="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
+              Suma netto
+            </span>
+            <span className="text-xl font-extrabold text-blue-600 dark:text-blue-400">
+              <BlurredPrice value={effectiveNettoBase} isPro={isPro} showBadge={!isPro} />
+            </span>
+          </div>
+          <div className="mt-1.5 flex justify-between items-center text-[11px] text-slate-500">
+            <span>VAT {vatRate}% doliczysz osobno</span>
+            <BlurredPrice value={totalVat} isPro={isPro} showBadge={!isPro} />
+          </div>
+        </div>
+      )}
 
-      {/* 1. Suma Bazowa Netto — pre-multiplier baseline (no KNR, no region, no narzut, no adj) */}
-      <div className="flex justify-between items-center py-1.5">
-        <TooltipProvider delayDuration={200}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <span className="text-xs text-muted-foreground border-b border-dotted border-muted-foreground/40 cursor-help">
-                Suma bazowa netto
-              </span>
-            </TooltipTrigger>
-            <TooltipContent side="left" className="max-w-[260px] text-[11px] leading-snug">
-              Cena przed województwem, narzutem i negocjacją.
-              <br />Kwota z tabeli jest w <strong>SUMA NETTO</strong>.
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <span className="text-sm text-muted-foreground">
-          <BlurredPrice value={totals.sumaBazowaNetto} isPro={isPro} showBadge={!isPro} />
-        </span>
-      </div>
-
-      {/* 2. Korekta Regionalna */}
-      <div className="flex justify-between items-start py-1.5 gap-2">
-        <span className="text-xs text-muted-foreground flex flex-col gap-0.5 min-w-0">
-          <span className="flex items-center gap-1">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-orange-400 flex-shrink-0" />
-            Województwo
-          </span>
-          <span className="text-[10px] text-orange-500 font-semibold pl-2.5">
-            ×{totals.regionModifier.toFixed(2)} ({totals.regionName})
-          </span>
-        </span>
-        <span className={`text-xs font-medium flex-shrink-0 pt-0.5 ${totals.regionalCorrectionAmount > 0 ? "text-orange-500" : totals.regionalCorrectionAmount < 0 ? "text-blue-500" : "text-slate-400"}`}>
-          {totals.regionalCorrectionAmount > 0 ? "+" : ""}
-          <BlurredPrice value={totals.regionalCorrectionAmount} isPro={isPro} />
-        </span>
-      </div>
-
-      {/* 3. M / R / S breakdown (po korektach) */}
       {!materialsOwnedByCustomer && (
         <div className="flex justify-between items-center py-1.5 pl-2.5 border-l-2 border-amber-200 dark:border-amber-800">
           <span className="text-xs text-muted-foreground">M — Materiały</span>
@@ -151,7 +144,40 @@ export function SummaryFinancialTotals({
         </div>
       )}
 
-      {/* 4. Narzuty */}
+      <div className="flex justify-between items-start py-1.5 gap-2">
+        <span className="text-xs text-muted-foreground flex flex-col gap-0.5 min-w-0">
+          <span className="flex items-center gap-1">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-orange-400 flex-shrink-0" />
+            Województwo
+          </span>
+          <span className="text-[10px] text-orange-500 font-semibold pl-2.5">
+            ×{totals.regionModifier.toFixed(2)} ({totals.regionName})
+          </span>
+        </span>
+        <span className={`text-xs font-medium flex-shrink-0 pt-0.5 ${totals.regionalCorrectionAmount > 0 ? "text-orange-500" : totals.regionalCorrectionAmount < 0 ? "text-blue-500" : "text-slate-400"}`}>
+          {totals.regionalCorrectionAmount > 0 ? "+" : ""}
+          <BlurredPrice value={totals.regionalCorrectionAmount} isPro={isPro} />
+        </span>
+      </div>
+
+      <div className="flex justify-between items-center py-1">
+        <TooltipProvider delayDuration={200}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="text-[11px] text-muted-foreground border-b border-dotted border-muted-foreground/40 cursor-help">
+                Przed województwem
+              </span>
+            </TooltipTrigger>
+            <TooltipContent side="left" className="max-w-[260px] text-[11px] leading-snug">
+              Cena z wierszy, zanim doliczysz województwo. Klientowi podajesz sumę u góry.
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <span className="text-[11px] text-muted-foreground">
+          <BlurredPrice value={totals.sumaBazowaNetto} isPro={isPro} showBadge={!isPro} />
+        </span>
+      </div>
+
       {totals.totalNarzuty > 0 && (
         <div className="flex justify-between items-center py-1.5 text-indigo-600 dark:text-indigo-400">
           <span className="text-xs flex items-center gap-1">
@@ -164,7 +190,6 @@ export function SummaryFinancialTotals({
         </div>
       )}
 
-      {/* 4b. v3.0: Rezerwa budżetowa */}
       {(totals.contingencyAmount ?? 0) > 0 && (
         <div className="flex justify-between items-center py-1.5 text-orange-600 dark:text-orange-400">
           <span className="text-xs flex items-center gap-1">
@@ -177,17 +202,6 @@ export function SummaryFinancialTotals({
         </div>
       )}
 
-      {/* 5. Suma Netto po korektach — zawsze netto (Sacred Table) */}
-      <div className="flex justify-between items-center pt-3 pb-1.5 mt-1 border-t-2 border-border">
-        <span className="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
-          SUMA NETTO
-        </span>
-        <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
-          <BlurredPrice value={effectiveNettoBase} isPro={isPro} showBadge={!isPro} />
-        </span>
-      </div>
-
-      {/* Section breakdown */}
       {hasSections && (
         <div className="pt-1">
           <button
@@ -214,72 +228,6 @@ export function SummaryFinancialTotals({
           )}
         </div>
       )}
-
-      {/* VAT + Brutto block */}
-      {bruttoMode ? (
-        <div className="space-y-1.5 pt-1">
-          {hasSplitVat ? (
-            <>
-              {!materialsOwnedByCustomer && (
-                <div className="flex justify-between items-center py-1.5">
-                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                    VAT mat. ({effectiveVatMat}%)
-                  </span>
-                  <span className="text-sm font-semibold text-amber-600 dark:text-amber-400">
-                    <BlurredPrice value={vatOnMat} isPro={isPro} showBadge={!isPro} />
-                  </span>
-                </div>
-              )}
-              <div className="flex justify-between items-center py-1.5">
-                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                  VAT rob. ({effectiveVatLab}%)
-                </span>
-                <span className="text-sm font-semibold text-amber-600 dark:text-amber-400">
-                  <BlurredPrice value={vatOnLab} isPro={isPro} showBadge={!isPro} />
-                </span>
-              </div>
-            </>
-          ) : (
-            <div className="flex justify-between items-center py-1.5">
-              <span className="text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide">VAT ({vatRate}%)</span>
-              <span className="text-sm font-semibold text-amber-600 dark:text-amber-400">
-                <BlurredPrice value={totalVat} isPro={isPro} showBadge={!isPro} />
-              </span>
-            </div>
-          )}
-          {/* RAZEM BRUTTO */}
-          <div className="flex justify-between items-center pt-2.5 border-t-2 border-amber-300 dark:border-amber-700">
-            <span className="text-xs font-bold text-amber-700 dark:text-amber-300 uppercase tracking-wider">
-              RAZEM BRUTTO
-            </span>
-            <span className="text-lg font-extrabold text-amber-600 dark:text-amber-400">
-              <BlurredPrice value={totalBrutto} isPro={isPro} showBadge={!isPro} />
-            </span>
-          </div>
-        </div>
-      ) : (
-        <TooltipProvider delayDuration={800}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="flex justify-between items-center cursor-help py-1.5">
-                <span className="text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide">VAT ({vatRate}%)</span>
-                <span className="text-sm font-semibold text-amber-600 dark:text-amber-400">
-                  <BlurredPrice value={totalVat} isPro={isPro} showBadge={!isPro} />
-                </span>
-              </div>
-            </TooltipTrigger>
-            <TooltipContent side="left" className="max-w-[220px]">
-              <p>
-                {vatRate === 8
-                  ? "Stawka 8% VAT — usługi budowlano-montażowe w budownictwie mieszkaniowym (PKOB 11)."
-                  : "Stawka 23% VAT — roboty komercyjne, usługowe lub przemysłowe (B2B)."}
-              </p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      )}
-
-      <Separator className="my-2" />
     </div>
   );
 }

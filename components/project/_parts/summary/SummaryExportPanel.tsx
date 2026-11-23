@@ -42,7 +42,7 @@ export function SummaryExportPanel({
   items,
   profile,
   isPro,
-  grandTotal,
+  grandTotal: _grandTotal,
   pdfNotes,
   onPdfNotesChange,
   offerTerms,
@@ -105,7 +105,63 @@ export function SummaryExportPanel({
 
   return (
     <>
-      {/* PDF Notes */}
+      <div className="space-y-2" data-tour="tour-export">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Dla klienta</span>
+          <div className="flex gap-1">
+            <HintTooltip content={HINTS.pdfExport} side="left" iconOnly />
+            <HintTooltip content={HINTS.excelExport} side="left" iconOnly />
+          </div>
+        </div>
+        {isTrialActive(profile ?? null) && (
+          <div className="flex justify-end">
+            <TrialStatusBadge profile={profile ?? null} />
+          </div>
+        )}
+        {!isPro && !project.paid_export_unlocked_at && (
+          <>
+            <div className="flex items-start gap-2 px-3 py-2 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
+              <Lock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+              <p className="text-[10px] text-blue-800 dark:text-blue-200 leading-tight">
+                <span className="font-semibold">Tryb Demo:</span> PDF ma czerwony znak DEMO.
+                Czysty PDF tej jednej wyceny to 49 zł netto. Subskrypcja PRO zdejmuje znak ze wszystkich kosztorysów i otwiera Excel.
+              </p>
+            </div>
+            {PAY_PER_EXPORT_ENABLED && (
+              <UnlockPdfButton projectId={project.id} />
+            )}
+          </>
+        )}
+        {!isPro && Boolean(project.paid_export_unlocked_at) && (
+          <UnlockPdfButton projectId={project.id} alreadyUnlocked />
+        )}
+        <div className="flex w-full rounded-lg overflow-hidden shadow-lg border-2 border-red-400/50">
+          <button
+            onClick={handleExportPDF}
+            disabled={isDownloading}
+            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-red-500 to-red-600 disabled:cursor-not-allowed"
+            data-export-pdf
+          >
+            {isDownloading ? (
+              <span className="animate-spin">⏳</span>
+            ) : (
+              <Download className="h-4 w-4 flex-shrink-0" />
+            )}
+            <span>PDF{!isPro && !project.paid_export_unlocked_at && " (Demo)"}</span>
+          </button>
+          <div className="w-px flex-shrink-0 bg-red-300/60" />
+          <button
+            onClick={handleExportExcel}
+            disabled={isDownloading}
+            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-green-500 to-emerald-500 disabled:cursor-not-allowed"
+            data-export-excel
+          >
+            <FileSpreadsheet className="h-4 w-4 flex-shrink-0" />
+            <span>{isPro ? "Excel" : "Excel (PRO)"}</span>
+          </button>
+        </div>
+      </div>
+
       <Separator />
       <OfferStatusLine projectId={project.id} />
       <ShoppingListDialog
@@ -135,85 +191,6 @@ export function SummaryExportPanel({
           disabled={isDownloading}
         />
         <p className="text-xs text-muted-foreground">Tekst pojawi się na końcu dokumentu PDF. Zapisuje się po wyjściu z pola.</p>
-      </div>
-
-      {/* Export buttons — v2.0: FREE tier może eksportować, PDF dostaje watermark DEMO */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Eksport</span>
-          <div className="flex gap-1">
-            <HintTooltip content={HINTS.pdfExport} side="left" iconOnly />
-            <HintTooltip content={HINTS.excelExport} side="left" iconOnly />
-          </div>
-        </div>
-        <p className="text-[11px] text-slate-500 dark:text-slate-400">
-          PDF dla klienta bierze poprawione pozycje i rabat z suwaka Negocjacje.
-        </p>
-
-        {/* v2.1: Trial status badge — visible during active 7-day trial */}
-        {isTrialActive(profile ?? null) && (
-          <div className="flex justify-end">
-            <TrialStatusBadge profile={profile ?? null} />
-          </div>
-        )}
-
-        {/* v2.1: FREE — banner Demo + Trial CTA + (optional) Pay-per-Export CTA */}
-        {!isPro && !project.paid_export_unlocked_at && (
-          <>
-            <div className="flex items-start gap-2 px-3 py-2 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
-              <Lock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-              <p className="text-[10px] text-blue-800 dark:text-blue-200 leading-tight">
-                <span className="font-semibold">Tryb Demo:</span> PDF ma czerwony znak DEMO.
-                Czysty PDF tej jednej wyceny to 49 zł netto. Subskrypcja PRO zdejmuje znak ze wszystkich kosztorysów i otwiera Excel.
-              </p>
-            </div>
-            {PAY_PER_EXPORT_ENABLED && (
-              <UnlockPdfButton projectId={project.id} />
-            )}
-          </>
-        )}
-
-        {/* v2.0: FREE — już opłacono jednorazowy eksport.
-            Keep this rendering even when PAY_PER_EXPORT_ENABLED=false so that
-            users who paid BEFORE we flipped the flag still see the confirmation. */}
-        {!isPro && Boolean(project.paid_export_unlocked_at) && (
-          <UnlockPdfButton projectId={project.id} alreadyUnlocked />
-        )}
-
-        {/* PDF + Excel buttons */}
-        <div className="relative w-full" data-tour="tour-export">
-          <div className="flex w-full rounded-lg overflow-hidden shadow-lg border-2 border-red-400/50">
-            <button
-              onClick={handleExportPDF}
-              disabled={isDownloading}
-              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-red-500 to-red-600 disabled:cursor-not-allowed"
-              data-export-pdf
-            >
-              {isDownloading ? (
-                <span className="animate-spin">⏳</span>
-              ) : (
-                <Download className="h-4 w-4 flex-shrink-0" />
-              )}
-              <span>PDF{!isPro && !project.paid_export_unlocked_at && " (Demo)"}</span>
-            </button>
-            <div className="w-px flex-shrink-0 bg-red-300/60" />
-            <button
-              onClick={handleExportExcel}
-              disabled={isDownloading}
-              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-green-500 to-emerald-500 disabled:cursor-not-allowed"
-              data-export-excel
-            >
-              <FileSpreadsheet className="h-4 w-4 flex-shrink-0" />
-              <span>{isPro ? "Excel" : "Excel (PRO)"}</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Footer info */}
-      <div className="text-xs text-muted-foreground pt-2 border-t">
-        <p className="mb-1">💡 Ceny są aktualizowane automatycznie</p>
-        <p>Wszystkie wartości w PLN</p>
       </div>
     </>
   );

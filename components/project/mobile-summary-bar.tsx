@@ -280,7 +280,6 @@ export function MobileSummaryBar({
 
             <Separator />
 
-            {/* Price breakdown */}
             <div className="space-y-2">
               {!materialsOwnedByCustomer && (
                 <div className="flex justify-between text-sm">
@@ -333,7 +332,27 @@ export function MobileSummaryBar({
               </div>
             </div>
 
-            {/* PDF Notes */}
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                onClick={handleExportPDF}
+                disabled={isDownloading}
+                className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-lg"
+                size="lg"
+              >
+                <Download className="w-4 h-4 mr-1.5" />
+                {isDownloading ? "..." : (isPro ? "PDF" : "PDF (Demo)")}
+              </Button>
+              <Button
+                onClick={handleExportExcel}
+                disabled={isDownloading}
+                className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-lg"
+                size="lg"
+              >
+                <FileSpreadsheet className="w-4 h-4 mr-1.5" />
+                Excel{isPro ? "" : " (PRO)"}
+              </Button>
+            </div>
+
             <div className="space-y-2">
               <p className="text-[11px] text-slate-500">
                 {offerTerms.depositPercent
@@ -366,31 +385,8 @@ export function MobileSummaryBar({
               />
             </div>
 
-            {/* Profitability */}
-            <div className="pb-1">
+            <div className="pb-4">
               <ProfitabilityReportDialog projectId={project.id} projectName={project.name} isPro={isPro} />
-            </div>
-
-            {/* Export buttons */}
-            <div className="grid grid-cols-2 gap-2 pb-4">
-              <Button
-                onClick={handleExportPDF}
-                disabled={isDownloading}
-                className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-lg"
-                size="lg"
-              >
-                <Download className="w-4 h-4 mr-1.5" />
-                {isDownloading ? "..." : (isPro ? "PDF" : "PDF (Demo)")}
-              </Button>
-              <Button
-                onClick={handleExportExcel}
-                disabled={isDownloading}
-                className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-lg"
-                size="lg"
-              >
-                <FileSpreadsheet className="w-4 h-4 mr-1.5" />
-                Excel{isPro ? "" : " (PRO)"}
-              </Button>
             </div>
           </div>
         </SheetContent>
