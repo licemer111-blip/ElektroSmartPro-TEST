@@ -35,6 +35,7 @@ import { OfferTermsFields } from "@/components/project/offer-terms-fields";
 import { ShoppingListDialog } from "@/components/project/shopping-list-dialog";
 import { OfferStatusLine } from "@/components/project/offer-status-line";
 import { useToast } from "@/hooks/use-toast";
+import { useModalStore } from "@/hooks/use-modal-store";
 import { useRouter } from "next/navigation";
 import { notifyDataChanged } from "@/hooks/use-synced-action";
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
@@ -70,6 +71,7 @@ export function MobileSummaryBar({
 }: MobileSummaryBarProps) {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
+  const { onOpen } = useModalStore();
   const router = useRouter();
   const isPro = getEffectiveIsPro(profile);
   const { multiplier: knrMultiplier } = useKnrMultiplier();
@@ -137,6 +139,10 @@ export function MobileSummaryBar({
   };
 
   const handleExportExcel = async () => {
+    if (!isPro) {
+      onOpen("proModal");
+      return;
+    }
     try {
       const { exportProjectToExcel } = await import("@/lib/utils/excel-export");
       const result = exportProjectToExcel(
@@ -393,7 +399,7 @@ export function MobileSummaryBar({
                 size="lg"
               >
                 <FileSpreadsheet className="w-4 h-4 mr-1.5" />
-                Excel{isPro ? "" : " (Demo)"}
+                Excel{isPro ? "" : " (PRO)"}
               </Button>
             </div>
           </div>

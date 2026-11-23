@@ -738,6 +738,7 @@ export function exportProjectToExcel(
   isPro: boolean = true,
   knrMultiplier: number = 1.0,
 ) {
+  if (!isPro) return undefined;
   const showRg = Boolean((project as unknown as Record<string, unknown>).show_labor_hours_in_pdf);
   const matOwnedByClient = Boolean((project as unknown as Record<string, unknown>).materials_owned_by_customer);
   const showKnr = Boolean((project as unknown as Record<string, unknown>).show_knr);
@@ -777,6 +778,7 @@ export function buildExcelBuffer(
   isPro: boolean = true,
   knrMultiplier: number = 1.0,
 ): { buffer: ArrayBuffer; storageName: string } | undefined {
+  if (!isPro) return undefined;
   try {
     const showRg2 = Boolean((project as unknown as Record<string, unknown>).show_labor_hours_in_pdf);
     const matOwned2 = Boolean((project as unknown as Record<string, unknown>).materials_owned_by_customer);

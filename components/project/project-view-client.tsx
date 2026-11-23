@@ -226,6 +226,7 @@ export function ProjectViewClient({
       if (evtId !== projectId) return;
 
       // ── Excel ──────────────────────────────────────────────────────────────
+      if (isPro) {
       try {
         const { buildExcelBuffer } = await import("@/lib/utils/excel-export");
         const result = buildExcelBuffer({ ...project, brutto_mode: liveBruttoMode }, items, isPro, knrMultiplier);
@@ -239,6 +240,7 @@ export function ProjectViewClient({
         }
       } catch {
         // Non-critical — Excel auto-save failure is silent
+      }
       }
 
       // ── PDF ────────────────────────────────────────────────────────────────

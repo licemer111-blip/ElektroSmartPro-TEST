@@ -90,12 +90,7 @@ export const HINTS = {
   excelExport: (
     <div className="space-y-1.5">
       <p className="font-semibold text-emerald-700 dark:text-emerald-300">📊 Eksport Excel</p>
-      <p>Eksportuje kosztorys do pliku .xlsx z rozpisaniem na arkusze.</p>
-      <ul className="space-y-0.5 text-slate-400">
-        <li>• Arkusz Kosztorys — pełna tabela</li>
-        <li>• Arkusz Podsumowanie — sumy sekcji</li>
-        <li>• Gotowy do edycji lub wysłania</li>
-      </ul>
+      <p>Excel kosztorysu jest w PRO. Darmowe konto dostaje PDF ze znakiem DEMO.</p>
     </div>
   ),
 

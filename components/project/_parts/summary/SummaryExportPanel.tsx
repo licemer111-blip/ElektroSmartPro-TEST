@@ -11,6 +11,7 @@ import { TrialStatusBadge } from "@/components/billing/trial-status-badge";
 import { hasUsedTrial, isTrialActive, TRIAL_DURATION_DAYS } from "@/lib/auth/entitlements";
 import { PAY_PER_EXPORT_ENABLED } from "@/lib/config/tier-limits";
 import { useToast } from "@/hooks/use-toast";
+import { useModalStore } from "@/hooks/use-modal-store";
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { HintTooltip } from "@/components/ui/hint-tooltip";
 import { HINTS } from "@/lib/hints/hint-content";
@@ -53,6 +54,7 @@ export function SummaryExportPanel({
   onPdfNotesSaved,
 }: SummaryExportPanelProps) {
   const { toast } = useToast();
+  const { onOpen } = useModalStore();
   const { multiplier: knrMultiplier } = useKnrMultiplier();
   const handleSavePdfNotes = async () => {
     const result = await updateProjectPdfNotes(project.id, joinOfferNotes(offerTerms, pdfNotes));
@@ -72,6 +74,10 @@ export function SummaryExportPanel({
   };
 
   const handleExportExcel = async () => {
+    if (!isPro) {
+      onOpen("proModal");
+      return;
+    }
     try {
       const { exportProjectToExcel } = await import("@/lib/utils/excel-export");
       const result = exportProjectToExcel(
@@ -206,7 +212,7 @@ export function SummaryExportPanel({
               data-export-excel
             >
               <FileSpreadsheet className="h-4 w-4 flex-shrink-0" />
-              <span>Excel{!isPro && !project.paid_export_unlocked_at && " (Demo)"}</span>
+              <span>{isPro ? "Excel" : "Excel (PRO)"}</span>
             </button>
           </div>
         </div>
