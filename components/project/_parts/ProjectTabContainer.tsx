@@ -175,6 +175,7 @@ export function ProjectTabContainer({
             ? "bg-orange-50 border-orange-200 text-orange-700 dark:bg-orange-950/20 dark:border-orange-800 dark:text-orange-400"
             : "bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-950/20 dark:border-emerald-800 dark:text-emerald-400"
         }`}
+        data-tour="tour-region"
         title={`Korekta regionalna: ${formatRegionCorrection(regionSlug)}`}
       >
         <MapPin className="w-3 h-3 flex-shrink-0" />

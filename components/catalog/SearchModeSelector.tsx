@@ -48,7 +48,7 @@ export function SearchModeSelector({
   const current = MODES.find((item) => item.id === mode) ?? MODES[2];
 
   return (
-    <div className={cn("min-w-0", className)}>
+    <div className={cn("min-w-0", className)} data-tour="tour-sources">
       <div className="flex items-center gap-0.5 p-0.5 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 min-w-0 overflow-hidden">
         {MODES.map(({ id, icon: Icon, label, description }) => (
           <button

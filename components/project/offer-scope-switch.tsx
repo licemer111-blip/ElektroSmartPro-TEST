@@ -25,7 +25,7 @@ export function OfferScopeSwitch({ laborOnly, disabled, onChange }: OfferScopeSw
   const current = OPTIONS.find((option) => option.laborOnly === laborOnly) ?? OPTIONS[0];
 
   return (
-    <div className={cn("space-y-1.5", disabled && "opacity-70")}>
+    <div className={cn("space-y-1.5", disabled && "opacity-70")} data-tour="tour-scope">
       <div className="grid grid-cols-2 gap-0.5 p-0.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800">
         {OPTIONS.map((option) => {
           const active = option.laborOnly === laborOnly;

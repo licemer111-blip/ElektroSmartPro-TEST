@@ -87,7 +87,7 @@ export function CatalogMobileTrigger({
   return (
     <Sheet open={isOpen} onOpenChange={handleOpen}>
       <SheetTrigger asChild>
-        <Button className={`${className} ${isFinal ? "opacity-50" : ""}`}>
+        <Button data-tour="tour-catalog-mobile" className={`${className} ${isFinal ? "opacity-50" : ""}`}>
           <Plus className="w-4 h-4 mr-2" />
           Katalog
         </Button>

@@ -129,7 +129,7 @@ export function ProjectControlPanel({
     }`;
 
   return (
-    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2">
+    <div data-tour="tour-doc" className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2">
       <div className="flex items-center gap-2">
         <span className="text-xs font-medium text-slate-500 dark:text-slate-400">VAT</span>
         <div className="inline-flex items-center gap-0.5 rounded-md border border-slate-200 dark:border-slate-700 p-0.5">

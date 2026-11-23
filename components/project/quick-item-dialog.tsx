@@ -96,6 +96,7 @@ export function QuickItemDialog({
       <Button
         disabled={isFinal}
         onClick={() => handleOpen(true)}
+        data-tour="tour-quick"
         className={cn("gap-1.5 bg-blue-600 text-white hover:bg-blue-700 shadow-sm border-transparent h-8 text-xs", isFinal && "opacity-50 cursor-not-allowed", className)}
         title="Dodaj pozycję ręcznie bez katalogu"
       >

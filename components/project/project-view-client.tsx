@@ -348,12 +348,11 @@ export function ProjectViewClient({
         )}
 
         {!summaryCollapsed && (
-          <div className="min-w-0 hidden lg:block sticky top-4">
+          <div className="min-w-0 hidden lg:block sticky top-4" data-tour="tour-summary-panel">
             <div className="relative">
               <button
                 onClick={toggleSummary}
                 className="absolute top-2 right-2 z-10 p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/60 shadow-sm ring-2 ring-blue-300/50 dark:ring-blue-600/30 animate-pulse hover:animate-none transition-colors inline-flex items-center gap-1"
-                data-tour="tour-summary"
                 title="Ukryj podsumowanie, żeby poszerzyć tabelę"
               >
                 <PanelRightClose className="w-4 h-4" />

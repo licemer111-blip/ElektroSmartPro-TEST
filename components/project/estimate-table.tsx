@@ -325,7 +325,7 @@ export function EstimateTable({
 
       {/* Empty state — shown below tabs+toolbar+filters when no items */}
       {isEmpty && (
-        <div className="text-center py-12 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-900/30 px-4">
+        <div data-tour="tour-rows" className="text-center py-12 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-900/30 px-4">
           <div className="mx-auto w-14 h-14 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-4">
             <FileBox className="w-7 h-7 text-blue-500 dark:text-blue-400" />
           </div>
@@ -400,7 +400,7 @@ export function EstimateTable({
       )}
 
       {/* Mobile Card View — only shown when compactView=true (compact/card mode) on small screens */}
-      {!isEmpty && <div className={cn("lg:hidden", compactView ? "block" : "hidden")}>
+      {!isEmpty && <div data-tour="tour-rows" className={cn("lg:hidden", compactView ? "block" : "hidden")}>
         <EstimateMobileCards
           items={filteredItems} isPro={isPro} isFinal={isFinal} isReadOnly={isReadOnly}
           adjustmentPercentage={adjustmentPercentage} selectedIds={selectedIds}
@@ -414,7 +414,7 @@ export function EstimateTable({
       </div>}
 
       {/* Desktop Table — always shown on lg+; on mobile shown only when compactView=false (Widok normalny) */}
-      {!isEmpty && <div className={cn(!compactView ? "block" : "hidden lg:block")}>
+      {!isEmpty && <div data-tour="tour-rows" className={cn(!compactView ? "block" : "hidden lg:block")}>
         <DndContext id={dndId} sensors={sensors} collisionDetection={closestCenter}
           onDragStart={handleDragStart} onDragEnd={handleDragEnd} onDragCancel={handleDragCancel}>
           <div className="no-btn-scale border rounded-lg dark:border-slate-800 bg-slate-100 dark:bg-slate-900 relative overflow-x-auto scroll-smooth">

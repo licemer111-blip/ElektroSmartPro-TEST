@@ -117,7 +117,7 @@ export function PriceAdjuster({ projectId, basePrice, initialAdjustment, isPro =
   const isNeutral = adjustment === 0;
 
   return (
-    <div className="space-y-3 border-t border-border mt-4 pt-4">
+    <div className="space-y-3 border-t border-border mt-4 pt-4" data-tour="tour-negotiate">
       {/* Header with saving indicator */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 min-w-0">

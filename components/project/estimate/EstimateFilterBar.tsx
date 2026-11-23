@@ -60,7 +60,7 @@ export function EstimateFilterBar({
   onGroupBySection, onCollapsedSections, onCompactView, onToast,
 }: EstimateFilterBarProps) {
   return (
-    <div className="mb-3 flex flex-col gap-1 p-1.5 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700/50 flex-shrink-0">
+    <div data-tour="tour-view" className="mb-3 flex flex-col gap-1 p-1.5 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700/50 flex-shrink-0">
       {/* Row 1: Search + type filter + category + section */}
       <div className="flex items-center gap-1.5 overflow-x-auto flex-nowrap no-scrollbar">
         {!isSearchOpen ? (
