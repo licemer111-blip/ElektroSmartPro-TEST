@@ -4,7 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { Download, FileSpreadsheet, Lock } from "lucide-react";
+import { Download, FileSpreadsheet, Lock, Palette } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { UnlockPdfButton } from "@/components/billing/unlock-pdf-button";
 import { TrialStatusBadge } from "@/components/billing/trial-status-badge";
 import { isTrialActive } from "@/lib/auth/entitlements";
@@ -161,14 +169,23 @@ export function SummaryExportPanel({
             <span>{isPro ? "Excel" : "Excel (PRO)"}</span>
           </button>
         </div>
-        <details className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-900/40 px-3 py-2">
-          <summary className="cursor-pointer text-xs font-medium text-slate-600 dark:text-slate-300">
-            Wygląd PDF
-          </summary>
-          <div className="pt-3">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button type="button" variant="outline" size="sm" className="w-full">
+              <Palette className="w-3.5 h-3.5 mr-2" />
+              Wygląd PDF
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Wygląd PDF</DialogTitle>
+              <DialogDescription>
+                Szablon, okładka i to, co wchodzi do dokumentu. Kwoty zostają te same.
+              </DialogDescription>
+            </DialogHeader>
             <ProjectSettings project={project} isPro={isPro} pdfOnly />
-          </div>
-        </details>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <Separator />
