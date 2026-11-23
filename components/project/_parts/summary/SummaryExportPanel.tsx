@@ -6,9 +6,8 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Download, FileSpreadsheet, Lock } from "lucide-react";
 import { UnlockPdfButton } from "@/components/billing/unlock-pdf-button";
-import { StartTrialButton } from "@/components/billing/start-trial-button";
 import { TrialStatusBadge } from "@/components/billing/trial-status-badge";
-import { hasUsedTrial, isTrialActive, TRIAL_DURATION_DAYS } from "@/lib/auth/entitlements";
+import { isTrialActive } from "@/lib/auth/entitlements";
 import { PAY_PER_EXPORT_ENABLED } from "@/lib/config/tier-limits";
 import { useToast } from "@/hooks/use-toast";
 import { useModalStore } from "@/hooks/use-modal-store";
@@ -164,17 +163,10 @@ export function SummaryExportPanel({
             <div className="flex items-start gap-2 px-3 py-2 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
               <Lock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
               <p className="text-[10px] text-blue-800 dark:text-blue-200 leading-tight">
-                <span className="font-semibold">Tryb Demo:</span> PDF zostanie oznaczony znakiem wodnym „DEMO”.
-                {PAY_PER_EXPORT_ENABLED
-                  ? " Aby wysłać czysty PDF do klienta — aktywuj darmowy trial lub kup jednorazowy eksport."
-                  : ` Aby wysłać czysty PDF do klienta — aktywuj darmowy ${TRIAL_DURATION_DAYS}-dniowy trial PRO.`}
+                <span className="font-semibold">Tryb Demo:</span> PDF ma czerwony znak DEMO.
+                Czysty PDF tej jednej wyceny to 49 zł netto. Subskrypcja PRO zdejmuje znak ze wszystkich kosztorysów i otwiera Excel.
               </p>
             </div>
-            {/* Trial button — only shown to users who have NEVER started a trial */}
-            {!hasUsedTrial(profile ?? null) && (
-              <StartTrialButton />
-            )}
-            {/* Pay-per-Export CTA — hidden via feature flag during Stripe Tax + BLIK/P24 validation */}
             {PAY_PER_EXPORT_ENABLED && (
               <UnlockPdfButton projectId={project.id} />
             )}

@@ -47,7 +47,7 @@ export function EstimateTableHeader({
   };
 
   return (
-    <TableHeader className="bg-slate-100 dark:bg-slate-900">
+    <TableHeader data-tour="tour-rows" className="scroll-mt-24 bg-slate-100 dark:bg-slate-900">
       <TableRow className="bg-gradient-to-r from-slate-50 via-slate-100 to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
         {!isFinal && !isReadOnly && (
           <TableHead className="text-center min-w-[36px] w-[36px] dark:text-slate-300 border-r border-slate-200 dark:border-slate-700">

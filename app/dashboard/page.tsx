@@ -9,8 +9,7 @@ import { createClient } from "@/utils/supabase/server";
 import { OnboardingWizard } from "@/components/onboarding/onboarding-wizard";
 import { ClientActivityWidget } from "@/components/dashboard/client-activity-widget";
 import { getEffectiveMaxProjects } from "@/lib/config/tier-limits";
-import { StartTrialButton } from "@/components/billing/start-trial-button";
-import { getEffectiveIsPro, hasUsedTrial } from "@/lib/auth/entitlements";
+import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 
 export const dynamic = 'force-dynamic';
 
@@ -60,7 +59,6 @@ export default async function DashboardPage({
   }
 
   const effectivelyPro = getEffectiveIsPro(profile);
-  const trialUsed = hasUsedTrial(profile);
 
   // Calculate stats
   const draftCount = projects.filter((p) => p.status === "draft").length;
@@ -94,21 +92,6 @@ export default async function DashboardPage({
               />
             </div>
           </div>
-
-          {/* Trial CTA — shown to free users who haven't used their trial yet */}
-          {!effectivelyPro && !trialUsed && (
-            <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-3 px-5 py-4 rounded-2xl bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30 border border-indigo-200/70 dark:border-indigo-800/50 shadow-sm">
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-indigo-900 dark:text-indigo-100">
-                  🚀 Wypróbuj PRO przez 7 dni — za darmo, bez karty!
-                </p>
-                <p className="text-xs text-indigo-600 dark:text-indigo-400 mt-0.5">
-                  Czysty PDF dla klienta, więcej niż 1 projekt, bez znaku wodnego DEMO.
-                </p>
-              </div>
-              <StartTrialButton variant="compact" />
-            </div>
-          )}
 
         {/* Quick Start Guide - Compact 3-step */}
           {projects.length > 0 && projects.length <= 3 && (

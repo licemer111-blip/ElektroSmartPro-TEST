@@ -172,7 +172,7 @@ export async function createProject(formData: FormData) {
       .or("is_demo_project.is.null,is_demo_project.eq.false");
     if (count !== null && count >= maxAllowed) {
       return {
-        error: "Osiągnięto limit projektów dla darmowego konta. Aktywuj 7-dniowy trial PRO lub kup subskrypcję, aby tworzyć więcej projektów.",
+        error: "Osiągnięto limit projektów dla darmowego konta. Na Demo jest 1 własny projekt. Kolejny otwiera subskrypcja PRO.",
         requiresUpgrade: true,
       };
     }
@@ -266,7 +266,7 @@ export async function duplicateProject(projectId: string) {
         .or("is_demo_project.is.null,is_demo_project.eq.false");
       if (count !== null && count >= maxAllowed) {
         return {
-          error: `Osiągnąłeś limit ${maxAllowed} projektu. Usuń istniejący projekt lub aktywuj trial PRO.`,
+          error: `Osiągnąłeś limit ${maxAllowed} projektu. Usuń istniejący albo przejdź na PRO.`,
           requiresUpgrade: true,
         };
       }

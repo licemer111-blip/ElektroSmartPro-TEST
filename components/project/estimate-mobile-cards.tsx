@@ -143,7 +143,7 @@ export function EstimateMobileCards({
 
   return (
     <div className="space-y-5 pb-4">
-      {Array.from(sections.entries()).map(([sectionName, sectionItems]) => {
+      {Array.from(sections.entries()).map(([sectionName, sectionItems], sectionIndex) => {
         const secMat = sectionItems.reduce((s, i) => s + calcItemMat(i) * i.quantity, 0);
         const secLab = sectionItems.reduce((s, i) => s + calcItemLab(i) * i.quantity, 0);
         const secSum = adjustmentPercentage !== 0
@@ -151,8 +151,7 @@ export function EstimateMobileCards({
           : secMat + secLab;
         return (
         <div key={sectionName}>
-          {/* Section header with counter */}
-          <div className="flex items-center gap-2 mb-2 px-1">
+          <div data-tour={sectionIndex === 0 ? "tour-rows" : undefined} className="flex items-center gap-2 mb-2 px-1 scroll-mt-24">
             <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
             <div className="flex items-center gap-1.5 shrink-0">
               <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">

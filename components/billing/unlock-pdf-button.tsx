@@ -99,6 +99,7 @@ export function UnlockPdfButton({ projectId, alreadyUnlocked = false, className 
                   text-white shadow-md shadow-orange-500/20 disabled:cursor-not-allowed disabled:opacity-70
                   transition-all ${className}`}
       aria-label={`Odblokuj czysty PDF za ${PAY_PER_EXPORT_PRICE_PLN} zł`}
+      data-tour="tour-clean-pdf"
     >
       {loading ? (
         <Loader2 className="w-3.5 h-3.5 animate-spin" />

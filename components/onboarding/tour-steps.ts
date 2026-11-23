@@ -125,7 +125,7 @@ export const TOUR_STEPS: TourStep[] = [
     description:
       "W Ustawieniach → Finanse ustaw stawkę roboczogodziny (PLN/r-g) i wybierz województwo. " +
       "To wpływa na WSZYSTKIE kosztorysy. " +
-      "Trial PRO na 7 dni zdejmuje znak wodny i limit jednego projektu.",
+      "Czysty PDF jednej wyceny to 49 zł netto. Excel i czyste PDF bez limitu są w PRO.",
     targetSelector: 'a[href="/dashboard/settings"]',
     position: "bottom",
     emoji: "⚙️",

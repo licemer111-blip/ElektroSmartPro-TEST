@@ -400,7 +400,7 @@ export function EstimateTable({
       )}
 
       {/* Mobile Card View — only shown when compactView=true (compact/card mode) on small screens */}
-      {!isEmpty && <div data-tour="tour-rows" className={cn("lg:hidden", compactView ? "block" : "hidden")}>
+      {!isEmpty && <div className={cn("lg:hidden", compactView ? "block" : "hidden")}>
         <EstimateMobileCards
           items={filteredItems} isPro={isPro} isFinal={isFinal} isReadOnly={isReadOnly}
           adjustmentPercentage={adjustmentPercentage} selectedIds={selectedIds}
@@ -414,7 +414,7 @@ export function EstimateTable({
       </div>}
 
       {/* Desktop Table — always shown on lg+; on mobile shown only when compactView=false (Widok normalny) */}
-      {!isEmpty && <div data-tour="tour-rows" className={cn(!compactView ? "block" : "hidden lg:block")}>
+      {!isEmpty && <div className={cn(!compactView ? "block" : "hidden lg:block")}>
         <DndContext id={dndId} sensors={sensors} collisionDetection={closestCenter}
           onDragStart={handleDragStart} onDragEnd={handleDragEnd} onDragCancel={handleDragCancel}>
           <div className="no-btn-scale border rounded-lg dark:border-slate-800 bg-slate-100 dark:bg-slate-900 relative overflow-x-auto scroll-smooth">

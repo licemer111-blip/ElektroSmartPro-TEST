@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
-const STORAGE_KEY = "es_estimate_tour_v2";
+const STORAGE_KEY = "es_estimate_tour_v3";
 export const ESTIMATE_TOUR_EVENT = "es-estimate-tour-start";
 
 type Place = "top" | "bottom" | "left" | "right" | "center";
@@ -15,6 +15,7 @@ interface Step {
   description: string;
   targets?: string[];
   place: Place;
+  scroll?: "start" | "center";
 }
 
 const STEPS: Step[] = [
@@ -79,6 +80,7 @@ const STEPS: Step[] = [
     description: "Tu poprawiasz ilość, cenę materiału i robociznę. Góra komórki to cena za jednostkę, dół to suma wiersza. Zielony to robocizna, pomarańczowy to materiał.",
     targets: ['[data-tour="tour-rows"]'],
     place: "top",
+    scroll: "start",
   },
   {
     id: "view",
@@ -127,6 +129,13 @@ const STEPS: Step[] = [
     title: "PDF i Excel",
     description: "PDF idzie do klienta. Na darmowym koncie jest czerwony znak DEMO, także na przykładowym projekcie. Excel kosztorysu jest w PRO. Jednorazowa opłata za czysty PDF nie otwiera Excela.",
     targets: ['[data-tour="tour-export"]'],
+    place: "left",
+  },
+  {
+    id: "clean-pdf",
+    title: "Czysty PDF za 49 zł",
+    description: "Darmowy PDF ma czerwony znak DEMO. 49 zł netto zdejmuje ten znak z jednego kosztorysu. To nie subskrypcja i nie otwiera Excela. Excel oraz czyste PDF bez limitu są w PRO, 159 zł netto miesięcznie.",
+    targets: ['[data-tour="tour-clean-pdf"]'],
     place: "left",
   },
   {
@@ -247,7 +256,7 @@ export function EstimateTour() {
       setRect(null);
       return;
     }
-    el.scrollIntoView({ block: "center", inline: "nearest" });
+    el.scrollIntoView({ block: current?.scroll ?? "center", inline: "nearest" });
     const read = () => {
       const again = findTarget(current?.targets);
       setRect(again ? again.getBoundingClientRect() : null);

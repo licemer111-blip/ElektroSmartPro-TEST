@@ -168,18 +168,6 @@ export function PricingSection({ catalogCount = 1400, dinCount = 295 }: PricingS
           </Card>
         </div>
 
-        {/* Trial Banner */}
-        <div className="mt-8 max-w-4xl mx-auto">
-          <div className="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-950/30 dark:to-blue-950/30 border border-indigo-200 dark:border-indigo-800 rounded-xl p-5 text-center">
-            <p className="text-sm font-semibold text-indigo-800 dark:text-indigo-200 mb-1">
-              Nie jesteś pewien? Wypróbuj PRO przez 7 dni za darmo
-            </p>
-            <p className="text-xs text-indigo-600 dark:text-indigo-400">
-              Bez karty. Po 7 dniach wracasz do Demo. Płatne PRO to osobny przycisk wyżej.
-            </p>
-          </div>
-        </div>
-
         {/* Trust Badges */}
         <div className="mt-12 text-center">
           <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
