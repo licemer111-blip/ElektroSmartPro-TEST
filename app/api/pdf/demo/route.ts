@@ -46,9 +46,11 @@ const DEMO_ITEMS: DemoItem[] = [
 
 // ─── Semantic section IDs (mirrors /api/pdf/route.ts logic) ──────────────────
 
-type PdfSectionId = "I_PRZYGOT" | "II_TRASY" | "III_OSPRZET" | "IV_ROZDZ" | "V_SPEC" | "VI_POMIARY";
+type PdfSectionId = "I_PRZYGOT" | "II_TRASY" | "III_OSPRZET" | "III_OPRAWY" | "IV_ROZDZ" | "V_SPEC" | "VI_POMIARY";
 
 const POMIAR_RE = /pomiar|odbior|sprawdzen|protokol|atest|komisj|uziom|rezystancj|szczelno|izolacj.*test/i;
+const LIGHT_RE = /opraw|lamp[ayę]|plafon|kinkiet|downlight|na[sś]wietlacz|o[sś]wietlen|panel\s+led|halogen/i;
+const CABLE_RE = /przew[oó]d|\bkabel\b|\bnhxh\b|\byksy\b|\byky\b|\bydy\b|\butp\b|\bfe180\b|\bwlz\b/i;
 
 const INTENT_MAP: Record<string, PdfSectionId> = {
   DEMOLITION: "I_PRZYGOT", HARD_CONSTRUCTION: "I_PRZYGOT", DRILLING_HARD: "I_PRZYGOT",
@@ -61,14 +63,17 @@ const INTENT_MAP: Record<string, PdfSectionId> = {
 const PDF_SECTIONS = [
   { id: "I_PRZYGOT"   as PdfSectionId, roman: "I",   label: "PRACE PRZYGOTOWAWCZE I DEMONTAŻ"      },
   { id: "II_TRASY"    as PdfSectionId, roman: "II",  label: "TRASY KABLOWE I OKABLOWANIE"            },
-  { id: "III_OSPRZET" as PdfSectionId, roman: "III", label: "OSPRZĘT ELEKTRYCZNY I OPRAWY"           },
-  { id: "IV_ROZDZ"    as PdfSectionId, roman: "IV",  label: "ROZDZIELNICE I ZASILANIE"               },
-  { id: "V_SPEC"      as PdfSectionId, roman: "V",   label: "SYSTEMY SPECJALNE (PV/PPOŻ/PRZEMYSŁ)"  },
-  { id: "VI_POMIARY"  as PdfSectionId, roman: "VI",  label: "POMIARY, ODBIORY I URUCHOMIENIE"        },
+  { id: "III_OSPRZET" as PdfSectionId, roman: "III", label: "OSPRZĘT INSTALACYJNY"                 },
+  { id: "III_OPRAWY"  as PdfSectionId, roman: "IV",  label: "OPRAWY I OŚWIETLENIE"                   },
+  { id: "IV_ROZDZ"    as PdfSectionId, roman: "V",   label: "ROZDZIELNICE I ZASILANIE"               },
+  { id: "V_SPEC"      as PdfSectionId, roman: "VI",  label: "SYSTEMY SPECJALNE (PV/PPOŻ/PRZEMYSŁ)"  },
+  { id: "VI_POMIARY"  as PdfSectionId, roman: "VII", label: "POMIARY, ODBIORY I URUCHOMIENIE"        },
 ];
 
 function classifySection(name: string): PdfSectionId {
   if (POMIAR_RE.test(name)) return "VI_POMIARY";
+  if (LIGHT_RE.test(name)) return "III_OPRAWY";
+  if (CABLE_RE.test(name)) return "II_TRASY";
   const { intent } = classifyIntent(name);
   return (INTENT_MAP[intent] ?? "III_OSPRZET") as PdfSectionId;
 }

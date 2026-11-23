@@ -71,11 +71,40 @@ function foldLabel(raw: string): string {
     .trim();
 }
 
-/** Column titles such as "Opis pozycji / Materiał" are not work items. */
+const COLUMN_WORD = /^(lp|opis|nazwa|pozycja|material|materialy|robocizna|jednostka|jm|jedn|ilosc|wartosc|cena|kod|knr|podstawa|uwagi|nr|numer|zl|netto|brutto|pln)$/;
+
+/** Column titles such as "Opis pozycji / Materiał" or "Cena jedn. (zł)" are not work items. */
 export function isColumnLabel(raw: string): boolean {
   const parts = raw.split(/[/|]/).map(foldLabel).filter(Boolean);
   if (parts.length === 0) return true;
-  return parts.every((part) => COLUMN_LABELS.has(part));
+  return parts.every((part) =>
+    COLUMN_LABELS.has(part) || part.split(" ").every((word) => COLUMN_WORD.test(word)),
+  );
+}
+
+const TOTAL_HEADING_RE = /^(razem|suma|ogolem|lacznie)\b/;
+
+/**
+ * A row that names a chapter ("ODDYMIANIE", "RAZEM (...)") and has no quantity.
+ * Real items written in capitals still have a quantity, so they stay.
+ */
+export function isTableHeadingRow(name: string, quantityRaw: string): boolean {
+  const n = name.trim();
+  if (!n || isColumnLabel(n)) return true;
+  if (TOTAL_HEADING_RE.test(foldLabel(n))) return true;
+  if (/^[*\u2022•]/.test(n)) return true;
+  const qty = quantityRaw.trim();
+  const hasQty = /\d/.test(qty) && Number(qty.replace(",", ".").replace(/[^\d.]/g, "")) > 0;
+  if (hasQty) return false;
+  const letters = n.replace(/[^A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]/g, "");
+  return letters.length >= 3 && letters === letters.toUpperCase() && n.length <= 90;
+}
+
+/** Chapter title to attach to the following rows. Totals and footnotes are not chapters. */
+export function chapterTitle(name: string): string | null {
+  const n = name.trim();
+  if (!n || TOTAL_HEADING_RE.test(foldLabel(n)) || /^[*\u2022•]/.test(n) || isColumnLabel(n)) return null;
+  return n;
 }
 
 export function detectUnitColumn(data: string[][], colCount: number, excludeIdx: number): number {
@@ -152,6 +181,7 @@ export function smartParseExcel(headers: string[], data: string[][]): ExcelRow[]
     }
   }
 
+  let currentSection = "";
   return data.map((row): ExcelRow | null => {
     let name = String(row[nameIdx] ?? "").trim();
     if (!name) {
@@ -172,7 +202,12 @@ export function smartParseExcel(headers: string[], data: string[][]): ExcelRow[]
         name = anyCell ? String(anyCell).trim() : "";
       }
     }
-    if (!name || isColumnLabel(name)) return null;
+    const rawQtyCell = String(row[qtyIdx] ?? "").trim();
+    if (!name || isTableHeadingRow(name, rawQtyCell)) {
+      const title = name ? chapterTitle(name) : null;
+      if (title) currentSection = title;
+      return null;
+    }
 
     const rawUnit = String(row[unitIdx] ?? "").trim();
     const unit = smartCorrectUnit(name, normalizeUnit(rawUnit || "kpl"));
@@ -202,13 +237,14 @@ export function smartParseExcel(headers: string[], data: string[][]): ExcelRow[]
       else { mat = Math.round(p * 0.6 * 100) / 100; lab = Math.round(p * 0.4 * 100) / 100; }
     }
     const sec = secIdx >= 0 ? String(row[secIdx] ?? "").trim() : "";
-    return { name, unit, quantity: qty, materialPrice: mat, laborPrice: lab, section: sec, valid: true };
+    return { name, unit, quantity: qty, materialPrice: mat, laborPrice: lab, section: sec || currentSection, valid: true };
   }).filter((r): r is ExcelRow => r !== null);
 }
 
 // ─── Apply AI column map ──────────────────────────────────────────────────────
 
 export function applyColumnMap(map: ExcelColumnMap, data: string[][]): ExcelRow[] {
+  let currentSection = "";
   return data.map((row): ExcelRow | null => {
     let name = String(row[map.nameIdx] ?? "").trim();
     if (!name) {
@@ -229,7 +265,12 @@ export function applyColumnMap(map: ExcelColumnMap, data: string[][]): ExcelRow[
         name = anyCell ? String(anyCell).trim() : "";
       }
     }
-    if (!name || isColumnLabel(name)) return null;
+    const rawQtyCell = map.qtyIdx >= 0 ? String(row[map.qtyIdx] ?? "").trim() : "";
+    if (!name || isTableHeadingRow(name, rawQtyCell)) {
+      const title = name ? chapterTitle(name) : null;
+      if (title) currentSection = title;
+      return null;
+    }
 
     const rawUnit = map.unitIdx >= 0 ? String(row[map.unitIdx] ?? "").trim() : "";
     const unit = smartCorrectUnit(name, normalizeUnit(rawUnit || "kpl"));
@@ -258,9 +299,10 @@ export function applyColumnMap(map: ExcelColumnMap, data: string[][]): ExcelRow[
     }
 
     const sec = map.secIdx >= 0 ? String(row[map.secIdx] ?? "").trim() : "";
+    const section = sec || currentSection;
     const rawKnr = map.knrIdx >= 0 ? String(row[map.knrIdx] ?? "").trim() : "";
     const knr_code = rawKnr ? rawKnr.replace(/\bc\.\d+\s*/gi, "").trim() || null : null;
-    return { name, unit, quantity: qty, materialPrice: mat, laborPrice: lab, section: sec, knr_code, valid: true };
+    return { name, unit, quantity: qty, materialPrice: mat, laborPrice: lab, section, knr_code, valid: true };
   }).filter((r): r is ExcelRow => r !== null);
 }
 

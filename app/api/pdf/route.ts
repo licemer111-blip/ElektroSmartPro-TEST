@@ -50,12 +50,15 @@ async function fetchImage(url: string): Promise<string | null> {
 type PdfSectionId =
   | "I_PRZYGOT"    // Demolition, cutting, drilling
   | "II_TRASY"     // Cable laying, conduits, trays
-  | "III_OSPRZET"  // Devices, sockets, lighting
+  | "III_OSPRZET"  // Sockets, switches, sensors
+  | "III_OPRAWY"   // Luminaires — not the same trade as osprzęt
   | "IV_ROZDZ"     // Distribution boards, heavy conn.
   | "V_SPEC"       // PV, Industrial, Fire Safety, Commercial
   | "VI_POMIARY";  // Testing, measurements, commissioning
 
 const POMIAR_PDF_RE = /pomiar|odbior|sprawdzen|protokol|atest|komisj|uziom|rezystancj|szczelno|izolacj.*test/i;
+const LIGHT_PDF_RE = /opraw|lamp[ayę]|plafon|kinkiet|downlight|na[sś]wietlacz|o[sś]wietlen|panel\s+led|halogen/i;
+const CABLE_PDF_RE = /przew[oó]d|\bkabel\b|\bnhxh\b|\byksy\b|\byky\b|\bydy\b|\butp\b|\bfe180\b|\bwlz\b/i;
 
 const INTENT_TO_PDF_SECTION: Record<string, PdfSectionId> = {
   DEMOLITION:         "I_PRZYGOT",
@@ -81,16 +84,26 @@ interface PdfSectionDef {
 const PDF_SECTIONS: PdfSectionDef[] = [
   { id: "I_PRZYGOT",   roman: "I",   label: "PRACE PRZYGOTOWAWCZE I DEMONTAŻ"        },
   { id: "II_TRASY",    roman: "II",  label: "TRASY KABLOWE I OKABLOWANIE"              },
-  { id: "III_OSPRZET", roman: "III", label: "OSPRZĘT ELEKTRYCZNY I OPRAWY"             },
-  { id: "IV_ROZDZ",    roman: "IV",  label: "ROZDZIELNICE I ZASILANIE"                 },
-  { id: "V_SPEC",      roman: "V",   label: "SYSTEMY SPECJALNE (PV/PPOŻ/PRZEMYSŁ)"    },
-  { id: "VI_POMIARY",  roman: "VI",  label: "POMIARY, ODBIORY I URUCHOMIENIE"          },
+  { id: "III_OSPRZET", roman: "III", label: "OSPRZĘT INSTALACYJNY"                     },
+  { id: "III_OPRAWY",  roman: "IV",  label: "OPRAWY I OŚWIETLENIE"                     },
+  { id: "IV_ROZDZ",    roman: "V",   label: "ROZDZIELNICE I ZASILANIE"                 },
+  { id: "V_SPEC",      roman: "VI",  label: "SYSTEMY SPECJALNE (PV/PPOŻ/PRZEMYSŁ)"    },
+  { id: "VI_POMIARY",  roman: "VII", label: "POMIARY, ODBIORY I URUCHOMIENIE"          },
 ];
 
 function classifyItemSection(itemName: string): PdfSectionId {
   if (POMIAR_PDF_RE.test(itemName)) return "VI_POMIARY";
+  if (LIGHT_PDF_RE.test(itemName)) return "III_OPRAWY";
+  if (CABLE_PDF_RE.test(itemName)) return "II_TRASY";
   const { intent } = classifyIntent(itemName);
   return (INTENT_TO_PDF_SECTION[intent] ?? "III_OSPRZET") as PdfSectionId;
+}
+
+/** Imported chapter title wins over the automatic trade bucket. */
+function pdfGroupKey(section: unknown, name: string): string {
+  const own = String(section ?? "").trim();
+  if (own) return `user:${own}`;
+  return classifyItemSection(name);
 }
 
 // ─── Price helpers ────────────────────────────────────────────────
@@ -453,11 +466,15 @@ export async function POST(req: Request) {
 
     // ─── Smart PDF Grouping v2.0: Semantic Section Sorter ────────────────────
 
-    // Step 1: assign section to each top-level item by SemanticClassifier
-    const semanticSectionMap = new Map<string, PdfSectionId>();
+    // Step 1: a chapter saved on the row (Excel import) wins.
+    // Otherwise the trade bucket is guessed from the name.
+    const semanticSectionMap = new Map<string, string>();
     for (const item of calcItems) {
       if (!item.parent_assembly_id) {
-        semanticSectionMap.set(item.id as string, classifyItemSection(item.name as string));
+        semanticSectionMap.set(
+          item.id as string,
+          pdfGroupKey((item as { section?: string | null }).section, item.name as string),
+        );
       }
     }
     // Children inherit their parent's section
@@ -469,33 +486,47 @@ export async function POST(req: Request) {
     }
 
     // Step 2: per-section mat/lab totals (for subtotals + Executive Summary)
-    const sectionTotalsMap = new Map<PdfSectionId, { mat: number; lab: number }>(
-      PDF_SECTIONS.map(s => [s.id, { mat: 0, lab: 0 }])
-    );
+    const sectionTotalsMap = new Map<string, { mat: number; lab: number }>();
     for (const item of calcItems) {
       if (parentIds.has(item.id)) continue; // skip parents — children are counted individually
       const sec = semanticSectionMap.get(item.id as string) ?? "III_OSPRZET";
-      const st = sectionTotalsMap.get(sec)!;
+      const st = sectionTotalsMap.get(sec) ?? { mat: 0, lab: 0 };
       st.mat += item.finalMat * item.quantity;
       st.lab += item.finalLab * item.quantity;
+      sectionTotalsMap.set(sec, st);
     }
 
-    // Step 3: build final rows — grouped by semantic section OR flat (based on showSectionGroups)
+    const autoLabel = new Map(PDF_SECTIONS.map(s => [s.id, `${s.roman}. ${s.label}`]));
+    const groupOrder: string[] = [];
+    for (const item of calcItems) {
+      if (item.parent_assembly_id) continue;
+      const key = semanticSectionMap.get(item.id as string);
+      if (key && !groupOrder.includes(key)) groupOrder.push(key);
+    }
+    const hasUserChapters = groupOrder.some(key => key.startsWith("user:"));
+    const orderedGroups = hasUserChapters
+      ? groupOrder
+      : PDF_SECTIONS.map(s => s.id).filter(id => groupOrder.includes(id));
+
+    // Step 3: build final rows — grouped by chapter or trade OR flat
     const rows: PdfRow[] = [];
     if (pdfStructure.showSectionGroups) {
-      for (const secDef of PDF_SECTIONS) {
+      for (const groupKey of orderedGroups) {
         const secRawRows = rowsRaw
-          .filter(row => row._itemId && semanticSectionMap.get(row._itemId) === secDef.id);
+          .filter(row => row._itemId && semanticSectionMap.get(row._itemId) === groupKey);
 
         if (secRawRows.length === 0) continue;
 
-        const secT   = sectionTotalsMap.get(secDef.id)!;
+        const secT   = sectionTotalsMap.get(groupKey) ?? { mat: 0, lab: 0 };
         const secTot = secT.mat + secT.lab;
         const secItemCount = secRawRows.filter(row => !row.isChild).length;
+        const secTitle = groupKey.startsWith("user:")
+          ? groupKey.slice(5)
+          : (autoLabel.get(groupKey as PdfSectionId) ?? groupKey);
 
         rows.push({
           index: "",
-          name: `${secDef.roman}. ${secDef.label}  (${secItemCount} poz.)`,
+          name: `${secTitle}  (${secItemCount} poz.)`,
           knrCode: "", unit: "", qty: 0,
           rg: "", mat: "", lab: "", combined: "",
           total: "",

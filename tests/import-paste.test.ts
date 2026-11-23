@@ -39,4 +39,27 @@ describe("pasted estimate list", () => {
     const rows = smartParseExcel(headers, data);
     expect(rows.map((row) => row.name)).toEqual(["Gniazdo pojedyncze"]);
   });
+
+  it("keeps chapter titles as sections and skips totals", () => {
+    const grid = [
+      ["KOSZTORYS PRAC I MATERIAŁÓW"],
+      ["Lp.", "Opis pozycji / Materiał", "Ilość", "Cena jedn. (zł)", "Wartość (zł)"],
+      ["MONTAŻ I PODŁĄCZENIE URZĄDZEŃ DALI", "", "", "", ""],
+      ["1", "PRZYCISK ŚCIENNY ANTUMBRA", "18", "", "0"],
+      ["4", "MODUŁ OPRAW E27", "13", "", "0"],
+      ["RAZEM (MONTAŻ I PODŁĄCZENIE URZĄDZEŃ DALI)", "", "", "", "0"],
+      ["ODDYMIANIE", "", "", "", ""],
+      ["6", "PRZEWÓD NHXH-J FE180/E90 3x1,5", "400", "", "0"],
+      ["", "   * w cenie uwzględniona cena za montaż tras na OZ", "", "", ""],
+      ["RAZEM (ODDYMIANIE)", "", "", "", "0"],
+      ["SUMA CAŁKOWITA (ŁĄCZNIE)", "", "", "", "0"],
+    ];
+    const { headers, data } = splitImportGrid(grid);
+    const rows = smartParseExcel(headers, data);
+    expect(rows.map((row) => `${row.section} | ${row.name} | ${row.quantity}`)).toEqual([
+      "MONTAŻ I PODŁĄCZENIE URZĄDZEŃ DALI | PRZYCISK ŚCIENNY ANTUMBRA | 18",
+      "MONTAŻ I PODŁĄCZENIE URZĄDZEŃ DALI | MODUŁ OPRAW E27 | 13",
+      "ODDYMIANIE | PRZEWÓD NHXH-J FE180/E90 3x1,5 | 400",
+    ]);
+  });
 });
