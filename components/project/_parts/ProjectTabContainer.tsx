@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/card";
 import { EstimateTable } from "@/components/project/estimate-table";
 import { ProjectMaterialsList } from "@/components/project/project-materials-list";
 import { ProjectDocumentsSection } from "@/components/project/project-documents-section";
-import { ProjectSettings } from "@/components/project/project-settings";
 import { AddUserAssemblyDialog } from "@/components/project/add-user-assembly-dialog";
 import { QuickItemDialog } from "@/components/project/quick-item-dialog";
 import { CatalogMobileTrigger } from "@/components/project/catalog-mobile-trigger";
@@ -13,27 +12,19 @@ import { PriceAlertBanner } from "@/components/project/price-alert-banner";
 import { NormDivergenceBanner } from "@/components/project/_parts/NormDivergenceBanner";
 import { ProjectPricingModeControl } from "@/components/project/_parts/ProjectPricingModeControl";
 import {
-  Eye, Sparkles,
-  FileText, Package, Mic, Settings2, MapPin,
+  Eye,
+  FileText, Package, MapPin,
 } from "lucide-react";
 import { formatRegionCorrection, getRegionById } from "@/lib/config/regions";
 import { useToast } from "@/hooks/use-toast";
 import type { ProjectWithRelations, ProjectItem, Profile, CatalogCategory, CatalogItem } from "@/lib/types/database";
 import type { ProjectTab } from "@/components/project/project-view-client";
-import dynamic from "next/dynamic";
 import React, { useCallback, useMemo, useRef } from "react";
-
-const ProjectNotes = dynamic(
-  () => import("@/components/project/project-notes").then((m) => ({ default: m.ProjectNotes })),
-  { ssr: false }
-);
 
 // Static — defined outside component to avoid new array reference on every render
 const TAB_CONFIG = [
   { id: "estimate", label: "Kosztorys", shortLabel: "Koszt.", icon: FileText, lockedWhenFinal: false },
   { id: "materials", label: "Materiały", shortLabel: "Mat.", icon: Package, lockedWhenFinal: true },
-  { id: "notes", label: "Notatki", shortLabel: "Notat.", icon: Mic, lockedWhenFinal: true },
-  { id: "settings", label: "PDF", shortLabel: "PDF", icon: Settings2, lockedWhenFinal: true },
 ] as const;
 
 interface Region {
@@ -269,7 +260,7 @@ export function ProjectTabContainer({
       />
 
       {/* ESTIMATE TAB */}
-      {activeTab === "estimate" && (
+      {activeTab !== "materials" && (
         <div className="space-y-3">
           <NormDivergenceBanner items={items} />
           <Card className="p-3 sm:p-4 md:p-6 bg-white dark:bg-slate-900 shadow-lg md:shadow-md rounded-xl">
@@ -319,20 +310,6 @@ export function ProjectTabContainer({
               materialsOwnedByCustomer={project.materials_owned_by_customer}
             />
           </div>
-        </Card>
-      )}
-
-      {activeTab === "notes" && (
-        <Card className="h-full p-4 md:p-6 bg-white dark:bg-slate-900 shadow-lg md:shadow-md rounded-xl">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">{tabNav}</div>
-          <ProjectNotes projectId={projectId} initialNotes={project.notes} />
-        </Card>
-      )}
-
-      {activeTab === "settings" && (
-        <Card className="h-full p-4 md:p-6 bg-white dark:bg-slate-900 shadow-lg md:shadow-md rounded-xl">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">{tabNav}</div>
-          <ProjectSettings project={project} isPro={isPro} />
         </Card>
       )}
     </>

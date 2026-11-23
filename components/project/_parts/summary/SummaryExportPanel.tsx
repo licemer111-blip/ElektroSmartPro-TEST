@@ -19,6 +19,7 @@ import { joinOfferNotes, type OfferTerms } from "@/lib/offer-terms";
 import { OfferTermsFields } from "@/components/project/offer-terms-fields";
 import { ShoppingListDialog } from "@/components/project/shopping-list-dialog";
 import { OfferStatusLine } from "@/components/project/offer-status-line";
+import { ProjectSettings } from "@/components/project/project-settings";
 import type { ProjectWithRelations, ProjectItem, Profile } from "@/lib/types/database";
 
 interface SummaryExportPanelProps {
@@ -160,6 +161,14 @@ export function SummaryExportPanel({
             <span>{isPro ? "Excel" : "Excel (PRO)"}</span>
           </button>
         </div>
+        <details className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-900/40 px-3 py-2">
+          <summary className="cursor-pointer text-xs font-medium text-slate-600 dark:text-slate-300">
+            Wygląd PDF
+          </summary>
+          <div className="pt-3">
+            <ProjectSettings project={project} isPro={isPro} pdfOnly />
+          </div>
+        </details>
       </div>
 
       <Separator />

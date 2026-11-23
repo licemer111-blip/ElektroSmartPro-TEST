@@ -12,9 +12,11 @@ import { useGlobalSettings } from "@/hooks/use-global-settings";
 interface ProjectSettingsProps {
   project: ProjectWithRelations;
   isPro: boolean;
+  /** On the estimate, only the PDF look is shown. Project dates stay off that screen. */
+  pdfOnly?: boolean;
 }
 
-export function ProjectSettings({ project, isPro }: ProjectSettingsProps) {
+export function ProjectSettings({ project, isPro: _isPro, pdfOnly = false }: ProjectSettingsProps) {
   const { priceInputMode, setPriceInputMode, pdfStructure, setPdfStructure } = useGlobalSettings();
 
   const isFinal = project.status === "final";
@@ -241,7 +243,7 @@ export function ProjectSettings({ project, isPro }: ProjectSettingsProps) {
         </CardContent>
       </Card>
 
-      {/* ── SECTION 3: Info o projekcie ── */}
+      {!pdfOnly && (
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-sm">
@@ -273,6 +275,7 @@ export function ProjectSettings({ project, isPro }: ProjectSettingsProps) {
           </div>
         </CardContent>
       </Card>
+      )}
 
     </div>
   );

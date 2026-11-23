@@ -11,7 +11,6 @@ import { PayPerExportResultToast } from "@/components/billing/pay-per-export-res
 import { ProjectContentClient } from "@/components/project/project-content-client";
 import { ProjectQuickSwitcher } from "@/components/project/project-quick-switcher";
 import { ProjectTracker } from "@/components/project/project-tracker";
-import { ProjectTools } from "@/components/project/project-tools";
 import {
   getProjectDetails,
   getProjectItems,
@@ -20,7 +19,6 @@ import {
   getUserTeamForProjectPage,
   getUserProjectRole,
 } from "./actions";
-import { getProjectCommentCount, getLastProjectChange } from "./stats-actions";
 import { getProjectPhotos } from "./photo-actions";
 import { getProfile } from "@/app/dashboard/settings/actions";
 import { getUserAssemblies } from "@/app/dashboard/assemblies/actions";
@@ -85,15 +83,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     }
 
     // Step 2: Fetch remaining data in parallel
-    const [items, categories, profileResult, userAssemblies, allProjects, allRegions, commentCount, lastChange, userTeam, photos, userRole] = await Promise.all([
+    const [items, categories, profileResult, userAssemblies, allProjects, allRegions, userTeam, photos, userRole] = await Promise.all([
       getProjectItems(id),
-      getCatalogCategories(undefined, false, undefined, "personal"), // sourceFilter default — user controls via toggle button
+      getCatalogCategories(undefined, false, undefined, "personal"),
       getProfile(),
       getUserAssemblies(),
       getProjects(),
-      getRegions(), // Load all voivodeships for regional selector
-      getProjectCommentCount(id),
-      getLastProjectChange(id),
+      getRegions(),
       getUserTeamForProjectPage(),
       getProjectPhotos(id),
       getUserProjectRole(id),
@@ -224,15 +220,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     catalogItemsByCategory={catalogItemsByCategory}
                     regions={allRegions || []}
                     isReadOnly={isReadOnly}
-                  />
-                </div>
-                {/* Project Tools - Unified */}
-                <div className="mt-4 flex-shrink-0">
-                  <ProjectTools
-                    projectId={id}
-                    projectNotes={project.notes || undefined}
-                    lastHistoryUpdate={lastChange || undefined}
-                    projectStatus={project.status}
                   />
                 </div>
               </div>
