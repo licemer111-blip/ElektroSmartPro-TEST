@@ -1,8 +1,9 @@
 "use server";
 
 import { tryAuth } from "@/lib/auth";
-import { logger } from "@/lib/logger";
+import { regroupCatalogItems } from "@/lib/catalog/catalog-groups";
 import { catalogNameMatches, catalogSearchRank } from "@/lib/catalog/catalog-search";
+import { logger } from "@/lib/logger";
 import type { CatalogItem, CatalogCategory } from "@/lib/types/database";
 
 // Helper type for category with count
@@ -172,20 +173,21 @@ export async function getCatalogDataBatch(
     const hiddenIds = new Set(
       ((hiddenResult.data || []) as { catalog_item_id: string }[]).map(h => h.catalog_item_id)
     );
+    const visibleItems = allItems.filter((item) => !hiddenIds.has(item.id));
+    const regrouped = regroupCatalogItems(allCategories, visibleItems);
 
     const itemsByCategory: Record<string, CatalogItem[]> = {};
     const countMap = new Map<string, number>();
 
-    for (const item of allItems) {
-      if (hiddenIds.has(item.id)) continue;
-      const catId = item.category_id as string;
+    for (const item of regrouped.items) {
+      const catId = item.category_id;
       if (!catId) continue;
       if (!itemsByCategory[catId]) itemsByCategory[catId] = [];
       itemsByCategory[catId].push(item);
       countMap.set(catId, (countMap.get(catId) || 0) + 1);
     }
 
-    const categories: CatalogCategoryWithCount[] = allCategories.map(cat => ({
+    const categories: CatalogCategoryWithCount[] = regrouped.categories.map(cat => ({
       ...cat,
       count: countMap.get(cat.id) || 0,
     }));
