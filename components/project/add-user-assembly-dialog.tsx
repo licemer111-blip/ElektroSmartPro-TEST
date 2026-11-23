@@ -44,6 +44,12 @@ export function AddUserAssemblyDialog({ projectId, isPro = false, currentAssembl
   const isFinal = false;
   const router = useRouter();
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const openKit = () => { if (!isFinal) setOpen(true); };
+    window.addEventListener("es-open-kit", openKit);
+    return () => window.removeEventListener("es-open-kit", openKit);
+  }, [isFinal]);
   
   // UI Sync context for Following mode
   const tabSyncContext = useTabSyncOptional();

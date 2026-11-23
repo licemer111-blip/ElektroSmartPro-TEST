@@ -66,7 +66,7 @@ export function CatalogMobileTrigger({
   const handleOpen = (open: boolean) => {
     if (open && isFinal) {
       toast({
-        title: "🔒 Projekt zablokowany",
+        title: "Projekt zablokowany",
         description: "Odblokuj projekt, aby dodawać pozycje do kosztorysu",
         variant: "destructive",
       });
@@ -74,6 +74,15 @@ export function CatalogMobileTrigger({
     }
     setIsOpen(open);
   };
+
+  useEffect(() => {
+    const openCatalog = () => {
+      if (window.innerWidth >= 1024) return;
+      handleOpen(true);
+    };
+    window.addEventListener("es-open-catalog", openCatalog);
+    return () => window.removeEventListener("es-open-catalog", openCatalog);
+  }, [isFinal]);
 
   return (
     <Sheet open={isOpen} onOpenChange={handleOpen}>

@@ -53,7 +53,7 @@ export function ProjectsWithTemplatesClient({
             Twoje kosztorysy
           </h1>
           <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base max-w-2xl mx-auto">
-            Wczytaj listę, kliknij Wyceń. Robocizna to godzina normy ES razy Twoja stawka.
+            Przedmiar od klienta: wczytaj, wyceń, popraw i wyślij PDF. Albo złóż ofertę sam z katalogu i zestawów.
           </p>
         </div>
 
@@ -100,7 +100,7 @@ export function ProjectsWithTemplatesClient({
                     Pierwszy kosztorys
                   </h2>
                   <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-6 text-sm">
-                    Utwórz projekt, wklej listę prac i kliknij Wyceń. Godziny są z normy ES, złotówki z Twojej stawki.
+                    Dwie drogi. Wczytaj przedmiar klienta i zrób z niego PDF albo złóż ofertę z własnych pozycji i zestawów.
                   </p>
 
                   <NewProjectButton

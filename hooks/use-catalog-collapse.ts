@@ -16,8 +16,17 @@ export function useCatalogCollapse() {
     const onToggled = () => {
       setCatalogCollapsed(localStorage.getItem(STORAGE_KEY) === "true");
     };
+    const openCatalog = () => {
+      localStorage.setItem(STORAGE_KEY, "false");
+      setCatalogCollapsed(false);
+      window.dispatchEvent(new Event("catalog-toggled"));
+    };
     window.addEventListener("catalog-toggled", onToggled);
-    return () => window.removeEventListener("catalog-toggled", onToggled);
+    window.addEventListener("es-open-catalog", openCatalog);
+    return () => {
+      window.removeEventListener("catalog-toggled", onToggled);
+      window.removeEventListener("es-open-catalog", openCatalog);
+    };
   }, []);
 
   const toggleCatalog = useCallback(() => {

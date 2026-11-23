@@ -329,36 +329,59 @@ export function EstimateTable({
           <div className="mx-auto w-14 h-14 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-4">
             <FileBox className="w-7 h-7 text-blue-500 dark:text-blue-400" />
           </div>
-          <h3 className="text-base font-semibold text-slate-800 dark:text-slate-100 mb-1">Pusta oferta</h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mb-5 max-w-md mx-auto">
-            {rateIsSet
-              ? "Wklej listę prac. Potem Wyceń policzy robociznę: godzina normy ES × Twoja stawka. Materiał dopiszesz sam."
-              : "Najpierw zapisz stawkę w Ustawienia → Finanse. Bez niej program nie przeliczy godzin na złotówki."}
-          </p>
-          <div className="flex flex-wrap gap-2 justify-center">
-            <button
-              type="button"
-              onClick={() => window.dispatchEvent(new Event("es-open-import"))}
-              className="h-9 px-4 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold"
-            >
-              Wczytaj listę
-            </button>
-            {!rateIsSet && (
-              <a
-                href="/dashboard/settings?tab=knr"
-                className="h-9 px-4 rounded-md border border-slate-300 dark:border-slate-600 text-sm font-semibold inline-flex items-center text-slate-700 dark:text-slate-200"
+          <h3 className="text-base font-semibold text-slate-800 dark:text-slate-100 mb-4">Od czego zaczynasz?</h3>
+          <div className="grid gap-3 sm:grid-cols-2 max-w-2xl mx-auto text-left">
+            <div className="rounded-xl border border-emerald-200 dark:border-emerald-800 bg-white dark:bg-slate-900 p-4">
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Przedmiar od klienta</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-3">
+                Wczytaj tabelę, kliknij Wyceń, popraw ilości i wyślij PDF.
+              </p>
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new Event("es-open-import"))}
+                className="h-9 px-3 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold"
               >
-                Ustaw stawkę
-              </a>
-            )}
+                Wczytaj przedmiar
+              </button>
+            </div>
+            <div className="rounded-xl border border-blue-200 dark:border-blue-800 bg-white dark:bg-slate-900 p-4">
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Własna oferta</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-3">
+                Dobierz pozycje z katalogu i gotowe zestawy. Potem ten sam PDF.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => window.dispatchEvent(new Event("es-open-catalog"))}
+                  className="h-9 px-3 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold"
+                >
+                  Katalog
+                </button>
+                <button
+                  type="button"
+                  onClick={() => window.dispatchEvent(new Event("es-open-kit"))}
+                  className="h-9 px-3 rounded-md border border-slate-300 dark:border-slate-600 text-sm font-semibold text-slate-700 dark:text-slate-200"
+                >
+                  Zestaw
+                </button>
+              </div>
+            </div>
           </div>
+          {!rateIsSet && (
+            <a
+              href="/dashboard/settings?tab=knr"
+              className="inline-flex mt-4 text-sm font-semibold text-orange-700 dark:text-orange-300 underline"
+            >
+              Najpierw zapisz stawkę, inaczej Wyceń nie policzy złotówek
+            </a>
+          )}
         </div>
       )}
 
       {!isEmpty && awaitingPrice && (
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-orange-300 dark:border-orange-800 bg-orange-50 dark:bg-orange-950/30 px-3 py-2">
           <p className="text-sm text-orange-900 dark:text-orange-100">
-            Pozycje są. Kliknij Wyceń — robocizna to godzina × Twoja stawka. Cen materiału program nie wymyśla.
+            Pozycje z przedmiaru są w tabeli. Wyceń policzy robociznę, potem poprawisz ilości i zapiszesz PDF. Cen materiału program nie wymyśla.
           </p>
           <button
             type="button"
