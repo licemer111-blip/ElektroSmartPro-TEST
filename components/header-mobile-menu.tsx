@@ -115,6 +115,12 @@ export function HeaderMobileMenu({ isAuthenticated, isPro }: HeaderMobileMenuPro
               <MobileNavLink href="/#features" icon="Zap">
                 Funkcje
               </MobileNavLink>
+              <MobileNavLink href="/kosztorys-elektryczny" icon="ClipboardList">
+                Kosztorys
+              </MobileNavLink>
+              <MobileNavLink href="/wycena-elektryczna" icon="CircleDollarSign">
+                Wycena
+              </MobileNavLink>
               <MobileNavLink href="/porownanie" icon="Scale">
                 Porównanie
               </MobileNavLink>

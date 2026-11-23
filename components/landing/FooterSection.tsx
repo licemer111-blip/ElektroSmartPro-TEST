@@ -27,6 +27,8 @@ function FooterSectionInner() {
               {[
                 { href: "/#features", label: "Funkcje" },
                 { href: "/#pricing", label: "Cennik" },
+                { href: "/kosztorys-elektryczny", label: "Kosztorys elektryczny" },
+                { href: "/wycena-elektryczna", label: "Wycena elektryczna" },
                 { href: "/katalog", label: "Katalog godzin" },
                 { href: "/blog", label: "Blog" },
                 { href: "/login", label: "Demo" },

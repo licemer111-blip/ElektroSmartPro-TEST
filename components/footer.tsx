@@ -29,6 +29,8 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">Firma</h3>
             <ul className="space-y-2 text-sm text-slate-500 dark:text-slate-500">
+              <li><Link href="/kosztorys-elektryczny" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Kosztorys elektryczny</Link></li>
+              <li><Link href="/wycena-elektryczna" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Wycena elektryczna</Link></li>
               <li><Link href="/porownanie" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Porównanie</Link></li>
               <li><Link href="/o-nas" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">O nas</Link></li>
               <li><Link href="/kontakt" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Kontakt</Link></li>

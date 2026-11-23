@@ -44,7 +44,7 @@ export function LandingStructuredData({ catalogCount }: LandingStructuredDataPro
     url: baseUrl,
     logo: `${baseUrl}/icon.png`,
     description:
-      "Profesjonalny program dla elektryków w Polsce: kosztorys elektryczny online, wycena instalacji z podziałem materiał/robocizna, ceny regionalne 16 województw. Zgodność z PN-HD 60364.",
+      "Program dla elektryków w Polsce: kosztorys i wycena instalacji. Robocizna osobno od materiału, godzina normy ES razy stawka, województwo tylko na pracę.",
     contactPoint: {
       "@type": "ContactPoint",
       email: "elektrosmartpro@gmail.com",

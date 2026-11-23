@@ -117,6 +117,14 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                                 Cennik
                             </NavLink>
 
+                            <NavLink href="/kosztorys-elektryczny" icon="ClipboardList">
+                                Kosztorys
+                            </NavLink>
+
+                            <NavLink href="/wycena-elektryczna" icon="CircleDollarSign">
+                                Wycena
+                            </NavLink>
+
                             <NavLink href="/katalog" icon="PackageSearch">
                                 Katalog
                             </NavLink>
