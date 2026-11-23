@@ -276,14 +276,14 @@ export function CatalogSidebar({ projectId, categories: initialCategories, catal
         />
         <CategoryNav sourceFilter={sourceFilter} onSourceFilterChange={setSourceFilter} userTeam={userTeam} />
 
-        <div className="mb-3 grid grid-cols-2 gap-1 p-1 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700/50 flex-shrink-0">
-          <Button onClick={() => setIsCreateDialogOpen(true)} variant="ghost" size="sm" className="h-7 text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 gap-1 px-1">
+        <div className="mb-3 grid grid-cols-2 gap-0.5 p-0.5 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 flex-shrink-0">
+          <Button onClick={() => setIsCreateDialogOpen(true)} variant="ghost" size="sm" className="h-7 text-[11px] font-medium text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 gap-1 px-1">
             <PlusCircle className="w-3.5 h-3.5 flex-shrink-0" />Pozycja
           </Button>
-          <Button onClick={() => setIsCategoryDialogOpen(true)} variant="ghost" size="sm" className="h-7 text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 gap-1 px-1">
+          <Button onClick={() => setIsCategoryDialogOpen(true)} variant="ghost" size="sm" className="h-7 text-[11px] font-medium text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 gap-1 px-1">
             <FolderPlus className="w-3.5 h-3.5 flex-shrink-0" />Kategoria
           </Button>
-          <Button onClick={() => { if (isFinal) { toast({ title: "Projekt zablokowany", description: "Odblokuj projekt, aby dodawać pozycje", variant: "destructive" }); return; } setIsCopyDialogOpen(true); }} variant="ghost" size="sm" className="col-span-2 h-7 text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 gap-1 px-1" disabled={isFinal}>
+          <Button onClick={() => { if (isFinal) { toast({ title: "Projekt zablokowany", description: "Odblokuj projekt, aby dodawać pozycje", variant: "destructive" }); return; } setIsCopyDialogOpen(true); }} variant="ghost" size="sm" className="col-span-2 h-7 text-[11px] font-medium text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 gap-1 px-1" disabled={isFinal}>
             <Copy className="w-3.5 h-3.5 flex-shrink-0" />Z innego projektu
           </Button>
         </div>

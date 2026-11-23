@@ -134,9 +134,10 @@ export const HINTS = {
 
   materialInwestora: (
     <div className="space-y-1.5">
-      <p className="font-semibold text-orange-700 dark:text-orange-300">🏗️ Materiał Inwestora</p>
-      <p>Zaznacz jeśli klient dostarcza materiały sam — wtedy kosztorys zawiera tylko robociznę.</p>
-      <p className="text-slate-400">Cena materiału = 0 zł, robocizna bez zmian.</p>
+      <p className="font-semibold text-orange-700 dark:text-orange-300">Robocizna i materiały</p>
+      <p>Dwa tryby oferty. Ceny w wierszach się nie kasują.</p>
+      <p>Robocizna i materiały — do sumy wchodzą obie kolumny.</p>
+      <p className="text-slate-400">Tylko robocizna — materiał nie wchodzi do sumy ani do PDF. Klient kupuje go sam.</p>
     </div>
   ),
 
@@ -167,8 +168,8 @@ export const HINTS = {
   navKatalog: (
     <div className="space-y-1.5">
       <p className="font-semibold">📚 Katalog</p>
-      <p>Moje to Twój cennik. Baza to wspólne nazwy i godziny, bez ceny materiału. Razem pokazuje oba.</p>
-      <p className="text-slate-400">Cenę materiału z Moje program bierze do kosztorysu. Z Bazy — nie.</p>
+      <p>Moje, Baza i Razem włączają albo chowają pozycje w lewej kolumnie.</p>
+      <p className="text-slate-400">Moje to Twój cennik. Baza to godziny bez ceny materiału. Razem pokazuje oba, Twoja cena jest pierwsza.</p>
     </div>
   ),
 

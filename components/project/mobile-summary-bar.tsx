@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { BlurredPrice } from "@/components/ui/blurred-price";
@@ -12,6 +11,7 @@ import { getEffectiveIsPro } from "@/lib/auth/entitlements";
 import { awaitsContractSum } from "@/lib/estimate/system-scope";
 import { calcNarzuty } from "@/lib/pricing-calculations";
 import { PriceAdjuster } from "@/components/project/price-adjuster";
+import { OfferScopeSwitch } from "@/components/project/offer-scope-switch";
 import {
   Sheet,
   SheetContent,
@@ -251,30 +251,20 @@ export function MobileSummaryBar({
 
             {/* Materials toggle */}
             <div
-              className={`rounded-lg border p-3 flex items-center justify-between ${
-                materialsOwnedByCustomer
-                  ? "bg-green-50/50 dark:bg-green-950/20 border-green-300 dark:border-green-700"
-                  : "bg-red-50/50 dark:bg-red-950/20 border-red-300 dark:border-red-700"
-              } ${isFinal ? "cursor-not-allowed opacity-70" : ""}`}
               onClick={() => {
                 if (isFinal) {
                   toast({
-                    title: "🔒 Projekt zablokowany",
+                    title: "Projekt zablokowany",
                     description: "Odblokuj projekt, aby zmienić ustawienia materiałów",
                     variant: "destructive",
                   });
                 }
               }}
             >
-              <Label htmlFor="summary-mobile-materials-toggle" className="text-sm font-medium cursor-pointer">
-                {materialsOwnedByCustomer ? "Tylko Robocizna" : "Robocizna + Materia\u0142y"}
-              </Label>
-              <Switch
-                id="summary-mobile-materials-toggle"
-                name="summary-mobile-materials-toggle"
-                checked={materialsOwnedByCustomer}
-                onCheckedChange={isFinal ? undefined : handleToggleMaterials}
-                className={`scale-90${isFinal ? " pointer-events-none opacity-50" : ""}`}
+              <OfferScopeSwitch
+                laborOnly={materialsOwnedByCustomer}
+                disabled={isFinal}
+                onChange={handleToggleMaterials}
               />
             </div>
 

@@ -110,12 +110,12 @@ export function CategorySidebar({
             className="w-full mb-3"
           />
 
-          <div className="flex items-center gap-1 p-1 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
+          <div className="flex items-center gap-0.5 p-0.5 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
             {onAddItem && (
               <button
                 type="button"
                 onClick={onAddItem}
-                className="flex-1 h-7 text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md"
+                className="flex-1 h-7 text-[11px] font-medium text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 rounded-md"
               >
                 Pozycja
               </button>
@@ -123,7 +123,7 @@ export function CategorySidebar({
             <button
               type="button"
               onClick={() => setIsCreateDialogOpen(true)}
-              className="flex-1 h-7 text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md"
+              className="flex-1 h-7 text-[11px] font-medium text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 rounded-md"
             >
               Kategoria
             </button>

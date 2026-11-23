@@ -119,50 +119,59 @@ export function EstimateFilterBar({
         )}
 
         {uniqueSections.length > 0 && (
-          <>
-            <Button variant="ghost" size="sm"
+          <div className="inline-flex items-center gap-0.5 p-0.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 flex-shrink-0">
+            <button
+              type="button"
               onClick={() => { onGroupBySection(!groupBySection); if (groupBySection) onCollapsedSections(new Set()); }}
-              className={cn("h-7 sm:h-8 px-2 text-[11px] sm:text-xs gap-1 transition-all flex-shrink-0",
-                groupBySection
-                  ? "text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-900/40 hover:bg-purple-200 dark:hover:bg-purple-900/60"
-                  : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200")}
-              title={groupBySection ? "Wyłącz grupowanie" : "Grupuj wg sekcji"}>
+              title="Składa wiersze w grupy, na przykład Salon albo Trasy. Grupy idą też do PDF."
+              className={cn(chip, groupBySection ? chipOn : chipOff)}
+            >
               <LayoutGrid className="w-3.5 h-3.5" /><span className="hidden sm:inline">Sekcje</span>
-            </Button>
+            </button>
 
             {groupBySection && (() => {
               const hasUnsectioned = localItems.some(i => !i.section && !i.is_assembly_child);
               const allSectionKeys = [...uniqueSections, ...(hasUnsectioned ? ["__none__"] : [])];
               const allCollapsed = allSectionKeys.length > 0 && collapsedSections.size >= allSectionKeys.length;
               return (
-                <Button variant="ghost" size="sm"
+                <button
+                  type="button"
                   onClick={() => onCollapsedSections(allCollapsed ? new Set() : new Set(allSectionKeys))}
-                  className="h-7 sm:h-8 px-2 text-[11px] sm:text-xs gap-1 text-purple-500 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 flex-shrink-0"
-                  title={allCollapsed ? "Rozwiń wszystkie" : "Zwiń wszystkie"}>
+                  title={allCollapsed ? "Otwiera wszystkie grupy" : "Chowa wszystkie grupy. Wiersze zostają w kosztorysie."}
+                  className={cn(chip, chipOff)}
+                >
                   {allCollapsed ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronUp className="w-3.5 h-3.5" />}
                   <span className="hidden sm:inline">{allCollapsed ? "Rozwiń" : "Zwiń"}</span>
-                </Button>
+                </button>
               );
             })()}
-          </>
+          </div>
         )}
 
-        {/* Separator */}
         <div className="w-px h-5 bg-slate-200 dark:bg-slate-700 flex-shrink-0" />
 
-        {/* Normalny/Kompakt toggle */}
-        <button
-          onClick={isFinal ? undefined : onCompactView}
-          title={compactView ? "Widok normalny" : "Widok kompaktowy"}
-          className={cn(
-            "inline-flex items-center gap-1 px-2 py-1 rounded text-[11px] sm:text-xs font-medium transition-all flex-shrink-0 h-7 sm:h-8",
-            isFinal ? "opacity-40 cursor-not-allowed text-slate-400" :
-            compactView ? "bg-blue-600 text-white shadow-sm" : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600"
-          )}
-        >
-          {compactView ? <Maximize2 className="w-3.5 h-3.5" /> : <List className="w-3.5 h-3.5" />}
-          <span className="hidden sm:inline">{compactView ? "Normalny" : "Kompakt"}</span>
-        </button>
+        <div className={cn("inline-flex items-center gap-0.5 p-0.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 flex-shrink-0", isFinal && "opacity-40")}>
+          <button
+            type="button"
+            disabled={isFinal}
+            onClick={() => { if (!compactView) onCompactView(); }}
+            title="Węższe wiersze. Na telefonie lista kart zamiast tabeli."
+            className={cn(chip, "border-0", compactView ? chipOn : chipOff)}
+          >
+            <List className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Kompakt</span>
+          </button>
+          <button
+            type="button"
+            disabled={isFinal}
+            onClick={() => { if (compactView) onCompactView(); }}
+            title="Pełna tabela z cenami w wierszu."
+            className={cn(chip, "border-0", !compactView ? chipOn : chipOff)}
+          >
+            <Maximize2 className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Normalny</span>
+          </button>
+        </div>
 
         {/* AI analyzing indicator */}
         {isAnalyzing && (
@@ -174,7 +183,13 @@ export function EstimateFilterBar({
         {/* Region indicator (right-aligned) */}
         {filterBarExtra && <div className="flex flex-1 items-center justify-end">{filterBarExtra}</div>}
       </div>
-
+      <p className="px-1 text-[10px] leading-snug text-slate-500 dark:text-slate-400">
+        Sekcje składają wiersze w grupy. Zwiń chowa grupy, Rozwiń je otwiera. Kompakt zwęża tabelę, Normalny pokazuje pełne wiersze.
+      </p>
     </div>
   );
 }
+
+const chip = "inline-flex items-center gap-1 h-7 px-2 rounded-md text-[11px] font-medium transition-colors flex-shrink-0 disabled:cursor-not-allowed";
+const chipOff = "bg-transparent text-slate-600 dark:text-slate-300 hover:bg-white/80 dark:hover:bg-slate-700";
+const chipOn = "bg-blue-600 text-white shadow-sm";

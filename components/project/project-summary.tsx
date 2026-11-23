@@ -2,8 +2,6 @@
 import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -23,6 +21,7 @@ import type { ProjectItem, ProjectWithRelations, Profile } from "@/lib/types/dat
 import { calcNarzuty } from "@/lib/pricing-calculations";
 import { SummaryFinancialTotals } from "./_parts/summary/SummaryFinancialTotals";
 import { SummaryExportPanel } from "./_parts/summary/SummaryExportPanel";
+import { OfferScopeSwitch } from "./offer-scope-switch";
 
 interface RegionItem {
   id: string;
@@ -239,38 +238,17 @@ export function ProjectSummary({
       <CardContent className="space-y-4">
         {/* Materials Responsibility Toggle */}
         <div
-          className={`rounded-lg border transition-colors ${
-            materialsOwnedByCustomer
-              ? "bg-amber-50/70 dark:bg-amber-950/30 border-amber-400 dark:border-amber-700"
-              : "bg-slate-50/50 dark:bg-slate-900/40 border-slate-200 dark:border-slate-700"
-          } ${isFinal ? "cursor-not-allowed opacity-70" : ""}`}
           onClick={() => {
             if (isFinal) {
               toast({ title: "Projekt zablokowany", description: "Odblokuj projekt, aby zmienić ustawienia materiałów", variant: "destructive" });
             }
           }}
         >
-          <div className="px-3 py-2.5 flex items-center justify-between gap-3">
-            <Label htmlFor="summary-materials-toggle" className="flex flex-col gap-0.5 min-w-0 cursor-pointer">
-              <span className={`text-xs font-medium ${materialsOwnedByCustomer ? "text-amber-800 dark:text-amber-200" : "text-slate-700 dark:text-slate-200"}`}>
-                {materialsOwnedByCustomer ? "Tylko robocizna" : "Robocizna i materiały"}
-              </span>
-              <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                {materialsOwnedByCustomer
-                  ? "Materiały włączysz tym przełącznikiem i wycenisz ze swojego cennika"
-                  : totals.laborTotal > 0 && totals.materialTotal === 0
-                    ? "W wierszach nie ma cen materiałów"
-                    : "Materiał z wierszy wchodzi do sumy"}
-              </span>
-            </Label>
-            <Switch
-              id="summary-materials-toggle"
-              name="summary-materials-toggle"
-              checked={materialsOwnedByCustomer}
-              onCheckedChange={isFinal ? undefined : handleToggleMaterials}
-              className={`scale-75 flex-shrink-0${isFinal ? " pointer-events-none opacity-50" : ""}`}
-            />
-          </div>
+          <OfferScopeSwitch
+            laborOnly={materialsOwnedByCustomer}
+            disabled={isFinal}
+            onChange={handleToggleMaterials}
+          />
         </div>
 
         {!materialsOwnedByCustomer && totals.laborTotal > 0 && totals.materialTotal === 0 && (

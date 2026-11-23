@@ -9,8 +9,6 @@ interface ModeConfig {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   description: string;
-  active: string;
-  inactive: string;
 }
 
 const MODES: ModeConfig[] = [
@@ -18,25 +16,19 @@ const MODES: ModeConfig[] = [
     id: "own",
     icon: User,
     label: "Moje",
-    description: "Tylko Twoje ceny — pozycje, które sam wpisałeś",
-    active:   "bg-violet-100 text-violet-700 dark:bg-violet-900/50 dark:text-violet-300 shadow-sm",
-    inactive: "text-slate-500 hover:text-violet-600 hover:bg-violet-50/80 dark:hover:bg-violet-950/20",
+    description: "W kolumnie zostają tylko Twoje pozycje. Ich cena materiału wchodzi do kosztorysu.",
   },
   {
     id: "engine",
     icon: Brain,
     label: "Baza",
-    description: "Baza programu: pozycje z godzinami normy ES",
-    active:   "bg-orange-100 text-orange-700 dark:bg-orange-900/50 dark:text-orange-300 shadow-sm",
-    inactive: "text-slate-500 hover:text-orange-600 hover:bg-orange-50/80 dark:hover:bg-orange-950/20",
+    description: "W kolumnie zostaje baza. Jest godzina pracy, ceny materiału nie ma.",
   },
   {
     id: "hybrid",
     icon: Zap,
     label: "Razem",
-    description: "Najpierw Twoje ceny, potem baza programu",
-    active:   "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 shadow-sm",
-    inactive: "text-slate-500 hover:text-blue-600 hover:bg-blue-50/80 dark:hover:bg-blue-950/20",
+    description: "W kolumnie są Twoje pozycje i baza. Twoja cena jest pierwsza.",
   },
 ];
 
@@ -53,28 +45,34 @@ export function SearchModeSelector({
   compact = false,
   className,
 }: SearchModeSelectorProps) {
+  const current = MODES.find((item) => item.id === mode) ?? MODES[2];
+
   return (
-    <div
-      className={cn(
-        "flex items-center gap-0.5 p-0.5 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 min-w-0 overflow-hidden",
-        className,
+    <div className={cn("min-w-0", className)}>
+      <div className="flex items-center gap-0.5 p-0.5 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 min-w-0 overflow-hidden">
+        {MODES.map(({ id, icon: Icon, label, description }) => (
+          <button
+            key={id}
+            type="button"
+            title={description}
+            onClick={() => onChange(id)}
+            className={cn(
+              "flex flex-1 items-center justify-center gap-1 px-1.5 py-1 rounded-md text-xs font-medium transition-all duration-150 select-none min-w-0 overflow-hidden",
+              mode === id
+                ? "bg-blue-600 text-white shadow-sm"
+                : "text-slate-500 hover:text-slate-800 hover:bg-white/70 dark:hover:bg-slate-700/60 dark:hover:text-slate-100",
+            )}
+          >
+            <Icon className="w-3 h-3 flex-shrink-0" />
+            {!compact && <span className="truncate">{label}</span>}
+          </button>
+        ))}
+      </div>
+      {!compact && (
+        <p className="mt-1 px-0.5 text-[10px] leading-snug text-slate-500 dark:text-slate-400">
+          {current.description}
+        </p>
       )}
-    >
-      {MODES.map(({ id, icon: Icon, label, description, active, inactive }) => (
-        <button
-          key={id}
-          type="button"
-          title={description}
-          onClick={() => onChange(id)}
-          className={cn(
-            "flex flex-1 items-center justify-center gap-1 px-1.5 py-1 rounded-md text-xs font-medium transition-all duration-150 select-none min-w-0 overflow-hidden",
-            mode === id ? active : inactive,
-          )}
-        >
-          <Icon className="w-3 h-3 flex-shrink-0" />
-          {!compact && <span className="truncate">{label}</span>}
-        </button>
-      ))}
     </div>
   );
 }
