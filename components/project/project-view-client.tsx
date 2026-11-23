@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { useKnrMultiplier } from "@/hooks/useKnrMultiplier";
 import { ProjectSummary } from "./project-summary";
 import { useTabSyncOptional } from "./tab-sync-context";
-import { PanelRightClose, Calculator, FileText, Download, X as XIcon, ExternalLink } from "lucide-react";
+import { Calculator, FileText, Download, X as XIcon, ExternalLink } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { MobileSummaryBar } from "./mobile-summary-bar";
@@ -349,16 +349,7 @@ export function ProjectViewClient({
 
         {!summaryCollapsed && (
           <div className="min-w-0 hidden lg:block sticky top-4" data-tour="tour-summary-panel">
-            <div className="relative">
-              <button
-                onClick={toggleSummary}
-                className="absolute top-2 right-2 z-10 p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/60 shadow-sm ring-2 ring-blue-300/50 dark:ring-blue-600/30 animate-pulse hover:animate-none transition-colors inline-flex items-center gap-1"
-                title="Ukryj podsumowanie, żeby poszerzyć tabelę"
-              >
-                <PanelRightClose className="w-4 h-4" />
-                <span className="text-[10px] font-semibold pr-0.5">Ukryj</span>
-              </button>
-              <ProjectSummary
+            <ProjectSummary
                 project={project}
                 items={items}
                 profile={profile}
@@ -374,8 +365,8 @@ export function ProjectViewClient({
                 liveRegionId={liveRegionId}
                 regions={regions}
                 vatRate={liveVatRate}
+                onCollapse={toggleSummary}
               />
-            </div>
           </div>
         )}
 

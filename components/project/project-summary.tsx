@@ -11,7 +11,7 @@ import { toggleMaterialsOwnedByCustomer } from "@/app/dashboard/projects/[id]/ac
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { notifyDataChanged } from "@/hooks/use-synced-action";
-import { Calculator, CheckCircle, AlertTriangle, Sparkles, TrendingUp, Percent, ChevronDown } from "lucide-react";
+import { Calculator, CheckCircle, AlertTriangle, Sparkles, TrendingUp, Percent, ChevronDown, PanelRightClose } from "lucide-react";
 import { HintTooltip } from "@/components/ui/hint-tooltip";
 import { HINTS } from "@/lib/hints/hint-content";
 import { cn } from "@/lib/utils";
@@ -48,6 +48,7 @@ interface ProjectSummaryProps {
   regions?: RegionItem[];
   /** Live document VAT. Object type does not lock this. */
   vatRate?: number;
+  onCollapse?: () => void;
 }
 
 export function ProjectSummary({
@@ -66,6 +67,7 @@ export function ProjectSummary({
   liveRegionId,
   regions,
   vatRate: vatRateProp,
+  onCollapse,
 }: ProjectSummaryProps) {
   const { toast } = useToast();
   const router = useRouter();
@@ -228,12 +230,25 @@ export function ProjectSummary({
   const [narzutyOpen, setNarzutyOpen] = useState(false);
 
   return (
-    <Card className="h-full lg:sticky lg:top-20 rounded-xl">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Calculator className="w-5 h-5" />
-          Podsumowanie
-        </CardTitle>
+    <Card className="h-full rounded-xl">
+      <CardHeader className="flex-shrink-0 bg-white dark:bg-slate-900 py-2.5 px-3 border-b border-slate-100 dark:border-slate-800">
+        <div className="flex items-center gap-1.5">
+          {onCollapse && (
+            <button
+              type="button"
+              onClick={onCollapse}
+              className="p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800/60 shadow-sm ring-2 ring-blue-300/50 dark:ring-blue-600/30 animate-pulse hover:animate-none transition-colors flex-shrink-0 inline-flex items-center gap-1"
+              title="Ukryj podsumowanie, żeby poszerzyć tabelę"
+            >
+              <PanelRightClose className="w-4 h-4" />
+              <span className="text-[10px] font-semibold pr-0.5">Ukryj</span>
+            </button>
+          )}
+          <CardTitle className="flex items-center gap-2 text-sm">
+            <Calculator className="w-4 h-4" />
+            Podsumowanie
+          </CardTitle>
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Materials Responsibility Toggle */}
