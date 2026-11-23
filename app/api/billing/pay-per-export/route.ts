@@ -112,7 +112,9 @@ export async function POST(request: NextRequest) {
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      payment_method_types: ["card", "blik", "p24"],
+      // Dashboard decides card / BLIK / P24. A hard-coded p24 fails the
+      // whole session when that method is not activated in Stripe.
+      automatic_payment_methods: { enabled: true },
       customer: stripeCustomerId,
       locale: "pl",
       line_items: [
