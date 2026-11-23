@@ -206,7 +206,7 @@ export function SummaryExportPanel({
               data-export-excel
             >
               <FileSpreadsheet className="h-4 w-4 flex-shrink-0" />
-              <span>Excel</span>
+              <span>Excel{!isPro && !project.paid_export_unlocked_at && " (Demo)"}</span>
             </button>
           </div>
         </div>

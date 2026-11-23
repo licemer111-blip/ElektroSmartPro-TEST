@@ -384,7 +384,7 @@ export function MobileSummaryBar({
                 size="lg"
               >
                 <Download className="w-4 h-4 mr-1.5" />
-                {isDownloading ? "..." : "PDF"}
+                {isDownloading ? "..." : (isPro ? "PDF" : "PDF (Demo)")}
               </Button>
               <Button
                 onClick={handleExportExcel}
@@ -393,7 +393,7 @@ export function MobileSummaryBar({
                 size="lg"
               >
                 <FileSpreadsheet className="w-4 h-4 mr-1.5" />
-                Excel
+                Excel{isPro ? "" : " (Demo)"}
               </Button>
             </div>
           </div>

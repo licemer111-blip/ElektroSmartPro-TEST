@@ -67,7 +67,7 @@ const STEPS: Step[] = [
   {
     id: "export",
     title: "PDF i Excel",
-    description: "Na dole prawej kolumny. PDF idzie do klienta, Excel ma osobną listę materiałów. W Demo na PDF jest znak wodny.",
+    description: "Na dole prawej kolumny. PDF idzie do klienta, Excel ma osobną listę materiałów. W Demo oba pliki są oznaczone jako DEMO.",
     target: '[data-tour="tour-export"]',
     place: "left",
   },
