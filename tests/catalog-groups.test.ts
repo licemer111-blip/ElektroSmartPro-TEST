@@ -14,6 +14,10 @@ describe("catalog groups", () => {
     expect(itemGroupKey("Montaż gniazda pojedynczego")).toBe("osprzet");
     expect(itemGroupKey("Montaż łącznika schodowego")).toBe("osprzet");
     expect(itemGroupKey("Kabel gniazdkowy YDY 3x2,5")).toBe("okablowanie");
+    expect(itemGroupKey("Wyłącznik nadprądowy B16")).toBe("rozdzielnice");
+    expect(itemGroupKey("Pomiar rezystancji izolacji")).toBe("pomiary");
+    expect(itemGroupKey("Uziom szpilkowy")).toBe("uziemienie");
+    expect(itemGroupKey("Oprawa awaryjna LED")).toBe("awaryjne");
     expect(categoryGroupKey("Okablowanie strukturalne")).toBe("teletechnika");
     expect(pickCategoryId(categories, "okablowanie")).toBe("cab");
   });

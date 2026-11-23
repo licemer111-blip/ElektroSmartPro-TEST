@@ -5,18 +5,36 @@ export type CatalogGroupKey =
   | "demontaz"
   | "osprzet"
   | "oswietlenie"
+  | "awaryjne"
   | "rozdzielnice"
+  | "aparatura"
   | "trasy"
   | "przygotowanie"
   | "teletechnika"
+  | "monitoring"
+  | "security"
+  | "ppoz"
+  | "uziemienie"
+  | "ziemne"
+  | "pomiary"
+  | "smart"
   | "okablowanie";
 
 export function itemGroupKey(name: string): CatalogGroupKey | null {
   const text = foldCatalogText(name);
   if (/^demont/.test(text)) return "demontaz";
-  if (/\b(utp|ftp|skretk|swiatlowod|kamera|wideodomofon)\b/.test(text)) return "teletechnika";
+  if (/\b(ssp|sap|ppoz|przeciwpozar|czujka poz)/.test(text)) return "ppoz";
+  if (/\b(awaryjn|ewakuac)/.test(text)) return "awaryjne";
+  if (/\b(knx|smart home|zigbee)\b/.test(text)) return "smart";
+  if (/\b(alarm|sswin|kontrola dostep)\b/.test(text)) return "security";
+  if (/\b(kamera|rejestrator|nvr)\b/.test(text)) return "monitoring";
+  if (/\b(utp|ftp|skretk|swiatlowod|wideodomofon)\b/.test(text)) return "teletechnika";
+  if (/\b(uziom|bednark|odgrom|zwod|iglica)/.test(text)) return "uziemienie";
+  if (/\b(wykop|podsypk|folia ostrzeg|przewiert)/.test(text)) return "ziemne";
+  if (/\b(pomiar|rezystancj|odbior)/.test(text)) return "pomiary";
   if (/\b(koryt|drabink|peszel|kanal kabl)/.test(text)) return "trasy";
   if (/\b(opraw|downlight|plafon|kinkiet|naswietlacz)/.test(text)) return "oswietlenie";
+  if (/\b(mcb|rcd|rcbo|spd|bezpiecznik|stycznik|szyna din)\b/.test(text)) return "aparatura";
   if (/\b(rozdzielnic|szafa sterownic|wylacznik nadprad|ogranicznik przepiec)/.test(text)) return "rozdzielnice";
   // "kabel gniazdkowy" is a cable. A socket is not.
   if (/\b(gniazd|lacznik|wlacznik|puszk|ramk|sciemniacz)/.test(text) && !/\bgniazdkow/.test(text)) {
@@ -30,12 +48,21 @@ export function itemGroupKey(name: string): CatalogGroupKey | null {
 export function categoryGroupKey(name: string): CatalogGroupKey | null {
   const text = foldCatalogText(name);
   if (text.includes("demont")) return "demontaz";
+  if (text.includes("ppoz") || text.includes("pozar")) return "ppoz";
+  if (text.includes("awaryj")) return "awaryjne";
+  if (text.includes("smart") || text.includes("knx")) return "smart";
+  if (text.includes("security") || text.includes("alarm")) return "security";
+  if (text.includes("monitoring") || text.includes("cctv")) return "monitoring";
+  if (text.includes("teletech") || text.includes("struktural")) return "teletechnika";
+  if (text.includes("uziem") || text.includes("odgrom")) return "uziemienie";
+  if (text.includes("ziem")) return "ziemne";
+  if (text.includes("pomiar")) return "pomiary";
   if (text.includes("osprzet") || text.includes("gniazd") || text.includes("lacznik")) return "osprzet";
   if (text.includes("oswietl")) return "oswietlenie";
+  if (text.includes("aparatur") || text.includes("modularn")) return "aparatura";
   if (text.includes("rozdziel")) return "rozdzielnice";
   if (text.includes("tras")) return "trasy";
   if (text.includes("przygot") || text.includes("bruzd")) return "przygotowanie";
-  if (text.includes("teletech") || text.includes("struktural")) return "teletechnika";
   if (text.includes("okablow") || text.includes("kable") || text.includes("przewod")) return "okablowanie";
   return null;
 }
@@ -44,10 +71,19 @@ const VIRTUAL_NAMES: Record<CatalogGroupKey, string> = {
   demontaz: "Demontaże",
   osprzet: "Osprzęt instalacyjny",
   oswietlenie: "Oświetlenie",
+  awaryjne: "Awaryjne",
   rozdzielnice: "Rozdzielnice",
+  aparatura: "Aparatura modułowa",
   trasy: "Trasy kablowe",
   przygotowanie: "Przygotowanie",
   teletechnika: "Teletechnika",
+  monitoring: "Monitoring",
+  security: "Security",
+  ppoz: "PPOŻ",
+  uziemienie: "Uziemienie i odgrom",
+  ziemne: "Prace ziemne",
+  pomiary: "Pomiary",
+  smart: "Smart Home",
   okablowanie: "Okablowanie",
 };
 
