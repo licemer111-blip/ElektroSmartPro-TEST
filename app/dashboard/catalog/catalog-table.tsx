@@ -392,7 +392,7 @@ export function CatalogTable({
                   <TableHeader>
                     <TableRow className="bg-orange-50/60 dark:bg-orange-950/20">
                       <TableHead className="text-xs p-2 sm:p-3 w-[35%] text-orange-700 dark:text-orange-400">Nazwa normy</TableHead>
-                      <TableHead className="text-xs p-2 sm:p-3 w-[22%] text-orange-700 dark:text-orange-400">Kod KNR</TableHead>
+                      <TableHead className="text-xs p-2 sm:p-3 w-[22%] text-orange-700 dark:text-orange-400">Kod ES</TableHead>
                       <TableHead className="text-xs p-2 sm:p-3 w-[8%] text-orange-700 dark:text-orange-400">Jedn.</TableHead>
                       <TableHead className="text-xs p-2 sm:p-3 w-[18%] text-orange-700 dark:text-orange-400">Robocizna</TableHead>
                       <TableHead className="text-xs p-2 sm:p-3 w-[17%] text-right text-orange-700 dark:text-orange-400">Dodaj</TableHead>

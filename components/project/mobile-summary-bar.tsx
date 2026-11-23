@@ -197,15 +197,15 @@ export function MobileSummaryBar({
   return (
     <div className="fixed bottom-16 left-0 right-0 z-40 lg:hidden">
       {/* Collapsed bar - always visible */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes summaryPulse {
+          0%, 100% { box-shadow: 0 -4px 16px rgba(59,130,246,0.15); border-color: rgb(96,165,250); }
+          50% { box-shadow: 0 -4px 24px rgba(59,130,246,0.35); border-color: rgb(37,99,235); }
+        }
+      `}} />
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <button data-tour="tour-summary-mobile" className="w-full bg-gradient-to-r from-blue-50 via-white to-blue-50 dark:from-blue-950/30 dark:via-slate-900 dark:to-blue-950/30 border-t-2 border-blue-400 dark:border-blue-600 shadow-[0_-4px_16px_rgba(59,130,246,0.15)] dark:shadow-[0_-4px_16px_rgba(59,130,246,0.2)] px-4 pr-16 py-2.5 flex items-center justify-between gap-2 active:bg-blue-50 dark:active:bg-slate-800 transition-colors animate-[summaryPulse_2.5s_ease-in-out_infinite]">
-            <style dangerouslySetInnerHTML={{ __html: `
-              @keyframes summaryPulse {
-                0%, 100% { box-shadow: 0 -4px 16px rgba(59,130,246,0.15); border-color: rgb(96,165,250); }
-                50% { box-shadow: 0 -4px 24px rgba(59,130,246,0.35); border-color: rgb(37,99,235); }
-              }
-            `}} />
             <div className="flex items-center gap-3">
               <div className="p-1.5 rounded-lg bg-blue-500 dark:bg-blue-600 animate-pulse">
                 <Calculator className="w-4 h-4 text-white" />
