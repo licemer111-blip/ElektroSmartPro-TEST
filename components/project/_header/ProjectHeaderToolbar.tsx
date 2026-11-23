@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,6 +27,7 @@ import { ProjectColorPicker } from "@/components/project/project-color-picker";
 import type { DialogHostAction } from "./ProjectHeaderDialogHost";
 import { HintTooltip } from "@/components/ui/hint-tooltip";
 import { HINTS } from "@/lib/hints/hint-content";
+import { objectTypeForClient } from "@/lib/pdf-pricing";
 
 interface ProjectHeaderToolbarProps {
   projectId: string;
@@ -122,6 +123,24 @@ export function ProjectHeaderToolbar({
 
   const [esAssistOpen, setEsAssistOpen] = useState(false);
   const [esWycenaOpen, setEsWycenaOpen] = useState(false);
+
+  useEffect(() => {
+    const openImport = () => {
+      if (isFinal) return;
+      onAIImportClick();
+    };
+    const openPrice = () => {
+      if (isFinal || projectItems.length === 0) return;
+      setEsWycenaOpen(true);
+      onBroadcastDialog("headerAiPricerOpen", true);
+    };
+    window.addEventListener("es-open-import", openImport);
+    window.addEventListener("es-open-price", openPrice);
+    return () => {
+      window.removeEventListener("es-open-import", openImport);
+      window.removeEventListener("es-open-price", openPrice);
+    };
+  }, [isFinal, onAIImportClick, onBroadcastDialog, projectItems.length]);
 
   return (
     <div className="mb-4">
@@ -239,7 +258,7 @@ export function ProjectHeaderToolbar({
                 : "Zarchiwizowany"}
             </Badge>
             <Badge variant="outline">VAT {vatRate}%</Badge>
-            {objectTypeName && <Badge variant="outline">{objectTypeName}</Badge>}
+            {objectTypeName && <Badge variant="outline">{objectTypeForClient(objectTypeName)}</Badge>}
             <ProjectTagsManager projectId={projectId} compact />
             <ProjectColorPicker
               projectId={projectId}

@@ -224,6 +224,9 @@ export function EstimateTable({
   const singleCellBorder = "border border-slate-300 dark:border-slate-700 bg-clip-padding";
 
   const isEmpty = items.length === 0;
+  const awaitingPrice = !isEmpty && localItems.length > 0 && localItems.every((item) =>
+    Number(item.labor_price ?? 0) === 0 && Number(item.final_labor_price ?? 0) === 0,
+  );
 
   // ─── Render helpers ───────────────────────────────────────────────────────────
 
@@ -322,19 +325,48 @@ export function EstimateTable({
 
       {/* Empty state — shown below tabs+toolbar+filters when no items */}
       {isEmpty && (
-        <div className="text-center py-16 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-900/30">
-          <div className="mx-auto w-16 h-16 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-4">
-            <FileBox className="w-8 h-8 text-blue-500 dark:text-blue-400" />
+        <div className="text-center py-12 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-900/30 px-4">
+          <div className="mx-auto w-14 h-14 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-4">
+            <FileBox className="w-7 h-7 text-blue-500 dark:text-blue-400" />
           </div>
-          <h3 className="text-base font-semibold text-slate-700 dark:text-slate-200 mb-1">Kosztorys jest pusty</h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 max-w-xs mx-auto">
-            Dodaj z katalogu po lewej albo kliknij Wczytaj ofertę. Potem Wyceń policzy robociznę.
+          <h3 className="text-base font-semibold text-slate-800 dark:text-slate-100 mb-1">Pusta oferta</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-5 max-w-md mx-auto">
+            {rateIsSet
+              ? "Wklej listę prac. Potem Wyceń policzy robociznę: godzina normy ES × Twoja stawka. Materiał dopiszesz sam."
+              : "Najpierw zapisz stawkę w Ustawienia → Finanse. Bez niej program nie przeliczy godzin na złotówki."}
           </p>
-          <div className="flex flex-wrap gap-2 justify-center text-[10px] text-slate-400 dark:text-slate-500">
-            {["Katalog", "Wyceń", "Wczytaj ofertę", "Zestawy"].map(label => (
-              <span key={label} className="px-2 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">{label}</span>
-            ))}
+          <div className="flex flex-wrap gap-2 justify-center">
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new Event("es-open-import"))}
+              className="h-9 px-4 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold"
+            >
+              Wczytaj listę
+            </button>
+            {!rateIsSet && (
+              <a
+                href="/dashboard/settings?tab=knr"
+                className="h-9 px-4 rounded-md border border-slate-300 dark:border-slate-600 text-sm font-semibold inline-flex items-center text-slate-700 dark:text-slate-200"
+              >
+                Ustaw stawkę
+              </a>
+            )}
           </div>
+        </div>
+      )}
+
+      {!isEmpty && awaitingPrice && (
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-orange-300 dark:border-orange-800 bg-orange-50 dark:bg-orange-950/30 px-3 py-2">
+          <p className="text-sm text-orange-900 dark:text-orange-100">
+            Pozycje są. Kliknij Wyceń — robocizna to godzina × Twoja stawka. Cen materiału program nie wymyśla.
+          </p>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event("es-open-price"))}
+            className="h-8 px-3 rounded-md bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold"
+          >
+            Wyceń
+          </button>
         </div>
       )}
 

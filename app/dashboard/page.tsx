@@ -79,7 +79,7 @@ export default async function DashboardPage({
               </div>
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">Kosztorysy</h1>
-                <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 mt-1">Twoje kosztorysy elektryczne</p>
+                <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 mt-1">Wczytaj listę i kliknij Wyceń. Robocizna to godzina × Twoja stawka.</p>
               </div>
             </div>
             <div className="w-full md:w-auto">

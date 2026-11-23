@@ -60,9 +60,9 @@ export function formatHours(val: number): string {
   return `${groupPl(val)} rbh`;
 }
 
-/** Object type names sometimes include "(VAT 23%)". The document must show the rate that was actually calculated. */
+/** Object type names sometimes include "(VAT 23%)" or "(VAT 8/23%)". The screen shows the type. The VAT rate is a separate control. */
 export function objectTypeForClient(name: string | null | undefined): string {
-  return (name || "").replace(/\s*\(VAT\s*\d+\s*%\)/gi, "").trim();
+  return (name || "").replace(/\s*\(VAT[^)]*\)/gi, "").trim();
 }
 
 /** Keep Polish letters. Drop only control characters. */

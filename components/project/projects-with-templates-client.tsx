@@ -1,11 +1,10 @@
 "use client";
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { NewProjectButton } from "@/components/dashboard/new-project-button";
+import { FolderKanban, FileText, ArrowRight } from "lucide-react";
 import { ProjectSelectList } from "@/components/project/project-select-list";
 import { TemplatesPageClient } from "@/components/templates/templates-page-client";
-import { FolderKanban, FileText, Plus, ArrowRight, Zap, Copy, PenTool, Upload } from "lucide-react";
+import { NewProjectButton } from "@/components/dashboard/new-project-button";
 import { DemoProjectButton } from "@/components/project/demo-project-button";
 import type { ProjectTemplate } from "@/app/dashboard/templates/actions";
 import type { Region, ObjectType } from "@/lib/types/database";
@@ -51,10 +50,10 @@ export function ProjectsWithTemplatesClient({
             <FolderKanban className="w-8 h-8 md:w-10 md:h-10 text-white" />
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100 mb-2">
-            Kreator Kosztorysów
+            Twoje kosztorysy
           </h1>
           <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base max-w-2xl mx-auto">
-            Projekty i szablony w jednym miejscu
+            Wczytaj listę, kliknij Wyceń. Robocizna to godzina normy ES razy Twoja stawka.
           </p>
         </div>
 
@@ -98,51 +97,11 @@ export function ProjectsWithTemplatesClient({
                   </div>
 
                   <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">
-                    Zacznij od swojego pierwszego projektu!
+                    Pierwszy kosztorys
                   </h2>
                   <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-6 text-sm">
-                    Wybierz sposób startu. Robocizna to rbh normy ES razy Twoja stawka.
+                    Utwórz projekt, wklej listę prac i kliknij Wyceń. Godziny są z normy ES, złotówki z Twojej stawki.
                   </p>
-
-                  {/* 4 ways */}
-                  <div className="grid grid-cols-2 gap-3 mb-7 text-left">
-                    <div className="flex items-start gap-3 bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800/50 rounded-lg p-3">
-                      <div className="w-7 h-7 rounded-md bg-orange-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Zap className="w-4 h-4 text-white" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-semibold text-orange-800 dark:text-orange-300">Własny zestaw</p>
-                        <p className="text-[11px] text-orange-700/70 dark:text-orange-400/70">Punkt, który sam ułożyłeś: puszka, kabel, robocizna</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-800/50 rounded-lg p-3">
-                      <div className="w-7 h-7 rounded-md bg-violet-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Upload className="w-4 h-4 text-white" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-semibold text-violet-800 dark:text-violet-300">Wczytaj listę</p>
-                        <p className="text-[11px] text-violet-700/70 dark:text-violet-400/70">SMS, Excel albo PDF. Potem jedno Wyceń.</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/50 rounded-lg p-3">
-                      <div className="w-7 h-7 rounded-md bg-blue-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <PenTool className="w-4 h-4 text-white" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-semibold text-blue-800 dark:text-blue-300">Ręcznie</p>
-                        <p className="text-[11px] text-blue-700/70 dark:text-blue-400/70">Dodaj pozycje z katalogu</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800/50 rounded-lg p-3">
-                      <div className="w-7 h-7 rounded-md bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Copy className="w-4 h-4 text-white" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-semibold text-green-800 dark:text-green-300">Szablony</p>
-                        <p className="text-[11px] text-green-700/70 dark:text-green-400/70">Użyj gotowego wzorca</p>
-                      </div>
-                    </div>
-                  </div>
 
                   <NewProjectButton
                     regions={regions}
@@ -158,9 +117,6 @@ export function ProjectsWithTemplatesClient({
                     <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
                   </div>
                   <DemoProjectButton />
-                  <p className="text-xs text-slate-400 mt-3">
-                    Ceny automatycznie dostosowane do Twojego województwa!
-                  </p>
                 </div>
               </div>
             ) : (

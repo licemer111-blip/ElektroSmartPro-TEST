@@ -22,10 +22,10 @@ interface OnboardingWizardProps {
 }
 
 const RATE_PRESETS = [
-  { label: "Początkujący", value: 55, desc: "Start kariery" },
-  { label: "Standardowa", value: 75, desc: "Średnia krajowa" },
-  { label: "Doświadczony", value: 95, desc: "5+ lat doświadczenia" },
-  { label: "Ekspert", value: 120, desc: "Specjalista / SEP" },
+  { value: 55, desc: "Małe zlecenia" },
+  { value: 75, desc: "Większość ofert" },
+  { value: 95, desc: "Doświadczona ekipa" },
+  { value: 120, desc: "Specjalista" },
 ];
 
 // Group regions by price level for better UX
@@ -169,12 +169,7 @@ export function OnboardingWizard({ regions, userName, userId }: OnboardingWizard
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{preset.label}</span>
-                        <span className={`text-lg font-bold ${
-                          hourlyRate === preset.value ? "text-blue-600 dark:text-blue-400" : "text-slate-700 dark:text-slate-300"
-                        }`}>
-                          {preset.value} zł
-                        </span>
+                        <span className="text-lg font-bold text-slate-900 dark:text-slate-100">{preset.value} zł</span>
                       </div>
                       <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{preset.desc}</p>
                     </button>

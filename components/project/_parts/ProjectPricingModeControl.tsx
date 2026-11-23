@@ -1,7 +1,6 @@
 "use client";
 
 import { PenLine, MapPin, Loader2 } from "lucide-react";
-import { getRegionById } from "@/lib/config/regions";
 
 interface Region {
   id: string;
@@ -68,15 +67,13 @@ export function ProjectPricingModeControl({
         >
           <option value="__none__">Województwo — stawka bazowa</option>
           {regions.map((r) => {
-            const regionCfg = getRegionById(r.slug);
             const mult = r.price_modifier;
             const pct = Math.round((mult - 1) * 100);
             const sign = pct > 0 ? "+" : "";
-            const flag = regionCfg?.flag ?? "";
             const label = pct === 0 ? "baza" : `${sign}${pct}%`;
             return (
               <option key={r.id} value={r.id}>
-                {flag} {r.name} ({label})
+                {r.name} ({label})
               </option>
             );
           })}

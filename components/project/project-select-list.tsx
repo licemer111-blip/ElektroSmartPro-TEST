@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { FolderKanban, Clock, CheckCircle, Archive, ChevronRight, Loader2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { pl } from "date-fns/locale";
+import { objectTypeForClient } from "@/lib/pdf-pricing";
 
 interface ProjectListItem {
   id: string;
@@ -155,7 +156,7 @@ export function ProjectSelectList({ projects, skipAutoRedirect = false }: Projec
                       {project.object_types?.name && (
                         <>
                           <span className="text-slate-300 dark:text-slate-700">•</span>
-                          <span>{project.object_types.name}</span>
+                          <span>{objectTypeForClient(project.object_types.name)}</span>
                         </>
                       )}
 

@@ -26,6 +26,7 @@ describe("offer terms", () => {
     expect(formatPlQty(4500)).toBe("4 500");
     expect(formatPlQty(2.5)).toBe("2,5");
     expect(objectTypeForClient("Biuro / Lokale (VAT 23%)")).toBe("Biuro / Lokale");
+    expect(objectTypeForClient("Mieszkanie / Dom (VAT 8/23%)")).toBe("Mieszkanie / Dom");
   });
 
   it("hides the deposit amount on a blind estimate", () => {
