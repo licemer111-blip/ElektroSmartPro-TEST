@@ -69,13 +69,8 @@ export const HINTS = {
   negotiationSlider: (
     <div className="space-y-1.5">
       <p className="font-semibold text-blue-700 dark:text-blue-300">🤝 Negocjacje Ceny</p>
-      <p>Jeden rabat albo narzut na cały kosztorys. Suwak od −20% do +20%.</p>
-      <ul className="space-y-0.5 text-slate-400">
-        <li>• 0% — bez zmiany</li>
-        <li>• −10% — rabat dla klienta</li>
-        <li>• +10% — narzut</li>
-      </ul>
-      <p className="text-slate-400">Nie przepisuje zapisanych cen. Widać go na ekranie i w PDF.</p>
+      <p>Klientowi drogo — przesuń w lewo. −5% albo −15% przelicza wszystkie pozycje. W prawo to narzut.</p>
+      <p className="text-slate-400">Możesz też wpisać kwotę, którą klient akceptuje. Suwak nie rusza zapisanych cen i wchodzi do PDF.</p>
     </div>
   ),
 
@@ -122,6 +117,7 @@ export const HINTS = {
       <p className="font-semibold text-indigo-700 dark:text-indigo-300">Wczytaj, potem Wyceń</p>
       <p>Wczytaj bierze listę z SMS, Excela albo PDF. Pozycje wchodzą bez cen, jeśli plik ich nie ma.</p>
       <p>Wyceń liczy robociznę: godzina normy ES × Twoja stawka. Asystent dopisuje brakujące nazwy.</p>
+      <p className="text-slate-400">Jak klientowi drogo, suwak Negocjacje w podsumowaniu zdejmuje 5% albo 15% z całości. Potem PDF.</p>
     </div>
   ),
 

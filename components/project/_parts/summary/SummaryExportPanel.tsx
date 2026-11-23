@@ -141,6 +141,9 @@ export function SummaryExportPanel({
             <HintTooltip content={HINTS.excelExport} side="left" iconOnly />
           </div>
         </div>
+        <p className="text-[11px] text-slate-500 dark:text-slate-400">
+          PDF dla klienta bierze poprawione pozycje i rabat z suwaka Negocjacje.
+        </p>
 
         {/* v2.1: Trial status badge — visible during active 7-day trial */}
         {isTrialActive(profile ?? null) && (

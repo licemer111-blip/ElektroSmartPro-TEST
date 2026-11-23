@@ -142,6 +142,9 @@ export function PriceAdjuster({ projectId, basePrice, initialAdjustment, isPro =
           </Badge>
         )}
       </div>
+      <p className="text-[11px] leading-snug text-slate-500 dark:text-slate-400">
+        Klientowi drogo — przesuń w lewo o 5% albo 15%. Liczy się cała oferta. Zapisane ceny pozycji zostają, wrócisz suwakiem na 0%.
+      </p>
 
       {/* Base Price - Subtle and grey */}
       <div className="flex justify-between items-center">
