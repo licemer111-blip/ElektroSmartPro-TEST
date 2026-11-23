@@ -211,11 +211,9 @@ export async function POST(req: Request) {
     const isOwner = project.user_id === requestingUser.id;
     const hasPaidUnlock = Boolean(paidExportUnlockedAt) && isOwner;
 
-    // v2.0: FREE tier CAN export PDF, but receives a diagonal "DEMO" watermark
-    // overlay + footer CTA on every page. Demo projects bypass the watermark
-    // (they're already marked as demo samples). A paid one-shot unlock also
-    // bypasses the watermark and is consumed by the very next export.
-    const showDemoWatermark = !isPro && !isDemoProject && !hasPaidUnlock;
+    // Free accounts get a hard DEMO stamp on every page, including the
+    // sample project. A one-time paid unlock still prints one clean PDF.
+    const showDemoWatermark = !isPro && !hasPaidUnlock;
 
     // DB-based rate limiting (works on Vercel serverless — in-memory Map resets per invocation).
     // Tracks exports per hour in ai_usage_stats. FREE=3/h, PRO=20/h.

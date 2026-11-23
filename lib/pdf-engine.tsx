@@ -585,6 +585,7 @@ const CoverPage = ({
       </Text>
 
       <PageFooter companyName={companyName} palette={palette} />
+      {data.showDemoWatermark ? <DemoWatermark /> : null}
     </Page>
   );
 };
@@ -1082,56 +1083,56 @@ const ContentPage = ({
 // Absolutely positioned so it overlays the content without disturbing layout.
 
 const watermarkStyles = StyleSheet.create({
-  container: {
+  banner: {
     position: 'absolute',
     top: 0,
     left: 0,
-    right: 0,
-    bottom: 0,
+    width: 595,
+    height: 22,
+    backgroundColor: '#DC2626',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  rotateWrapper: {
-    transform: 'rotate(-32deg)',
+  bannerText: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: 'bold',
+    letterSpacing: 0.6,
+  },
+  stamp: {
+    position: 'absolute',
+    left: 70,
+    width: 460,
     alignItems: 'center',
   },
-  textBig: {
-    fontSize: 78,
+  stampText: {
+    fontSize: 92,
     fontWeight: 'bold',
     color: '#DC2626',
-    opacity: 0.28,
-    letterSpacing: 4,
-    textAlign: 'center',
-  },
-  textSmall: {
-    fontSize: 14,
-    color: '#DC2626',
-    opacity: 0.18,
-    marginTop: 6,
+    opacity: 0.22,
+    letterSpacing: 8,
     textAlign: 'center',
   },
   ctaBar: {
     position: 'absolute',
-    bottom: 32,
-    left: 25,
-    right: 25,
-    paddingTop: 4,
-    paddingBottom: 4,
-    paddingLeft: 6,
-    paddingRight: 6,
+    bottom: 28,
+    left: 28,
+    width: 539,
+    paddingTop: 5,
+    paddingBottom: 5,
     backgroundColor: '#FEF2F2',
     borderRadius: 3,
-    borderLeftWidth: 3,
+    borderLeftWidth: 4,
     borderLeftColor: '#DC2626',
   },
   ctaText: {
-    fontSize: 7.5,
+    fontSize: 8,
     color: '#991B1B',
     textAlign: 'center',
     fontWeight: 'bold',
   },
   ctaSubText: {
-    fontSize: 6.5,
+    fontSize: 7,
     color: '#B91C1C',
     textAlign: 'center',
     marginTop: 1,
@@ -1140,12 +1141,14 @@ const watermarkStyles = StyleSheet.create({
 
 const DemoWatermark = () => (
   <>
-    <View style={watermarkStyles.container} fixed>
-      <View style={watermarkStyles.rotateWrapper}>
-        <Text style={watermarkStyles.textBig}>DEMO</Text>
-        <Text style={watermarkStyles.textSmall}>ElektroSmart PRO — wersja demonstracyjna</Text>
-      </View>
+    <View style={watermarkStyles.banner} fixed>
+      <Text style={watermarkStyles.bannerText}>WERSJA DEMO — NIE DLA KLIENTA — ELEKTROSMART PRO</Text>
     </View>
+    {[180, 430, 680].map((top) => (
+      <View key={top} style={[watermarkStyles.stamp, { top, transform: 'rotate(-28deg)' }]} fixed>
+        <Text style={watermarkStyles.stampText}>DEMO</Text>
+      </View>
+    ))}
     <View style={watermarkStyles.ctaBar} fixed>
       <Text style={watermarkStyles.ctaText}>
         Ten dokument jest wygenerowany w trybie DEMO i nie nadaje się do przekazania klientowi.
