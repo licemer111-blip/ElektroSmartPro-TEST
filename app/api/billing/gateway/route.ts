@@ -32,6 +32,21 @@ export async function POST(request: NextRequest) {
       isTest = false,
     }: { billingCycle?: "monthly" | "yearly"; vatRate?: 8 | 23; isTest?: boolean } = body;
 
+    // Cheap live webhook/InFakt probe — admin only (never expose to regular users)
+    if (isTest) {
+      const { data: adminProfile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+      if (adminProfile?.role !== "admin") {
+        return NextResponse.json(
+          { error: "Płatność testowa dostępna tylko dla administratora." },
+          { status: 403 }
+        );
+      }
+    }
+
     const isYearly = billingCycle === "yearly";
 
     // Resolve Price ID — prefer env-configured Stripe Price IDs (recurring prices),

@@ -1,13 +1,88 @@
 "use client";
 
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
-  Settings, Crown, Users, Rocket, Shield, Lock, FileText,
+  Settings, Crown, Users, Rocket, Shield, Lock, FileText, CreditCard, Loader2,
 } from "lucide-react";
 import { FREE_TIER_MAX_PROJECTS, PAY_PER_EXPORT_ENABLED, PAY_PER_EXPORT_PRICE_PLN } from "@/lib/config/tier-limits";
 import { TRIAL_DURATION_DAYS } from "@/lib/auth/entitlements";
 import { DEMO_AI_LIMIT, PRO_AI_LIMIT } from "@/lib/ai-quota-config";
+import { useToast } from "@/hooks/use-toast";
+
+function TestPaymentCard() {
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+
+  const startTestPayment = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/billing/gateway", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isTest: true, billingCycle: "monthly", vatRate: 23 }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.details || data.error || "Nie udało się utworzyć sesji testowej.");
+      }
+      if (!data.url) {
+        throw new Error("Stripe nie zwrócił adresu Checkout.");
+      }
+      window.location.href = data.url;
+    } catch (error: unknown) {
+      setLoading(false);
+      toast({
+        title: "Błąd płatności testowej",
+        description: error instanceof Error ? error.message : "Spróbuj ponownie.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  return (
+    <Card className="border-amber-200 dark:border-amber-800 bg-amber-50/40 dark:bg-amber-950/20">
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 text-base">
+          <CreditCard className="w-4 h-4 text-amber-600" />
+          Płatność testowa (live)
+        </CardTitle>
+        <CardDescription className="text-xs">
+          Subskrypcja ~2 zł netto / miesiąc — sprawdza Stripe Checkout, webhook, PRO w profilu i fakturę InFakt.
+          Po teście odwołaj subskrypcję w Stripe Portal, żeby nie pobrało kolejnego miesiąca.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <ul className="text-[11px] text-slate-600 dark:text-slate-400 space-y-1 list-disc ml-4">
+          <li>Działa na żywym Stripe (nie test mode) — realna mała kwota.</li>
+          <li>Tylko konto admina. Po sukcesie: dashboard z <code className="text-[10px]">?test_payment=success</code>.</li>
+          <li>Sprawdź: profil PRO → Stripe Dashboard (webhook 200) → InFakt.</li>
+        </ul>
+        <Button
+          type="button"
+          variant="outline"
+          className="border-amber-400 text-amber-800 hover:bg-amber-100 dark:text-amber-200 dark:hover:bg-amber-900/40"
+          disabled={loading}
+          onClick={startTestPayment}
+        >
+          {loading ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Tworzę Checkout…
+            </>
+          ) : (
+            <>
+              <CreditCard className="w-4 h-4" />
+              Zapłać testowo ~2 zł
+            </>
+          )}
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
 
 export function SettingsClient() {
   return (
@@ -16,6 +91,8 @@ export function SettingsClient() {
         <Settings className="w-5 h-5 text-slate-600 dark:text-slate-400" />
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Ustawienia Systemu</h1>
       </div>
+
+      <TestPaymentCard />
 
       {/* ── Business Model Config ── */}
       <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
