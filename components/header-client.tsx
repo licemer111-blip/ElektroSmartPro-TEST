@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Settings, Zap, FileText, Crown, Wrench } from "lucide-react";
+import { Settings, Zap, FileText, Crown, Wrench, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HeaderNewProjectButton } from "@/components/header-new-project-button";
 import { NavLink } from "@/components/nav-link";
@@ -100,6 +100,10 @@ export default function HeaderClient({ user, isPro, isDashboard = true }: Header
                                     <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onSelect={() => openMore("/dashboard/settings")}>
                                         <Settings className="w-4 h-4" />
                                         Ustawienia
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onSelect={() => openMore("/dashboard/feedback")}>
+                                        <Mail className="w-4 h-4 text-green-600" />
+                                        Kontakt i wsparcie
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>

@@ -92,6 +92,9 @@ export function HeaderMobileMenu({ isAuthenticated, isPro }: HeaderMobileMenuPro
                 <HeaderMobileNavItem href="/dashboard/settings" icon="Settings">
                   Ustawienia
                 </HeaderMobileNavItem>
+                <HeaderMobileNavItem href="/dashboard/feedback" icon="Mail" desc="Napisz do nas — błąd, pytanie, pomysł">
+                  Kontakt i wsparcie
+                </HeaderMobileNavItem>
               </div>
 
             </nav>

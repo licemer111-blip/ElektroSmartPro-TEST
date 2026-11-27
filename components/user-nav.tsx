@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { UserCircle, Crown, MapPin, CreditCard, LayoutDashboard, Lightbulb, LightbulbOff } from "lucide-react";
+import { UserCircle, Crown, MapPin, CreditCard, LayoutDashboard, Lightbulb, LightbulbOff, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LogoutButton } from "@/components/logout-button";
 import { Badge } from "@/components/ui/badge";
@@ -117,6 +117,17 @@ export function UserNav({ user, isPro = false }: UserNavProps) {
                         </Link>
                     </DropdownMenuItem>
                 )}
+
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                    <Link href="/dashboard/feedback" className="cursor-pointer">
+                        <Mail className="mr-2 h-4 w-4 text-green-600" />
+                        <div className="flex flex-col">
+                            <span>Kontakt i wsparcie</span>
+                            <span className="text-[10px] text-muted-foreground font-normal">Napisz do nas — błąd, pytanie, pomysł</span>
+                        </div>
+                    </Link>
+                </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
