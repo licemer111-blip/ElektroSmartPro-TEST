@@ -24,8 +24,8 @@ export const HINTS = {
 
   columnKnr: (
     <div className="space-y-1.5">
-      <p className="font-semibold text-violet-700 dark:text-violet-300">📋 Kod KNR</p>
-      <p>Numer normy ES. To godzina pracy, nie urzędowy tom KNR.</p>
+      <p className="font-semibold text-violet-700 dark:text-violet-300">📋 Norma ES</p>
+      <p>Skąd wzięła się godzina. Starego numeru KNR tu nie ma.</p>
       <ul className="space-y-0.5 text-slate-400">
         <li>• Zielony — godzina z normy ES</li>
         <li>• Przybliżenie — podobna pozycja, sprawdź przed ofertą</li>

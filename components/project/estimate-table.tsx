@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useId, useCallback, useRef, useState } from "react";
+import React, { useId, useCallback, useEffect, useRef, useState } from "react";
 import {
   Table, TableBody, TableCell, TableRow,
 } from "@/components/ui/table";
@@ -142,6 +142,16 @@ export function EstimateTable({
   });
 
   const [fallbackLoadingIds, setFallbackLoadingIds] = useState<Set<string>>(new Set());
+  const [mobileCards, setMobileCards] = useState(false);
+  useEffect(() => {
+    try {
+      if (localStorage.getItem("es-mobile-estimate-layout") === "cards") setMobileCards(true);
+    } catch { /* private mode */ }
+  }, []);
+  const handleMobileCards = useCallback((cards: boolean) => {
+    setMobileCards(cards);
+    try { localStorage.setItem("es-mobile-estimate-layout", cards ? "cards" : "table"); } catch { /* private mode */ }
+  }, []);
 
   const handleGlobalFallback = useCallback(async (itemId: string) => {
     setFallbackLoadingIds((prev) => new Set([...prev, itemId]));
@@ -298,6 +308,7 @@ export function EstimateTable({
         collapsedSections={collapsedSections}
         colorMode={colorMode}
         compactView={compactView}
+        mobileCards={mobileCards}
         showColorToggle={!!onColorModeChange}
         showKnrCol={showKnrCol}
         isAnalyzing={isFillNormsPending || isFillKnrCodesPending}
@@ -320,6 +331,7 @@ export function EstimateTable({
         onCollapsedSections={setCollapsedSections}
         onColorMode={handleColorMode}
         onCompactView={handleCompactView}
+        onMobileCards={handleMobileCards}
         onToast={toast}
       />
 
@@ -399,8 +411,8 @@ export function EstimateTable({
         </div>
       )}
 
-      {/* Mobile Card View — only shown when compactView=true (compact/card mode) on small screens */}
-      {!isEmpty && <div className={cn("lg:hidden", compactView ? "block" : "hidden")}>
+      {/* Phone cards — optional. The table is the default. */}
+      {!isEmpty && <div className={cn("lg:hidden", mobileCards ? "block" : "hidden")}>
         <EstimateMobileCards
           items={filteredItems} isPro={isPro} isFinal={isFinal} isReadOnly={isReadOnly}
           adjustmentPercentage={adjustmentPercentage} selectedIds={selectedIds}
@@ -413,8 +425,8 @@ export function EstimateTable({
         />
       </div>}
 
-      {/* Desktop Table — always shown on lg+; on mobile shown only when compactView=false (Widok normalny) */}
-      {!isEmpty && <div className={cn(!compactView ? "block" : "hidden lg:block")}>
+      {/* Table on desktop always. On a phone, until the user picks Karty. */}
+      {!isEmpty && <div className={cn(mobileCards ? "hidden lg:block" : "block")}>
         <DndContext id={dndId} sensors={sensors} collisionDetection={closestCenter}
           onDragStart={handleDragStart} onDragEnd={handleDragEnd} onDragCancel={handleDragCancel}>
           <div className="no-btn-scale border rounded-lg dark:border-slate-800 bg-slate-100 dark:bg-slate-900 relative overflow-x-auto scroll-smooth">

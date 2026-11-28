@@ -7,6 +7,16 @@ import { cn } from "@/lib/utils";
 import { HintTooltip } from "@/components/ui/hint-tooltip";
 import { HINTS } from "@/lib/hints/hint-content";
 
+export function estimatePinLeft(showCheck: boolean, showDnd: boolean) {
+  const dnd = showCheck ? 36 : 0;
+  const num = dnd + (showDnd ? 28 : 0);
+  return { dnd, num, name: num + 40 };
+}
+
+export const pinCell = "max-lg:sticky max-lg:z-20 max-lg:bg-white dark:max-lg:bg-slate-950";
+export const pinHead = "max-lg:sticky max-lg:z-30 max-lg:bg-slate-100 dark:max-lg:bg-slate-900";
+export const pinEdge = "max-lg:shadow-[4px_0_8px_-4px_rgba(15,23,42,0.45)]";
+
 interface EstimateTableHeaderProps {
   isFinal: boolean;
   isReadOnly: boolean;
@@ -39,6 +49,9 @@ export function EstimateTableHeader({
 }: EstimateTableHeaderProps) {
   const [isFillNormsPending, startFillNormsTransition] = useTransition();
   const moneyTag = bruttoMode ? `brutto +${vatRate}% VAT` : "netto";
+  const showCheck = !isFinal && !isReadOnly;
+  const showDnd = isDndEnabled && !isFinal;
+  const pin = estimatePinLeft(showCheck, showDnd);
 
   const handleFillNorms = () => {
     startFillNormsTransition(() => {
@@ -49,8 +62,8 @@ export function EstimateTableHeader({
   return (
     <TableHeader data-tour="tour-rows" className="scroll-mt-24 bg-slate-100 dark:bg-slate-900">
       <TableRow className="bg-gradient-to-r from-slate-50 via-slate-100 to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-        {!isFinal && !isReadOnly && (
-          <TableHead className="text-center min-w-[36px] w-[36px] dark:text-slate-300 border-r border-slate-200 dark:border-slate-700">
+        {showCheck && (
+          <TableHead style={{ left: 0 }} className={`text-center min-w-[36px] w-[36px] dark:text-slate-300 border-r border-slate-200 dark:border-slate-700 ${pinHead}`}>
             <button onClick={onToggleSelectAll}
               className="p-0.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded"
               aria-label="Zaznacz wszystko">
@@ -60,9 +73,9 @@ export function EstimateTableHeader({
             </button>
           </TableHead>
         )}
-        {isDndEnabled && !isFinal && <TableHead className="min-w-[28px] w-[28px] dark:text-slate-300 border-r border-slate-200 dark:border-slate-700" />}
-        <TableHead className="text-center min-w-[40px] w-[40px] dark:text-slate-300 text-xs font-semibold border-r border-slate-200 dark:border-slate-700">#</TableHead>
-        <TableHead className="min-w-[180px] xs:min-w-[200px] md:w-[40%] dark:text-slate-300 text-xs font-semibold text-center border-r border-slate-200 dark:border-slate-700">
+        {showDnd && <TableHead style={{ left: pin.dnd }} className={`min-w-[28px] w-[28px] dark:text-slate-300 border-r border-slate-200 dark:border-slate-700 ${pinHead}`} />}
+        <TableHead style={{ left: pin.num }} className={`text-center min-w-[40px] w-[40px] dark:text-slate-300 text-xs font-semibold border-r border-slate-200 dark:border-slate-700 ${pinHead}`}>#</TableHead>
+        <TableHead style={{ left: pin.name }} className={`max-lg:w-44 max-lg:max-w-44 min-w-[180px] xs:min-w-[200px] md:w-[40%] dark:text-slate-300 text-xs font-semibold text-center border-r border-slate-200 dark:border-slate-700 ${pinHead} ${pinEdge}`}>
           <div className="flex flex-col items-center gap-0.5">
             <span>📋</span>
             <span>Nazwa</span>

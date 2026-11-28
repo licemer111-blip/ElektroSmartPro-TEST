@@ -134,7 +134,7 @@ export function ConfidenceDot({ level: storedLevel, note, className, knrSource, 
 
   const sourceTooltip = knrSource ? KNR_SOURCE_TOOLTIP[knrSource] : undefined;
   const tooltipText = sourceTooltip
-    ? knrCode ? `${sourceTooltip}\nKNR: ${knrCode}` : sourceTooltip
+    ? sourceTooltip
     : level === "analog" && note
     ? `Cena na podstawie analogu: ${note.replace("Analog: ", "")}`
     : level === "uncertain"

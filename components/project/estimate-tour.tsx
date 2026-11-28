@@ -85,14 +85,14 @@ const STEPS: Step[] = [
   {
     id: "view",
     title: "Sekcje, Zwiń i widok",
-    description: "Sekcje składają wiersze w grupy, na przykład Salon albo Trasy. Grupy idą do PDF. Zwiń chowa grupy, Rozwiń je otwiera. Kompakt zwęża tabelę, na telefonie pokazuje karty. Normalny rozwija pełne wiersze. Szukaj znajduje pozycję po nazwie.",
+    description: "Sekcje składają wiersze w grupy, na przykład Salon albo Trasy. Grupy idą do PDF. Zwiń chowa grupy, Rozwiń je otwiera. Na telefonie Tabela pokazuje kolumny, Karty pokazują listę. Na komputerze Kompakt zwęża wiersze. Szukaj znajduje pozycję po nazwie.",
     targets: ['[data-tour="tour-view"]'],
     place: "bottom",
   },
   {
     id: "doc",
     title: "VAT, brutto i kolory",
-    description: "Jedna stawka VAT na cały dokument: 23% albo 8%. Nowy kosztorys startuje od 23% i cen brutto. Netto pokazuje kwoty bez VAT. Norma włącza kod w tabeli, rbh godziny, Kolory rozróżniają robociznę i materiał.",
+    description: "Jedna stawka VAT na cały dokument: 23% albo 8%. Nowy kosztorys startuje od 23% i cen brutto. Netto pokazuje kwoty bez VAT. Norma pokazuje, skąd jest godzina, rbh pokazuje godziny, Kolory rozróżniają robociznę i materiał.",
     targets: ['[data-tour="tour-doc"]'],
     place: "bottom",
   },

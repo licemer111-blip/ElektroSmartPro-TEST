@@ -36,6 +36,11 @@ export async function generateBigCatalogMatrix() {
       return { success: false, count: 0, error: "Unauthorized" };
     }
 
+    const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).maybeSingle();
+    if (profile?.role !== "admin") {
+      return { success: false, count: 0, error: "Tylko administrator może zmieniać wspólny katalog" };
+    }
+
     const items: Array<{ name: string; category: string; unit: string; material_price: number; labor_price: number }> = [];
 
     // 1. Heavy Power Cables

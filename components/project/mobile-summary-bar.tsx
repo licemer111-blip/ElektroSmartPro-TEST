@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -70,6 +70,56 @@ export function MobileSummaryBar({
   vatRate: vatRateProp,
 }: MobileSummaryBarProps) {
   const [open, setOpen] = useState(false);
+
+  // At the end of the estimate, the next upward drag opens the summary.
+  // A tap on the bar still works. A sideways drag on the table does not.
+  useEffect(() => {
+    if (open) return;
+    let lastX = 0;
+    let lastY = 0;
+    let pull = 0;
+    let ignore = false;
+
+    const atBottom = () => {
+      const el = document.scrollingElement || document.documentElement;
+      return el.scrollHeight - el.scrollTop - el.clientHeight <= 16;
+    };
+
+    const onStart = (e: TouchEvent) => {
+      if (window.innerWidth >= 1024) return;
+      const target = e.target as HTMLElement | null;
+      ignore = Boolean(target?.closest("input, textarea, select, [role='dialog'], [role='listbox']"));
+      const t = e.touches[0];
+      lastX = t.clientX;
+      lastY = t.clientY;
+      pull = 0;
+    };
+
+    const onMove = (e: TouchEvent) => {
+      if (ignore || window.innerWidth >= 1024) return;
+      const t = e.touches[0];
+      const dy = lastY - t.clientY;
+      const dx = t.clientX - lastX;
+      lastX = t.clientX;
+      lastY = t.clientY;
+      if (Math.abs(dx) > Math.abs(dy) || dy <= 0 || !atBottom()) {
+        pull = 0;
+        return;
+      }
+      pull += dy;
+      if (pull >= 72) {
+        pull = 0;
+        setOpen(true);
+      }
+    };
+
+    window.addEventListener("touchstart", onStart, { passive: true });
+    window.addEventListener("touchmove", onMove, { passive: true });
+    return () => {
+      window.removeEventListener("touchstart", onStart);
+      window.removeEventListener("touchmove", onMove);
+    };
+  }, [open]);
   const { toast } = useToast();
   const { onOpen } = useModalStore();
   const router = useRouter();
@@ -226,7 +276,10 @@ export function MobileSummaryBar({
               <Badge variant="outline" className="text-[10px]">
                 {items.length} poz.
               </Badge>
-              <ChevronUp className="w-5 h-5 text-muted-foreground" />
+              <span className="flex flex-col items-center text-blue-600 dark:text-blue-400">
+                <ChevronUp className="w-5 h-5" />
+                <span className="text-[9px] font-medium leading-none">w górę</span>
+              </span>
             </div>
           </button>
         </SheetTrigger>

@@ -55,6 +55,11 @@ export async function generateMasterCatalog(): Promise<{
       return { success: false, count: 0, message: "Unauthorized" };
     }
 
+    const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).maybeSingle();
+    if (profile?.role !== "admin") {
+      return { success: false, count: 0, message: "Tylko administrator może zmieniać wspólny katalog" };
+    }
+
     const items: CatalogItem[] = [
       ...getCableItems(),
       ...getApparatusItems(),

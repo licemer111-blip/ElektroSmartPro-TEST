@@ -29,6 +29,7 @@ interface EstimateFilterBarProps {
   collapsedSections: Set<string>;
   colorMode: boolean;
   compactView: boolean;
+  mobileCards: boolean;
   showColorToggle: boolean;
   showKnrCol?: boolean;
   filterBarExtra?: React.ReactNode;
@@ -47,6 +48,7 @@ interface EstimateFilterBarProps {
   onCollapsedSections: (v: Set<string>) => void;
   onColorMode: () => void;
   onCompactView: () => void;
+  onMobileCards: (cards: boolean) => void;
   onToast: (msg: { title: string; description: string; variant?: "destructive" }) => void;
 }
 
@@ -54,10 +56,10 @@ export function EstimateFilterBar({
   isFinal, isSearchOpen, searchQuery, searchMatchIds, currentMatchIndex,
   filterType, sortBy, sortOrder, categoryFilter, sectionFilter,
   uniqueCategories, uniqueSections, groupBySection, collapsedSections,
-  compactView, filterBarExtra, isAnalyzing, localItems,
+  compactView, mobileCards, filterBarExtra, isAnalyzing, localItems,
   onSearchOpen, onSearchClose, onSearchChange, onGoToMatch,
   onFilterType, onSortBy, onSortOrder, onCategoryFilter, onSectionFilter,
-  onGroupBySection, onCollapsedSections, onCompactView, onToast,
+  onGroupBySection, onCollapsedSections, onCompactView, onMobileCards, onToast,
 }: EstimateFilterBarProps) {
   return (
     <div data-tour="tour-view" className="mb-3 flex flex-col gap-1 p-1.5 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700/50 flex-shrink-0">
@@ -150,26 +152,48 @@ export function EstimateFilterBar({
 
         <div className="w-px h-5 bg-slate-200 dark:bg-slate-700 flex-shrink-0" />
 
-        <div className={cn("inline-flex items-center gap-0.5 p-0.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 flex-shrink-0", isFinal && "opacity-40")}>
+        <div className={cn("lg:hidden inline-flex items-center gap-0.5 p-0.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 flex-shrink-0", isFinal && "opacity-40")}>
+          <button
+            type="button"
+            disabled={isFinal}
+            onClick={() => { if (!mobileCards) onMobileCards(true); }}
+            title="Lista pozycji. Ceny materiału i robocizny po rozwinięciu karty."
+            className={cn(chip, "border-0", mobileCards ? chipOn : chipOff)}
+          >
+            <List className="w-3.5 h-3.5" />
+            <span>Karty</span>
+          </button>
+          <button
+            type="button"
+            disabled={isFinal}
+            onClick={() => { if (mobileCards) onMobileCards(false); }}
+            title="Tabela z kolumnami. Przewiń w bok, nazwa zostaje po lewej."
+            className={cn(chip, "border-0", !mobileCards ? chipOn : chipOff)}
+          >
+            <Maximize2 className="w-3.5 h-3.5" />
+            <span>Tabela</span>
+          </button>
+        </div>
+        <div className={cn("hidden lg:inline-flex items-center gap-0.5 p-0.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 flex-shrink-0", isFinal && "opacity-40")}>
           <button
             type="button"
             disabled={isFinal}
             onClick={() => { if (!compactView) onCompactView(); }}
-            title="Węższe wiersze. Na telefonie lista kart zamiast tabeli."
+            title="Węższe wiersze tabeli."
             className={cn(chip, "border-0", compactView ? chipOn : chipOff)}
           >
             <List className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Kompakt</span>
+            <span>Kompakt</span>
           </button>
           <button
             type="button"
             disabled={isFinal}
             onClick={() => { if (compactView) onCompactView(); }}
-            title="Pełna tabela z cenami w wierszu."
+            title="Wyższe wiersze, pełne ceny w komórce."
             className={cn(chip, "border-0", !compactView ? chipOn : chipOff)}
           >
             <Maximize2 className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Normalny</span>
+            <span>Normalny</span>
           </button>
         </div>
 
@@ -183,8 +207,11 @@ export function EstimateFilterBar({
         {/* Region indicator (right-aligned) */}
         {filterBarExtra && <div className="flex flex-1 items-center justify-end">{filterBarExtra}</div>}
       </div>
-      <p className="px-1 text-[10px] leading-snug text-slate-500 dark:text-slate-400">
-        Sekcje składają wiersze w grupy. Zwiń chowa grupy, Rozwiń je otwiera. Kompakt zwęża tabelę, Normalny pokazuje pełne wiersze.
+      <p className="px-1 text-[10px] leading-snug text-slate-500 dark:text-slate-400 lg:hidden">
+        Karty to lista pozycji. Tabela to kolumny, przewijane w bok. Nazwa zostaje po lewej.
+      </p>
+      <p className="hidden lg:block px-1 text-[10px] leading-snug text-slate-500 dark:text-slate-400">
+        Sekcje składają wiersze w grupy. Zwiń chowa grupy, Rozwiń je otwiera. Kompakt zwęża wiersze, Normalny pokazuje pełne ceny.
       </p>
     </div>
   );

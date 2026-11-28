@@ -42,8 +42,6 @@ export function RowKnrCell({ item, compactView }: RowKnrCellProps) {
   const isAnalog    = src === "es_synthetic" || (!src && !!item.knr_code);
   const isEstimated = src === "ai_estimation";
 
-  const cleanCode = item.knr_code?.replace(/\s*est\.\s*$/i, "") ?? "";
-
   // v2.7 UX: extract L2.5 and sanity signals from trace notes
   const { isL25Match, isSanityClamped, isRateCapped } = detectSignals(item.notes);
   const hasWarning = isSanityClamped || isRateCapped;
@@ -76,14 +74,6 @@ export function RowKnrCell({ item, compactView }: RowKnrCellProps) {
           <span className="inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[8px] font-medium bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
             ≈ Szacunek ES
           </span>
-          {cleanCode && (
-            <span
-              className={cn("font-mono leading-tight text-amber-700 dark:text-amber-400", compactView ? "text-[9px]" : "text-[10px]")}
-              title="Kod orientacyjny — to nie jest oficjalna pozycja KNR. Zweryfikuj przed ofertą."
-            >
-              {cleanCode}
-            </span>
-          )}
           {isL25Match && (
             <span
               className="inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[8px] font-medium bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400 border border-sky-200 dark:border-sky-800"
@@ -100,11 +90,6 @@ export function RowKnrCell({ item, compactView }: RowKnrCellProps) {
             <ShieldCheck className="w-2.5 h-2.5" />
             Z bazy ES
           </span>
-          {cleanCode && (
-            <span className={cn("font-mono leading-tight text-emerald-700 dark:text-emerald-400", compactView ? "text-[9px]" : "text-[10px]")}>
-              {cleanCode}
-            </span>
-          )}
           {isL25Match && (
             <span
               className="inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[8px] font-medium bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400 border border-sky-200 dark:border-sky-800"
@@ -121,18 +106,10 @@ export function RowKnrCell({ item, compactView }: RowKnrCellProps) {
             <ShieldCheck className="w-2.5 h-2.5" />
             Twój cennik
           </span>
-          {cleanCode && (
-            <span className={cn("font-mono leading-tight text-purple-700 dark:text-purple-300", compactView ? "text-[9px]" : "text-[10px]")}>
-              {cleanCode}
-            </span>
-          )}
         </div>
       ) : item.knr_code ? (
-        <span
-          className={cn("font-mono italic leading-tight text-slate-400 dark:text-slate-500", compactView ? "text-[9px]" : "text-[10px]")}
-          title="Źródło nieznane"
-        >
-          {cleanCode}
+        <span className="inline-flex items-center gap-0.5 px-1 py-0.5 rounded text-[8px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+          Norma ES
         </span>
       ) : (
         <span className="text-[10px] text-slate-300 dark:text-slate-600">—</span>

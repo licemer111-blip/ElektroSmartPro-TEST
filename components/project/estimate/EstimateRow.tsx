@@ -23,6 +23,7 @@ import { RowActions } from "@/components/project/estimate/_parts/RowActions";
 import { saveAssemblyOverrides } from "@/app/dashboard/projects/[id]/_actions/project-items";
 import { RowUnitCell, RowQuantityCell, RowMaterialCell, RowLaborCell, RowRgCell } from "@/components/project/estimate/_parts/RowInputs";
 import { RowKnrCell } from "@/components/project/estimate/_parts/RowKnrCell";
+import { estimatePinLeft, pinCell, pinEdge } from "@/components/project/estimate/EstimateTableHeader";
 import { RowTotalCell } from "@/components/project/estimate/_parts/RowTotalCell";
 import { SystemScopeBar } from "@/components/project/estimate/SystemScopeBar";
 import { awaitsContractSum, wholeSystem } from "@/lib/estimate/system-scope";
@@ -352,6 +353,10 @@ export const EstimateRow = React.memo(function EstimateRow({
     else if (e.key === "Escape") onCancelEdit();
   };
 
+  const showCheck = !isFinal && !isReadOnly;
+  const showDnd = isDndEnabled && !isFinal && !isReadOnly;
+  const pin = estimatePinLeft(showCheck, showDnd);
+
   return (
     <>
     <TableRow
@@ -365,7 +370,7 @@ export const EstimateRow = React.memo(function EstimateRow({
     >
       {/* Checkbox */}
       {!isFinal && !isReadOnly && (
-        <TableCell className={`text-center min-w-[36px] w-[36px] ${singleCellBorderClass} ${leftBorderColor}`}>
+        <TableCell style={{ left: 0 }} className={`text-center min-w-[36px] w-[36px] ${singleCellBorderClass} ${leftBorderColor} ${pinCell}`}>
           <button onClick={() => onToggleSelect(item.id)} className="p-0.5" aria-label={`Zaznacz ${item.name}`}>
             {isSelected
               ? <CheckSquare className="w-4 h-4 text-blue-600 dark:text-blue-400" />
@@ -377,7 +382,7 @@ export const EstimateRow = React.memo(function EstimateRow({
 
       {/* Drag handle placeholder — actual handle injected by SortableRow in parent */}
       {isDndEnabled && !isFinal && !isReadOnly && (
-        <TableCell className={`min-w-[28px] w-[28px] ${singleCellBorderClass} ${!isAssemblyChild ? "cursor-grab active:cursor-grabbing touch-none" : ""}`}>
+        <TableCell style={{ left: pin.dnd }} className={`min-w-[28px] w-[28px] ${singleCellBorderClass} ${pinCell} ${!isAssemblyChild ? "cursor-grab active:cursor-grabbing touch-none" : ""}`}>
           {!isAssemblyChild && (
             <div className="flex items-center justify-center w-6 h-8 -mx-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" style={{ touchAction: "none" }}>
               <GripVertical className="w-3.5 h-3.5 text-slate-300 dark:text-slate-600" />
@@ -387,7 +392,7 @@ export const EstimateRow = React.memo(function EstimateRow({
       )}
 
       {/* Row number */}
-      <TableCell className={`text-center min-w-[40px] w-[40px] ${singleCellBorderClass} ${!isFinal ? "" : leftBorderColor}`}>
+      <TableCell style={{ left: pin.num }} className={`text-center min-w-[40px] w-[40px] ${singleCellBorderClass} ${pinCell} ${!isFinal ? "" : leftBorderColor}`}>
         {rowNumber !== null && (
           <div className={cn("font-bold text-sm", !colorMode
             ? "text-slate-600 dark:text-slate-400"
@@ -430,7 +435,8 @@ export const EstimateRow = React.memo(function EstimateRow({
 
       {/* Name — always display mode; editing values reflected via displayItem */}
       <TableCell
-        className={`min-w-[180px] xs:min-w-[200px] md:w-[40%] ${singleCellBorderClass} ${!isEditing && !isFinal ? "cursor-pointer" : ""}`}
+        style={{ left: pin.name }}
+        className={`max-lg:w-44 max-lg:max-w-44 min-w-[180px] xs:min-w-[200px] md:w-[40%] ${singleCellBorderClass} ${pinCell} ${pinEdge} ${!isEditing && !isFinal ? "cursor-pointer" : ""}`}
         onDoubleClick={() => { if (!isEditing && !isFinal) onStartEdit(item); }}
       >
         <div className="flex items-start gap-1 sm:gap-2">
@@ -612,18 +618,18 @@ export const EstimateRow = React.memo(function EstimateRow({
           >
             {/* Checkbox placeholder */}
             {!isFinal && !isReadOnly && (
-              <TableCell className={`min-w-[36px] w-[36px] ${singleCellBorderClass}`} />
+              <TableCell style={{ left: 0 }} className={`min-w-[36px] w-[36px] ${singleCellBorderClass} ${pinCell}`} />
             )}
             {/* DnD placeholder */}
             {isDndEnabled && !isFinal && !isReadOnly && (
-              <TableCell className={`min-w-[28px] w-[28px] ${singleCellBorderClass}`} />
+              <TableCell style={{ left: pin.dnd }} className={`min-w-[28px] w-[28px] ${singleCellBorderClass} ${pinCell}`} />
             )}
             {/* Row # → ↳ */}
-            <TableCell className={`text-center min-w-[40px] w-[40px] ${singleCellBorderClass}`}>
+            <TableCell style={{ left: pin.num }} className={`text-center min-w-[40px] w-[40px] ${singleCellBorderClass} ${pinCell}`}>
               <span className="text-orange-400 dark:text-orange-600 text-xs font-bold">↳</span>
             </TableCell>
             {/* Nazwa */}
-            <TableCell className={`min-w-[180px] ${singleCellBorderClass}`}>
+            <TableCell style={{ left: pin.name }} className={`max-lg:w-44 max-lg:max-w-44 min-w-[180px] ${singleCellBorderClass} ${pinCell} ${pinEdge}`}>
               <div className="pl-2 flex flex-col gap-0">
                 <div className={cn("text-xs font-medium break-words",
                   colorMode ? "text-orange-700 dark:text-orange-300" : "text-slate-600 dark:text-slate-400"
@@ -633,7 +639,6 @@ export const EstimateRow = React.memo(function EstimateRow({
                   )}
                   {vRow.label}
                 </div>
-                <div className="text-[9px] text-slate-400 dark:text-slate-500 font-mono">{vRow.knrCode}</div>
               </div>
             </TableCell>
             {/* Jedn. */}
@@ -698,7 +703,7 @@ export const EstimateRow = React.memo(function EstimateRow({
             {/* KNR */}
             {showKnrCol && (
               <TableCell className={`min-w-[110px] w-[110px] ${singleCellBorderClass}`}>
-                <span className="text-[9px] text-slate-400 dark:text-slate-500 font-mono">{vRow.knrCode}</span>
+                <span className="text-[9px] text-slate-400 dark:text-slate-500">—</span>
               </TableCell>
             )}
             {/* Suma */}
