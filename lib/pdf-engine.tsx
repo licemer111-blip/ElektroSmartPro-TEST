@@ -764,13 +764,13 @@ const TableDataRow = ({
       </View>
       {/* Nakłady r-g (optional) */}
       {showRg && cols.rg ? (
-        <View style={[amountStyle, { width: cols.rg, textAlign: 'right' }, paintColumn && COL.rgCell]}>
+        <View style={[amountStyle, { width: cols.rg, textAlign: 'right' }, paintColumn ? COL.rgCell : {}]}>
           <Text>{isSectionHeader ? '' : row.rg}</Text>
         </View>
       ) : null}
       {/* Materiał */}
       {!matOwned ? (
-        <View style={[amountStyle, { width: cols.mat, textAlign: 'right' }, paintColumn && COL.matCell]}>
+        <View style={[amountStyle, { width: cols.mat, textAlign: 'right' }, paintColumn ? COL.matCell : {}]}>
           {isSectionHeader ? (
             <Text></Text>
           ) : row.isInvestorMat ? (
@@ -781,11 +781,11 @@ const TableDataRow = ({
         </View>
       ) : null}
       {/* Robocizna */}
-      <View style={[amountStyle, { width: cols.lab, textAlign: 'right' }, paintColumn && COL.labCell]}>
+      <View style={[amountStyle, { width: cols.lab, textAlign: 'right' }, paintColumn ? COL.labCell : {}]}>
         <Text>{isSectionHeader ? '' : row.lab}</Text>
       </View>
       {/* Suma */}
-      <View style={[amountStyle, { width: cols.total, textAlign: 'right', fontWeight: 'bold' }, paintColumn && COL.sumCell]}>
+      <View style={[amountStyle, { width: cols.total, textAlign: 'right', fontWeight: 'bold' }, paintColumn ? COL.sumCell : {}]}>
         <Text>{row.total}</Text>
       </View>
     </View>
