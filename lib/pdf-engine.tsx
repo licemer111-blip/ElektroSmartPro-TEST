@@ -592,17 +592,30 @@ const CoverPage = ({
 
 // ─── Table Header Row ─────────────────────────────────────────────────────────
 
+const COL = {
+  matHead: { backgroundColor: '#fef3c7', color: '#92400e' },
+  matCell: { backgroundColor: '#fffbeb', color: '#92400e' },
+  labHead: { backgroundColor: '#d1fae5', color: '#065f46' },
+  labCell: { backgroundColor: '#f0fdf4', color: '#065f46' },
+  rgHead: { backgroundColor: '#cffafe', color: '#155e75' },
+  rgCell: { backgroundColor: '#ecfeff', color: '#155e75' },
+  sumHead: { backgroundColor: '#dbeafe', color: '#1e3a8a' },
+  sumCell: { backgroundColor: '#eff6ff', color: '#1e3a8a' },
+} as const;
+
 const TableHeaderRow = ({
   palette,
   cols,
   showRg,
   matOwned,
+  showColors = true,
 }: {
   palette: ThemePalette;
   cols: ColWidths;
   showKnr?: boolean;
   showRg: boolean;
   matOwned: boolean;
+  showColors?: boolean;
 }) => (
   <View
     style={[
@@ -623,19 +636,19 @@ const TableHeaderRow = ({
       <Text>Ilość</Text>
     </View>
     {showRg && cols.rg ? (
-      <View style={[base.tableHeaderCell, { width: cols.rg, color: palette.tableHeaderText, textAlign: 'right' }]}>
+      <View style={[base.tableHeaderCell, { width: cols.rg, textAlign: 'right' }, showColors ? COL.rgHead : { color: palette.tableHeaderText }]}>
         <Text>rbh</Text>
       </View>
     ) : null}
     {!matOwned ? (
-      <View style={[base.tableHeaderCell, { width: cols.mat, color: palette.tableHeaderText, textAlign: 'right' }]}>
+      <View style={[base.tableHeaderCell, { width: cols.mat, textAlign: 'right' }, showColors ? COL.matHead : { color: palette.tableHeaderText }]}>
         <Text>Mat. jedn.</Text>
       </View>
     ) : null}
-    <View style={[base.tableHeaderCell, { width: cols.lab, color: palette.tableHeaderText, textAlign: 'right' }]}>
+    <View style={[base.tableHeaderCell, { width: cols.lab, textAlign: 'right' }, showColors ? COL.labHead : { color: palette.tableHeaderText }]}>
       <Text>{matOwned ? "Cena jedn." : "Rob. jedn."}</Text>
     </View>
-    <View style={[base.tableHeaderCell, { width: cols.total, color: palette.tableHeaderText, textAlign: 'right' }]}>
+    <View style={[base.tableHeaderCell, { width: cols.total, textAlign: 'right' }, showColors ? COL.sumHead : { color: palette.tableHeaderText }]}>
       <Text>Wartość</Text>
     </View>
   </View>
@@ -648,11 +661,11 @@ const TableDataRow = ({
   rowIndex,
   palette,
   cols,
-  showKnr,
+  showKnr: _showKnr,
   showRg,
   matOwned,
   showColors = true,
-  monochrome = false,
+  monochrome: _monochrome = false,
 }: {
   row: PdfRow;
   rowIndex: number;
@@ -679,31 +692,6 @@ const TableDataRow = ({
       textColor = showColors ? palette.sectionHeaderText : '#ffffff';
       amountColor = showColors ? palette.sectionHeaderText : '#ffffff';
       fontWeight = 'bold';
-      break;
-
-    case 'set_parent':
-      // Zestaw Engine v2: monochrome mode drops yellow tint; showColors controls palette.
-      rowBg = monochrome ? rowBg : palette.setParentBg;
-      textColor = monochrome ? palette.textPrimary : '#78350f';
-      fontWeight = 'bold';
-      borderLeftWidth = monochrome ? 0 : 4;
-      borderLeftColor = monochrome ? 'transparent' : palette.setParentBorder;
-      break;
-
-    case 'child_mat':
-      rowBg = monochrome ? rowBg : palette.childMatBg;
-      textColor = monochrome ? palette.textSecondary : '#92400e';
-      fontStyle = 'italic';
-      borderLeftWidth = monochrome ? 0 : 3;
-      borderLeftColor = monochrome ? 'transparent' : '#f59e0b';
-      break;
-
-    case 'child_lab':
-      rowBg = monochrome ? rowBg : palette.childLabBg;
-      textColor = monochrome ? palette.textSecondary : '#166534';
-      fontStyle = 'italic';
-      borderLeftWidth = monochrome ? 0 : 3;
-      borderLeftColor = monochrome ? 'transparent' : '#22c55e';
       break;
 
     case 'section_subtotal':
@@ -743,6 +731,7 @@ const TableDataRow = ({
   };
 
   const isSectionHeader = row.rowType === 'section_header';
+  const paintColumn = showColors && !isSectionHeader && row.rowType !== 'section_subtotal';
 
   return (
     <View
@@ -764,9 +753,6 @@ const TableDataRow = ({
       {/* Nazwa */}
       <View style={[cellStyle, { width: cols.name }]}>
         <Text>{row.name}</Text>
-        {showKnr && row.knrCode && !isSectionHeader && row.rowType !== 'section_subtotal' ? (
-          <Text style={{ fontSize: 6.5, color: palette.textSecondary, marginTop: 1 }}>{row.knrCode}</Text>
-        ) : null}
       </View>
       {/* Jedn. */}
       <View style={[cellStyle, { width: cols.unit, textAlign: 'center' }]}>
@@ -778,13 +764,13 @@ const TableDataRow = ({
       </View>
       {/* Nakłady r-g (optional) */}
       {showRg && cols.rg ? (
-        <View style={[amountStyle, { width: cols.rg, textAlign: 'right' }]}>
+        <View style={[amountStyle, { width: cols.rg, textAlign: 'right' }, paintColumn && COL.rgCell]}>
           <Text>{isSectionHeader ? '' : row.rg}</Text>
         </View>
       ) : null}
       {/* Materiał */}
       {!matOwned ? (
-        <View style={[amountStyle, { width: cols.mat, textAlign: 'right' }]}>
+        <View style={[amountStyle, { width: cols.mat, textAlign: 'right' }, paintColumn && COL.matCell]}>
           {isSectionHeader ? (
             <Text></Text>
           ) : row.isInvestorMat ? (
@@ -795,11 +781,11 @@ const TableDataRow = ({
         </View>
       ) : null}
       {/* Robocizna */}
-      <View style={[amountStyle, { width: cols.lab, textAlign: 'right' }]}>
+      <View style={[amountStyle, { width: cols.lab, textAlign: 'right' }, paintColumn && COL.labCell]}>
         <Text>{isSectionHeader ? '' : row.lab}</Text>
       </View>
-      {/* Suma — bold, always accent or section color */}
-      <View style={[amountStyle, { width: cols.total, textAlign: 'right', fontWeight: 'bold' }]}>
+      {/* Suma */}
+      <View style={[amountStyle, { width: cols.total, textAlign: 'right', fontWeight: 'bold' }, paintColumn && COL.sumCell]}>
         <Text>{row.total}</Text>
       </View>
     </View>
@@ -906,14 +892,28 @@ const SummarySection = ({
 
 // ─── Legend Block ─────────────────────────────────────────────────────────────
 
-const LegendBlock = ({ palette, showColors = true }: { palette: ThemePalette; showColors?: boolean }) => {
+const LegendBlock = ({
+  palette,
+  showColors = true,
+  showRg = false,
+  matOwned = false,
+}: {
+  palette: ThemePalette;
+  showColors?: boolean;
+  showRg?: boolean;
+  matOwned?: boolean;
+}) => {
   if (!showColors) return null;
+  const items = [
+    ...(!matOwned ? [{ color: '#f59e0b', label: 'Materiał' }] : []),
+    { color: '#16a34a', label: 'Robocizna' },
+    ...(showRg ? [{ color: '#06b6d4', label: 'Godziny' }] : []),
+    { color: '#2563eb', label: 'Suma' },
+    { color: palette.sectionHeaderBg, label: 'Sekcja' },
+  ];
   return (
     <View style={{ flexDirection: 'row', gap: 12, marginBottom: 8, flexWrap: 'wrap' }}>
-      {[
-        { color: palette.setParentBorder,  label: 'Zestaw (komplet)' },
-        { color: palette.sectionHeaderBg,   label: 'Sekcja' },
-      ].map(({ color, label }) => (
+      {items.map(({ color, label }) => (
         <View key={label} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
           <View style={{ width: 8, height: 8, backgroundColor: color, borderRadius: 1 }} />
           <Text style={{ fontSize: 7, color: palette.textSecondary }}>{label}</Text>
@@ -1014,10 +1014,24 @@ const ContentPage = ({
       )}
 
       {/* Legend — controlled by showLegend */}
-      {isFirstContent && s.showLegend && <LegendBlock palette={palette} showColors={data.showColors !== false} />}
+      {isFirstContent && s.showLegend && (
+        <LegendBlock
+          palette={palette}
+          showColors={data.showColors !== false}
+          showRg={showRg}
+          matOwned={matOwnedByClient}
+        />
+      )}
 
       {/* Table */}
-      <TableHeaderRow palette={palette} cols={cols} showKnr={showKnr} showRg={showRg} matOwned={matOwnedByClient} />
+      <TableHeaderRow
+        palette={palette}
+        cols={cols}
+        showKnr={showKnr}
+        showRg={showRg}
+        matOwned={matOwnedByClient}
+        showColors={data.showColors !== false}
+      />
       {rows.map((row, idx) => (
         <TableDataRow
           key={`row-${idx}`}

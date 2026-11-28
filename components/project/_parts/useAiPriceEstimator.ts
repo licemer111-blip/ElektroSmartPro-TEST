@@ -153,7 +153,7 @@ export function useAiPriceEstimator({
       if (result.success && result.estimates && result.estimates.length > 0) {
         const ids = new Set(
           result.estimates
-            .filter((e) => !e.isAmbiguous && e.trace !== "unmatched")
+            .filter((e) => !e.isAmbiguous && e.trace !== "unmatched" && e.trace !== "proposal")
             .map((e) => e.itemId)
         );
         setPendingData({ estimates: result.estimates, initialSelectedIds: ids });
@@ -198,13 +198,14 @@ export function useAiPriceEstimator({
         itemId: e.itemId,
         material_price: e.suggestedMaterial,
         labor_price: e.suggestedLabor,
-        unit: undefined,
+        unit: e.unit,
         knr_code: e.knrCode ?? undefined,
         knr_source: e.knrSource ?? undefined,
         labor_norm: e.laborNorm ?? undefined,
         labor_hours_total: e.laborHoursTotal ?? undefined,
         suggested_norm: e.suggestedNorm ?? undefined,
         note: e.note ?? undefined,
+        remember_name: e.trace === "proposal" ? e.name : undefined,
         expert_override:   e.expert_override,
         is_low_confidence: e.isLowConfidence,
         calculation_log:   e.calculationLog,
@@ -316,7 +317,7 @@ export function useAiPriceEstimator({
   }, []);
 
   const toggleAll = useCallback(() => {
-    const nonAmbiguous = estimates.filter((e) => !e.isAmbiguous && e.trace !== "unmatched");
+    const nonAmbiguous = estimates.filter((e) => !e.isAmbiguous && e.trace !== "unmatched" && e.trace !== "proposal");
     const allSelected = nonAmbiguous.every((e) => selectedIds.has(e.itemId));
     setSelectedIds(allSelected ? new Set() : new Set(nonAmbiguous.map((e) => e.itemId)));
   }, [estimates, selectedIds]);
@@ -336,7 +337,7 @@ export function useAiPriceEstimator({
   const applyCertainOnly = useCallback(() => {
     setSelectedIds(new Set(
       estimates
-        .filter(e => !e.isAmbiguous && (e.confidence === "high" || e.confidence === "medium"))
+        .filter(e => !e.isAmbiguous && e.trace !== "proposal" && (e.confidence === "high" || e.confidence === "medium"))
         .map(e => e.itemId)
     ));
   }, [estimates]);

@@ -105,6 +105,8 @@ export interface KnrMatch {
   unit: string;
   /** Industrial file row. The hour is a norma ES estimate, not a measured flat job. */
   estimated: boolean;
+  /** Job name the match came from. Shown as a suggestion, not applied by itself. */
+  description?: string;
 }
 
 const CORE_KNR_SOURCES: unknown[] = [
@@ -645,7 +647,13 @@ export function lookupKnrByName(itemName: string, preferResidential = true): Knr
       .map((unit) => findCanonicalL0(itemName, unit))
       .find((hit) => hit != null);
     if (canonical) {
-      return { code: canonical.knrCode, laborNorm: canonical.laborNorm, unit: canonical.unit, estimated: false };
+      return {
+        code: canonical.knrCode,
+        laborNorm: canonical.laborNorm,
+        unit: canonical.unit,
+        estimated: false,
+        description: canonical.description,
+      };
     }
     const adjustedNorm = bestEntry.labor_norm * (bestEntry.unit_factor ?? 1.0);
     return {
@@ -653,6 +661,7 @@ export function lookupKnrByName(itemName: string, preferResidential = true): Knr
       laborNorm: adjustedNorm,
       unit: bestEntry.unit,
       estimated: bestEntry.is_industrial === true,
+      description: bestEntry.description,
     };
   }
   return null;

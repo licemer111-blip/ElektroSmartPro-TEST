@@ -43,10 +43,6 @@ const C_HEADER_BG   = '1E2937'; // slate-800
 const C_HEADER_TEXT = 'FFFFFF';
 const C_ORANGE_BG   = 'FFF3E0'; // orange tint — Material columns
 const C_GREEN_BG    = 'E8F5E9'; // green tint  — Labor columns
-const C_ZESTAW_BG   = 'FEF3C7'; // amber-100 — Zestaw parent row (more visible)
-const C_ZESTAW_TEXT = '92400E'; // amber-900
-const C_CHILD_BG    = 'FFFBEB'; // amber-50  — child row subtle tint
-const C_CHILD_TEXT  = '78350F'; // amber-800 — child text
 const C_SECTION_BG  = 'EEE8FF'; // violet tint — Section header
 const C_SECTION_TXT = '5B21B6'; // violet-800
 const C_SUM_BG      = 'F1F5F9'; // slate-100   — Summary rows
@@ -175,7 +171,9 @@ function buildKosztorysSheet(
   // Cols: Lp(0) | Pozycja(1) | [Opis] | [Kod KNR] | Jm | Ilość | [r-g] | [Cena mat.] | Cena rob. | Wartość
   const hasRg  = showRg;
   const hasMat = !matOwnedByClient;
-  const hasKnr = showKnr;
+  // Client file does not print old KNR table codes. Hours stay in the rbh columns.
+  const hasKnr = false;
+  void showKnr;
   // 4 fixed (Lp+Pozycja+Jm+Ilo) + [Opis] + [KNR] + [rbh/j.m. + rbh razem] + [Mat] + Rob + War
   const rgCols = hasRg ? 2 : 0;
   const baseCount = 4 + (hasOpisData ? 1 : 0) + (hasKnr ? 1 : 0) + rgCols + (hasMat ? 1 : 0) + 2;
@@ -335,16 +333,11 @@ function buildKosztorysSheet(
       : priced.rowTotal) * vatMult;
 
     // Row style selection
-    const rowBg     = isZestaw ? C_ZESTAW_BG : (isChild ? C_CHILD_BG : 'FFFFFF');
-    const textRgb   = isZestaw ? C_ZESTAW_TEXT : (isChild ? C_CHILD_TEXT : '1E293B');
-    const baseFont  = font({ bold: isZestaw, color: { rgb: textRgb }, sz: 9 });
+    const rowBg     = itemNumber % 2 === 0 ? 'F8FAFC' : 'FFFFFF';
+    const textRgb   = '1E293B';
+    const baseFont  = font({ bold: false, color: { rgb: textRgb }, sz: 9 });
     const baseFill  = fill(rowBg);
-    // Left border: orange thick for Zestaw parent, orange thin for child, gray for regular
-    const baseBorder: XlsxCellStyle['border'] = isZestaw
-      ? { ...thinBorder('E2E8F0'), left: { style: 'medium', color: { rgb: 'F97316' } } }
-      : isChild
-      ? { ...thinBorder('E2E8F0'), left: { style: 'thin', color: { rgb: 'FB923C' } } }
-      : thinBorder('E2E8F0');
+    const baseBorder: XlsxCellStyle['border'] = thinBorder('E2E8F0');
 
     const dataRow: XlsxCell[] = Array(colCount).fill(null).map(() =>
       sc('', { fill: baseFill, font: baseFont, border: baseBorder })
@@ -746,7 +739,7 @@ export function exportProjectToExcel(
   const result = buildKosztorysSheet(project, items, isPro, showRg, matOwnedByClient, showKnr, knrMultiplier);
   const { ws, rowCount, headerRowIdx, grandTotalIdx, hasOpisData } = result;
 
-  ws['!cols'] = buildColWidths(hasOpisData, showRg, matOwnedByClient, showKnr);
+  ws['!cols'] = buildColWidths(hasOpisData, showRg, matOwnedByClient, false);
   ws['!rows'] = buildRowHeights(rowCount, headerRowIdx, grandTotalIdx);
 
   XLSXStyle.utils.book_append_sheet(workbook, ws as never, 'Kosztorys');
@@ -787,7 +780,7 @@ export function buildExcelBuffer(
     const result = buildKosztorysSheet(project, items, isPro, showRg2, matOwned2, showKnr2, knrMultiplier);
     const { ws, rowCount, headerRowIdx, grandTotalIdx, hasOpisData } = result;
 
-    ws['!cols'] = buildColWidths(hasOpisData, showRg2, matOwned2, showKnr2);
+    ws['!cols'] = buildColWidths(hasOpisData, showRg2, matOwned2, false);
     ws['!rows'] = buildRowHeights(rowCount, headerRowIdx, grandTotalIdx);
 
     XLSXStyle.utils.book_append_sheet(workbook, ws as never, 'Kosztorys');

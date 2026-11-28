@@ -29,7 +29,7 @@ import {
   resolveImportedRows,
   type MatchResult,
 } from "@/lib/services/matching-engine";
-import { buildLocalKnrContext, preferredNormHour, normHoursConflict } from "@/lib/knr-local-context";
+import { buildLocalKnrContext, preferredNormHour, normHoursConflict, lookupKnrByName } from "@/lib/knr-local-context";
 import { validateAgainstCanonicalL0, findCanonicalL0 } from "@/lib/services/canonical-knr-l0";
 import { wholeSystem } from "@/lib/estimate/system-scope";
 import { findCanonicalL0WithOverrides } from "@/lib/services/canonical-l0-overrides";
@@ -230,6 +230,16 @@ export async function priceRowWithGlobalFallback(
 // ─────────────────────────────────────────────────────────────────
 // estimatePricesWithAI
 // ─────────────────────────────────────────────────────────────────
+
+function sameWorkUnit(a: string, b: string): boolean {
+  const family = (unit: string) => {
+    const u = unit.toLowerCase().replace(/\./g, "").trim();
+    if (u === "m" || u === "mb") return "m";
+    if (u === "szt" || u === "kpl" || u === "krot") return "szt";
+    return u;
+  };
+  return family(a) === family(b);
+}
 
 export async function estimatePricesWithAI(
   projectId: string,
@@ -902,6 +912,8 @@ export async function estimatePricesWithAI(
         const noteFormula = normWithFloor != null
           ? ` | ${normWithFloor.toFixed(4)} rbh × ${baseRateForCalc.toFixed(1)} zł/h = ${sugLab.toFixed(2)} zł${regionHintL2}`
           : "";
+        const hoursShown = normWithFloor ?? scaledNorm;
+        const needsConfirm = !isL1Hit && !isRegexExact;
         return {
           itemId: item.id,
           name: item.name,
@@ -913,18 +925,48 @@ export async function estimatePricesWithAI(
           suggestedLabor: mode === "material" ? (item.labor_price || 0) : sugLab,
           laborHoursTotal: laborHoursTotalL2,
           regionModifier: regionModL2,
-          confidence: isL1Hit ? "high" as const : "medium" as const,
-          note: `ES-Słownik (${hitLabel}): ${m.matched_keyword ?? esRow.name} → ${esRow.knr_code}${noteFormula}${scaleNote}${matNote}`,
+          confidence: needsConfirm ? "low" as const : "high" as const,
+          note: needsConfirm
+            ? `Podobne: ${m.matched_keyword ?? esRow.name}. ${hoursShown != null ? `${hoursShown.toFixed(2)} rbh. ` : ""}Zaznacz, żeby wziąć i zapamiętać w cenniku.`
+            : `ES-Słownik (${hitLabel}): ${m.matched_keyword ?? esRow.name} → ${esRow.knr_code}${noteFormula}${scaleNote}${matNote}`,
           knrCode: esRow.knr_code,
           knrSource: "official" as const,
-          laborNorm: normWithFloor ?? scaledNorm,
-          suggestedNorm: normWithFloor ?? scaledNorm,
+          laborNorm: hoursShown,
+          suggestedNorm: hoursShown,
           isAmbiguous: false,
-          trace: `${isL1Hit ? "L1" : "L2"} Hit (${hitLabel}${isRegexExact ? "/regex" : ""}): "${m.matched_keyword ?? esRow.name}" → ${esRow.knr_code} | ${traceFormula}`,
+          trace: needsConfirm
+            ? "proposal"
+            : `${isL1Hit ? "L1" : "L2"} Hit (${hitLabel}${isRegexExact ? "/regex" : ""}): "${m.matched_keyword ?? esRow.name}" → ${esRow.knr_code} | ${traceFormula}`,
         };
       }
 
-      // No second hour from the JSON archive. One dictionary hour, or the row stays empty.
+      // No automatic hour from a fuzzy JSON hit. Offer it only when the unit matches.
+      const hint = lookupKnrByName(item.name);
+      const itemUnit = String(originalItem?.unit ?? item.unit ?? "");
+      const unitOk = hint != null && sameWorkUnit(itemUnit, hint.unit);
+      if (hint && unitOk && hint.laborNorm > 0 && mode !== "material") {
+        const sugLab = Math.round(hint.laborNorm * baseRateForCalc * 100) / 100;
+        return {
+          itemId: item.id,
+          name: item.name,
+          unit: itemUnit,
+          quantity: item.quantity,
+          currentMaterial: item.material_price || 0,
+          currentLabor: item.labor_price || 0,
+          suggestedMaterial: 0,
+          suggestedLabor: sugLab,
+          laborHoursTotal: Math.round(hint.laborNorm * (item.quantity ?? 1) * 1000) / 1000,
+          regionModifier: rateResult.regionModifier,
+          confidence: "low" as const,
+          note: `Podobne: ${hint.description ?? hint.code}. ${hint.laborNorm.toFixed(2)} rbh. Zaznacz, żeby wziąć i zapamiętać w cenniku.`,
+          knrCode: hint.code,
+          knrSource: "official" as const,
+          laborNorm: hint.laborNorm,
+          suggestedNorm: hint.laborNorm,
+          isAmbiguous: false,
+          trace: "proposal",
+        };
+      }
       return {
         itemId: item.id,
         name: item.name,
@@ -1638,6 +1680,8 @@ export async function applyAiPrices(
     labor_hours_total?: number | null; // pre-calculated effective hours (with all modifiers)
     suggested_norm?: number | null;
     confidence_level?: "verified" | "analog" | "estimated" | "uncertain" | "unmatched" | null;
+    /** Line name to store in the personal catalog when the electrician accepts a suggestion. */
+    remember_name?: string | null;
     expert_override?: boolean;    // SAL flag: price was raised to expert floor
     is_low_confidence?: boolean;  // SAL flag: heavy noun without action verb → manual check needed
     calculation_log?: string;     // SAL explainability trace (max 500 chars)
@@ -1803,6 +1847,33 @@ export async function applyAiPrices(
 
     const count = updateResults.filter((r) => r.ok).length;
     const protectedCount = updateResults.filter((r) => r.ok && r.wasProtected).length;
+
+    const toRemember = prices.filter((p) =>
+      p.remember_name && p.remember_name.trim() && p.labor_norm != null && p.labor_norm > 0
+    );
+    for (const row of toRemember) {
+      const name = row.remember_name!.trim().slice(0, 300);
+      const { data: existing } = await supabase
+        .from("catalog_items")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("name", name)
+        .maybeSingle();
+      if (existing) continue;
+      const { error: rememberErr } = await supabase.from("catalog_items").insert({
+        user_id: user.id,
+        name,
+        unit: row.unit || "szt",
+        base_labor_price: row.labor_price,
+        base_material_price: 0,
+        visibility: "personal",
+        labor_norm_rbh: row.labor_norm,
+        knr_code: row.knr_code || null,
+      });
+      if (rememberErr) {
+        logger.error("rememberConfirmedNorm insert failed", { name }, rememberErr);
+      }
+    }
     revalidatePath(`/dashboard/projects/${projectId}`);
     return { success: true, updatedCount: count, protectedCount };
   } catch (error) {

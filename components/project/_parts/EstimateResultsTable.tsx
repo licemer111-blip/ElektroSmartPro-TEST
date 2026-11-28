@@ -266,7 +266,7 @@ export function EstimateResultsTable({
               <TableRow className="bg-slate-50 dark:bg-slate-900">
                 <TableHead className="w-8 text-[10px]">
                   <Checkbox
-                    checked={estimates.filter(e => !e.isAmbiguous).length > 0 && estimates.filter(e => !e.isAmbiguous).every(e => selectedIds.has(e.itemId))}
+                    checked={estimates.filter(e => !e.isAmbiguous && e.trace !== "proposal" && e.trace !== "unmatched").length > 0 && estimates.filter(e => !e.isAmbiguous && e.trace !== "proposal" && e.trace !== "unmatched").every(e => selectedIds.has(e.itemId))}
                     onCheckedChange={onToggleAll}
                   />
                 </TableHead>
@@ -297,9 +297,11 @@ export function EstimateResultsTable({
                 const isRefined = !isAmb && !!(est.note?.startsWith("Uściślone"));
 
                 // Unified row classification — single source of truth
+                const isProposal = est.trace === "proposal";
                 const rowType =
                   isRefreshing ? "refreshing" as const :
                   (isAmb || est.trace === "unmatched") ? "intervention" as const :
+                  isProposal ? "proposal" as const :
                   isRefined ? "refined" as const :
                   est.knrSource === "catalog-l1" ? "l1" as const :
                   est.knrSource === "official" ? "knr-a" as const :
@@ -315,6 +317,7 @@ export function EstimateResultsTable({
                     className={`cursor-pointer transition-colors ${
                       rowType === "refreshing" ? "bg-orange-50/40 dark:bg-orange-950/10 animate-pulse"
                       : needsIntervention ? "bg-violet-50/40 dark:bg-violet-950/10 border-l-2 border-l-violet-400"
+                      : rowType === "proposal" ? "bg-amber-50/70 dark:bg-amber-950/20 border-l-2 border-l-amber-400"
                       : rowType === "refined" ? "bg-emerald-50/40 dark:bg-emerald-950/10 border-l-2 border-l-emerald-400"
                       : isSelected ? "bg-orange-50/50 dark:bg-orange-950/10"
                       : "opacity-60"
@@ -357,6 +360,13 @@ export function EstimateResultsTable({
                                 <PenLine className="w-2.5 h-2.5" />
                                 Koryguj
                               </button>
+                            </div>
+                          ) : isProposal ? (
+                            <div className="flex items-center gap-1 mt-0.5 flex-wrap">
+                              <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
+                                Podobne — zaznacz
+                              </span>
+                              {est.note && <p className="text-[9px] text-slate-500 truncate max-w-[220px]">{est.note}</p>}
                             </div>
                           ) : (needsIntervention || rowType === "poza-knr") ? (
                             <div className="flex items-center gap-1 mt-0.5 flex-wrap">
